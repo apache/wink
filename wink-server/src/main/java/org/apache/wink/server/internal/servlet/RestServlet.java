@@ -29,8 +29,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Application;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.server.internal.DeploymentConfiguration;
 import org.apache.wink.server.internal.RequestProcessor;
 import org.apache.wink.server.internal.application.ServletSymphonyApplication;
@@ -61,7 +61,7 @@ public class RestServlet extends AbstractSymphonyServlet {
 
     private static final long   serialVersionUID              = 8797036173835816706L;
 
-    private static final Log    logger                        = LogFactory.getLog(RestServlet.class);
+    private static final Logger logger = LoggerFactory.getLogger(RestServlet.class);
     private static final String PROPERTIES_DEFAULT_FILE       = "META-INF/configuration-default.properties";
     private static final String PROPERTIES_INIT_PARAM         = "symphony.propertiesLocation";
     private static final String SYMPHONY_APP_LOCATION_PARAM   = "symphony.applicationConfigLocation";

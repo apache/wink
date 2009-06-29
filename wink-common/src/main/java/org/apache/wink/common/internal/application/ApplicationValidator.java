@@ -25,8 +25,8 @@ import java.util.Set;
 import javax.ws.rs.Path;
 import javax.ws.rs.ext.Provider;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.DynamicResource;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
@@ -43,7 +43,7 @@ public class ApplicationValidator {
      */
     private final Set<Class<?>> singletonClasses = new LinkedHashSet<Class<?>>();
 
-    private static final Log    logger           = LogFactory.getLog(ApplicationValidator.class);
+    private static final Logger logger = LoggerFactory.getLogger(ApplicationValidator.class);
 
     /**
      * Returns true if the resource is valid resource and false otherwise.

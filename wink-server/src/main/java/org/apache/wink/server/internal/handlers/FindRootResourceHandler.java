@@ -29,8 +29,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.PathSegment;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.server.handlers.HandlersChain;
 import org.apache.wink.server.handlers.MessageContext;
 import org.apache.wink.server.handlers.RequestHandler;
@@ -41,7 +41,7 @@ import org.apache.wink.server.internal.registry.ResourceRegistry;
 public class FindRootResourceHandler implements RequestHandler {
     
     public static final String SEARCH_POLICY_CONTINUED_SEARCH_KEY = "symphony.searchPolicyContinuedSearch";
-    private static final Log logger = LogFactory.getLog(FindRootResourceHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(FindRootResourceHandler.class);
     
     private boolean isContinuedSearchPolicy;
 

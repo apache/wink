@@ -23,15 +23,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.server.handlers.AbstractHandler;
 import org.apache.wink.server.handlers.MessageContext;
 
 
 public class InvokeMethodHandler extends AbstractHandler {
 
-    private static final Log logger = LogFactory.getLog(InvokeMethodHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(InvokeMethodHandler.class);
 
     public void handleRequest(MessageContext context) throws Throwable {
         try {

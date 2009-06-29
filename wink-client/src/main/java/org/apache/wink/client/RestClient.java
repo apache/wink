@@ -26,8 +26,8 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.client.internal.ResourceImpl;
 import org.apache.wink.common.SymphonyApplication;
 import org.apache.wink.common.internal.application.ApplicationValidator;
@@ -57,7 +57,7 @@ import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollect
  */
 public class RestClient {
 
-    private static final Log logger = LogFactory.getLog(RestClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(RestClient.class);
 
     private ProvidersRegistry providersRegistry;
     private ClientConfig config;

@@ -25,8 +25,8 @@ import java.io.IOException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.server.internal.providers.entity.html.OutputStreamHttpServletResponseWrapper;
 import org.springframework.mock.web.MockRequestDispatcher;
 import org.springframework.util.Assert;
@@ -38,7 +38,7 @@ import org.springframework.util.Assert;
  * type of MockHttpServletResponse.
  */
 public class HtmlMockRequestDispatcher extends MockRequestDispatcher {
-    private final Log logger = LogFactory.getLog(super.getClass());
+    private final Logger logger = LoggerFactory.getLogger(super.getClass());
     private final String url;
 
     /**

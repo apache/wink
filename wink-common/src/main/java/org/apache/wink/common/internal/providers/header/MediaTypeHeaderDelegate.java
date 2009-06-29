@@ -26,14 +26,14 @@ import java.util.regex.Pattern;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
 public class MediaTypeHeaderDelegate implements HeaderDelegate<MediaType> {
 
-	private static final Log logger = LogFactory.getLog(MediaTypeHeaderDelegate.class);
+	private static final Logger logger = LoggerFactory.getLogger(MediaTypeHeaderDelegate.class);
 	private static final Pattern EQUALS = Pattern.compile("=");
 	private static final Pattern SEMICOLON = Pattern.compile(";");
 	private static final Pattern SLASH = Pattern.compile("/");

@@ -31,8 +31,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.annotations.Workspace;
 import org.apache.wink.example.qadefect.legacy.DataStore;
 import org.apache.wink.example.qadefect.legacy.DefectBean;
@@ -53,7 +53,7 @@ import org.apache.wink.server.utils.LinkBuilders;
 @Workspace(workspaceTitle = "QA Defects", collectionTitle = "Tests of Defect")
 public class DefectTestsResource {
     
-    private static final Log logger = LogFactory.getLog(DefectTestsResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(DefectTestsResource.class);
 	
     /**
      * Method is handling GET requests to retrieve tests that are related to the

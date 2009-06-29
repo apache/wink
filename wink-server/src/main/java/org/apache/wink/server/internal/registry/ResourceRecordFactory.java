@@ -28,8 +28,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.DynamicResource;
 import org.apache.wink.common.internal.factory.OFFactoryRegistry;
 import org.apache.wink.common.internal.factory.ObjectFactory;
@@ -40,7 +40,7 @@ import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor;
 
 public class ResourceRecordFactory {
 
-    private static final Log logger = LogFactory.getLog(ResourceRecordFactory.class);
+    private static final Logger logger = LoggerFactory.getLogger(ResourceRecordFactory.class);
 
     private final OFFactoryRegistry objectFactoryRegistry;
     private final Map<Class<?>,ResourceRecord> cacheByClass;

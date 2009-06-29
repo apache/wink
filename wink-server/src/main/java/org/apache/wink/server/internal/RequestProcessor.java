@@ -31,8 +31,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.WebApplicationException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.application.ApplicationFileLoader;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.server.internal.handlers.ServerMessageContext;
@@ -46,7 +46,7 @@ import org.apache.wink.server.utils.RegistrationUtils;
  */
 public class RequestProcessor {
 
-    private static final Log              logger                           = LogFactory.getLog(RequestProcessor.class);
+    private static final Logger logger = LoggerFactory.getLogger(RequestProcessor.class);
     private static final String           PROPERTY_ROOT_RESOURCE_NONE      = "none";
     private static final String           PROPERTY_ROOT_RESOURCE_ATOM      = "atom";
     private static final String           PROPERTY_ROOT_RESOURCE_ATOM_HTML = "atom+html";

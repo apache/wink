@@ -44,8 +44,8 @@ import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 import javax.ws.rs.ext.Providers;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.annotations.Asset;
 import org.apache.wink.common.annotations.Scope;
 import org.apache.wink.common.annotations.Scope.ScopeType;
@@ -62,7 +62,7 @@ import org.apache.wink.common.internal.utils.MediaTypeUtils;
 @Provider
 public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWriter<Object> {
 
-    private static final Log logger = LogFactory.getLog(AssetProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(AssetProvider.class);
 
     @Context
     private Providers providers;

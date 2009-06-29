@@ -38,8 +38,8 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.client.ClientConfig;
 import org.apache.wink.client.ClientConfigException;
 import org.apache.wink.client.ClientRuntimeException;
@@ -187,7 +187,7 @@ public class ConfigurationTest extends BaseTest {
     public static class FooProvider implements MessageBodyReader<Foo>, MessageBodyWriter<Foo> {
 
         
-        private static final Log logger = LogFactory.getLog(StringProvider.class);
+        private static final Logger logger = LoggerFactory.getLogger(StringProvider.class);
         
         public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
             return type == Foo.class ;
@@ -212,11 +212,9 @@ public class ConfigurationTest extends BaseTest {
         public void writeTo(Foo t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
             MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException,
             WebApplicationException {
-            
-            if (logger.isDebugEnabled()) {
-                logger.debug(String.format("Writing %s to stream using %s", t, getClass().getName()));
-            }
-            
+
+            logger.debug(String.format("Writing %s to stream using %s", t, getClass().getName()));
+
             entityStream.write(t.foo.getBytes(ProviderUtils.getCharset(mediaType)));
         }
    }

@@ -26,8 +26,8 @@ import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 
 
@@ -37,7 +37,7 @@ import org.apache.wink.common.internal.utils.MediaTypeUtils;
  */
 public final class MediaTypeMapper {
 
-    private static final Log LOG = LogFactory.getLog(MediaTypeMapper.class);
+    private static final Logger logger = LoggerFactory.getLogger(MediaTypeMapper.class);
 
     private interface MappingRecord {
 
@@ -85,7 +85,7 @@ public final class MediaTypeMapper {
 
     public void addMapping(String userAgent, String resultMimeType, String typeToSend) {
         if (userAgent == null || resultMimeType == null || typeToSend == null) {
-            LOG.warn(String.format("Record %s is not complete => ignored", userAgent));
+            logger.warn(String.format("Record %s is not complete => ignored", userAgent));
             return;
         }
         this.mappings.add(new AgentStartsWith(userAgent, resultMimeType, typeToSend));

@@ -37,8 +37,8 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.SymphonyApplication;
 import org.apache.wink.common.http.HttpStatus;
 import org.apache.wink.common.internal.application.ApplicationValidator;
@@ -57,7 +57,7 @@ import org.apache.wink.common.internal.utils.MediaTypeUtils;
  */
 public class ResourceRegistry  {
 
-    private static final Log logger = LogFactory.getLog(ResourceRegistry.class);
+    private static final Logger logger = LoggerFactory.getLogger(ResourceRegistry.class);
 
     private List<ResourceRecord> rootResources;
     private boolean dirty;

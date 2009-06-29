@@ -38,7 +38,7 @@ import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 public class ContextAccessor {
 
 //    private static Object[] EMPTY_ARRAY = new Object[0];
-//    private static final Log logger = LogFactory.getLog(ContextAccessor.class);
+//    private static final Logger logger = LoggerFactory.getLogger(ContextAccessor.class);
 
 //    private static final Map<Class<?>,Method> contextAccessors = new HashMap<Class<?>,Method>();
 

@@ -31,8 +31,8 @@ import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.registry.Injectable;
 import org.apache.wink.common.internal.registry.InjectableFactory;
 import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
@@ -44,7 +44,7 @@ import org.apache.wink.common.internal.runtime.RuntimeContext;
 
 public class CreationUtils {
 
-    private static final Log logger = LogFactory.getLog(CreationUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(CreationUtils.class);
 
     private CreationUtils() {
     }

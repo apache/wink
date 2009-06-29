@@ -37,8 +37,8 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.RestConstants;
 import org.apache.wink.common.internal.providers.entity.xml.AbstractJAXBProvider;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
@@ -51,7 +51,7 @@ import org.apache.wink.common.utils.ProviderUtils;
 @Produces({MediaType.APPLICATION_JSON, MediaTypeUtils.JAVASCRIPT})
 public class JsonProvider extends AbstractJAXBProvider implements MessageBodyWriter<JSONObject> {
 
-    private static final Log logger = LogFactory.getLog(JsonProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(JsonProvider.class);
 
     @Context
     private UriInfo uriInfo;

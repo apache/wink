@@ -45,8 +45,8 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.SymphonyApplication;
 import org.apache.wink.common.internal.application.ApplicationValidator;
 import org.apache.wink.common.internal.factory.OFFactoryRegistry;
@@ -63,7 +63,7 @@ import org.apache.wink.common.internal.utils.GenericsUtils;
  */
 public class ProvidersRegistry  {
 
-    private static final Log                                 logger             = LogFactory.getLog(ProvidersRegistry.class);
+    private static Logger logger = LoggerFactory.getLogger(ProvidersRegistry.class);
     
     private final ProducesMediaTypeMap<ContextResolver<?>>   contextResolvers   = new ProducesMediaTypeMap<ContextResolver<?>>(
                                                                                     ContextResolver.class);

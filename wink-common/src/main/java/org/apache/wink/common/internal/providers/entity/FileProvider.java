@@ -37,15 +37,15 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Provider
 @Produces("*/*")
 @Consumes("*/*")
 
 public class FileProvider implements MessageBodyWriter<File>, MessageBodyReader<File> {
-	private static final Log logger = LogFactory.getLog(FileProvider.class);
+	private static final Logger logger = LoggerFactory.getLogger(FileProvider.class);
 	private String prefix = "FP_PRE";
 	private String uploadDir = null;
 	private String suffix = "FP_SUF";

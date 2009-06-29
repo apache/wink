@@ -30,14 +30,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FileLoader {
     
     protected FileLoader(){}
     
-    private static final Log logger = LogFactory.getLog(FileLoader.class);
+    private static final Logger logger = LoggerFactory.getLogger(FileLoader.class);
 
     /**
      * search for file using classloaders only and returns URL to the file if

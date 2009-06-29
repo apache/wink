@@ -22,8 +22,8 @@ package org.apache.wink.spring.internal;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.DynamicResource;
 import org.apache.wink.common.internal.factory.OFFactory;
 import org.apache.wink.common.internal.factory.ObjectCreationException;
@@ -34,7 +34,7 @@ import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollect
 
 public class SpringOFFactory<T> implements OFFactory<T> {
 
-    private static final Log                   logger        = LogFactory.getLog(SpringOFFactory.class);
+    private static final Logger logger = LoggerFactory.getLogger(SpringOFFactory.class);
 
     /**
      * holds Static Resources and Providers

@@ -30,8 +30,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.http.HttpStatus;
 import org.apache.wink.common.model.synd.SyndBase;
 import org.apache.wink.common.model.synd.SyndEntry;
@@ -61,7 +61,7 @@ import org.w3c.dom.NodeList;
 
 public class WebDAVResponseBuilder {
 
-    private static final Log logger = LogFactory.getLog(WebDAVResponseBuilder.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebDAVResponseBuilder.class);
 
     private UriInfo uriInfo;
 

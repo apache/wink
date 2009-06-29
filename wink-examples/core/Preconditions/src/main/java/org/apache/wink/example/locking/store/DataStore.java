@@ -26,8 +26,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.example.locking.legacy.DefectBean;
 
 
@@ -41,7 +41,7 @@ public class DataStore {
 
     private static DataStore defectStore = createSingletonInstance();
 
-    final static Log         logger      = LogFactory.getLog(DataStore.class);
+    final static Logger logger = LoggerFactory.getLogger(DataStore.class);
 
     /**
      * Constructor of mock defect store. It is initialized with test data.

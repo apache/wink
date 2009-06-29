@@ -34,8 +34,8 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.utils.ProviderUtils;
 
 
@@ -45,7 +45,7 @@ import org.apache.wink.common.utils.ProviderUtils;
 public class StringProvider implements MessageBodyReader<String>, MessageBodyWriter<String> {
 
     
-    private static final Log logger = LogFactory.getLog(StringProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(StringProvider.class);
     
     public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
         return type == String.class;

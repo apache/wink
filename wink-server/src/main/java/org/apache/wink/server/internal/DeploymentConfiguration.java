@@ -35,8 +35,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.application.ApplicationValidator;
 import org.apache.wink.common.internal.factory.OFFactoryRegistry;
 import org.apache.wink.common.internal.factory.ScopeOFFactory;
@@ -76,8 +76,10 @@ import org.apache.wink.server.internal.registry.ServerInjectableFactory;
 public class DeploymentConfiguration {
 
     private static final String   ALTERNATIVE_SHORTCUTS    = "META-INF/symphony-alternateShortcutsMap.properties";
-    private static final Log      logger                   = LogFactory.getLog(DeploymentConfiguration.class);
+    private static final Logger logger = LoggerFactory.getLogger(DeploymentConfiguration.class);
     private static final String   VALIDATE_LOCATION_HEADER = "wink.validateLocationHeader";
+   
+   
     // handler chains
     private RequestHandlersChain  requestHandlersChain;
     private ResponseHandlersChain responseHandlersChain;

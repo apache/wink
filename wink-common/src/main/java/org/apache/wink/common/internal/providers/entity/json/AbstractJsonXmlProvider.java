@@ -31,8 +31,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.xml.bind.Marshaller;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.providers.entity.xml.AbstractJAXBProvider;
 import org.apache.wink.common.model.atom.AtomJAXBUtils;
 import org.apache.wink.common.model.json.JSONException;
@@ -45,7 +45,7 @@ import org.xml.sax.SAXException;
 
 public class AbstractJsonXmlProvider extends AbstractJAXBProvider {
     
-    private static final Log logger = LogFactory.getLog(AbstractJsonXmlProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(AbstractJsonXmlProvider.class);
     
     protected static SAXParserFactory spf;
     static {

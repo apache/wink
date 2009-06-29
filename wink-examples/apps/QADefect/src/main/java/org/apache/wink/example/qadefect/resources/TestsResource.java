@@ -33,8 +33,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.annotations.Workspace;
 import org.apache.wink.example.qadefect.legacy.DataStore;
 import org.apache.wink.example.qadefect.legacy.TestBean;
@@ -44,7 +44,7 @@ import org.apache.wink.example.qadefect.legacy.TestBean;
 @Path(TestsResource.TESTS_PATH)
 public class TestsResource {
 
-    private static final Log logger = LogFactory.getLog(TestsResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(TestsResource.class);
 
     public static final String TESTS_PATH = "tests";
     public static final String TEST_PATH = "{test}";

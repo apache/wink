@@ -35,8 +35,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.http.OPTIONS;
 import org.apache.wink.common.model.synd.SyndBase;
 import org.apache.wink.common.model.synd.SyndEntry;
@@ -59,7 +59,7 @@ import org.apache.wink.webdav.server.WebDAVUtils;
 @Path(DefectsResource.DEFECTS_PATH)
 public class WebDAVDefectsResource extends DefectsResource {
 
-    private static final Log logger = LogFactory.getLog(WebDAVDefectsResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebDAVDefectsResource.class);
 
     @Context
     private LinkBuilders     linkProcessor;

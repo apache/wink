@@ -38,8 +38,8 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.annotations.Scope;
 import org.apache.wink.common.annotations.Scope.ScopeType;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
@@ -51,7 +51,7 @@ import org.apache.wink.common.model.json.JSONObject;
 @Produces( { MediaType.APPLICATION_JSON, MediaTypeUtils.JAVASCRIPT })
 public class JsonJAXBProvider extends AbstractJsonXmlProvider implements MessageBodyWriter<Object> {
 
-    private static final Log              logger = LogFactory.getLog(JsonJAXBProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(JsonJAXBProvider.class);
 
     @Context
     private Providers                     providers;

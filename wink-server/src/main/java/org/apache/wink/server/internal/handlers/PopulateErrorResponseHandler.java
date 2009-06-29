@@ -24,8 +24,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.RuntimeDelegate;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.server.handlers.AbstractHandler;
 import org.apache.wink.server.handlers.MessageContext;
 
@@ -33,7 +33,7 @@ import org.apache.wink.server.handlers.MessageContext;
 public class PopulateErrorResponseHandler extends AbstractHandler {
 
     private static final RuntimeDelegate RUNTIME_DELEGATE = RuntimeDelegate.getInstance();
-    private static final Log             logger           = LogFactory.getLog(PopulateErrorResponseHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(PopulateErrorResponseHandler.class);
 
     @SuppressWarnings("unchecked")
     public void handleResponse(MessageContext context) throws Throwable {

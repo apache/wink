@@ -21,8 +21,8 @@ package org.apache.wink.spring.internal;
 
 import javax.ws.rs.WebApplicationException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.factory.CreationUtils;
 import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
@@ -32,7 +32,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 
 public class DependenciesInjectionPostProcessor implements BeanPostProcessor {
 
-    private static final Log        logger = LogFactory.getLog(DependenciesInjectionPostProcessor.class);
+    private static final Logger logger = LoggerFactory.getLogger(DependenciesInjectionPostProcessor.class);
     private SpringOFFactory<Object> springOFFactory;
 
     public Object postProcessAfterInitialization(Object bean, String beanName)

@@ -29,8 +29,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.example.qadefect.legacy.DefectBean;
 import org.apache.wink.example.qadefect.legacy.TestBean;
 import org.apache.wink.example.qadefect.resources.DefectsResource;
@@ -47,7 +47,7 @@ public class DataStore {
 
     private static DataStore defectStore = createSingletonInstance();
 
-    private final static Log logger      = LogFactory.getLog(DataStore.class);
+    private final static Logger logger = LoggerFactory.getLogger(DataStore.class);
 
     /**
      * Constructor of mock defect store. It is initialized with test data.
@@ -264,9 +264,8 @@ public class DataStore {
             l_defects: for (DefectBean defect : defects.values()) {
                 for (Entry<String, String> entry : searchParameters.entrySet()) {
                     String value = entry.getValue();
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Parameter: " + entry.getKey() + "; value: " + value);
-                    }
+                    logger.debug("Parameter: {}; value: {}", entry.getKey(), value);
+
                     if (entry.getKey().equals(DefectsResource.ASSIGNED_TO)) {
                         if (defect.getAssignedTo() == null
                             || !defect.getAssignedTo().equalsIgnoreCase(value)) {

@@ -36,8 +36,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.DynamicResource;
 import org.apache.wink.common.annotations.Parent;
 import org.apache.wink.common.annotations.Workspace;
@@ -50,7 +50,7 @@ import org.apache.wink.common.internal.registry.InjectableFactory;
  */
 public class ResourceMetadataCollector extends AbstractMetadataCollector {
     
-    private static final Log logger = LogFactory.getLog(ResourceMetadataCollector.class);
+    private static final Logger logger = LoggerFactory.getLogger(ResourceMetadataCollector.class);
 
     private ResourceMetadataCollector(Class<?> clazz) {
         super(clazz);

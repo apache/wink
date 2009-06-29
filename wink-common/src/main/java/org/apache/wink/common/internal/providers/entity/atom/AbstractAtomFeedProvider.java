@@ -35,8 +35,8 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.model.atom.AtomFeed;
 import org.apache.wink.common.model.atom.AtomJAXBUtils;
 import org.apache.wink.common.model.atom.ObjectFactory;
@@ -46,7 +46,7 @@ import org.apache.wink.common.utils.ProviderUtils;
 
 public abstract class AbstractAtomFeedProvider<T> {
 
-    private static final Log logger = LogFactory.getLog(AbstractAtomFeedProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(AbstractAtomFeedProvider.class);
 
     protected ObjectFactory atomObjectFactory = new org.apache.wink.common.model.atom.ObjectFactory();
 

@@ -21,8 +21,8 @@ package org.apache.wink.common.internal.factory;
 
 
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
 
@@ -49,7 +49,7 @@ import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollect
  */
 class DefaultOFFactory<T> implements OFFactory<T> {
 
-    static final Log logger = LogFactory.getLog(DefaultOFFactory.class);
+    static final Logger logger = LoggerFactory.getLogger(DefaultOFFactory.class);
 
     /**
      * The default implementation, returns a SingletonFactory for all objects.
@@ -59,10 +59,7 @@ class DefaultOFFactory<T> implements OFFactory<T> {
             throw new NullPointerException("object");
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug(String.format("Creating a %s for %s.",
-                String.valueOf(SingletonObjectFactory.class), String.valueOf(object)));
-        }
+        logger.debug("Creating a {} for {}", SingletonObjectFactory.class, object);
 
         return new SingletonObjectFactory<T>(object);
     }

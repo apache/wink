@@ -41,8 +41,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.annotations.Workspace;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.internal.utils.OpenSearchUtils;
@@ -61,7 +61,7 @@ import org.apache.wink.server.utils.LinkBuilders;
 @Path(DefectsResource.DEFECTS_PATH)
 public class DefectsResource {
 
-    private static final Log logger = LogFactory.getLog(DefectsResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(DefectsResource.class);
 
     public static final String DEFECTS_PATH = "defects";
     public static final String DEFECT_VAR = "defect";

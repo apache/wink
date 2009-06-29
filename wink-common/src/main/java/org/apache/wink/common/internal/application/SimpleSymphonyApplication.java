@@ -24,8 +24,8 @@ import java.io.InputStream;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.SymphonyApplication;
 import org.apache.wink.common.internal.utils.FileLoader;
 
@@ -36,7 +36,7 @@ import org.apache.wink.common.internal.utils.FileLoader;
  */
 public class SimpleSymphonyApplication extends SymphonyApplication {
 
-    private static final Log    logger         = LogFactory.getLog(SimpleSymphonyApplication.class);
+    private static final Logger logger = LoggerFactory.getLogger(SimpleSymphonyApplication.class);
     private static final String FILE_SEPARATOR = ";";
     private Set<Class<?>> jaxRSClasses;
     private String applicationConfigFiles;

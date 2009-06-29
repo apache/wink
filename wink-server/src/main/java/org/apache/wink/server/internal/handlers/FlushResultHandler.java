@@ -41,8 +41,8 @@ import javax.ws.rs.ext.Providers;
 import javax.ws.rs.ext.RuntimeDelegate;
 import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.MultivaluedMapImpl;
 import org.apache.wink.server.handlers.AbstractHandler;
 import org.apache.wink.server.handlers.MessageContext;
@@ -50,7 +50,7 @@ import org.apache.wink.server.handlers.MessageContext;
 
 public class FlushResultHandler extends AbstractHandler {
 
-    private static final Log logger = LogFactory.getLog(FlushResultHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(FlushResultHandler.class);
     private static final RuntimeDelegate runtimeDelegate = RuntimeDelegate.getInstance();
 
     @SuppressWarnings("unchecked")

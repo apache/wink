@@ -29,8 +29,8 @@ import java.util.Set;
 
 import javax.ws.rs.WebApplicationException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
 import org.apache.wink.common.internal.utils.FileLoader;
@@ -45,7 +45,7 @@ import org.apache.wink.common.internal.utils.FileLoader;
  */
 public class ApplicationFileLoader {
 
-    private static final Log    logger           = LogFactory.getLog(ApplicationFileLoader.class);
+    private static final Logger logger = LoggerFactory.getLogger(ApplicationFileLoader.class);
     private static final String CORE_APPLICATION = "META-INF/core/symphony.app";
     private final Set<Class<?>> classes          = new LinkedHashSet<Class<?>>();
 
