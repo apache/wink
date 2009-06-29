@@ -11,8 +11,8 @@
         <module.relative.path></module.relative.path>
         <javadoc.aggregate>true</javadoc.aggregate>
         <javadoc.exclude.patterns>*internal:org.apache.wink.example</javadoc.exclude.patterns>
-<!--        <site.deploy.dir>/buildsReports</site.deploy.dir> -->
-        <file.system.site.deploy.dir>/reports</file.system.site.deploy.dir>
+        <site.deploy.dir>C:/wink/buildsReports</site.deploy.dir> 
+        <file.system.site.deploy.dir>C:/wink/reports</file.system.site.deploy.dir>
         <distribution.deploy.directory.snapshots>TBD</distribution.deploy.directory.snapshots>
         <distribution.deploy.directory.release>TBD</distribution.deploy.directory.release>
         <distribution.deploy.directory>${distribution.deploy.directory.snapshots}</distribution.deploy.directory>
@@ -398,7 +398,7 @@
                     <reportSet>
                         <reports>
                             <report>index</report>
-                            <report>dependencies</report>
+                            <!-- <report>dependencies</report> -->
                             <report>dependency-convergence</report>
                             <report>project-team</report>
                             <report>license</report>
