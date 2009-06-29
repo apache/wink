@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Runtime Registration Demo</title>
+</head>
+<body>
+<p>
+<form action="http://localhost:8080/RuntimeRegistration/register" >
+Select a resource to add: 
+<select name="class">
+	<option
+		value="com.hp.symphony.rest.example.registration.AtomHelloWorldResource">Hello
+	World (atom)</option>
+	<option value="com.hp.symphony.rest.example.registration.HelloWorldResource" />Hello
+	World (text)</option>
+</select><br />
+<input type="submit" title="Add Resource" value="Add Resource" /></form>
+<p>A resource can be registered many times, 
+it won't actually effect the system, but a warning will be printed to log.
+<p>
+<hr/>
+The following links lead to the resources:
+<ul>
+<li><a href="http://localhost:8080/RuntimeRegistration/rest/atom">Hello World (atom)</a></li>
+<li><a href="http://localhost:8080/RuntimeRegistration/rest/world">Hello World (text)</a></li>
+</ul>
+Prior to registering resources these links will be broken (will return 404 Not Found).<br/>
+</body>
+</html>

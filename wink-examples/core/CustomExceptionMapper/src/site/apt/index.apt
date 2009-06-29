@@ -1,0 +1,16 @@
+ -----
+ CustomErrorMapper
+ -----
+ -----
+ 
+CustomExceptionMapper
+
+  This example is located under <<<examples/CustomErrorMapper>>>
+  
+  * This is example demonstrate an implementation of ExceptionMapper the example expose users feed. in case the requested user does not exist the resource throw a UserNotExistException.
+  The UserNotExistExceptionMapper ExceptionMapper format a proper response and set the status code to be 404.      
+    
+  
+    
+
+ 

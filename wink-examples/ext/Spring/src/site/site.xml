@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Bookmars Example">
+    <body>
+        <breadcrumbs>
+        	<item name="symphony-sdk" href="../.."/>
+            <item name="symphony-examples" href=".."/>
+        </breadcrumbs> 
+    </body>
+</project>

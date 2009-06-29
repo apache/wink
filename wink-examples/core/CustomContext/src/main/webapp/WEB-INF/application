@@ -1,0 +1,2 @@
+org.apache.wink.example.customcontext.UsersResource
+org.apache.wink.example.customcontext.SecurityContextResolver

@@ -1,0 +1,3 @@
+org.apache.wink.example.jaxb.JaxbResource
+org.apache.wink.example.jaxb.context.PersonContextResolver
+org.apache.wink.example.jaxb.context.AddressContextResolver

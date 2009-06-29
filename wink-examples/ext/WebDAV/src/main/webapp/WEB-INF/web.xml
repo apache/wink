@@ -1,0 +1,50 @@
+<!DOCTYPE web-app PUBLIC
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+	<display-name>Symphony SDK demo</display-name>
+	<description>Demonstration of SDK features</description>
+
+
+	<!--
+		Symphony SDK servlet configuration. This servlet handles HTTP requests
+		of SDK web service on application server.
+	-->
+
+	<servlet>
+		<servlet-name>restSdkService</servlet-name>
+		<servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+		<init-param>
+			<param-name>symphony.applicationConfigLocation</param-name>
+			<param-value>/WEB-INF/application-dav;/WEB-INF/application</param-value>
+		</init-param>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+
+
+	<servlet>
+		<servlet-name>restSdkAdmin</servlet-name>
+		<servlet-class>org.apache.wink.server.internal.servlet.AdminServlet</servlet-class>
+	</servlet>
+
+	<!--
+		Symphony SDK servlet mapping. This mapping controls how the SDK
+		servlet is accessed. Example 1: <url-pattern>/*</url-pattern> means
+		that all HTTP requests within the web application context will be
+		handled by SDK servlet. E.g. http://localhost:8080/web-context/defects
+		Example 2: <url-pattern>/rest/*</url-pattern> means that SDK servlet
+		will handle only those HTTP requests that match the web application
+		context and this URI pattern. The URI pattern defines the REST
+		endpoint of the web service. E.g.
+		http://localhost:8080/web-context/rest/defects
+	-->
+	<servlet-mapping>
+		<servlet-name>restSdkService</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>restSdkAdmin</servlet-name>
+		<url-pattern>/admin</url-pattern>
+	</servlet-mapping>
+</web-app>

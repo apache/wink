@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+                                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+	
+	<!--
+		Resources Registrar. 
+		This bean is used to provide an Application object.
+		The bean has the following properties:
+		    - classes - returns Classes. Same as Application.getClasses(). 
+		    			Classes can be classes either of resources or providers.
+		    			The scope is used according default framework definition.
+		    - instances - returns instances of either resources or providers. Instances
+		    			are actually Spring beans and their scope is controled using Spring.
+		    - priority - priority of the Registrar. When omitted, the default value is 0.5
+		 -->
+	<bean class="org.apache.wink.spring.Registrar">
+		<property name="classes">
+			<set value-type="java.lang.Class">
+			</set>
+		</property>
+		<property name="instances">
+			<set>
+				<ref local="resource.bookmarks" />
+			</set>
+		</property>
+	</bean>
+	
+	
+	<!-- Resources -->
+
+	<bean id="resource.bookmarks" class="org.apache.wink.example.bookmarks.BookmarksResource" />
+	
+	<!-- Custom proprties defintion -->
+
+	<!-- bookmarks.customPropertiesFactory defines loaded of the custom properties file -->
+	<bean id="bookmarks.customPropertiesFactory"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>WEB-INF/bookmarks.properties
+				</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- bookmarks.placeholderConfigurer overrides the default symphony.propertiesFactory placeholder
+	     that causes Symphony to use bookmarks.customPropertiesFactory instead of the default one -->
+	<bean id="bookmarks.placeholderConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+		<property name="order" value="1" />
+		<property name="propertiesArray">
+			<list>
+				<props>
+					<prop key="symphony.propertiesFactory">bookmarks.customPropertiesFactory
+					</prop>
+				</props>
+			</list>
+		</property>
+	</bean>
+</beans>

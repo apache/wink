@@ -1,0 +1,56 @@
+/*******************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ *  
+ *******************************************************************************/
+package org.apache.wink.server.internal.handlers;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.wink.server.handlers.AbstractHandler;
+import org.apache.wink.server.handlers.MessageContext;
+
+
+public class InvokeMethodHandler extends AbstractHandler {
+
+    private static final Log logger = LogFactory.getLog(InvokeMethodHandler.class);
+
+    public void handleRequest(MessageContext context) throws Throwable {
+        try {
+            SearchResult searchResult = context.getAttribute(SearchResult.class);
+            Method javaMethod = searchResult.getMethod().getMetadata().getReflectionMethod();
+            Object[] parameters = searchResult.getInvocationParameters();
+            Object instance = searchResult.getResource().getInstance(context);
+            if (logger.isDebugEnabled()) {
+                logger.debug(String.format(
+                    "Invoking method %s of declaring class %s on the instance of a class %s with parameters %s",
+                    javaMethod.getName(), javaMethod.getDeclaringClass().getName(),
+                    instance.getClass().getName(), Arrays.toString(parameters)));
+
+            }
+            Object result = javaMethod.invoke(instance, parameters);
+            context.setResponseEntity(result);
+        } catch (InvocationTargetException ite) {
+            throw ite.getTargetException(); // unpack the original exception
+        }
+    }
+
+}

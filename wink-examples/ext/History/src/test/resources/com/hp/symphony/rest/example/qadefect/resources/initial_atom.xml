@@ -1,0 +1,130 @@
+<feed xml:base="http://localhost:80/defects" xmlns="http://www.w3.org/2005/Atom">
+    <id>urn:com:hp:qadefects:defects</id>
+    <updated>2008-08-14T14:32:31.613+03:00</updated>
+    <title type="text">Defects</title>
+    <link href="http://localhost:80/defects" rel="self"/>
+    <link href="http://localhost:80/defects?alt=application%2Fatom%2Bxml" type="application/atom+xml" rel="alternate"/>
+    <link href="http://localhost:80/defects?alt=application%2Fjson" type="application/json" rel="alternate"/>
+    <author>
+        <name>admin</name>
+    </author>
+    <entry>
+        <id>urn:com:hp:qadefects:defect:3</id>
+        <title type="text">Checkbox is disabled</title>
+        <link href="http://localhost:80/defects/3" rel="edit"/>
+        <link href="http://localhost:80/defects/3/history?alt=application%2Fatom%2Bxml" type="application/atom+xml" rel="history"/>
+        <link href="http://localhost:80/defects/3;rev=2" rel="self"/>
+        <link href="http://localhost:80/defects/3;rev=2?alt=application%2Fatom%2Bxml" type="application/atom+xml" rel="alternate"/>
+        <link href="http://localhost:80/defects/3;rev=2?alt=application%2Fjson" type="application/json" rel="alternate"/>
+        <link href="http://localhost:80/defects/3;rev=2?alt=application%2Fxml" type="application/xml" rel="alternate"/>
+        <category scheme="urn:com:hp:qadefects:categories:severity" term="2-high"/>
+        <category scheme="urn:com:hp:qadefects:categories:status" term="Rejected"/>
+        <author>
+            <name>tester3</name>
+        </author>
+        <published>1970-01-01T16:01:45.052+02:00</published>
+        <summary type="text">Checkbox is disabled in Edit Profile page</summary>
+    </entry>
+    <entry>
+        <id>urn:com:hp:qadefects:defect:5</id>
+        <title type="text">Submit button is disabled in Edit Profile page</title>
+        <link href="http://localhost:80/defects/5" rel="edit"/>
+        <link href="http://localhost:80/defects/5/history?alt=application%2Fatom%2Bxml" type="application/atom+xml" rel="history"/>
+        <link href="http://localhost:80/defects/5;rev=0" rel="self"/>
+        <link href="http://localhost:80/defects/5;rev=0?alt=application%2Fatom%2Bxml" type="application/atom+xml" rel="alternate"/>
+        <link href="http://localhost:80/defects/5;rev=0?alt=application%2Fjson" type="application/json" rel="alternate"/>
+        <link href="http://localhost:80/defects/5;rev=0?alt=application%2Fxml" type="application/xml" rel="alternate"/>
+        <category scheme="urn:com:hp:qadefects:categories:severity" term="2-high"/>
+        <category scheme="urn:com:hp:qadefects:categories:status" term="New"/>
+        <author>
+            <name>tester3</name>
+        </author>
+        <published>1970-01-01T16:01:45.052+02:00</published>
+        <summary type="text">When trying to submit changes in Edit Profile page, the Submit button is disabled.</summary>
+    </entry>
+    <entry>
+        <id>urn:com:hp:qadefects:defect:7</id>
+        <title type="text">Wrong translation for the word 'user'</title>
+        <link href="http://localhost:80/defects/7" rel="edit"/>
+        <link href="http://localhost:80/defects/7/history?alt=application%2Fatom%2Bxml" type="application/atom+xml" rel="history"/>
+        <link href="http://localhost:80/defects/7;rev=0" rel="self"/>
+        <link href="http://localhost:80/defects/7;rev=0?alt=application%2Fatom%2Bxml" type="application/atom+xml" rel="alternate"/>
+        <link href="http://localhost:80/defects/7;rev=0?alt=application%2Fjson" type="application/json" rel="alternate"/>
+        <link href="http://localhost:80/defects/7;rev=0?alt=application%2Fxml" type="application/xml" rel="alternate"/>
+        <category scheme="urn:com:hp:qadefects:categories:severity" term="2-high"/>
+        <category scheme="urn:com:hp:qadefects:categories:status" term="Rejected"/>
+        <author>
+            <name>tester3</name>
+        </author>
+        <published>1970-01-01T16:01:45.052+02:00</published>
+        <summary type="text">When moving to French language the translation of 'user' word is incorrect</summary>
+    </entry>
+    <entry>
+        <id>urn:com:hp:qadefects:defect:2</id>
+        <title type="text">Cannot login to the system</title>
+        <link href="http://localhost:80/defects/2" rel="edit"/>
+        <link href="http://localhost:80/defects/2/history?alt=application%2Fatom%2Bxml" type="application/atom+xml" rel="history"/>
+        <link href="http://localhost:80/defects/2;rev=2" rel="self"/>
+        <link href="http://localhost:80/defects/2;rev=2?alt=application%2Fatom%2Bxml" type="application/atom+xml" rel="alternate"/>
+        <link href="http://localhost:80/defects/2;rev=2?alt=application%2Fjson" type="application/json" rel="alternate"/>
+        <link href="http://localhost:80/defects/2;rev=2?alt=application%2Fxml" type="application/xml" rel="alternate"/>
+        <category scheme="urn:com:hp:qadefects:categories:severity" term="1-critical"/>
+        <category scheme="urn:com:hp:qadefects:categories:status" term="Rejected"/>
+        <author>
+            <name>tester3</name>
+        </author>
+        <published>1970-01-01T16:01:45.052+02:00</published>
+        <summary type="text">Cannot login to the system with the user 'David'.</summary>
+    </entry>
+    <entry>
+        <id>urn:com:hp:qadefects:defect:4</id>
+        <title type="text">Error messages</title>
+        <link href="http://localhost:80/defects/4" rel="edit"/>
+        <link href="http://localhost:80/defects/4/history?alt=application%2Fatom%2Bxml" type="application/atom+xml" rel="history"/>
+        <link href="http://localhost:80/defects/4;rev=1" rel="self"/>
+        <link href="http://localhost:80/defects/4;rev=1?alt=application%2Fatom%2Bxml" type="application/atom+xml" rel="alternate"/>
+        <link href="http://localhost:80/defects/4;rev=1?alt=application%2Fjson" type="application/json" rel="alternate"/>
+        <link href="http://localhost:80/defects/4;rev=1?alt=application%2Fxml" type="application/xml" rel="alternate"/>
+        <category scheme="urn:com:hp:qadefects:categories:severity" term="4-minor"/>
+        <category scheme="urn:com:hp:qadefects:categories:status" term="Fixed"/>
+        <author>
+            <name>tester1</name>
+        </author>
+        <published>1970-01-01T16:01:45.052+02:00</published>
+        <summary type="text">Error messages are not displayed in red color</summary>
+    </entry>
+    <entry>
+        <id>urn:com:hp:qadefects:defect:6</id>
+        <title type="text">Missing message text</title>
+        <link href="http://localhost:80/defects/6" rel="edit"/>
+        <link href="http://localhost:80/defects/6/history?alt=application%2Fatom%2Bxml" type="application/atom+xml" rel="history"/>
+        <link href="http://localhost:80/defects/6;rev=0" rel="self"/>
+        <link href="http://localhost:80/defects/6;rev=0?alt=application%2Fatom%2Bxml" type="application/atom+xml" rel="alternate"/>
+        <link href="http://localhost:80/defects/6;rev=0?alt=application%2Fjson" type="application/json" rel="alternate"/>
+        <link href="http://localhost:80/defects/6;rev=0?alt=application%2Fxml" type="application/xml" rel="alternate"/>
+        <category scheme="urn:com:hp:qadefects:categories:severity" term="4-minor"/>
+        <category scheme="urn:com:hp:qadefects:categories:status" term="Rejected"/>
+        <author>
+            <name>tester3</name>
+        </author>
+        <published>1970-01-01T16:01:45.052+02:00</published>
+        <summary type="text">Missing message text in Edit Profile page</summary>
+    </entry>
+    <entry>
+        <id>urn:com:hp:qadefects:defect:1</id>
+        <title type="text">Id field is disabled in Edit Profile page</title>
+        <link href="http://localhost:80/defects/1" rel="edit"/>
+        <link href="http://localhost:80/defects/1/history?alt=application%2Fatom%2Bxml" type="application/atom+xml" rel="history"/>
+        <link href="http://localhost:80/defects/1;rev=2" rel="self"/>
+        <link href="http://localhost:80/defects/1;rev=2?alt=application%2Fatom%2Bxml" type="application/atom+xml" rel="alternate"/>
+        <link href="http://localhost:80/defects/1;rev=2?alt=application%2Fjson" type="application/json" rel="alternate"/>
+        <link href="http://localhost:80/defects/1;rev=2?alt=application%2Fxml" type="application/xml" rel="alternate"/>
+        <category scheme="urn:com:hp:qadefects:categories:severity" term="2-high"/>
+        <category scheme="urn:com:hp:qadefects:categories:status" term="New"/>
+        <author>
+            <name>tester1</name>
+        </author>
+        <published>1970-01-01T16:01:45.052+02:00</published>
+        <summary type="text">Cannot change the Id in Edit Profile page, it is disabled.</summary>
+    </entry>
+</feed>

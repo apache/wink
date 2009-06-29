@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<multistatus xmlns="DAV:"
+               xmlns:Z="http://ns.example.com/standards/z39.50/">
+    <response>
+        <href>http://www.example.com/bar.html</href>
+        <propstat>
+            <prop>
+                <Z:Copyright-Owner/>
+            </prop>
+            <status>HTTP/1.1 409 Conflict</status>
+        </propstat>
+        <propstat>
+            <prop>
+                <Z:Authors/>
+            </prop>
+            <status>HTTP/1.1 424 Failed Dependency</status>
+        </propstat>
+        <responsedescription>Copyright Owner cannot be deleted or altered.</responsedescription>
+    </response>
+</multistatus>

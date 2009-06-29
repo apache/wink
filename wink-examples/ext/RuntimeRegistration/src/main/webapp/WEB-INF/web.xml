@@ -1,0 +1,33 @@
+<!DOCTYPE web-app PUBLIC
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+	<display-name>Symphony SDK demo</display-name>
+	<description>Demonstration of SDK features</description>
+
+
+	<servlet>
+		<servlet-name>restSdkService</servlet-name>
+		<servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+
+    <!--
+        This is the example registration servlet for dynamically registering new resources and providers
+    -->
+	<servlet>
+		<servlet-name>registrationServlet</servlet-name>
+		<servlet-class>org.apache.wink.example.registration.RegistrationServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>restSdkService</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+	
+		<servlet-mapping>
+		<servlet-name>registrationServlet</servlet-name>
+		<url-pattern>/register/*</url-pattern>
+	</servlet-mapping>
+</web-app>

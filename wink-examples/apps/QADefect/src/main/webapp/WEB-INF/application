@@ -1,0 +1,5 @@
+org.apache.wink.server.internal.providers.entity.html.HtmlSyndEntryProvider
+org.apache.wink.server.internal.providers.entity.html.HtmlSyndFeedProvider
+org.apache.wink.example.qadefect.resources.DefectsResource
+org.apache.wink.example.qadefect.resources.TestsResource
+org.apache.wink.example.qadefect.resources.DefectTestsResource

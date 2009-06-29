@@ -1,0 +1,22 @@
+ -----
+ QADefect WebDAV
+ -----
+ -----
+ 
+QADefect WebDAV
+  
+  This example is located under <<<examples/QADefectWebDAV>>>
+
+  * WebDAV extension to QADefect example
+
+  * DAVDefectsResource and DavDefectResource handles WebDAV methods for collection of defects (it's read/write collection)
+
+  * DAVTestsResource and DAVTestResource handles WebDAV methods for collection of tests (it's read only collection)
+
+  * Collections of defects and tests can be accessed in a WebDAV client pointing to {{{http://localhost:8080/QADefectWebDAV/rest}http://localhost:8080/QADefectWebDAV/rest}} address
+
+  * Built-in Windows client - Web Folders (My Network Places / Add Network Place) can be used
+
+  * Alternative clients like WebDAV plug-in for Total Commander ({{{http://ghisler.fileburst.com/fsplugins/webdav.zip}http://ghisler.fileburst.com/fsplugins/webdav.zip}}) can be used as well
+
+  * Make sure you have installed Windows update: KB907306 ({{{http://support.microsoft.com/?kbid=907306}http://support.microsoft.com/?kbid=907306}}) for Windows Web Folders

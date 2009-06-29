@@ -1,0 +1,32 @@
+ -----
+ Downloads
+ -----
+ -----
+ May 2009
+ 
+How to Download
+
+	All of the Symphony 2.0 versions are located under the Maven repository located at  
+	{{@RESPOSITORY_LOCATION@}}
+		
+* Version 2.0
+
+** Symphony 2.0 Distribution
+
+  The Distribution zip includes all of the Symphony 2.0 and client jars, dependencies jars, javadocs and sources
+  
+*-----------+----------------------------------------------+
+|| Version || Artifact  || Description
+*-----------+----------------------------------------------+
+| @PROJECT_VERSION@ | {{{@RESPOSITORY_LOCATION@/@DEPLOY_DIRECTORY@/com/hp/sw/bto/ast/symphony/rest/symphony-sdk-dist/@PROJECT_VERSION@/}symphony-sdk-dist:@PROJECT_VERSION@}} | distribution zip - includes sdk jars, dependencies jars, javadocs and sources. |
+*-----------+----------------------------------------------+
+
+** Client Module Distribution
+
+  Client module distribution zip that includes only the client jars, dependencies jars, javadocs and sources
+  
+*-----------+----------------------------------------------+
+|| Version || Artifact  || Description
+*-----------+----------------------------------------------+
+| @PROJECT_VERSION@ | {{{@RESPOSITORY_LOCATION@/@DEPLOY_DIRECTORY@/com/hp/sw/bto/ast/symphony/rest/symphony-client/@PROJECT_VERSION@/}symphony-client:@PROJECT_VERSION@}}  |
+*-----------+----------------------------------------------+

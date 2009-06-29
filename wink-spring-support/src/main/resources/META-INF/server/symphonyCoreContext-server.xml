@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+	<!-- Spring root application context for Symphony SDK -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+	<!-- Object Factory-Factories definitions -->
+
+	<bean id="symphony.SpringOFFactory" class="org.apache.wink.spring.internal.SpringOFFactory">
+	</bean>
+
+	<bean id="symphony.offRegistry" class="org.apache.wink.common.internal.factory.OFFactoryRegistry">
+		<property name="factoryFactoryArray">
+			<list>
+				<ref local="symphony.SpringOFFactory" />
+				<bean class="org.apache.wink.common.internal.factory.ScopeOFFactory" />
+			</list>
+		</property>
+	</bean>
+
+
+	<!--  Post Processors -->
+
+	<bean id="symphony.RegistryPostProcessor"
+		class="org.apache.wink.spring.internal.RegistryPostProcessor">
+		<property name="providersRegistry">
+			<util:property-path
+				path="symphony_deploymentConfiguration.providersRegistry" />
+		</property>
+		<property name="resourceRegistry">
+			<util:property-path
+				path="symphony_deploymentConfiguration.resourceRegistry" />
+		</property>
+	</bean>
+
+	<bean id="symphony.SpringOFFactoryPostProcessor"
+		class="org.apache.wink.spring.internal.SpringOFFactoryPostProcessor">
+		<property name="springOFFactory">
+			<ref local="symphony.SpringOFFactory" />
+		</property>
+	</bean>
+
+
+	<bean id="symphony.DependenciesInjectionPostProcessor"
+		class="org.apache.wink.spring.internal.DependenciesInjectionPostProcessor">
+		<property name="springOFFactory">
+			<ref local="symphony.SpringOFFactory" />
+		</property>
+	</bean>
+
+	<!-- Request Processor -->
+
+	<bean id="symphony_deploymentConfiguration" class="org.apache.wink.server.internal.DeploymentConfiguration"
+		init-method="init">
+
+		<property name="properties">
+			<ref bean="symphony.propertiesFactory" />
+		</property>
+		<property name="requestHandlersChain">
+			<ref bean="${symphony.requestHandlersChain}" />
+		</property>
+        <property name="responseHandlersChain">
+            <ref bean="${symphony.responseHandlersChain}" />
+        </property>
+		<property name="errorHandlersChain">
+			<ref bean="${symphony.errorHandlersChain}" />
+		</property>
+		<property name="ofFactoryRegistry">
+			<ref bean="${symphony.offRegistry}" />
+		</property>
+		<property name="mediaTypeMapper">
+			<ref bean="${symphony.MediaTypeMapper}" />
+		</property>
+		<property name="alternateShortcutMap">
+			<ref bean="${symphony.alternateShortcutsMap}" />
+		</property>
+	</bean>
+
+
+	<!-- The central bean controlling the whole processing. -->
+	<!-- bean id="symphony_RequestProcessor"  class="org.apache.wink.server.internal.RequestProcessor">
+		<constructor-arg ref="symphony_deploymentConfiguration"
+			type="org.apache.wink.server.internal.DeploymentConfiguration">
+		</constructor-arg>
+	</bean -->
+
+	<bean id="symphony_RequestProcessorBuilder" class="org.apache.wink.spring.internal.RequestProcessorBuilder">
+		<property name="deploymentConfiguration">
+			<ref local="symphony_deploymentConfiguration" />
+		</property>
+		<property name="requestProcessorAttribute"
+			value="${symphony.servletContext.requestProcessorAttribute}">
+		</property>
+	</bean>
+
+	<!-- Properties -->
+
+	<bean id="symphony_defaultPropertiesFactory"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>classpath:META-INF/configuration-default.properties
+				</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="symphony.propertiesFactory"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="propertiesArray">
+			<list>
+				<ref local="symphony_defaultPropertiesFactory"/>
+				<ref bean="${symphony.propertiesFactory}" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- PlaceHolders -->
+
+
+	<!-- Property placeholder configurer -->
+	<!--
+		Used to configure beans that can be replaced. "symphony.null" means to
+		use a default implementation and not to use a bean.
+	-->
+	<bean id="symphony-1.6.defaultPlaceholderConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+		<property name="order" value="0x3fffffff" />
+		<property name="propertiesArray">
+			<list merge="true">
+				<props>
+					<prop key="symphony.propertiesFactory">symphony.null
+					</prop>
+					<prop key="symphony.MediaTypeMapper">symphony.null</prop>
+					<prop key="symphony.alternateShortcutsMap">symphony.null</prop>
+					<prop key="symphony.offRegistry">symphony.offRegistry</prop>
+					<prop key="symphony.requestHandlersChain">symphony.null</prop>
+                    <prop key="symphony.responseHandlersChain">symphony.null</prop>
+					<prop key="symphony.errorHandlersChain">symphony.null</prop>
+					<prop key="symphony.servletContext.requestProcessorAttribute"></prop>
+				</props>
+			</list>
+		</property>
+	</bean>
+
+
+	<util:constant id="symphony.null"
+		static-field="org.apache.wink.spring.internal.RequestProcessorBuilder.NULL" />
+
+</beans>

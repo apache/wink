@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.apache.wink.example</groupId>
+    <artifactId>wink-examples</artifactId>
+    <packaging>pom</packaging>
+    <name>${artifactId}:${version}</name>
+    <properties>
+        <module.relative.path>../</module.relative.path>
+    </properties>
+    <parent>
+        <groupId>org.apache.wink</groupId>
+        <artifactId>wink</artifactId>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <modules>
+        <module>apps</module>
+        <module>core</module>
+        <module>client</module>
+        <module>ext</module>
+  </modules>
+    <!-- The definition for the repositories was added to enable building the examples from the distribution zip (the parent will be located through this definition) -->
+	<!--
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>TBD</url>
+        </repository>
+        <repository>
+            <id>snapshots</id>
+            <url>TBD</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+	-->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>maven-jetty-plugin</artifactId>
+				<configuration>
+	                <scanIntervalSeconds>10</scanIntervalSeconds>
+	                <stopKey>foo</stopKey>
+	                <stopPort>9966</stopPort>
+				</configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

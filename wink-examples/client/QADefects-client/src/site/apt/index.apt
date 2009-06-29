@@ -1,0 +1,15 @@
+ -----
+ QADefects
+ -----
+ -----
+ 
+QADefects
+
+    This example is located under <<<examples/client/QADefects>>>
+
+    * A simple example that introduces Symphony Client usage
+    
+    * Demonstrate the consumption of an Atom feed of defects from the QADefectWithSpring service example which can be found at SDK_HOME/examples/apps/QADefectWithSpring
+ 
+ 
+ 

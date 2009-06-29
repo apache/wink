@@ -1,0 +1,60 @@
+<assembly>
+	<id></id>
+	
+	<formats>
+		<format>zip</format>
+	</formats>
+	
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>/lib</outputDirectory>
+            <scope>runtime</scope>
+  	        <includes>
+				<include>wink-client*.jar</include>
+                <include>wink-common*.jar</include>
+                <include>commons-*.jar</include>
+                <include>xerces*.jar</include>
+                <include>activation*.jar</include>
+                <include>jaxb*.jar</include>
+                <include>stax-api*.jar</include>
+			</includes>
+      </dependencySet>
+    </dependencySets>
+
+    <fileSets>
+        <fileSet>
+            <directory>target</directory>
+            <outputDirectory>/jdk14</outputDirectory>
+            <includes>
+				<include>*-jdk14.jar</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>target</directory>
+            <outputDirectory>/src</outputDirectory>
+            <includes>
+				<include>*-sources.jar</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>target/tmp-doc</directory>
+            <outputDirectory>/docs</outputDirectory>
+            <includes>
+              <include>pdf/**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>target/site/apidocs</directory>
+            <outputDirectory>/docs/api</outputDirectory>
+        </fileSet>        
+        <fileSet>
+            <directory>../examples/client/GoogleServices/src/main/java</directory>
+            <outputDirectory>/examples</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../examples/client/QADefects/src/main/java</directory>
+            <outputDirectory>/examples</outputDirectory>
+        </fileSet>
+	</fileSets>
+		
+</assembly>

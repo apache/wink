@@ -1,0 +1,11 @@
+ -----
+ Symphony Client Module
+ -----
+ -----
+ June 2008
+ 
+Symphony Client Module
+ 
+  Symphony REST client is a Java based library that provides functionality for communicating with REST based services. 
+  The library is built on top of the JDK HttpURLConnection and adds essential features that facilitate development of such client applications.
+  

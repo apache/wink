@@ -1,0 +1,17 @@
+ -----
+ HelloWorld
+ -----
+ -----
+ 
+HelloWorld
+
+  This example is located under <<<examples/HelloWorld>>>
+  
+  
+  * This example demonstrate the most basic implementation of a simple service using the SDK
+  
+  * A simple Atom feed with a "Hello World!" title is returned from this URL: {{{http://localhost:8080/HelloWorld/rest/world}http://localhost:8080/HelloWorld/rest/world}} 
+
+
+
+

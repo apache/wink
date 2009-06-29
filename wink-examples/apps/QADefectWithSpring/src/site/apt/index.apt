@@ -1,0 +1,14 @@
+ -----
+ QADefectWithSpring
+ -----
+ -----
+ 
+QADefectWithSpring
+  
+  This example is located under <<<examples/QADefectWithSpring>>>
+
+  * This example provides almost the same functionality as the QADefect example, 
+  but all the resourcess are declared using the ResourceBean interface. 
+  
+  * The list of all defects is returned as an Atom feed on this URI:
+  {{{http://localhost:8080/QADefectWithSpring/rest/defects}http://localhost:8080/QADefectWithSpring/rest/defects}}

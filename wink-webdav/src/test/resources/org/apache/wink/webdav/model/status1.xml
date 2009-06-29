@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<multistatus xmlns="DAV:">
+    <response>
+        <href>http://www.example.com/file</href>
+        <propstat>
+            <prop>
+                <R:bigbox xmlns:R="http://ns.example.com/boxschema/">
+                    <R:BoxType>Box type A</R:BoxType>
+                </R:bigbox>
+                <R:author xmlns:R="http://ns.example.com/boxschema/">
+                    <R:Name>J.J. Johnson</R:Name>
+                </R:author>
+            </prop>
+            <status>HTTP/1.1 200 OK</status>
+        </propstat>
+        <propstat>
+            <prop>
+                <R:DingALing xmlns:R="http://ns.example.com/boxschema/"/>
+                <R:Random xmlns:R="http://ns.example.com/boxschema/"/>
+            </prop>
+            <status>HTTP/1.1 403 Forbidden</status>
+            <responsedescription>The user does not have access to the DingALing property.</responsedescription>
+        </propstat>
+    </response>
+    <responsedescription>There has been an access violation error.</responsedescription>
+</multistatus>

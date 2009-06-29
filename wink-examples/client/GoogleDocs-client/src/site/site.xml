@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Client GoogleServices Example">
+    <body>
+        <breadcrumbs>
+        	<item name="symphony-sdk" href="../../.."/>
+            <item name="symphony-examples" href="../.."/>
+            <item name="client-examples" href=".."/>
+        </breadcrumbs> 
+    </body>
+</project>

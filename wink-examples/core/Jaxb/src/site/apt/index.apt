@@ -1,0 +1,11 @@
+ -----
+ Jaxb
+ -----
+ -----
+ 
+Jaxb
+
+  This example is located under <<<examples/Jaxb>>>
+  
+  * This example demonstrates how to use JAXB objects in association with application/xml media type
+     

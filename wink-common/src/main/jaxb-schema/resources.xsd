@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://hp.org/symphony/model/admin" xmlns="http://hp.org/symphony/model/admin" xmlns:admin="http://hp.org/symphony/model/admin" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xs:element name="registry">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="admin:resources" minOccurs="0" maxOccurs="1"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="resources">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="admin:resource" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="resource">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="uri" type="xs:string"/>
+				<xs:element name="class-name" type="xs:string" maxOccurs="1" minOccurs="0"/>
+				<xs:element name="priority" type="xs:decimal" maxOccurs="1" minOccurs="0"/>
+				<xs:element name="workspace" type="xs:string" maxOccurs="1" minOccurs="0"/>
+				<xs:element name="collection" type="xs:string" maxOccurs="1" minOccurs="0"/>
+				<xs:element ref="admin:methods"/>
+				<xs:element ref="admin:sub-resources"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="methods">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="method" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="name" type="xs:string" minOccurs="0"/>
+							<xs:element ref="admin:accept-media-types" minOccurs="0"/>
+							<xs:element ref="admin:produced-media-types" minOccurs="0"/>
+							<xs:element ref="admin:query-parameters" minOccurs="0"/>
+							<xs:element ref="admin:matrix-parameters" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="sub-resources">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="admin:sub-resource" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="sub-resource">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="type" type="xs:string"/>
+				<xs:element name="method" type="xs:string" minOccurs="0"/>
+				<xs:element name="uri" type="xs:string"/>
+				<xs:element ref="admin:accept-media-types" minOccurs="0"/>
+				<xs:element ref="admin:produced-media-types" minOccurs="0"/>
+				<xs:element ref="admin:query-parameters" minOccurs="0"/>
+				<xs:element ref="admin:matrix-parameters" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="accept-media-types">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="accept-media-type" type="admin:media-type" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="produced-media-types">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="produced-media-type" type="admin:media-type" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="query-parameters">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="admin:parameter" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="matrix-parameters">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="admin:parameter" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="parameter">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string"/>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="MandatoryYesNo">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="yes"/>
+			<xs:enumeration value="no"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="media-type">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="(.+/.+,?)*"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

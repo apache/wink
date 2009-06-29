@@ -1,0 +1,83 @@
+<project name="QADefectsClient" default="dist" basedir=".">
+	<description>
+        Ant build file for Symphony Client example QADefects
+    </description>
+
+	<property name="example.jar.name" value="QADefects-client.jar" />
+	<property name="common.jar.name" value="@SDK_COMMON_JAR_NAME@" />
+	<property name="client.jar.name" value="@SDK_CLIENT_JAR_NAME@" />
+
+
+	<!-- set global properties for this build -->
+	<property name="src" location="src" />
+	<property name="build" location="build" />
+	<property name="build.classes" location="${build}/classes" />
+	<property name="client.base" location="${basedir}/../../.." />
+	<property name="client.lib" location="${client.base}/lib" />
+	<property name="client.dist" location="${client.base}/dist" />
+	<property name="client.components" location="${client.dist}/components" />
+	<property name="client.jar" location="${client.components}/${client.jar.name}" />
+	<property name="common.jar" location="${client.components}/${common.jar.name}" />
+	<property name="example.jar" location="${basedir}/${example.jar.name}" />
+	<property name="main" location="${basedir}/src/main" />
+	<property name="resources" location="${main}/resources" />
+
+
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp />
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${build.classes}" />
+	</target>
+
+
+	<target name="compile" depends="init" description="compile the source ">
+		<!-- Set classpath for client lib -->
+		<path id="client.classpath">
+			<fileset dir="${client.lib}" includes="**/*.jar" />
+			<pathelement path="${common.jar}" />
+			<pathelement path="${client.jar}" />
+		</path>
+
+		<!-- Compile the java code from ${src} into ${build} -->
+		<javac srcdir="${src}" destdir="${build.classes}">
+			<classpath refid="client.classpath" />
+		</javac>
+	</target>
+
+	<target name="dist" depends="compile" description="generate the distribution">
+		<manifestclasspath property="jar.classpath" jarfile="${example.jar}" maxParentLevels="10">
+			<classpath>
+				<fileset dir="${client.lib}" includes="*.jar" />
+				<fileset dir="${client.components}" includes="*.jar" />
+			</classpath>
+		</manifestclasspath>
+		
+		<!-- Create the jar file -->
+		<jar destfile="${example.jar}" basedir="${build.classes}">
+			<manifest>
+				<attribute name="Main-Class" value="org.apache.wink.example.QADefectsClient" />
+				<attribute name="Class-Path" value="${jar.classpath}" />
+			</manifest>
+		</jar>
+	</target>
+
+
+	<target name="clean" description="clean up">
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${build}" />
+		<delete file="${example.jar}" />
+	</target>
+
+
+	<target name="run" depends="dist">
+		<java classname="org.apache.wink.example.QADefectsClient">
+			<classpath>
+				<fileset dir="${client.lib}" includes="**/*.jar" />
+				<fileset dir="${client.dist}" includes="**/*.jar" />
+				<fileset dir="." includes="**/*.jar" />
+			</classpath>
+		</java>
+	</target>
+
+</project>

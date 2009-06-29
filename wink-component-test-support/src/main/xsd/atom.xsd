@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            elementFormDefault="qualified"
+            targetNamespace="http://www.w3.org/2005/Atom"
+            xmlns:atom="http://www.w3.org/2005/Atom"
+            xmlns:app="http://www.w3.org/2007/app">
+
+    <xsd:import namespace="http://www.w3.org/2007/app" schemaLocation="appCategory.xsd"/>
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+
+    <xsd:group name="local">
+        <xsd:sequence>
+            <xsd:any namespace="##other" processContents="skip"/>
+        </xsd:sequence>
+    </xsd:group>
+
+</xsd:schema>

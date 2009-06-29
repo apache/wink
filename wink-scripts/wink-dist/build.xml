@@ -1,0 +1,287 @@
+<?xml version="1.0"?>
+<project name="distromaker" default="dist" xmlns="antlib:org.apache.tools.ant">
+	<!--
+	Distribution script
+	===================
+	1. This script is intend to be run using maven's maven-antrun-plugin.
+	   It should run either in deploy phase, or by invoking "mvn antrun:run".
+	2. When new component is added to the project at the root level (in addition to common, server and client),
+	   the following targets are effected:
+		a. merge.sources - if component should be added to the javadoc. 
+			Notice that only packages that start with org.* are added to the javadoc.
+		b. create.dist.components - if the component's target includes jars that should be included in dist/components and in main jars.
+		c. create.dist.resources - if the component has resources (e.g. *.xsd)
+	3. When new component is added under the root level components (e.g. under server in addition to server-core),
+	   the following targets are effected:
+	   	a.  create.dist.lib - if component has dependencies
+	4. Assumption of create.dist.lib is that no third parties have word "symphony" in it and should be removed.
+	5. Changes in examples should not effect this script.
+	-->
+
+	<property name="tmp" value="${basedir}/target/tmp" />
+	<property name="dist" value="${basedir}/target/dist" />
+	<property name="dist.root" value="${dist}/wink-${project.version}" />
+	<property name="dist.docs" value="${dist.root}/docs" />
+	<property name="dist.docs.api" value="${dist.docs}/api" />
+	<property name="dist.dist" value="${dist.root}/dist" />
+	<property name="dist.components" value="${dist.dist}/components" />
+	<property name="dist.resources" value="${dist.dist}/resources" />
+	<property name="dist.examples" value="${dist.root}/examples" />
+	<property name="dist.lib" value="${dist.root}/lib" />
+
+	<property name="project.root" value="${basedir}/../.." />
+	<property name="project.site" value="${project.root}/target/site" />
+	<property name="project.common" value="${project.root}/wink-common" />
+	<property name="project.server" value="${project.root}/wink-server" />
+	<property name="project.client" value="${project.root}/wink-client" />
+	<property name="project.webdav" value="${project.root}/wink-webdav" />
+	<property name="project.spring" value="${project.root}/wink-spring-support" />
+	<property name="project.examples" value="${project.root}/wink-examples" />
+
+
+	<property name="tmp.src" value="${tmp}/src" />
+	<property name="tmp.binary" value="${tmp}/binary" />
+
+	<property name="wink.main.jar.name" value="wink-sdk-${project.version}.jar" />
+	<property name="project.developerGuide.file" value="${basedir}/../../src/doc/DeveloperGuide/Symphony_SDK_2.0_Features_List.pdf" />
+
+	<!-- Init -->
+	<target name="init">
+
+		<fail message="This script is not intend to be run standalone, but should run from maven only. Run 'mvn antrun:run'." unless="project.version" />
+
+		<echo message="Building distribution of ${project.name}" />
+		<delete dir="target" />
+	</target>
+
+
+	<!-- Merges sources of all components to a single folder. -->
+	<!-- Used to create a javadoc -->
+	<!--target name="merge.sources" depends="init">
+
+
+		<mkdir dir="${tmp.src}" />
+
+		<!- - Sets file separator for the RE - ->
+		<condition property="re.file.sep" value="\\" else="/">
+			<equals arg1="${file.separator}" arg2="\" />
+		</condition>
+
+		<copy todir="${tmp.src}">
+			<fileset dir="${project.common}" includes="**/src/main/java/org/**" />
+			<fileset dir="${project.server}" includes="**/src/main/java/org/**" />
+			<fileset dir="${project.client}" includes="**/src/main/java/org/**" />
+			<mapper type="regexp" from="^(.*)src${re.file.sep}main${re.file.sep}java${re.file.sep}org(.*)$" to="org/\2" />
+		</copy>
+	</target -->
+
+	<!-- Creates javadoc folder with javadocs for all sources in org.hp package -->
+	<!-- Javadoc is common for all components -->
+	<target name="create.javadoc" depends="init">
+		<echo>Copying Javadocs ...</echo>
+		<mkdir dir="${dist.docs.api}" />
+		<copy todir="${dist.docs.api}">
+			<fileset dir="${project.site}/apidocs">
+				<!-- the javadoc maven plugin creates these files and doesn't delete them if -->
+				<!-- maven is run with the -X option, but we don't want them in the distribution -->
+				<exclude name="**/javadoc.*" />
+				<exclude name="**/options" />
+				<exclude name="**/packages" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- Creates components folder with jar of each component -->
+	<target name="create.dist.components" depends="init">
+		<echo>Making components</echo>
+		<mkdir dir="${dist.components}" />
+		<copy todir="${dist.components}" flatten="true" includeemptydirs="false">
+			<fileset dir="${project.common}">
+				<include name="**/*.jar" />
+				<exclude name="**/*xmlbeans-generated*" />
+			</fileset>
+			<fileset dir="${project.server}">
+				<include name="**/*.jar" />
+				<exclude name="**/*xmlbeans-generated*" />
+				<exclude name="**/*test-support*" />
+			</fileset>
+			<fileset dir="${project.client}">
+				<include name="**/*.jar" />
+				<exclude name="**/*xmlbeans-generated*" />
+			</fileset>
+			<fileset dir="${project.webdav}">
+				<include name="**/*.jar" />
+				<exclude name="**/*xmlbeans-generated*" />
+			</fileset>
+			<fileset dir="${project.spring}">
+				<include name="**/*.jar" />
+				<exclude name="**/*xmlbeans-generated*" />
+			</fileset>
+		</copy>
+
+	</target>
+
+	<!--
+	<!- - Creates resources folder with xsds. - ->
+	<target name="create.dist.resources" depends="init">
+		<echo>Making resources</echo>
+		<mkdir dir="${dist.resources}" />
+		<copy todir="${dist.resources}" flatten="true" includeemptydirs="false">
+			<fileset dir="${project.client}" includes="**/src/main/xsd/**" />
+			<fileset dir="${project.common}" includes="**/src/main/xsd/**" />
+			<fileset dir="${project.server}" includes="**/src/main/xsd/**" />
+		</copy>
+	</target>
+	-->
+
+	<!-- Creates lib folder with the third party jars -->
+	<target name="create.dist.lib" depends="init">
+		<echo>Making lib directory</echo>
+		<mkdir dir="${dist.lib}" />
+
+		<!-- Copies components dependencies -->
+		<ant target="copy.pom.dependencied">
+			<property name="pom.file" value="${project.root}/wink-common/pom.xml" />
+		</ant>
+		<ant target="copy.pom.dependencied">
+			<property name="pom.file" value="${project.root}/wink-client/pom.xml" />
+		</ant>
+		<ant target="copy.pom.dependencied">
+			<property name="pom.file" value="${project.root}/wink-server/pom.xml" />
+		</ant>
+		<ant target="copy.pom.dependencied">
+			<property name="pom.file" value="${project.root}/wink-webdav/pom.xml" />
+		</ant>
+		<ant target="copy.pom.dependencied">
+			<property name="pom.file" value="${project.spring}/pom.xml" />
+		</ant>
+
+		<!-- Copies retrotranslator dependencies -->
+		<dependencies filesetId="apis.fileset.retrotranslator">
+			<dependency groupId="org.apache.geronimo.specs" artifactId="geronimo-j2ee_1.4_spec" version="1.1" scope="compile" />
+		</dependencies>
+		
+		<dependencies filesetId="examples.lib">
+			<dependency groupId="commons-cli" artifactId="commons-cli" version="1.2" scope="compile" />
+		</dependencies>
+		
+		<mkdir dir="${dist.lib}/examples" />
+		<copy todir="${dist.lib}/examples" flatten="true" overwrite="false">
+			<fileset refid="examples.lib" />
+		</copy>
+		
+		<mkdir dir="${dist.lib}/apis" />
+		<copy todir="${dist.lib}/apis" flatten="true" overwrite="false">
+			<fileset refid="apis.fileset.retrotranslator" />
+		</copy>
+
+		<!-- Delete project dependencies (if any), since they are already in dist directory -->
+		<delete dir="${dist.lib}">
+			<include name="**/wink*${project.version}*" />
+		</delete>
+
+	</target>
+
+	<!-- Copies dependencies of the specific pom.file to dist.lib folder. -->
+	<!-- Runs from create.dist.lib target -->
+	<target name="copy.pom.dependencied">
+		<echo>"${pom.file}"</echo>
+		<pom id="maven.project" file="${pom.file}" />
+		<dependencies filesetId="dependency.fileset" useScope="runtime">
+			<pom refid="maven.project" />
+		</dependencies>
+
+		<copy todir="${dist.lib}" flatten="true" overwrite="false">
+			<fileset refid="dependency.fileset" />
+		</copy>
+	</target>
+
+	<!-- Copies legal documents to the root folder and SDK PDF document to the doc directory. -->
+	<target name="create.dist.root.docs" depends="init">
+		<echo>Making root documents</echo>
+		<copy todir="${dist.root}" flatten="true" includeemptydirs="false">
+			<fileset dir="${project.root}/src" includes="doc/*.txt" />
+		</copy>
+		<!-- replace the version in the copied readme.txt files -->
+		<replace file="${dist.root}/readme.txt">
+			<replacefilter token="@PROJECT_VERSION@" value="${project.version}" />
+		</replace>
+		<!-- Copy PDF Developer Guide that exists under trunk/src/doc/DeveloperGuide into doc directory -->
+		<copy file="${project.developerGuide.file}" todir="${dist.docs}" />
+	</target>
+
+	<!-- Creates jar that aggregates all components -->
+	<target name="create.dist.main.jar" depends="create.dist.components">
+		<echo>Making main jar</echo>
+		<ant target="create.dist.aggregator.jar">
+			<property name="tmp.unzip" value="${tmp.binary}" />
+			<property name="aggregator.target" value="${dist.components}" />
+			<property name="aggregator.includes" value="*-${project.version}.jar" />
+			<property name="aggregator.jar.name" value="${dist.dist}/${wink.main.jar.name}" />
+		</ant>
+	</target>
+
+
+	<!-- Creates jar that aggregates sources of all components -->
+	<target name="create.dist.main.sources.jar" depends="create.dist.components">
+		<echo>Making main sources jar</echo>
+		<ant target="create.dist.aggregator.jar">
+			<property name="tmp.unzip" value="${tmp.binary}" />
+			<property name="aggregator.target" value="${dist.components}" />
+			<property name="aggregator.includes" value="*-${project.version}-sources.jar" />
+			<property name="aggregator.jar.name" value="${dist.dist}/wink-sdk-${project.version}-sources.jar" />
+		</ant>
+	</target>
+
+	<!-- Merges several jars from aggregator.target using aggregator.includes to a signle jar with aggregator.jar.name -->
+	<target name="create.dist.aggregator.jar">
+		<echo>aggregator.jar.name: ${aggregator.jar.name}</echo>
+		<mkdir dir="${tmp.unzip}" />
+		<unzip dest="${tmp.unzip}" overwrite="true">
+			<fileset dir="${aggregator.target}" includes="${aggregator.includes}" />
+		</unzip>
+		<jar destfile="${aggregator.jar.name}" basedir="${tmp.unzip}">
+			<manifest>
+				<attribute name="Created-By" value="Wink Distribution Script" />
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Build-Jdk" value="${java.version}" />
+				<attribute name="Implementation-Title" value="${title.name}" />
+				<attribute name="Implementation-Version" value="${project.version}" />
+				<attribute name="Implementation-Vendor-Id" value="${group.id}" />
+			</manifest>
+		</jar>
+		<delete dir="${tmp.unzip}" />
+	</target>
+
+	<!-- Creates examples folder -->
+	<target name="create.examples" depends="init">
+		<echo>Making examples directory</echo>
+		<copy todir="${dist.examples}" includeemptydirs="false">
+			<fileset dir="${project.root}/wink-examples">
+				<include name="**/build.xml" />
+				<exclude name="**/GoogleServices-client/**" />
+			    <exclude name="**/target/**" />
+			</fileset>
+			<filterset>
+				<filter token="SDK_JAR_NAME" value="${wink.main.jar.name}" />
+				<filter token="SDK_COMMON_JAR_NAME" value="wink-common-${project.version}.jar" />
+				<filter token="SDK_CLIENT_JAR_NAME" value="wink-client-${project.version}.jar" />
+			</filterset>
+		</copy>
+		<copy todir="${dist.examples}" includeemptydirs="false" overwrite="false">
+			<fileset dir="${project.root}/wink-examples">
+				<include name="**/pom.xml" />
+				<include name="**/readme.txt" />
+				<include name="**/src/main/**" />
+				<exclude name="**/GoogleServices-client/**" />
+                <exclude name="**/target/**" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- Creates final zip -->
+	<target name="dist" depends="create.javadoc, create.dist.components, create.dist.lib, create.dist.root.docs, create.dist.main.jar, create.dist.main.sources.jar, create.examples">
+		<zip destfile="${target.zip}" basedir="${dist}" />
+	</target>
+
+</project>

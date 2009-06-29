@@ -1,0 +1,15 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+    <ShortName>HP Defect Manager search engine</ShortName>
+    <Description>You can search defects in HP Defect Manager</Description>
+    <Tags>defect bug</Tags>
+    <Contact>john.smith@example.com</Contact>
+    <Url template="http://localhost:8080/QADefectUsingResourceBeans-service/rest/defects?q={searchTerms?}" type="text/html"/>
+    <Url template="http://localhost:8080/QADefectUsingResourceBeans-service/rest/defects?severity={urn:hp:defect:severity?}&amp;q={searchTerms?}&amp;assignedTo={urn:hp:defect:assignedTo?}" type="text/html"/>
+    <LongName>HP Defect Manager search engine</LongName>
+    <Image type="image/jpeg" width="64" height="64">http://localhost:8080/QADefectUsingResourceBeans-service/rest/defectssplash.jpg</Image>
+    <Query outputEncoding="UTF-8" inputEncoding="UTF-8" language="en-US" startIndex="1" startPage="10" count="10" totalResults="65000" title="Defect Search" searchTerms="All Defects" role="example"/>
+    <Developer>John Smith</Developer>
+    <Language>en-US</Language>
+    <OutputEncoding>UTF-8</OutputEncoding>
+    <InputEncoding>UTF-8</InputEncoding>
+</OpenSearchDescription>

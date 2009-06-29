@@ -1,0 +1,20 @@
+ -----
+ SimpleDefects
+ -----
+ -----
+ 
+SimpleDefects
+  
+  This example is located under <<<examples/SimpleDefects>>>
+
+  * Simple implementation of a QA defect web service showing a custom implementation of resource and representation classes
+  
+  * The defect resource demonstrates the handling of a data object including its serialization and deserialization
+  
+  * JAXB usage is demonstrated
+  
+  * Defects can be listed, created, updated, and deleted
+  
+  * The list of all defects is returned as an Atom feed from {{{http://localhost:8080/SimpleDefects/rest/defects}http://localhost:8080/SimpleDefects/rest/defects}}
+
+    

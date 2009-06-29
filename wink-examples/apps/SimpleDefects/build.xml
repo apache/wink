@@ -1,0 +1,64 @@
+<project name="SimpleDefects" default="dist" basedir=".">
+	<description>
+        Ant build file for Symphony SDK example Simple Defects
+    </description>
+
+	<property name="final.war.name" value="SimpleDefects.war" />
+	<property name="sdk.jar.name" value="@SDK_JAR_NAME@" />
+
+
+	<!-- set global properties for this build -->
+	<property name="build" location="build" />
+	<property name="build.classes" location="${build}/classes" />
+	<property name="sdk.base" location="${basedir}/../../.." />
+	<property name="sdk.lib" location="${sdk.base}/lib" />
+	<property name="sdk.dist" location="${sdk.base}/dist" />
+	<property name="sdk.jar" location="${sdk.dist}/${sdk.jar.name}" />
+	<property name="final.war" location="${basedir}/${final.war.name}" />
+	<property name="main" location="${basedir}/src/main" />
+	<property name="webapp" location="${main}/webapp" />
+	<property name="resources" location="${main}/resources" />
+
+
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp />
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${build.classes}" />
+	</target>
+	
+	<target name="compile" depends="init" description="compile the source ">
+		<!-- Set classpath for SDK lib -->
+		<path id="sdk.classpath">
+			<fileset dir="${sdk.lib}" includes="**/*.jar" />
+			<pathelement path="${sdk.jar}" />
+		</path>
+
+		<!-- Compile the java code -->
+		<javac srcdir="${main}/java" destdir="${build.classes}">
+			<classpath refid="sdk.classpath" />
+			
+		</javac>
+	</target>
+
+
+	<target name="dist" depends="compile" description="generate the distribution">
+
+		<!-- Create the war file -->
+		<war destfile="${final.war}" webxml="${webapp}/WEB-INF/web.xml" basedir="${webapp}" excludes="WEB-INF/**">
+			
+			<webinf dir="${webapp}/WEB-INF" includes="**/*" />
+			<classes dir="${build.classes}" includes="**/*" />
+			<lib dir="${sdk.lib}" includes="*.jar" excludes="spring*.jar"/>
+			<lib file="${sdk.jar}" />
+		</war>
+	</target>
+
+
+	<target name="clean" description="clean up">
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${build}" />
+		<delete file="${final.war}" />
+	</target>
+
+</project>

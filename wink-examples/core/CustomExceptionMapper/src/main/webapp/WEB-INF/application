@@ -1,0 +1,2 @@
+org.apache.wink.example.customerror.UsersResource
+org.apache.wink.example.customerror.UserNotExistExceptionMapper

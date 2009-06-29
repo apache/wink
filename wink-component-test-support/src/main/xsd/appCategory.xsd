@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  -*- rnc -*-
+  RELAX NG Compact Syntax Grammar for the Atom Protocol
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            elementFormDefault="qualified"
+            targetNamespace="http://www.w3.org/2007/app"
+            xmlns:atom="http://www.w3.org/2005/Atom"
+            xmlns:app="http://www.w3.org/2007/app">
+
+    <xsd:import namespace="http://www.w3.org/2005/Atom" schemaLocation="atom.xsd"/>
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+    <!-- common:attrs -->
+    <xsd:attributeGroup name="atomCommonAttributes">
+        <xsd:attribute ref="xml:base"/>
+        <xsd:attribute ref="xml:lang"/>
+        <xsd:attributeGroup ref="app:undefinedAttribute"/>
+    </xsd:attributeGroup>
+
+    <xsd:attributeGroup name="undefinedAttribute">
+        <xsd:anyAttribute processContents="skip"/>
+    </xsd:attributeGroup>
+    <xsd:group name="appInlineCategories">
+        <xsd:sequence>
+    		<xsd:element minOccurs="0" maxOccurs="unbounded"  ref="app:categories"/>        
+        </xsd:sequence>
+    </xsd:group>
+	<xsd:element name="categories">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="0" maxOccurs="unbounded" ref="atom:category"/>
+                    </xsd:sequence>
+                    <xsd:attribute name="href"/>
+                    <xsd:attribute name="fixed">
+                        <xsd:simpleType>
+                            <xsd:restriction base="xsd:token">
+                                <xsd:enumeration value="yes"/>
+                                <xsd:enumeration value="no"/>
+                            </xsd:restriction>
+                        </xsd:simpleType>
+                    </xsd:attribute>
+                    <xsd:attribute name="scheme"/>
+                </xsd:complexType>
+    </xsd:element>
+    <xsd:group name="appCategories">
+        <xsd:sequence>
+            <xsd:group ref="app:appInlineCategories"/>
+        </xsd:sequence>
+    </xsd:group>
+
+    <xsd:element name="control" type="xsd:string"/>
+
+    <xsd:complexType name="undefinedContent" mixed="true">
+        <xsd:group minOccurs="0" maxOccurs="unbounded" ref="app:anyForeignElement"/>
+    </xsd:complexType>
+    <xsd:group name="anyElement">
+        <xsd:sequence>
+            <xsd:any processContents="skip"/>
+        </xsd:sequence>
+    </xsd:group>
+    <xsd:group name="anyForeignElement">
+        <xsd:choice>
+            <xsd:group ref="atom:local"/>
+            <xsd:any namespace="##local" processContents="skip"/>
+        </xsd:choice>
+    </xsd:group>
+
+</xsd:schema>
+
+<!-- EOF -->

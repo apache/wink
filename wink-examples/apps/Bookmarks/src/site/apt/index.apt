@@ -1,0 +1,15 @@
+ -----
+ Bookmarks
+ -----
+ -----
+ 
+Bookmarks
+
+  This example is located under <<<examples/Bookmarks>>>
+  
+  * This is a simple implementation of a bookmarking web service 
+    
+  * The predefined bookmarks can be listed and updated
+    
+  * A list of predefined bookmarks is returned as an Atom feed on this URI: {{{http://localhost:8080/Bookmarks/rest/mybookmarks}http://localhost:8080/Bookmarks/rest/mybookmarks}}
+ 

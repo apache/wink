@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<D:propertyupdate xmlns:D="DAV:"
+                  xmlns:Z="http://ns.example.com/standards/z39.50/">
+    <D:set>
+        <D:prop>
+            <Z:Authors>
+                <Z:Author>Jim Whitehead</Z:Author>
+                <Z:Author>Roy Fielding</Z:Author>
+            </Z:Authors>
+        </D:prop>
+    </D:set>
+    <D:remove>
+        <D:prop>
+            <Z:Copyright-Owner/>
+        </D:prop>
+    </D:remove>
+</D:propertyupdate>

@@ -1,0 +1,21 @@
+a:link {
+  color:#1111ee;
+}
+a:visited  {
+  color:#111188;
+}
+#navcolumn h5 {
+  color: #336666;
+}
+.xright a:link, .xright a:visited {
+  color: #000099;
+}
+.xright a:hover, .xright a:active {
+  color: #990000;
+}
+#banner {
+  height: 70px;
+  background: none;
+  background-color: #003366
+}
+

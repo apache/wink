@@ -1,0 +1,816 @@
+/*******************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ *  
+ *******************************************************************************/
+ 
+
+package org.apache.wink.common.model.atom;
+
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.namespace.QName;
+
+import org.apache.wink.common.RestConstants;
+import org.apache.wink.common.internal.utils.JAXBUtils;
+import org.apache.wink.common.model.JAXBNamespacePrefixMapper;
+import org.apache.wink.common.model.atom.AtomCategory;
+import org.apache.wink.common.model.atom.AtomContent;
+import org.apache.wink.common.model.atom.AtomEntry;
+import org.apache.wink.common.model.atom.AtomFeed;
+import org.apache.wink.common.model.atom.AtomGenerator;
+import org.apache.wink.common.model.atom.AtomJAXBUtils;
+import org.apache.wink.common.model.atom.AtomLink;
+import org.apache.wink.common.model.atom.AtomPerson;
+import org.apache.wink.common.model.atom.AtomText;
+import org.apache.wink.common.model.atom.AtomTextType;
+import org.apache.wink.common.model.atom.ObjectFactory;
+import org.apache.wink.common.model.opensearch.OpenSearchQuery;
+
+import junit.framework.TestCase;
+
+
+
+public class AtomTest extends TestCase {
+    
+    private static final String ATOM_TEXT_TEXT = "<title type=\"text\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">title</title>\n";
+    private static final String ATOM_TEXT_HTML = "<title type=\"html\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">&lt;h1&gt;title&lt;/h1&gt;</title>\n";
+    private static final String ATOM_TEXT_XHTML = 
+        "<title type=\"xhtml\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + 
+        "    <div xmlns=\""+RestConstants.NAMESPACE_XHTML+"\">\n" +
+        "        <h1>title</h1>\n" +
+        "    </div>\n" + 
+        "</title>\n";
+    private static final String ATOM_TEXT_XHTML_WITH_DIV = 
+        "<title type=\"xhtml\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + 
+        "    <div xmlns=\""+RestConstants.NAMESPACE_XHTML+"\">\n" +
+        "        <h1>\n" +
+        "            <div>title</div>\n" +
+        "        </h1>\n" +
+        "    </div>\n" + 
+        "</title>\n";
+    
+    
+    private static final String ATOM_CONTENT_TEXT = "<content type=\"text\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">title</content>\n";
+    private static final String ATOM_CONTENT_HTML = "<content type=\"html\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">&lt;h1&gt;title&lt;/h1&gt;</content>\n";
+    private static final String ATOM_CONTENT_XHTML = 
+        "<content type=\"xhtml\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + 
+        "    <div xmlns=\""+RestConstants.NAMESPACE_XHTML+"\">\n" +
+        "        <h1>title</h1>\n" +
+        "    </div>\n" + 
+        "</content>\n";
+    private static final String ATOM_CONTENT_XML = 
+        "<content type=\"application/xml\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">\n" +
+        "    <x xmlns=\"http://x/\">title</x>\n" +
+        "</content>\n";
+    
+    private static final String ATOM_ENTRY_1 = replaceTimeToken(
+        "<entry xml:lang=\"en-us\" xml:base=\"http://entry/base\" anyAttr=\"anyAttrValue\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + 
+        "    <id>1</id>\n" + 
+        "    <updated>@TIME@</updated>\n" + 
+        "    <title type=\"text\">title</title>\n" + 
+        "    <summary type=\"text\">summary</summary>\n" + 
+        "    <published>@TIME@</published>\n" + 
+        "    <link href=\"href\" type=\"text/plain\" rel=\"rel\" hreflang=\"en-us\" title=\"title\" length=\"10\"/>\n" + 
+        "    <author>\n" + 
+        "        <email>author@hp.com</email>\n" + 
+        "        <name>author</name>\n" + 
+        "        <uri>http://uri</uri>\n" + 
+        "    </author>\n" + 
+        "    <contributor>\n" + 
+        "        <email>cont@hp.com</email>\n" + 
+        "        <name>cont</name>\n" + 
+        "        <uri>http://uri</uri>\n" + 
+        "    </contributor>\n" + 
+        "    <category label=\"label\" scheme=\"scheme\" term=\"term\"/>\n" +
+        "</entry>\n");
+    private static final String ATOM_ENTRY_2 = replaceTimeToken(
+        "<entry xml:lang=\"en-us\" xml:base=\"http://entry/base\" anyAttr=\"anyAttrValue\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + 
+        "    <id>2</id>\n" + 
+        "    <updated>@TIME@</updated>\n" + 
+        "    <title type=\"text\">title</title>\n" + 
+        "    <summary type=\"text\">summary</summary>\n" + 
+        "    <published>@TIME@</published>\n" + 
+        "    <link href=\"href\" type=\"text/plain\" rel=\"rel\" hreflang=\"en-us\" title=\"title\" length=\"10\"/>\n" + 
+        "    <author>\n" + 
+        "        <email>author@hp.com</email>\n" + 
+        "        <name>author</name>\n" + 
+        "        <uri>http://uri</uri>\n" + 
+        "    </author>\n" + 
+        "    <contributor>\n" + 
+        "        <email>cont@hp.com</email>\n" + 
+        "        <name>cont</name>\n" + 
+        "        <uri>http://uri</uri>\n" + 
+        "    </contributor>\n" + 
+        "    <category label=\"label\" scheme=\"scheme\" term=\"term\"/>\n" +
+        "    <content type=\"text/plain\">Gustaf's Knäckebröd</content>\n" + 
+        "</entry>\n");
+    private static final String ATOM_ENTRY_3 = replaceTimeToken(
+        "<entry xml:lang=\"en-us\" xml:base=\"http://entry/base\" anyAttr=\"anyAttrValue\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + 
+        "    <id>3</id>\n" + 
+        "    <updated>@TIME@</updated>\n" + 
+        "    <title type=\"text\">title</title>\n" + 
+        "    <summary type=\"text\">summary</summary>\n" + 
+        "    <published>@TIME@</published>\n" + 
+        "    <link href=\"href\" type=\"text/plain\" rel=\"rel\" hreflang=\"en-us\" title=\"title\" length=\"10\"/>\n" + 
+        "    <author>\n" + 
+        "        <email>author@hp.com</email>\n" + 
+        "        <name>author</name>\n" + 
+        "        <uri>http://uri</uri>\n" + 
+        "    </author>\n" + 
+        "    <contributor>\n" + 
+        "        <email>cont@hp.com</email>\n" + 
+        "        <name>cont</name>\n" + 
+        "        <uri>http://uri</uri>\n" + 
+        "    </contributor>\n" + 
+        "    <category label=\"label\" scheme=\"scheme\" term=\"term\"/>\n" +
+        "    <content type=\"application/xml\">\n" + 
+        "        <x1 xmlns=\"xxx\" xmlns:y=\"yyy\">\n" +
+        "            <x2>\n" +
+        "                <y:y1>Gustaf's Knäckebröd</y:y1>\n" +
+        "            </x2>\n" +
+        "        </x1>\n" + 
+        "    </content>\n" + 
+        "</entry>\n");
+    
+    private static final String ATOM_FEED_1 = replaceTimeToken(
+        "<feed xml:lang=\"en-us\" xml:base=\"http://feed/base\" anyAttr=\"anyAttrValue\" xmlns:opensearch=\"http://a9.com/-/spec/opensearch/1.1/\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + 
+        "    <id>id</id>\n" + 
+        "    <updated>@TIME@</updated>\n" + 
+        "    <title type=\"text\">title</title>\n" + 
+        "    <subtitle type=\"text\">subtitle</subtitle>\n" + 
+        "    <opensearch:itemsPerPage>5</opensearch:itemsPerPage>\n" + 
+        "    <opensearch:startIndex>6</opensearch:startIndex>\n" + 
+        "    <opensearch:totalResults>7</opensearch:totalResults>\n" +
+        "    <opensearch:Query searchTerms=\"query 1\"/>\n" +
+        "    <opensearch:Query searchTerms=\"query 2\"/>\n" +
+        "    <link href=\"href\" type=\"text/plain\" rel=\"rel\" hreflang=\"en-us\" title=\"title\" length=\"10\"/>\n" + 
+        "    <author>\n" + 
+        "        <email>author@hp.com</email>\n" + 
+        "        <name>author</name>\n" + 
+        "        <uri>http://uri</uri>\n" + 
+        "    </author>\n" + 
+        "    <contributor>\n" + 
+        "        <email>cont@hp.com</email>\n" + 
+        "        <name>cont</name>\n" + 
+        "        <uri>http://uri</uri>\n" + 
+        "    </contributor>\n" + 
+        "    <category label=\"label\" scheme=\"scheme\" term=\"term\"/>\n" + 
+        "    <generator version=\"1.0\" uri=\"http://generator/uri\" xml:lang=\"en-us\" xml:base=\"http://generator/base\">symphony</generator>\n" + 
+        "    <icon>icon</icon>\n" + 
+        "    <logo>logo</logo>\n" + 
+        "    <rights type=\"text\">rights</rights>\n" + 
+        "    <entry xml:lang=\"en-us\" xml:base=\"http://entry/base\" anyAttr=\"anyAttrValue\">\n" + 
+        "        <id>1</id>\n" + 
+        "        <updated>@TIME@</updated>\n" + 
+        "        <title type=\"text\">title</title>\n" + 
+        "        <summary type=\"text\">summary</summary>\n" + 
+        "        <published>@TIME@</published>\n" + 
+        "        <link href=\"href\" type=\"text/plain\" rel=\"rel\" hreflang=\"en-us\" title=\"title\" length=\"10\"/>\n" + 
+        "        <author>\n" + 
+        "            <email>author@hp.com</email>\n" + 
+        "            <name>author</name>\n" + 
+        "            <uri>http://uri</uri>\n" + 
+        "        </author>\n" + 
+        "        <contributor>\n" + 
+        "            <email>cont@hp.com</email>\n" + 
+        "            <name>cont</name>\n" + 
+        "            <uri>http://uri</uri>\n" + 
+        "        </contributor>\n" + 
+        "        <category label=\"label\" scheme=\"scheme\" term=\"term\"/>\n" + 
+        "        <content type=\"application/xml\">\n" + 
+        "            <x1 xmlns=\"xxx\" xmlns:y=\"yyy\">\n" +
+        "                <x2>\n" +
+        "                    <y:y1>Gustaf's Knäckebröd</y:y1>\n" +
+        "                </x2>\n" +
+        "            </x1>\n" + 
+        "        </content>\n" + 
+        "    </entry>\n" + 
+        "</feed>\n");
+
+    private static final String ATOM_FEED_2 = replaceTimeToken(
+            "<feed xml:lang=\"en-us\" xml:base=\"http://feed/base\" anyAttr=\"anyAttrValue\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + 
+            "    <id>id</id>\n" + 
+            "    <updated>@TIME@</updated>\n" + 
+            "    <title type=\"text\">title</title>\n" + 
+            "    <subtitle type=\"text\">subtitle</subtitle>\n" + 
+            "    <link href=\"href\" type=\"text/plain\" rel=\"rel\" hreflang=\"en-us\" title=\"title\" length=\"10\"/>\n" + 
+            "    <author>\n" + 
+            "        <email>author@hp.com</email>\n" + 
+            "        <name>author</name>\n" + 
+            "        <uri>http://uri</uri>\n" + 
+            "    </author>\n" + 
+            "    <contributor>\n" + 
+            "        <email>cont@hp.com</email>\n" + 
+            "        <name>cont</name>\n" + 
+            "        <uri>http://uri</uri>\n" + 
+            "    </contributor>\n" + 
+            "    <category label=\"label\" scheme=\"scheme\" term=\"term\"/>\n" + 
+            "    <generator version=\"1.0\" uri=\"http://generator/uri\" xml:lang=\"en-us\" xml:base=\"http://generator/base\">symphony</generator>\n" + 
+            "    <icon>icon</icon>\n" + 
+            "    <logo>logo</logo>\n" + 
+            "    <rights type=\"text\">rights</rights>\n" + 
+            "    <entry xml:lang=\"en-us\" xml:base=\"http://entry/base\" anyAttr=\"anyAttrValue\">\n" + 
+            "        <id>1</id>\n" + 
+            "        <updated>@TIME@</updated>\n" + 
+            "        <title type=\"text\">title</title>\n" + 
+            "        <summary type=\"text\">summary</summary>\n" + 
+            "        <published>@TIME@</published>\n" + 
+            "        <link href=\"href\" type=\"text/plain\" rel=\"rel\" hreflang=\"en-us\" title=\"title\" length=\"10\"/>\n" + 
+            "        <author>\n" + 
+            "            <email>author@hp.com</email>\n" + 
+            "            <name>author</name>\n" + 
+            "            <uri>http://uri</uri>\n" + 
+            "        </author>\n" + 
+            "        <contributor>\n" + 
+            "            <email>cont@hp.com</email>\n" + 
+            "            <name>cont</name>\n" + 
+            "            <uri>http://uri</uri>\n" + 
+            "        </contributor>\n" + 
+            "        <category label=\"label\" scheme=\"scheme\" term=\"term\"/>\n" + 
+            "        <content type=\"application/xml\">\n" + 
+            "            <x1 xmlns=\"xxx\" xmlns:y=\"yyy\">\n" +
+            "                <x2>\n" +
+            "                    <y:y1>Gustaf's Knäckebröd</y:y1>\n" +
+            "                </x2>\n" +
+            "            </x1>\n" + 
+            "        </content>\n" + 
+            "    </entry>\n" + 
+            "</feed>\n");
+    
+    private static JAXBContext ctx;
+    
+    static {
+        try {
+            ctx = JAXBContext.newInstance(AtomFeed.class, AtomEntry.class, AtomText.class);
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    public void testAtomTextMarshal() throws Exception {
+        Marshaller m = JAXBUtils.createMarshaller(ctx);
+        
+        AtomText text = new AtomText();
+        text.setBase("http://title/base");
+        text.setLang("en-us");
+        
+        JAXBNamespacePrefixMapper mapper = new JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_ATOM);
+        mapper.omitNamespace(RestConstants.NAMESPACE_OPENSEARCH);
+        
+        // test type TEXT
+        text.setType(AtomTextType.text);
+        text.setValue("title");
+        JAXBElement<AtomText> element = (new ObjectFactory()).createTitle(text);
+        StringWriter writer = new StringWriter();
+        AtomJAXBUtils.marshal(m, element, null, mapper, writer);
+        assertEquals(ATOM_TEXT_TEXT, writer.toString());
+        
+        // test type HTML
+        text.setType(AtomTextType.html);
+        text.setValue("<h1>title</h1>");
+        element = (new ObjectFactory()).createTitle(text);
+        writer = new StringWriter();
+        AtomJAXBUtils.marshal(m, element, null, mapper, writer);
+        assertEquals(ATOM_TEXT_HTML, writer.toString());
+        
+        // test type XHTML
+        text.setType(AtomTextType.xhtml);
+        text.setValue("<h1>title</h1>");
+        element = (new ObjectFactory()).createTitle(text);
+        writer = new StringWriter();
+        AtomJAXBUtils.marshal(m, element, null, mapper, writer);
+        assertEquals(ATOM_TEXT_XHTML, writer.toString());
+    }
+    
+    public void testAtomTextUnmarshal() throws Exception {
+        Unmarshaller u = JAXBUtils.createUnmarshaller(ctx);
+        Object element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_TEXT_TEXT));
+        assertNotNull(element);
+        assertTrue(element instanceof AtomText);
+        AtomText text = (AtomText)element;
+        assertNotNull(text);
+        assertEquals("en-us", text.getLang());
+        assertEquals("http://title/base", text.getBase());
+        assertEquals("title", text.getValue());
+        assertEquals(AtomTextType.text, text.getType());
+        
+        element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_TEXT_HTML));
+        assertNotNull(element);
+        assertTrue(element instanceof AtomText);
+        text = (AtomText)element;
+        assertNotNull(text);
+        assertEquals("en-us", text.getLang());
+        assertEquals("http://title/base", text.getBase());
+        assertEquals("<h1>title</h1>", text.getValue());
+        assertEquals(AtomTextType.html, text.getType());
+        
+        element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_TEXT_XHTML));
+        assertNotNull(element);
+        assertTrue(element instanceof AtomText);
+        text = (AtomText)element;
+        assertNotNull(text);
+        assertEquals("en-us", text.getLang());
+        assertEquals("http://title/base", text.getBase());
+        assertEquals("<h1 xmlns=\""+RestConstants.NAMESPACE_XHTML+"\">title</h1>", text.getValue());
+        assertEquals(AtomTextType.xhtml, text.getType());
+    }
+    
+    public void testAtomTextUnmarshalXhtml() throws Exception {
+        Unmarshaller u = JAXBUtils.createUnmarshaller(ctx);
+        
+        Object element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_TEXT_XHTML_WITH_DIV));
+        assertNotNull(element);
+        assertTrue(element instanceof AtomText);
+        AtomText text = (AtomText)element;
+        assertNotNull(text);
+        assertEquals("en-us", text.getLang());
+        assertEquals("http://title/base", text.getBase());
+        assertEquals("<h1 xmlns=\""+RestConstants.NAMESPACE_XHTML+"\"><div>title</div></h1>", text.getValue().replaceAll("\n", "").replaceAll("    ", ""));
+        assertEquals(AtomTextType.xhtml, text.getType());
+    }
+
+    public void testAtomContentMarshal() throws Exception {
+        Marshaller m = JAXBUtils.createMarshaller(ctx);
+        
+        JAXBNamespacePrefixMapper mapper = new JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_ATOM);
+        mapper.omitNamespace(RestConstants.NAMESPACE_OPENSEARCH);
+
+        AtomContent content = new AtomContent();
+        content.setBase("http://title/base");
+        content.setLang("en-us");
+        
+        content.setType("text");
+        content.setValue("title");
+        JAXBElement<AtomContent> element = (new ObjectFactory()).createContent(content);
+        StringWriter writer = new StringWriter();
+        AtomJAXBUtils.marshal(m, element, null, mapper, writer);
+        assertEquals(ATOM_CONTENT_TEXT, writer.toString());
+        
+        content.setType("html");
+        content.setValue("<h1>title</h1>");
+        element = (new ObjectFactory()).createContent(content);
+        writer = new StringWriter();
+        AtomJAXBUtils.marshal(m, element, null, mapper, writer);
+        assertEquals(ATOM_CONTENT_HTML, writer.toString());
+
+        content.setType("xhtml");
+        content.setValue("<h1>title</h1>");
+        element = (new ObjectFactory()).createContent(content);
+        writer = new StringWriter();
+        AtomJAXBUtils.marshal(m, element, null, mapper, writer);
+        assertEquals(ATOM_CONTENT_XHTML, writer.toString());
+
+        content.setType("application/xml");
+        content.setValue("<x xmlns=\"http://x/\">title</x>");
+        element = (new ObjectFactory()).createContent(content);
+        writer = new StringWriter();
+        AtomJAXBUtils.marshal(m, element, null, mapper, writer);
+        assertEquals(ATOM_CONTENT_XML, writer.toString());
+}
+    
+    public void testAtomContentUnmarshal() throws Exception {
+        Unmarshaller u = JAXBUtils.createUnmarshaller(ctx);
+        Object element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_CONTENT_TEXT));
+        assertNotNull(element);
+        assertTrue(element instanceof AtomContent);
+        AtomContent content = (AtomContent)element;
+        assertNotNull(content);
+        assertEquals("en-us", content.getLang());
+        assertEquals("http://title/base", content.getBase());
+        assertEquals("title", content.getValue());
+        assertEquals("text", content.getType());
+
+        element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_CONTENT_HTML));
+        assertNotNull(element);
+        assertTrue(element instanceof AtomContent);
+        content = (AtomContent)element;
+        assertNotNull(content);
+        assertEquals("en-us", content.getLang());
+        assertEquals("http://title/base", content.getBase());
+        assertEquals("<h1>title</h1>", content.getValue());
+        assertEquals("html", content.getType());
+        
+        element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_CONTENT_XHTML));
+        assertNotNull(element);
+        assertTrue(element instanceof AtomContent);
+        content = (AtomContent)element;
+        assertNotNull(content);
+        assertEquals("en-us", content.getLang());
+        assertEquals("http://title/base", content.getBase());
+        assertEquals("<h1 xmlns=\""+RestConstants.NAMESPACE_XHTML+"\">title</h1>", content.getValue());
+        assertEquals("xhtml", content.getType());
+
+        element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_CONTENT_XML));
+        assertNotNull(element);
+        assertTrue(element instanceof AtomContent);
+        content = (AtomContent)element;
+        assertNotNull(content);
+        assertEquals("en-us", content.getLang());
+        assertEquals("http://title/base", content.getBase());
+        assertEquals("<x xmlns=\"http://x/\">title</x>", content.getValue());
+        assertEquals("application/xml", content.getType());
+    }
+    
+    public void testAtomEntryMarshal() throws Exception {
+        Marshaller m = AtomEntry.getMarshaller();
+
+        AtomEntry entry = getEntryWithoutContent("1");
+        JAXBElement<AtomEntry> element = (new ObjectFactory()).createEntry(entry);
+        StringWriter writer = new StringWriter();
+        AtomJAXBUtils.marshal(m, element, null, writer);
+        assertEquals(ATOM_ENTRY_1, writer.toString());
+        
+        entry = getEntryWithPlainTextContent("2");
+        element = (new ObjectFactory()).createEntry(entry);
+        writer = new StringWriter();
+        AtomJAXBUtils.marshal(m, element, null, writer);
+        assertEquals(ATOM_ENTRY_2, writer.toString());
+
+        entry = getEntryWithXmlContent("3");
+        element = (new ObjectFactory()).createEntry(entry);
+        writer = new StringWriter();
+        AtomJAXBUtils.marshal(m, element, null, writer);
+        assertEquals(ATOM_ENTRY_3, writer.toString());
+    }
+    
+
+    public void testAtomEntryUnmarshal() throws Exception {
+        Unmarshaller u = AtomEntry.getUnmarshaller();
+        Object element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_ENTRY_1));
+        assertNotNull(element);
+        assertTrue(element instanceof AtomEntry);
+        
+        AtomEntry entry = AtomEntry.unmarshal(new StringReader(ATOM_ENTRY_1));
+        assertEquals("en-us", entry.getLang());
+        assertEquals("http://entry/base", entry.getBase());
+        assertEquals("1", entry.getId());
+        assertEquals("anyAttrValue", entry.getOtherAttributes().get(new QName("anyAttr")));
+        assertEquals(getDate(), entry.getPublished());
+        assertEquals("summary", entry.getSummary().getValue());
+        assertEquals("title", entry.getTitle().getValue());
+        assertEquals(1, entry.getAuthors().size());
+        assertEquals("author", entry.getAuthors().get(0).getName());
+        assertEquals("author@hp.com", entry.getAuthors().get(0).getEmail());
+        assertEquals("http://uri", entry.getAuthors().get(0).getUri());
+        assertEquals(1, entry.getContributors().size());
+        assertEquals("cont", entry.getContributors().get(0).getName());
+        assertEquals("cont@hp.com", entry.getContributors().get(0).getEmail());
+        assertEquals("http://uri", entry.getContributors().get(0).getUri());
+        assertEquals(1, entry.getLinks().size());
+        assertEquals("href", entry.getLinks().get(0).getHref());
+        assertEquals("rel", entry.getLinks().get(0).getRel());
+        assertEquals("text/plain", entry.getLinks().get(0).getType());
+        assertEquals(1, entry.getCategories().size());
+        assertEquals("label", entry.getCategories().get(0).getLabel());
+        assertEquals("scheme", entry.getCategories().get(0).getScheme());
+        assertEquals("term", entry.getCategories().get(0).getTerm());
+        
+        element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_ENTRY_2));
+        assertNotNull(element);
+        assertTrue(element instanceof AtomEntry);
+        entry = (AtomEntry)element;
+        assertNotNull(entry);
+        assertEquals("2", entry.getId());
+        assertNotNull(entry.getContent());
+        assertEquals("text/plain", entry.getContent().getType());
+        assertEquals("Gustaf's Knäckebröd", entry.getContent().getValue());
+        
+        element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_ENTRY_3));
+        assertNotNull(element);
+        assertTrue(element instanceof AtomEntry);
+        entry = (AtomEntry)element;
+        assertNotNull(entry);
+        assertEquals("3", entry.getId());
+        assertNotNull(entry.getContent());
+        assertEquals("application/xml", entry.getContent().getType());
+        assertEquals("<x1 xmlns=\"xxx\" xmlns:y=\"yyy\"><x2><y:y1>Gustaf's Knäckebröd</y:y1></x2></x1>", entry.getContent().getValue().replaceAll("\n", "").replaceAll("    ", ""));
+    }
+
+    public void testAtomFeedMarshal() throws Exception {
+        Marshaller m = AtomFeed.getMarshaller();
+        
+        AtomFeed feed = getFeed();
+        JAXBElement<AtomFeed> element = (new ObjectFactory()).createFeed(feed);
+        StringWriter writer = new StringWriter();
+        AtomJAXBUtils.marshal(m, element, null, writer);
+        assertEquals(ATOM_FEED_1, writer.toString());
+    }
+    
+    public void testAtomFeedUnmarshal() throws Exception {
+        Unmarshaller u = AtomFeed.getUnmarshaller();
+        Object element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_FEED_1));
+        assertNotNull(element);
+        assertTrue(element instanceof AtomFeed);
+        
+        AtomFeed feed = AtomFeed.unmarshal(new StringReader(ATOM_FEED_1));
+        assertEquals("en-us", feed.getLang());
+        assertEquals("http://feed/base", feed.getBase());
+        assertEquals("id", feed.getId());
+        assertEquals("anyAttrValue", feed.getOtherAttributes().get(new QName("anyAttr")));
+        assertEquals(getDate(), feed.getUpdated());
+        assertEquals("title", feed.getTitle().getValue());
+        assertEquals("logo", feed.getLogo());
+        assertEquals("rights", feed.getRights().getValue());
+        assertEquals("subtitle", feed.getSubtitle().getValue());
+        assertEquals(1, feed.getAuthors().size());
+        assertEquals("author", feed.getAuthors().get(0).getName());
+        assertEquals("author@hp.com", feed.getAuthors().get(0).getEmail());
+        assertEquals("http://uri", feed.getAuthors().get(0).getUri());
+        assertEquals(1, feed.getContributors().size());
+        assertEquals("cont", feed.getContributors().get(0).getName());
+        assertEquals("cont@hp.com", feed.getContributors().get(0).getEmail());
+        assertEquals("http://uri", feed.getContributors().get(0).getUri());
+        assertEquals(1, feed.getLinks().size());
+        assertEquals("href", feed.getLinks().get(0).getHref());
+        assertEquals("rel", feed.getLinks().get(0).getRel());
+        assertEquals("text/plain", feed.getLinks().get(0).getType());
+        assertEquals(1, feed.getCategories().size());
+        assertEquals("label", feed.getCategories().get(0).getLabel());
+        assertEquals("scheme", feed.getCategories().get(0).getScheme());
+        assertEquals("term", feed.getCategories().get(0).getTerm());
+        assertEquals(1, feed.getEntries().size());
+        assertEquals(5, feed.getItemsPerPage());
+        assertEquals(6, feed.getStartIndex());
+        assertEquals(7, feed.getTotalResults());
+        List<OpenSearchQuery> openSearchQuery = feed.getOpenSearchQueries();
+        assertEquals(2, openSearchQuery.size());
+        assertEquals("query 1", openSearchQuery.get(0).getSearchTerms());
+        assertEquals("query 2", openSearchQuery.get(1).getSearchTerms());
+    }
+    
+    public void testAtomFeedMarshalUnmarshal() throws Exception {
+        Marshaller m = AtomFeed.getMarshaller();
+        Unmarshaller u = AtomFeed.getUnmarshaller();
+        AtomFeed feed = (AtomFeed)AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_FEED_1));
+        JAXBElement<AtomFeed> element = (new ObjectFactory()).createFeed(feed);
+        StringWriter writer = new StringWriter();
+        AtomJAXBUtils.marshal(m, element, null, feed.getNamespacePrefixMapper(), writer);
+        assertEquals(ATOM_FEED_1, writer.toString());
+    }
+    
+    public void testAtomFeedMarshalUnmarshalWithoutOpenSearch() throws Exception {
+        Marshaller m = AtomFeed.getMarshaller();
+        Unmarshaller u = AtomFeed.getUnmarshaller();
+        AtomFeed feed = (AtomFeed)AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_FEED_2));
+        assertEquals(-1, feed.getItemsPerPage());
+        assertEquals(-1, feed.getStartIndex());
+        assertEquals(-1, feed.getTotalResults());
+        assertEquals(0, feed.getOpenSearchQueries().size());
+        JAXBElement<AtomFeed> element = (new ObjectFactory()).createFeed(feed);
+        StringWriter writer = new StringWriter();
+        AtomJAXBUtils.marshal(m, element, null, feed.getNamespacePrefixMapper(), writer);
+        assertEquals(ATOM_FEED_2, writer.toString());
+    }
+
+    public void testGetLinkFromEntry() {
+        AtomEntry entry = new AtomEntry();
+        AtomLink link1 = new AtomLink();
+        link1.setHref("href1");
+        link1.setRel("rel1");
+        link1.setType("type1");
+        entry.getLinks().add(link1);
+        AtomLink link2 = new AtomLink();
+        link2.setHref("href2");
+        link2.setRel("rel2");
+        link2.setType("type2");
+        entry.getLinks().add(link2);
+        AtomLink link3 = new AtomLink();
+        link3.setHref("href3");
+        link3.setRel("rel2");
+        link3.setType("type2");
+        entry.getLinks().add(link3);
+        AtomLink link4NoRel = new AtomLink();
+        link4NoRel.setHref("href3");
+        link4NoRel.setType("type2");
+        entry.getLinks().add(link4NoRel);
+        AtomLink link5NoType = new AtomLink();
+        link5NoType.setHref("href3");
+        link3.setRel("rel2");
+        entry.getLinks().add(link5NoType);
+
+        
+        List<AtomLink> links = entry.getLinks("rel1", "type1");
+        assertEquals(1, links.size());
+        assertEquals("href1", links.get(0).getHref());
+
+        links = entry.getLinks("rel2", "type2");
+        assertEquals(2, links.size());
+        assertEquals("href2", links.get(0).getHref());
+        assertEquals("href3", links.get(1).getHref());
+        
+        links = entry.getLinksByRelation("rel2");
+        assertEquals(2, links.size());
+        assertEquals("href2", links.get(0).getHref());
+        assertEquals("href3", links.get(1).getHref());
+
+        links = entry.getLinksByType("type2");
+        assertEquals(3, links.size());
+        assertEquals("href2", links.get(0).getHref());
+        assertEquals("href3", links.get(1).getHref());
+
+        try {
+            entry.getLinks(null, "");
+            fail("expected NullPointerException");
+        } catch(NullPointerException e) {
+            // passed!
+        }
+
+        try {
+            entry.getLinks("", null);
+            fail("expected NullPointerException");
+        } catch(NullPointerException e) {
+            // passed!
+        }
+        
+        try {
+            entry.getLinks("", null);
+            fail("expected NullPointerException");
+        } catch(NullPointerException e) {
+            // passed!
+        }
+        
+        try {
+            entry.getLinks("", null);
+            fail("expected NullPointerException");
+        } catch(NullPointerException e) {
+            // passed!
+        }
+
+    }
+    
+    private AtomFeed getFeed() throws Exception {
+        AtomFeed feed = new AtomFeed();
+        feed.setBase("http://feed/base");
+        feed.getOtherAttributes().put(new QName("anyAttr"), "anyAttrValue");
+        AtomGenerator generator = new AtomGenerator();
+        generator.setBase("http://generator/base");
+        generator.setLang("en-us");
+        generator.setUri("http://generator/uri");
+        generator.setValue("symphony");
+        generator.setVersion("1.0");
+        feed.setGenerator(generator);
+        feed.setIcon("icon");
+        feed.setId("id");
+        feed.setItemsPerPage(5);
+        feed.setStartIndex(6);
+        feed.setTotalResults(7);
+        
+        OpenSearchQuery query = new OpenSearchQuery();
+        query.setSearchTerms("query 1");
+        feed.addOpenSearchQuery(query);
+        query = new OpenSearchQuery();
+        query.setSearchTerms("query 2");
+        feed.addOpenSearchQuery(query);
+        
+        feed.setLang("en-us");
+        feed.setLogo("logo");
+        AtomText rights = new AtomText();
+        rights.setType(AtomTextType.text);
+        rights.setValue("rights");
+        feed.setRights(rights);
+        AtomText subtitle = new AtomText();
+        subtitle.setType(AtomTextType.text);
+        subtitle.setValue("subtitle");
+        feed.setSubtitle(subtitle);
+        AtomText title = new AtomText();
+        title.setType(AtomTextType.text);
+        title.setValue("title");
+        feed.setTitle(title);
+        feed.setUpdated(getDate());       
+        AtomPerson author = new AtomPerson();
+        author.setEmail("author@hp.com");
+        author.setName("author");
+        author.setUri("http://uri");
+        feed.getAuthors().add(author);
+        AtomPerson cont = new AtomPerson();
+        cont.setEmail("cont@hp.com");
+        cont.setName("cont");
+        cont.setUri("http://uri");
+        feed.getContributors().add(cont);
+        AtomCategory cat = new AtomCategory();
+        cat.setLabel("label");
+        cat.setScheme("scheme");
+        cat.setTerm("term");
+        feed.getCategories().add(cat);
+        AtomLink link = new AtomLink();
+        link.setHref("href");
+        link.setRel("rel");
+        link.setTitle("title");
+        link.setType("text/plain");
+        link.setHreflang("en-us");
+        link.setLength("10");
+        feed.getLinks().add(link);
+        feed.getEntries().add(getEntryWithXmlContent("1"));
+        return feed;
+    }
+    
+    private static Date getDate() {
+        return getCalendar().toGregorianCalendar().getTime();
+    }
+
+    private static XMLGregorianCalendar getCalendar() {
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTimeInMillis(1234567);
+        DatatypeFactory datatypeFactory;
+        try {
+            datatypeFactory = DatatypeFactory.newInstance();
+        } catch (DatatypeConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+        XMLGregorianCalendar xmlGregCal = datatypeFactory.newXMLGregorianCalendar(calendar);
+        return xmlGregCal;
+    }
+    
+    private static String replaceTimeToken(String string) {
+        XMLGregorianCalendar calendar = getCalendar();
+        return string.replace("@TIME@", calendar.toXMLFormat());
+    }
+    
+    private AtomEntry getEntryWithoutContent(String id) throws Exception {
+        AtomEntry entry = new AtomEntry();
+        entry.setId(id);
+        entry.getOtherAttributes().put(new QName("anyAttr"), "anyAttrValue");
+        entry.setBase("http://entry/base");
+        entry.setLang("en-us");
+        entry.setPublished(getDate());
+        AtomText summary = new AtomText();
+        summary.setType(AtomTextType.text);
+        summary.setValue("summary");
+        entry.setSummary(summary);
+        AtomText title = new AtomText();
+        title.setType(AtomTextType.text);
+        title.setValue("title");
+        entry.setTitle(title);
+        entry.setUpdated(getDate());
+        AtomPerson author = new AtomPerson();
+        author.setEmail("author@hp.com");
+        author.setName("author");
+        author.setUri("http://uri");
+        entry.getAuthors().add(author);
+        AtomPerson cont = new AtomPerson();
+        cont.setEmail("cont@hp.com");
+        cont.setName("cont");
+        cont.setUri("http://uri");
+        entry.getContributors().add(cont);
+        AtomCategory cat = new AtomCategory();
+        cat.setLabel("label");
+        cat.setScheme("scheme");
+        cat.setTerm("term");
+        entry.getCategories().add(cat);
+        AtomLink link = new AtomLink();
+        link.setHref("href");
+        link.setRel("rel");
+        link.setTitle("title");
+        link.setType("text/plain");
+        link.setHreflang("en-us");
+        link.setLength("10");
+        entry.getLinks().add(link);
+        return entry;
+    }
+
+    private AtomEntry getEntryWithPlainTextContent(String id) throws Exception {
+        AtomEntry entry = getEntryWithoutContent(id);
+        AtomContent content = new AtomContent();
+        content.setType("text/plain");
+        content.setValue("Gustaf's Knäckebröd");
+        entry.setContent(content);
+        return entry;
+    }
+
+    private AtomEntry getEntryWithXmlContent(String id) throws Exception {
+        AtomEntry entry = getEntryWithoutContent(id);
+        AtomContent content = new AtomContent();
+        content.setType("application/xml");
+        content.setValue("<x1 xmlns=\"xxx\" xmlns:y=\"yyy\"><x2><y:y1>Gustaf's Knäckebröd</y:y1></x2></x1>");
+        entry.setContent(content);
+        return entry;
+    }
+    
+}

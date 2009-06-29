@@ -1,0 +1,25 @@
+ -----
+ QADefect
+ -----
+ -----
+ 
+QADefect
+  
+  This example is located under <<<examples/QADefect>>>
+
+  * Advanced implementation of a QA defect web service showing a custom implementation of resource and representation classes
+  
+  * The defect resource demonstrates the handling of a data object including its serialization and deserialization
+  
+  * JAXB usage is demonstrated
+  
+  * Defects can be listed, created, updated, and deleted
+  
+  * Demonstrated usage of CSV Representation and HTML representation
+  
+  * Demonstrated usage of OpenSearch 
+  
+  * Demonstrated usage of defects' attachment binary representation
+  
+  * The list of all defects is returned as an Atom feed from {{{http://localhost:8080/QADefect/rest/defects}http://localhost:8080/QADefect/rest/defects}}
+    

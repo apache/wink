@@ -1,0 +1,2 @@
+org.apache.wink.example.scope.SingletonCounter
+org.apache.wink.example.scope.PrototypeCounter

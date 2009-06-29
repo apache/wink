@@ -1,0 +1,5 @@
+org.apache.wink.server.internal.providers.entity.html.HtmlSyndEntryProvider
+org.apache.wink.server.internal.providers.entity.html.HtmlSyndFeedProvider
+org.apache.wink.example.webdav.WebDAVDefectsResource
+org.apache.wink.example.webdav.WebDAVTestsResource
+org.apache.wink.webdav.server.WebDAVRootResource
