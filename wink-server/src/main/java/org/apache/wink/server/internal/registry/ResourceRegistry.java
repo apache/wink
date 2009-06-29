@@ -199,7 +199,7 @@ public class ResourceRegistry  {
         if (resource.isExactMatch()) {
             resourceMethods = resource.getRecord().getMetadata().getResourceMethods();
         } else {
-            String uri = resource.getMatcher().getTail(false);
+            String uri = UriTemplateProcessor.normalizeUri(resource.getMatcher().getTail(false));
             List<SubResourceInstance> matchingMethods = resource.getRecord().getMatchingSubResourceMethods(uri);
             resourceMethods = new LinkedList<MethodMetadata>();
             for (SubResourceInstance subResource : matchingMethods) {
@@ -357,7 +357,7 @@ public class ResourceRegistry  {
      *            the context of the current request
      * @return 
      */
-    public void filterDispatchMethods(List<? extends MethodRecord> methodRecords, RuntimeContext context)
+    private void filterDispatchMethods(List<? extends MethodRecord> methodRecords, RuntimeContext context)
             throws WebApplicationException {
         // filter by http method
         ListIterator<? extends MethodRecord> iterator = methodRecords.listIterator();
