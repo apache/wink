@@ -46,7 +46,7 @@ public class CookieHeaderDelegate implements HeaderDelegate<Cookie> {
 
         ModifiableCookie firstCookie = null;
         int cookieNum = 0;
-
+        boolean versionSet = false;
         for (String token : tokens) {
             String[] subTokens = token.trim().split("=", 2);
             String name = subTokens.length > 0 ? subTokens[0] : null;
@@ -63,23 +63,27 @@ public class CookieHeaderDelegate implements HeaderDelegate<Cookie> {
                     break;
                 }
                 if (firstCookie == null) {
-                    throw new IllegalArgumentException("Cookie must start with $Version: " + cookie);
+                    firstCookie = new ModifiableCookie();
                 }
                 firstCookie.name = name;
                 firstCookie.value = value;
-            } else if (name.trim().startsWith("$Version")) {
+            } else if (name.startsWith(VERSION)) {
                 if (firstCookie == null) {
                     firstCookie = new ModifiableCookie();
                 } else {
-                    throw new IllegalArgumentException("Cookie cannot contain additional $Version: " + cookie);
+                    if (versionSet) {
+                        throw new IllegalArgumentException(
+                            "Cookie cannot contain additional $Version: " + cookie);
+                    }
                 }
+                versionSet = true;
                 firstCookie.version = Integer.parseInt(value);
-            } else if (name.startsWith("$Path") && cookie != null) {
+            } else if (name.startsWith(PATH) && cookie != null) {
                 if (firstCookie == null) {
                     throw new IllegalArgumentException("Cookie must start with $Version: " + cookie);
                 }
                 firstCookie.path = value;
-            } else if (name.trim().startsWith("$Domain") && cookie != null) {
+            } else if (name.startsWith(DOMAIN) && cookie != null) {
                 if (firstCookie == null) {
                     throw new IllegalArgumentException("Cookie must start with $Version: " + cookie);
                 }
@@ -154,7 +158,7 @@ public class CookieHeaderDelegate implements HeaderDelegate<Cookie> {
 
         public String name;
         public String value;
-        public int    version = Cookie.DEFAULT_VERSION;
+        public int    version = 0;
         public String path;
         public String domain;
     }
