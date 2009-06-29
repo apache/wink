@@ -4,7 +4,7 @@
     <groupId>org.apache.wink.example</groupId>
     <artifactId>wink-examples</artifactId>
     <packaging>pom</packaging>
-    <name>${artifactId}:${version}</name>
+    <name>Wink Examples</name>
     <properties>
         <module.relative.path>../</module.relative.path>
     </properties>

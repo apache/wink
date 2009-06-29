@@ -7,7 +7,7 @@
 	<artifactId>Bookmarks</artifactId>
 	<packaging>war</packaging>
 	<version>0.1-SNAPSHOT</version>
-	<name>${artifactId}:${version}</name>
+	<name>Wink Examples Apps :: Bookmarks</name>
 	<properties>
 		<module.relative.path>../../../</module.relative.path>
 	</properties>

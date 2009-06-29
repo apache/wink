@@ -5,7 +5,7 @@
     <groupId>org.apache.wink</groupId>
     <artifactId>wink-dist</artifactId>
     <packaging>pom</packaging>
-    <name>${artifactId}:${version}</name>
+    <name>Wink Scripts :: Dist</name>
     <properties>
         <target.zip>target/wink-${project.version}.zip</target.zip>
         <target.jar>target/dist/wink-${project.version}/dist/wink-${project.version}.jar</target.jar>

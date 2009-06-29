@@ -5,7 +5,7 @@
     <groupId>org.apache.wink</groupId>
     <artifactId>wink-site-deploy</artifactId>
     <packaging>pom</packaging>
-    <name>${artifactId}:${version}</name>
+    <name>Wink Scripts :: Site Deploy</name>
     <properties>
         <module.relative.path>../../</module.relative.path>
     </properties>

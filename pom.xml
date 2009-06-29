@@ -6,7 +6,7 @@
     <artifactId>wink</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>${artifactId}:${version}</name>
+    <name>Wink</name>
     <properties>
         <module.relative.path></module.relative.path>
         <javadoc.aggregate>true</javadoc.aggregate>

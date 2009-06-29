@@ -5,7 +5,7 @@
     <groupId>org.apache.wink</groupId>
     <artifactId>wink-client</artifactId>
     <packaging>jar</packaging>
-    <name>${artifactId}:${version}</name>
+    <name>Wink Client</name>
     <properties>
         <module.relative.path>../</module.relative.path>
         <javadoc.aggregate>false</javadoc.aggregate>

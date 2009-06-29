@@ -6,7 +6,7 @@
     <groupId>org.apache.wink</groupId>
     <artifactId>wink-webdav</artifactId>
     <packaging>jar</packaging>
-    <name>${artifactId}:${version}</name>
+    <name>Wink WebDav</name>
     <properties>
         <module.relative.path>../</module.relative.path>
         <javadoc.aggregate>false</javadoc.aggregate>

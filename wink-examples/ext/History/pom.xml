@@ -7,7 +7,7 @@
     <artifactId>History</artifactId>
     <packaging>war</packaging>
     <version>0.1-SNAPSHOT</version>
-    <name>${artifactId}:${version}</name>
+    <name>Wink Examples Ext :: History</name>
     <properties>
         <module.relative.path>../../../</module.relative.path>
     </properties>

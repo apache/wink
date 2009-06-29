@@ -5,7 +5,7 @@
     <groupId>org.apache.wink.example</groupId>
     <artifactId>QADefects-client</artifactId>
     <version>0.1-SNAPSHOT</version>
-    <name>${artifactId}:${version}</name>
+    <name>Wink Examples Clients :: QADefects</name>
     <properties>
         <module.relative.path>../../../</module.relative.path>
     </properties>
