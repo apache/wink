@@ -117,8 +117,10 @@ public class CaseInsensitiveMultivaluedMapTest extends TestCase {
         
         Set<String> keySet = map.keySet();
         assertTrue(keySet.contains("a"));
-        assertFalse(keySet.contains("A"));
+        assertTrue(keySet.contains("A"));
         assertTrue(keySet.contains("B"));
-        assertFalse(keySet.contains("b"));
+        assertTrue(keySet.contains("b"));
+        assertFalse(keySet.contains("c"));
+        assertFalse(keySet.contains("C"));
     }
 }
