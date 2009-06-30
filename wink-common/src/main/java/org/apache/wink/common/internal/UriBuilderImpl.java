@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal;
 
@@ -40,16 +39,16 @@ import org.apache.wink.common.internal.uri.UriEncoder;
 import org.apache.wink.common.internal.uritemplate.JaxRsUriTemplateProcessor;
 import org.apache.wink.common.internal.utils.UriHelper;
 
-
 public class UriBuilderImpl extends UriBuilder implements Cloneable {
 
-    private String scheme;
-    private String userInfo;
-    private String host;
-    private int port;
-    private String fragment;
-    private List<PathSegment> segments;
-    private MultivaluedMap<String,String> query;
+    private String                         scheme;
+    private String                         userInfo;
+    private String                         host;
+    private int                            port;
+    private String                         fragment;
+    private List<PathSegment>              segments;
+    private MultivaluedMap<String, String> query;
+    private String                         schemeSpecificPart;
 
     public UriBuilderImpl() {
         reset();
@@ -63,6 +62,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
     }
 
     private void resetSchemeSpecificPart() {
+        schemeSpecificPart = null;
         userInfo = null;
         host = null;
         port = -1;
@@ -76,9 +76,9 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         return segments;
     }
 
-    private MultivaluedMap<String,String> getQuery() {
+    private MultivaluedMap<String, String> getQuery() {
         if (query == null) {
-            query = new MultivaluedMapImpl<String,String>();
+            query = new MultivaluedMapImpl<String, String>();
         }
         return query;
     }
@@ -112,13 +112,14 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
     private Set<String> getVariableNamesList() {
         String constructedPath = constructPathString();
         String constructedQuery = constructQueryString();
-        String uriStr = UriHelper
-                .contructUri(scheme, userInfo, host, port, constructedPath, constructedQuery, fragment);
+        String uriStr = UriHelper.contructUri(scheme, userInfo, host, port, constructedPath,
+            constructedQuery, fragment);
         JaxRsUriTemplateProcessor uriTemplate = new JaxRsUriTemplateProcessor(uriStr);
         return uriTemplate.getVariableNames();
     }
 
-    private URI buildInternal(Map<String,? extends Object> values) throws IllegalArgumentException, UriBuilderException {
+    private URI buildInternal(Map<String, ? extends Object> values)
+        throws IllegalArgumentException, UriBuilderException {
         StringBuilder out = new StringBuilder();
         buildScheme(values, out);
         buildAuthority(values, out);
@@ -133,28 +134,30 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         }
     }
 
-    private void buildScheme(Map<String,? extends Object> values, StringBuilder out) {
+    private void buildScheme(Map<String, ? extends Object> values, StringBuilder out) {
         if (scheme == null) {
             return;
         }
-        JaxRsUriTemplateProcessor.expand(scheme, MultivaluedMapImpl.toMultivaluedMapString(values), out);
+        JaxRsUriTemplateProcessor.expand(scheme, MultivaluedMapImpl.toMultivaluedMapString(values),
+            out);
         out.append(':');
     }
 
-    private void buildAuthority(Map<String,? extends Object> values, StringBuilder out) {
+    private void buildAuthority(Map<String, ? extends Object> values, StringBuilder out) {
         if (userInfo == null && host == null && port == -1) {
             return;
         }
         out.append("//");
         if (userInfo != null) {
-            String eUserInfo = JaxRsUriTemplateProcessor.expand(userInfo, MultivaluedMapImpl
-                    .toMultivaluedMapString(values));
+            String eUserInfo = JaxRsUriTemplateProcessor.expand(userInfo,
+                MultivaluedMapImpl.toMultivaluedMapString(values));
             eUserInfo = UriEncoder.encodeUserInfo(eUserInfo, true);
             out.append(eUserInfo);
             out.append('@');
         }
         if (host != null) {
-            JaxRsUriTemplateProcessor.expand(host, MultivaluedMapImpl.toMultivaluedMapString(values), out);
+            JaxRsUriTemplateProcessor.expand(host,
+                MultivaluedMapImpl.toMultivaluedMapString(values), out);
         }
         if (port != -1) {
             out.append(':');
@@ -162,7 +165,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         }
     }
 
-    private void buildPath(Map<String,? extends Object> values, StringBuilder out) {
+    private void buildPath(Map<String, ? extends Object> values, StringBuilder out) {
         if (segments == null || segments.size() == 0) {
             return;
         }
@@ -171,34 +174,34 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         for (PathSegment segment : segments) {
             // segment
             String segmentPath = segment.getPath();
-            String eSegmentPath = JaxRsUriTemplateProcessor.expand(segmentPath, MultivaluedMapImpl
-                    .toMultivaluedMapString(values));
+            String eSegmentPath = JaxRsUriTemplateProcessor.expand(segmentPath,
+                MultivaluedMapImpl.toMultivaluedMapString(values));
             eSegmentPath = UriEncoder.encodePathSegment(eSegmentPath, true);
-            
+
             // we output the path separator if: 
             // 1. if we already have some uri built and the last character is not the path separator
             // 2. if the uri is still empty and this is not the first path segment
-            if ((out.length() > 0 && out.charAt(out.length() - 1) != '/') ||
-               (out.length() == 0 && !first)) {
+            if ((out.length() > 0 && out.charAt(out.length() - 1) != '/')
+                || (out.length() == 0 && !first)) {
                 out.append('/');
             }
             first = false;
-            
+
             // output the path segment
             out.append(eSegmentPath);
 
             // matrix parameters
-            MultivaluedMap<String,String> matrixParameters = segment.getMatrixParameters();
+            MultivaluedMap<String, String> matrixParameters = segment.getMatrixParameters();
             for (String matrix : matrixParameters.keySet()) {
                 // matrix parameter
-                String eMatrix = JaxRsUriTemplateProcessor.expand(matrix, MultivaluedMapImpl
-                        .toMultivaluedMapString(values));
+                String eMatrix = JaxRsUriTemplateProcessor.expand(matrix,
+                    MultivaluedMapImpl.toMultivaluedMapString(values));
                 eMatrix = UriEncoder.encodeMatrix(eMatrix, true);
 
                 // matrix values
                 for (String matrixValue : matrixParameters.get(matrix)) {
-                    String eValue = JaxRsUriTemplateProcessor.expand(matrixValue, MultivaluedMapImpl
-                            .toMultivaluedMapString(values));
+                    String eValue = JaxRsUriTemplateProcessor.expand(matrixValue,
+                        MultivaluedMapImpl.toMultivaluedMapString(values));
                     eValue = UriEncoder.encodeMatrix(eValue, true);
                     out.append(';');
                     out.append(eMatrix);
@@ -209,24 +212,27 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         }
     }
 
-    private void buildQuery(Map<String,? extends Object> values, StringBuilder out) {
+    private void buildQuery(Map<String, ? extends Object> values, StringBuilder out) {
         if (query == null || query.size() == 0) {
             return;
         }
         char delim = '?';
         for (String queryParam : query.keySet()) {
             // query param name
-            String eQueryParam = JaxRsUriTemplateProcessor.expand(queryParam, MultivaluedMapImpl
-                    .toMultivaluedMapString(values));
+            String eQueryParam = JaxRsUriTemplateProcessor.expand(queryParam,
+                MultivaluedMapImpl.toMultivaluedMapString(values));
             eQueryParam = UriEncoder.encodeQueryParam(eQueryParam, true);
 
             // query param values
             for (String queryValue : query.get(queryParam)) {
-                String eQueryValue = JaxRsUriTemplateProcessor.expand(queryValue, MultivaluedMapImpl
-                        .toMultivaluedMapString(values));
+                String eQueryValue = JaxRsUriTemplateProcessor.expand(queryValue,
+                    MultivaluedMapImpl.toMultivaluedMapString(values));
                 eQueryValue = UriEncoder.encodeQueryParam(eQueryValue, true);
                 out.append(delim);
                 out.append(eQueryParam);
+                if (eQueryValue == null) {
+                    continue;
+                }
                 out.append('=');
                 out.append(eQueryValue);
                 delim = '&';
@@ -234,12 +240,12 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         }
     }
 
-    private void buildFragment(Map<String,? extends Object> values, StringBuilder out) {
+    private void buildFragment(Map<String, ? extends Object> values, StringBuilder out) {
         if (fragment == null) {
             return;
         }
-        String eFragment = JaxRsUriTemplateProcessor
-                .expand(fragment, MultivaluedMapImpl.toMultivaluedMapString(values));
+        String eFragment = JaxRsUriTemplateProcessor.expand(fragment,
+            MultivaluedMapImpl.toMultivaluedMapString(values));
         eFragment = UriEncoder.encodeFragment(eFragment, true);
         out.append('#');
         out.append(eFragment);
@@ -251,16 +257,28 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
     }
 
     @Override
-    public URI buildFromEncoded(Object... values) throws IllegalArgumentException, UriBuilderException {
+    public URI buildFromEncoded(Object... values) throws IllegalArgumentException,
+        UriBuilderException {
         return build(false, values);
     }
 
-    private URI build(boolean escapePercent, Object... values) throws IllegalArgumentException, UriBuilderException {
+    private URI build(boolean escapePercent, Object... values) throws IllegalArgumentException,
+        UriBuilderException {
+        
+        if (schemeSpecificPart != null) {
+            try {
+                // uri templates will be automatically encoded
+                return new URI(scheme, schemeSpecificPart, fragment);
+            } catch (URISyntaxException e) {
+                throw new IllegalArgumentException("schemeSpecificPart is invalid", e);
+            }
+        }
+        
         Set<String> names = getVariableNamesList();
         if (names.size() > values.length) {
             throw new IllegalArgumentException("missing variable values");
         }
-        Map<String,Object> valuesMap = new HashMap<String,Object>();
+        Map<String, Object> valuesMap = new HashMap<String, Object>();
         int i = 0;
         for (String name : names) {
             if (values[i] == null) {
@@ -280,23 +298,24 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
     }
 
     @Override
-    public URI buildFromMap(Map<String,? extends Object> values) throws IllegalArgumentException, UriBuilderException {
+    public URI buildFromMap(Map<String, ? extends Object> values) throws IllegalArgumentException,
+        UriBuilderException {
         return buildFromMap(true, values);
     }
 
     @Override
-    public URI buildFromEncodedMap(Map<String,? extends Object> values) throws IllegalArgumentException,
-            UriBuilderException {
+    public URI buildFromEncodedMap(Map<String, ? extends Object> values)
+        throws IllegalArgumentException, UriBuilderException {
         return buildFromMap(false, values);
     }
 
-    private URI buildFromMap(boolean escapePercent, Map<String,? extends Object> values)
-            throws IllegalArgumentException, UriBuilderException {
+    private URI buildFromMap(boolean escapePercent, Map<String, ? extends Object> values)
+        throws IllegalArgumentException, UriBuilderException {
         Set<String> names = getVariableNamesList();
         if (names.size() > values.size()) {
             throw new IllegalArgumentException("missing variable values");
         }
-        Map<String,Object> valuesMap = new HashMap<String,Object>();
+        Map<String, Object> valuesMap = new HashMap<String, Object>();
         for (String name : names) {
             Object value = values.get(name);
             if (value == null) {
@@ -340,11 +359,11 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         return this;
     }
 
-    private void query(MultivaluedMap<String,String> query) {
+    private void query(MultivaluedMap<String, String> query) {
         if (query == null) {
             return;
         }
-        this.query = ((MultivaluedMapImpl<String,String>)query).clone();
+        this.query = ((MultivaluedMapImpl<String, String>) query).clone();
     }
 
     private void segments(List<PathSegment> pathSegments) {
@@ -353,7 +372,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         }
         this.segments = new ArrayList<PathSegment>();
         for (PathSegment segment : pathSegments) {
-            this.segments.add(((PathSegmentImpl)segment).clone());
+            this.segments.add(((PathSegmentImpl) segment).clone());
         }
     }
 
@@ -389,7 +408,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         PathSegmentImpl lastSegment = null;
         int lastSegmentIndex = pathSegments.size() - 1;
         if (lastSegmentIndex >= 0) {
-            lastSegment = (PathSegmentImpl)pathSegments.get(lastSegmentIndex);
+            lastSegment = (PathSegmentImpl) pathSegments.get(lastSegmentIndex);
         } else {
             lastSegment = new PathSegmentImpl("");
             pathSegments.add(lastSegment);
@@ -405,7 +424,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         List<PathSegment> list = UriHelper.parsePath(path);
         for (PathSegment segment : list) {
             segment(segment.getPath());
-            MultivaluedMap<String,String> matrixParameters = segment.getMatrixParameters();
+            MultivaluedMap<String, String> matrixParameters = segment.getMatrixParameters();
             for (String matrix : matrixParameters.keySet()) {
                 matrixParam(matrix, matrixParameters.get(matrix).toArray());
             }
@@ -419,7 +438,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         if (resource == null) {
             throw new IllegalArgumentException("resource is null");
         }
-        Path pathAnnotation = ((Class<?>)resource).getAnnotation(Path.class);
+        Path pathAnnotation = ((Class<?>) resource).getAnnotation(Path.class);
         if (pathAnnotation == null) {
             throw new IllegalArgumentException("resource is not annotated with Path");
         }
@@ -459,7 +478,8 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                 Path pathAnnotation = m.getAnnotation(Path.class);
                 if (pathAnnotation != null) {
                     if (foundMethod != null) {
-                        throw new IllegalArgumentException("more than one method with Path annotation exists");
+                        throw new IllegalArgumentException(
+                            "more than one method with Path annotation exists");
                     }
                     foundMethod = m;
                 }
@@ -486,9 +506,9 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         if (values == null) {
             throw new IllegalArgumentException("values is null");
         }
-        MultivaluedMap<String,String> query = getQuery();
+        MultivaluedMap<String, String> query = getQuery();
         for (Object value : values) {
-            query.add(name, value.toString());
+            query.add(name, value != null ? value.toString() : null);
         }
         return this;
     }
@@ -501,7 +521,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
 
         // use a temporary PathSegmentImpl to parse the matrix parameters
         PathSegmentImpl tmpPathSegment = new PathSegmentImpl("", matrix);
-        MultivaluedMap<String,String> matrixParameters = tmpPathSegment.getMatrixParameters();
+        MultivaluedMap<String, String> matrixParameters = tmpPathSegment.getMatrixParameters();
         for (String param : matrixParameters.keySet()) {
             List<String> matrixValues = matrixParameters.get(param);
             // add the matrix parameter and its values
@@ -511,7 +531,8 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
     }
 
     @Override
-    public UriBuilder replaceMatrixParam(String name, Object... values) throws IllegalArgumentException {
+    public UriBuilder replaceMatrixParam(String name, Object... values)
+        throws IllegalArgumentException {
         if (name == null) {
             throw new IllegalArgumentException("name is null");
         }
@@ -533,6 +554,9 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
 
     @Override
     public UriBuilder replacePath(String path) {
+        if (path == null) {
+            throw new IllegalArgumentException("path is null");
+        }
         getPathSegments().clear();
         if (path != null) {
             path(path);
@@ -544,7 +568,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
     public UriBuilder replaceQuery(String query) throws IllegalArgumentException {
         getQuery().clear();
         if (query != null) {
-            MultivaluedMap<String,String> queries = UriHelper.parseQuery(query);
+            MultivaluedMap<String, String> queries = UriHelper.parseQuery(query);
             for (String name : queries.keySet()) {
                 queryParam(name, queries.get(name).toArray());
             }
@@ -553,7 +577,8 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
     }
 
     @Override
-    public UriBuilder replaceQueryParam(String name, Object... values) throws IllegalArgumentException {
+    public UriBuilder replaceQueryParam(String name, Object... values)
+        throws IllegalArgumentException {
         if (name == null) {
             throw new IllegalArgumentException("name is null");
         }
@@ -576,6 +601,13 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
     public UriBuilder schemeSpecificPart(String ssp) throws IllegalArgumentException {
         if (ssp == null) {
             throw new IllegalArgumentException("schemeSpecificPart is null");
+        }
+
+        if (!ssp.startsWith("/")) {
+            //An opaque URI is an absolute URI whose scheme-specific part does not begin with a slash character ('/'). 
+            // Opaque URIs are not subject to further parsing.
+            schemeSpecificPart = ssp;
+            return this;
         }
 
         URI uri = null;
@@ -654,6 +686,9 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         }
         if (uri.getRawFragment() != null) {
             fragment(uri.getRawFragment());
+        }
+        if (uri.getSchemeSpecificPart() != null) {
+            schemeSpecificPart(uri.getSchemeSpecificPart());
         }
         return this;
     }
