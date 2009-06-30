@@ -66,11 +66,11 @@ public class ResponseImpl extends Response {
 
         private Object                         entity;
         private int                            status;
-        private MultivaluedMap<String, Object> metadata;
+        private final MultivaluedMap<String, Object> metadata;
 
         public ResponseBuilderImpl() {
             super();
-            metadata = new MultivaluedMapImpl<String, Object>();
+            metadata = new CaseInsensitiveMultivaluedMap<Object>();
             status = DEFAULT_STATUS;
 
         }
