@@ -180,12 +180,12 @@ public class ResponseImpl extends Response {
         public ResponseBuilder variant(Variant variant) {
             if (variant != null) {
                 language(variant.getLanguage());
-                putSingleRemoveNull(HttpHeaders.CONTENT_ENCODING, variant.getEncoding());
+                putSingleRemoveNull(HttpHeaders.ACCEPT_ENCODING, variant.getEncoding());
                 type(variant.getMediaType());
             } else {
 
                 putSingleRemoveNull(HttpHeaders.CONTENT_LANGUAGE, null);
-                putSingleRemoveNull(HttpHeaders.CONTENT_ENCODING, null);
+                putSingleRemoveNull(HttpHeaders.ACCEPT_ENCODING, null);
                 putSingleRemoveNull(HttpHeaders.CONTENT_TYPE, null);
             }
             return this;
@@ -207,7 +207,7 @@ public class ResponseImpl extends Response {
                 medyatype = medyatype || (v.getMediaType() != null);
             }
             StringBuilder sb = new StringBuilder();
-            conditionalAppend(sb, encoding, HttpHeaders.CONTENT_ENCODING);
+            conditionalAppend(sb, encoding, HttpHeaders.ACCEPT_ENCODING);
             conditionalAppend(sb, lang, HttpHeaders.ACCEPT_LANGUAGE);
             conditionalAppend(sb, medyatype, HttpHeaders.CONTENT_TYPE);
             putSingleRemoveNull(HttpHeaders.VARY, sb.toString());
