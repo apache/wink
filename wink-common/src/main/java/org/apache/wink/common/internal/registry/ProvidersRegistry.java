@@ -54,17 +54,17 @@ import org.apache.wink.common.internal.factory.ObjectFactory;
 import org.apache.wink.common.internal.runtime.RuntimeContext;
 import org.apache.wink.common.internal.utils.GenericsUtils;
 
-
 /**
+ * Keeps the registry of providers.
  * <p>
  * The order of the providers is important. The later provider was added, the
  * higher priority it has. Thus, the default providers should be always added
  * before the custom or with lower priority.
  */
-public class ProvidersRegistry  {
+public class ProvidersRegistry {
 
-    private static Logger logger = LoggerFactory.getLogger(ProvidersRegistry.class);
-    
+    private static Logger                                    logger             = LoggerFactory.getLogger(ProvidersRegistry.class);
+
     private final ProducesMediaTypeMap<ContextResolver<?>>   contextResolvers   = new ProducesMediaTypeMap<ContextResolver<?>>(
                                                                                     ContextResolver.class);
     private final Set<ObjectFactory<ExceptionMapper<?>>>     exceptionMappers   = new TreeSet<ObjectFactory<ExceptionMapper<?>>>(
@@ -146,24 +146,10 @@ public class ProvidersRegistry  {
 
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.hp.symphony.internal.server.jaxrs.core.ProvidersRegistry#addProvider(
-     * java.lang.Class)
-     */
     public boolean addProvider(Class<?> cls) {
         return addProvider(cls, SymphonyApplication.DEFAULT_PRIORITY);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.hp.symphony.internal.server.jaxrs.core.ProvidersRegistry#addProvider(
-     * java.lang.Object)
-     */
     public boolean addProvider(Object provider) {
         return addProvider(provider, SymphonyApplication.DEFAULT_PRIORITY);
     }

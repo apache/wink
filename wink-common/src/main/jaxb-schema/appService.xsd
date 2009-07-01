@@ -14,7 +14,7 @@
     <xsd:annotation>
         <xsd:appinfo>
             <jaxb:schemaBindings>
-                <jaxb:package name="com.hp.symphony.rest.model.app"/>
+                <jaxb:package name="org.apache.wink.common.model.app"/>
             </jaxb:schemaBindings>
         </xsd:appinfo>
     </xsd:annotation>

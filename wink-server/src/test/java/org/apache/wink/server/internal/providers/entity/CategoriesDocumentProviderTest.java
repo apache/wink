@@ -85,13 +85,13 @@ public class CategoriesDocumentProviderTest extends MockServletInvocationTest {
     private static Categories buildCategories() {
         // Create CategoriesDocumentResource with Categories data
         Categories cats = new Categories();
-        cats.setScheme("urn:com.hpsymphony.rest.example.default.scheme");
+        cats.setScheme("urn:org.apache.wink.example.default.scheme");
         cats.setFixed(true);
         // Get category listing for somewhere
         for (int i = 0; i < 4; i++) {
             AtomCategory cb = new AtomCategory();
             cb.setLabel("label" + i);
-            cb.setScheme("urn:com.hp.scheme" + i);
+            cb.setScheme("urn:org.apache.wink.scheme" + i);
             cb.setTerm("term" + i);
             cats.addCategory(cb);
         }

@@ -36,7 +36,7 @@ import javax.xml.namespace.QName;
 /**
  * This object contains factory methods for each 
  * Java content interface and Java element interface 
- * generated in the com.hp.symphony.internal.model.atom package. 
+ * generated in the org.apache.wink.common.model.atom package. 
  * <p>An ObjectFactory allows you to programatically 
  * construct new instances of the Java representation 
  * for XML content. The Java representation of XML 
@@ -57,7 +57,7 @@ public class ObjectFactory {
     private final static QName _Entry_QNAME = new QName("http://www.w3.org/2005/Atom", "entry");
 
     /**
-     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.hp.symphony.internal.model.atom
+     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: org.apache.wink.common.model.atom
      * 
      */
     public ObjectFactory() {

@@ -86,13 +86,13 @@ public class AppCategoriesDocumentProviderTest extends MockServletInvocationTest
     private static AppCategories buildCategories() {
         // Create CategoriesDocumentResource with Categories data
         AppCategories cats = new AppCategories();
-        cats.setScheme("urn:com.hpsymphony.rest.example.default.scheme");
+        cats.setScheme("urn:org.apache.wink.example.default.scheme");
         cats.setFixed(AppYesNo.YES);
         // Get category listing for somewhere
         for (int i = 0; i < 4; i++) {
             AtomCategory cb = new AtomCategory();
             cb.setLabel("label" + i);
-            cb.setScheme("urn:com.hp.scheme" + i);
+            cb.setScheme("urn:org.apache.wink.scheme" + i);
             cb.setTerm("term" + i);
             cats.getCategory().add(cb);
         }

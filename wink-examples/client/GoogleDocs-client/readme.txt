@@ -10,7 +10,7 @@ Description
 
 Running the example
 ===============================================================================
-Run com.hp.symphony.rest.example.GoogleDocsClient in order to get help.
+Run org.apache.wink.example.googledocs.GoogleDocsClient in order to get help.
 The following lines illustrate the possible usages:
  * List existing documents: GoogleDocsClient -l -u test@gmail.com -p test123
  * Upload new document: GoogleDocsClient -f c:\test.xls -u test@gmail.com -p test123

@@ -89,7 +89,7 @@ public interface DynamicResource {
      * Workspace, the annotation data is overridden.
      * 
      * @return workspace title
-     * @see com.hp.symphony.server.annotations.Workspace
+     * @see org.apache.wink.common.annotations.Workspace
      * 
      */
     String getWorkspaceTitle();
@@ -99,7 +99,7 @@ public interface DynamicResource {
      * Workspace, the annotation data is overridden.
      * 
      * @return collection title
-     * @see com.hp.symphony.server.annotations.Workspace
+     * @see org.apache.wink.common.annotations.Workspace
      */
     String getCollectionTitle();
 }

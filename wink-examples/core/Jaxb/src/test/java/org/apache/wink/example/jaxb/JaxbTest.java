@@ -19,7 +19,7 @@
  *******************************************************************************/
  
 
-package com.hp.symphony.rest.example.jaxb;
+package org.apache.wink.example.jaxb;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;

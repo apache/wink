@@ -11,7 +11,7 @@
     <xs:annotation>
         <xs:appinfo>
             <jaxb:schemaBindings>
-                <jaxb:package name="com.hp.symphony.rest.model.atom"/>
+                <jaxb:package name="org.apache.wink.common.model.atom"/>
             </jaxb:schemaBindings>
         </xs:appinfo>
     </xs:annotation>

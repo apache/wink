@@ -18,7 +18,7 @@
  *  
  *******************************************************************************/
  
-package com.hp.symphony.rest.example.qadefect.resources;
+package org.apache.wink.example.history;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;

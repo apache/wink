@@ -10,7 +10,7 @@
     <xs:annotation>
         <xs:appinfo>
             <jaxb:schemaBindings>
-                <jaxb:package name="com.hp.symphony.rest.model.opensearch"/>
+                <jaxb:package name="org.apache.wink.common.model.opensearch"/>
             </jaxb:schemaBindings>
         </xs:appinfo>
     </xs:annotation>

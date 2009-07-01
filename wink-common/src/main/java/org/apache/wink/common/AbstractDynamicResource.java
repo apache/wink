@@ -21,7 +21,7 @@
 package org.apache.wink.common;
 
 /**
- * Provides a basic implementation of the com.hp.symphony.server.DynamicResource.
+ * Provides a basic implementation of the org.apache.wink.common.DynamicResource.
  */
 public abstract class AbstractDynamicResource implements DynamicResource {
 
