@@ -151,6 +151,10 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
 
     private void parseMethods() {
         F1: for (Method method : getMetadata().getResourceClass().getMethods()) {
+            Class<?> declaringClass = method.getDeclaringClass();
+            if (method.getDeclaringClass() == Object.class) {
+                continue F1;
+            }
             MethodMetadata methodMetadata = createMethodMetadata(method);
             if (methodMetadata != null) {
                 String path = methodMetadata.getPath();
@@ -163,7 +167,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                     } else {
                         // sub-resource locator
                         // verify that the method does not take an entity parameter
-                        String methodName = String.format("%s.%s", method.getDeclaringClass().getName(), method.getName());
+                        String methodName = String.format("%s.%s", declaringClass.getName(), method.getName());
                         for (Injectable id : methodMetadata.getFormalParameters()) {
                             if (id.getParamType() == Injectable.ParamType.ENTITY) {
                                 logger.warn(String.format("Sub-Resource locator %s contains an illegal entity parameter. The locator will be ignored.", methodName));
@@ -188,7 +192,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
 
         int modifiers = method.getModifiers();
         // only public, non-static methods
-        if (Modifier.isStatic(modifiers)) {
+        if (Modifier.isStatic(modifiers) || !Modifier.isPublic(modifiers)) {
             return null;
         }
 
@@ -223,12 +227,17 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
         // then it may override a method in a superclass or interface that has annotations, 
         // so try looking at the overridden method annotations
         if (!hasAnnotation) {
+
             Class<?> declaringClass = method.getDeclaringClass();
 
             // try a superclass
             Class<?> superclass = declaringClass.getSuperclass();
-            if (superclass != null) {
-                return createMethodMetadata(superclass, method);
+            if (superclass != null && superclass != Object.class) {
+                MethodMetadata createdMetadata = createMethodMetadata(superclass, method);
+                // stop with if the method found
+                if (createdMetadata != null) {
+                    return createdMetadata;
+                }
             }
 
             // try interfaces

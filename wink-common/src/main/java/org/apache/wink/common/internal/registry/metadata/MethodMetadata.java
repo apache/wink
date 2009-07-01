@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.registry.metadata;
 
@@ -31,20 +30,19 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.wink.common.internal.registry.Injectable;
 
-
 public class MethodMetadata extends AbstractMetadata {
-    
-    private ClassMetadata                 parent;
-    private Method                        reflectionMethod;
-    private Set<String>                   httpMethod;
-    private List<Injectable>          formalParameters;
+
+    private ClassMetadata    parent;
+    private Method           reflectionMethod;
+    private Set<String>      httpMethod;
+    private List<Injectable> formalParameters;
 
     public MethodMetadata(ClassMetadata parent) {
         this.parent = parent;
         this.httpMethod = new LinkedHashSet<String>(); // linked hash sets to make the behaviour deterministic
         this.formalParameters = new ArrayList<Injectable>();
     }
-    
+
     public Method getReflectionMethod() {
         return reflectionMethod;
     }
@@ -60,7 +58,7 @@ public class MethodMetadata extends AbstractMetadata {
     public List<Injectable> getFormalParameters() {
         return formalParameters;
     }
-    
+
     @Override
     public Set<MediaType> getConsumes() {
         Set<MediaType> set = super.getConsumes();
@@ -77,6 +75,15 @@ public class MethodMetadata extends AbstractMetadata {
             set = parent.getProduces();
         }
         return set;
+    }
+
+    @Override
+    public String toString() {
+        return "MethodMetadata [" + super.toString()
+            + (formalParameters != null ? "formalParameters=" + formalParameters + ", " : "")
+            + (httpMethod != null ? "httpMethod=" + httpMethod + ", " : "")
+            + (parent != null ? "parent=" + parent + ", " : "")
+            + (reflectionMethod != null ? "reflectionMethod=" + reflectionMethod : "") + "]";
     }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.registry.metadata;
 
@@ -75,5 +74,12 @@ public abstract class AbstractMetadata {
 
     public Set<MediaType> getProduces() {
         return Collections.unmodifiableSet(produces);
+    }
+
+    @Override
+    public String toString() {
+        return "[" + (consumes != null ? "consumes=" + consumes + ", " : "")
+            + (paths != null ? "paths=" + paths + ", " : "")
+            + (produces != null ? "produces=" + produces : "") + "]";
     }
 }
