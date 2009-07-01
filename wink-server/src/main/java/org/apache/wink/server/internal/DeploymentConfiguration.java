@@ -360,7 +360,7 @@ public class DeploymentConfiguration {
      */
     protected List<ResponseHandler> initResponseUserHandlers() {
         ArrayList<ResponseHandler> list = new ArrayList<ResponseHandler>(1);
-        if (Boolean.getBoolean(properties.getProperty(VALIDATE_LOCATION_HEADER))) {
+        if (Boolean.parseBoolean(properties.getProperty(VALIDATE_LOCATION_HEADER))) {
             list.add(new CheckLocationHeaderHandler());
         }
         return list;

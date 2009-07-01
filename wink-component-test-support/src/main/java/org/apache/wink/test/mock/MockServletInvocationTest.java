@@ -237,6 +237,9 @@ public abstract class MockServletInvocationTest extends TestCase {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {
+            if (e.getTargetException() instanceof RuntimeException){
+               throw (RuntimeException)e.getTargetException();
+            }
             throw new RuntimeException(e);
         } finally {
             response.getOutputStream().flush();
