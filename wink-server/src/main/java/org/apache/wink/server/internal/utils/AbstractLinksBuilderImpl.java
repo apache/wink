@@ -112,7 +112,7 @@ public abstract class AbstractLinksBuilderImpl<T> implements BaseLinksBuilder<T>
     }
 
     private void initRelativize() {
-        relativize = Boolean.parseBoolean(context.getProperties().getProperty("symphony.defaultUrisRelative", "true"));
+        relativize = Boolean.parseBoolean(context.getProperties().getProperty("wink.defaultUrisRelative", "true"));
         String relative = context.getUriInfo().getQueryParameters(false).getFirst(
                 RestConstants.REST_PARAM_RELATIVE_URLS);
         if (relative != null) {
@@ -121,7 +121,7 @@ public abstract class AbstractLinksBuilderImpl<T> implements BaseLinksBuilder<T>
     }
 
     private void initAddAltParam() {
-        addAltParam = Boolean.parseBoolean(context.getProperties().getProperty("symphony.addAltParam", "true"));
+        addAltParam = Boolean.parseBoolean(context.getProperties().getProperty("wink.addAltParam", "true"));
     }
 
     @SuppressWarnings("unchecked")

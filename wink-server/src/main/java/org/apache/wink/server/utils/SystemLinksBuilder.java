@@ -48,7 +48,7 @@ public interface SystemLinksBuilder extends BaseLinksBuilder<SystemLinksBuilder>
      * Determines if this system links builder will generate links for all the root resources that
      * are reachable when the search mode is "Continued Search" or just the current active resource.
      * If this method is not called, then the builder will use the value defined by the
-     * symphony.searchPolicyContinuedSearch property.
+     * wink.searchPolicyContinuedSearch property.
      * 
      * @param all
      *            If set to <code>true</code> then this system links builder will generate links for

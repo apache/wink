@@ -119,7 +119,7 @@ public interface BaseLinksBuilder<T> {
      * Set whether the links should be generated absolute or relative, overriding any configuration
      * and request settings. If this method is not called, the behavior is taken from the value of
      * the "relative-urls" query parameter on the request. If the request does not have the query
-     * parameter, the behavior is taken from the <code>symphony.defaultUrisRelative</code>
+     * parameter, the behavior is taken from the <code>wink.defaultUrisRelative</code>
      * configuration property.
      * 
      * @param relativize
@@ -133,7 +133,7 @@ public interface BaseLinksBuilder<T> {
      * Set whether the to automatically add to the generated links the "alt" query parameter
      * indicating the link type. The "alt" query parameter will never be added automatically in
      * case if it was added manually. If this method is not called, the default behavior is
-     * taken from the <code>symphony.addAltParam</code> configuration property.
+     * taken from the <code>wink.addAltParam</code> configuration property.
      * 
      * @param addAltParam
      *            <code>true</code> to add the "alt" parameter

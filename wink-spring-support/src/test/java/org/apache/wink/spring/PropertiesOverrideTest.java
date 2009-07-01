@@ -34,10 +34,10 @@ public class PropertiesOverrideTest extends SpringMockServletInvocationTest {
         Properties properties = configuration.getProperties();
         
         // check custom
-        assertEquals("atom", properties.getProperty("symphony.rootResource"));
+        assertEquals("atom", properties.getProperty("wink.searchPolicyContinuedSearch"));
         assertEquals("test me", properties.getProperty("test.property"));
         
         // check default
-        assertEquals("true", properties.getProperty("symphony.addAltParam"));
+        assertEquals("true", properties.getProperty("wink.addAltParam"));
     }
 }

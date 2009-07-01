@@ -256,8 +256,8 @@ public class UriInfoImpl implements UriInfo {
     }
 
     private String buildBaseUriString(HttpServletRequest request, Properties properties) {
-        String httpURI = getURI(properties, "symphony.http.uri");
-        String httpsURI = getURI(properties, "symphony.https.uri");
+        String httpURI = getURI(properties, "wink.http.uri");
+        String httpsURI = getURI(properties, "wink.https.uri");
         if (httpURI != null || httpsURI != null) {
             if (httpsURI == null) {
                 throw new IllegalStateException("Parameter httpsURI is empty or not initialized");
@@ -308,7 +308,7 @@ public class UriInfoImpl implements UriInfo {
         if (builder.charAt(builder.length() - 1) == '/') {
             builder.deleteCharAt(builder.length() - 1);
         }
-        String contextURI = properties.getProperty("symphony.context.uri");
+        String contextURI = properties.getProperty("wink.context.uri");
         String contextPath = ((contextURI != null  && contextURI.length() > 0) ? contextURI : request.getContextPath());
         if (contextPath != null) {
             builder.append(contextPath);

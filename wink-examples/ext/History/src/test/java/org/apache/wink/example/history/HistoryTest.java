@@ -57,7 +57,7 @@ public class HistoryTest extends MockServletInvocationTest {
     @Override
     protected Properties getProperties() {
         Properties p = new Properties();
-        p.setProperty("symphony.defaultUrisRelative", "false");
+        p.setProperty("wink.defaultUrisRelative", "false");
         p.setProperty("symphony.generator", "REST-style WS SDK");
         return p;
     }

@@ -40,7 +40,7 @@ import org.apache.wink.server.internal.registry.ResourceRegistry;
 
 public class FindRootResourceHandler implements RequestHandler {
     
-    public static final String SEARCH_POLICY_CONTINUED_SEARCH_KEY = "symphony.searchPolicyContinuedSearch";
+    public static final String SEARCH_POLICY_CONTINUED_SEARCH_KEY = "wink.searchPolicyContinuedSearch";
     private static final Logger logger = LoggerFactory.getLogger(FindRootResourceHandler.class);
     
     private boolean isContinuedSearchPolicy;

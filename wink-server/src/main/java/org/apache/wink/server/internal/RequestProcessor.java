@@ -51,8 +51,8 @@ public class RequestProcessor {
     private static final String           PROPERTY_ROOT_RESOURCE_ATOM      = "atom";
     private static final String           PROPERTY_ROOT_RESOURCE_ATOM_HTML = "atom+html";
     private static final String           PROPERTY_ROOT_RESOURCE_DEFAULT   = PROPERTY_ROOT_RESOURCE_ATOM_HTML;
-    private static final String           PROPERTY_ROOT_RESOURCE           = "symphony.rootResource";
-    private static final String           PROPERTY_ROOT_RESOURCE_CSS       = "symphony.serviceDocumentCssPath";
+    private static final String           PROPERTY_ROOT_RESOURCE           = "wink.searchPolicyContinuedSearch";
+    private static final String           PROPERTY_ROOT_RESOURCE_CSS       = "wink.serviceDocumentCssPath";
 
     private final DeploymentConfiguration configuration;
 
