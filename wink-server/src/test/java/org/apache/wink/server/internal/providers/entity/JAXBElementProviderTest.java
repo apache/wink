@@ -19,6 +19,7 @@
  *******************************************************************************/
 package org.apache.wink.server.internal.providers.entity;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
 
@@ -28,7 +29,10 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -172,20 +176,38 @@ public class JAXBElementProviderTest extends MockServletInvocationTest {
             "plain")));
     }
 
-    public void testJAXBElementProviderInvocation() throws IOException {
+    public void testJAXBElementProviderInvocation() throws IOException, JAXBException {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("POST",
             "/jaxbresource/jaxbelement", "text/xml", "text/xml", SOURCE_REQUEST_BYTES);
         MockHttpServletResponse invoke = invoke(request);
         assertEquals(200, invoke.getStatus());
-        assertEquals(SOURCE_RESPONSE, invoke.getContentAsString());
+
+        JAXBContext context = JAXBContext.newInstance(AtomFeed.class);
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+        JAXBElement<AtomFeed> expectedResponse = (JAXBElement<AtomFeed>) unmarshaller
+        .unmarshal(new ByteArrayInputStream(SOURCE_RESPONSE.getBytes()));
+        JAXBElement<AtomFeed> response = (JAXBElement<AtomFeed>) unmarshaller
+        .unmarshal(new ByteArrayInputStream(invoke
+                        .getContentAsByteArray()));
+        assertEquals(expectedResponse.getValue().getId(), response.getValue()
+                        .getId());
     }
 
-    public void testJAXBXmlElementProviderInvocation() throws IOException {
+    public void testJAXBXmlElementProviderInvocation() throws IOException, JAXBException {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("POST",
             "/jaxbresource/xmlrootwithfactory", "text/xml", "text/xml", SOURCE_REQUEST_BYTES);
         MockHttpServletResponse invoke = invoke(request);
         assertEquals(200, invoke.getStatus());
-        assertEquals(SOURCE_RESPONSE, invoke.getContentAsString());
+
+        JAXBContext context = JAXBContext.newInstance(AtomFeed.class);
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+        JAXBElement<AtomFeed> expectedResponse = (JAXBElement<AtomFeed>) unmarshaller
+        .unmarshal(new ByteArrayInputStream(SOURCE_RESPONSE.getBytes()));
+        JAXBElement<AtomFeed> response = (JAXBElement<AtomFeed>) unmarshaller
+        .unmarshal(new ByteArrayInputStream(invoke
+                        .getContentAsByteArray()));
+        assertEquals(expectedResponse.getValue().getId(), response.getValue()
+                        .getId());
     }
 
     public void testJAXBXmlElementProviderInvocationXmltypeNoFactory() throws IOException {
