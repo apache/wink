@@ -17,6 +17,7 @@
     specific language governing permissions and limitations
     under the License.
 -->
+
 <project>
     <parent>
         <artifactId>wink-server-integration-test</artifactId>
