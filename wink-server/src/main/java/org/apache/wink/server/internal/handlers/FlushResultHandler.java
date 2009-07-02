@@ -203,6 +203,12 @@ public class FlushResultHandler extends AbstractHandler {
             outputStream.write(b);
         }
 
+        @Override
+        public void flush() throws IOException {
+            flushHeaders();
+            outputStream.flush();
+        }
+
         private void flushHeaders() {
             if (!writeStarted) {
                 FlushResultHandler.flushHeaders(httpResponse, headers);
