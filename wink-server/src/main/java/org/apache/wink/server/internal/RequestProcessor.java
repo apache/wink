@@ -108,7 +108,7 @@ public class RequestProcessor {
             handleRequestWithoutFaultBarrier(request, response);
         } catch (Throwable t) {
             // exception was not handled properly
-            logger.error("Unhandled exception: ", t);
+            logger.error("Unhandled exception", t);
             if (t instanceof RuntimeException) {
                 // let the servlet container to handle the runtime exception
                 throw (RuntimeException) t;

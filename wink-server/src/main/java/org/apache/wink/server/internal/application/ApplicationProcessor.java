@@ -61,10 +61,7 @@ public class ApplicationProcessor {
     }
 
     public void process() {
-
-        if (logger.isDebugEnabled()) {
-            logger.debug("Processing Application:");
-        }
+        logger.debug("Processing Application:");
 
         // process singletons
         Set<Object> singletons = application.getSingletons();
@@ -82,10 +79,7 @@ public class ApplicationProcessor {
             processSymphonyApplication((SymphonyApplication) application);
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Processing of Application completed.");
-        }
-
+        logger.debug("Processing of Application completed.");
     }
 
     private void processSymphonyApplication(SymphonyApplication sApplication) {
@@ -97,9 +91,7 @@ public class ApplicationProcessor {
         }
 
         for (Object obj : instances) {
-            if (logger.isDebugEnabled()) {
-                logger.debug(String.format("Processing instance: %s", String.valueOf(obj)));
-            }
+            logger.debug("Processing instance: {}", obj);
 
             Class<?> cls = obj.getClass();
 
@@ -112,7 +104,7 @@ public class ApplicationProcessor {
             } else if (ProviderMetadataCollector.isProvider(cls)) {
                 providersRegistry.addProvider(obj, priority);
             } else {
-                logger.warn(String.format("Cannot handle %s. Ignoring.", String.valueOf(obj)));
+                logger.warn("Cannot handle {}. Ignoring.", obj);
             }
         }
     }
@@ -120,10 +112,7 @@ public class ApplicationProcessor {
     private void processClasses(Set<Class<?>> classes) {
 
         for (Class<?> cls : classes) {
-
-            if (logger.isDebugEnabled()) {
-                logger.debug(String.format("Processing class: %s", String.valueOf(cls)));
-            }
+            logger.debug("Processing class: {}", cls);
 
             // the validations were moved to registry
 
@@ -132,8 +121,7 @@ public class ApplicationProcessor {
             } else if (ProviderMetadataCollector.isProvider(cls)) {
                 providersRegistry.addProvider(cls);
             } else {
-                logger.warn(String.format("%s is not a resource or a provider. Ignored.",
-                    String.valueOf(cls)));
+                logger.warn("{} is not a resource or a provider. Ignored.", cls);
             }
         }
     }
@@ -142,10 +130,7 @@ public class ApplicationProcessor {
 
         // add singletons
         for (Object obj : singletons) {
-
-            if (logger.isDebugEnabled()) {
-                logger.debug(String.format("Processing singleton: %s", String.valueOf(obj)));
-            }
+            logger.debug("Processing singleton: {}", obj);
 
             Class<?> cls = obj.getClass();
 
@@ -154,8 +139,7 @@ public class ApplicationProcessor {
             } else if (ProviderMetadataCollector.isProvider(cls)) {
                 providersRegistry.addProvider(obj);
             } else {
-                logger.warn(String.format("%s is not a resource or a provider. Ignoring.",
-                    String.valueOf(obj)));
+                logger.warn("{} is not a resource or a provider. Ignoring.", obj);
             }
         }
     }

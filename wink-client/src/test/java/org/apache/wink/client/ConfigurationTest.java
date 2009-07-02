@@ -213,7 +213,7 @@ public class ConfigurationTest extends BaseTest {
             MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException,
             WebApplicationException {
 
-            logger.debug(String.format("Writing %s to stream using %s", t, getClass().getName()));
+            logger.debug("Writing {} to stream using {}", t, getClass().getName());
 
             entityStream.write(t.foo.getBytes(ProviderUtils.getCharset(mediaType)));
         }

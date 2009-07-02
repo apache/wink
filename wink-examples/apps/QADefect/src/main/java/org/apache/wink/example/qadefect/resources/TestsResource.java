@@ -101,7 +101,7 @@ public class TestsResource {
         // create data object (populated with store data)
         TestBean test = store.getTest(testId);
         if (test == null) {
-            logger.error("Test " + testId + " was not found");
+            logger.error("Test {} was not found", testId);
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 

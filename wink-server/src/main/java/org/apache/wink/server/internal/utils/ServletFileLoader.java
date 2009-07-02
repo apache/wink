@@ -39,9 +39,8 @@ public class ServletFileLoader extends FileLoader {
         }
 
         if (servletContext != null) {
-            if (logger.isDebugEnabled()) {
-                logger.debug(String.format("Searching for %s using servlet context.", fileName));
-            }
+            logger.debug("Searching for {} using servlet context.", fileName);
+
             InputStream is = servletContext.getResourceAsStream(fileName);
             if (is != null) {
                 return is;

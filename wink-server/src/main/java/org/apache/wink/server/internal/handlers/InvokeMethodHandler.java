@@ -40,11 +40,12 @@ public class InvokeMethodHandler extends AbstractHandler {
             Object[] parameters = searchResult.getInvocationParameters();
             Object instance = searchResult.getResource().getInstance(context);
             if (logger.isDebugEnabled()) {
-                logger.debug(String.format(
-                    "Invoking method %s of declaring class %s on the instance of a class %s with parameters %s",
-                    javaMethod.getName(), javaMethod.getDeclaringClass().getName(),
-                    instance.getClass().getName(), Arrays.toString(parameters)));
-
+                logger.debug("Invoking method {} of declaring class {} on the instance of a class {} with parameters {}", new Object[] {
+                    javaMethod.getName(),
+                    javaMethod.getDeclaringClass().getName(),
+                    instance.getClass().getName(),
+                    Arrays.toString(parameters)
+                });
             }
             Object result = javaMethod.invoke(instance, parameters);
             context.setResponseEntity(result);

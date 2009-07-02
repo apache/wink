@@ -70,17 +70,12 @@ public class FileLoader {
             throw new NullPointerException("fileName");
         }
 
-        boolean debugEnabled = logger.isDebugEnabled();
+        logger.debug("Searching for {} in file system.", fileName);
 
-        if (debugEnabled) {
-            logger.debug("Searching for " + fileName + " in file system.");
-        }
         File file = new File(fileName);
         if (file.isFile()) {
             // since file is a normal file, return it
-            if (debugEnabled) {
-                logger.debug("File " + fileName + " found in file system.");
-            }
+            logger.debug("File {} found in file system.", fileName);
             return new FileInputStream(file);
         }
 
@@ -114,32 +109,28 @@ public class FileLoader {
      * @throws FileNotFoundException
      */
     public static URL loadFileUsingClassLoaders(String filename) throws FileNotFoundException {
-        boolean debugEnabled = logger.isDebugEnabled();
-        if (debugEnabled) {
-            logger.debug("Searching for " + filename + " using thread context classloader.");
-        }
+        logger.debug("Searching for {} using thread context classloader.", filename);
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         URL url = loadFileUsingClassLoader(classLoader, filename);
         if (url != null) {
             return url;
         }
-        if (debugEnabled) {
-            logger.debug("Searching for " + filename + " using current classloader.");
-        }
+
+        logger.debug("Searching for {} using current classloader.", filename);
         classLoader = FileLoader.class.getClassLoader();
         url = loadFileUsingClassLoader(classLoader, filename);
         if (url != null) {
             return url;
         }
-        if (debugEnabled) {
-            logger.debug("Searching for " + filename + " using system classloader.");
-        }
+
+        logger.debug("Searching for {} using system classloader.", filename);
         url = ClassLoader.getSystemResource(filename);
         if (url == null) {
             // well, the last attempt has failed! throw FileNotFoundException
             logger.error("Failed to find file using classloaders");
             throw new FileNotFoundException(filename);
         }
+        
         return url;
     }
 

@@ -59,18 +59,14 @@ public class FlushResultHandler extends AbstractHandler {
         // assert status code is valid
         int statusCode = context.getResponseStatusCode();
         if (statusCode < 0) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Status code was not set. Nothing to do.");
-            }
+            logger.debug("Status code was not set. Nothing to do.");
             return;
         }
 
         // assert response is not committed
         final HttpServletResponse httpResponse = context.getAttribute(HttpServletResponse.class);
         if (httpResponse.isCommitted()) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("The response is already committed. Nothing to do.");
-            }
+            logger.debug("The response is already committed. Nothing to do.");
             return;
         }
 
@@ -136,9 +132,7 @@ public class FlushResultHandler extends AbstractHandler {
 
         // use the provider to write the entity
         if (messageBodyWriter != null) {
-            if (logger.isDebugEnabled()) {
-                logger.debug(String.format("Serialization using provider %s", messageBodyWriter.getClass().getName()));
-            }
+            logger.debug("Serialization using provider {}", messageBodyWriter.getClass().getName());
 
             final MultivaluedMap<String,Object> headers = httpHeaders;
 
@@ -151,8 +145,7 @@ public class FlushResultHandler extends AbstractHandler {
                     httpHeaders, new FlushHeadersOutputStream(httpResponse, headers));
 
         } else {
-            logger.error(String.format("Could not find a writer for %s and %s", entity.getClass().getName(),
-                    responseMediaType));
+            logger.error("Could not find a writer for {} and {}", entity.getClass().getName(), responseMediaType);
             throw new WebApplicationException(500);
         }
     }

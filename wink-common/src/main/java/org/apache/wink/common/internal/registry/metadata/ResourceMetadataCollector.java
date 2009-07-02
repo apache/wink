@@ -170,13 +170,13 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                         String methodName = String.format("%s.%s", declaringClass.getName(), method.getName());
                         for (Injectable id : methodMetadata.getFormalParameters()) {
                             if (id.getParamType() == Injectable.ParamType.ENTITY) {
-                                logger.warn(String.format("Sub-Resource locator %s contains an illegal entity parameter. The locator will be ignored.", methodName));
+                                logger.warn("Sub-Resource locator {} contains an illegal entity parameter. The locator will be ignored.", methodName);
                                 continue F1;
                             }
                         }
                         // log a warning if the locator has a Produces or Consumes annotation
                         if (!methodMetadata.getConsumes().isEmpty() || !methodMetadata.getProduces().isEmpty()) {
-                            logger.warn(String.format("Sub-Resource locator %s is annotated with Consumes/Produces. These annotations are ignored for sub-resource locators", methodName));
+                            logger.warn("Sub-Resource locator {} is annotated with Consumes/Produces. These annotations are ignored for sub-resource locators", methodName);
                         }
                         getMetadata().getSubResourceLocators().add(methodMetadata);
                     }

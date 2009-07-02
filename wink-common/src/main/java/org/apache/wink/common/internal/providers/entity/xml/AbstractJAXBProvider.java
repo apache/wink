@@ -113,7 +113,7 @@ public abstract class AbstractJAXBProvider {
         if (type.getAnnotation(XmlRootElement.class) == null && type.getAnnotation(XmlType.class) != null) {
             JAXBElement<?> wrappedJAXBElement = wrapInJAXBElement(jaxbObject, type);
             if (wrappedJAXBElement == null) {
-                logger.error("Failed to find ObjectFactory for " + type.getName());
+                logger.error("Failed to find ObjectFactory for {}", type.getName());
                 throw new WebApplicationException();
             }
             return wrappedJAXBElement;
@@ -143,10 +143,10 @@ public abstract class AbstractJAXBProvider {
                 }
                 return null;
             } 
-            logger.warn("Failed to instantiate object factory for " + type.getName());
+            logger.warn("Failed to instantiate object factory for {}", type.getName());
             return defaultWrapInJAXBElement(jaxbObject, type);
         } catch (Exception e) {
-            logger.error("Failed to build JAXBElement for " + type.getName());
+            logger.error("Failed to build JAXBElement for {}", type.getName());
             return null;
         }
 
@@ -156,7 +156,7 @@ public abstract class AbstractJAXBProvider {
         // XmlType typeAnnotation = type.getAnnotation(XmlType.class);
         // // Check that class factory method uses
         // if (!typeAnnotation.factoryClass().equals(XmlType.DEFAULT.class)) {
-        // logger.error("Failed to build JAXBElement for " + type.getName());
+        // logger.error("Failed to build JAXBElement for {}", type.getName());
         // return null;
         // }
         // Search for Factory
@@ -166,23 +166,21 @@ public abstract class AbstractJAXBProvider {
         try {
             factoryClass = Thread.currentThread().getContextClassLoader().loadClass(b.toString());
         } catch (ClassNotFoundException e) {
-            logger.error("ObjectFactory for " + type.getName() + " was not found");
+            logger.error("ObjectFactory for {} was not found", type.getName());
             return null;
         }
 
         if (!factoryClass.isAnnotationPresent(XmlRegistry.class)) {
-            logger.error("Found ObjectFactory for " + type.getName() + " is not annotated with XmlRegistry.class");
+            logger.error("Found ObjectFactory for {} is not annotated with XmlRegistry.class", type.getName());
             return null;
         }
-        
-        
 
         return factoryClass;
     }
     
     @SuppressWarnings("unchecked")
     private JAXBElement<?> defaultWrapInJAXBElement(Object jaxbObject, Class<?> type) {
-        logger.info("Creating default JAXBElement for " + type.getName());
+        logger.info("Creating default JAXBElement for {}", type.getName());
         String typeStr = type.getAnnotation(XmlType.class).name();
         return new JAXBElement(new QName(typeStr), type, jaxbObject);
     }

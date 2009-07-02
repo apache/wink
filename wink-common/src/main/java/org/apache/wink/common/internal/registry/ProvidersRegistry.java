@@ -113,9 +113,7 @@ public class ProvidersRegistry {
     private boolean addProvider(ObjectFactory<?> objectFactory) {
         Class<? extends Object> cls = objectFactory.getInstanceClass();
 
-        if (logger.isDebugEnabled()) {
-            logger.debug(String.format("Processing provider of type %s", String.valueOf(cls)));
-        }
+        logger.debug("Processing provider of type {}", cls);
 
         boolean retValue = false;
 
@@ -140,7 +138,7 @@ public class ProvidersRegistry {
             retValue = true;
         }
         if (retValue == false) {
-            logger.warn(String.format("Unknown provider: %s", String.valueOf(cls)));
+            logger.warn("Unknown provider: {}", cls);
         }
         return retValue;
 
@@ -405,8 +403,7 @@ public class ProvidersRegistry {
                 data.put(key, set);
             }
             if (!set.add(objectFactory)) {
-                logger.warn(String.format("The set already contains %s. Skipping...",
-                    String.valueOf(objectFactory)));
+                logger.warn("The set already contains {}. Skipping...", objectFactory);
             }
         }
 

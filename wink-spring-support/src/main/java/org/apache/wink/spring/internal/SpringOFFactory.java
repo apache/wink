@@ -82,11 +82,10 @@ public class SpringOFFactory<T> implements OFFactory<T> {
         if (ResourceMetadataCollector.isStaticResource(cls) || ProviderMetadataCollector.isProvider(cls)) {
             SpringObjectFactory old = class2factory.put(cls, objectFactory);
             if (old != null) {
-                logger.warn(String.format("The %s was replaced by a newer object factory.", cls));
+                logger.warn("The {} was replaced by a newer object factory.", cls);
             }
         } else {
-            logger.warn(String.format("The bean %s of class %s is neither resource nor provider",
-                beanName, String.valueOf(cls)));
+            logger.warn("The bean {} of class {} is neither resource nor provider", beanName, cls);
         }
     }
 
@@ -97,12 +96,10 @@ public class SpringOFFactory<T> implements OFFactory<T> {
             dynResource.setBeanName(beanName);
             SpringObjectFactory old = id2factory.put(beanName, objectFactory);
             if (old != null) {
-                logger.warn(String.format("The %s was replaced by a newer object factory.",
-                    beanName));
+                logger.warn("The {} was replaced by a newer object factory.", beanName);
             }
         } else {
-            logger.warn(String.format("The bean %s of class %s is not a DynamicResource.",
-                beanName, String.valueOf(cls)));
+            logger.warn("The bean {} of class {} is not a DynamicResource.", beanName, cls);
         }
     }
 

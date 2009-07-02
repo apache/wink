@@ -303,7 +303,7 @@ public class DataStore {
                 }
                 // defect matched all filters
                 // add it to result collection
-                logger.debug("Defect " + defect.getId() + " was added to result.");
+                logger.debug("Defect {} was added to result.", defect.getId());
                 hashSet.add(defect);
             }
         }

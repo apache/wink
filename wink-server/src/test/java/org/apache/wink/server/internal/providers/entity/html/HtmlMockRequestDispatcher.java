@@ -70,7 +70,6 @@ public class HtmlMockRequestDispatcher extends MockRequestDispatcher {
             Assert.isTrue(false);
         }
 
-        if (logger.isDebugEnabled())
-            logger.debug("MockRequestDispatcher: including URL [" + url + "]");
+        logger.debug("MockRequestDispatcher: including URL [{}]", url);
     }
 }

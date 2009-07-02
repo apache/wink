@@ -71,7 +71,7 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
                 unmarshaledResource = unmarshaller.unmarshal(new StreamSource(entityStream), type).getValue();
 
         } catch (JAXBException e) {
-            logger.error("Failed to unmarshal " + type.getName());
+            logger.error("Failed to unmarshal {}", type.getName());
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         }
         return unmarshaledResource;
@@ -94,7 +94,7 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
             marshaller.marshal(entityToMarshal, writer);
             writer.flush();
         } catch (JAXBException e) {
-            logger.error("Failed to marshal " + type.getName());
+            logger.error("Failed to marshal {}", type.getName());
             throw new WebApplicationException(e);
         }
     }

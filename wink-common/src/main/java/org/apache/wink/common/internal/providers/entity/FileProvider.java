@@ -68,10 +68,7 @@ public class FileProvider implements MessageBodyWriter<File>, MessageBodyReader<
 			OutputStream entityStream) throws IOException,
 			WebApplicationException {
 		if(!t.canRead() || t.isDirectory()){
-			if (logger.isWarnEnabled()) {
-	            logger.warn(String.format("Can not write file %s to response, file is not readable or a Directory ", t.getAbsoluteFile()));
-
-	        }
+	        logger.warn("Can not write file {} to response, file is not readable or a Directory ", t.getAbsoluteFile());
 			throw new WebApplicationException();
 		}else{
 			FileInputStream fis = new FileInputStream(t);
@@ -97,10 +94,8 @@ public class FileProvider implements MessageBodyWriter<File>, MessageBodyReader<
 			dir = new File(uploadDir);
 			if(!dir.exists() || !dir.isDirectory()){
 				dir = null;
-				if (logger.isWarnEnabled()) {
-		            logger.warn(String.format("Upload directory \"%s\" does not exist or not a directory, uploading entity to deafult temporary directory", uploadDir));
-		        }
-				throw new WebApplicationException(); 
+				logger.warn("Upload directory '{}' does not exist or not a directory, uploading entity to deafult temporary directory", uploadDir);
+		        throw new WebApplicationException();
 				
 			}
 		}

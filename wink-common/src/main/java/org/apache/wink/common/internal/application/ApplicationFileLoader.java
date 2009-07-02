@@ -105,11 +105,10 @@ public class ApplicationFileLoader {
                     if (ResourceMetadataCollector.isStaticResource(cls) || ProviderMetadataCollector.isProvider(cls)) {
                         classes.add(cls);
                     } else {
-                        logger.warn(String.format(
-                            "The %s is neither resource nor provider. Ignoring.", cls));
+                        logger.warn("The {} is neither resource nor provider. Ignoring.", cls);
                     }
                 } catch (ClassNotFoundException e) {
-                    logger.error(String.format("%s is not a class. Ignoring.", line));
+                    logger.error("{} is not a class. Ignoring.", line);
                 }
             }
         } catch (IOException e) {
@@ -118,7 +117,7 @@ public class ApplicationFileLoader {
             try {
                 is.close();
             } catch (IOException e) {
-                logger.info(String.format("Exception when closing file "), e);
+                logger.info("Exception when closing file", e);
             }
         }
     }

@@ -44,8 +44,7 @@ public class DependenciesInjectionPostProcessor implements BeanPostProcessor {
             try {
                 CreationUtils.injectFields(bean, classMetadata, RuntimeContextTLS.getRuntimeContext());
             } catch (Exception e) {
-                logger.error("Exception occured during the fields injection for bean " + beanName,
-                    e);
+                logger.error("Exception occured during the fields injection for bean " + beanName, e);
                 throw new WebApplicationException(e);
             }
         }

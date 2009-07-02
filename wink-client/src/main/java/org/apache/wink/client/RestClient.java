@@ -151,7 +151,7 @@ public class RestClient {
             if (ProviderMetadataCollector.isProvider(cls)) {
                 providersRegistry.addProvider(cls);
             } else {
-                logger.warn(String.format("%s is not a provider. Ignoring.", String.valueOf(cls)));
+                logger.warn("{} is not a provider. Ignoring.", cls);
             }
         }
     }
@@ -162,7 +162,7 @@ public class RestClient {
             if (ProviderMetadataCollector.isProvider(cls)) {
                 providersRegistry.addProvider(obj);
             } else {
-                logger.warn(String.format("%s is not a provider. Ignoring.", String.valueOf(obj)));
+                logger.warn("{} is not a provider. Ignoring.", obj);
             }
         }
     }
@@ -179,7 +179,7 @@ public class RestClient {
             if (ProviderMetadataCollector.isProvider(cls)) {
                 providersRegistry.addProvider(obj, priority);
             } else {
-                logger.warn(String.format("%s is not a provider. Ignoring.", String.valueOf(obj)));
+                logger.warn("{} is not a provider. Ignoring.", obj);
             }
         }
     }

@@ -85,7 +85,7 @@ public final class MediaTypeMapper {
 
     public void addMapping(String userAgent, String resultMimeType, String typeToSend) {
         if (userAgent == null || resultMimeType == null || typeToSend == null) {
-            logger.warn(String.format("Record %s is not complete => ignored", userAgent));
+            logger.warn("Record {} is not complete => ignored", userAgent);
             return;
         }
         this.mappings.add(new AgentStartsWith(userAgent, resultMimeType, typeToSend));

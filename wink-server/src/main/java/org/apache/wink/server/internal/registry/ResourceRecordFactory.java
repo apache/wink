@@ -203,7 +203,7 @@ public class ResourceRecordFactory {
             if (dispatchedPath != null) {
                 classMetadata.addPaths(Arrays.asList(dispatchedPath));
                 if (logger.isDebugEnabled()) {
-                    logger.debug(String.format("Adding dispatched path from instance: %s", Arrays.toString(dispatchedPath)));
+                    logger.debug("Adding dispatched path from instance: {}", Arrays.toString(dispatchedPath));
                 }
             }
 
@@ -211,7 +211,7 @@ public class ResourceRecordFactory {
             if (parents != null) {
                 classMetadata.getParentInstances().addAll(Arrays.asList(parents));
                 if (logger.isDebugEnabled()) {
-                    logger.debug(String.format("Adding parent beans from instance: %s", Arrays.toString(parents)));
+                    logger.debug("Adding parent beans from instance: {}", Arrays.toString(parents));
                 }
             }
 

@@ -270,8 +270,7 @@ public class DeploymentConfiguration {
                         is.close();
                     }
                 } catch (IOException e) {
-                    logger.info(String.format("Exception when closing file %s",
-                        ALTERNATIVE_SHORTCUTS), e);
+                    logger.info("Exception when closing file " + ALTERNATIVE_SHORTCUTS, e);
                 }
             }
         }

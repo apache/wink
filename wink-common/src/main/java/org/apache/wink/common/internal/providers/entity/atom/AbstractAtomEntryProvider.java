@@ -79,8 +79,7 @@ public abstract class AbstractAtomEntryProvider<T> {
         if (object instanceof AtomEntry) {
             entry = (AtomEntry)object;
         } else {
-            logger.error(String.format("request entity is not an atom entry (it was unmarshalled as %s)", object
-                    .getClass()));
+            logger.error("request entity is not an atom entry (it was unmarshalled as {})", object.getClass());
             throw new WebApplicationException(Status.BAD_REQUEST);
         }
 

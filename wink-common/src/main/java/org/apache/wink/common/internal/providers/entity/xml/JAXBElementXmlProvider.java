@@ -70,7 +70,7 @@ public class JAXBElementXmlProvider extends AbstractJAXBProvider implements Mess
             unmarshaller = getUnmarshaller(classToFill, mediaType);
             unmarshaledResource = unmarshaller.unmarshal(new StreamSource(entityStream), classToFill);
         } catch (JAXBException e) {
-            logger.error("Failed to unmarshal " + type.getName()); 
+            logger.error("Failed to unmarshal {}", type.getName());
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         }
         return unmarshaledResource;
@@ -92,7 +92,7 @@ public class JAXBElementXmlProvider extends AbstractJAXBProvider implements Mess
             marshaller.marshal(t, writer);
             writer.flush();
         } catch (JAXBException e) {
-            logger.error("Failed to marshal " + t.getName());
+            logger.error("Failed to marshal {}", t.getName());
             throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
         }
 

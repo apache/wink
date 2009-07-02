@@ -73,13 +73,13 @@ public class DefectTestsResource {
         // create data object (populated with store data)
         DefectBean defect = store.getDefect(defectId);
         if (defect == null) {
-            logger.error("Defect " + defectId + " was not found");
+            logger.error("Defect {} was not found", defectId);
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 
         List<TestBean> tests = defect.getTests();
         if (tests == null || tests.isEmpty()) {
-            logger.error("Defect " + defectId + " has not tests");
+            logger.error("Defect {} has not tests", defectId);
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 

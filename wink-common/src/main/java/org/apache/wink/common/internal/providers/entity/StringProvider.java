@@ -69,11 +69,9 @@ public class StringProvider implements MessageBodyReader<String>, MessageBodyWri
     public void writeTo(String t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
         MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException,
         WebApplicationException {
-        
-        if (logger.isDebugEnabled()) {
-            logger.debug(String.format("Writing %s to stream using %s", t, getClass().getName()));
-        }
-        
+
+        logger.debug("Writing {} to stream using {}", t, getClass().getName());
+
         entityStream.write(t.getBytes(ProviderUtils.getCharset(mediaType)));
     }
 

@@ -96,13 +96,13 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
             writer.writeTo(object, method.getTypeClass(), method.getType(), annotations, mediaType, httpHeaders,
                     entityStream);
         } catch (IllegalArgumentException e) {
-            logger.error("Error invoking asset method " + method.getMethod().getName());
+            logger.error("Error invoking asset method {}", method.getMethod().getName());
             throw new WebApplicationException(e);
         } catch (IllegalAccessException e) {
-            logger.error("Error invoking asset method " + method.getMethod().getName());
+            logger.error("Error invoking asset method {}", method.getMethod().getName());
             throw new WebApplicationException(e);
         } catch (InvocationTargetException e) {
-            logger.error("Error invoking asset method " + method.getMethod().getName());
+            logger.error("Error invoking asset method {}", method.getMethod().getName());
             throw new WebApplicationException(e);
         }
     }
@@ -132,17 +132,16 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
             method.getMethod().invoke(asset, args);
             return asset;
         } catch (IllegalArgumentException e) {
-            logger.error("Error invoking asset method " + method.getMethod().getName());
+            logger.error("Error invoking asset method {}", method.getMethod().getName());
             throw new WebApplicationException(e);
         } catch (IllegalAccessException e) {
-            logger.error("Error invoking asset method " + method.getMethod().getName());
+            logger.error("Error invoking asset method {}", method.getMethod().getName());
             throw new WebApplicationException(e);
         } catch (InvocationTargetException e) {
-            logger.error("Error invoking asset method " + method.getMethod().getName());
+            logger.error("Error invoking asset method {}", method.getMethod().getName());
             throw new WebApplicationException(e);
         } catch (InstantiationException e) {
-            logger.error("Failed to instantiate asset " + type.getName()
-                    + ". Assets must have a default public contructor.");
+            logger.error("Failed to instantiate asset {}. Assets must have a default public contructor.", type.getName());
             throw new WebApplicationException(e);
         }
     }
@@ -182,14 +181,14 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
         // verify that the asset has a default public constructor
         try {
             if (assetType.getConstructor() == null) {
-                logger.info("Cannot instantiate asset " + assetType.getName());
+                logger.info("Cannot instantiate asset {}", assetType.getName());
                 return false;
             }
         } catch (SecurityException e) {
-            logger.info("Cannot instantiate asset " + assetType.getName());
+            logger.info("Cannot instantiate asset {}", assetType.getName());
             return false;
         } catch (NoSuchMethodException e) {
-            logger.info("Cannot instantiate asset " + assetType.getName());
+            logger.info("Cannot instantiate asset {}", assetType.getName());
             return false;
         }
 
@@ -352,7 +351,7 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
                     if (type != null) {
                         // we allow to have only one entity parameter
                         String methodName = method.getDeclaringClass().getName() + "." + method.getName();
-                        logger.error("Asset locator method " + methodName + " has more than one entity parameter");
+                        logger.error("Asset locator method {} has more than one entity parameter", methodName);
                         throw new WebApplicationException();
                     }
                     type = fp.getGenericType();

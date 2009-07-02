@@ -211,7 +211,7 @@ public class DefectsResource {
         DataStore store = DataStore.getInstance();
         DefectBean defect = store.getDefect(defectId);
         if (defect == null) {
-            logger.info("Defect " + defectId + " does not exist");
+            logger.info("Defect {} does not exist", defectId);
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 
@@ -239,7 +239,7 @@ public class DefectsResource {
         // create data object (populated with store data)
         DefectBean defect = store.getDefect(defectId);
         if (defect == null) {
-            logger.info("Defect " + defectId + " does not exist");
+            logger.info("Defect {} does not exist", defectId);
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 
@@ -263,7 +263,7 @@ public class DefectsResource {
         // verify Defect exist in the store, return 404 otherwise
         DefectBean bean = store.getDefect(defectId);
         if (bean == null) {
-            logger.info("Defect " + defectId + " does not exist");
+            logger.info("Defect {} does not exist", defectId);
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 

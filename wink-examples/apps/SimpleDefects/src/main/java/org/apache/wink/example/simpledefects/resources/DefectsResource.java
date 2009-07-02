@@ -126,7 +126,7 @@ public class DefectsResource {
         // create data object (populated with store data)
         DefectBean defect = store.getDefect(defectId);
         if (defect == null) {
-            logger.error("Defect " + defectId + " was not found");
+            logger.error("Defect {} was not found", defectId);
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
         // create a new instance of a defect asset
@@ -146,7 +146,7 @@ public class DefectsResource {
         // verify the defect exists in the store
         DefectBean defect = store.getDefect(defectId);
         if (defect == null) {
-            logger.error("Defect " + defectId + " was not found");
+            logger.error("Defect {} was not found", defectId);
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 
@@ -180,7 +180,7 @@ public class DefectsResource {
         // obtain data object from memory store
         DefectBean defect = store.getDefect(defectId);
         if (defect == null) {
-            logger.error("Defect " + defectId + " was not found");
+            logger.error("Defect {} was not found", defectId);
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 

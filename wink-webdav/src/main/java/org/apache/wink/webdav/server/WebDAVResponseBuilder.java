@@ -374,7 +374,7 @@ public class WebDAVResponseBuilder {
         }
         if (link == null) {
             // no link in the resource
-            logger.error("The resource " + synd.getId() + " has set no edit or self link");
+            logger.error("The resource {} has set no edit or self link", synd.getId());
             throw new WebApplicationException();
         }
 

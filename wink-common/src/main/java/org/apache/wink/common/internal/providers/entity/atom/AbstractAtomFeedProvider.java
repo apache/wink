@@ -79,8 +79,7 @@ public abstract class AbstractAtomFeedProvider<T> {
         if (object instanceof AtomFeed) {
             feed = (AtomFeed)object;
         } else {
-            logger.error(String.format("request entity is not an atom feed (it was unmarshalled as %s)", object
-                    .getClass()));
+            logger.error("request entity is not an atom feed (it was unmarshalled as {})", object.getClass());
             throw new WebApplicationException(Status.BAD_REQUEST);
         }
 

@@ -107,17 +107,12 @@ public class ResourceRegistry  {
      *            priority of the resource
      */
     public void addResource(Object instance, double priority) {
-        if (logger.isDebugEnabled()) {
-            logger.debug(String.format("Adding resource instance: %s with priority: %f", String.valueOf(instance),
-                    priority));
-        }
+        logger.debug("Adding resource instance: {} with priority: {}", instance, priority);
 
         writersLock.lock();
         try {
-
             if (!applicationValidator.isValidResource(instance.getClass())) {
-                logger.warn(String.format("The resource %s is not a valid resource. Ignoring.", String
-                        .valueOf(instance)));
+                logger.warn("The resource {} is not a valid resource. Ignoring.", instance);
                 return;
             }
 
@@ -139,15 +134,12 @@ public class ResourceRegistry  {
      *            priority of the resource
      */
     public void addResource(Class<?> clazz, double priority) {
-        if (logger.isDebugEnabled()) {
-            logger.debug(String.format("Adding resource class: %s with priority: %f", String.valueOf(clazz), priority));
-        }
+        logger.debug("Adding resource class: {} with priority: {}", clazz, priority);
 
         writersLock.lock();
         try {
             if (!applicationValidator.isValidResource(clazz)) {
-                logger.warn(String.format("The resource class %s is not a valid resource. Ignoring.", String
-                        .valueOf(clazz)));
+                logger.warn("The resource class {} is not a valid resource. Ignoring.", clazz);
                 return;
             }
             ResourceRecord record = resourceRecordsFactory.getResourceRecord(clazz);
@@ -368,7 +360,7 @@ public class ResourceRegistry  {
             }
         }
         if (methodRecords.size() == 0) {
-            logger.info("Could not find any method supporting " + context.getRequest().getMethod());
+            logger.info("Could not find any method supporting {}", context.getRequest().getMethod());
             throw new WebApplicationException(HttpStatus.METHOD_NOT_ALLOWED.getCode());
         }
 

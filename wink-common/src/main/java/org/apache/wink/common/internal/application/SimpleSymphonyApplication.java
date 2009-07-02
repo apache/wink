@@ -63,7 +63,7 @@ public class SimpleSymphonyApplication extends SymphonyApplication {
                 try {
                     jaxRSClasses.addAll(getApplicationFileLoader(getFileStream(applicationConfigFile)).getClasses());
                 } catch (FileNotFoundException e) {
-                    logger.warn(String.format("Could not find %s. Ignoring.", applicationConfigFile));
+                    logger.warn("Could not find {}. Ignoring.", applicationConfigFile);
                 }
             }
         }

@@ -166,7 +166,7 @@ public class RestServlet extends AbstractSymphonyServlet {
                     is.close();
                 }
             } catch (IOException e) {
-                logger.warn(String.format("Exception when closing file %s", resourceName), e);
+                logger.warn("Exception when closing file " + resourceName, e);
             }
         }
         return properties;

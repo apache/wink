@@ -195,11 +195,11 @@ public abstract class MockServletInvocationTest extends TestCase {
 //                        symphonyInstances.add(cls.newInstance());
 //                    }
 //                } catch (ClassNotFoundException e) {
-//                    logger.error(String.format("%s is not a class", line));
+//                    logger.error("{} is not a class", line);
 //                } catch (InstantiationException e) {
-//                    logger.error(String.format("Failed to instantiate %s", String.valueOf(cls)));
+//                    logger.error("Failed to instantiate {}", cls);
 //                } catch (IllegalAccessException e) {
-//                    logger.error(String.format("Illegal access to %s", String.valueOf(cls)));
+//                    logger.error("Illegal access to {}", cls);
 //                }
 //            }
 //        } catch (IOException e) {
@@ -208,7 +208,7 @@ public abstract class MockServletInvocationTest extends TestCase {
 //            try {
 //                is.close();
 //            } catch (IOException e) {
-//                logger.info(String.format("Exception when closing file "), e);
+//                logger.info("Exception when closing file", e);
 //            }
 //        }
 //    }

@@ -98,7 +98,7 @@ public class JsonJAXBProvider extends AbstractJsonXmlProvider implements Message
             marshaller.marshal(jaxbObject, handler);
             return handler.getJsonResult();
         } catch (JAXBException e) {
-            logger.error("Failed to convert JAXB object " + type.getName() + " to JSONObject");
+            logger.error("Failed to convert JAXB object {} to JSONObject", type.getName());
             throw new WebApplicationException(e);
         }
     }
