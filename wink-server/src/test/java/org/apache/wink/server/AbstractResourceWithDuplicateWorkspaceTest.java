@@ -20,7 +20,6 @@
 
 package org.apache.wink.server;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,7 +36,6 @@ import org.apache.wink.test.mock.MockRequestConstructor;
 import org.custommonkey.xmlunit.Diff;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.xml.sax.SAXException;
 
 public class AbstractResourceWithDuplicateWorkspaceTest extends MockServletInvocationTest {
 
@@ -94,7 +92,7 @@ public class AbstractResourceWithDuplicateWorkspaceTest extends MockServletInvoc
         }
     }
 
-    public void testBeanWithEmptyPath() throws IOException, SAXException {
+    public void testBeanWithEmptyPath() throws Exception {
         MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
             "/", MediaTypeUtils.ATOM_SERVICE_DOCUMENT_TYPE);
         MockHttpServletResponse response = invoke(mockRequest);

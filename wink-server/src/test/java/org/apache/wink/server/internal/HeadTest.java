@@ -20,8 +20,6 @@
  
 package org.apache.wink.server.internal;
 
-import java.io.IOException;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -58,7 +56,7 @@ public class HeadTest extends MockServletInvocationTest {
 
     }
 
-    public void testHead() throws IOException {
+    public void testHead() throws Exception {
         MockHttpServletRequest getRequest = MockRequestConstructor.constructMockRequest("GET",
             PATH, "*/*");
         MockHttpServletResponse getResponse = invoke(getRequest);

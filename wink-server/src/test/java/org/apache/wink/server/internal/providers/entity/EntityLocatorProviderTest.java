@@ -19,9 +19,6 @@
  *******************************************************************************/
 package org.apache.wink.server.internal.providers.entity;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -39,7 +36,6 @@ import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-
 
 public class EntityLocatorProviderTest extends MockServletInvocationTest {
 
@@ -151,7 +147,7 @@ public class EntityLocatorProviderTest extends MockServletInvocationTest {
         postAtomEntry("/test/jaxbelement");
     }
 
-    private void getAtomEntry(String url) throws IOException, UnsupportedEncodingException {
+    private void getAtomEntry(String url) throws Exception {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", url,
             "application/atom+xml");
         MockHttpServletResponse response = invoke(request);
@@ -159,7 +155,7 @@ public class EntityLocatorProviderTest extends MockServletInvocationTest {
         assertEquals(ENTRY, response.getContentAsString());
     }
 
-    private void postAtomEntry(String url) throws IOException, UnsupportedEncodingException {
+    private void postAtomEntry(String url) throws Exception {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("POST", url,
             "application/atom+xml");
         request.setContentType("application/atom+xml");

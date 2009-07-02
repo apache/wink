@@ -17,10 +17,8 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
-package org.apache.wink.server;
 
-import java.io.IOException;
+package org.apache.wink.server;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -31,7 +29,6 @@ import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-
 
 /**
  * Tests @QueryParam.
@@ -48,8 +45,7 @@ public class QueryTest extends MockServletInvocationTest {
 
         @GET
         @Produces
-        public String getQuery2(@QueryParam("q") String q,
-            @QueryParam("b") String b,
+        public String getQuery2(@QueryParam("q") String q, @QueryParam("b") String b,
             @QueryParam("c") String c) {
             if (q == null && b == null && c == null) {
                 return "normal";
@@ -68,13 +64,13 @@ public class QueryTest extends MockServletInvocationTest {
 
     }
 
-    public void testNoQuery() throws IOException {
+    public void testNoQuery() throws Exception {
         MockHttpServletResponse resp = invoke(MockRequestConstructor.constructMockRequest("GET",
             "/query", "*/*"));
         assertEquals("result", "normal", resp.getContentAsString());
     }
 
-    public void testQueryWithOneParam() throws IOException {
+    public void testQueryWithOneParam() throws Exception {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
             "/query", "*/*");
         request.setQueryString("q=A");
@@ -82,7 +78,7 @@ public class QueryTest extends MockServletInvocationTest {
         assertEquals("result", "query1:A", resp.getContentAsString());
     }
 
-    public void testQueryWithNoParam() throws IOException {
+    public void testQueryWithNoParam() throws Exception {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
             "/query", "*/*");
         request.setQueryString("q=A&b=B");
@@ -90,7 +86,7 @@ public class QueryTest extends MockServletInvocationTest {
         assertEquals("result", "query2:q=A,b=B", resp.getContentAsString());
     }
 
-    public void testQueryOptional() throws IOException {
+    public void testQueryOptional() throws Exception {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
             "/query", "*/*");
         request.setQueryString("c=C");

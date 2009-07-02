@@ -20,7 +20,6 @@
  
 package org.apache.wink.server.internal;
 
-import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
 import java.util.Date;
@@ -49,7 +48,7 @@ import org.apache.wink.common.model.synd.SyndText;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.server.utils.LinkBuilders;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.apache.wink.test.mock.SpringMockServletInvocationTest;
+import org.apache.wink.test.mock.TestUtils;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -73,7 +72,7 @@ public class DispatchIPv6Test extends MockServletInvocationTest {
     @Override
     protected String getPropertiesFile() {
         String name = getClass().getName();
-        String fileName = SpringMockServletInvocationTest.packageToPath(name) + ".properties";
+        String fileName = TestUtils.packageToPath(name) + ".properties";
         return fileName;
     }
 
@@ -116,7 +115,7 @@ public class DispatchIPv6Test extends MockServletInvocationTest {
         }
     }
 
-    public void testIPv6HttpServiceDocument() throws IOException {
+    public void testIPv6HttpServiceDocument() throws Exception {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "/",
             MediaTypeUtils.ATOM_SERVICE_DOCUMENT_TYPE);
         MockHttpServletResponse response = invoke(request);
@@ -129,7 +128,7 @@ public class DispatchIPv6Test extends MockServletInvocationTest {
         assertTrue("ipv6 URI: " + href, href.startsWith(http));
     }
 
-    public void testIPv6HttpsServiceDocument() throws IOException {
+    public void testIPv6HttpsServiceDocument() throws Exception {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "/",
             MediaTypeUtils.ATOM_SERVICE_DOCUMENT_TYPE);
         request.setSecure(true);
@@ -143,7 +142,7 @@ public class DispatchIPv6Test extends MockServletInvocationTest {
         assertTrue("ipv6 URI: " + href, href.startsWith(https));
     }
 
-    public void testIPv6HttpEntry() throws IOException {
+    public void testIPv6HttpEntry() throws Exception {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
             "/get/entry", MediaType.APPLICATION_ATOM_XML_TYPE);
         request.addParameter(RestConstants.REST_PARAM_ABSOLUTE_URLS, "");
@@ -155,7 +154,7 @@ public class DispatchIPv6Test extends MockServletInvocationTest {
         assertTrue("ipv6 URI: " + link, link.getHref().startsWith(http));
     }
 
-    public void testIPv6HttpsEntry() throws IOException {
+    public void testIPv6HttpsEntry() throws Exception {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
             "/get/entry", MediaType.APPLICATION_ATOM_XML_TYPE);
         request.setSecure(true);
@@ -168,7 +167,7 @@ public class DispatchIPv6Test extends MockServletInvocationTest {
         assertTrue("ipv6 URI: " + link, link.getHref().startsWith(https));
     }
 
-    public void testIPv6HttpFeed() throws IOException {
+    public void testIPv6HttpFeed() throws Exception {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
             "/get/feed", MediaType.APPLICATION_ATOM_XML_TYPE);
         request.addParameter(RestConstants.REST_PARAM_ABSOLUTE_URLS, "");
@@ -180,7 +179,7 @@ public class DispatchIPv6Test extends MockServletInvocationTest {
         assertTrue("ipv6 URI: " + link, link.getHref().startsWith(http));
     }
 
-    public void testIPv6HttpsFeed() throws IOException {
+    public void testIPv6HttpsFeed() throws Exception {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
             "/get/feed", MediaType.APPLICATION_ATOM_XML_TYPE);
         request.setSecure(true);

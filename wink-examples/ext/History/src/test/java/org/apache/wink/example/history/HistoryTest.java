@@ -38,7 +38,7 @@ import org.apache.wink.server.internal.resources.HtmlServiceDocumentResource;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.diff.DiffIgnoreUpdateWithAttributeQualifier;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.apache.wink.test.mock.SpringMockServletInvocationTest;
+import org.apache.wink.test.mock.TestUtils;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.w3c.dom.Document;
@@ -55,7 +55,7 @@ public class HistoryTest extends MockServletInvocationTest {
 
     @Override
     protected String getPropertiesFile() {
-        return SpringMockServletInvocationTest.packageToPath(getClass().getPackage().getName())
+        return TestUtils.packageToPath(getClass().getPackage().getName())
             + "\\history.properties";
     }
 
@@ -74,7 +74,7 @@ public class HistoryTest extends MockServletInvocationTest {
             MediaType.APPLICATION_ATOM_XML_TYPE);
         response = invoke(request);
         assertEquals("status", 200, response.getStatus());
-        diff = SpringMockServletInvocationTest.diffIgnoreUpdateWithAttributeQualifier(
+        diff = TestUtils.diffIgnoreUpdateWithAttributeQualifier(
             "initial_defect1_atom.xml", response.getContentAsString().getBytes(), getClass());
         assertNull(diff);
 
@@ -83,7 +83,7 @@ public class HistoryTest extends MockServletInvocationTest {
             MediaType.APPLICATION_ATOM_XML_TYPE);
         response = invoke(request);
         assertEquals("status", 200, response.getStatus());
-        diff = SpringMockServletInvocationTest.diffIgnoreUpdateWithAttributeQualifier(
+        diff = TestUtils.diffIgnoreUpdateWithAttributeQualifier(
             "defect1_1_atom.xml", response.getContentAsString().getBytes(), getClass());
         assertNull(diff);
 
@@ -106,7 +106,7 @@ public class HistoryTest extends MockServletInvocationTest {
             MediaType.APPLICATION_ATOM_XML_TYPE);
         response = invoke(request);
         assertEquals("status", 200, response.getStatus());
-        diff = SpringMockServletInvocationTest.diffIgnoreUpdateWithAttributeQualifier(
+        diff = TestUtils.diffIgnoreUpdateWithAttributeQualifier(
             "initial_defect1_atom.xml", response.getContentAsString().getBytes(), getClass());
         assertNull(diff);
 
@@ -119,7 +119,7 @@ public class HistoryTest extends MockServletInvocationTest {
         // try to update the defect, should return 404
         request = MockRequestConstructor.constructMockRequest("PUT", "/defects/1",
             MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_ATOM_XML,
-            SpringMockServletInvocationTest.getResourceOfSamePackageAsBytes("defect1_1_atom.xml",
+            TestUtils.getResourceOfSamePackageAsBytes("defect1_1_atom.xml",
                 getClass()));
         response = invoke(request);
         assertEquals("status", 404, response.getStatus());
@@ -130,7 +130,7 @@ public class HistoryTest extends MockServletInvocationTest {
             MediaType.APPLICATION_ATOM_XML_TYPE);
         response = invoke(request);
         assertEquals("status", 200, response.getStatus());
-        diff = SpringMockServletInvocationTest.diffIgnoreUpdateWithAttributeQualifier(
+        diff = TestUtils.diffIgnoreUpdateWithAttributeQualifier(
             "defect1_1_afterdelete_atom.xml", response.getContentAsString().getBytes(), getClass());
         assertNull(diff);
 
@@ -147,11 +147,11 @@ public class HistoryTest extends MockServletInvocationTest {
         // should return created
         request = MockRequestConstructor.constructMockRequest("POST", "/defects",
             MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_ATOM_XML,
-            SpringMockServletInvocationTest.getResourceOfSamePackageAsBytes("defect1_1_atom.xml",
+            TestUtils.getResourceOfSamePackageAsBytes("defect1_1_atom.xml",
                 getClass()));
         response = invoke(request);
         assertEquals("status", 201, response.getStatus());
-        diff = SpringMockServletInvocationTest.diffIgnoreUpdateWithAttributeQualifier(
+        diff = TestUtils.diffIgnoreUpdateWithAttributeQualifier(
             "defect1_4_atom.xml", response.getContentAsString().getBytes(), getClass());
         assertNull(diff);
 
@@ -159,7 +159,7 @@ public class HistoryTest extends MockServletInvocationTest {
         // should fail, since the defect was already undeleted
         request = MockRequestConstructor.constructMockRequest("POST", "/defects",
             MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_ATOM_XML,
-            SpringMockServletInvocationTest.getResourceOfSamePackageAsBytes("defect1_1_atom.xml",
+            TestUtils.getResourceOfSamePackageAsBytes("defect1_1_atom.xml",
                 getClass()));
         response = invoke(request);
         assertEquals("status", 409, response.getStatus());
@@ -167,11 +167,11 @@ public class HistoryTest extends MockServletInvocationTest {
         // update undeleted defect
         request = MockRequestConstructor.constructMockRequest("PUT", "/defects/1",
             MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_ATOM_XML,
-            SpringMockServletInvocationTest.getResourceOfSamePackageAsBytes("defect1_1_atom.xml",
+            TestUtils.getResourceOfSamePackageAsBytes("defect1_1_atom.xml",
                 getClass()));
         response = invoke(request);
         assertEquals("status", 200, response.getStatus());
-        diff = SpringMockServletInvocationTest.diffIgnoreUpdateWithAttributeQualifier(
+        diff = TestUtils.diffIgnoreUpdateWithAttributeQualifier(
             "defect1_5_atom.xml", response.getContentAsString().getBytes(), getClass());
         assertNull(diff);
 
@@ -185,7 +185,7 @@ public class HistoryTest extends MockServletInvocationTest {
     }
 
     private String diffFeed(String expectedFileName, String actual) throws Exception {
-        InputStream expected = SpringMockServletInvocationTest.getResourceOfSamePackage(
+        InputStream expected = TestUtils.getResourceOfSamePackage(
             expectedFileName, getClass());
 
         // sort feeds
@@ -199,8 +199,8 @@ public class HistoryTest extends MockServletInvocationTest {
         AtomFeed.marshal(expectedFeed, expectedWriter);
         AtomFeed.marshal(actualFeed, actualWriter);
 
-        Document expectedXml = SpringMockServletInvocationTest.getXML(expectedWriter.getBuffer().toString().getBytes());
-        Document actualXml = SpringMockServletInvocationTest.getXML(actualWriter.getBuffer().toString().getBytes());
+        Document expectedXml = TestUtils.getXML(expectedWriter.getBuffer().toString().getBytes());
+        Document actualXml = TestUtils.getXML(actualWriter.getBuffer().toString().getBytes());
 
         DiffIgnoreUpdateWithAttributeQualifier diff = new DiffIgnoreUpdateWithAttributeQualifier(
             expectedXml, actualXml);
@@ -208,9 +208,9 @@ public class HistoryTest extends MockServletInvocationTest {
             return null;
         }
         System.err.println("Expected:\r\n"
-            + SpringMockServletInvocationTest.printPrettyXML(expectedXml));
+            + TestUtils.printPrettyXML(expectedXml));
         System.err.println("Actual:\r\n"
-            + SpringMockServletInvocationTest.printPrettyXML(actualXml));
+            + TestUtils.printPrettyXML(actualXml));
         return diff.toString();
     }
 

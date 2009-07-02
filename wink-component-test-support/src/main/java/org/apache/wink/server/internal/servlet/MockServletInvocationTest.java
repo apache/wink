@@ -125,17 +125,13 @@ public abstract class MockServletInvocationTest extends TestCase {
      *            the filled request
      * @return a new response as filled by the servlet
      * @throws IOException
-     *             io error
      * @throws ServletException
      */
-    public MockHttpServletResponse invoke(MockHttpServletRequest request) throws IOException {
+    public MockHttpServletResponse invoke(MockHttpServletRequest request) throws ServletException,
+        IOException {
         MockHttpServletResponse response = new MockHttpServletResponse();
 
-        try {
-            servlet.service(request, response);
-        } catch (ServletException e) {
-            throw new RuntimeException(e);
-        }
+        servlet.service(request, response);
 
         return response;
     }

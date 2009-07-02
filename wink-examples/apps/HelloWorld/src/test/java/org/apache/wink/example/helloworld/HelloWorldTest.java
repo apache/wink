@@ -21,7 +21,6 @@
 package org.apache.wink.example.helloworld;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.StringReader;
 import java.util.Set;
 
@@ -29,7 +28,6 @@ import org.apache.wink.common.http.HttpStatus;
 import org.apache.wink.common.internal.application.ApplicationFileLoader;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.model.atom.AtomEntry;
-import org.apache.wink.example.helloworld.HelloWorld;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -51,7 +49,7 @@ public class HelloWorldTest extends MockServletInvocationTest {
         }
     }
     
-    public void testHelloWorld() throws IOException {
+    public void testHelloWorld() throws Exception {
         // prepare a mock request and an empty mock response
         MockHttpServletRequest request = constructMockRequest("GET", "/world",
             MediaTypeUtils.ATOM_ENTRY);

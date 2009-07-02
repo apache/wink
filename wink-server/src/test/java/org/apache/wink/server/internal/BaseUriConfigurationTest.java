@@ -20,8 +20,6 @@
  
 package org.apache.wink.server.internal;
 
-import java.io.IOException;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -31,7 +29,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.apache.wink.test.mock.SpringMockServletInvocationTest;
+import org.apache.wink.test.mock.TestUtils;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -60,11 +58,11 @@ public class BaseUriConfigurationTest extends MockServletInvocationTest {
     @Override
     protected String getPropertiesFile() {
         String name = getClass().getName();
-        String fileName = SpringMockServletInvocationTest.packageToPath(name) + ".properties";
+        String fileName = TestUtils.packageToPath(name) + ".properties";
         return fileName;
     }
     
-    public void testDetection() throws IOException {
+    public void testDetection() throws Exception {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
             "/con%20textPath/servle%20tPath/bas%20eUri", "*/*");
         request.setSecure(false);

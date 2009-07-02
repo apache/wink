@@ -21,8 +21,6 @@
 
 package org.apache.wink.server;
 
-import java.io.IOException;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -96,7 +94,7 @@ public class JAXRSContextTest extends MockServletInvocationTest {
         }
     }
 
-    public void testUriInfoContext() throws IOException {
+    public void testUriInfoContext() throws Exception {
         // TODO test all context fields
         MockHttpServletResponse resp = invoke(MockRequestConstructor.constructMockRequest("GET",
             "/context/uriInfo", "*/*"));
@@ -104,7 +102,7 @@ public class JAXRSContextTest extends MockServletInvocationTest {
         assertEquals("result", "context/uriInfo", result);
     }
 
-    public void testHttpHeadersContext() throws IOException {
+    public void testHttpHeadersContext() throws Exception {
         // TODO test all context fields
         MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
             "/context/httpHeaders", "*/*");
@@ -114,7 +112,7 @@ public class JAXRSContextTest extends MockServletInvocationTest {
         assertEquals("result", "Header Value", result);
     }
 
-    public void testRequestContext() throws IOException {
+    public void testRequestContext() throws Exception {
         // TODO test all context fields
         MockHttpServletResponse resp = invoke(MockRequestConstructor.constructMockRequest("GET",
             "/context/request", "*/*"));
@@ -122,7 +120,7 @@ public class JAXRSContextTest extends MockServletInvocationTest {
         assertEquals("result", "GET", result);
     }
 
-    public void testSecurityContext() throws IOException {
+    public void testSecurityContext() throws Exception {
         // TODO test all context fields
         MockHttpServletResponse resp = invoke(MockRequestConstructor.constructMockRequest("GET",
             "/context/security", "*/*"));
@@ -130,7 +128,7 @@ public class JAXRSContextTest extends MockServletInvocationTest {
         assertEquals("result", "true", result);
     }
 
-    public void testProvidersContext() throws IOException {
+    public void testProvidersContext() throws Exception {
         // TODO test all context fields
         MockHttpServletResponse resp = invoke(MockRequestConstructor.constructMockRequest("GET",
             "/context/providers", "*/*"));

@@ -26,7 +26,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.wink.example.locking.resources.DefectResource;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.apache.wink.test.mock.SpringMockServletInvocationTest;
+import org.apache.wink.test.mock.TestUtils;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -47,7 +47,7 @@ public class LockingTest extends MockServletInvocationTest {
         MockHttpServletResponse response = invoke(request);
         assertEquals("status", 200, response.getStatus());
         byte[] defect11 = response.getContentAsString().getBytes();
-        String diff = SpringMockServletInvocationTest.diffIgnoreUpdateWithAttributeQualifier(
+        String diff = TestUtils.diffIgnoreUpdateWithAttributeQualifier(
             "/results/defect_11.xml", defect11, getClass());
         assertNull(diff, diff);
         String etag = (String) response.getHeader(HttpHeaders.ETAG);

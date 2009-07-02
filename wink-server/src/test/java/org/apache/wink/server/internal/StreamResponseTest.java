@@ -75,7 +75,7 @@ public class StreamResponseTest extends MockServletInvocationTest {
 
     } // 
 
-    public void testStreamResponse() throws IOException {
+    public void testStreamResponse() throws Exception {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "path",
             MediaTypeUtils.IMAGE_JPEG_TYPE);
         MockHttpServletResponse response = invoke(request);
@@ -86,7 +86,7 @@ public class StreamResponseTest extends MockServletInvocationTest {
         }
     }
 
-    public void testReaderResponse() throws IOException {
+    public void testReaderResponse() throws Exception {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "path",
             MediaType.TEXT_PLAIN_TYPE);
         MockHttpServletResponse response = invoke(request);

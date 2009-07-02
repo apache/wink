@@ -20,7 +20,6 @@
 
 package org.apache.wink.server;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -81,7 +80,7 @@ public class AbstractResourceWithEmptyPathTest extends MockServletInvocationTest
         }
     }
 
-    public void testBeanWithEmptyPath() throws IOException {
+    public void testBeanWithEmptyPath() throws Exception {
         MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
             "/a", MediaType.APPLICATION_ATOM_XML_TYPE);
         MockHttpServletResponse response = invoke(mockRequest);
@@ -89,7 +88,7 @@ public class AbstractResourceWithEmptyPathTest extends MockServletInvocationTest
         assertEquals(EXPECTED_SERVICE_COLLECTION_1, responseContent);
     }
 
-    public void testBeanWithEmptyParent() throws IOException {
+    public void testBeanWithEmptyParent() throws Exception {
         MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
             "/emptyParent", MediaType.APPLICATION_ATOM_XML_TYPE);
         MockHttpServletResponse response = invoke(mockRequest);

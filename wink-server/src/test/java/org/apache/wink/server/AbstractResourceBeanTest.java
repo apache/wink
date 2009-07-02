@@ -20,7 +20,6 @@
 
 package org.apache.wink.server;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,7 +37,6 @@ import org.apache.wink.test.mock.MockRequestConstructor;
 import org.custommonkey.xmlunit.Diff;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.xml.sax.SAXException;
 
 public class AbstractResourceBeanTest extends MockServletInvocationTest {
 
@@ -183,7 +181,7 @@ public class AbstractResourceBeanTest extends MockServletInvocationTest {
         }
     }
 
-    public void testServicesCollection() throws IOException {
+    public void testServicesCollection() throws Exception {
         MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
             "/services", MediaType.APPLICATION_ATOM_XML_TYPE);
         MockHttpServletResponse response = invoke(mockRequest);
@@ -191,7 +189,7 @@ public class AbstractResourceBeanTest extends MockServletInvocationTest {
         assertEquals(EXPECTED_SERVICE_COLLECTION, responseContent);
     }
 
-    public void testServicesCollectionWithWorkspaceAndTitle() throws IOException, SAXException {
+    public void testServicesCollectionWithWorkspaceAndTitle() throws Exception {
         MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
             "/services/workspaceAndTitle", MediaType.APPLICATION_ATOM_XML_TYPE);
         MockHttpServletResponse response = invoke(mockRequest);
@@ -207,7 +205,7 @@ public class AbstractResourceBeanTest extends MockServletInvocationTest {
             diff.identical());
     }
 
-    public void testServicesSingleEntry() throws IOException {
+    public void testServicesSingleEntry() throws Exception {
         MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
             "/services/1", MediaType.APPLICATION_ATOM_XML_TYPE);
         MockHttpServletResponse response = invoke(mockRequest);
@@ -215,7 +213,7 @@ public class AbstractResourceBeanTest extends MockServletInvocationTest {
         assertEquals(EXPECTED_SINGLE_ENTRY + "1", responseContent);
     }
 
-    public void testServicesSingleEntryDifferentURIs() throws IOException {
+    public void testServicesSingleEntryDifferentURIs() throws Exception {
         MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
             "/services1/1", MediaType.APPLICATION_ATOM_XML_TYPE);
         MockHttpServletResponse response = invoke(mockRequest);
@@ -229,7 +227,7 @@ public class AbstractResourceBeanTest extends MockServletInvocationTest {
         //        assertEquals(EXPECTED_SINGLE_ENTRY + "1", responseContent);
     }
 
-    public void testServicesSingleEntryWithParent() throws IOException {
+    public void testServicesSingleEntryWithParent() throws Exception {
         MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
             "/services/2/parent", MediaType.APPLICATION_ATOM_XML_TYPE);
         MockHttpServletResponse response = invoke(mockRequest);
@@ -237,7 +235,7 @@ public class AbstractResourceBeanTest extends MockServletInvocationTest {
         assertEquals(EXPECTED_SINGLE_ENTRY_PARENT + "2", responseContent);
     }
 
-    public void testServicesSingleEntryWithMultipleParents() throws IOException {
+    public void testServicesSingleEntryWithMultipleParents() throws Exception {
         MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
             "/services/2/parent1", MediaType.APPLICATION_ATOM_XML_TYPE);
         MockHttpServletResponse response = invoke(mockRequest);
@@ -276,7 +274,7 @@ public class AbstractResourceBeanTest extends MockServletInvocationTest {
         //        assertEquals(EXPECTED_SINGLE_ENTRY_PARENT + "2", responseContent);
     }
 
-    public void testBeanReferencingAnotherBean() throws IOException {
+    public void testBeanReferencingAnotherBean() throws Exception {
         MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
             "/referenceBean/1", MediaType.APPLICATION_ATOM_XML_TYPE);
         MockHttpServletResponse response = invoke(mockRequest);
@@ -286,7 +284,7 @@ public class AbstractResourceBeanTest extends MockServletInvocationTest {
             responseContent);
     }
 
-    public void testBeanReferencingAnotherResourceWithAnnotations() throws IOException {
+    public void testBeanReferencingAnotherResourceWithAnnotations() throws Exception {
         MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
             "/referenceClass/1", MediaType.APPLICATION_ATOM_XML_TYPE);
         MockHttpServletResponse response = invoke(mockRequest);
@@ -298,7 +296,7 @@ public class AbstractResourceBeanTest extends MockServletInvocationTest {
             responseContent);
     }
 
-    public void testBeanWithParentIsResourceWithAnnotations() throws IOException {
+    public void testBeanWithParentIsResourceWithAnnotations() throws Exception {
         MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
             "/resourceWithAnnotations/2/parent", MediaType.APPLICATION_ATOM_XML_TYPE);
         MockHttpServletResponse response = invoke(mockRequest);

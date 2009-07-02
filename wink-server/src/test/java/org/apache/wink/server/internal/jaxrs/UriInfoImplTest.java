@@ -19,7 +19,6 @@
  *******************************************************************************/
 package org.apache.wink.server.internal.jaxrs;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -245,7 +244,7 @@ public class UriInfoImplTest extends MockServletInvocationTest {
     
 
     @Test
-    public void testUriInfoMatchedResourcesAndURIs() throws IOException {
+    public void testUriInfoMatchedResourcesAndURIs() throws Exception {
 
         MockHttpServletRequest servletRequest = MockRequestConstructor.constructMockRequest("GET", "/foo", "text/plain");
         invoke(servletRequest);
@@ -263,7 +262,7 @@ public class UriInfoImplTest extends MockServletInvocationTest {
     }
     
     @Test
-    public void testUriInfo() throws IOException {
+    public void testUriInfo() throws Exception {
         MockHttpServletRequest servletRequest = MockRequestConstructor.constructMockRequest("GET", "/te%20st/5", "text/plain");
         servletRequest.setQueryString("abc=6");
         invoke(servletRequest);

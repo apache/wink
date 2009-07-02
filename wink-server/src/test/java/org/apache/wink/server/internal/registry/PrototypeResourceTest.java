@@ -20,8 +20,6 @@
  
 package org.apache.wink.server.internal.registry;
 
-import java.io.IOException;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -63,7 +61,7 @@ public class PrototypeResourceTest extends MockServletInvocationTest {
 
     }
 
-    public void testMultipleInvocation() throws IOException {
+    public void testMultipleInvocation() throws Exception {
         MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
             "/stam", MediaType.APPLICATION_ATOM_XML_TYPE);
 

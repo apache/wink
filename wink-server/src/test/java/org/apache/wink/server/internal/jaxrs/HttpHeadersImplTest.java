@@ -19,7 +19,6 @@
  *******************************************************************************/
 package org.apache.wink.server.internal.jaxrs;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -158,7 +157,7 @@ public class HttpHeadersImplTest extends MockServletInvocationTest {
     
 
     @Test
-    public void testHttpHeaderContext() throws IOException {
+    public void testHttpHeaderContext() throws Exception {
         MockHttpServletRequest servletRequest = MockRequestConstructor.constructMockRequest("GET", "/test", "application/xml;q=0.3, text/plain, text/html;q=0.5");
         servletRequest.addHeader("Content-Type", "application/xml");
         servletRequest.addHeader("Content-Language", "en-us, he");
@@ -172,7 +171,7 @@ public class HttpHeadersImplTest extends MockServletInvocationTest {
     }
      
     @Test
-    public void testHttpHeaderContextNegative() throws IOException {
+    public void testHttpHeaderContextNegative() throws Exception {
         MockHttpServletRequest servletRequest = MockRequestConstructor.constructMockRequest("GET", "/test/negative", "*/*");
         invoke(servletRequest);
     }

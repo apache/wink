@@ -21,7 +21,6 @@
 
 package org.apache.wink.server.internal.registry;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -601,7 +600,7 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         try {
             MockHttpServletResponse mockResponse = invoke(mockRequest);
             assertEquals(204, mockResponse.getStatus());
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail("method invocation failed");
         }

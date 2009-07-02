@@ -20,7 +20,6 @@
  
 package org.apache.wink.server.internal;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -146,7 +145,7 @@ public class PreconditionsTest extends MockServletInvocationTest {
 
     } // 
 
-    public void testNormalGet() throws IOException {
+    public void testNormalGet() throws Exception {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
             "get/0/null", "*/*");
         MockHttpServletResponse response = invoke(request);
@@ -154,7 +153,7 @@ public class PreconditionsTest extends MockServletInvocationTest {
         assertEquals("content", THE_CONTENT, response.getContentAsString());
     }
 
-    public void testConditionModified() throws IOException {
+    public void testConditionModified() throws Exception {
         Date date_to_return = new GregorianCalendar(2007, 11, 06, 10, 0, 0).getTime();
         Date modified_since = new GregorianCalendar(2007, 11, 07, 10, 0, 0).getTime();
 
@@ -173,7 +172,7 @@ public class PreconditionsTest extends MockServletInvocationTest {
         assertEquals("status", 304, response.getStatus());
     }
 
-    public void testConditionNotModified() throws IOException {
+    public void testConditionNotModified() throws Exception {
         Date date_to_return = new GregorianCalendar(2007, 11, 07, 10, 0, 0).getTime();
         Date modified_since = new GregorianCalendar(2007, 11, 06, 10, 0, 0).getTime();
 
@@ -192,7 +191,7 @@ public class PreconditionsTest extends MockServletInvocationTest {
         assertEquals("status", 200, response.getStatus());
     }
 
-    public void testConditionModifiedAndMatches() throws IOException {
+    public void testConditionModifiedAndMatches() throws Exception {
         Date date_to_return = new GregorianCalendar(2007, 11, 07, 10, 0, 0).getTime();
         Date modified_since = new GregorianCalendar(2007, 11, 06, 10, 0, 0).getTime();
         String etag = "blablabla";
@@ -214,7 +213,7 @@ public class PreconditionsTest extends MockServletInvocationTest {
         assertEquals("status", 200, response.getStatus());
     }
 
-    public void testConditionUnModifiedAndMatches() throws IOException {
+    public void testConditionUnModifiedAndMatches() throws Exception {
         Date date_to_return = new GregorianCalendar(2007, 11, 07, 10, 0, 0).getTime();
         Date modified_since = new GregorianCalendar(2007, 11, 06, 10, 0, 0).getTime();
         String etag = "blablabla";
@@ -236,7 +235,7 @@ public class PreconditionsTest extends MockServletInvocationTest {
 
     }
 
-    public void testConditionIfMatches() throws IOException {
+    public void testConditionIfMatches() throws Exception {
         String etag = "blablabla";
 
         // GET
@@ -254,7 +253,7 @@ public class PreconditionsTest extends MockServletInvocationTest {
 
     }
 
-    public void testConditionGetNotIfMatches() throws IOException {
+    public void testConditionGetNotIfMatches() throws Exception {
         String etag = "blablabla";
 
         // GET
@@ -272,7 +271,7 @@ public class PreconditionsTest extends MockServletInvocationTest {
 
     }
 
-    public void testConditionIfNoneMatches() throws IOException {
+    public void testConditionIfNoneMatches() throws Exception {
         String etag = "blablabla";
 
         // GET
@@ -290,7 +289,7 @@ public class PreconditionsTest extends MockServletInvocationTest {
 
     }
 
-    public void testConditionNoteIfNoneMatches() throws IOException {
+    public void testConditionNoteIfNoneMatches() throws Exception {
         String etag = "blablabla";
 
         // GET
@@ -308,7 +307,7 @@ public class PreconditionsTest extends MockServletInvocationTest {
 
     }
 
-    public void testConditionalIfUnModified() throws IOException {
+    public void testConditionalIfUnModified() throws Exception {
         Date date_to_return = new GregorianCalendar(2007, 11, 06, 10, 0, 0).getTime();
         Date modified_since = new GregorianCalendar(2007, 11, 07, 10, 0, 0).getTime();
 
@@ -332,7 +331,7 @@ public class PreconditionsTest extends MockServletInvocationTest {
 
     }
 
-    public void testConditionalIfNotUnModified() throws IOException {
+    public void testConditionalIfNotUnModified() throws Exception {
         Date date_to_return = new GregorianCalendar(2007, 11, 07, 10, 0, 0).getTime();
         Date modified_since = new GregorianCalendar(2007, 11, 06, 10, 0, 0).getTime();
 

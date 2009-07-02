@@ -19,16 +19,12 @@
  *******************************************************************************/
 package org.apache.wink.spring;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.wink.common.internal.providers.entity.StringProvider;
-import org.apache.wink.server.internal.registry.ResourceRecord;
-import org.apache.wink.server.internal.registry.ResourceRegistry;
 import org.apache.wink.test.mock.MockRequestConstructor;
 import org.apache.wink.test.mock.SpringMockServletInvocationTest;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -79,12 +75,6 @@ public class RegistrarTest extends SpringMockServletInvocationTest {
     }
 
     public void testRegistration() throws Exception {
-        ResourceRegistry resourceRegistry = getResourceRegistry(ResourceRegistry.class);
-
-        List<ResourceRecord> records = resourceRegistry.getRecords();
-
-        assertEquals(RESOURCE_PATH, records.get(0).getTemplateProcessor().toString());
-        assertEquals(PATH, records.get(1).getTemplateProcessor().toString());
 
         MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET", "/"
             + RESOURCE_PATH, MediaType.WILDCARD_TYPE);

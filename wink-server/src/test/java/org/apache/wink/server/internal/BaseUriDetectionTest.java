@@ -20,8 +20,6 @@
  
 package org.apache.wink.server.internal;
 
-import java.io.IOException;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -57,7 +55,7 @@ public class BaseUriDetectionTest extends MockServletInvocationTest {
 
     } // class GetBaseUriResource
 
-    public void testDetection() throws IOException {
+    public void testDetection() throws Exception {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
             "/context/baseUri", "*/*");
         request.setScheme("http");

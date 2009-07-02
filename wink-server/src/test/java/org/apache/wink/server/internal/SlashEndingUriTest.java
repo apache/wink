@@ -20,8 +20,6 @@
  
 package org.apache.wink.server.internal;
 
-import java.io.IOException;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -73,7 +71,7 @@ public class SlashEndingUriTest extends MockServletInvocationTest {
     } //
 
 
-    public void testFinalSlash() throws IOException {
+    public void testFinalSlash() throws Exception {
         final String withSlash = "service/hello/collection/subcollection/";
         final String withoutSlash = withSlash.substring(0, withSlash.length() - 1);
 
@@ -90,7 +88,7 @@ public class SlashEndingUriTest extends MockServletInvocationTest {
             response2.getContentAsString());
     }
 
-    public void testSeveralSlashes() throws IOException {
+    public void testSeveralSlashes() throws Exception {
         final String withSlash = "service/hello/collection/subcollection/";
         final String withSlash2 = withSlash + "/";
         final String withSlash3 = withSlash2 + "/";
@@ -113,7 +111,7 @@ public class SlashEndingUriTest extends MockServletInvocationTest {
         assertEquals("should end with slash", requestUriWithSlash, response.getContentAsString());
     }
 
-    public void testRootUri() throws IOException {
+    public void testRootUri() throws Exception {
         final String requestUri = "http://localhost:8080/rest/";
 
         MockHttpServletRequest request = null;

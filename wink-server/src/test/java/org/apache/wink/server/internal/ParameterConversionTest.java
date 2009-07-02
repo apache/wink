@@ -230,137 +230,124 @@ public class ParameterConversionTest extends MockServletInvocationTest {
     // --- test methods ---
 
     // Boolean
-    public void testBooleanPath() throws IOException {
+    public void testBooleanPath() throws Exception {
         assertInvocation(constructPathRequest("true", "p/bigBoolean"));
     }
 
-    public void testBooleanArrayQuery() throws IOException {
+    public void testBooleanArrayQuery() throws Exception {
         Boolean[] ia = {true, true, false, true};
         QueryResource.expectedValues = ia;
         assertInvocation(constructQueryArrayRequest(new String[]{"true", "true", "false", "true"}, "q/bigBooleanArray"));
     }
 
-    public void testBooleanQuery() throws IOException {
+    public void testBooleanQuery() throws Exception {
         assertInvocation(constructQueryRequest(null, "q/bigBoolean"));
     }
 
     // boolean
-    public void testBoolPath() throws IOException {
+    public void testBoolPath() throws Exception {
         assertInvocation(constructPathRequest("true", "p/bool"));
     }
 
-    public void testBoolQuery() throws IOException {
+    public void testBoolQuery() throws Exception {
         assertInvocation(constructQueryRequest(null, "q/bool"));
     }
 
-    public void testBoolArrayQuery() throws IOException {
+    public void testBoolArrayQuery() throws Exception {
         boolean[] ia = {true, false, true, true};
         QueryResource.expectedValues = ia;
         assertInvocation(constructQueryArrayRequest(new String[]{"true", "false", "true", "true"}, "q/booleanArray"));
     }
 
     // Integer
-    public void testIntQuery() throws IOException {
+    public void testIntQuery() throws Exception {
         assertInvocation(constructQueryRequest("42", "q/int"));
     }
 
-    public void testIntergerArrayQuery() throws IOException {
+    public void testIntergerArrayQuery() throws Exception {
         Integer[] ia = {new Integer("1"), new Integer("2"), new Integer("3"), new Integer("4"), new Integer("5")};
         QueryResource.expectedValues = ia;
         assertInvocation(constructQueryArrayRequest(new String[]{"1", "2", "3", "4", "5"}, "q/IntegerArray"));
     }
 
     // int
-    public void testIntPath() throws IOException {
+    public void testIntPath() throws Exception {
         assertInvocation(constructPathRequest("42", "p/int"));
     }
 
-    public void testNullIntArrayQuery() throws IOException {
+    public void testNullIntArrayQuery() throws Exception {
         int[] ia = {};
         QueryResource.expectedValues = ia;
         assertInvocation(constructQueryArrayRequest(null, "q/intArray"));
     }
 
-    public void testIntArrayQuery() throws IOException {
+    public void testIntArrayQuery() throws Exception {
         int[] ia = {1, 2, 3, 4, 5};
         QueryResource.expectedValues = ia;
         assertInvocation(constructQueryArrayRequest(new String[]{"1", "2", "3", "4", "5"}, "q/intArray"));
     }
 
-    public void testBigIntegerPath() throws IOException {
+    public void testBPI() throws Exception {
         assertInvocation(constructPathRequest("42", "p/bigInteger"));
-    }
-
-    // Byte
-    public void testBigBytePath() throws IOException {
         assertInvocation(constructPathRequest("42", "p/bigByte"));
     }
 
-    public void testByteArrayQuery() throws IOException {
+
+    public void testByteArrayQuery() throws Exception {
         QueryResource.expectedValues = new Byte[]{new Byte("1"), new Byte("2"), new Byte("3"), new Byte("4"),
                 new Byte("5")};
         assertInvocation(constructQueryArrayRequest(new String[]{"1", "2", "3", "4", "5"}, "q/bigByteArray"));
     }
 
     // byte
-    public void testByteQuery() throws IOException {
+    public void testByteQuery() throws Exception {
         assertInvocation(constructQueryRequest("42", "q/byte"));
     }
 
-    public void testByteiArrayQuery() throws IOException {
+    public void testByteiArrayQuery() throws Exception {
         QueryResource.expectedValues = new byte[]{1, 2, 3, 4, 5};
         assertInvocation(constructQueryArrayRequest(new String[]{"1", "2", "3", "4", "5"}, "q/byteArray"));
     }
 
-    public void testMissingByteQuery() throws IOException {
+    public void testMissingBQ() throws Exception {
         assertInvocation(constructQueryRequest(null, "q/byteMissing"));
-    }
-
-    // Short
-    public void testBigShortQuery() throws IOException {
         assertInvocation((constructQueryRequest(null, "q/bigShort")));
     }
 
-    public void testShortArrayQuery() throws IOException {
+
+
+    public void testShortArrayQuery() throws Exception {
         Short[] ia = {new Short("1"), new Short("2"), new Short("3"), new Short("4"), new Short("5")};
         QueryResource.expectedValues = ia;
         assertInvocation(constructQueryArrayRequest(new String[]{"1", "2", "3", "4", "5"}, "q/bigShortArray"));
     }
 
     // short
-    public void testShortPath() throws IOException {
+    public void testShortPath() throws Exception {
         assertInvocation(constructPathRequest("42", "p/short"));
     }
 
-    public void testShortiArrayQuery() throws IOException {
+    public void testShortiArrayQuery() throws Exception {
         short[] ia = {1, 2, 3, 4, 5};
         QueryResource.expectedValues = ia;
         assertInvocation(constructQueryArrayRequest(new String[]{"1", "2", "3", "4", "5"}, "q/shortArray"));
     }
 
-    // Long
-    public void testLongQuery() throws IOException {
+    public void testLP() throws Exception {
         assertInvocation(constructQueryRequest("43", "q/bigLong"));
-    }
-
-    // long
-    public void testLongiPath() throws IOException {
         assertInvocation(constructPathRequest("43", "p/long"));
-    }
-
-    // Double
-    public void testDoubleQuery() throws IOException {
         assertInvocation(constructQueryRequest("1.0", "q/bigDouble"));
     }
 
-    public void testDoubleArrayQuery() throws IOException {
+
+    public void testDoubleArrayQuery() throws Exception {
         Double[] ia = {new Double("1"), new Double("2"), new Double("3"), new Double("4"), new Double("5")};
         QueryResource.expectedValues = ia;
         assertInvocation(constructQueryArrayRequest(new String[]{"1", "2", "3", "4", "5"}, "q/bigDoubleArray"));
     }
 
     // float
-    public void testFloatPath() throws IOException {
+    public void testFloatPath() throws Exception {
         assertInvocation(constructPathRequest("3.0", "p/float"));
     }
 
@@ -370,7 +357,7 @@ public class ParameterConversionTest extends MockServletInvocationTest {
         return MockRequestConstructor.constructMockRequest("GET", "/p/" + UriEncoder.encodeString(varValue), method);
     }
 
-    private void assertInvocation(MockHttpServletRequest servletRequest) throws IOException {
+    private void assertInvocation(MockHttpServletRequest servletRequest) throws Exception {
         MockHttpServletResponse mockHttpServletResponse = invoke(servletRequest);
         try {
             assertEquals("http status", HttpStatus.NO_CONTENT.getCode(), mockHttpServletResponse.getStatus());

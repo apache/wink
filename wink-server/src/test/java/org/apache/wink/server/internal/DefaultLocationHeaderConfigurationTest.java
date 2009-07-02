@@ -20,7 +20,6 @@
 
 package org.apache.wink.server.internal;
 
-import java.io.IOException;
 import java.net.URI;
 
 import javax.ws.rs.GET;
@@ -68,7 +67,7 @@ public class DefaultLocationHeaderConfigurationTest extends MockServletInvocatio
         }
     }
 
-    public void testLocationHeaderMissing() throws IOException {
+    public void testLocationHeaderMissing() throws Exception {
         MockHttpServletRequest request =
             MockRequestConstructor.constructMockRequest("GET", "/locationHeader/missing", "text/plain");
         request.setSecure(false);
@@ -78,7 +77,7 @@ public class DefaultLocationHeaderConfigurationTest extends MockServletInvocatio
         assertTrue(response.getHeader(HttpHeaders.LOCATION) == null);
     }
 
-    public void testLocationHeaderExists() throws IOException {
+    public void testLocationHeaderExists() throws Exception {
         MockHttpServletRequest request =
             MockRequestConstructor.constructMockRequest("GET", "/locationHeader/exist", "text/xml");
         request.setSecure(false);

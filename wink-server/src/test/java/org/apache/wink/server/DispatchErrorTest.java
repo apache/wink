@@ -20,8 +20,6 @@
  
 package org.apache.wink.server;
 
-import java.io.IOException;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -60,19 +58,19 @@ public class DispatchErrorTest extends
 
     }
 
-    public void NotFound() throws IOException {
+    public void NotFound() throws Exception {
         MockHttpServletResponse response = invoke(MockRequestConstructor.constructMockRequest(
             "GET", "zzz", "*/*"));
         assertEquals("status", HttpStatus.NOT_FOUND.getCode(), response.getStatus());
     }
 
-    public void testMethodNotAllowed() throws IOException {
+    public void testMethodNotAllowed() throws Exception {
         MockHttpServletResponse response = invoke(MockRequestConstructor.constructMockRequest(
             "GET", "path", "*/*"));
         assertEquals("status", HttpStatus.METHOD_NOT_ALLOWED.getCode(), response.getStatus());
     }
 
-    public void testNotAcceptable() throws IOException {
+    public void testNotAcceptable() throws Exception {
         MockHttpServletRequest servletRequest = MockRequestConstructor.constructMockRequest("PUT",
             "path", "text/plain");
         servletRequest.setContentType(MediaType.TEXT_HTML);
@@ -80,7 +78,7 @@ public class DispatchErrorTest extends
         assertEquals("status", HttpStatus.NOT_ACCEPTABLE.getCode(), response.getStatus());
     }
 
-    public void testUnsupportedMediaType() throws IOException {
+    public void testUnsupportedMediaType() throws Exception {
         MockHttpServletRequest servletRequest = MockRequestConstructor.constructMockRequest("PUT",
             "path", MediaType.TEXT_XML);
         servletRequest.setContentType("text/vnd.x-test");

@@ -22,21 +22,18 @@ package org.apache.wink.spring;
 import java.util.Properties;
 
 import org.apache.wink.server.internal.DeploymentConfiguration;
-import org.apache.wink.server.internal.RequestProcessor;
-import org.apache.wink.test.mock.SpringMockServletInvocationTest;
+import org.apache.wink.test.mock.SpringAwareTestCase;
 
-
-public class PropertiesOverrideTest extends SpringMockServletInvocationTest {
+public class PropertiesOverrideTest extends SpringAwareTestCase {
 
     public void testPropertiesOverride() throws Exception {
-        RequestProcessor requestProcessor = getRequestProcessor(RequestProcessor.class);
-        DeploymentConfiguration configuration = requestProcessor.getConfiguration();
+        DeploymentConfiguration configuration = (DeploymentConfiguration) applicationContext.getBean("symphony_deploymentConfiguration");
         Properties properties = configuration.getProperties();
-        
+
         // check custom
         assertEquals("atom", properties.getProperty("wink.searchPolicyContinuedSearch"));
         assertEquals("test me", properties.getProperty("test.property"));
-        
+
         // check default
         assertEquals("true", properties.getProperty("wink.addAltParam"));
     }

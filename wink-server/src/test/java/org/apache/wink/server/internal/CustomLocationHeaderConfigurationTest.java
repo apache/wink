@@ -35,7 +35,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.apache.wink.test.mock.SpringMockServletInvocationTest;
+import org.apache.wink.test.mock.TestUtils;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -73,7 +73,7 @@ public class CustomLocationHeaderConfigurationTest extends MockServletInvocation
     @Override
     protected String getPropertiesFile() {
         String name = getClass().getName();
-        String fileName = SpringMockServletInvocationTest.packageToPath(name) + ".properties";
+        String fileName = TestUtils.packageToPath(name) + ".properties";
         return fileName;
     }
     
@@ -94,7 +94,7 @@ public class CustomLocationHeaderConfigurationTest extends MockServletInvocation
         }
    }
     
-   public void testLocationHeaderExists() throws IOException {
+   public void testLocationHeaderExists() throws Exception {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
             "/locationHeader/exist", "text/xml");
         request.setSecure(false);

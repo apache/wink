@@ -21,7 +21,6 @@
 
 package org.apache.wink.server.internal.registry;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -942,7 +941,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
             }
             MockHttpServletResponse mockResponse = invoke(mockRequest);
             assertEquals(204, mockResponse.getStatus());
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail("method invocation failed");
         }

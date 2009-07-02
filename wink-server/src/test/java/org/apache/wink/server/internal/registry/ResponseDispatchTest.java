@@ -20,7 +20,6 @@
  
 package org.apache.wink.server.internal.registry;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -62,7 +61,7 @@ public class ResponseDispatchTest extends
 
     } // class ResponseResource
 
-    public void testPut() throws IOException {
+    public void testPut() throws Exception {
         MockHttpServletRequest servletRequest = MockRequestConstructor.constructMockRequest("PUT",
             "a", "*/*");
         servletRequest.setContentType("text/xml");

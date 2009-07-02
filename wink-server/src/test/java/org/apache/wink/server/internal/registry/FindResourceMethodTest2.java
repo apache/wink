@@ -23,7 +23,7 @@ package org.apache.wink.server.internal.registry;
 import org.apache.wink.server.internal.registry.FindResourceMethodTest.LocatedContinuedSearchResource;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.apache.wink.test.mock.SpringMockServletInvocationTest;
+import org.apache.wink.test.mock.TestUtils;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -37,7 +37,7 @@ public class FindResourceMethodTest2 extends MockServletInvocationTest {
    
     @Override
     protected String getPropertiesFile() {
-        return SpringMockServletInvocationTest.packageToPath(FindResourceMethodTest2.class.getPackage().getName())
+        return TestUtils.packageToPath(FindResourceMethodTest2.class.getPackage().getName())
             + "\\FindResourceMethodTest2.properties";
     }
 

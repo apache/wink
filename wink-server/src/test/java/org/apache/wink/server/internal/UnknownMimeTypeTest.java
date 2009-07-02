@@ -107,7 +107,7 @@ public class UnknownMimeTypeTest extends
      * @throws XmlException
      *             problem with parsing by xmlbeans
      */
-    public void testGetUnknown() throws IOException {
+    public void testGetUnknown() throws Exception {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest(HttpMethod.GET.toString(),
                 "get/unknown", MediaType.WILDCARD);
         MockHttpServletResponse response = invoke(request);
@@ -123,7 +123,7 @@ public class UnknownMimeTypeTest extends
      * @throws XmlException
      *             problem with parsing by xmlbeans
      */
-    public void testGetPdf() throws IOException {
+    public void testGetPdf() throws Exception {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest(HttpMethod.GET.toString(), "get/"
                 + PDF, MediaType.WILDCARD);
         MockHttpServletResponse response = invoke(request);
@@ -132,7 +132,7 @@ public class UnknownMimeTypeTest extends
     }
 
     // Test http://qcweb/qcweb/showBug.jsp?bug=39720
-    public void testGetPdfWithConcreteType() throws IOException {
+    public void testGetPdfWithConcreteType() throws Exception {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest(HttpMethod.GET.toString(), "get/"
                 + PDF, MediaTypeUtils.PDF);
         MockHttpServletResponse response = invoke(request);
@@ -140,14 +140,14 @@ public class UnknownMimeTypeTest extends
         assertTrue("content type", response.getContentType().contains(MediaTypeUtils.PDF));
     }
 
-    public void testGetPdfWithWrongConreteType() throws IOException {
+    public void testGetPdfWithWrongConreteType() throws Exception {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest(HttpMethod.GET.toString(), "get/"
                 + PDF, MediaType.APPLICATION_OCTET_STREAM);
         MockHttpServletResponse response = invoke(request);
         assertEquals("status", 406, response.getStatus());
     }
 
-    public void testAtomWithWrongConreteType() throws IOException {
+    public void testAtomWithWrongConreteType() throws Exception {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest(HttpMethod.GET.toString(),
                 "get/atom", MediaType.APPLICATION_OCTET_STREAM);
         MockHttpServletResponse response = invoke(request);
@@ -157,7 +157,7 @@ public class UnknownMimeTypeTest extends
     /**
      * Test that resource returns correct error code 
      */
-    public void testRestException() throws IOException {
+    public void testRestException() throws Exception {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest(HttpMethod.GET.toString(), "get/"
                 + THROW_EXCEPTION, MediaType.WILDCARD);
         MockHttpServletResponse response = invoke(request);

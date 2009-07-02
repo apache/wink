@@ -95,11 +95,7 @@ public abstract class SpringAwareTestCase extends TestCase {
     }
 
     protected String getPackagePath() {
-        return packageToPath(getClass().getPackage().getName());
-    }
-
-    public static String packageToPath(String packageName) {
-        return packageName.replace(".", File.separator);
+        return TestUtils.packageToPath(getClass().getPackage().getName());
     }
 
 }
