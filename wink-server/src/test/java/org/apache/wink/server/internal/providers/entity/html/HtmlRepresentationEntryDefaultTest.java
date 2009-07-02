@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal.providers.entity.html;
 
 import java.io.IOException;
@@ -38,25 +38,19 @@ import org.apache.wink.common.model.synd.SyndEntry;
 import org.apache.wink.common.model.synd.SyndLink;
 import org.apache.wink.common.model.synd.SyndPerson;
 import org.apache.wink.common.model.synd.SyndText;
-import org.apache.wink.server.internal.RequestProcessor;
-import org.apache.wink.server.internal.providers.entity.html.ExpandableSectionHelper;
-import org.apache.wink.server.internal.providers.entity.html.HtmlConstants;
-import org.apache.wink.server.internal.providers.entity.html.HtmlDescriptor;
-import org.apache.wink.server.internal.providers.entity.html.HtmlSyndEntryAdapter;
 import org.springframework.mock.web.MockHttpServletResponse;
-
 
 /**
  * Test default Html Representation for entry resource.
  */
 public class HtmlRepresentationEntryDefaultTest extends HtmlMockServletInvocationTest {
 
-    private static Date                    CURRENT_DATE          = new Date();
+    private static Date             CURRENT_DATE          = new Date();
     private static String           ID                    = "1";
     private static String           TITLE                 = "Entry 1";
     private static String           OWNER                 = "Tali";
     private static String           SUMMARY               = "summary for Entry 1";
-    private static SimpleDateFormat simpleDateFormat      = new SimpleDateFormat("dd/MM/yyyy");                                                    //$NON-NLS-1$
+    private static SimpleDateFormat simpleDateFormat      = new SimpleDateFormat("dd/MM/yyyy");                                                                            //$NON-NLS-1$
     private static final String     CATEGORY_SCHEME       = "urn:com:hp:categories:scheme";
     private static final String     CATEGORY_TERM         = "high";
     private static final String     LINK_REL              = "urn:com:hp:links:rel";
@@ -107,10 +101,8 @@ public class HtmlRepresentationEntryDefaultTest extends HtmlMockServletInvocatio
      * @throws IOException
      */
     public void testGetEntryHtmlDefault() throws Exception {
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        RequestProcessor requestProcessor = getRequestProcessor(RequestProcessor.class);
-        requestProcessor.handleRequest(constructMockRequest("GET", "/defectsDefault/htmlDefect",
-            MediaType.TEXT_HTML), response);
+        MockHttpServletResponse response = invoke(constructMockRequest("GET",
+            "/defectsDefault/htmlDefect", MediaType.TEXT_HTML));
         assertEquals("HTTP status", 200, response.getStatus());
         String content = response.getContentAsString();
         assertEquals("body", HtmlConstants.DEFAULT_JSP_ENTRY_PATH, content);

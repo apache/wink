@@ -17,24 +17,17 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal.providers.entity.html;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.ws.rs.core.Application;
-
-import org.apache.wink.common.SymphonyApplication;
 import org.apache.wink.server.internal.providers.entity.html.HtmlRepresentationCollectionCustomizedTest.DefectsCustomizedResource;
 import org.apache.wink.server.internal.providers.entity.html.HtmlRepresentationCollectionDefaultTest.DefectsDefaultResource;
 import org.apache.wink.server.internal.providers.entity.html.HtmlRepresentationEntryCustomizedTest.DefectCustomizedResource;
 import org.apache.wink.server.internal.providers.entity.html.HtmlRepresentationEntryDefaultTest.DefectDefaultResource;
 import org.apache.wink.server.internal.providers.entity.html.HtmlRepresentationServiceDocumentTest.ExistHtmlResource;
 import org.apache.wink.server.internal.providers.entity.html.HtmlRepresentationServiceDocumentTest.NoHtmlResource;
-import org.apache.wink.test.mock.MockServletInvocationTest;
+import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.springframework.mock.web.MockHttpServletRequest;
-
 
 /**
  * This class defines the data that will be used to test the HTML representation
@@ -46,21 +39,10 @@ public abstract class HtmlMockServletInvocationTest extends MockServletInvocatio
     protected static final String CUSTOMIZED_COLLECTION_URL = "/HtmlCustRepresentation/customizedHtmlCollection.jsp";
     protected static final String GET                       = "GET";
 
-    @Override
-    protected Application getApplication() {
-        return new SymphonyApplication() {
-            @Override
-            public Set<Object> getInstances() {
-                Set<Object> set = new HashSet<Object>();
-                set.add(new DefectsCustomizedResource());
-                set.add(new DefectsDefaultResource());
-                set.add(new DefectCustomizedResource());
-                set.add(new DefectDefaultResource());
-                set.add(new ExistHtmlResource());
-                set.add(new NoHtmlResource());
-                return set;
-            }
-        };
+    protected Class<?>[] getClasses() {
+        return new Class<?>[] { DefectsCustomizedResource.class, DefectsDefaultResource.class,
+            DefectCustomizedResource.class, DefectDefaultResource.class, ExistHtmlResource.class,
+            NoHtmlResource.class };
     }
 
     /**

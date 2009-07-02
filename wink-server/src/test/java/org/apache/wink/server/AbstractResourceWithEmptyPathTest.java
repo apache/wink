@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server;
 
@@ -27,37 +26,37 @@ import java.util.Set;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.wink.common.AbstractDynamicResource;
 import org.apache.wink.common.SymphonyApplication;
+import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.apache.wink.test.mock.MockServletInvocationTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
+public class AbstractResourceWithEmptyPathTest extends MockServletInvocationTest {
 
-public class AbstractResourceWithEmptyPathTest extends
-    MockServletInvocationTest {
+    public static class InnerApplication extends SymphonyApplication {
+
+        @Override
+        public Set<Object> getInstances() {
+            AbstractTestCollectionResource emptyPath = new AbstractTestCollectionResource();
+            emptyPath.setDispatchedPath(new String[] { "/a" });
+
+            AbstractTestCollectionResource2 emptyParent = new AbstractTestCollectionResource2();
+            emptyParent.setDispatchedPath(new String[] { "/emptyParent" });
+            emptyParent.setParents(new Object[0]);
+            Set<Object> set = new HashSet<Object>();
+            set.add(emptyPath);
+            set.add(emptyParent);
+            return set;
+        }
+    }
 
     @Override
-    protected Application getApplication() {
-        return new SymphonyApplication() {
-            @Override
-            public Set<Object> getInstances() {
-                AbstractTestCollectionResource emptyPath = new AbstractTestCollectionResource();
-                emptyPath.setDispatchedPath(new String[] { "" });
-        
-                AbstractTestCollectionResource2 emptyParent = new AbstractTestCollectionResource2();
-                emptyParent.setDispatchedPath(new String[] { "/emptyParent" });
-                emptyParent.setParents(new Object[0]);
-                Set<Object> set = new HashSet<Object>();
-                set.add(emptyPath);
-                set.add(emptyParent);
-                return set;
-            }
-        };
+    protected String getApplicationClassName() {
+        return InnerApplication.class.getName();
     }
 
     private static final String EXPECTED_SERVICE_COLLECTION_1 = "expected service collection 1";
@@ -84,7 +83,7 @@ public class AbstractResourceWithEmptyPathTest extends
 
     public void testBeanWithEmptyPath() throws IOException {
         MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
-            "/", MediaType.APPLICATION_ATOM_XML_TYPE);
+            "/a", MediaType.APPLICATION_ATOM_XML_TYPE);
         MockHttpServletResponse response = invoke(mockRequest);
         String responseContent = response.getContentAsString();
         assertEquals(EXPECTED_SERVICE_COLLECTION_1, responseContent);

@@ -30,7 +30,7 @@ import org.apache.wink.common.internal.application.ApplicationFileLoader;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.model.atom.AtomEntry;
 import org.apache.wink.example.helloworld.HelloWorld;
-import org.apache.wink.test.mock.MockServletInvocationTest;
+import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 

@@ -37,8 +37,7 @@ import javax.ws.rs.ext.RuntimeDelegate;
 import org.apache.wink.common.http.HttpHeadersEx;
 import org.apache.wink.common.http.HttpStatus;
 import org.apache.wink.common.http.OPTIONS;
-import org.apache.wink.server.internal.RequestProcessor;
-import org.apache.wink.test.mock.MockServletInvocationTest;
+import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.junit.Assert;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -111,9 +110,7 @@ public class OptionsMethodTest extends
         };
         request.setMethod("OPTIONS");
         request.setRequestURI(path);
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        RequestProcessor requestProcessor = getRequestProcessor(RequestProcessor.class);
-        requestProcessor.handleRequest(request, response);
+        MockHttpServletResponse response = invoke(request);
 
         // response
         // check status code

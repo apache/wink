@@ -36,7 +36,6 @@ import org.apache.wink.server.internal.RequestProcessor;
 import org.apache.wink.server.internal.application.ServletSymphonyApplication;
 import org.apache.wink.server.internal.utils.ServletFileLoader;
 
-
 /**
  * <p>
  * Main servlet that is used by Symphony runtime to handle the incoming request.
@@ -61,7 +60,8 @@ public class RestServlet extends AbstractSymphonyServlet {
 
     private static final long   serialVersionUID              = 8797036173835816706L;
 
-    private static final Logger logger = LoggerFactory.getLogger(RestServlet.class);
+    private static final Logger logger                        = LoggerFactory.getLogger(RestServlet.class);
+    private static final String APPLICATION_INIT_PARAM        = "javax.ws.rs.Application";
     private static final String PROPERTIES_DEFAULT_FILE       = "META-INF/configuration-default.properties";
     private static final String PROPERTIES_INIT_PARAM         = "symphony.propertiesLocation";
     private static final String SYMPHONY_APP_LOCATION_PARAM   = "symphony.applicationConfigLocation";
@@ -101,8 +101,9 @@ public class RestServlet extends AbstractSymphonyServlet {
     protected RequestProcessor createRequestProcessor() throws ClassNotFoundException,
         InstantiationException, IllegalAccessException, IOException {
         DeploymentConfiguration deploymentConfiguration = getDeploymentConfiguration();
+        RequestProcessor requestProcessor = new RequestProcessor(deploymentConfiguration);
         deploymentConfiguration.addApplication(getApplication());
-        return new RequestProcessor(deploymentConfiguration);
+        return requestProcessor;
     }
 
     protected DeploymentConfiguration getDeploymentConfiguration() throws ClassNotFoundException,
@@ -138,7 +139,7 @@ public class RestServlet extends AbstractSymphonyServlet {
     protected Application getApplication() throws ClassNotFoundException, InstantiationException,
         IllegalAccessException {
         Class<? extends Application> appClass = null;
-        String initParameter = getInitParameter("javax.ws.rs.Application");
+        String initParameter = getInitParameter(APPLICATION_INIT_PARAM);
         if (initParameter != null) {
             appClass = (Class<Application>) Class.forName(initParameter);
             return appClass.newInstance();

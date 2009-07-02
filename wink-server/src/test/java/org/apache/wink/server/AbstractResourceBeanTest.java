@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server;
 
@@ -29,82 +28,89 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.wink.common.AbstractDynamicResource;
 import org.apache.wink.common.SymphonyApplication;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
+import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.apache.wink.test.mock.MockServletInvocationTest;
 import org.custommonkey.xmlunit.Diff;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.xml.sax.SAXException;
 
+public class AbstractResourceBeanTest extends MockServletInvocationTest {
 
-public class AbstractResourceBeanTest extends
-    MockServletInvocationTest {
+    public static class InnerApplication extends SymphonyApplication {
+
+        @Override
+        public Set<Object> getInstances() {
+            AbstractTestCollectionResource servicesCollection = new AbstractTestCollectionResource();
+            servicesCollection.setDispatchedPath(new String[] { "/services" });
+
+            AbstractTestCollectionResource servicesCollectionWithWorkspaceAndTitle = new AbstractTestCollectionResource();
+            servicesCollectionWithWorkspaceAndTitle.setDispatchedPath(new String[] { "/services/workspaceAndTitle" });
+            servicesCollectionWithWorkspaceAndTitle.setWorkspaceTitle("Services Workspace Title");
+            servicesCollectionWithWorkspaceAndTitle.setCollectionTitle("Services Collection Title");
+
+            AbstractTestSingleResource singleService = new AbstractTestSingleResource();
+            singleService.setDispatchedPath(new String[] { "/services/{id}" });
+
+            // TODO: do we support multiple paths?
+            AbstractTestSingleResource singleServiceDifferentURIs = new AbstractTestSingleResource();
+            singleServiceDifferentURIs.setDispatchedPath(new String[] { "/services1/{id}"/*
+                                                                                          * ,
+                                                                                          * "/services2/{id}"
+                                                                                          */});
+
+            AbstractTestSingleParentResource singleServiceParent = new AbstractTestSingleParentResource();
+            singleServiceParent.setDispatchedPath(new String[] { "parent" });
+            singleServiceParent.setParents(new Object[] { singleService });
+
+            // TODO: do we support multiple paths and multiple parents?
+            AbstractTestSingleParentResource singleServiceMultipleParents = new AbstractTestSingleParentResource();
+            singleServiceMultipleParents.setDispatchedPath(new String[] { "parent1"/*
+                                                                                    * ,
+                                                                                    * "parent2"
+                                                                                    */});
+            singleServiceMultipleParents.setParents(new Object[] { singleService /*
+                                                                                  * ,
+                                                                                  * singleServiceDifferentURIs
+                                                                                  */});
+
+            AbstractTestReferencingBeanResource beanReferencingaAnotherBean = new AbstractTestReferencingBeanResource();
+            beanReferencingaAnotherBean.setDispatchedPath(new String[] { "/referenceBean/{id}" });
+            beanReferencingaAnotherBean.setRefdBean(singleService);
+
+            AbstractTestWithAnnotationsResource resourceWithAnnotations = new AbstractTestWithAnnotationsResource();
+
+            AbstractTestReferencingBeanResource beanReferencingClass = new AbstractTestReferencingBeanResource();
+            beanReferencingClass.setDispatchedPath(new String[] { "/referenceClass/{id}" });
+            beanReferencingClass.setRefdBean(resourceWithAnnotations);
+
+            AbstractTestSingleParentResource singleServiceParentIsClass = new AbstractTestSingleParentResource();
+            singleServiceParentIsClass.setDispatchedPath(new String[] { "parent" });
+            singleServiceParentIsClass.setParents(new Object[] { resourceWithAnnotations });
+
+            Set<Object> set = new HashSet<Object>();
+            set.add(servicesCollection);
+            set.add(servicesCollectionWithWorkspaceAndTitle);
+            set.add(singleService);
+            set.add(singleServiceDifferentURIs);
+            set.add(singleServiceParent);
+            set.add(singleServiceMultipleParents);
+            set.add(beanReferencingaAnotherBean);
+            set.add(resourceWithAnnotations);
+            set.add(beanReferencingClass);
+            set.add(singleServiceParentIsClass);
+            return set;
+        }
+    }
 
     @Override
-    protected Application getApplication() {
-        return new SymphonyApplication() {
-            @Override
-            public Set<Object> getInstances() {
-                AbstractTestCollectionResource servicesCollection = new AbstractTestCollectionResource();
-                servicesCollection.setDispatchedPath(new String[] { "/services" });
-        
-                AbstractTestCollectionResource servicesCollectionWithWorkspaceAndTitle = new AbstractTestCollectionResource();
-                servicesCollectionWithWorkspaceAndTitle.setDispatchedPath(new String[] { "/services/workspaceAndTitle" });
-                servicesCollectionWithWorkspaceAndTitle.setWorkspaceTitle("Services Workspace Title");
-                servicesCollectionWithWorkspaceAndTitle.setCollectionTitle("Services Collection Title");
-        
-                AbstractTestSingleResource singleService = new AbstractTestSingleResource();
-                singleService.setDispatchedPath(new String[] { "/services/{id}" });
-        
-                // TODO: do we support multiple paths?
-                AbstractTestSingleResource singleServiceDifferentURIs = new AbstractTestSingleResource();
-                singleServiceDifferentURIs.setDispatchedPath(new String[] { "/services1/{id}"/*,
-                    "/services2/{id}" */});
-        
-                AbstractTestSingleParentResource singleServiceParent = new AbstractTestSingleParentResource();
-                singleServiceParent.setDispatchedPath(new String[] { "parent" });
-                singleServiceParent.setParents(new Object[] { singleService });
-        
-                // TODO: do we support multiple paths and multiple parents?
-                AbstractTestSingleParentResource singleServiceMultipleParents = new AbstractTestSingleParentResource();
-                singleServiceMultipleParents.setDispatchedPath(new String[] { "parent1"/*, "parent2"*/ });
-                singleServiceMultipleParents.setParents(new Object[] { singleService/*,
-                    singleServiceDifferentURIs */});
-        
-                AbstractTestReferencingBeanResource beanReferencingaAnotherBean = new AbstractTestReferencingBeanResource();
-                beanReferencingaAnotherBean.setDispatchedPath(new String[] { "/referenceBean/{id}" });
-                beanReferencingaAnotherBean.setRefdBean(singleService);
-        
-                AbstractTestWithAnnotationsResource resourceWithAnnotations = new AbstractTestWithAnnotationsResource();
-        
-                AbstractTestReferencingBeanResource beanReferencingClass = new AbstractTestReferencingBeanResource();
-                beanReferencingClass.setDispatchedPath(new String[] { "/referenceClass/{id}" });
-                beanReferencingClass.setRefdBean(resourceWithAnnotations);
-        
-                AbstractTestSingleParentResource singleServiceParentIsClass = new AbstractTestSingleParentResource();
-                singleServiceParentIsClass.setDispatchedPath(new String[] { "parent" });
-                singleServiceParentIsClass.setParents(new Object[] { resourceWithAnnotations });
-        
-                Set<Object> set = new HashSet<Object>();
-                set.add(servicesCollection);
-                set.add(servicesCollectionWithWorkspaceAndTitle);
-                set.add(singleService);
-                set.add(singleServiceDifferentURIs);
-                set.add(singleServiceParent);
-                set.add(singleServiceMultipleParents);
-                set.add(beanReferencingaAnotherBean);
-                set.add(resourceWithAnnotations);
-                set.add(beanReferencingClass);
-                set.add(singleServiceParentIsClass);
-                return set;
-            }
-        };
+    protected String getApplicationClassName() {
+        return InnerApplication.class.getName();
     }
 
     private static final String EXPECTED_SERVICE_COLLECTION    = "expected service collection";
@@ -216,11 +222,11 @@ public class AbstractResourceBeanTest extends
         String responseContent = response.getContentAsString();
         assertEquals(EXPECTED_SINGLE_ENTRY + "1", responseContent);
 
-//        mockRequest = MockRequestConstructor.constructMockRequest("GET", "/services2/1",
-//            MediaType.APPLICATION_ATOM_XML_TYPE);
-//        response = invoke(mockRequest);
-//        responseContent = response.getContentAsString();
-//        assertEquals(EXPECTED_SINGLE_ENTRY + "1", responseContent);
+        //        mockRequest = MockRequestConstructor.constructMockRequest("GET", "/services2/1",
+        //            MediaType.APPLICATION_ATOM_XML_TYPE);
+        //        response = invoke(mockRequest);
+        //        responseContent = response.getContentAsString();
+        //        assertEquals(EXPECTED_SINGLE_ENTRY + "1", responseContent);
     }
 
     public void testServicesSingleEntryWithParent() throws IOException {
@@ -239,35 +245,35 @@ public class AbstractResourceBeanTest extends
         assertEquals(EXPECTED_SINGLE_ENTRY_PARENT + "2", responseContent);
 
         // TODO: do we support multiple paths and multiple parents
-//        mockRequest = MockRequestConstructor.constructMockRequest("GET", "/services/2/parent2",
-//            MediaType.APPLICATION_ATOM_XML_TYPE);
-//        response = invoke(mockRequest);
-//        responseContent = response.getContentAsString();
-//        assertEquals(EXPECTED_SINGLE_ENTRY_PARENT + "2", responseContent);
-//
-//        mockRequest = MockRequestConstructor.constructMockRequest("GET", "/services1/2/parent1",
-//            MediaType.APPLICATION_ATOM_XML_TYPE);
-//        response = invoke(mockRequest);
-//        responseContent = response.getContentAsString();
-//        assertEquals(EXPECTED_SINGLE_ENTRY_PARENT + "2", responseContent);
-//
-//        mockRequest = MockRequestConstructor.constructMockRequest("GET", "/services1/2/parent2",
-//            MediaType.APPLICATION_ATOM_XML_TYPE);
-//        response = invoke(mockRequest);
-//        responseContent = response.getContentAsString();
-//        assertEquals(EXPECTED_SINGLE_ENTRY_PARENT + "2", responseContent);
-//
-//        mockRequest = MockRequestConstructor.constructMockRequest("GET", "/services2/2/parent1",
-//            MediaType.APPLICATION_ATOM_XML_TYPE);
-//        response = invoke(mockRequest);
-//        responseContent = response.getContentAsString();
-//        assertEquals(EXPECTED_SINGLE_ENTRY_PARENT + "2", responseContent);
-//
-//        mockRequest = MockRequestConstructor.constructMockRequest("GET", "/services2/2/parent2",
-//            MediaType.APPLICATION_ATOM_XML_TYPE);
-//        response = invoke(mockRequest);
-//        responseContent = response.getContentAsString();
-//        assertEquals(EXPECTED_SINGLE_ENTRY_PARENT + "2", responseContent);
+        //        mockRequest = MockRequestConstructor.constructMockRequest("GET", "/services/2/parent2",
+        //            MediaType.APPLICATION_ATOM_XML_TYPE);
+        //        response = invoke(mockRequest);
+        //        responseContent = response.getContentAsString();
+        //        assertEquals(EXPECTED_SINGLE_ENTRY_PARENT + "2", responseContent);
+        //
+        //        mockRequest = MockRequestConstructor.constructMockRequest("GET", "/services1/2/parent1",
+        //            MediaType.APPLICATION_ATOM_XML_TYPE);
+        //        response = invoke(mockRequest);
+        //        responseContent = response.getContentAsString();
+        //        assertEquals(EXPECTED_SINGLE_ENTRY_PARENT + "2", responseContent);
+        //
+        //        mockRequest = MockRequestConstructor.constructMockRequest("GET", "/services1/2/parent2",
+        //            MediaType.APPLICATION_ATOM_XML_TYPE);
+        //        response = invoke(mockRequest);
+        //        responseContent = response.getContentAsString();
+        //        assertEquals(EXPECTED_SINGLE_ENTRY_PARENT + "2", responseContent);
+        //
+        //        mockRequest = MockRequestConstructor.constructMockRequest("GET", "/services2/2/parent1",
+        //            MediaType.APPLICATION_ATOM_XML_TYPE);
+        //        response = invoke(mockRequest);
+        //        responseContent = response.getContentAsString();
+        //        assertEquals(EXPECTED_SINGLE_ENTRY_PARENT + "2", responseContent);
+        //
+        //        mockRequest = MockRequestConstructor.constructMockRequest("GET", "/services2/2/parent2",
+        //            MediaType.APPLICATION_ATOM_XML_TYPE);
+        //        response = invoke(mockRequest);
+        //        responseContent = response.getContentAsString();
+        //        assertEquals(EXPECTED_SINGLE_ENTRY_PARENT + "2", responseContent);
     }
 
     public void testBeanReferencingAnotherBean() throws IOException {

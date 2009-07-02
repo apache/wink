@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.history;
 
 import java.io.InputStream;
@@ -35,14 +35,13 @@ import org.apache.wink.common.model.atom.AtomEntry;
 import org.apache.wink.common.model.atom.AtomFeed;
 import org.apache.wink.example.history.resources.DefectsResource;
 import org.apache.wink.server.internal.resources.HtmlServiceDocumentResource;
+import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.diff.DiffIgnoreUpdateWithAttributeQualifier;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.apache.wink.test.mock.MockServletInvocationTest;
 import org.apache.wink.test.mock.SpringMockServletInvocationTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.w3c.dom.Document;
-
 
 /**
  *
@@ -51,15 +50,13 @@ public class HistoryTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] { DefectsResource.class};
+        return new Class[] { DefectsResource.class };
     }
 
     @Override
-    protected Properties getProperties() {
-        Properties p = new Properties();
-        p.setProperty("wink.defaultUrisRelative", "false");
-        p.setProperty("symphony.generator", "REST-style WS SDK");
-        return p;
+    protected String getPropertiesFile() {
+        return SpringMockServletInvocationTest.packageToPath(getClass().getPackage().getName())
+            + "\\history.properties";
     }
 
     public void testAll() throws Exception {

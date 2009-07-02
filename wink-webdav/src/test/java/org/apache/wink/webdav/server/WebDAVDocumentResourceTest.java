@@ -72,9 +72,7 @@ public class WebDAVDocumentResourceTest extends AbstractWebDAVResourcesTest {
         Propfind propfind = new Propfind();
         propfind.setPropname(new Propname());
         MockHttpServletRequest request = constructPropfindRequest(propfind, path, -1);
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        RequestProcessor requestProcessor = getRequestProcessor(RequestProcessor.class);
-        requestProcessor.handleRequest(request, response);
+        MockHttpServletResponse response = invoke(request);
 
         // response
         Assert.assertEquals(HttpStatus.NOT_FOUND.getCode(), response.getStatus());

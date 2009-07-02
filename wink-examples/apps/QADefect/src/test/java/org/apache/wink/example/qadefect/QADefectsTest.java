@@ -24,7 +24,7 @@ import java.io.FileNotFoundException;
 import java.util.Set;
 
 import org.apache.wink.common.internal.application.ApplicationFileLoader;
-import org.apache.wink.test.mock.MockServletInvocationTest;
+import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 
 
 /**

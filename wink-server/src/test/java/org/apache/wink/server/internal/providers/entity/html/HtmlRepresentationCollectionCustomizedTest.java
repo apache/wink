@@ -32,8 +32,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.wink.common.RestException;
 import org.apache.wink.common.model.synd.SyndFeed;
-import org.apache.wink.server.internal.RequestProcessor;
-import org.apache.wink.server.internal.providers.entity.html.HtmlDescriptor;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 
@@ -57,6 +56,11 @@ public class HtmlRepresentationCollectionCustomizedTest extends HtmlMockServletI
         }
     } // class DefectsCustomizedResource
 
+    @Override
+    protected Class<?>[] getClasses() {
+        return new Class<?>[] {DefectsCustomizedResource.class};
+    }
+    
     /**
      * The method invokes the Resource and check the response.
      * 
@@ -64,10 +68,9 @@ public class HtmlRepresentationCollectionCustomizedTest extends HtmlMockServletI
      */
     public void testGetCollectionHtmlCust() throws Exception {
         try {
-            MockHttpServletResponse response = new MockHttpServletResponse();
-            RequestProcessor requestProcessor = getRequestProcessor(RequestProcessor.class);
-            requestProcessor.handleRequest(constructMockRequest("GET", "/defectsCustomized",
-                MediaType.TEXT_HTML), response);
+            MockHttpServletRequest request = constructMockRequest("GET", "/defectsCustomized",
+                MediaType.TEXT_HTML);
+            MockHttpServletResponse response = invoke(request);
             assertEquals("HTTP status", 200, response.getStatus());
             String content = response.getContentAsString();
             assertEquals("body", CUSTOMIZED_COLLECTION_URL, content);

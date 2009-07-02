@@ -76,7 +76,9 @@ public class RequestProcessor {
         String registerRootResource = properties.getProperty(PROPERTY_ROOT_RESOURCE,
             PROPERTY_ROOT_RESOURCE_DEFAULT);
         if (registerRootResource.equals(PROPERTY_ROOT_RESOURCE_ATOM)) {
-            configuration.addApplication(new RegistrationUtils.InnerApplication(RootResource.class));
+            RegistrationUtils.InnerApplication application = new RegistrationUtils.InnerApplication(RootResource.class);
+            application.setPriority(0.1);
+            configuration.addApplication(application);
         } else if (registerRootResource.equals(PROPERTY_ROOT_RESOURCE_NONE)) {
             // do nothing
         } else {
@@ -85,7 +87,9 @@ public class RequestProcessor {
             if (css != null) {
                 instance.setServiceDocumentCssPath(css);
             }
-            configuration.addApplication(new RegistrationUtils.InnerApplication(instance));
+            RegistrationUtils.InnerApplication application = new RegistrationUtils.InnerApplication(instance);
+            application.setPriority(0.1);
+            configuration.addApplication(application);
         }
     }
 

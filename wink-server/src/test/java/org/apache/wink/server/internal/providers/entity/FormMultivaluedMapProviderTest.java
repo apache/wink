@@ -35,8 +35,8 @@ import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.wink.common.internal.MultivaluedMapImpl;
 import org.apache.wink.common.internal.providers.entity.FormMultivaluedMapProvider;
+import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.apache.wink.test.mock.MockServletInvocationTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 

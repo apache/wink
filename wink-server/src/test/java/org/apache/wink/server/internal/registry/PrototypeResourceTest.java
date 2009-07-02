@@ -29,8 +29,8 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.wink.common.annotations.Scope;
 import org.apache.wink.common.annotations.Scope.ScopeType;
+import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.apache.wink.test.mock.MockServletInvocationTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 

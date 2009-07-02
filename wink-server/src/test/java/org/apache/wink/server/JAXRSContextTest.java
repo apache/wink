@@ -32,8 +32,8 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 
+import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.apache.wink.test.mock.MockServletInvocationTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 

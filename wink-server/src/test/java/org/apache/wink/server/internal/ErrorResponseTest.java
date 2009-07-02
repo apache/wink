@@ -30,7 +30,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.wink.common.RestConstants;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
-import org.apache.wink.test.mock.MockServletInvocationTest;
+import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 
 
 /**

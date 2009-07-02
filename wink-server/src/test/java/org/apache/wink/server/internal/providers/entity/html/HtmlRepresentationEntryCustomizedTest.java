@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal.providers.entity.html;
 
 import java.io.IOException;
@@ -31,10 +31,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.wink.common.model.synd.SyndEntry;
-import org.apache.wink.server.internal.RequestProcessor;
-import org.apache.wink.server.internal.providers.entity.html.HtmlDescriptor;
 import org.springframework.mock.web.MockHttpServletResponse;
-
 
 /**
  * Test customized Html Representation for entry resource.
@@ -59,10 +56,8 @@ public class HtmlRepresentationEntryCustomizedTest extends HtmlMockServletInvoca
      * @throws IOException
      */
     public void testGetEntryHtmlCust() throws Exception {
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        RequestProcessor requestProcessor = getRequestProcessor(RequestProcessor.class);
-        requestProcessor.handleRequest(constructMockRequest("GET", "/defectsCustomized/htmlDefect",
-            MediaType.TEXT_HTML), response);
+        MockHttpServletResponse response = invoke(constructMockRequest("GET",
+            "/defectsCustomized/htmlDefect", MediaType.TEXT_HTML));
         assertEquals("HTTP status", 200, response.getStatus());
         String content = response.getContentAsString();
         assertEquals("body", CUSTOMIZED_ENTRY_URL, content);

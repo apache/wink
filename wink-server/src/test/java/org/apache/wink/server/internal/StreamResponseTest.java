@@ -17,28 +17,23 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.wink.common.SymphonyApplication;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
+import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.apache.wink.test.mock.MockServletInvocationTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-
 
 /**
  * Tests Response created from InputStream and Reader
@@ -48,17 +43,9 @@ public class StreamResponseTest extends MockServletInvocationTest {
     private static byte[] BYTES  = new byte[] { 123, 23, 43, 54, 34, 66, 89, 77 };
     private static String STRING = createTestString();
 
-    
     @Override
-    protected Application getApplication() {
-        return new SymphonyApplication() {
-            @Override
-            public Set<Object> getInstances() {
-                Set<Object> set = new HashSet<Object>();
-                set.add(new Resource());
-                return set;
-            }
-        };
+    protected Class<?>[] getClasses() {
+        return new Class<?>[] { Resource.class };
     }
 
     private static String createTestString() {
@@ -76,7 +63,7 @@ public class StreamResponseTest extends MockServletInvocationTest {
         @GET
         @Produces(MediaTypeUtils.IMAGE_JPEG)
         public ByteArrayInputStream getBinary() {
-            
+
             return new ByteArrayInputStream(BYTES);
         }
 

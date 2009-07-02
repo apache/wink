@@ -30,8 +30,8 @@ import javax.ws.rs.Produces;
 import org.apache.wink.common.annotations.Asset;
 import org.apache.wink.common.model.synd.SyndFeed;
 import org.apache.wink.common.model.synd.SyndText;
+import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.apache.wink.test.mock.MockServletInvocationTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 

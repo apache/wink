@@ -30,9 +30,9 @@ import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.model.app.AppCategories;
 import org.apache.wink.common.model.app.AppYesNo;
 import org.apache.wink.common.model.atom.AtomCategory;
+import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.diff.DiffIgnoreUpdateWithAttributeQualifier;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.apache.wink.test.mock.MockServletInvocationTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 

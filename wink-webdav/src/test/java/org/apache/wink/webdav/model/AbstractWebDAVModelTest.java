@@ -23,7 +23,7 @@ package org.apache.wink.webdav.model;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import org.apache.wink.test.mock.MockServletInvocationTest;
+import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 
 
 public abstract class AbstractWebDAVModelTest extends

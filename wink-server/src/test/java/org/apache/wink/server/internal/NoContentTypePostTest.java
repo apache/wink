@@ -17,44 +17,31 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.wink.common.SymphonyApplication;
 import org.apache.wink.common.http.HttpStatus;
+import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.apache.wink.test.mock.MockServletInvocationTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-
 
 /**
  * Test response on POST without Content-Type HTTP header in request.
  */
-public class NoContentTypePostTest extends
-    MockServletInvocationTest {
+public class NoContentTypePostTest extends MockServletInvocationTest {
 
     @Override
-    protected Application getApplication() {
-        return new SymphonyApplication() {
-            @Override
-            public Set<Object> getInstances() {
-                Set<Object> set = new HashSet<Object>();
-                set.add(new PostResource());
-                return set;
-            }
-        };
+    protected Object[] getSingletons() {
+        return new Object[] { new PostResource() };
     }
 
     @Path("t")
@@ -73,7 +60,8 @@ public class NoContentTypePostTest extends
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("POST", "t",
             "*/*");
         MockHttpServletResponse response = invoke(request);
-        assertEquals("status code", HttpStatus.UNSUPPORTED_MEDIA_TYPE.getCode(), response.getStatus());
+        assertEquals("status code", HttpStatus.UNSUPPORTED_MEDIA_TYPE.getCode(),
+            response.getStatus());
     }
 
 }

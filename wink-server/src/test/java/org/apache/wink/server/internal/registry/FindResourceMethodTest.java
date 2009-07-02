@@ -21,11 +21,9 @@
 
 package org.apache.wink.server.internal.registry;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -40,20 +38,18 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.wink.common.http.HttpStatus;
-import org.apache.wink.server.internal.handlers.FindRootResourceHandler;
+import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.apache.wink.test.mock.MockServletInvocationTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 
 public class FindResourceMethodTest extends MockServletInvocationTest {
     
-    private static List<Class<?>> allResources = new LinkedList<Class<?>>();
-    private static List<Class<?>> resourceClasses = new LinkedList<Class<?>>();
-    private static Properties properties = new Properties();
+    static List<Class<?>> resourceClasses = new LinkedList<Class<?>>();
     
     static {
+        List<Class<?>> allResources = new LinkedList<Class<?>>();
         for (Class<?> cls : FindResourceMethodTest.class.getClasses()) {
             if (cls.getSimpleName().startsWith("Resource")) {
                 allResources.add(cls);
@@ -67,10 +63,6 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
         return resourceClasses.toArray(new Class<?>[resourceClasses.size()]);
     }
     
-    @Override
-    protected Properties getProperties() throws IOException {
-        return properties;
-    }
 
     // /// -- Resources --
 
@@ -749,97 +741,9 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
         assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
     }
     
-    public void testContinuedSearchSetup() {
-        // set up the environment for the continued search test thats that are coming next
-        resourceClasses.clear();
-        resourceClasses.add(ContinuedSearchResource.class);
-        resourceClasses.add(ResourceSimpleGet.class);
-        resourceClasses.add(ResourceWithSubResourceMethodSimpleGet.class);
-        resourceClasses.add(ContinuedSearchResourceLocatorBad.class);
-        properties.setProperty(FindRootResourceHandler.SEARCH_POLICY_CONTINUED_SEARCH_KEY, "false");
-    }
-    
-    public void testContinuedSearch_1_1() throws Exception {
-        MockHttpServletRequest request = null;
-        MockHttpServletResponse response = null;
-        
-        // 1. test resource method
-        // 1.1. negative test - make sure that ContinuedSearchResource is not reachable when continued search policy is off
-        request = MockRequestConstructor.constructMockRequest("PUT", "/simpleGet", "text/plain", "text/plain", null);        
-        response = invoke(request);
-        assertEquals(405, response.getStatus());
-        
-        // set the continuedSearch flag for the continued search test that is coming next
-        properties.setProperty(FindRootResourceHandler.SEARCH_POLICY_CONTINUED_SEARCH_KEY, "true");
-    }
-    
-    public void testContinuedSearch_1_2() throws Exception {
-        MockHttpServletRequest request = null;
-        MockHttpServletResponse response = null;
-
-        // 1.2. make sure that ContinuedSearchResource is reachable when continued search policy is activated 
-        request = MockRequestConstructor.constructMockRequest("PUT", "/simpleGet", "text/plain", "text/plain", null);        
-        response = invoke(request);
-        assertMethodFound(response, ContinuedSearchResource.class, "put");
-        
-        // set the continuedSearch flag for the continued search test that is coming next
-        properties.setProperty(FindRootResourceHandler.SEARCH_POLICY_CONTINUED_SEARCH_KEY, "false");
-    }
-    
-    public void testContinuedSearch_2_1() throws Exception {
-        MockHttpServletRequest request = null;
-        MockHttpServletResponse response = null;
-
-        // 2. test sub-resource method
-        // 2.1. negative test - make sure that ContinuedSearchResource is not reachable when continued search policy is off
-        request = MockRequestConstructor.constructMockRequest("PUT", "/subResourceMethodSimpleGet/1", "text/plain", "text/plain", null);        
-        response = invoke(request);
-        assertEquals(405, response.getStatus());
-
-        // set the continuedSearch flag for the continued search test that is coming next
-        properties.setProperty(FindRootResourceHandler.SEARCH_POLICY_CONTINUED_SEARCH_KEY, "true");
-    }
-
-    public void testContinuedSearch_2_2() throws Exception {
-        MockHttpServletRequest request = null;
-        MockHttpServletResponse response = null;
-        
-        // 2.2. make sure that ContinuedSearchResource is reachable when continued search policy is activated 
-        request = MockRequestConstructor.constructMockRequest("PUT", "/subResourceMethodSimpleGet/1", "text/plain", "text/plain", null);        
-        response = invoke(request);
-        assertMethodFound(response, ContinuedSearchResource.class, "subPut");
-        
-        // set the continuedSearch flag for the continued search test that is coming next
-        properties.setProperty(FindRootResourceHandler.SEARCH_POLICY_CONTINUED_SEARCH_KEY, "false");
-    }
-    
-    public void testContinuedSearch_3_1() throws Exception {
-        MockHttpServletRequest request = null;
-        MockHttpServletResponse response = null;
-        
-        // 3. test sub-resource locator
-        // 3.1. negative test - make sure that ContinuedSearchResource is not reachable when continued search policy is off
-        request = MockRequestConstructor.constructMockRequest("PUT", "/continuedSearchResourceLocatorBad/1/2", "text/plain", "text/plain", null);        
-        response = invoke(request);
-        assertEquals(405, response.getStatus());
-        
-        // set the continuedSearch flag for the continued search test that is coming next
-        properties.setProperty(FindRootResourceHandler.SEARCH_POLICY_CONTINUED_SEARCH_KEY, "true");
-    }
-
-    public void testContinuedSearch_3_2() throws Exception {
-        MockHttpServletRequest request = null;
-        MockHttpServletResponse response = null;
-
-        // 3.2. make sure that ContinuedSearchResource is reachable when continued search policy is activated 
-        request = MockRequestConstructor.constructMockRequest("PUT", "/continuedSearchResourceLocatorBad/1/2", "text/plain", "text/plain", null);        
-        response = invoke(request);
-        assertMethodFound(response, LocatedContinuedSearchResource.class, "subPut");
-    }
-
     // // -- Helpers --
 
-    private void assertMethodFound(MockHttpServletResponse response, Class<?> expectedResource, String expectedMethod) throws UnsupportedEncodingException {
+    static void assertMethodFound(MockHttpServletResponse response, Class<?> expectedResource, String expectedMethod) throws UnsupportedEncodingException {
         assertEquals(200, response.getStatus());
         String expected = expectedResource.getSimpleName() + "." + expectedMethod;
         assertEquals(expected, response.getContentAsString());

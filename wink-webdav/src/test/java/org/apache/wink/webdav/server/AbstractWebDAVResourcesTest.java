@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.webdav.server;
 
 import java.io.IOException;
@@ -33,9 +33,8 @@ import javax.xml.namespace.QName;
 
 import org.apache.wink.common.http.HttpHeadersEx;
 import org.apache.wink.common.http.HttpStatus;
-import org.apache.wink.server.internal.RequestProcessor;
+import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockHttpServletRequestWrapper;
-import org.apache.wink.test.mock.MockServletInvocationTest;
 import org.apache.wink.webdav.WebDAVConstants;
 import org.apache.wink.webdav.WebDAVHeaders;
 import org.apache.wink.webdav.WebDAVMethod;
@@ -54,7 +53,6 @@ import org.apache.wink.webdav.model.Write;
 import org.junit.Assert;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-
 
 public abstract class AbstractWebDAVResourcesTest extends MockServletInvocationTest {
 
@@ -114,9 +112,7 @@ public abstract class AbstractWebDAVResourcesTest extends MockServletInvocationT
         throws Exception {
 
         MockHttpServletRequest request = constructPropfindRequest(propfind, requestURI, depth);
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        RequestProcessor requestProcessor = getRequestProcessor(RequestProcessor.class);
-        requestProcessor.handleRequest(request, response);
+        MockHttpServletResponse response = invoke(request);
         return getMultistatus(response);
     }
 
@@ -210,9 +206,7 @@ public abstract class AbstractWebDAVResourcesTest extends MockServletInvocationT
         };
         request.setMethod("OPTIONS");
         request.setRequestURI(path);
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        RequestProcessor requestProcessor = getRequestProcessor(RequestProcessor.class);
-        requestProcessor.handleRequest(request, response);
+        MockHttpServletResponse response = invoke(request);
 
         // response
         Assert.assertEquals(HttpStatus.OK.getCode(), response.getStatus());
@@ -253,9 +247,7 @@ public abstract class AbstractWebDAVResourcesTest extends MockServletInvocationT
         WebDAVModelHelper.marshal(WebDAVModelHelper.createMarshaller(), lockinfo, writer,
             "lockinfo");
         request.setContent(writer.toString().getBytes());
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        RequestProcessor requestProcessor = getRequestProcessor(RequestProcessor.class);
-        requestProcessor.handleRequest(request, response);
+        MockHttpServletResponse response = invoke(request);
 
         // lock response
         Assert.assertEquals(HttpStatus.OK.getCode(), response.getStatus());
@@ -281,8 +273,7 @@ public abstract class AbstractWebDAVResourcesTest extends MockServletInvocationT
         };
         request.setMethod(WebDAVMethod.UNLOCK.name());
         request.setRequestURI(path);
-        response = new MockHttpServletResponse();
-        requestProcessor.handleRequest(request, response);
+        response = invoke(request);
 
         // lock response
         Assert.assertEquals(HttpStatus.NO_CONTENT.getCode(), response.getStatus());

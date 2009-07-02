@@ -25,56 +25,46 @@ import java.util.Set;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.wink.common.AbstractDynamicResource;
-import org.apache.wink.common.SymphonyApplication;
-import org.apache.wink.test.mock.MockServletInvocationTest;
-
-
+import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 
 /**
  * This test checks scenarios with Resource that are defined as beans.
  * 
  */
-public class ExtensionResourceBeanTest extends
-    MockServletInvocationTest {
+public class ExtensionResourceBeanTest extends MockServletInvocationTest {
 
     @Override
-    protected Application getApplication() {
-        return new SymphonyApplication() {
-            @Override
-            public Set<Object> getInstances() {
-                BasicBeanResource basicResourceResource = new BasicBeanResource();
-                basicResourceResource.setDispatchedPath(new String[] { "/basicBeanUrl", "/basicBeanUrlNoParent" });
-        
-                BasicResource basit = new BasicResource();
-        
-                ExtendedBasicBeanResource  extendedBasicBeanResource = new ExtendedBasicBeanResource();
-                extendedBasicBeanResource.setDispatchedPath(new String[] { "" });
-                extendedBasicBeanResource.setParents(new Object[] { basicResourceResource });
-        
-                ExtendedBasicBeanWithNoParentResource extendedBasicBeanWithNoParentResource = new ExtendedBasicBeanWithNoParentResource();
-                extendedBasicBeanWithNoParentResource.setDispatchedPath(new String[] { "/basicBeanUrl",
-                    "/basicBeanUrlNoParent" });
-        
-                ExtendedBasicResource extendedBasicResource = new ExtendedBasicResource();
-                extendedBasicResource.setDispatchedPath(new String[] { "" });
-                extendedBasicResource.setParents(new Object[] { basicResourceResource });
-        
-                Set<Object> set = new HashSet<Object>();
-                set.add(basicResourceResource);
-                set.add(basit);
-                set.add(extendedBasicBeanResource);
-                set.add(extendedBasicBeanWithNoParentResource);
-                set.add(extendedBasicResource);
-                return set;
-            }
-        };
+    protected Object[] getSingletons() {
+        BasicBeanResource basicResourceResource = new BasicBeanResource();
+        basicResourceResource.setDispatchedPath(new String[] { "/basicBeanUrl",
+            "/basicBeanUrlNoParent" });
 
+        BasicResource basit = new BasicResource();
+
+        ExtendedBasicBeanResource extendedBasicBeanResource = new ExtendedBasicBeanResource();
+        extendedBasicBeanResource.setDispatchedPath(new String[] { "" });
+        extendedBasicBeanResource.setParents(new Object[] { basicResourceResource });
+
+        ExtendedBasicBeanWithNoParentResource extendedBasicBeanWithNoParentResource = new ExtendedBasicBeanWithNoParentResource();
+        extendedBasicBeanWithNoParentResource.setDispatchedPath(new String[] { "/basicBeanUrl",
+            "/basicBeanUrlNoParent" });
+
+        ExtendedBasicResource extendedBasicResource = new ExtendedBasicResource();
+        extendedBasicResource.setDispatchedPath(new String[] { "" });
+        extendedBasicResource.setParents(new Object[] { basicResourceResource });
+
+        Set<Object> set = new HashSet<Object>();
+        set.add(basicResourceResource);
+        set.add(basit);
+        set.add(extendedBasicBeanResource);
+        set.add(extendedBasicBeanWithNoParentResource);
+        set.add(extendedBasicResource);
+        return new Object[] { basicResourceResource, basit, extendedBasicBeanResource,
+            extendedBasicBeanWithNoParentResource, extendedBasicResource };
     }
-
 
     /**
      * Basic Resource Bean with class annotations defined on the configuration

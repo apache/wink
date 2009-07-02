@@ -30,8 +30,8 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.PathSegment;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.apache.wink.test.mock.MockServletInvocationTest;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 

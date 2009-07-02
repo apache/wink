@@ -36,9 +36,9 @@ import org.apache.wink.common.categories.CollectionCategories;
 import org.apache.wink.common.internal.MultivaluedMapImpl;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.model.atom.AtomCategory;
+import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.diff.DiffIgnoreUpdateWithAttributeQualifier;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.apache.wink.test.mock.MockServletInvocationTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 

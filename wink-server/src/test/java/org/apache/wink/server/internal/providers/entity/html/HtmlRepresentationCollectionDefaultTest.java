@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal.providers.entity.html;
 
 import java.io.IOException;
@@ -37,21 +37,16 @@ import org.apache.wink.common.model.synd.SyndFeed;
 import org.apache.wink.common.model.synd.SyndLink;
 import org.apache.wink.common.model.synd.SyndPerson;
 import org.apache.wink.common.model.synd.SyndText;
-import org.apache.wink.server.internal.RequestProcessor;
-import org.apache.wink.server.internal.providers.entity.html.HtmlConstants;
-import org.apache.wink.server.internal.providers.entity.html.HtmlDescriptor;
-import org.apache.wink.server.internal.providers.entity.html.HtmlSyndFeedAdapter;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletResponse;
-
 
 /**
  * Test default Html Representation for collection resource.
  */
 public class HtmlRepresentationCollectionDefaultTest extends HtmlMockServletInvocationTest {
 
-    private static Date                    CURRENT_DATE        = new Date();
-    private static SimpleDateFormat simpleDateFormat    = new SimpleDateFormat("dd/MM/yyyy"); //$NON-NLS-1$
+    private static Date             CURRENT_DATE        = new Date();
+    private static SimpleDateFormat simpleDateFormat    = new SimpleDateFormat("dd/MM/yyyy");       //$NON-NLS-1$
     private static final String     COL_ID              = "10";
     private static final String     COL_TITLE           = "Collection";
     private static final String     COL_OWNER           = "Tali Col";
@@ -81,10 +76,8 @@ public class HtmlRepresentationCollectionDefaultTest extends HtmlMockServletInvo
      */
     @Test
     public void testGetCollectionHtmlDefault() throws Exception {
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        RequestProcessor requestProcessor = getRequestProcessor(RequestProcessor.class);
-        requestProcessor.handleRequest(constructMockRequest("GET", "/defectsDefault",
-            MediaType.TEXT_HTML), response);
+        MockHttpServletResponse response = invoke(constructMockRequest("GET", "/defectsDefault",
+            MediaType.TEXT_HTML));
         assertEquals("HTTP status", 200, response.getStatus());
         String content = response.getContentAsString();
         assertEquals("body", HtmlConstants.DEFAULT_JSP_COLLECTION_PATH, content);
@@ -141,15 +134,5 @@ public class HtmlRepresentationCollectionDefaultTest extends HtmlMockServletInvo
         return feed;
     }
 
-//    /**
-//     * The method creates DocumentMetadata with dummy data.
-//     * 
-//     * @return DocumentMetadata
-//     */
-//    public DocumentMetadata getEntryMetadata() {
-//        DocumentMetadata metadata = new DocumentMetadata();
-//        metadata.setName(ENTRY_NAME);
-//        return metadata;
-//
-//    }
+
 }

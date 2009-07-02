@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server;
 
@@ -27,55 +26,43 @@ import java.util.Set;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.wink.common.AbstractDynamicResource;
 import org.apache.wink.common.SymphonyApplication;
 import org.apache.wink.common.annotations.Workspace;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
+import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.apache.wink.test.mock.MockServletInvocationTest;
 import org.custommonkey.xmlunit.Diff;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.xml.sax.SAXException;
 
-
 public class AbstractResourceWithDuplicateWorkspaceTest extends MockServletInvocationTest {
 
-    @Override
-    protected Application getApplication() {
-        return new SymphonyApplication() {
-            @Override
-            public Set<Object> getInstances() {
-                Set<Object> set = new HashSet<Object>();
-                AbstractTestWithWorkspaceResource servicesCollectionWithWorskapce = new AbstractTestWithWorkspaceResource();
-                servicesCollectionWithWorskapce.setDispatchedPath(new String[] { "/services/withWorkspace" });
-                servicesCollectionWithWorskapce.setCollectionTitle("Spring Collection");
-                servicesCollectionWithWorskapce.setWorkspaceTitle("Spring Workspace");
+    public static class InnerApplication extends SymphonyApplication {
 
-                AbstractTestWithWorkspaceResource servicesCollectionWithoutWorskapce = new AbstractTestWithWorkspaceResource();
-                servicesCollectionWithoutWorskapce.setDispatchedPath(new String[] { "/services/withoutWorkspace" });
-                
-                set.add(servicesCollectionWithWorskapce);
-                set.add(servicesCollectionWithoutWorskapce);
-                return set;
-            }
-        };
+        @Override
+        public Set<Object> getInstances() {
+            Set<Object> set = new HashSet<Object>();
+            AbstractTestWithWorkspaceResource servicesCollectionWithWorskapce = new AbstractTestWithWorkspaceResource();
+            servicesCollectionWithWorskapce.setDispatchedPath(new String[] { "/services/withWorkspace" });
+            servicesCollectionWithWorskapce.setCollectionTitle("Spring Collection");
+            servicesCollectionWithWorskapce.setWorkspaceTitle("Spring Workspace");
+
+            AbstractTestWithWorkspaceResource servicesCollectionWithoutWorskapce = new AbstractTestWithWorkspaceResource();
+            servicesCollectionWithoutWorskapce.setDispatchedPath(new String[] { "/services/withoutWorkspace" });
+
+            set.add(servicesCollectionWithWorskapce);
+            set.add(servicesCollectionWithoutWorskapce);
+            return set;
+        }
     }
 
     @Override
-    protected Object[] getInstances() {
-        AbstractTestWithWorkspaceResource servicesCollectionWithWorskapce = new AbstractTestWithWorkspaceResource();
-        servicesCollectionWithWorskapce.setDispatchedPath(new String[] { "/services/withWorkspace" });
-        servicesCollectionWithWorskapce.setCollectionTitle("Spring Collection");
-        servicesCollectionWithWorskapce.setWorkspaceTitle("Spring Workspace");
-
-        AbstractTestWithWorkspaceResource servicesCollectionWithoutWorskapce = new AbstractTestWithWorkspaceResource();
-        servicesCollectionWithoutWorskapce.setDispatchedPath(new String[] { "/services/withoutWorkspace" });
-
-        return new Object[] { servicesCollectionWithWorskapce, servicesCollectionWithoutWorskapce, };
+    protected String getApplicationClassName() {
+        return InnerApplication.class.getName();
     }
 
     private static final String EXPECTED_SERVICE_COLLECTION = "expected service collection 1";

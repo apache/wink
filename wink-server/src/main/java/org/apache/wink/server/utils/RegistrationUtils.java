@@ -28,7 +28,6 @@ import javax.ws.rs.core.Application;
 import org.apache.wink.common.SymphonyApplication;
 import org.apache.wink.server.internal.RequestProcessor;
 
-
 public class RegistrationUtils {
 
     /**
@@ -90,11 +89,12 @@ public class RegistrationUtils {
 
         private Set<Class<?>> classes   = null;
         private Set<Object>   instances = null;
+        private double        priority  = DEFAULT_PRIORITY;
 
         public InnerApplication(Set<Class<?>> set) {
             classes = set;
         }
-        
+
         public InnerApplication(Class<?>... classes) {
             this.classes = new HashSet<Class<?>>(classes.length);
             for (Class<?> cls : classes) {
@@ -123,6 +123,14 @@ public class RegistrationUtils {
                 return super.getInstances();
             }
             return instances;
+        }
+
+        public void setPriority(double priority) {
+            this.priority = priority;
+        }
+
+        public double getPriority() {
+            return priority;
         }
 
     }

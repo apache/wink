@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal.providers.entity.html;
 
 import java.io.IOException;
@@ -30,10 +30,8 @@ import javax.ws.rs.core.MediaType;
 import org.apache.wink.common.RestException;
 import org.apache.wink.common.annotations.Workspace;
 import org.apache.wink.common.internal.uri.UriEncoder;
-import org.apache.wink.server.internal.RequestProcessor;
 import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletResponse;
-
 
 /**
  * Test Service Document in Html Representation.
@@ -73,8 +71,8 @@ public class HtmlRepresentationServiceDocumentTest extends HtmlMockServletInvoca
     } // class NoHtmlResource
 
     /**
-     * The method invokes the Resource for Service Document in HTML and checks the
-     * response.
+     * The method invokes the Resource for Service Document in HTML and checks
+     * the response.
      * 
      * @param relPath
      *            The path to invoke
@@ -82,10 +80,8 @@ public class HtmlRepresentationServiceDocumentTest extends HtmlMockServletInvoca
      */
     public void executeTestServiceDocumentHtml(String relPath) throws Exception {
         try {
-            MockHttpServletResponse response = new MockHttpServletResponse();
-            RequestProcessor requestProcessor = getRequestProcessor(RequestProcessor.class);
-            requestProcessor.handleRequest(MockRequestConstructor.constructMockRequest("GET",
-                relPath, MediaType.TEXT_HTML), response);
+            MockHttpServletResponse response = invoke(MockRequestConstructor.constructMockRequest(
+                "GET", relPath, MediaType.TEXT_HTML));
             assertEquals("HTTP status", 200, response.getStatus());
             // check that the content contains at least one link with HTML
             String content = response.getContentAsString();
@@ -93,7 +89,8 @@ public class HtmlRepresentationServiceDocumentTest extends HtmlMockServletInvoca
                 content.indexOf(UriEncoder.encodeString(MediaType.TEXT_HTML)) > 0);
 
         } catch (RestException e) {
-            assertEquals("exception message","The file requested cannot be retrieved.", e.getMessage()); //$NON-NLS-1$
+            assertEquals(
+                "exception message", "The file requested cannot be retrieved.", e.getMessage()); //$NON-NLS-1$
         }
     }
 

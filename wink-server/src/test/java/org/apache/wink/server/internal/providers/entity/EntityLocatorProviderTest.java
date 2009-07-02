@@ -35,8 +35,8 @@ import org.apache.wink.common.model.atom.AtomEntry;
 import org.apache.wink.common.model.atom.AtomText;
 import org.apache.wink.common.model.atom.AtomTextType;
 import org.apache.wink.common.model.atom.ObjectFactory;
+import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.apache.wink.test.mock.MockServletInvocationTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
