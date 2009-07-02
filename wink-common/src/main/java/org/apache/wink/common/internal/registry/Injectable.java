@@ -21,6 +21,7 @@
 
 package org.apache.wink.common.internal.registry;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Member;
 import java.lang.reflect.Type;
@@ -133,6 +134,6 @@ public abstract class Injectable {
      * @param runtimeContext
      * @return
      */
-    public abstract Object getValue(RuntimeContext runtimeContext);
+    public abstract Object getValue(RuntimeContext runtimeContext) throws IOException;
 
 }

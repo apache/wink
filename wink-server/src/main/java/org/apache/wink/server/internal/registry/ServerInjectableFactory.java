@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.registry;
 
@@ -54,53 +53,53 @@ import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.internal.utils.StringUtils;
 import org.apache.wink.server.internal.handlers.SearchResult;
 
-
 public class ServerInjectableFactory extends InjectableFactory {
 
     @Override
     public Injectable createCookieParam(String value, Class<?> classType, Type genericType,
-            Annotation[] annotations, Member member) {
+        Annotation[] annotations, Member member) {
         return new CookieParamBinding(value, classType, genericType, annotations, member);
     }
 
     @Override
-    public Injectable createEntityParam(Class<?> classType, Type genericType, Annotation[] annotations, Member member) {
+    public Injectable createEntityParam(Class<?> classType, Type genericType,
+        Annotation[] annotations, Member member) {
         return new EntityParam(classType, genericType, annotations, member);
     }
 
     @Override
-    public Injectable createFormParam(String value, Class<?> classType, Type genericType, Annotation[] annotations,
-            Member member) {
+    public Injectable createFormParam(String value, Class<?> classType, Type genericType,
+        Annotation[] annotations, Member member) {
         return new FormParamBinding(value, classType, genericType, annotations, member);
     }
 
     @Override
     public Injectable createHeaderParam(String value, Class<?> classType, Type genericType,
-            Annotation[] annotations, Member member) {
+        Annotation[] annotations, Member member) {
         return new HeaderParamBinding(value, classType, genericType, annotations, member);
     }
 
     @Override
     public Injectable createMatrixParam(String value, Class<?> classType, Type genericType,
-            Annotation[] annotations, Member member) {
+        Annotation[] annotations, Member member) {
         return new MatrixParamBinding(value, classType, genericType, annotations, member);
     }
 
     @Override
-    public Injectable createPathParam(String value, Class<?> classType, Type genericType, Annotation[] annotations,
-            Member member) {
+    public Injectable createPathParam(String value, Class<?> classType, Type genericType,
+        Annotation[] annotations, Member member) {
         return new PathParamBinding(value, classType, genericType, annotations, member);
     }
 
     @Override
-    public Injectable createQueryParam(String value, Class<?> classType, Type genericType, Annotation[] annotations,
-            Member member) {
+    public Injectable createQueryParam(String value, Class<?> classType, Type genericType,
+        Annotation[] annotations, Member member) {
         return new QueryParamBinding(value, classType, genericType, annotations, member);
     }
 
     /**
-     * Used for injecting a field or parameter of JAX-RS resource that has no annotation on it -
-     * represents the request entity.
+     * Used for injecting a field or parameter of JAX-RS resource that has no
+     * annotation on it - represents the request entity.
      */
     public static class EntityParam extends Injectable {
 
@@ -109,7 +108,7 @@ public class ServerInjectableFactory extends InjectableFactory {
         }
 
         @SuppressWarnings("unchecked")
-        public Object getValue(RuntimeContext runtimeContext) {
+        public Object getValue(RuntimeContext runtimeContext) throws IOException {
             if (runtimeContext == null) {
                 return null;
             }
@@ -123,17 +122,14 @@ public class ServerInjectableFactory extends InjectableFactory {
                 if (mediaType == null) {
                     mediaType = MediaType.WILDCARD_TYPE;
                 }
-                MessageBodyReader mbr = providers.getMessageBodyReader(paramType, getGenericType(), getAnnotations(),
-                        mediaType);
+                MessageBodyReader mbr = providers.getMessageBodyReader(paramType, getGenericType(),
+                    getAnnotations(), mediaType);
 
                 if (mbr != null) {
-                    try {
-                        Object read = mbr.readFrom(paramType, getGenericType(), getAnnotations(), mediaType, runtimeContext
-                                .getHttpHeaders().getRequestHeaders(), runtimeContext.getInputStream());
-                        return read;
-                    } catch (IOException e) {
-                        throw new WebApplicationException(e);
-                    }
+                    Object read = mbr.readFrom(paramType, getGenericType(), getAnnotations(),
+                        mediaType, runtimeContext.getHttpHeaders().getRequestHeaders(),
+                        runtimeContext.getInputStream());
+                    return read;
                 }
             }
             throw new WebApplicationException(Response.Status.UNSUPPORTED_MEDIA_TYPE);
@@ -141,26 +137,27 @@ public class ServerInjectableFactory extends InjectableFactory {
     }
 
     /**
-     * Used for injecting a field or parameter of JAX-RS resource with the value of a matrix
-     * parameter
+     * Used for injecting a field or parameter of JAX-RS resource with the value
+     * of a matrix parameter
      */
     public static class MatrixParamBinding extends BoundInjectable {
 
-        public MatrixParamBinding(String variableName, Class<?> type, Type genericType, Annotation[] annotations,
-                Member member) {
+        public MatrixParamBinding(String variableName, Class<?> type, Type genericType,
+            Annotation[] annotations, Member member) {
             super(ParamType.MATRIX, variableName, type, genericType, annotations, member);
         }
 
         @Override
-        public Object getValue(RuntimeContext runtimeContext) {
+        public Object getValue(RuntimeContext runtimeContext) throws IOException {
             if (runtimeContext == null) {
                 return null;
             }
             List<String> allValues = new ArrayList<String>();
-            List<PathSegment> segments = runtimeContext.getAttribute(SearchResult.class).getData().getMatchedURIs().get(0);
+            List<PathSegment> segments = runtimeContext.getAttribute(SearchResult.class).getData().getMatchedURIs().get(
+                0);
             // get the matrix parameter only from the last segment
             PathSegment segment = segments.get(segments.size() - 1);
-            MultivaluedMap<String,String> matrixParameters = segment.getMatrixParameters();
+            MultivaluedMap<String, String> matrixParameters = segment.getMatrixParameters();
             List<String> values = matrixParameters.get(getName());
             if (values != null) {
                 allValues.addAll(values);
@@ -182,23 +179,23 @@ public class ServerInjectableFactory extends InjectableFactory {
     }
 
     /**
-     * Used for injecting a field or parameter of JAX-RS resource with the value of a query
-     * parameter
+     * Used for injecting a field or parameter of JAX-RS resource with the value
+     * of a query parameter
      */
     public static class QueryParamBinding extends BoundInjectable {
 
-        public QueryParamBinding(String variableName, Class<?> type, Type genericType, Annotation[] annotations,
-                Member member) {
+        public QueryParamBinding(String variableName, Class<?> type, Type genericType,
+            Annotation[] annotations, Member member) {
             super(ParamType.QUERY, variableName, type, genericType, annotations, member);
         }
 
         @Override
-        public Object getValue(RuntimeContext runtimeContext) {
+        public Object getValue(RuntimeContext runtimeContext) throws IOException {
             if (runtimeContext == null) {
                 return null;
             }
             UriInfo uriInfo = runtimeContext.getUriInfo();
-            MultivaluedMap<String,String> queryParameters = uriInfo.getQueryParameters(false);
+            MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters(false);
             List<String> values = queryParameters.get(getName());
             if (values == null) {
                 values = new LinkedList<String>();
@@ -226,13 +223,14 @@ public class ServerInjectableFactory extends InjectableFactory {
     }
 
     /**
-     * Used for injecting a field or parameter of JAX-RS resource with the value of a Form parameter
+     * Used for injecting a field or parameter of JAX-RS resource with the value
+     * of a Form parameter
      */
     public static class FormParamBinding extends BoundInjectable {
 
-        static final String FORM_PARAMATERS = "symphony.formParameters";
-        public final static MultivaluedMap<String,String> dummyMultivaluedMap = null;
-        private static Type MULTIVALUED_MAP_STRING_TYPE = null;
+        static final String                                FORM_PARAMATERS             = "symphony.formParameters";
+        public final static MultivaluedMap<String, String> dummyMultivaluedMap         = null;
+        private static Type                                MULTIVALUED_MAP_STRING_TYPE = null;
 
         static {
             try {
@@ -244,33 +242,34 @@ public class ServerInjectableFactory extends InjectableFactory {
             }
         }
 
-        public FormParamBinding(String variableName, Class<?> type, Type genericType, Annotation[] annotations,
-                Member member) {
+        public FormParamBinding(String variableName, Class<?> type, Type genericType,
+            Annotation[] annotations, Member member) {
             super(ParamType.FORM, variableName, type, genericType, annotations, member);
         }
 
         @SuppressWarnings("unchecked")
         @Override
-        public Object getValue(RuntimeContext runtimeContext) {
+        public Object getValue(RuntimeContext runtimeContext) throws IOException {
             if (runtimeContext == null) {
                 return null;
             }
 
             // request must be application/x-www-form-urlencoded
             MediaType mediaType = runtimeContext.getHttpHeaders().getMediaType();
-            if (!MediaTypeUtils.equalsIgnoreParameters(mediaType, MediaType.APPLICATION_FORM_URLENCODED_TYPE)) {
+            if (!MediaTypeUtils.equalsIgnoreParameters(mediaType,
+                MediaType.APPLICATION_FORM_URLENCODED_TYPE)) {
                 return null;
             }
 
             // see if we already have the form parameters, which will happen if there
             // is more than one form parameter on the method
-            MultivaluedMap<String,String> formParameters = (MultivaluedMap<String,String>)runtimeContext.getAttributes()
-                    .get(FORM_PARAMATERS);
+            MultivaluedMap<String, String> formParameters = (MultivaluedMap<String, String>) runtimeContext.getAttributes().get(
+                FORM_PARAMATERS);
             if (formParameters == null) {
                 // read the request body as an entity parameter to get the form parameters
-                EntityParam entityParam = new EntityParam(MultivaluedMap.class, MULTIVALUED_MAP_STRING_TYPE,
-                        getAnnotations(), null);
-                formParameters = (MultivaluedMap<String,String>)entityParam.getValue(runtimeContext);
+                EntityParam entityParam = new EntityParam(MultivaluedMap.class,
+                    MULTIVALUED_MAP_STRING_TYPE, getAnnotations(), null);
+                formParameters = (MultivaluedMap<String, String>) entityParam.getValue(runtimeContext);
                 runtimeContext.getAttributes().put(FORM_PARAMATERS, formParameters);
             }
 
@@ -304,24 +303,24 @@ public class ServerInjectableFactory extends InjectableFactory {
     }
 
     /**
-     * Used for injecting a field or parameter of JAX-RS resource with the value of a path template
-     * variable
+     * Used for injecting a field or parameter of JAX-RS resource with the value
+     * of a path template variable
      */
     public static class PathParamBinding extends BoundInjectable {
 
-        public PathParamBinding(String variableName, Class<?> type, Type genericType, Annotation[] annotations,
-                Member member) {
+        public PathParamBinding(String variableName, Class<?> type, Type genericType,
+            Annotation[] annotations, Member member) {
             super(ParamType.PATH, variableName, type, genericType, annotations, member);
         }
 
         @Override
-        public Object getValue(RuntimeContext runtimeContext) {
+        public Object getValue(RuntimeContext runtimeContext) throws IOException {
             if (runtimeContext == null) {
                 return null;
             }
 
-            MultivaluedMap<String,List<PathSegment>> pathSegmentsMap = runtimeContext.getAttribute(SearchResult.class).getData()
-                    .getMatchedVariablesPathSegments();
+            MultivaluedMap<String, List<PathSegment>> pathSegmentsMap = runtimeContext.getAttribute(
+                SearchResult.class).getData().getMatchedVariablesPathSegments();
             List<PathSegment> segments = pathSegmentsMap.getFirst(getName());
             if (segments != null && segments.size() > 0) {
                 // special handling for PathSegment
@@ -351,7 +350,7 @@ public class ServerInjectableFactory extends InjectableFactory {
 
             // for all other types and for cases where the default value should be used
             UriInfo uriInfo = runtimeContext.getUriInfo();
-            MultivaluedMap<String,String> variables = uriInfo.getPathParameters(false);
+            MultivaluedMap<String, String> variables = uriInfo.getPathParameters(false);
             List<String> values = variables.get(getName());
             if (values == null) {
                 values = new LinkedList<String>();
@@ -382,17 +381,18 @@ public class ServerInjectableFactory extends InjectableFactory {
     }
 
     /**
-     * Used for injecting a field or parameter of JAX-RS resource with the value of a request header
+     * Used for injecting a field or parameter of JAX-RS resource with the value
+     * of a request header
      */
     public static class HeaderParamBinding extends BoundInjectable {
 
-        public HeaderParamBinding(String variableName, Class<?> type, Type genericType, Annotation[] annotations,
-                Member member) {
+        public HeaderParamBinding(String variableName, Class<?> type, Type genericType,
+            Annotation[] annotations, Member member) {
             super(ParamType.HEADER, variableName, type, genericType, annotations, member);
         }
 
         @Override
-        public Object getValue(RuntimeContext runtimeContext) {
+        public Object getValue(RuntimeContext runtimeContext) throws IOException {
             if (runtimeContext == null) {
                 return null;
             }
@@ -416,29 +416,30 @@ public class ServerInjectableFactory extends InjectableFactory {
     }
 
     /**
-     * Used for injecting a field or parameter of JAX-RS resource with the value of a request cookie
+     * Used for injecting a field or parameter of JAX-RS resource with the value
+     * of a request cookie
      */
     public static class CookieParamBinding extends BoundInjectable {
 
-        public CookieParamBinding(String variableName, Class<?> type, Type genericType, Annotation[] annotations,
-                Member member) {
+        public CookieParamBinding(String variableName, Class<?> type, Type genericType,
+            Annotation[] annotations, Member member) {
             super(ParamType.COOKIE, variableName, type, genericType, annotations, member);
         }
 
         @Override
-        public Object getValue(RuntimeContext runtimeContext) {
+        public Object getValue(RuntimeContext runtimeContext) throws IOException {
             if (runtimeContext == null) {
                 return null;
             }
             String value = null;
             HttpHeaders httpHeaders = runtimeContext.getHttpHeaders();
-            Map<String,Cookie> values = httpHeaders.getCookies();
+            Map<String, Cookie> values = httpHeaders.getCookies();
 
             Cookie cookie = null;
             if (values.size() > 0) {
                 cookie = values.get(getName());
             }
-            
+
             if (cookie == null && hasDefaultValue()) {
                 cookie = new Cookie(getName(), getDefaultValue());
             }
@@ -466,6 +467,7 @@ public class ServerInjectableFactory extends InjectableFactory {
         }
 
         public static class CookieComparator implements Comparator<Cookie> {
+
             public int compare(Cookie o1, Cookie o2) {
                 int val = 0;
                 if (o1.getName() != null) {

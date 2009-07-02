@@ -21,6 +21,7 @@
 
 package org.apache.wink.common.internal.registry;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Member;
 import java.lang.reflect.Type;
@@ -58,8 +59,9 @@ public class InjectableFactory {
      * @param runtimeContext
      * @param formalParameters
      * @return
+     * @throws IOException 
      */
-    public Object[] instantiate(List<Injectable> formalParameters, RuntimeContext runtimeContext) {
+    public Object[] instantiate(List<Injectable> formalParameters, RuntimeContext runtimeContext) throws IOException {
         Object[] result = new Object[formalParameters.size()];
         for (int pos = 0; pos < result.length; pos++) {
             Injectable fp = formalParameters.get(pos);
