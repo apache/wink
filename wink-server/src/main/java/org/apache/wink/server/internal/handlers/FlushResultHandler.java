@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Map.Entry;
 
+import javax.activation.CommandMap;
+import javax.activation.DataContentHandler;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.WebApplicationException;
@@ -127,9 +129,6 @@ public class FlushResultHandler extends AbstractHandler {
         MessageBodyWriter<Object> messageBodyWriter = (MessageBodyWriter<Object>)providers.getMessageBodyWriter(
                 rawType, genericType, declaredAnnotations, responseMediaType);
 
-        // TODO: try to find a data handler using JavaBeans Activation Framework,
-        // if found use DataSourceProvider
-
         // use the provider to write the entity
         if (messageBodyWriter != null) {
             logger.debug("Serialization using provider {}", messageBodyWriter.getClass().getName());
@@ -143,9 +142,28 @@ public class FlushResultHandler extends AbstractHandler {
 
             messageBodyWriter.writeTo(entity, rawType, genericType, declaredAnnotations, responseMediaType,
                     httpHeaders, new FlushHeadersOutputStream(httpResponse, headers));
-
+            return;
+            
         } else {
-            logger.error("Could not find a writer for {} and {}", entity.getClass().getName(), responseMediaType);
+            logger.warn("Could not find a writer for {} and {}. Try to find JAF DataSourceProvider", entity.getClass().getName(), responseMediaType);
+        }
+        
+        DataContentHandler dataContentHandler = null;
+        // Write Entity with ASF DataContentHandler
+        try{
+            // try to find a data handler using JavaBeans Activation Framework, if found use DataSourceProvider
+            dataContentHandler = CommandMap.getDefaultCommandMap().createDataContentHandler(responseMediaType.toString());
+           
+            if(dataContentHandler == null){
+                logger.error("Could not find a DataSourceProvider for {} ", responseMediaType);
+                throw new WebApplicationException(500);
+            }
+            
+            dataContentHandler.writeTo(entity, responseMediaType.toString(), new FlushHeadersOutputStream(httpResponse, httpHeaders));
+            
+        }catch (Exception e) {
+            logger.error("Could not write {} with DataSourceProvider {} for mediatype {} ", 
+                         new Object[]{entity.getClass().getName(), dataContentHandler.getClass().getName(), responseMediaType.toString() });
             throw new WebApplicationException(500);
         }
     }
