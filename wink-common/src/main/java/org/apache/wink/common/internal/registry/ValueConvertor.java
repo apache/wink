@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.registry;
 
@@ -41,14 +40,15 @@ import javax.ws.rs.core.PathSegment;
 import org.apache.wink.common.internal.utils.GenericsUtils;
 import org.apache.wink.common.internal.utils.UriHelper;
 
-
 /**
  * Provides conversion from string value to proper java object.
  */
 public abstract class ValueConvertor {
-    
+
     public static class ConversionException extends RuntimeException {
+
         private static final long serialVersionUID = -450326706168680880L;
+
         public ConversionException() {
             super();
         }
@@ -98,16 +98,19 @@ public abstract class ValueConvertor {
     }
 
     public static ValueConvertor createConcreteValueConvertor(Class<?> classType, Type genericType) {
-//        if (classType.equals(List.class)
-//                && PathSegment.class.equals(GenericsUtils.getGenericParamType(genericType))) {
-//            return new DummyConvertor();
-//        } else 
-            if (classType.equals(List.class)) {
-            return new ListConvertor(getSingleValueConvertor(GenericsUtils.getGenericParamType(genericType)));
+        //        if (classType.equals(List.class)
+        //                && PathSegment.class.equals(GenericsUtils.getGenericParamType(genericType))) {
+        //            return new DummyConvertor();
+        //        } else 
+        if (classType.equals(List.class)) {
+            return new ListConvertor(
+                getSingleValueConvertor(GenericsUtils.getGenericParamType(genericType)));
         } else if (classType.equals(SortedSet.class)) {
-            return new SortedSetConvertor(getSingleValueConvertor(GenericsUtils.getGenericParamType(genericType)));
+            return new SortedSetConvertor(
+                getSingleValueConvertor(GenericsUtils.getGenericParamType(genericType)));
         } else if (classType.equals(Set.class)) {
-            return new SetConvertor(getSingleValueConvertor(GenericsUtils.getGenericParamType(genericType)));
+            return new SetConvertor(
+                getSingleValueConvertor(GenericsUtils.getGenericParamType(genericType)));
         } else {
             return getSingleValueConvertor(classType);
         }
@@ -126,7 +129,7 @@ public abstract class ValueConvertor {
             return getComplexValueConverter(classType);
         }
     }
-    
+
     private static ValueConvertor getComplexValueConverter(Class<?> classType) {
         if (classType == null) {
             return null;
@@ -146,12 +149,14 @@ public abstract class ValueConvertor {
         } catch (NoSuchMethodException e) {
         }
 
-        throw new IllegalArgumentException("type '" + classType + "' is not a supported resource method parameter");
+        throw new IllegalArgumentException("type '" + classType
+            + "' is not a supported resource method parameter");
     }
 
     private static class ArrayValueConvertor extends ValueConvertor {
+
         private ValueConvertor concrete;
-        private Class<?> type;
+        private Class<?>       type;
 
         public ArrayValueConvertor(ValueConvertor concrete, Class<?> type) {
             this.concrete = concrete;
@@ -160,7 +165,7 @@ public abstract class ValueConvertor {
 
         @Override
         public Object convert(String value) throws WebApplicationException {
-            Object[] array = (Object[])Array.newInstance(type, 1);
+            Object[] array = (Object[]) Array.newInstance(type, 1);
             array[0] = concrete.convert(value);
             return null;
         }
@@ -180,21 +185,25 @@ public abstract class ValueConvertor {
     }
 
     private static abstract class SingleValueConvertor extends ValueConvertor {
-        
-        ConversionException createConversionException(String value, Class<?> targetClass, Exception e) {
+
+        RuntimeException createConversionException(String value, Class<?> targetClass, Throwable e) {
+            if (e instanceof WebApplicationException) {
+                return (RuntimeException) e;
+            }
             String message = String.format("Cannot convert value '%s' to %s", value, targetClass);
             return new ConversionException(message, e);
         }
 
         public Object convert(List<String> values) throws WebApplicationException {
             if (values == null || values.size() == 0) {
-                return convert((String)null);
+                return convert((String) null);
             }
             return convert(values.get(0));
         }
     }
 
     private static class ConstructorConvertor extends SingleValueConvertor {
+
         private Constructor<?> constructor;
 
         public ConstructorConvertor(Constructor<?> constructor) {
@@ -214,12 +223,15 @@ public abstract class ValueConvertor {
             } catch (IllegalAccessException e) {
                 throw createConversionException(value, constructor.getDeclaringClass(), e);
             } catch (InvocationTargetException e) {
-                throw createConversionException(value, constructor.getDeclaringClass(), e);
+                Throwable targetException = e.getTargetException();
+                throw createConversionException(value, constructor.getDeclaringClass(),
+                    targetException);
             }
         }
     }
 
     private static class ValueOfConvertor extends SingleValueConvertor {
+
         private Method method;
 
         public ValueOfConvertor(Method method) {
@@ -241,8 +253,9 @@ public abstract class ValueConvertor {
             }
         }
     }
-    
+
     private static class StringConvertor extends SingleValueConvertor {
+
         @Override
         public Object convert(String value) throws WebApplicationException {
             return value;
@@ -250,6 +263,7 @@ public abstract class ValueConvertor {
     }
 
     private static class CharacterConvertor extends SingleValueConvertor {
+
         @Override
         public Object convert(String value) throws WebApplicationException {
             if (value == null || value.length() == 0) {
@@ -260,6 +274,7 @@ public abstract class ValueConvertor {
     }
 
     private static class PathSegmentConvertor extends SingleValueConvertor {
+
         @Override
         public PathSegment convert(String value) throws WebApplicationException {
             if (value == null) {
@@ -273,17 +288,18 @@ public abstract class ValueConvertor {
         }
     }
 
-//    private static class PathSegmentListConvertor extends SingleValueConvertor {
-//        @Override
-//        public List<PathSegment> convert(String value) throws WebApplicationException {
-//            if (value == null) {
-//                return new ArrayList<PathSegment>();
-//            }
-//            return UriBuilderImpl.parsePath(value);
-//        }
-//    }
-//
+    //    private static class PathSegmentListConvertor extends SingleValueConvertor {
+    //        @Override
+    //        public List<PathSegment> convert(String value) throws WebApplicationException {
+    //            if (value == null) {
+    //                return new ArrayList<PathSegment>();
+    //            }
+    //            return UriBuilderImpl.parsePath(value);
+    //        }
+    //    }
+    //
     private static class PrimitiveConvertor extends SingleValueConvertor {
+
         final protected Class<?> targetClass;
 
         PrimitiveConvertor(Class<?> targetClass) {
@@ -307,13 +323,13 @@ public abstract class ValueConvertor {
                 }
                 if (targetClass.equals(byte.class)) {
                     if (value == null) {
-                        return Byte.valueOf((byte)0);
+                        return Byte.valueOf((byte) 0);
                     }
                     return Byte.valueOf(value).byteValue();
                 }
                 if (targetClass.equals(short.class)) {
                     if (value == null) {
-                        return Short.valueOf((short)0);
+                        return Short.valueOf((short) 0);
                     }
                     return Short.valueOf(value).shortValue();
                 }
@@ -347,8 +363,9 @@ public abstract class ValueConvertor {
             throw createConversionException(value, targetClass, null);
         }
     }
-    
+
     private static abstract class CollectionValueConvertor extends ValueConvertor {
+
         protected ValueConvertor converter;
 
         public CollectionValueConvertor(ValueConvertor converter) {
@@ -362,7 +379,7 @@ public abstract class ValueConvertor {
             }
             return convert(list);
         }
-        
+
         protected Collection<Object> convertCollection(List<String> values, Collection<Object> out) {
             for (String string : values) {
                 out.add(converter.convert(string));
@@ -372,6 +389,7 @@ public abstract class ValueConvertor {
     }
 
     private static class ListConvertor extends CollectionValueConvertor {
+
         public ListConvertor(ValueConvertor converter) {
             super(converter);
         }
@@ -382,6 +400,7 @@ public abstract class ValueConvertor {
     }
 
     private static class SetConvertor extends CollectionValueConvertor {
+
         public SetConvertor(ValueConvertor converter) {
             super(converter);
         }
@@ -392,6 +411,7 @@ public abstract class ValueConvertor {
     }
 
     private static class SortedSetConvertor extends CollectionValueConvertor {
+
         public SortedSetConvertor(ValueConvertor converter) {
             super(converter);
         }
@@ -400,6 +420,5 @@ public abstract class ValueConvertor {
             return convertCollection(values, new TreeSet<Object>());
         }
     }
-
 
 }

@@ -17,10 +17,10 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.registry;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -33,74 +33,95 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 public class ValueConvertorTest extends MockServletInvocationTest {
+
     private static List<Class<?>> resources = new LinkedList<Class<?>>();
-    
+
     static {
         for (Class<?> cls : ValueConvertorTest.class.getClasses()) {
             if (cls.getSimpleName().endsWith("Resource")) {
                 resources.add(cls);
             }
-        }        
+        }
     }
-    
+
     @Override
     protected Class<?>[] getClasses() {
         return resources.toArray(new Class<?>[resources.size()]);
     }
-    
+
     public static class StringConstructorClass implements Comparable<StringConstructorClass> {
+
         public String value;
-        public StringConstructorClass(String value){
-            this.value = value; 
+
+        public StringConstructorClass(String value) {
+            if (value.equals("3"))
+                throw new WebApplicationException(Response.status(499).entity(
+                    "WebApplicationException in StringConstructorClass").build());
+            else if (value.equals("4"))
+                throw new RuntimeException();
+            this.value = value;
         }
+
         @Override
         public boolean equals(Object obj) {
-            return value.equals(((StringConstructorClass)obj).value);
+            return value.equals(((StringConstructorClass) obj).value);
         }
+
         @Override
         public int hashCode() {
             return value.hashCode();
         }
+
         public int compareTo(StringConstructorClass o) {
             return value.compareTo(o.value);
         }
     }
 
     public static class ValueOfClass implements Comparable<ValueOfClass> {
+
         public String value;
-        public ValueOfClass(String value, String dummy){
-            this.value = value; 
+
+        public ValueOfClass(String value, String dummy) {
+            this.value = value;
         }
+
         public static ValueOfClass valueOf(String value) {
             return new ValueOfClass(value, value);
         }
+
         @Override
         public boolean equals(Object obj) {
-            return value.equals(((ValueOfClass)obj).value);
+            return value.equals(((ValueOfClass) obj).value);
         }
+
         @Override
         public int hashCode() {
             return value.hashCode();
         }
+
         public int compareTo(ValueOfClass o) {
             return value.compareTo(o.value);
         }
     }
-    
+
     @Path("pathParam/{p}")
     public static class PathParamResource {
-        
+
+        @PathParam("p")
+        public StringConstructorClass fieldPropertyPathParam;
+
         // Basic types
-        
+
         @GET
         @Path("byte")
         @Produces
@@ -119,7 +140,7 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         @Path("Byte")
         @Produces
         public void getByte(@PathParam("p") Byte p) {
-            assertEquals(new Byte((byte)1), p);
+            assertEquals(new Byte((byte) 1), p);
         }
 
         @GET
@@ -147,7 +168,7 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         @Path("Short")
         @Produces
         public void getShort(@PathParam("p") Short p) {
-            assertEquals(new Short((short)1), p);
+            assertEquals(new Short((short) 1), p);
         }
 
         @GET
@@ -352,9 +373,9 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         public void getBooleanDefault(@PathParam("k") Boolean p) {
             assertEquals(null, p);
         }
-        
+
         // Complex types
-        
+
         @GET
         @Path("StringConstructor")
         @Produces
@@ -384,7 +405,7 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         }
 
         // List
-        
+
         @GET
         @Path("ListInteger/{p}")
         @Produces
@@ -454,7 +475,7 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         }
 
         // Set
-        
+
         @GET
         @Path("SetInteger/{p}")
         @Produces
@@ -524,7 +545,7 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         }
 
         // SortedSet
-        
+
         @GET
         @Path("SortedSetInteger/{p}")
         @Produces
@@ -562,7 +583,8 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         @GET
         @Path("SortedSetStringConstructor/{p}")
         @Produces
-        public void getSortedSetStringConstructor(@PathParam("p") SortedSet<StringConstructorClass> p) {
+        public void getSortedSetStringConstructor(
+            @PathParam("p") SortedSet<StringConstructorClass> p) {
             SortedSet<StringConstructorClass> list = new TreeSet<StringConstructorClass>();
             list.add(new StringConstructorClass("1"));
             list.add(new StringConstructorClass("2"));
@@ -572,7 +594,8 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         @GET
         @Path("SortedSetStringConstructorDefault")
         @Produces
-        public void getSortedSetStringConstructorDefault(@PathParam("k") SortedSet<StringConstructorClass> p) {
+        public void getSortedSetStringConstructorDefault(
+            @PathParam("k") SortedSet<StringConstructorClass> p) {
             assertEquals(new TreeSet<StringConstructorClass>(), p);
         }
 
@@ -592,11 +615,18 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         public void getSortedSetValueOfDefault(@PathParam("k") SortedSet<ValueOfClass> p) {
             assertEquals(new TreeSet<ValueOfClass>(), p);
         }
-        
+
+        @GET
+        @Path("FieldProperty")
+        @Produces
+        public void getFieldProperty() {
+            assertEquals(new StringConstructorClass("1"), this.fieldPropertyPathParam);
+        }
     }
-    
+
     private void assertInvocation(String path) {
-        MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET", path, MediaType.APPLICATION_XML);
+        MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
+            path, MediaType.APPLICATION_XML);
         try {
             MockHttpServletResponse mockResponse = invoke(mockRequest);
             assertEquals(204, mockResponse.getStatus());
@@ -605,14 +635,26 @@ public class ValueConvertorTest extends MockServletInvocationTest {
             fail("method invocation failed");
         }
     }
-    
+
+    private void assertWebAppException(String path, int status) throws Exception {
+        MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
+            path, MediaType.APPLICATION_XML);
+        try {
+            MockHttpServletResponse mockResponse = invoke(mockRequest);
+            assertEquals(status, mockResponse.getStatus());
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail("method invocation failed");
+        }
+    }
+
     public void testByte() {
         assertInvocation("pathParam/1/byte");
         assertInvocation("pathParam/1/byteDefault");
         assertInvocation("pathParam/1/Byte");
         assertInvocation("pathParam/1/ByteDefault");
     }
-    
+
     public void testShort() {
         assertInvocation("pathParam/1/short");
         assertInvocation("pathParam/1/shortDefault");
@@ -675,11 +717,13 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         assertInvocation("pathParam/ff/BooleanDefault");
     }
 
-    public void testComplex() {
+    public void testComplex() throws Exception {
         assertInvocation("pathParam/1/StringConstructor");
         assertInvocation("pathParam/1/StringConstructorDefault");
         assertInvocation("pathParam/1/ValueOf");
         assertInvocation("pathParam/1/ValueOfDefault");
+        assertWebAppException("pathParam/4/StringConstructor", 404);
+        assertWebAppException("pathParam/3/StringConstructor", 499);
     }
 
     public void testList() {
@@ -692,7 +736,7 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         assertInvocation("pathParam/1/ListValueOf/2");
         assertInvocation("pathParam/1/ListValueOfDefault");
     }
-    
+
     public void testSet() {
         assertInvocation("pathParam/1/SetInteger/2");
         assertInvocation("pathParam/1/SetIntegerDefault");
@@ -714,5 +758,10 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         assertInvocation("pathParam/1/SortedSetValueOf/2");
         assertInvocation("pathParam/1/SortedSetValueOfDefault");
     }
-    
+
+    public void testFieldPropertyPathParam() throws Exception {
+        assertInvocation("pathParam/1/FieldProperty");
+        assertWebAppException("pathParam/4/FieldProperty", 404);
+        assertWebAppException("pathParam/3/FieldProperty", 499);
+    }
 }

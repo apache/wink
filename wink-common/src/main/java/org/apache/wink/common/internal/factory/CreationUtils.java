@@ -19,8 +19,10 @@
  *******************************************************************************/
 package org.apache.wink.common.internal.factory;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -31,8 +33,6 @@ import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.registry.Injectable;
 import org.apache.wink.common.internal.registry.InjectableFactory;
 import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
@@ -40,7 +40,8 @@ import org.apache.wink.common.internal.registry.metadata.ConstructorMetadata;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
 import org.apache.wink.common.internal.runtime.RuntimeContext;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CreationUtils {
 
@@ -62,18 +63,26 @@ public class CreationUtils {
             ConstructorMetadata constructorMetadata = metadata.getConstructor();
             Constructor<?> constructor = constructorMetadata.getConstructor();
             List<Injectable> formalParameters = constructorMetadata.getFormalParameters();
-            Object[] params = InjectableFactory.getInstance().instantiate(formalParameters, runtimeContext);
+            Object[] params = InjectableFactory.getInstance().instantiate(formalParameters,
+                runtimeContext);
             Object object = constructor.newInstance(params);
             injectFields(object, metadata, runtimeContext);
             return object;
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (InvocationTargetException e) {
+            Throwable targetException = e.getTargetException();
+            if (targetException instanceof RuntimeException) {
+                throw (RuntimeException) targetException;
+            }
+            throw new ObjectCreationException(e);
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
             throw new ObjectCreationException(e);
         }
     }
 
     public static void injectFields(final Object object, ClassMetadata metadata,
-        RuntimeContext runtimeContext) throws Exception {
+        RuntimeContext runtimeContext) throws IOException, PrivilegedActionException {
 
         List<Injectable> injectableFields = metadata.getInjectableFields();
         for (Injectable injectableData : injectableFields) {
