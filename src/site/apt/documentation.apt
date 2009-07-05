@@ -1,5 +1,5 @@
  -----
- Symphony 2.0 Documentation
+ Wink 0.1 Documentation
  -----
  -----
  June 2008
@@ -23,15 +23,15 @@
 ~~ under the License.
 ~~
 
-Symphony 2.0 Documentation
+Wink 0.1 Documentation
 
   * {{{docs/Symphony_SDK_2.0_Features_List.pdf}Symphony 2.0 Features List}}
   
-    "Symphony 2.0 Features List" document provides detailed information about Symphony 2.0 and describes the\
-    additional features that the Symphony 2.0 runtime provides in addition to the JAX-RS Java API for REST Web Service 
+    "Symphony 2.0 Features List" document provides detailed information about Wink 0.1 and describes the\
+    additional features that the Wink runtime provides in addition to the JAX-RS Java API for REST Web Service 
 	specification.
 	<<<NOTICE>>>: This document will be replaced by "Symphony 2.0 Developer Guide" that is currently under construction.
         
-  * {{{apidocs/index.html}Symphony 2.0 JavaDocs}}
+  * {{{apidocs/index.html}Wink 0.1 JavaDocs}}
   
-    This is the Symphony 2.0 public API documentation.
+    This is the Wink 0.1 public API documentation.

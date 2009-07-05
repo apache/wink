@@ -1,5 +1,5 @@
  -----
- Symphony Client Module
+ Wink Client Module
  -----
  -----
  June 2008
@@ -23,8 +23,8 @@
 ~~ under the License.
 ~~
 
-Symphony Client Module
+Wink Client Module
  
-  Symphony REST client is a Java based library that provides functionality for communicating with REST based services. 
+  Wink REST client is a Java based library that provides functionality for communicating with REST based services. 
   The library is built on top of the JDK HttpURLConnection and adds essential features that facilitate development of such client applications.
   

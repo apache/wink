@@ -1,5 +1,5 @@
  -----
- Symphony Examples Module
+ Wink Examples Module
  -----
  -----
  June 2008
@@ -23,7 +23,7 @@
 ~~ under the License.
 ~~
 
-Symphony Examples Module
+Wink Examples Module
 
   The SDK is distributed with several examples demonstrating the abilities of the SDK. 
   All the examples can be found under the <<<examples>>> directory in the distribution zip.

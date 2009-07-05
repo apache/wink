@@ -1,5 +1,5 @@
  -----
- Symphony Server Module
+ Wink Server Module
  -----
  -----
  June 2008
@@ -23,7 +23,7 @@
 ~~ under the License.
 ~~
 
-Symphony Server Module
+Wink Server Module
  
-  Symphony Server Module is a core module of Symphony Server component - all Symphony Server component logic resides in this module.  
+  Wink Server Module is a core module of Wink Server component - all Wink Server component logic resides in this module.  
   

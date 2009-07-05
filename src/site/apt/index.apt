@@ -1,5 +1,5 @@
  -----
- Symphony 2.0
+ Wink 0.1
  -----
  -----
  May 2009
@@ -23,17 +23,17 @@
 ~~ under the License.
 ~~
 
-Symphony 2.0
+Wink 0.1
 
-  Symphony 2.0 is simple yet solid framework for building RESTful Web services. It is comprised of a Server module and a Client module\
+  Wink 0.1 is simple yet solid framework for building RESTful Web services. It is comprised of a Server module and a Client module\
   for developing and consuming RESTful Web services.
 
-  The <<Symphony Server>> module is a complete implementation of the JAX-RS v1.0 specification. On top this implementation, the Symphony Server\
+  The <<Wink Server>> module is a complete implementation of the JAX-RS v1.0 specification. On top this implementation, the Wink Server\
   module provides a set of {{{additional-features.html}additional features}} that were designed to facilitate\
   the development of RESTful Web services.
   
   <<<NOTICE>>>: The JAX-RS TCK tests still need to run in order to be able to declare that it is JAX-RS compliant.
   
   
-  The <<{{{client.html}Symphony Client}}>> module is a Java based framework that provides functionality for communicating with RESTful Web services.\
+  The <<{{{client.html}Wink Client}}>> module is a Java based framework that provides functionality for communicating with RESTful Web services.\
   The framework is built on top of the JDK HttpURLConnection and adds essential features that facilitate the development of such client applications.

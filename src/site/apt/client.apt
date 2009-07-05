@@ -1,5 +1,5 @@
  -----
- Symphony Client
+ Wink Client
  -----
  -----
  June 2008
@@ -23,9 +23,9 @@
 ~~ under the License.
 ~~
 
-Symphony Client
+Wink Client
  
-  The Symphony Client is a Java based library that provides functionality for communicating with Rest based web services. 
+  The Wink Client is a Java based library that provides functionality for communicating with Rest based web services. 
   The library is built on top of the JDK HttpURLConnection and adds essential features that facilitate the development of client applications.
   
   * Supports the IETF Atom Syndication Format and Atom Publishing Protocol standards (RFC's 4287 and 5023).
@@ -46,11 +46,11 @@ Symphony Client
 
 * API
 
-  The Client API documentation is located in the{{{symphony-client/apidocs/index.html}here}} folder.
+  The Client API documentation is located in the{{{wink-client/apidocs/index.html}here}} folder.
   
 * Consuming a Service
 
-  This section provides example applications that demonstrate how the Symphony Client is used to interact with Rest web services.
+  This section provides example applications that demonstrate how the Wink Client is used to interact with Rest web services.
   
   * {{{Hello_World_Example}Hello World Example}}
   
@@ -186,13 +186,13 @@ AtomEntry post = response.getEntity().getEntry();
 +-----------------------------------------
 
   * <<Note>>: Prior to publishing a new blog entry, the client has to be authenticated against a Google "ClientLogin" service. 
-    An example of how to perform this with a Symphony REST Client can be found in the {{Handlers}} section.
+    An example of how to perform this with a Wink REST Client can be found in the {{Handlers}} section.
 	
   []
 
 ** {Introspection of an Atom Service Document}
  
-  These example applications provides a complete code reference of how the service is "discovered" using the Symphony Rest Client. 
+  These example applications provides a complete code reference of how the service is "discovered" using the Wink Rest Client. 
   Discovery refers to retrieving the service workspaces and their collections, and printing all of
   the collection URL's and the their accepted representations.
 
@@ -340,7 +340,7 @@ Workspace : QA Defects
 
 * {Handlers}
 
-  The Symphony Client provides the ability to easily plug-in cross application functionality by using <Handlers>. 
+  The Wink Client provides the ability to easily plug-in cross application functionality by using <Handlers>. 
   A handler class implements the <<<Handler>>> interface by implementing the <<<handle()>>> method.
   All registered handlers on a client are invoked for every request made by the client, and in the order that they were registered. 
   Handlers provide the opportunity to manipulate the outgoing request headers and body before they are actually sent, 

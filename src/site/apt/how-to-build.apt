@@ -25,9 +25,9 @@
 
 How to Build
 
-  This page provides the information required by developers to download the Symphony 2.0 source files and to build the Symphony 2.0 from these sources.
+  This page provides the information required by developers to download the Wink source files and to build the Wink from these sources.
   
-  The Symphony 2.0 is based on Java. It uses SVN as the source control, and Maven for building 
+  The Wink is based on Java. It uses SVN as the source control, and Maven for building 
   the sources.
  
 * Java
@@ -36,7 +36,7 @@ How to Build
 	
 * SVN
 
-  The Symphony 2.0 project is an internal open source that uses the SVN of Collabnet 
+  The Wink project is an internal open source that uses the SVN of Collabnet 
   as its version control system. 
   In order to retrieve the sources of the project you will have to install a SVN client.
   This page describes how to install the SVN client so you can checkout the SVN sources.
@@ -51,9 +51,8 @@ How to Build
   
 ** Checkout Sources
 	
-  Latest sources can be downloaded from: <<<https://ast-symphony-rest-sdk.csd200a.com/svn/ast-symphony-rest-sdk/trunk>>>\
-  To checkout the latest sources, use the following command: <<<svn checkout https://ast-symphony-rest-sdk.csd200a.com/svn/ast-symphony-rest-sdk/trunk>>>\  
-  Please note: in order to checkout the sources you need to {{{http://rndwiki.atlanta.hp.com/confluence/display/Arch/Symphony+Contribution+Technical+Guide#SymphonyContributionTechnicalGuide-obtainDigitalBadge}obtain HP digital badge}} and {{{http://rndwiki.atlanta.hp.com/confluence/display/Arch/Symphony+Contribution+Technical+Guide#SymphonyContributionTechnicalGuide-configureDigitalBadge}configure it}}    
+  Latest sources can be downloaded from: <<<https://svn.apache.org/viewvc/incubator/wink/trunk/>>>\
+  To checkout the latest sources, use the following command: <<<svn checkout https://svn.apache.org/viewvc/incubator/wink/trunk/>>>\  
   
 **	Third-Party Clients (recommended)
 
@@ -67,7 +66,7 @@ How to Build
   
 * Maven
 
-  The Symphony 2.0 project uses Maven to compile its sources. 
+  The Wink project uses Maven to compile its sources. 
   In order to compile the sources of the project Maven must be installed.
 
 ** Installing Maven
@@ -82,7 +81,7 @@ How to Build
 
 *** Using Command Line
 	
-	Standard compilation of the Symphony 2.0 project should be performed by executing the <<<mvn clean install>>> command
+	Standard compilation of the Wink project should be performed by executing the <<<mvn clean install>>> command
 	The Follwing section provides some basic maven commands:
 
 	* <<<mvn compile>>> : compiles all sources

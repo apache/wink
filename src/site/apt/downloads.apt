@@ -25,14 +25,14 @@
 
 How to Download
 
-	All of the Symphony 2.0 versions are located under the Maven repository located at  
+	All of the Wink 0.1 versions are located under the Maven repository located at  
 	{{@RESPOSITORY_LOCATION@}}
 		
 * Version 2.0
 
-** Symphony 2.0 Distribution
+** Wink 0.1 Distribution
 
-  The Distribution zip includes all of the Symphony 2.0 and client jars, dependencies jars, javadocs and sources
+  The Distribution zip includes all of the Wink 0.1 and client jars, dependencies jars, javadocs and sources
   
 *-----------+----------------------------------------------+
 || Version || Artifact  || Description
