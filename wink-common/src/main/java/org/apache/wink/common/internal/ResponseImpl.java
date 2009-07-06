@@ -90,7 +90,7 @@ public class ResponseImpl extends Response {
 
         @Override
         public ResponseBuilder cacheControl(CacheControl cacheControl) {
-            return putSingleRemoveNull(HttpHeaders.CACHE_CONTROL, cacheControl);
+            return singleHeader(HttpHeaders.CACHE_CONTROL, cacheControl);
         }
 
         @Override
@@ -100,16 +100,17 @@ public class ResponseImpl extends Response {
 
         @Override
         public ResponseBuilder contentLocation(URI location) {
-            return putSingleRemoveNull(HttpHeaders.CONTENT_LOCATION, location);
+            return singleHeader(HttpHeaders.CONTENT_LOCATION, location);
         }
 
         @Override
         public ResponseBuilder cookie(NewCookie... cookies) {
-            if (cookies == null)
+            if (cookies == null) {
                 metadata.remove(HttpHeaders.SET_COOKIE);
-            else {
-                for (NewCookie cooky : cookies)
-                    metadata.add(HttpHeaders.SET_COOKIE, cooky);
+            } else {
+                for (NewCookie cookie : cookies) {
+                    header(HttpHeaders.SET_COOKIE, cookie);
+                }
             }
             return this;
         }
@@ -122,32 +123,37 @@ public class ResponseImpl extends Response {
 
         @Override
         public ResponseBuilder expires(Date expires) {
-            return putSingleRemoveNull(HttpHeaders.EXPIRES, expires);
+            return singleHeader(HttpHeaders.EXPIRES, expires);
         }
 
         @Override
         public ResponseBuilder header(String name, Object value) {
-            return putSingleRemoveNull(name, value);
+            if (value == null) {
+                metadata.remove(name);
+            } else {
+                metadata.add(name, value);
+            }
+            return this;
         }
 
         @Override
         public ResponseBuilder language(String language) {
-            return putSingleRemoveNull(HttpHeaders.CONTENT_LANGUAGE, language);
+            return singleHeader(HttpHeaders.CONTENT_LANGUAGE, language);
         }
 
         @Override
         public ResponseBuilder language(Locale language) {
-            return putSingleRemoveNull(HttpHeaders.CONTENT_LANGUAGE, language);
+            return singleHeader(HttpHeaders.CONTENT_LANGUAGE, language);
         }
 
         @Override
         public ResponseBuilder lastModified(Date lastModified) {
-            return putSingleRemoveNull(HttpHeaders.LAST_MODIFIED, lastModified);
+            return singleHeader(HttpHeaders.LAST_MODIFIED, lastModified);
         }
 
         @Override
         public ResponseBuilder location(URI location) {
-            return putSingleRemoveNull(HttpHeaders.LOCATION, location);
+            return singleHeader(HttpHeaders.LOCATION, location);
         }
 
         @Override
@@ -158,35 +164,38 @@ public class ResponseImpl extends Response {
 
         @Override
         public ResponseBuilder tag(EntityTag tag) {
-            return putSingleRemoveNull(HttpHeaders.ETAG, tag);
+            return singleHeader(HttpHeaders.ETAG, tag);
         }
 
         @Override
         public ResponseBuilder tag(String tag) {
-            return putSingleRemoveNull(HttpHeaders.ETAG, tag);
+            return singleHeader(HttpHeaders.ETAG, tag);
         }
 
         @Override
         public ResponseBuilder type(MediaType type) {
-            return putSingleRemoveNull(HttpHeaders.CONTENT_TYPE, type);
+            return singleHeader(HttpHeaders.CONTENT_TYPE, type);
         }
 
         @Override
         public ResponseBuilder type(String type) {
-            return putSingleRemoveNull(HttpHeaders.CONTENT_TYPE, type);
+            return singleHeader(HttpHeaders.CONTENT_TYPE, type);
+        }
+        
+        public ResponseBuilder encoding(String encoding) {
+            return singleHeader(HttpHeaders.CONTENT_ENCODING, encoding);
         }
 
         @Override
         public ResponseBuilder variant(Variant variant) {
             if (variant != null) {
                 language(variant.getLanguage());
-                putSingleRemoveNull(HttpHeaders.ACCEPT_ENCODING, variant.getEncoding());
+                encoding(variant.getEncoding());
                 type(variant.getMediaType());
             } else {
-
-                putSingleRemoveNull(HttpHeaders.CONTENT_LANGUAGE, null);
-                putSingleRemoveNull(HttpHeaders.ACCEPT_ENCODING, null);
-                putSingleRemoveNull(HttpHeaders.CONTENT_TYPE, null);
+                language((String)null);
+                encoding(null);
+                type((String)null);
             }
             return this;
         }
@@ -194,32 +203,40 @@ public class ResponseImpl extends Response {
         @Override
         public ResponseBuilder variants(List<Variant> variants) {
             if (variants == null) {
-                putSingleRemoveNull(HttpHeaders.VARY, null);
+                header(HttpHeaders.VARY, null);
                 return this;
             }
+            
+            if (variants.isEmpty()) {
+                return this;
+            }
+            
             boolean encoding = false;
             boolean lang = false;
-            boolean medyatype = false;
+            boolean mediatype = false;
 
             for (Variant v : variants) {
                 encoding = encoding || (v.getEncoding() != null);
                 lang = lang || (v.getLanguage() != null);
-                medyatype = medyatype || (v.getMediaType() != null);
+                mediatype = mediatype || (v.getMediaType() != null);
             }
             StringBuilder sb = new StringBuilder();
-            conditionalAppend(sb, encoding, HttpHeaders.ACCEPT_ENCODING);
+            conditionalAppend(sb, mediatype, HttpHeaders.ACCEPT);
             conditionalAppend(sb, lang, HttpHeaders.ACCEPT_LANGUAGE);
-            conditionalAppend(sb, medyatype, HttpHeaders.CONTENT_TYPE);
-            putSingleRemoveNull(HttpHeaders.VARY, sb.toString());
+            conditionalAppend(sb, encoding, HttpHeaders.ACCEPT_ENCODING);
+            if (sb.length() > 0) {
+                header(HttpHeaders.VARY, sb.toString());
+            }
             return this;
         }
 
         ///////////////////// helper methods ////////////////////////
-        public ResponseBuilder putSingleRemoveNull(String key, Object value) {
-            if (value == null)
+        private ResponseBuilder singleHeader(String key, Object value) {
+            if (value == null) {
                 metadata.remove(key);
-            else
+            } else {
                 metadata.putSingle(key, value);
+            }
             return this;
         }
 
