@@ -36,7 +36,7 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			classpath:META-INF/server/symphonyCoreContext-server.xml
+			classpath:META-INF/server/wink-core-context.xml
             /WEB-INF/qadefectContext-server.xml
 		</param-value>
 	</context-param>
