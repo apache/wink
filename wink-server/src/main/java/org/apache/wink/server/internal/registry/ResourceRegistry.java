@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.registry;
 
@@ -50,12 +49,11 @@ import org.apache.wink.common.internal.uritemplate.UriTemplateMatcher;
 import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 
-
 /**
  * Registry for maintaining a set of all the known root resources and finding the dispatch method of
  * a request, following the JAX-RS spec.
  */
-public class ResourceRegistry  {
+public class ResourceRegistry {
 
     private static final Logger logger = LoggerFactory.getLogger(ResourceRegistry.class);
 
@@ -77,7 +75,7 @@ public class ResourceRegistry  {
         readersLock = readWriteLock.readLock();
         writersLock = readWriteLock.writeLock();
     }
-    
+
     /**
      * Add a resource as an object to the registry
      * 
@@ -182,11 +180,10 @@ public class ResourceRegistry  {
         assertSorted();
         return Collections.unmodifiableList(rootResources);
     }
-    
-    
+
     public Set<String> getOptions(ResourceInstance resource) {
         Set<String> set = new HashSet<String>();
-        
+
         List<MethodMetadata> resourceMethods;
         if (resource.isExactMatch()) {
             resourceMethods = resource.getRecord().getMetadata().getResourceMethods();
@@ -198,11 +195,11 @@ public class ResourceRegistry  {
                 resourceMethods.add(subResource.getRecord().getMetadata());
             }
         }
-        
+
         for (MethodMetadata method : resourceMethods) {
             set.addAll(method.getHttpMethod());
         }
-        
+
         return set;
     }
 
@@ -273,7 +270,7 @@ public class ResourceRegistry  {
         }
 
         // filter the methods according to the spec
-        filterDispatchMethods(records, context);
+        filterDispatchMethods(resource, records, context);
 
         // select the best matching method
         return selectBestMatchingMethod(records, context);
@@ -294,7 +291,7 @@ public class ResourceRegistry  {
      *            that are matched during the search
      * @param context
      *            the context of the current request
-     * @return 
+     * @return
      */
     public SubResourceInstance findSubResourceMethod(String pattern, List<SubResourceInstance> subResourceRecords,
             ResourceInstance resource, RuntimeContext context) throws WebApplicationException {
@@ -303,7 +300,7 @@ public class ResourceRegistry  {
         List<SubResourceInstance> subResourceMethods = extractSubResourceMethods(pattern, subResourceRecords);
 
         // filter the methods according to http method/consumes/produces
-        filterDispatchMethods(subResourceMethods, context);
+        filterDispatchMethods(resource, subResourceMethods, context);
 
         // select the best matching method
         return (SubResourceInstance)selectBestMatchingMethod(subResourceMethods, context);
@@ -343,14 +340,16 @@ public class ResourceRegistry  {
      * </ol>
      * The elements in the list remain in the same order
      * 
+     * @param resource
+     * 
      * @param methodRecords
      *            a list of method records to filter according to the request context
      * @param context
      *            the context of the current request
-     * @return 
+     * @return
      */
-    private void filterDispatchMethods(List<? extends MethodRecord> methodRecords, RuntimeContext context)
-            throws WebApplicationException {
+    private void filterDispatchMethods(ResourceInstance resource, List<? extends MethodRecord> methodRecords,
+            RuntimeContext context) throws WebApplicationException {
         // filter by http method
         ListIterator<? extends MethodRecord> iterator = methodRecords.listIterator();
         while (iterator.hasNext()) {
@@ -360,7 +359,8 @@ public class ResourceRegistry  {
             }
         }
         if (methodRecords.size() == 0) {
-            logger.info("Could not find any method supporting {}", context.getRequest().getMethod());
+            logger.info("Could not find any method in class {} that supports {}",
+                    resource.getResourceClass().getName(), context.getRequest().getMethod());
             throw new WebApplicationException(HttpStatus.METHOD_NOT_ALLOWED.getCode());
         }
 
@@ -373,7 +373,8 @@ public class ResourceRegistry  {
             }
         }
         if (methodRecords.size() == 0) {
-            logger.info("Could not find any method supporting consumed media type.");
+            logger.info("Could not find any method in class {} that consumes {}",
+                    resource.getResourceClass().getName(), context.getHttpHeaders().getMediaType());
             throw new WebApplicationException(Response.Status.UNSUPPORTED_MEDIA_TYPE);
         }
 
@@ -386,7 +387,8 @@ public class ResourceRegistry  {
             }
         }
         if (methodRecords.size() == 0) {
-            logger.info("Could not find any method supporting produced media type.");
+            logger.info("Could not find any method in class {} capable of producing {}", resource.getResourceClass()
+                    .getName(), context.getHttpHeaders().getRequestHeader(HttpHeaders.ACCEPT));
             throw new WebApplicationException(Response.Status.NOT_ACCEPTABLE);
         }
     }
@@ -481,7 +483,7 @@ public class ResourceRegistry  {
      *            the list of methods to select the best match from
      * @param context
      *            the context of the current request
-     * @return 
+     * @return
      */
     private MethodRecord selectBestMatchingMethod(List<? extends MethodRecord> methodRecords, RuntimeContext context) {
         HttpHeaders httpHeaders = context.getHttpHeaders();
@@ -606,8 +608,7 @@ public class ResourceRegistry  {
      * @return positive integer if record1 is a better match, negative integer if record2 is a
      *         better match, 0 if they are equal in matching terms
      */
-    private int compareMethodsProduces(MethodRecord record1, MethodRecord record2,
-            List<MediaType> acceptableMediaTypes) {
+    private int compareMethodsProduces(MethodRecord record1, MethodRecord record2, List<MediaType> acceptableMediaTypes) {
 
         MediaType bestMatch1 = null;
         MediaType bestMatch2 = null;
@@ -616,11 +617,9 @@ public class ResourceRegistry  {
         // so we need to stop with the first media type that has a match
         for (MediaType acceptableMediaType : acceptableMediaTypes) {
             // get media type of metadata 1 best matching the current acceptable media type
-            bestMatch1 = selectBestMatchingMediaType(acceptableMediaType, record1.getMetadata()
-                    .getProduces());
+            bestMatch1 = selectBestMatchingMediaType(acceptableMediaType, record1.getMetadata().getProduces());
             // get media type of metadata 2 best matching the current acceptable media type
-            bestMatch2 = selectBestMatchingMediaType(acceptableMediaType, record2.getMetadata()
-                    .getProduces());
+            bestMatch2 = selectBestMatchingMediaType(acceptableMediaType, record2.getMetadata().getProduces());
             // if either of them returned a match, it's enough for a comparison
             if (bestMatch1 != null || bestMatch2 != null) {
                 break;
