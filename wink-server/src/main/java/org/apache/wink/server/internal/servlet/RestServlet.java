@@ -33,20 +33,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.server.internal.DeploymentConfiguration;
 import org.apache.wink.server.internal.RequestProcessor;
-import org.apache.wink.server.internal.application.ServletSymphonyApplication;
+import org.apache.wink.server.internal.application.ServletWinkApplication;
 import org.apache.wink.server.internal.utils.ServletFileLoader;
 
 /**
  * <p>
- * Main servlet that is used by Symphony runtime to handle the incoming request.
+ * Main servlet that is used by the runtime to handle the incoming request.
  * <p>
  * The init-params are supported:
  * <ul>
- * <li><b>symphony.propertiesLocation</b> - custom properties file</li>
- * <li><b>symphony.applicationConfigLocation</b> - locations of flat application
+ * <li><b>propertiesLocation</b> - custom properties file</li>
+ * <li><b>applicationConfigLocation</b> - locations of flat application
  * configuration files. Relevant only if the no
  * <tt>javax.ws.rs.core.Application</tt> is provided.</li>
- * <li><b>symphony.deploymentConfiguration</b> - custom deployment configuration
+ * <li><b>deploymentConfiguration</b> - custom deployment configuration
  * class name. The deployment configuration must extend
  * <tt>org.apache.wink.server.internal.DeploymentConfiguration</tt>.</li>
  * </ul>
@@ -56,16 +56,16 @@ import org.apache.wink.server.internal.utils.ServletFileLoader;
  * <tt>org.springframework.web.context.ContextLoaderListener</tt> must be
  * configured and the whole customization should occur via the spring context.
  */
-public class RestServlet extends AbstractSymphonyServlet {
+public class RestServlet extends AbstractRestServlet {
 
-    private static final long   serialVersionUID              = 8797036173835816706L;
+    private static final long   serialVersionUID        = 8797036173835816706L;
 
-    private static final Logger logger                        = LoggerFactory.getLogger(RestServlet.class);
-    private static final String APPLICATION_INIT_PARAM        = "javax.ws.rs.Application";
-    private static final String PROPERTIES_DEFAULT_FILE       = "META-INF/configuration-default.properties";
-    private static final String PROPERTIES_INIT_PARAM         = "symphony.propertiesLocation";
-    private static final String SYMPHONY_APP_LOCATION_PARAM   = "symphony.applicationConfigLocation";
-    private static final String SYMPHONY_DEPLYMENT_CONF_PARAM = "symphony.deploymentConfiguration";
+    private static final Logger logger                  = LoggerFactory.getLogger(RestServlet.class);
+    private static final String APPLICATION_INIT_PARAM  = "javax.ws.rs.Application";
+    private static final String PROPERTIES_DEFAULT_FILE = "META-INF/wink-default.properties";
+    private static final String PROPERTIES_INIT_PARAM   = "propertiesLocation";
+    private static final String APP_LOCATION_PARAM      = "applicationConfigLocation";
+    private static final String DEPLYMENT_CONF_PARAM    = "deploymentConfiguration";
 
     @Override
     public void init() throws ServletException {
@@ -127,7 +127,7 @@ public class RestServlet extends AbstractSymphonyServlet {
 
     protected DeploymentConfiguration createDeploymentConfiguration()
         throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        String initParameter = getInitParameter(SYMPHONY_DEPLYMENT_CONF_PARAM);
+        String initParameter = getInitParameter(DEPLYMENT_CONF_PARAM);
         if (initParameter != null) {
             Class<?> confClass = Class.forName(initParameter);
             return (DeploymentConfiguration) confClass.newInstance();
@@ -144,12 +144,12 @@ public class RestServlet extends AbstractSymphonyServlet {
             appClass = (Class<Application>) Class.forName(initParameter);
             return appClass.newInstance();
         }
-        String appLocationParameter = getInitParameter(SYMPHONY_APP_LOCATION_PARAM);
+        String appLocationParameter = getInitParameter(APP_LOCATION_PARAM);
         if (appLocationParameter == null) {
-            String message = SYMPHONY_APP_LOCATION_PARAM + " was not defined.";
+            String message = APP_LOCATION_PARAM + " was not defined.";
             logger.warn(message);
         }
-        return new ServletSymphonyApplication(getServletContext(), appLocationParameter);
+        return new ServletWinkApplication(getServletContext(), appLocationParameter);
     }
 
     private Properties loadProperties(String resourceName, Properties defaultProperties)

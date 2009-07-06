@@ -26,22 +26,33 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.wink.common.SymphonyApplication;
+import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.internal.utils.FileLoader;
 
-
 /**
- * Provides a naive implementation for SymphonyApplication. Looks for names of
- * the classes in <tt>/WEB-INF/application</tt> file.
+ * <p>
+ * Loads one or more flat application files using the
+ * <tt>ApplicationFileLoader</tt>.
+ * <p>
+ * The implementation is lazy, meaning the files will be loaded on the first use
+ * and only once.
+ * <p>
+ * This implementation search for files using the <tt>FileLoader</tt>. See
+ * <tt>ServletWinkApplication</tt> that loads files using
+ * <tt>ServletFileLoader</tt>.
+ * 
+ * @see org.apache.wink.common.internal.utils.FileLoader
+ * @see org.apache.wink.common.internal.application.ApplicationFileLoader
+ * @see org.apache.wink.server.internal.application.ServletWinkApplication
  */
-public class SimpleSymphonyApplication extends SymphonyApplication {
+public class SimpleWinkApplication extends WinkApplication {
 
-    private static final Logger logger = LoggerFactory.getLogger(SimpleSymphonyApplication.class);
+    private static final Logger logger         = LoggerFactory.getLogger(SimpleWinkApplication.class);
     private static final String FILE_SEPARATOR = ";";
-    private Set<Class<?>> jaxRSClasses;
-    private String applicationConfigFiles;
+    private final String        applicationConfigFiles;
+    private Set<Class<?>>       jaxRSClasses;
 
-    public SimpleSymphonyApplication(String applicationConfigFiles) {
+    public SimpleWinkApplication(String applicationConfigFiles) {
         this.applicationConfigFiles = applicationConfigFiles;
     }
 
@@ -50,18 +61,19 @@ public class SimpleSymphonyApplication extends SymphonyApplication {
         if (jaxRSClasses != null) {
             return jaxRSClasses;
         }
-        jaxRSClasses = loadImplAppConfigFiles(applicationConfigFiles);
+        jaxRSClasses = loadImplAppConfigFiles();
         return jaxRSClasses;
     }
 
-    private Set<Class<?>> loadImplAppConfigFiles(String applicationConfigFiles) {
+    private Set<Class<?>> loadImplAppConfigFiles() {
         Set<Class<?>> jaxRSClasses = new LinkedHashSet<Class<?>>();
         if (applicationConfigFiles != null) {
             String[] applicationConfigFilesArray = applicationConfigFiles.split(FILE_SEPARATOR);
             for (String applicationConfigFile : applicationConfigFilesArray) {
                 applicationConfigFile = applicationConfigFile.trim();
                 try {
-                    jaxRSClasses.addAll(getApplicationFileLoader(getFileStream(applicationConfigFile)).getClasses());
+                    jaxRSClasses.addAll(getApplicationFileLoader(
+                        getFileStream(applicationConfigFile)).getClasses());
                 } catch (FileNotFoundException e) {
                     logger.warn("Could not find {}. Ignoring.", applicationConfigFile);
                 }
@@ -70,7 +82,8 @@ public class SimpleSymphonyApplication extends SymphonyApplication {
         return jaxRSClasses;
     }
 
-    protected ApplicationFileLoader getApplicationFileLoader(InputStream is) throws FileNotFoundException {
+    protected ApplicationFileLoader getApplicationFileLoader(InputStream is)
+        throws FileNotFoundException {
         return new ApplicationFileLoader(is);
     }
 

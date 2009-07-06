@@ -24,7 +24,7 @@ import java.util.Set;
 
 import org.apache.wink.common.internal.providers.entity.FileProvider;
 import org.apache.wink.common.internal.providers.entity.SourceProvider;
-import org.apache.wink.server.internal.application.ServletSymphonyApplication;
+import org.apache.wink.server.internal.application.ServletWinkApplication;
 import org.apache.wink.test.mock.ServletContextMock;
 
 import junit.framework.TestCase;
@@ -50,7 +50,7 @@ public class ServletSymphonyApplicationTest extends TestCase {
     }
 
     public void testSimpleSymphonyApplication() {
-        ServletSymphonyApplication simpleSymphonyApplication = new ServletSymphonyApplication(
+        ServletWinkApplication simpleSymphonyApplication = new ServletWinkApplication(
                 new ServletContextImpl(), "org//apache//wink//server//internal//application//custom.app");
         Set<Class<?>> classes = simpleSymphonyApplication.getClasses();
         assertTrue(classes.contains(FileProvider.class));

@@ -38,7 +38,7 @@ import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.wink.common.SymphonyApplication;
+import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.http.HttpStatus;
 import org.apache.wink.common.internal.application.ApplicationValidator;
 import org.apache.wink.common.internal.factory.OFFactoryRegistry;
@@ -83,7 +83,7 @@ public class ResourceRegistry {
      *            the object to add
      */
     public void addResource(Object instance) {
-        addResource(instance, SymphonyApplication.DEFAULT_PRIORITY);
+        addResource(instance, WinkApplication.DEFAULT_PRIORITY);
     }
 
     /**
@@ -93,7 +93,7 @@ public class ResourceRegistry {
      *            the resource class to add
      */
     public void addResource(Class<?> clazz) {
-        addResource(clazz, SymphonyApplication.DEFAULT_PRIORITY);
+        addResource(clazz, WinkApplication.DEFAULT_PRIORITY);
     }
 
     /**

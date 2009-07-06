@@ -22,10 +22,10 @@ package org.apache.wink.example.dynamicresource;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.wink.common.SymphonyApplication;
+import org.apache.wink.common.WinkApplication;
 
 
-public class MyApplication extends SymphonyApplication {
+public class MyApplication extends WinkApplication {
     
     @Override
     public Set<Object> getInstances() {

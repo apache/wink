@@ -54,7 +54,7 @@ public abstract class SpringAwareTestCase extends TestCase {
      */
     protected List<String> getAdditionalContextNames() {
         ArrayList<String> arrayList = new ArrayList<String>();
-        arrayList.add("META-INF/server/symphonyCoreContext-server.xml");
+        arrayList.add("META-INF/server/wink-core-context.xml");
         return arrayList;
     }
 

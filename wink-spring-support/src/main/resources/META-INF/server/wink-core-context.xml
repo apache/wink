@@ -119,7 +119,7 @@
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="locations">
 			<list>
-				<value>classpath:META-INF/configuration-default.properties
+				<value>classpath:META-INF/wink-default.properties
 				</value>
 			</list>
 		</property>

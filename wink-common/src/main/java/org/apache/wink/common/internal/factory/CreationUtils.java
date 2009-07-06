@@ -75,7 +75,7 @@ public class CreationUtils {
             if (targetException instanceof RuntimeException) {
                 throw (RuntimeException) targetException;
             }
-            throw new ObjectCreationException(e);
+            throw new ObjectCreationException(targetException);
         } catch (Exception e) {
             throw new ObjectCreationException(e);
         }

@@ -28,7 +28,7 @@ import java.util.Set;
 import javax.ws.rs.core.Application;
 
 import org.apache.wink.common.AbstractDynamicResource;
-import org.apache.wink.common.SymphonyApplication;
+import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.internal.factory.OFFactoryRegistry;
 import org.apache.wink.common.internal.providers.entity.FileProvider;
 import org.apache.wink.common.internal.providers.entity.StreamingOutputProvider;
@@ -131,7 +131,7 @@ public class ApplicationProcessorTest extends TestCase {
     private static final AbstractDynamicResource     DynamicResource     = new AbstractDynamicResource() {
                                                                          };
 
-    private static class SymphonyApplicationMock extends SymphonyApplication {
+    private static class SymphonyApplicationMock extends WinkApplication {
 
         @Override
         public Set<Class<?>> getClasses() {

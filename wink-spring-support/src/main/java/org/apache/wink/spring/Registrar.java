@@ -22,15 +22,15 @@ package org.apache.wink.spring;
 
 import java.util.Set;
 
-import org.apache.wink.common.SymphonyApplication;
+import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.server.internal.application.ApplicationProcessor;
 import org.apache.wink.server.internal.registry.ResourceRegistry;
 
 
-public class Registrar extends SymphonyApplication {
+public class Registrar extends WinkApplication {
 
-    private double        priority  = SymphonyApplication.DEFAULT_PRIORITY;
+    private double        priority  = WinkApplication.DEFAULT_PRIORITY;
 
     private Set<Object>   instances = null;
     private Set<Class<?>> classes   = null;

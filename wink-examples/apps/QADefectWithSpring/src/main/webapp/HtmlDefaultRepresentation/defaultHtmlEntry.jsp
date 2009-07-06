@@ -27,7 +27,7 @@
 <%@page import="org.apache.wink.common.model.atom.AtomConstants"%><html>
 <head>
 <STYLE TYPE="text/css">
-<%@include file="css/symphony_hp.css"%>
+<%@include file="css/wink-default.css"%>
 </STYLE>
 </head>
 

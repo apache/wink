@@ -24,7 +24,10 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
-public class SymphonyApplication extends Application {
+/**
+ * Enhances javax.ws.rs.core.Application with <tt>getPriority</tt> and <tt>getInstances</tt> methods.
+ */
+public class WinkApplication extends Application {
 
     public static final double DEFAULT_PRIORITY = 0.5;
 
@@ -34,7 +37,7 @@ public class SymphonyApplication extends Application {
     }
 
     /**
-     * Returns the SymophonyApplication priority.
+     * Returns the Application priority.
      * 
      * @return priority
      */

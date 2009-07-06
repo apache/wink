@@ -25,7 +25,7 @@ import java.util.Set;
 import javax.servlet.ServletContext;
 import javax.ws.rs.core.Application;
 
-import org.apache.wink.common.SymphonyApplication;
+import org.apache.wink.common.WinkApplication;
 import org.apache.wink.server.internal.RequestProcessor;
 
 public class RegistrationUtils {
@@ -85,7 +85,7 @@ public class RegistrationUtils {
         requestProcessor.getConfiguration().addApplication(application);
     }
 
-    public static class InnerApplication extends SymphonyApplication {
+    public static class InnerApplication extends WinkApplication {
 
         private Set<Class<?>> classes   = null;
         private Set<Object>   instances = null;

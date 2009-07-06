@@ -69,7 +69,7 @@
 %>
 
 <STYLE TYPE="text/css"> 
-<%@include file="css/symphony_hp.css" %>
+<%@include file="css/wink-default.css" %>
 </STYLE>
 </head>
 <body>

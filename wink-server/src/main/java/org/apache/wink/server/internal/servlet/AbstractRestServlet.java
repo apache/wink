@@ -19,40 +19,35 @@
  *******************************************************************************/
 package org.apache.wink.server.internal.servlet;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 import org.apache.wink.server.internal.RequestProcessor;
 
 
-public abstract class AbstractSymphonyServlet extends HttpServlet {
+/**
+ * Base class for RestServlet and AdminServlet
+ */
+public abstract class AbstractRestServlet extends HttpServlet {
 
-    private static final String REQUEST_PROCESSOR_ATTRIBUTE = "symphony.requestProcessorAttribute";
+    private static final String REQUEST_PROCESSOR_ATTRIBUTE = "requestProcessorAttribute";
     private static final long   serialVersionUID            = 7721777326714438571L;
-    private ServletContext      servletContext;
     private String              requestProcessorAttribute;
 
     @Override
     public void init() throws ServletException {
         super.init();
-        servletContext = getServletContext();
         requestProcessorAttribute = getInitParameter(REQUEST_PROCESSOR_ATTRIBUTE);
     }
 
     protected RequestProcessor getRequestProcessor() {
-        return RequestProcessor.getRequestProcessor(servletContext, requestProcessorAttribute);
+        return RequestProcessor.getRequestProcessor(getServletContext(), requestProcessorAttribute);
     }
 
     protected void storeRequestProcessorOnServletContext(RequestProcessor requestProcessor) {
-        requestProcessor.storeRequestProcessorOnServletContext(servletContext,
+        requestProcessor.storeRequestProcessorOnServletContext(getServletContext(),
             requestProcessorAttribute);
     }
 
-//    protected void registerApplication(Application application) {
-//        RegistrationUtils.registerApplication(application, servletContext,
-//            requestProcessorAttribute);
-//
-//    }
 
 }

@@ -27,15 +27,15 @@ import java.io.InputStream;
 import javax.servlet.ServletContext;
 
 import org.apache.wink.common.internal.application.ApplicationFileLoader;
-import org.apache.wink.common.internal.application.SimpleSymphonyApplication;
+import org.apache.wink.common.internal.application.SimpleWinkApplication;
 import org.apache.wink.server.internal.utils.ServletFileLoader;
 
 
-public class ServletSymphonyApplication extends SimpleSymphonyApplication {
+public class ServletWinkApplication extends SimpleWinkApplication {
 
-    private ServletContext servletContext;
+    private final ServletContext servletContext;
 
-    public ServletSymphonyApplication(ServletContext servletContext, String applicationConfigFiles) {
+    public ServletWinkApplication(ServletContext servletContext, String applicationConfigFiles) {
         super(applicationConfigFiles);
         this.servletContext = servletContext;
     }

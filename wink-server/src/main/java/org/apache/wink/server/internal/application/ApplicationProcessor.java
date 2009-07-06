@@ -25,7 +25,7 @@ import javax.ws.rs.core.Application;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.wink.common.SymphonyApplication;
+import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
@@ -42,7 +42,7 @@ import org.apache.wink.server.internal.registry.ResourceRegistry;
  * by getInstances.
  * 
  * @see Application
- * @see SymphonyApplication
+ * @see WinkApplication
  */
 public class ApplicationProcessor {
 
@@ -75,14 +75,14 @@ public class ApplicationProcessor {
             processClasses(classes);
         }
 
-        if (application instanceof SymphonyApplication) {
-            processSymphonyApplication((SymphonyApplication) application);
+        if (application instanceof WinkApplication) {
+            processSymphonyApplication((WinkApplication) application);
         }
 
         logger.debug("Processing of Application completed.");
     }
 
-    private void processSymphonyApplication(SymphonyApplication sApplication) {
+    private void processSymphonyApplication(WinkApplication sApplication) {
         Set<Object> instances = sApplication.getInstances();
         double priority = sApplication.getPriority();
 

@@ -46,7 +46,7 @@ import org.apache.wink.common.internal.utils.FileLoader;
 public class ApplicationFileLoader {
 
     private static final Logger logger = LoggerFactory.getLogger(ApplicationFileLoader.class);
-    private static final String CORE_APPLICATION = "META-INF/core/symphony.app";
+    private static final String CORE_APPLICATION = "META-INF/core/wink-providers";
     private final Set<Class<?>> classes          = new LinkedHashSet<Class<?>>();
 
     /**
@@ -83,7 +83,7 @@ public class ApplicationFileLoader {
         loadClasses(appConfigFileStream);
     }
 
-    protected void loadClasses(InputStream is) {
+    final protected void loadClasses(InputStream is) {
         try {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
             String line;

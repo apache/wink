@@ -47,7 +47,7 @@ import javax.ws.rs.ext.MessageBodyWriter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.wink.common.SymphonyApplication;
+import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.internal.application.ApplicationValidator;
 import org.apache.wink.common.internal.factory.OFFactoryRegistry;
 import org.apache.wink.common.internal.factory.ObjectFactory;
@@ -145,11 +145,11 @@ public class ProvidersRegistry {
     }
 
     public boolean addProvider(Class<?> cls) {
-        return addProvider(cls, SymphonyApplication.DEFAULT_PRIORITY);
+        return addProvider(cls, WinkApplication.DEFAULT_PRIORITY);
     }
 
     public boolean addProvider(Object provider) {
-        return addProvider(provider, SymphonyApplication.DEFAULT_PRIORITY);
+        return addProvider(provider, WinkApplication.DEFAULT_PRIORITY);
     }
 
     @SuppressWarnings("unchecked")

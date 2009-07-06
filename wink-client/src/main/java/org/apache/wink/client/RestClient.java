@@ -29,7 +29,7 @@ import javax.ws.rs.core.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.client.internal.ResourceImpl;
-import org.apache.wink.common.SymphonyApplication;
+import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.internal.application.ApplicationValidator;
 import org.apache.wink.common.internal.factory.OFFactoryRegistry;
 import org.apache.wink.common.internal.factory.ScopeOFFactory;
@@ -141,8 +141,8 @@ public class RestClient {
             processClasses(classes);
         }
 
-        if (application instanceof SymphonyApplication) {
-            processSymphonyApplication((SymphonyApplication)application);
+        if (application instanceof WinkApplication) {
+            processSymphonyApplication((WinkApplication)application);
         }
     }
 
@@ -167,7 +167,7 @@ public class RestClient {
         }
     }
 
-    private void processSymphonyApplication(SymphonyApplication sApplication) {
+    private void processSymphonyApplication(WinkApplication sApplication) {
         Set<Object> instances = sApplication.getInstances();
         double priority = sApplication.getPriority();
         if (instances == null) {

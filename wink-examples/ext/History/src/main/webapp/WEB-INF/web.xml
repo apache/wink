@@ -34,7 +34,7 @@
 			<param-value>/WEB-INF/configuration.properties</param-value>
 		</init-param>
 		<init-param>
-			<param-name>symphony.applicationConfigLocation</param-name>
+			<param-name>applicationConfigLocation</param-name>
 			<param-value>/WEB-INF/application</param-value>
 		</init-param>
 		<load-on-startup>0</load-on-startup>

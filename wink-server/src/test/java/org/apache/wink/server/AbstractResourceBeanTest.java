@@ -30,7 +30,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.wink.common.AbstractDynamicResource;
-import org.apache.wink.common.SymphonyApplication;
+import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
@@ -40,7 +40,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 public class AbstractResourceBeanTest extends MockServletInvocationTest {
 
-    public static class InnerApplication extends SymphonyApplication {
+    public static class InnerApplication extends WinkApplication {
 
         @Override
         public Set<Object> getInstances() {

@@ -32,7 +32,7 @@ import javax.ws.rs.core.Application;
 import org.apache.wink.client.handlers.ClientHandler;
 import org.apache.wink.client.handlers.ConnectionHandler;
 import org.apache.wink.client.internal.handlers.HttpURLConnectionHandler;
-import org.apache.wink.common.SymphonyApplication;
+import org.apache.wink.common.WinkApplication;
 
 
 /**
@@ -74,7 +74,7 @@ public class ClientConfig implements Cloneable {
 
     private void initDefaultApplication() {
         // TODO: use SimpleSymphonyAplication
-        applications(new SymphonyApplication() {
+        applications(new WinkApplication() {
             @Override
             public Set<Class<?>> getClasses() {
                 Set<Class<?>> set = new HashSet<Class<?>>();

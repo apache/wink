@@ -87,7 +87,7 @@ public abstract class MockServletInvocationTest extends TestCase {
 
         String propertiesFile = getPropertiesFile();
         if (propertiesFile != null) {
-            servletConfig.addInitParameter("symphony.propertiesLocation", propertiesFile);
+            servletConfig.addInitParameter("propertiesLocation", propertiesFile);
         }
 
         tls.set(this);

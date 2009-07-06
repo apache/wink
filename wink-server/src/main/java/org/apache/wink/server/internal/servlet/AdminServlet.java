@@ -55,7 +55,7 @@ import org.apache.wink.server.internal.registry.ResourceRecord;
 import org.apache.wink.server.internal.registry.ResourceRegistry;
 
 
-public class AdminServlet extends AbstractSymphonyServlet {
+public class AdminServlet extends AbstractRestServlet {
 
     private static final long                                           serialVersionUID       = -5972412568762942420L;
     private static final String                                         APPLICATION_XML        = "application/xml";

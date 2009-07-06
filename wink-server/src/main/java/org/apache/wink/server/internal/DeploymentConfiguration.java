@@ -75,11 +75,10 @@ import org.apache.wink.server.internal.registry.ServerInjectableFactory;
  */
 public class DeploymentConfiguration {
 
-    private static final String   ALTERNATIVE_SHORTCUTS    = "META-INF/symphony-alternateShortcutsMap.properties";
-    private static final Logger logger = LoggerFactory.getLogger(DeploymentConfiguration.class);
+    private static final Logger   logger                   = LoggerFactory.getLogger(DeploymentConfiguration.class);
+    private static final String   ALTERNATIVE_SHORTCUTS    = "META-INF/wink-alternate-shortcuts.properties";
     private static final String   VALIDATE_LOCATION_HEADER = "wink.validateLocationHeader";
-   
-   
+
     // handler chains
     private RequestHandlersChain  requestHandlersChain;
     private ResponseHandlersChain responseHandlersChain;
