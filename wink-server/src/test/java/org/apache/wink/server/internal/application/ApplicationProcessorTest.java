@@ -131,7 +131,7 @@ public class ApplicationProcessorTest extends TestCase {
     private static final AbstractDynamicResource     DynamicResource     = new AbstractDynamicResource() {
                                                                          };
 
-    private static class SymphonyApplicationMock extends WinkApplication {
+    private static class WinkApplicationMock extends WinkApplication {
 
         @Override
         public Set<Class<?>> getClasses() {
@@ -179,7 +179,7 @@ public class ApplicationProcessorTest extends TestCase {
     public void testSymphonyApplication() {
         ResourceRegistryMock resourceRegistry = new ResourceRegistryMock();
         ProvidersRegistryMock providersRegistry = new ProvidersRegistryMock();
-        new ApplicationProcessor(new SymphonyApplicationMock(), resourceRegistry, providersRegistry).process();
+        new ApplicationProcessor(new WinkApplicationMock(), resourceRegistry, providersRegistry).process();
         assertTrue(providersRegistry.classes.contains(FileProvider.class));
         assertTrue(resourceRegistry.classes.contains(RootResource.class));
         assertEquals(1, providersRegistry.classes.size());

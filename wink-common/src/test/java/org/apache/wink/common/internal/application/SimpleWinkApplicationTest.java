@@ -17,41 +17,21 @@
  *  under the License.
  *  
  *******************************************************************************/
-package org.apache.wink.server.internal.application;
+package org.apache.wink.common.internal.application;
 
-import java.io.InputStream;
 import java.util.Set;
 
+import org.apache.wink.common.internal.application.SimpleWinkApplication;
 import org.apache.wink.common.internal.providers.entity.FileProvider;
 import org.apache.wink.common.internal.providers.entity.SourceProvider;
-import org.apache.wink.server.internal.application.ServletWinkApplication;
-import org.apache.wink.test.mock.ServletContextMock;
 
 import junit.framework.TestCase;
 
 
-public class ServletSymphonyApplicationTest extends TestCase {
-
-    static class ServletContextImpl extends ServletContextMock {
-
-        public ServletContextImpl() {
-            super(null);
-        }
-
-        @Override
-        public String getInitParameter(String arg) {
-            return null;
-        }
-
-        @Override
-        public InputStream getResourceAsStream(String arg0) {
-            return null;
-        }
-    }
+public class SimpleWinkApplicationTest extends TestCase {
 
     public void testSimpleSymphonyApplication() {
-        ServletWinkApplication simpleSymphonyApplication = new ServletWinkApplication(
-                new ServletContextImpl(), "org//apache//wink//server//internal//application//custom.app");
+        SimpleWinkApplication simpleSymphonyApplication = new SimpleWinkApplication("org//apache//wink//common//internal//application//custom.app");
         Set<Class<?>> classes = simpleSymphonyApplication.getClasses();
         assertTrue(classes.contains(FileProvider.class));
         assertTrue(classes.contains(SourceProvider.DOMSourceProvider.class));
