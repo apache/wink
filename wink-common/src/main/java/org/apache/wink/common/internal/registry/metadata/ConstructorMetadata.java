@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.registry.metadata;
 
@@ -27,11 +26,11 @@ import java.util.List;
 
 import org.apache.wink.common.internal.registry.Injectable;
 
-
 public class ConstructorMetadata {
 
-    private Constructor<?>             constructor;
+    private Constructor<?>         constructor;
     private final List<Injectable> formalParameters;
+    private boolean                encoded = false;
 
     public ConstructorMetadata() {
         constructor = null;
@@ -48,6 +47,14 @@ public class ConstructorMetadata {
 
     public List<Injectable> getFormalParameters() {
         return formalParameters;
+    }
+
+    public void setEncoded(boolean encoded) {
+        this.encoded = encoded;
+    }
+
+    public boolean isEncoded() {
+        return encoded;
     }
 
 }

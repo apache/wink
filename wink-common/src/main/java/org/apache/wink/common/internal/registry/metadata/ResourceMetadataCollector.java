@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.registry.metadata;
 
@@ -31,6 +30,7 @@ import java.lang.reflect.Type;
 import java.util.Set;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.Encoded;
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -44,12 +44,11 @@ import org.apache.wink.common.annotations.Workspace;
 import org.apache.wink.common.internal.registry.Injectable;
 import org.apache.wink.common.internal.registry.InjectableFactory;
 
-
 /**
  * Collects ClassMetadata from JAX-RS Resource classes
  */
 public class ResourceMetadataCollector extends AbstractMetadataCollector {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(ResourceMetadataCollector.class);
 
     private ResourceMetadataCollector(Class<?> clazz) {
@@ -79,7 +78,8 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
 
     @Override
     protected final Injectable parseAccessibleObject(AccessibleObject field, Type fieldType) {
-        Injectable injectable = InjectableFactory.getInstance().create(fieldType, field.getAnnotations(), (Member) field);
+        Injectable injectable = InjectableFactory.getInstance().create(fieldType,
+            field.getAnnotations(), (Member) field, getMetadata().isEncoded());
         if (injectable.getParamType() == Injectable.ParamType.ENTITY) {
             // EntityParam should be ignored for fields (see JSR-311 3.2)
             return null;
@@ -104,27 +104,12 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             getMetadata().getParents().add(parent.value());
         }
 
+        parseEncoded(cls);
+
         // if the class contained any annotations, we can to stop
         if (workspacePresent || pathPresent || consumesPresent || producesPresent) {
             return true;
         }
-
-        //        // Do we want to allow searching for class annotations in superclass??? 
-        //       
-        //        // parse superclass
-        //        Class<?> superclass = cls.getSuperclass();
-        //        if (superclass != null) {
-        //            return parseClass(superclass);
-        //        }
-        //         
-        //        // parse all interfaces
-        //        Class<?>[] interfaces = cls.getInterfaces();
-        //        for (Class<?> interfaceClass : interfaces) {
-        //            // stop with the first interface that has annotations
-        //            if (parseClass(interfaceClass)) {
-        //                return true;
-        //            }
-        //        }
 
         // no annotations
         return false;
@@ -167,16 +152,22 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                     } else {
                         // sub-resource locator
                         // verify that the method does not take an entity parameter
-                        String methodName = String.format("%s.%s", declaringClass.getName(), method.getName());
+                        String methodName = String.format("%s.%s", declaringClass.getName(),
+                            method.getName());
                         for (Injectable id : methodMetadata.getFormalParameters()) {
                             if (id.getParamType() == Injectable.ParamType.ENTITY) {
-                                logger.warn("Sub-Resource locator {} contains an illegal entity parameter. The locator will be ignored.", methodName);
+                                logger.warn(
+                                    "Sub-Resource locator {} contains an illegal entity parameter. The locator will be ignored.",
+                                    methodName);
                                 continue F1;
                             }
                         }
                         // log a warning if the locator has a Produces or Consumes annotation
-                        if (!methodMetadata.getConsumes().isEmpty() || !methodMetadata.getProduces().isEmpty()) {
-                            logger.warn("Sub-Resource locator {} is annotated with Consumes/Produces. These annotations are ignored for sub-resource locators", methodName);
+                        if (!methodMetadata.getConsumes().isEmpty()
+                            || !methodMetadata.getProduces().isEmpty()) {
+                            logger.warn(
+                                "Sub-Resource locator {} is annotated with Consumes/Produces. These annotations are ignored for sub-resource locators",
+                                methodName);
                         }
                         getMetadata().getSubResourceLocators().add(methodMetadata);
                     }
@@ -221,6 +212,11 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
         for (String mediaType : produces) {
             hasAnnotation = true;
             metadata.addProduces(MediaType.valueOf(mediaType));
+        }
+
+        if (method.getAnnotation(Encoded.class) != null) {
+            metadata.setEncoded(true);
+            hasAnnotation = true;
         }
 
         // if the method has not annotation at all,
@@ -333,22 +329,25 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
         return null;
     }
 
-    private void parseMethodParameters(Method method, MethodMetadata metadata) {
+    private void parseMethodParameters(Method method, MethodMetadata methodMetadata) {
         Annotation[][] parameterAnnotations = method.getParameterAnnotations();
         Type[] paramTypes = method.getGenericParameterTypes();
         boolean entityParamExists = false;
         for (int pos = 0, limit = paramTypes.length; pos < limit; pos++) {
-            Injectable fp = InjectableFactory.getInstance().create(paramTypes[pos], parameterAnnotations[pos],
-                method);
+            Injectable fp = InjectableFactory.getInstance().create(paramTypes[pos],
+                parameterAnnotations[pos], method,
+                getMetadata().isEncoded() || methodMetadata.isEncoded());
             if (fp.getParamType() == Injectable.ParamType.ENTITY) {
                 if (entityParamExists) {
                     // we are allowed to have only one entity parameter
-                    String methodName = method.getDeclaringClass().getName() + "."+ method.getName();
-                    throw new IllegalStateException("Resource method " + methodName + " has more than one entity parameter");
+                    String methodName = method.getDeclaringClass().getName() + "."
+                        + method.getName();
+                    throw new IllegalStateException("Resource method " + methodName
+                        + " has more than one entity parameter");
                 }
                 entityParamExists = true;
             }
-            metadata.getFormalParameters().add(fp);
+            methodMetadata.getFormalParameters().add(fp);
         }
     }
 

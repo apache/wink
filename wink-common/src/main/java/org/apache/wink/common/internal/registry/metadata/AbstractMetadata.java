@@ -34,6 +34,7 @@ public abstract class AbstractMetadata {
     private List<String>   paths;
     private Set<MediaType> consumes;
     private Set<MediaType> produces;
+    private boolean        encoded = false;
 
     public AbstractMetadata() {
         paths = new ArrayList<String>();
@@ -81,5 +82,13 @@ public abstract class AbstractMetadata {
         return "[" + (consumes != null ? "consumes=" + consumes + ", " : "")
             + (paths != null ? "paths=" + paths + ", " : "")
             + (produces != null ? "produces=" + produces : "") + "]";
+    }
+
+    public void setEncoded(boolean encoded) {
+        this.encoded = encoded;
+    }
+
+    public boolean isEncoded() {
+        return encoded;
     }
 }

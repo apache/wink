@@ -30,15 +30,16 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.Encoded;
+
 import org.apache.wink.common.internal.registry.Injectable;
 import org.apache.wink.common.internal.registry.InjectableFactory;
-
 
 /**
  * Collects common class meta data of JAX-RS Resources and Providers
  */
 public abstract class AbstractMetadataCollector {
-    
+
     private final ClassMetadata metadata;
 
     public AbstractMetadataCollector(Class<?> clazz) {
@@ -55,6 +56,8 @@ public abstract class AbstractMetadataCollector {
     protected final void parseFields() {
         Class<?> resourceClass = metadata.getResourceClass();
 
+        List<Injectable> injectableFields = metadata.getInjectableFields();
+
         // add fields
         while (resourceClass != Object.class) {
             for (Field field : resourceClass.getDeclaredFields()) {
@@ -62,7 +65,7 @@ public abstract class AbstractMetadataCollector {
                 Injectable injectable = parseAccessibleObject(field, fieldType);
 
                 if (injectable != null) {
-                    metadata.getInjectableFields().add(injectable);
+                    injectableFields.add(injectable);
                 }
             }
             resourceClass = resourceClass.getSuperclass();
@@ -80,7 +83,7 @@ public abstract class AbstractMetadataCollector {
                 Type genericReturnType = writeMethod.getParameterTypes()[0];
                 Injectable injectable = parseAccessibleObject(writeMethod, genericReturnType);
                 if (injectable != null) {
-                    metadata.getInjectableFields().add(injectable);
+                    injectableFields.add(injectable);
                 }
             }
         }
@@ -102,13 +105,15 @@ public abstract class AbstractMetadataCollector {
         ConstructorMetadata constructorMetadata = new ConstructorMetadata();
         List<Injectable> formalParameters = new ArrayList<Injectable>();
         Class<?> resourceClass = metadata.getResourceClass();
-        
+
         L1: for (Constructor<?> constructor : resourceClass.getDeclaredConstructors()) {
             int modifiers = constructor.getModifiers();
             if (!Modifier.isPublic(modifiers)) {
                 continue;
             }
-            
+
+            constructorMetadata.setEncoded(constructor.getAnnotation(Encoded.class) != null);
+
             // gather all formal parameters
             formalParameters.clear();
 
@@ -121,8 +126,9 @@ public abstract class AbstractMetadataCollector {
             //            boolean isValidConstructor = true;
             // gather all formal parameters as list of injectable data
             for (int pos = 0, limit = paramTypes.length; pos < limit; pos++) {
-                Injectable fp = InjectableFactory.getInstance().create(paramTypes[pos], parameterAnnotations[pos],
-                    constructor);
+                Injectable fp = InjectableFactory.getInstance().create(paramTypes[pos],
+                    parameterAnnotations[pos], constructor,
+                    getMetadata().isEncoded() || constructorMetadata.isEncoded());
 
                 if (!isConstructorParameterValid(fp)) {
                     continue L1;
@@ -148,10 +154,17 @@ public abstract class AbstractMetadataCollector {
         // error if we haven't found a valid constructor 
         if (constructorMetadata.getConstructor() == null) {
             throw new IllegalStateException("No valid constrcutor found for resource "
-                + getMetadata().getResourceClass().getCanonicalName());
+                + metadata.getResourceClass().getCanonicalName());
         }
-        
-        getMetadata().setConstructor(constructorMetadata);
+
+        metadata.setConstructor(constructorMetadata);
+    }
+
+    protected void parseEncoded(Class<?> cls) {
+        Encoded encoded = cls.getAnnotation(Encoded.class);
+        if (encoded != null) {
+            metadata.setEncoded(true);
+        }
     }
 
     public ClassMetadata getMetadata() {
