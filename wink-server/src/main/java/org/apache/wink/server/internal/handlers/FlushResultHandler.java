@@ -77,6 +77,7 @@ public class FlushResultHandler extends AbstractHandler {
 
         // get the entity
         Object entity = context.getResponseEntity();
+        boolean isOriginalEntityResponseObj = false;
 
         // extract the entity and headers from the response (if it is a response)
         MultivaluedMap<String,Object> httpHeaders = null;
@@ -84,6 +85,7 @@ public class FlushResultHandler extends AbstractHandler {
             Response response = (Response)entity;
             entity = response.getEntity();
             httpHeaders = response.getMetadata();
+            isOriginalEntityResponseObj = true;
         }
 
         // prepare the entity to write, its class and generic type
@@ -105,7 +107,11 @@ public class FlushResultHandler extends AbstractHandler {
             genericType = genericEntity.getType();
         } else {
             rawType = (entity != null ? entity.getClass() : null);
-            genericType = (genericType != null ? genericType : rawType);
+            if (isOriginalEntityResponseObj) {
+                genericType = rawType;
+            } else {
+                genericType = (genericType != null ? genericType : rawType);
+            }
         }
 
         if (httpHeaders == null) {
