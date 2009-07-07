@@ -65,6 +65,13 @@ public class ActivationDataContentHandlerTest extends MockServletInvocationTest 
         public ActivationDataContentHandlerTest getResourceNoHandler() {
             return new ActivationDataContentHandlerTest();
         }
+
+        @GET
+        @Path("/nowriterorhandler")
+        @Produces("not/valid")
+        public Object getNoMatchingWriterOrHandler() {
+            return new Object() { };
+        }
     }
     
     public static class TestResourceContentHandler implements DataContentHandler{
@@ -164,16 +171,26 @@ public class ActivationDataContentHandlerTest extends MockServletInvocationTest 
         String content = response.getContentAsString();
         assertTrue(content.equals(DATA));
    }
-    
+
    public void testMissingHandlerExists() throws Exception {
         System.out.println(TestResource.class.getName());
         MockHttpServletRequest mockRequest =
         MockRequestConstructor.constructMockRequest("GET", "/root/missing", "text/resource");
-        MockHttpServletResponse response = invoke(mockRequest);
-        int family = response.getStatus() / 100;
-        assertTrue(family == 5 || family == 4);
+        try {
+            invoke(mockRequest);
+            fail("Should have thrown exception");
+        } catch (ClassCastException e) {
+            /* do nothing */
+        }
    }
-    
-   
 
+    public void test500ForMissingWriterAndHandler() throws Exception {
+        System.out.println(TestResource.class.getName());
+        MockHttpServletRequest mockRequest =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/root/nowriterorhandler",
+                                                        "not/valid");
+        MockHttpServletResponse response = invoke(mockRequest);
+        assertEquals(500, response.getStatus());
+    }
 }

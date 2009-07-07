@@ -150,22 +150,21 @@ public class FlushResultHandler extends AbstractHandler {
         
         DataContentHandler dataContentHandler = null;
         // Write Entity with ASF DataContentHandler
-        try{
-            // try to find a data handler using JavaBeans Activation Framework, if found use DataSourceProvider
-            dataContentHandler = CommandMap.getDefaultCommandMap().createDataContentHandler(responseMediaType.toString());
-           
-            if(dataContentHandler == null){
-                logger.error("Could not find a DataSourceProvider for {} ", responseMediaType);
-                throw new WebApplicationException(500);
-            }
-            
-            dataContentHandler.writeTo(entity, responseMediaType.toString(), new FlushHeadersOutputStream(httpResponse, httpHeaders));
-            
-        }catch (Exception e) {
-            logger.error("Could not write {} with DataSourceProvider {} for mediatype {} ", 
-                         new Object[]{entity.getClass().getName(), dataContentHandler.getClass().getName(), responseMediaType.toString() });
+
+        // try to find a data handler using JavaBeans Activation Framework, if
+        // found use DataSourceProvider
+        dataContentHandler =
+            CommandMap.getDefaultCommandMap()
+                .createDataContentHandler(responseMediaType.toString());
+
+        if (dataContentHandler == null) {
+            logger.error("Could not find a DataSourceProvider for {} ", responseMediaType);
             throw new WebApplicationException(500);
         }
+
+        dataContentHandler.writeTo(entity,
+                                   responseMediaType.toString(),
+                                   new FlushHeadersOutputStream(httpResponse, httpHeaders));
     }
 
     @SuppressWarnings("unchecked")
