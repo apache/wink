@@ -32,6 +32,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -456,6 +457,17 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
         }        
     }
     
+    @Path("/exceptionThrowing/{code}")
+    public static class ResourceExceptionThrowing {
+
+        // methods
+        @GET
+        @Produces("text/plain")
+        public String get(@PathParam("code") int code) {
+            throw new WebApplicationException(code);
+        }
+    }
+    
     // /// -- Tests --
 
     public void testFindResourceSimple() throws Exception {
@@ -739,6 +751,15 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
         request = MockRequestConstructor.constructMockRequest("GET", "/mixed/1/locateNull", "application/xml");
         response = invoke(request);
         assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+
+        request = MockRequestConstructor.constructMockRequest("GET", "/exceptionThrowing/400", "text/plain");
+        response = invoke(request);
+        assertEquals(400, response.getStatus());
+        
+        request = MockRequestConstructor.constructMockRequest("GET", "/exceptionThrowing/500", "text/plain");
+        response = invoke(request);
+        assertEquals(500, response.getStatus());
+
     }
     
     // // -- Helpers --

@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal;
 
 import java.io.FileNotFoundException;
@@ -30,6 +30,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,19 +42,18 @@ import org.apache.wink.server.internal.resources.HtmlServiceDocumentResource;
 import org.apache.wink.server.internal.resources.RootResource;
 import org.apache.wink.server.utils.RegistrationUtils;
 
-
 /**
  * Responsible for request processing.
  */
 public class RequestProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestProcessor.class);
-    private static final String           PROPERTY_ROOT_RESOURCE_NONE      = "none";
-    private static final String           PROPERTY_ROOT_RESOURCE_ATOM      = "atom";
-    private static final String           PROPERTY_ROOT_RESOURCE_ATOM_HTML = "atom+html";
-    private static final String           PROPERTY_ROOT_RESOURCE_DEFAULT   = PROPERTY_ROOT_RESOURCE_ATOM_HTML;
-    private static final String           PROPERTY_ROOT_RESOURCE           = "wink.searchPolicyContinuedSearch";
-    private static final String           PROPERTY_ROOT_RESOURCE_CSS       = "wink.serviceDocumentCssPath";
+    private static final String PROPERTY_ROOT_RESOURCE_NONE = "none";
+    private static final String PROPERTY_ROOT_RESOURCE_ATOM = "atom";
+    private static final String PROPERTY_ROOT_RESOURCE_ATOM_HTML = "atom+html";
+    private static final String PROPERTY_ROOT_RESOURCE_DEFAULT = PROPERTY_ROOT_RESOURCE_ATOM_HTML;
+    private static final String PROPERTY_ROOT_RESOURCE = "wink.searchPolicyContinuedSearch";
+    private static final String PROPERTY_ROOT_RESOURCE_CSS = "wink.serviceDocumentCssPath";
 
     private final DeploymentConfiguration configuration;
 
@@ -73,8 +74,7 @@ public class RequestProcessor {
 
     private void registerRootResources() {
         Properties properties = configuration.getProperties();
-        String registerRootResource = properties.getProperty(PROPERTY_ROOT_RESOURCE,
-            PROPERTY_ROOT_RESOURCE_DEFAULT);
+        String registerRootResource = properties.getProperty(PROPERTY_ROOT_RESOURCE, PROPERTY_ROOT_RESOURCE_DEFAULT);
         if (registerRootResource.equals(PROPERTY_ROOT_RESOURCE_ATOM)) {
             RegistrationUtils.InnerApplication application = new RegistrationUtils.InnerApplication(RootResource.class);
             application.setPriority(0.1);
@@ -96,8 +96,7 @@ public class RequestProcessor {
     // --- request processing ---
 
     /**
-     * Dispatches the request and fills the response (even with an error
-     * message.
+     * Dispatches the request and fills the response (even with an error message.
      * 
      * @param request
      *            AS or mock request
@@ -106,8 +105,7 @@ public class RequestProcessor {
      * @throws IOException
      *             I/O error
      */
-    public void handleRequest(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException {
+    public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         try {
             handleRequestWithoutFaultBarrier(request, response);
         } catch (Throwable t) {
@@ -115,14 +113,14 @@ public class RequestProcessor {
             logger.error("Unhandled exception", t);
             if (t instanceof RuntimeException) {
                 // let the servlet container to handle the runtime exception
-                throw (RuntimeException) t;
+                throw (RuntimeException)t;
             }
             throw new ServletException(t);
         }
     }
 
-    private void handleRequestWithoutFaultBarrier(HttpServletRequest request,
-        HttpServletResponse response) throws Throwable {
+    private void handleRequestWithoutFaultBarrier(HttpServletRequest request, HttpServletResponse response)
+            throws Throwable {
 
         try {
             ServerMessageContext msgContext = createMessageContext(request, response);
@@ -132,13 +130,7 @@ public class RequestProcessor {
             // run the response handler chain
             configuration.getResponseHandlersChain().run(msgContext);
         } catch (Throwable t) {
-            String exceptionMessage = t.getClass().getSimpleName();
-            if (t instanceof WebApplicationException) {
-                exceptionMessage += String.format(" (%d)",
-                    ((WebApplicationException) t).getResponse().getStatus());
-            }
-            logger.error(String.format("%s occured during the handlers chain invocation",
-                exceptionMessage), t);
+            logException(t);
             ServerMessageContext msgContext = createMessageContext(request, response);
             RuntimeContextTLS.setRuntimeContext(msgContext);
             msgContext.setResponseEntity(t);
@@ -149,8 +141,31 @@ public class RequestProcessor {
         }
     }
 
-    private ServerMessageContext createMessageContext(HttpServletRequest request,
-        HttpServletResponse response) {
+    private void logException(Throwable t) {
+        String messageFormat = "%s occured during the handlers chain invocation";
+        String exceptionName = t.getClass().getSimpleName();
+        if (t instanceof WebApplicationException) {
+            WebApplicationException wae = (WebApplicationException)t;
+            int statusCode = wae.getResponse().getStatus();
+            Status status = Response.Status.fromStatusCode(statusCode);
+            String statusSep = "";
+            String statusMessage = "";
+            if (status != null) {
+                statusSep = " - ";
+                statusMessage = status.toString();
+            }
+            exceptionName = String.format("%s (%d%s%s)", exceptionName, statusCode, statusSep, statusMessage);
+            if (statusCode >= 500) {
+                logger.error(String.format(messageFormat, exceptionName), t);
+            } else {
+                logger.info(String.format(messageFormat, exceptionName), t);
+            }
+        } else {
+            logger.error(String.format(messageFormat, exceptionName), t);
+        }
+    }
+
+    private ServerMessageContext createMessageContext(HttpServletRequest request, HttpServletResponse response) {
         ServerMessageContext messageContext = new ServerMessageContext(request, response, configuration);
         return messageContext;
     }
@@ -159,16 +174,14 @@ public class RequestProcessor {
         return configuration;
     }
 
-    public static RequestProcessor getRequestProcessor(ServletContext servletContext,
-        String attributeName) {
+    public static RequestProcessor getRequestProcessor(ServletContext servletContext, String attributeName) {
         if (attributeName == null) {
             attributeName = RequestProcessor.class.getName();
         }
-        return (RequestProcessor) servletContext.getAttribute(attributeName);
+        return (RequestProcessor)servletContext.getAttribute(attributeName);
     }
 
-    public void storeRequestProcessorOnServletContext(ServletContext servletContext,
-        String attributeName) {
+    public void storeRequestProcessorOnServletContext(ServletContext servletContext, String attributeName) {
         if (attributeName == null || attributeName.length() == 0) {
             attributeName = RequestProcessor.class.getName();
         }
