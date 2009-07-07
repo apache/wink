@@ -62,7 +62,7 @@
 				<groupId>com.google.code.maven-license-plugin</groupId>
 				<artifactId>maven-license-plugin</artifactId>
 				<configuration>
-					<header>src/etc/header.txt</header>
+					<header>${module.relative.path}src/etc/header.txt</header>
 					<quiet>false</quiet>
 					<failIfMissing>true</failIfMissing>
 					<aggregate>true</aggregate>
