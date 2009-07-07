@@ -1,136 +1,149 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-    
-     http://www.apache.org/licenses/LICENSE-2.0
-    
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
+	<!--
+		Licensed to the Apache Software Foundation (ASF) under one or more
+		contributor license agreements. See the NOTICE file distributed with
+		this work for additional information regarding copyright ownership.
+		The ASF licenses this file to you under the Apache License, Version
+		2.0 (the "License"); you may not use this file except in compliance
+		with the License. You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+		applicable law or agreed to in writing, software distributed under the
+		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+		CONDITIONS OF ANY KIND, either express or implied. See the License for
+		the specific language governing permissions and limitations under the
+		License.
+	-->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>org.apache.wink</groupId>
-    <artifactId>wink-dist</artifactId>
-    <packaging>pom</packaging>
-    <name>Wink Scripts :: Dist</name>
-    <properties>
-        <target.zip>target/wink-${project.version}.zip</target.zip>
-        <target.jar>target/dist/wink-${project.version}/dist/wink-${project.version}.jar</target.jar>
-        <module.relative.path>../../</module.relative.path>
-    </properties>
-    <parent>
-        <groupId>org.apache.wink</groupId>
-        <artifactId>wink-scripts</artifactId>
-        <version>0.1-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
-    </parent>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>ant.dist</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <inherited>false</inherited>
-                <configuration>
-                    <tasks>
-                        <typedef resource="org/apache/maven/artifact/ant/antlib.xml">
-                            <classpath refid="maven.dependency.classpath" />
-                        </typedef>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.apache.wink</groupId>
+	<artifactId>wink-dist</artifactId>
+	<packaging>pom</packaging>
+	<name>Wink Scripts :: Dist</name>
+	<properties>
+		<target.zip>target/wink-${project.version}.zip</target.zip>
+		<target.jar>target/dist/wink-${project.version}/dist/wink-${project.version}.jar</target.jar>
+		<module.relative.path>../../</module.relative.path>
+	</properties>
+	<parent>
+		<groupId>org.apache.wink</groupId>
+		<artifactId>wink-scripts</artifactId>
+		<version>0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<build>
+		<plugins>
+			<plugin>
+				<!-- Deploys the distribution zip to the repository -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>deploy-zip</id>
+						<configuration>
+							<file>${target.zip}</file>
+							<url>${distributionManagement.repository.url}</url>
+							<packaging>zip</packaging>
+							<groupId>${groupId}</groupId>
+							<artifactId>${artifactId}</artifactId>
+							<version>${version}</version>
+							<uniqueVersion>${distributionManagement.repository.uniqueVersion}</uniqueVersion>
+						</configuration>
+						<phase>deploy</phase>
+						<goals>
+							<goal>deploy-file</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>deploy-jar</id>
+						<configuration>
+							<file>${target.jar}</file>
+							<url>${distributionManagement.repository.url}</url>
+							<pomFile>../../pom.xml</pomFile>
+							<packaging>jar</packaging>
+							<groupId>${groupId}</groupId>
+							<artifactId>wink</artifactId>
+							<version>${version}</version>
+							<uniqueVersion>${distributionManagement.repository.uniqueVersion}</uniqueVersion>
+						</configuration>
+						<phase>deploy</phase>
+						<goals>
+							<goal>deploy-file</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
-                        <property name="file.separator" value="${file.separator}" />
-                        <property name="project.name" value="${parent.artifactId}-${parent.version}" />
-                        <property name="project.version" value="${project.version}" />
-                        <property name="artifact.id" value="${artifactId}" />
-                        <property name="group.id" value="${groupId}" />
-                        <property name="title.name" value="${project.name}" />
-                        <property name="user.name" value="${user.name}" />
-                        <property name="java.version" value="${java.version}" />
+	<profiles>
+		<profile>
+			<!--
+				Populates the file separator for the ANT script. Needed, since when
+				ANT runs from maven, it doesn't receives the file separator from the
+				environment.
+			-->
+			<activation>
+				<os>
+					<family>Windows</family>
+				</os>
+			</activation>
+			<properties>
+				<file.separator>\</file.separator>
+			</properties>
+		</profile>
 
-                        <property name="target.zip" value="${target.zip}" />
+		<profile>
+			<id>Hudson-dist</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+				<property>
+					<name>buildType</name>
+					<value>Hudson</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>ant.dist</id>
+								<phase>install</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+						<inherited>false</inherited>
+						<configuration>
+							<tasks>
+								<typedef resource="org/apache/maven/artifact/ant/antlib.xml">
+									<classpath refid="maven.dependency.classpath" />
+								</typedef>
+								<property name="file.separator" value="${file.separator}" />
+								<property name="project.name" value="${parent.artifactId}-${parent.version}" />
+								<property name="project.version" value="${project.version}" />
+								<property name="artifact.id" value="${artifactId}" />
+								<property name="group.id" value="${groupId}" />
+								<property name="title.name" value="${project.name}" />
+								<property name="user.name" value="${user.name}" />
+								<property name="java.version" value="${java.version}" />
+								<property name="target.zip" value="${target.zip}" />
+								<ant antfile="build.xml">
+									<target name="dist" />
+								</ant>
+							</tasks>
+						</configuration>
+					</plugin>
+				</plugins>
 
-                        <ant antfile="build.xml">
-                            <target name="dist" />
-                        </ant>
-                    </tasks>
-                </configuration>
-            </plugin>
-            <plugin>
-                <!-- Deploys the distribution zip to the repository -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>deploy-zip</id>
-                        <configuration>
-                            <file>${target.zip}</file>
-                            <url>${distributionManagement.repository.url}</url>
-                            <packaging>zip</packaging>
-                            <groupId>${groupId}</groupId>
-                            <artifactId>${artifactId}</artifactId>
-                            <version>${version}</version>
-                            <uniqueVersion>${distributionManagement.repository.uniqueVersion}</uniqueVersion>
-                        </configuration>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>deploy-file</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>deploy-jar</id>
-                        <configuration>
-                            <file>${target.jar}</file>
-                            <url>${distributionManagement.repository.url}</url>
-                            <pomFile>../../pom.xml</pomFile>
-                            <packaging>jar</packaging>
-                            <groupId>${groupId}</groupId>
-                            <artifactId>wink</artifactId>
-                            <version>${version}</version>
-                            <uniqueVersion>${distributionManagement.repository.uniqueVersion}</uniqueVersion>
-                        </configuration>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>deploy-file</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+			</build>
+		</profile>
 
-    <profiles>
-        <profile>
-            <!-- Populates the file separator for the ANT script.
-                Needed, since  when ANT runs from maven, it doesn't receives the file separator from the environment.
-            -->
-            <activation>
-                <os>
-                    <family>Windows</family>
-                </os>
-            </activation>
-            <properties>
-                <file.separator>\</file.separator>
-            </properties>
-        </profile>
-    </profiles>
+	</profiles>
 
 </project>
