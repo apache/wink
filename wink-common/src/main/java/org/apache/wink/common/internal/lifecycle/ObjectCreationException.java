@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
-package org.apache.wink.common.internal.factory;
+package org.apache.wink.common.internal.lifecycle;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;

@@ -29,7 +29,7 @@ import org.apache.wink.common.RestException;
 import org.apache.wink.common.annotations.Scope;
 import org.apache.wink.common.annotations.Scope.ScopeType;
 import org.apache.wink.common.internal.application.ApplicationValidator;
-import org.apache.wink.common.internal.factory.OFFactoryRegistry;
+import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
 
 import junit.framework.TestCase;
@@ -83,7 +83,7 @@ public class ProvidersErrorMapperTest extends TestCase {
     }
 
     private ProvidersRegistry createProvidersRegistryImpl() {
-        ProvidersRegistry providers = new ProvidersRegistry(new OFFactoryRegistry(),
+        ProvidersRegistry providers = new ProvidersRegistry(new LifecycleManagersRegistry(),
             new ApplicationValidator());
 
         return providers;

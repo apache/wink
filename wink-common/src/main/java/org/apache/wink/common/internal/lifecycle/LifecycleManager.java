@@ -17,31 +17,24 @@
  *  under the License.
  *  
  *******************************************************************************/
-package org.apache.wink.common.internal.factory;
-
-import org.apache.wink.common.internal.factory.ScopeOFFactory;
-
-import junit.framework.TestCase;
+package org.apache.wink.common.internal.lifecycle;
 
 /**
- * test scenarios not covered by OFFactoryTest
+ * <h3>LifecycleManager</h3>
+ * 
+ * Used to create ObjectFactory
+ * @see org.apache.wink.common.internal.factory.ObjectFactory<T>
+ * @see org.apache.wink.common.internal.factory.DefaultLifecycleManager<T>
+ * @see org.apache.wink.common.internal.factory.ScopeLifecycleManager<T>
+ * @param <T>
+ *            - type of object that ObjectFactory handles
  */
-public class ScopableOFFactoryTest extends TestCase {
+public interface LifecycleManager<T> {
 
-    public static class Dummy {
-    }
+    ObjectFactory<T> createObjectFactory(T object)
+        throws ObjectCreationException;
 
-
-    public void testNull() {
-        ScopeOFFactory<Object> scopableOFFactory = new ScopeOFFactory<Object>();
-        assertNull(scopableOFFactory.createObjectFactory(null));
-    }
-
-    public void testNotScopeable() {
-        ScopeOFFactory<Object> scopableOFFactory = new ScopeOFFactory<Object>();
-        assertNull(scopableOFFactory.createObjectFactory(Dummy.class));
-        assertNull(scopableOFFactory.createObjectFactory(new Dummy()));
-    }
-
+    ObjectFactory<T> createObjectFactory(Class<T> object)
+        throws ObjectCreationException;
 
 }

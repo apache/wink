@@ -22,7 +22,7 @@
 package org.apache.wink.server.internal.registry;
 
 
-import org.apache.wink.common.internal.factory.ObjectFactory;
+import org.apache.wink.common.internal.lifecycle.ObjectFactory;
 import org.apache.wink.common.internal.runtime.RuntimeContext;
 import org.apache.wink.common.internal.uritemplate.UriTemplateMatcher;
 

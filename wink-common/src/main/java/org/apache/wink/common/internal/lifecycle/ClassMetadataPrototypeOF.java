@@ -17,14 +17,40 @@
  *  under the License.
  *  
  *******************************************************************************/
-package org.apache.wink.common.internal.factory;
+package org.apache.wink.common.internal.lifecycle;
 
+import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
 import org.apache.wink.common.internal.runtime.RuntimeContext;
 
-public interface ObjectFactory<T> {
+/**
+ * Implements ObjectFactory that creates a new object for each call based on its
+ * ClassMetadata.
+ * 
+ * @param <T>
+ */
+class ClassMetadataPrototypeOF<T> implements ObjectFactory<T> {
 
-    T getInstance(RuntimeContext context);
+    private final ClassMetadata metadata;
 
-    Class<T> getInstanceClass();
+    public ClassMetadataPrototypeOF(ClassMetadata metadata) {
+        this.metadata = metadata;
+        if (metadata == null) {
+            throw new NullPointerException("metadata");
+        }
+    }
 
+    @SuppressWarnings("unchecked")
+    public T getInstance(RuntimeContext context) {
+        return (T) CreationUtils.createObject(metadata, context);
+    }
+
+    @SuppressWarnings("unchecked")
+    public Class<T> getInstanceClass() {
+        return (Class<T>) metadata.getResourceClass();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("ClassMetadataPrototypeOF %s", String.valueOf(metadata));
+    }
 }

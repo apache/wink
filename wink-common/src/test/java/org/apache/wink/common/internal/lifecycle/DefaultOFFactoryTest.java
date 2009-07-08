@@ -17,12 +17,12 @@
  *  under the License.
  *  
  *******************************************************************************/
-package org.apache.wink.common.internal.factory;
+package org.apache.wink.common.internal.lifecycle;
 
 
 import org.apache.wink.common.DynamicResource;
-import org.apache.wink.common.internal.factory.DefaultOFFactory;
-import org.apache.wink.common.internal.factory.SingletonObjectFactory;
+import org.apache.wink.common.internal.lifecycle.DefaultLifecycleManager;
+import org.apache.wink.common.internal.lifecycle.SingletonObjectFactory;
 
 import junit.framework.TestCase;
 
@@ -36,7 +36,7 @@ public class DefaultOFFactoryTest extends TestCase {
 
     @SuppressWarnings("unchecked")
     public void testNull() {
-        DefaultOFFactory defaultOFFactory = new DefaultOFFactory();
+        DefaultLifecycleManager defaultOFFactory = new DefaultLifecycleManager();
 
         try {
             defaultOFFactory.createObjectFactory(null);
@@ -48,7 +48,7 @@ public class DefaultOFFactoryTest extends TestCase {
 
     @SuppressWarnings("unchecked")
     public void testResourceBean() {
-        DefaultOFFactory defaultOFFactory = new DefaultOFFactory();
+        DefaultLifecycleManager defaultOFFactory = new DefaultLifecycleManager();
 
         try {
             defaultOFFactory.createObjectFactory(DynamicResource.class);
@@ -60,7 +60,7 @@ public class DefaultOFFactoryTest extends TestCase {
 
     @SuppressWarnings("unchecked")
     public void testDummy() {
-        DefaultOFFactory defaultOFFactory = new DefaultOFFactory();
+        DefaultLifecycleManager defaultOFFactory = new DefaultLifecycleManager();
         assertEquals(SingletonObjectFactory.class,
             defaultOFFactory.createObjectFactory(new Dummy()).getClass());
         

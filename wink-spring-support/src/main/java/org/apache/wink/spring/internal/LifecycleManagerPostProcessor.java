@@ -33,15 +33,15 @@ import org.springframework.context.event.ContextRefreshedEvent;
 
 /**
  * Each time a new bean is created, it's checked if it's Resource, Provider or
- * Dynamic Resource. If this is the case, it's registered in SpringOFFactory.
+ * Dynamic Resource. If this is the case, it's registered in SpringLifecycleManager.
  * This bean applies only during the context loading and doesn't effects the
  * beans created in runtime.
  */
-public class SpringOFFactoryPostProcessor implements BeanPostProcessor, ApplicationContextAware,
+public class LifecycleManagerPostProcessor implements BeanPostProcessor, ApplicationContextAware,
     ApplicationListener {
 
     private ApplicationContext applicationContext;
-    private SpringOFFactory<?> springOFFactory;
+    private SpringLifecycleManager<?> springOFFactory;
     private boolean            loadingOfContextCompleted = false;
 
     public Object postProcessAfterInitialization(final Object bean, final String beanName)
@@ -77,7 +77,7 @@ public class SpringOFFactoryPostProcessor implements BeanPostProcessor, Applicat
         this.applicationContext = applicationContext;
     }
 
-    public void setSpringOFFactory(SpringOFFactory<?> springOFFactory) {
+    public void setSpringOFFactory(SpringLifecycleManager<?> springOFFactory) {
         this.springOFFactory = springOFFactory;
     }
 

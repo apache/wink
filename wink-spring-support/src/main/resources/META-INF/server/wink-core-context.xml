@@ -26,14 +26,14 @@
 
 	<!-- Object Factory-Factories definitions -->
 
-	<bean id="symphony.SpringOFFactory" class="org.apache.wink.spring.internal.SpringOFFactory">
+	<bean id="symphony.SpringOFFactory" class="org.apache.wink.spring.internal.SpringLifecycleManager">
 	</bean>
 
-	<bean id="symphony.offRegistry" class="org.apache.wink.common.internal.factory.OFFactoryRegistry">
+	<bean id="symphony.offRegistry" class="org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry">
 		<property name="factoryFactoryArray">
 			<list>
 				<ref local="symphony.SpringOFFactory" />
-				<bean class="org.apache.wink.common.internal.factory.ScopeOFFactory" />
+				<bean class="org.apache.wink.common.internal.lifecycle.ScopeLifecycleManager" />
 			</list>
 		</property>
 	</bean>
@@ -54,7 +54,7 @@
 	</bean>
 
 	<bean id="symphony.SpringOFFactoryPostProcessor"
-		class="org.apache.wink.spring.internal.SpringOFFactoryPostProcessor">
+		class="org.apache.wink.spring.internal.LifecycleManagerPostProcessor">
 		<property name="springOFFactory">
 			<ref local="symphony.SpringOFFactory" />
 		</property>

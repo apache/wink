@@ -31,8 +31,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.DynamicResource;
-import org.apache.wink.common.internal.factory.OFFactoryRegistry;
-import org.apache.wink.common.internal.factory.ObjectFactory;
+import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
+import org.apache.wink.common.internal.lifecycle.ObjectFactory;
 import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
 import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor;
@@ -42,13 +42,13 @@ public class ResourceRecordFactory {
 
     private static final Logger logger = LoggerFactory.getLogger(ResourceRecordFactory.class);
 
-    private final OFFactoryRegistry objectFactoryRegistry;
+    private final LifecycleManagersRegistry objectFactoryRegistry;
     private final Map<Class<?>,ResourceRecord> cacheByClass;
 
     private Lock readersLock;
     private Lock writersLock;
 
-    public ResourceRecordFactory(OFFactoryRegistry objectFactoryRegistry) {
+    public ResourceRecordFactory(LifecycleManagersRegistry objectFactoryRegistry) {
         if (objectFactoryRegistry == null) {
             throw new NullPointerException("objectFactoryRegistry");
         }

@@ -24,7 +24,7 @@ package org.apache.wink.server.internal.registry;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
-import org.apache.wink.common.internal.factory.OFFactoryRegistry;
+import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.server.internal.registry.ResourceRecord;
 import org.apache.wink.server.internal.registry.ResourceRecordFactory;
 
@@ -52,7 +52,7 @@ public class ResourceRecordFactoryTest extends TestCase {
     }
 
     public void testFactory() {
-        ResourceRecordFactory factory = new ResourceRecordFactory(new OFFactoryRegistry());
+        ResourceRecordFactory factory = new ResourceRecordFactory(new LifecycleManagersRegistry());
         
         ResourceRecord record = factory.getResourceRecord(Resource1.class);
         assertEquals("/path1", record.getMetadata().getPath());

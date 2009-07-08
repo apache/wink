@@ -17,20 +17,14 @@
  *  under the License.
  *  
  *******************************************************************************/
-package org.apache.wink.common.internal.factory;
+package org.apache.wink.common.internal.lifecycle;
 
-/**
- * <h3>OFFactory - Object Factory Factory</h3>
- * 
- * @param <T>
- *            - type of object that OFFactory handles
- */
-public interface OFFactory<T> {
+import org.apache.wink.common.internal.runtime.RuntimeContext;
 
-    ObjectFactory<T> createObjectFactory(T object)
-        throws ObjectCreationException;
+public interface ObjectFactory<T> {
 
-    ObjectFactory<T> createObjectFactory(Class<T> object)
-        throws ObjectCreationException;
+    T getInstance(RuntimeContext context);
+
+    Class<T> getInstanceClass();
 
 }

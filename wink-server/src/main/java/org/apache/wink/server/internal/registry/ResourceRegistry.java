@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.http.HttpStatus;
 import org.apache.wink.common.internal.application.ApplicationValidator;
-import org.apache.wink.common.internal.factory.OFFactoryRegistry;
+import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.registry.Injectable;
 import org.apache.wink.common.internal.registry.metadata.MethodMetadata;
 import org.apache.wink.common.internal.runtime.RuntimeContext;
@@ -66,7 +66,7 @@ public class ResourceRegistry {
     private Lock writersLock;
     private final ApplicationValidator applicationValidator;
 
-    public ResourceRegistry(OFFactoryRegistry factoryRegistry, ApplicationValidator applicationValidator) {
+    public ResourceRegistry(LifecycleManagersRegistry factoryRegistry, ApplicationValidator applicationValidator) {
         this.applicationValidator = applicationValidator;
         rootResources = new LinkedList<ResourceRecord>();
         dirty = false;

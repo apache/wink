@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
-package org.apache.wink.common.internal.factory;
+package org.apache.wink.common.internal.lifecycle;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;

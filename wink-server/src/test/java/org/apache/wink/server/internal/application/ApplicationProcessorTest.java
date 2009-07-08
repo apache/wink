@@ -29,7 +29,7 @@ import javax.ws.rs.core.Application;
 
 import org.apache.wink.common.AbstractDynamicResource;
 import org.apache.wink.common.WinkApplication;
-import org.apache.wink.common.internal.factory.OFFactoryRegistry;
+import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.providers.entity.FileProvider;
 import org.apache.wink.common.internal.providers.entity.StreamingOutputProvider;
 import org.apache.wink.common.internal.providers.entity.StringProvider;
@@ -50,7 +50,7 @@ public class ApplicationProcessorTest extends TestCase {
         List<Class<?>> classes   = new ArrayList<Class<?>>();
 
         public ResourceRegistryMock() {
-            super(new OFFactoryRegistry(), null);
+            super(new LifecycleManagersRegistry(), null);
         }
 
         public void addResource(Object instance) {
@@ -80,7 +80,7 @@ public class ApplicationProcessorTest extends TestCase {
         List<Class<?>> classes   = new ArrayList<Class<?>>();
 
         public ProvidersRegistryMock() {
-            super(new OFFactoryRegistry(), null);
+            super(new LifecycleManagersRegistry(), null);
         }
 
         public boolean addProvider(Class<?> cls) {

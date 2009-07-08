@@ -49,8 +49,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.internal.application.ApplicationValidator;
-import org.apache.wink.common.internal.factory.OFFactoryRegistry;
-import org.apache.wink.common.internal.factory.ObjectFactory;
+import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
+import org.apache.wink.common.internal.lifecycle.ObjectFactory;
 import org.apache.wink.common.internal.runtime.RuntimeContext;
 import org.apache.wink.common.internal.utils.GenericsUtils;
 
@@ -74,11 +74,11 @@ public class ProvidersRegistry {
     private final ProducesMediaTypeMap<MessageBodyWriter<?>> messageBodyWriters = new ProducesMediaTypeMap<MessageBodyWriter<?>>(
                                                                                     MessageBodyWriter.class);
     private final ApplicationValidator                       applicationValidator;
-    private final OFFactoryRegistry                          factoryFactoryRegistry;
+    private final LifecycleManagersRegistry                          factoryFactoryRegistry;
     private final Lock                                       readersLock;
     private final Lock                                       writersLock;
 
-    public ProvidersRegistry(OFFactoryRegistry factoryRegistry,
+    public ProvidersRegistry(LifecycleManagersRegistry factoryRegistry,
         ApplicationValidator applicationValidator) {
         this.factoryFactoryRegistry = factoryRegistry;
         this.applicationValidator = applicationValidator;

@@ -17,22 +17,21 @@
  *  under the License.
  *  
  *******************************************************************************/
-package org.apache.wink.common.internal.factory;
+package org.apache.wink.common.internal.lifecycle;
 
 import java.util.LinkedList;
 
 /**
- * Registry of OFFactories.
+ * Registry of LifecycleManagers
  */
-public class OFFactoryRegistry {
+public class LifecycleManagersRegistry {
 
-    private LinkedList<OFFactory<?>> store                 = new LinkedList<OFFactory<?>>();
-
+    private LinkedList<LifecycleManager<?>> store                 = new LinkedList<LifecycleManager<?>>();
     @SuppressWarnings("unchecked")
-    private OFFactory                defaultFactoryFactory = new DefaultOFFactory();
+    private LifecycleManager                defaultFactoryFactory = new DefaultLifecycleManager();
 
-    public void setFactoryFactoryArray(OFFactory<?>[] factories) {
-        for (OFFactory<?> factory : factories) {
+    public void setFactoryFactoryArray(LifecycleManager<?>[] factories) {
+        for (LifecycleManager<?> factory : factories) {
             addFactoryFactory(factory);
         }
     }
@@ -44,7 +43,7 @@ public class OFFactoryRegistry {
      * 
      * @param factory
      */
-    public void addFactoryFactory(OFFactory<?> factory) {
+    public void addFactoryFactory(LifecycleManager<?> factory) {
         store.addFirst(factory);
     }
 
@@ -57,7 +56,7 @@ public class OFFactoryRegistry {
      */
     @SuppressWarnings("unchecked")
     public <T> ObjectFactory<T> getObjectFactory(T object) {
-        for (OFFactory factoryFactory : store) {
+        for (LifecycleManager factoryFactory : store) {
             ObjectFactory objectFactory = factoryFactory.createObjectFactory(object);
             if (objectFactory != null) {
                 return objectFactory;
@@ -75,7 +74,7 @@ public class OFFactoryRegistry {
      */
     @SuppressWarnings("unchecked")
     public <T> ObjectFactory<T> getObjectFactory(Class<T> cls) {
-        for (OFFactory factoryFactory : store) {
+        for (LifecycleManager factoryFactory : store) {
             ObjectFactory objectFactory = factoryFactory.createObjectFactory(cls);
             if (objectFactory != null) {
                 return objectFactory;

@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
-package org.apache.wink.common.internal.factory;
+package org.apache.wink.common.internal.lifecycle;
 
 import org.apache.wink.common.internal.runtime.RuntimeContext;
 

@@ -25,16 +25,16 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.DynamicResource;
-import org.apache.wink.common.internal.factory.OFFactory;
-import org.apache.wink.common.internal.factory.ObjectCreationException;
-import org.apache.wink.common.internal.factory.ObjectFactory;
+import org.apache.wink.common.internal.lifecycle.LifecycleManager;
+import org.apache.wink.common.internal.lifecycle.ObjectCreationException;
+import org.apache.wink.common.internal.lifecycle.ObjectFactory;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
 
 
-public class SpringOFFactory<T> implements OFFactory<T> {
+public class SpringLifecycleManager<T> implements LifecycleManager<T> {
 
-    private static final Logger logger = LoggerFactory.getLogger(SpringOFFactory.class);
+    private static final Logger logger = LoggerFactory.getLogger(SpringLifecycleManager.class);
 
     /**
      * holds Static Resources and Providers

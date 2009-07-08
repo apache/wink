@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.wink.common.internal.factory.ObjectFactory;
+import org.apache.wink.common.internal.lifecycle.ObjectFactory;
 import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
 import org.apache.wink.common.internal.registry.metadata.MethodMetadata;
 import org.apache.wink.common.internal.uritemplate.UriTemplateMatcher;

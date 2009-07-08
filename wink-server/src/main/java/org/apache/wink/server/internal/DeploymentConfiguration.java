@@ -38,8 +38,8 @@ import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.application.ApplicationValidator;
-import org.apache.wink.common.internal.factory.OFFactoryRegistry;
-import org.apache.wink.common.internal.factory.ScopeOFFactory;
+import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
+import org.apache.wink.common.internal.lifecycle.ScopeLifecycleManager;
 import org.apache.wink.common.internal.registry.InjectableFactory;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.common.internal.utils.FileLoader;
@@ -91,7 +91,7 @@ public class DeploymentConfiguration {
     // registries
     private ProvidersRegistry     providersRegistry;
     private ResourceRegistry      resourceRegistry;
-    private OFFactoryRegistry     ofFactoryRegistry;
+    private LifecycleManagersRegistry     ofFactoryRegistry;
 
     // mappers
     private MediaTypeMapper       mediaTypeMapper;
@@ -158,11 +158,11 @@ public class DeploymentConfiguration {
         this.mediaTypeMapper = mediaTypeMapper;
     }
 
-    public void setOfFactoryRegistry(OFFactoryRegistry ofFactoryRegistry) {
+    public void setOfFactoryRegistry(LifecycleManagersRegistry ofFactoryRegistry) {
         this.ofFactoryRegistry = ofFactoryRegistry;
     }
 
-    public OFFactoryRegistry getOfFactoryRegistry() {
+    public LifecycleManagersRegistry getOfFactoryRegistry() {
         return ofFactoryRegistry;
     }
 
@@ -236,8 +236,8 @@ public class DeploymentConfiguration {
     protected void initRegistries() {
         InjectableFactory.setInstance(new ServerInjectableFactory());
         if (ofFactoryRegistry == null) {
-            ofFactoryRegistry = new OFFactoryRegistry();
-            ofFactoryRegistry.addFactoryFactory(new ScopeOFFactory<Object>());
+            ofFactoryRegistry = new LifecycleManagersRegistry();
+            ofFactoryRegistry.addFactoryFactory(new ScopeLifecycleManager<Object>());
         }
         ApplicationValidator applicationValidator = new ApplicationValidator();
         providersRegistry = new ProvidersRegistry(ofFactoryRegistry, applicationValidator);

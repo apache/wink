@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
-package org.apache.wink.common.internal.factory;
+package org.apache.wink.common.internal.lifecycle;
 
 
 import org.apache.wink.common.annotations.Scope;
@@ -26,12 +26,12 @@ import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollect
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
 
 /**
- * Implements a OFFactory that creates objects based on the Scope annotation.
+ * Implements a LifecycleManager that creates objects based on the Scope annotation.
  * 
  * @param <T>
  * @see Scope
  */
-public class ScopeOFFactory<T> implements OFFactory<T> {
+public class ScopeLifecycleManager<T> implements LifecycleManager<T> {
 
     public ObjectFactory<T> createObjectFactory(T object) {
 

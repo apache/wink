@@ -38,7 +38,7 @@ import javax.ws.rs.ext.Provider;
 import org.apache.wink.common.annotations.Scope;
 import org.apache.wink.common.annotations.Scope.ScopeType;
 import org.apache.wink.common.internal.application.ApplicationValidator;
-import org.apache.wink.common.internal.factory.OFFactoryRegistry;
+import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.providers.entity.ByteArrayProvider;
 import org.apache.wink.common.internal.providers.entity.FileProvider;
 import org.apache.wink.common.internal.providers.entity.InputStreamProvider;
@@ -90,7 +90,7 @@ public class ProvidersMessageBodyTest extends TestCase {
     }
 
     private ProvidersRegistry createProvidersRegistryImpl() {
-        ProvidersRegistry providers = new ProvidersRegistry(new OFFactoryRegistry(),
+        ProvidersRegistry providers = new ProvidersRegistry(new LifecycleManagersRegistry(),
             new ApplicationValidator());
         return providers;
     }

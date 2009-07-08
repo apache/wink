@@ -23,7 +23,7 @@ import javax.ws.rs.WebApplicationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.wink.common.internal.factory.CreationUtils;
+import org.apache.wink.common.internal.lifecycle.CreationUtils;
 import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.springframework.beans.BeansException;
@@ -33,7 +33,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 public class DependenciesInjectionPostProcessor implements BeanPostProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger(DependenciesInjectionPostProcessor.class);
-    private SpringOFFactory<Object> springOFFactory;
+    private SpringLifecycleManager<Object> springOFFactory;
 
     public Object postProcessAfterInitialization(Object bean, String beanName)
         throws BeansException {
@@ -57,7 +57,7 @@ public class DependenciesInjectionPostProcessor implements BeanPostProcessor {
         return bean;
     }
 
-    public void setSpringOFFactory(SpringOFFactory<Object> springOFFactory) {
+    public void setSpringOFFactory(SpringLifecycleManager<Object> springOFFactory) {
         this.springOFFactory = springOFFactory;
     }
 

@@ -17,17 +17,17 @@
  *  under the License.
  *  
  *******************************************************************************/
-package org.apache.wink.common.internal.factory;
+package org.apache.wink.common.internal.lifecycle;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.ext.Provider;
 
 import org.apache.wink.common.annotations.Scope;
 import org.apache.wink.common.annotations.Scope.ScopeType;
-import org.apache.wink.common.internal.factory.ClassMetadataPrototypeOF;
-import org.apache.wink.common.internal.factory.OFFactoryRegistry;
-import org.apache.wink.common.internal.factory.ScopeOFFactory;
-import org.apache.wink.common.internal.factory.SingletonObjectFactory;
+import org.apache.wink.common.internal.lifecycle.ClassMetadataPrototypeOF;
+import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
+import org.apache.wink.common.internal.lifecycle.ScopeLifecycleManager;
+import org.apache.wink.common.internal.lifecycle.SingletonObjectFactory;
 
 import junit.framework.TestCase;
 
@@ -70,7 +70,7 @@ public class OFFactoryTest extends TestCase {
     }
 
     public void testDefault() {
-        OFFactoryRegistry factoryRegistry = new OFFactoryRegistry();
+        LifecycleManagersRegistry factoryRegistry = new LifecycleManagersRegistry();
 
         // by default providers are always singletons
         assertEquals(SingletonObjectFactory.class,
@@ -108,8 +108,8 @@ public class OFFactoryTest extends TestCase {
 
     @SuppressWarnings("unchecked")
     public void testScopeable() {
-        OFFactoryRegistry factoryRegistry = new OFFactoryRegistry();
-        factoryRegistry.addFactoryFactory(new ScopeOFFactory());
+        LifecycleManagersRegistry factoryRegistry = new LifecycleManagersRegistry();
+        factoryRegistry.addFactoryFactory(new ScopeLifecycleManager());
 
         // default
         assertEquals(SingletonObjectFactory.class,

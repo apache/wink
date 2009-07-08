@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
-package org.apache.wink.common.internal.factory;
+package org.apache.wink.common.internal.lifecycle;
 
 
 
@@ -29,7 +29,7 @@ import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollect
 
 /**
  * <p>
- * Default implementation for OFFactory.
+ * Default implementation for LifecycleManager according to JAX RS (JSR 311).
  * <p>
  * For <tt>createObjectFactory(T object)</tt> the factory will always return a
  * SingletonObjectFactory.
@@ -47,9 +47,9 @@ import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollect
  * @see ClassMetadataPrototypeOF
  * @see SimplePrototypeOF
  */
-class DefaultOFFactory<T> implements OFFactory<T> {
+class DefaultLifecycleManager<T> implements LifecycleManager<T> {
 
-    static final Logger logger = LoggerFactory.getLogger(DefaultOFFactory.class);
+    private static final Logger logger = LoggerFactory.getLogger(DefaultLifecycleManager.class);
 
     /**
      * The default implementation, returns a SingletonFactory for all objects.

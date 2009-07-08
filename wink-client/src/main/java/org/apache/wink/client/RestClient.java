@@ -31,8 +31,8 @@ import org.slf4j.LoggerFactory;
 import org.apache.wink.client.internal.ResourceImpl;
 import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.internal.application.ApplicationValidator;
-import org.apache.wink.common.internal.factory.OFFactoryRegistry;
-import org.apache.wink.common.internal.factory.ScopeOFFactory;
+import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
+import org.apache.wink.common.internal.lifecycle.ScopeLifecycleManager;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 
@@ -114,8 +114,8 @@ public class RestClient {
 
     private void initProvidersRegistry() {
         // setup OFFactoryRegistry to support default and scope
-        OFFactoryRegistry ofFactoryRegistry = new OFFactoryRegistry();
-        ofFactoryRegistry.addFactoryFactory(new ScopeOFFactory<Object>());
+        LifecycleManagersRegistry ofFactoryRegistry = new LifecycleManagersRegistry();
+        ofFactoryRegistry.addFactoryFactory(new ScopeLifecycleManager<Object>());
         providersRegistry = new ProvidersRegistry(ofFactoryRegistry, new ApplicationValidator());
 
         // process all applications
