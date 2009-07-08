@@ -38,13 +38,14 @@ import javax.xml.bind.annotation.XmlValue;
 import javax.xml.namespace.QName;
 
 import org.apache.wink.common.annotations.Asset;
-import org.apache.wink.common.model.json.JSONException;
-import org.apache.wink.common.model.json.JSONObject;
+import org.apache.wink.common.model.json.JSONUtils;
 import org.apache.wink.common.model.synd.SyndEntry;
 import org.apache.wink.common.model.synd.SyndFeed;
 import org.apache.wink.common.model.synd.SyndText;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -93,6 +94,12 @@ public class JsonProviderTest extends MockServletInvocationTest {
                                                           + "    \"@xmlns\": {\"$\": \"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\n"
                                                           + "    \"$\": \"entry title\"\n"
                                                           + "  }\n" + "}}";
+
+    private void compairJsonContent(final String expected, final String actual) throws JSONException {
+        JSONObject result = JSONUtils.objectForString(actual);
+        JSONObject want = JSONUtils.objectForString(expected);
+        assertTrue(JSONUtils.equals(want, result));
+    }
 
     @Path("test")
     public static class TestResource {
@@ -239,7 +246,7 @@ public class JsonProviderTest extends MockServletInvocationTest {
             "/test/json", "application/json");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(JSON, response.getContentAsString());
+        compairJsonContent(JSON, response.getContentAsString());
     }
     
     public void testGetJsonFeed() throws Exception {
@@ -247,7 +254,7 @@ public class JsonProviderTest extends MockServletInvocationTest {
             "/test/jsonfeed", "application/json");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(JSON_FEED, response.getContentAsString());
+        compairJsonContent(JSON_FEED, response.getContentAsString());
     }
 
     public void testGetJsonFromJAXB() throws Exception {
@@ -255,7 +262,7 @@ public class JsonProviderTest extends MockServletInvocationTest {
             "/test/jaxb", "application/json");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(JSON, response.getContentAsString());
+        compairJsonContent(JSON, response.getContentAsString());
     }
 
     public void testGetJsonFromJAXBElement() throws Exception {
@@ -263,7 +270,7 @@ public class JsonProviderTest extends MockServletInvocationTest {
             "/test/jaxbelement", "application/json");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(JSON, response.getContentAsString());
+        compairJsonContent(JSON, response.getContentAsString());
     }
 
     public void testGetJsonFromAtom() throws Exception {
@@ -271,7 +278,7 @@ public class JsonProviderTest extends MockServletInvocationTest {
             "/test/atom", "application/json");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(JSON_AS_ATOM_ENTRY, response.getContentAsString());
+        compairJsonContent(JSON_AS_ATOM_ENTRY, response.getContentAsString());
     }
 
     public void testGetJsonAsset() throws Exception {
@@ -279,7 +286,7 @@ public class JsonProviderTest extends MockServletInvocationTest {
             "/test/jsonasset", "application/json");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(JSON, response.getContentAsString());
+        compairJsonContent(JSON, response.getContentAsString());
     }
 
     public void testGetJAXBAsset() throws Exception {
@@ -287,7 +294,7 @@ public class JsonProviderTest extends MockServletInvocationTest {
             "/test/jaxbasset", "application/json");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(JSON, response.getContentAsString());
+        compairJsonContent(JSON, response.getContentAsString());
     }
 
     public void testGetAtomAsset() throws Exception {
@@ -295,7 +302,7 @@ public class JsonProviderTest extends MockServletInvocationTest {
             "/test/atomasset", "application/json");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(JSON, response.getContentAsString());
+        compairJsonContent(JSON, response.getContentAsString());
     }
 
 }

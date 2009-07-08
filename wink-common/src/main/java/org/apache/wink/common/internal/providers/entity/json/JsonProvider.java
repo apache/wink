@@ -42,9 +42,9 @@ import org.slf4j.LoggerFactory;
 import org.apache.wink.common.RestConstants;
 import org.apache.wink.common.internal.providers.entity.xml.AbstractJAXBProvider;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
-import org.apache.wink.common.model.json.JSONException;
-import org.apache.wink.common.model.json.JSONObject;
 import org.apache.wink.common.utils.ProviderUtils;
+import org.json.JSONObject;
+import org.json.JSONException;
 
 
 @Provider

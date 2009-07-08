@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.wink.common.annotations.Scope;
 import org.apache.wink.common.annotations.Scope.ScopeType;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
-import org.apache.wink.common.model.json.JSONObject;
+import org.json.JSONObject;
 
 
 @Scope(ScopeType.PROTOTYPE)

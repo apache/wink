@@ -17,22 +17,32 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.model.json;
 
 import java.util.Iterator;
 
+import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONTokener;
+import org.json.JSONException;
+
 public class JSONUtils {
-    
+
+    public static JSONObject objectForString(final String input) throws JSONException {
+        assert input != null;
+        JSONTokener tok = new JSONTokener(input);
+        return new JSONObject(tok);
+    }
+
     public static boolean equals(JSONObject expected, JSONObject actual) {
         return isJSONEquals(expected, actual);
     }
-    
+
     public static boolean equals(JSONArray expected, JSONArray actual) {
         return isJSONEquals(expected, actual);
     }
-    
+
     private static boolean isJSONEquals(Object expected, Object actual) {
         if (expected == actual) {
             return true;
@@ -71,7 +81,7 @@ public class JSONUtils {
             }
             return true;
         }
-            
+
         // all other objects
         return expected.equals(actual);
     }

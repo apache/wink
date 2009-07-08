@@ -35,12 +35,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.providers.entity.xml.AbstractJAXBProvider;
 import org.apache.wink.common.model.atom.AtomJAXBUtils;
-import org.apache.wink.common.model.json.JSONException;
-import org.apache.wink.common.model.json.JSONObject;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
+import org.json.JSONObject;
+import org.json.JSONException;
 
 
 public class AbstractJsonXmlProvider extends AbstractJAXBProvider {

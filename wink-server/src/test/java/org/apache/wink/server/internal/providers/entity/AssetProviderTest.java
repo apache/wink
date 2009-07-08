@@ -40,10 +40,11 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
 import org.apache.wink.common.annotations.Asset;
-import org.apache.wink.common.model.json.JSONException;
-import org.apache.wink.common.model.json.JSONObject;
+import org.apache.wink.common.model.json.JSONUtils;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -154,7 +155,9 @@ public class AssetProviderTest extends MockServletInvocationTest {
         MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "/test", "application/json");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(JSON, response.getContentAsString());
+        JSONObject result = JSONUtils.objectForString(response.getContentAsString());
+        JSONObject expected = JSONUtils.objectForString(JSON);
+        assertTrue(JSONUtils.equals(expected, result));
     }
 
     public void testAssetGetXml() throws Exception {
