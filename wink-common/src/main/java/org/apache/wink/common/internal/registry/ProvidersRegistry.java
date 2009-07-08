@@ -89,6 +89,9 @@ public class ProvidersRegistry {
 
     @SuppressWarnings("unchecked")
     public boolean addProvider(Class<?> cls, double priority) {
+        if (cls == null) {
+            throw new NullPointerException("cls");
+        }
         writersLock.lock();
         try {
             ObjectFactory<?> objectFactory = factoryFactoryRegistry.getObjectFactory(cls);
@@ -100,6 +103,9 @@ public class ProvidersRegistry {
 
     @SuppressWarnings("unchecked")
     public boolean addProvider(Object provider, double priority) {
+        if (provider == null) {
+            throw new NullPointerException("provider");
+        }
         writersLock.lock();
         try {
             ObjectFactory<?> objectFactory = factoryFactoryRegistry.getObjectFactory(provider);
@@ -155,6 +161,12 @@ public class ProvidersRegistry {
     @SuppressWarnings("unchecked")
     public <T> ContextResolver<T> getContextResolver(final Class<T> contextType,
         MediaType mediaType, RuntimeContext runtimeContext) {
+        if (contextType == null) {
+            throw new NullPointerException("contextType");
+        }
+        if (mediaType == null) {
+            throw new NullPointerException("mediaType");
+        }
         readersLock.lock();
         try {
             final List<ObjectFactory<ContextResolver<?>>> factories = contextResolvers.getProvidersByMediaType(
@@ -207,6 +219,9 @@ public class ProvidersRegistry {
     @SuppressWarnings("unchecked")
     public <T extends Throwable> ExceptionMapper<T> getExceptionMapper(Class<T> type,
         RuntimeContext runtimeContext) {
+        if (type == null) {
+            throw new NullPointerException("type");
+        }
         readersLock.lock();
         try {
             List<ExceptionMapper<?>> matchingMappers = new ArrayList<ExceptionMapper<?>>();
@@ -251,6 +266,12 @@ public class ProvidersRegistry {
     @SuppressWarnings("unchecked")
     public <T> MessageBodyReader<T> getMessageBodyReader(Class<T> type, Type genericType,
         Annotation[] annotations, MediaType mediaType, RuntimeContext runtimeContext) {
+        if (type == null) {
+            throw new NullPointerException("type");
+        }
+        if (mediaType == null) {
+            throw new NullPointerException("mediaType");
+        }
         readersLock.lock();
         try {
             List<ObjectFactory<MessageBodyReader<?>>> factories = messageBodyReaders.getProvidersByMediaType(
@@ -270,6 +291,12 @@ public class ProvidersRegistry {
     @SuppressWarnings("unchecked")
     public <T> MessageBodyWriter<T> getMessageBodyWriter(Class<T> type, Type genericType,
         Annotation[] annotations, MediaType mediaType, RuntimeContext runtimeContext) {
+        if (type == null) {
+            throw new NullPointerException("type");
+        }
+        if (mediaType == null) {
+            throw new NullPointerException("mediaType");
+        }
         readersLock.lock();
         try {
             List<ObjectFactory<MessageBodyWriter<?>>> writersFactories = messageBodyWriters.getProvidersByMediaType(
@@ -287,6 +314,9 @@ public class ProvidersRegistry {
     }
 
     public Set<MediaType> getMessageBodyWriterMediaTypes(Class<?> type) {
+        if (type == null) {
+            throw new NullPointerException("type");
+        }
         Set<MediaType> mediaTypes = messageBodyWriters.getProvidersMediaTypes(type);
         return mediaTypes;
     }
