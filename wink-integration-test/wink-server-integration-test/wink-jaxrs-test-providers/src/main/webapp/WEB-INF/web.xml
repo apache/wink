@@ -70,6 +70,19 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>StandardEntityProviders</servlet-name>
+        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>org.apache.wink.jaxrs.test.providers.standard.Application</param-value>
+        </init-param>
+        <init-param>
+            <param-name>requestProcessorAttribute</param-name>
+            <param-value>requestProcessorAttribute_standard</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
     <servlet-mapping>
         <servlet-name>MessageBodyReaders</servlet-name>
         <url-pattern>/readers/*</url-pattern>
@@ -85,5 +98,9 @@
     <servlet-mapping>
         <servlet-name>MessageBodyWriterExceptions</servlet-name>
         <url-pattern>/writerexceptions/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StandardEntityProviders</servlet-name>
+        <url-pattern>/standard/*</url-pattern>
     </servlet-mapping>
 </web-app>
