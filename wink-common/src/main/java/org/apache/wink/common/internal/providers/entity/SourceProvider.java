@@ -50,7 +50,6 @@ import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-
 public abstract class SourceProvider implements MessageBodyWriter<Source> {
 
     private static TransformerFactory transformerFactory;
@@ -61,17 +60,17 @@ public abstract class SourceProvider implements MessageBodyWriter<Source> {
         documentBuilderFactory = DocumentBuilderFactory.newInstance();
         documentBuilderFactory.setNamespaceAware(true);
     }
-    
+
     @Provider
     @Consumes({MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.WILDCARD})
     @Produces({MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.WILDCARD})
-    public static class StreamSourceProvider extends SourceProvider implements MessageBodyReader<StreamSource> {
+    public static class StreamSourceProvider extends SourceProvider implements MessageBodyReader<Source> {
 
         public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-            return (StreamSource.class == type && super.isReadable(mediaType));
+            return ((Source.class == type || StreamSource.class == type) && super.isReadable(mediaType));
         }
 
-        public StreamSource readFrom(Class<StreamSource> type, Type genericType, Annotation[] annotations,
+        public StreamSource readFrom(Class<Source> type, Type genericType, Annotation[] annotations,
                 MediaType mediaType, MultivaluedMap<String,String> httpHeaders, InputStream entityStream)
                 throws IOException, WebApplicationException {
             return new StreamSource(entityStream);
