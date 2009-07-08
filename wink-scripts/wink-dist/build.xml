@@ -300,7 +300,7 @@
 
 	<!-- Creates final zip -->
 	<target name="dist" depends="create.javadoc, create.dist.components, create.dist.lib, create.dist.root.docs, create.dist.main.jar, create.dist.main.sources.jar, create.examples">
-		<zip destfile="${target.zip}" basedir="${dist}" />
+		<!--zip destfile="${target.zip}" basedir="${dist}" /-->
 	</target>
 
 </project>
