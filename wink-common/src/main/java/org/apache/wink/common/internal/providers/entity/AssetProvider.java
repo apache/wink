@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.providers.entity;
 
@@ -57,24 +56,25 @@ import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.common.internal.utils.GenericsUtils;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 
-
 @Scope(ScopeType.PROTOTYPE)
 @Provider
 public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWriter<Object> {
 
-    private static final Logger logger = LoggerFactory.getLogger(AssetProvider.class);
+    private static final Logger       logger = LoggerFactory.getLogger(AssetProvider.class);
 
     @Context
-    private Providers providers;
+    private Providers                 providers;
 
     private MessageBodyWriter<Object> writer;
-    private BaseAssetMethod method;
+    private BaseAssetMethod           method;
 
-    public long getSize(Object t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public long getSize(Object t, Class<?> type, Type genericType, Annotation[] annotations,
+        MediaType mediaType) {
         return -1;
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations,
+        MediaType mediaType) {
         // must be annotated with @Asset
         if (type.getAnnotation(Asset.class) == null) {
             return false;
@@ -83,18 +83,19 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
         return findProducesMethod(type, annotations, mediaType);
     }
 
-    public void writeTo(Object t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
-            MultivaluedMap<String,Object> httpHeaders, OutputStream entityStream) throws IOException,
-            WebApplicationException {
+    public void writeTo(Object t, Class<?> type, Type genericType, Annotation[] annotations,
+        MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
+        throws IOException, WebApplicationException {
         RuntimeContext context = getRuntimeContext();
         // instantiate parameters of the asset method
-        Object[] args = InjectableFactory.getInstance().instantiate(method.getFormalParameters(), context);
+        Object[] args = InjectableFactory.getInstance().instantiate(method.getFormalParameters(),
+            context);
         try {
             // invoke the asset method to produce the object to write
             Object object = method.getMethod().invoke(t, args);
             // write the object
-            writer.writeTo(object, method.getTypeClass(), method.getType(), annotations, mediaType, httpHeaders,
-                    entityStream);
+            writer.writeTo(object, method.getTypeClass(), method.getType(), annotations, mediaType,
+                httpHeaders, entityStream);
         } catch (IllegalArgumentException e) {
             logger.error("Error invoking asset method {}", method.getMethod().getName());
             throw new WebApplicationException(e);
@@ -102,12 +103,17 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
             logger.error("Error invoking asset method {}", method.getMethod().getName());
             throw new WebApplicationException(e);
         } catch (InvocationTargetException e) {
+            Throwable targetException = e.getTargetException();
+            if (targetException instanceof RuntimeException) {
+                throw (RuntimeException) targetException;
+            }
             logger.error("Error invoking asset method {}", method.getMethod().getName());
-            throw new WebApplicationException(e);
+            throw new WebApplicationException(targetException);
         }
     }
 
-    public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations,
+        MediaType mediaType) {
         // must be annotated with @Asset
         if (type.getAnnotation(Asset.class) == null) {
             return false;
@@ -116,32 +122,39 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
         return findConsumesMethod(type, annotations, mediaType);
     }
 
-    public Object readFrom(Class<Object> type, Type genericType, Annotation[] annotations, MediaType mediaType,
-            MultivaluedMap<String,String> httpHeaders, InputStream entityStream) throws IOException,
-            WebApplicationException {
+    public Object readFrom(Class<Object> type, Type genericType, Annotation[] annotations,
+        MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream)
+        throws IOException, WebApplicationException {
         RuntimeContext context = getRuntimeContext();
         // instantiate parameters of the asset method.
         // since the formal parameters contain an Entity parameter, it is populated
         // during the call to the instantiate method. there is no need to manually call
         // the reader for getting the entity
-        Object[] args = InjectableFactory.getInstance().instantiate(method.getFormalParameters(), context);
+        Object[] args = InjectableFactory.getInstance().instantiate(method.getFormalParameters(),
+            context);
         try {
             // create the asset
             Object asset = type.newInstance();
             // invoke the asset method to consume the entity that was read
             method.getMethod().invoke(asset, args);
             return asset;
-        } catch (IllegalArgumentException e) {
-            logger.error("Error invoking asset method {}", method.getMethod().getName());
-            throw new WebApplicationException(e);
-        } catch (IllegalAccessException e) {
-            logger.error("Error invoking asset method {}", method.getMethod().getName());
-            throw new WebApplicationException(e);
+        } catch (RuntimeException e) {
+            throw e;
         } catch (InvocationTargetException e) {
+            Throwable targetException = e.getTargetException();
+            if (targetException instanceof RuntimeException) {
+                throw (RuntimeException) targetException;
+            }
             logger.error("Error invoking asset method {}", method.getMethod().getName());
             throw new WebApplicationException(e);
         } catch (InstantiationException e) {
-            logger.error("Failed to instantiate asset {}. Assets must have a default public contructor.", type.getName());
+            logger.error(
+                "Failed to instantiate asset {}. Assets must have a default public contructor.",
+                type.getName());
+            throw new WebApplicationException(e);
+
+        } catch (Exception e) {
+            logger.error("Error invoking asset method {}", method.getMethod().getName());
             throw new WebApplicationException(e);
         }
     }
@@ -151,12 +164,14 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
     }
 
     @SuppressWarnings("unchecked")
-    private boolean findProducesMethod(Class<?> assetType, Annotation[] annotations, MediaType mediaType) {
+    private boolean findProducesMethod(Class<?> assetType, Annotation[] annotations,
+        MediaType mediaType) {
 
         // get all writable locator methods
         List<ProducesMethod> methods = getProducingMethods(assetType, mediaType);
         // sort the methods according to media types in descending order
         Collections.sort(methods, new Comparator<ProducesMethod>() {
+
             public int compare(ProducesMethod o1, ProducesMethod o2) {
                 return o2.compareTo(o1);
             }
@@ -164,10 +179,10 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
         // find a method that can be handled
         // use the return type of the method to find the actual provider
         for (ProducesMethod method : methods) {
-            MessageBodyWriter<?> writer = providers.getMessageBodyWriter(method.getTypeClass(), method.getType(),
-                    annotations, mediaType);
+            MessageBodyWriter<?> writer = providers.getMessageBodyWriter(method.getTypeClass(),
+                method.getType(), annotations, mediaType);
             if (writer != null) {
-                this.writer = (MessageBodyWriter<Object>)writer;
+                this.writer = (MessageBodyWriter<Object>) writer;
                 this.method = method;
                 return true;
             }
@@ -176,7 +191,8 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
         return false;
     }
 
-    private boolean findConsumesMethod(Class<?> assetType, Annotation[] annotations, MediaType mediaType) {
+    private boolean findConsumesMethod(Class<?> assetType, Annotation[] annotations,
+        MediaType mediaType) {
 
         // verify that the asset has a default public constructor
         try {
@@ -196,14 +212,15 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
         List<ConsumesMethod> methods = getConsumingMethods(assetType, mediaType);
         // sort the methods according to media types in descending order
         Collections.sort(methods, new Comparator<ConsumesMethod>() {
+
             public int compare(ConsumesMethod o1, ConsumesMethod o2) {
                 return o2.compareTo(o1);
             }
         });
         // find a consuming method that has a message body reader
         for (ConsumesMethod method : methods) {
-            MessageBodyReader<?> reader = providers.getMessageBodyReader(method.getTypeClass(), method.getType(),
-                    annotations, mediaType);
+            MessageBodyReader<?> reader = providers.getMessageBodyReader(method.getTypeClass(),
+                method.getType(), annotations, mediaType);
             if (reader != null) {
                 // we don't need to save the reader because when we prepare the
                 // parameters to inject to the locator method, the entity parameter will also be
@@ -268,6 +285,7 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
 
         // sort the list of media types
         Collections.sort(list, new Comparator<MediaType>() {
+
             public int compare(MediaType o1, MediaType o2) {
                 // compare in descending order
                 return MediaTypeUtils.compareTo(o2, o1);
@@ -277,11 +295,12 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
     }
 
     private static abstract class BaseAssetMethod implements Comparable<BaseAssetMethod> {
-        private Method method;
+
+        private Method           method;
         private List<Injectable> formalParameters;
-        private MediaType mediaType;
-        protected Type type;
-        protected Class<?> typeClass;
+        private MediaType        mediaType;
+        protected Type           type;
+        protected Class<?>       typeClass;
 
         public BaseAssetMethod(Method method, MediaType mediaType) {
             this.method = method;
@@ -294,7 +313,8 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
             Annotation[][] parameterAnnotations = method.getParameterAnnotations();
             Type[] paramTypes = method.getGenericParameterTypes();
             for (int pos = 0, limit = paramTypes.length; pos < limit; pos++) {
-                Injectable fp = InjectableFactory.getInstance().create(paramTypes[pos], parameterAnnotations[pos], method, false);
+                Injectable fp = InjectableFactory.getInstance().create(paramTypes[pos],
+                    parameterAnnotations[pos], method, false);
                 formalParameters.add(fp);
             }
         }
@@ -336,6 +356,7 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
     }
 
     private static class ProducesMethod extends BaseAssetMethod {
+
         public ProducesMethod(Method method, MediaType mediaType) {
             super(method, mediaType);
             this.type = method.getGenericReturnType();
@@ -344,14 +365,17 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
     }
 
     private static class ConsumesMethod extends BaseAssetMethod {
+
         public ConsumesMethod(Method method, MediaType mediaType) {
             super(method, mediaType);
             for (Injectable fp : getFormalParameters()) {
                 if (fp.getParamType() == ParamType.ENTITY) {
                     if (type != null) {
                         // we allow to have only one entity parameter
-                        String methodName = method.getDeclaringClass().getName() + "." + method.getName();
-                        logger.error("Asset locator method {} has more than one entity parameter", methodName);
+                        String methodName = method.getDeclaringClass().getName() + "."
+                            + method.getName();
+                        logger.error("Asset locator method {} has more than one entity parameter",
+                            methodName);
                         throw new WebApplicationException();
                     }
                     type = fp.getGenericType();

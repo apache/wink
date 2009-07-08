@@ -249,7 +249,9 @@ public abstract class ValueConvertor {
             } catch (IllegalAccessException e) {
                 throw createConversionException(value, method.getDeclaringClass(), e);
             } catch (InvocationTargetException e) {
-                throw createConversionException(value, method.getDeclaringClass(), e);
+                Throwable targetException = e.getTargetException();
+                throw createConversionException(value, method.getDeclaringClass(),
+                    targetException);
             }
         }
     }
