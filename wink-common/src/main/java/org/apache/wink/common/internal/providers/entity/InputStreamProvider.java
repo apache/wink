@@ -45,7 +45,7 @@ public class InputStreamProvider implements MessageBodyReader<InputStream>,
 
     public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations,
         MediaType mediaType) {
-        return type != null && InputStream.class.isAssignableFrom(type);
+        return type != null && InputStream.class == type;
     }
 
     public InputStream readFrom(Class<InputStream> type, Type genericType,

@@ -43,7 +43,7 @@ import javax.ws.rs.ext.Provider;
 public class DataSourceProvider implements MessageBodyReader<DataSource>, MessageBodyWriter<DataSource> {
 
     public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-        return DataSource.class.isAssignableFrom(type);
+        return DataSource.class == type;
     }
 
     public DataSource readFrom(Class<DataSource> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders,

@@ -52,7 +52,7 @@ public final class ReaderProvider implements MessageBodyReader<Reader>, MessageB
     }
 
     public boolean isReadable(Class<?> type, Type genericType, Annotation annotations[], MediaType mediaType) {
-        return Reader.class.isAssignableFrom(type);
+        return Reader.class == type;
     }
 
     public Reader readFrom(Class<Reader> type, Type genericType, Annotation annotations[], MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream)

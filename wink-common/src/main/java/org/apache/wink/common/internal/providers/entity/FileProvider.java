@@ -82,7 +82,7 @@ public class FileProvider implements MessageBodyWriter<File>, MessageBodyReader<
 
 	public boolean isReadable(Class<?> type, Type genericType,
 			Annotation[] annotations, MediaType mediaType) {
-		return File.class.isAssignableFrom(type);
+		return File.class == type;
 	}
 
 	public File readFrom(Class<File> type, Type genericType,
