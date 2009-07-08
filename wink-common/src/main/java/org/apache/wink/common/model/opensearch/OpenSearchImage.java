@@ -55,17 +55,17 @@ import javax.xml.bind.annotation.XmlValue;
  *     Parent: OpenSearchDescription 
  *     Attributes:
  * 
- *         height – Contains the height, in pixels, of this image.
+ *         height - Contains the height, in pixels, of this image.
  * 
  *             Restrictions: The value must be a non-negative integer. 
  *             Requirements: This attribute is optional. 
  * 
- *         width – Contains the width, in pixels, of this image.
+ *         width - Contains the width, in pixels, of this image.
  * 
  *             Restrictions: The value must be a non-negative integer. 
  *             Requirements: This attribute is optional. 
  * 
- *         type – Contains the the MIME type of this image.
+ *         type - Contains the the MIME type of this image.
  * 
  *             Restrictions: The value must be a valid MIME type. 
  *             Requirements: This attribute is optional. 

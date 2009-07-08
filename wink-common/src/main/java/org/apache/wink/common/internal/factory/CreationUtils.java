@@ -40,12 +40,8 @@ import org.apache.wink.common.internal.registry.metadata.ConstructorMetadata;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
 import org.apache.wink.common.internal.runtime.RuntimeContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CreationUtils {
-
-    private static final Logger logger = LoggerFactory.getLogger(CreationUtils.class);
 
     private CreationUtils() {
     }

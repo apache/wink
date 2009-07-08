@@ -129,7 +129,7 @@ public class AtomTest extends TestCase {
         "        <uri>http://uri</uri>\n" + 
         "    </contributor>\n" + 
         "    <category label=\"label\" scheme=\"scheme\" term=\"term\"/>\n" +
-        "    <content type=\"text/plain\">Gustaf's Knäckebröd</content>\n" + 
+        "    <content type=\"text/plain\">Gustaf's KnÃ¤ckebrÃ¶d</content>\n" + 
         "</entry>\n");
     private static final String ATOM_ENTRY_3 = replaceTimeToken(
         "<entry xml:lang=\"en-us\" xml:base=\"http://entry/base\" anyAttr=\"anyAttrValue\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + 
@@ -153,7 +153,7 @@ public class AtomTest extends TestCase {
         "    <content type=\"application/xml\">\n" + 
         "        <x1 xmlns=\"xxx\" xmlns:y=\"yyy\">\n" +
         "            <x2>\n" +
-        "                <y:y1>Gustaf's Knäckebröd</y:y1>\n" +
+        "                <y:y1>Gustaf's KnÃ¤ckebrÃ¶d</y:y1>\n" +
         "            </x2>\n" +
         "        </x1>\n" + 
         "    </content>\n" + 
@@ -207,7 +207,7 @@ public class AtomTest extends TestCase {
         "        <content type=\"application/xml\">\n" + 
         "            <x1 xmlns=\"xxx\" xmlns:y=\"yyy\">\n" +
         "                <x2>\n" +
-        "                    <y:y1>Gustaf's Knäckebröd</y:y1>\n" +
+        "                    <y:y1>Gustaf's KnÃ¤ckebrÃ¶d</y:y1>\n" +
         "                </x2>\n" +
         "            </x1>\n" + 
         "        </content>\n" + 
@@ -257,7 +257,7 @@ public class AtomTest extends TestCase {
             "        <content type=\"application/xml\">\n" + 
             "            <x1 xmlns=\"xxx\" xmlns:y=\"yyy\">\n" +
             "                <x2>\n" +
-            "                    <y:y1>Gustaf's Knäckebröd</y:y1>\n" +
+            "                    <y:y1>Gustaf's KnÃ¤ckebrÃ¶d</y:y1>\n" +
             "                </x2>\n" +
             "            </x1>\n" + 
             "        </content>\n" + 
@@ -500,7 +500,7 @@ public class AtomTest extends TestCase {
         assertEquals("2", entry.getId());
         assertNotNull(entry.getContent());
         assertEquals("text/plain", entry.getContent().getType());
-        assertEquals("Gustaf's Knäckebröd", entry.getContent().getValue());
+        assertEquals("Gustaf's KnÃ¤ckebrÃ¶d", entry.getContent().getValue());
         
         element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_ENTRY_3));
         assertNotNull(element);
@@ -510,7 +510,7 @@ public class AtomTest extends TestCase {
         assertEquals("3", entry.getId());
         assertNotNull(entry.getContent());
         assertEquals("application/xml", entry.getContent().getType());
-        assertEquals("<x1 xmlns=\"xxx\" xmlns:y=\"yyy\"><x2><y:y1>Gustaf's Knäckebröd</y:y1></x2></x1>", entry.getContent().getValue().replaceAll("\n", "").replaceAll("    ", ""));
+        assertEquals("<x1 xmlns=\"xxx\" xmlns:y=\"yyy\"><x2><y:y1>Gustaf's KnÃ¤ckebrÃ¶d</y:y1></x2></x1>", entry.getContent().getValue().replaceAll("\n", "").replaceAll("    ", ""));
     }
 
     public void testAtomFeedMarshal() throws Exception {
@@ -799,7 +799,7 @@ public class AtomTest extends TestCase {
         AtomEntry entry = getEntryWithoutContent(id);
         AtomContent content = new AtomContent();
         content.setType("text/plain");
-        content.setValue("Gustaf's Knäckebröd");
+        content.setValue("Gustaf's KnÃ¤ckebrÃ¶d");
         entry.setContent(content);
         return entry;
     }
@@ -808,7 +808,7 @@ public class AtomTest extends TestCase {
         AtomEntry entry = getEntryWithoutContent(id);
         AtomContent content = new AtomContent();
         content.setType("application/xml");
-        content.setValue("<x1 xmlns=\"xxx\" xmlns:y=\"yyy\"><x2><y:y1>Gustaf's Knäckebröd</y:y1></x2></x1>");
+        content.setValue("<x1 xmlns=\"xxx\" xmlns:y=\"yyy\"><x2><y:y1>Gustaf's KnÃ¤ckebrÃ¶d</y:y1></x2></x1>");
         entry.setContent(content);
         return entry;
     }

@@ -183,17 +183,17 @@ import org.apache.wink.common.model.JAXBNamespacePrefixMapper;
  *         Parent: OpenSearchDescription 
  *         Attributes:
  *     
- *             height – Contains the height, in pixels, of this image.
+ *             height - Contains the height, in pixels, of this image.
  *     
  *                 Restrictions: The value must be a non-negative integer. 
  *                 Requirements: This attribute is optional. 
  *     
- *             width – Contains the width, in pixels, of this image.
+ *             width - Contains the width, in pixels, of this image.
  *     
  *                 Restrictions: The value must be a non-negative integer. 
  *                 Requirements: This attribute is optional. 
  *     
- *             type – Contains the the MIME type of this image.
+ *             type - Contains the the MIME type of this image.
  *     
  *                 Restrictions: The value must be a valid MIME type. 
  *                 Requirements: This attribute is optional. 
@@ -253,19 +253,19 @@ import org.apache.wink.common.model.JAXBNamespacePrefixMapper;
  *         Parent: OpenSearchDescription 
  *         Values: The value must be one of the following strings (case insensitive):
  *     
- *             &quot;open&quot; –
+ *             &quot;open&quot; -
  *     
  *                 The search client may request search results. 
  *                 The search client may display the search results to end users. 
  *                 The search client may send the search results to other search clients. 
  *     
- *             &quot;limited&quot; –
+ *             &quot;limited&quot; -
  *     
  *                 The search client may request search results. 
  *                 The search client may display the search results to end users. 
  *                 The search client may not send the search results to other search clients. 
  *     
- *             &quot;private&quot; –
+ *             &quot;private&quot; -
  *     
  *                 The search client may request search results. 
  *                 The search client may not display the search results to end users. 
