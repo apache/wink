@@ -62,7 +62,7 @@
 	<property name="tmp.binary" value="${tmp}/binary" />
 
 	<property name="wink.main.jar.name" value="wink-sdk-${project.version}.jar" />
-	<property name="project.developerGuide.file" value="${basedir}/../../src/doc/DeveloperGuide/Symphony_SDK_2.0_Features_List.pdf" />
+	<property name="project.developerGuide.file" value="${basedir}/../../src/doc/DeveloperGuide/Apache_Wink_0.1_Features_List.pdf" />
 
 	<!-- Init -->
 	<target name="init">
