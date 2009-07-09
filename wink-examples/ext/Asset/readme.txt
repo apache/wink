@@ -12,7 +12,7 @@ Description
 - A new user is created from xml by POSTing to
      http://localhost:8080/Asset/rest/users
      
-- Symphony features used in this example:
+- Wink features used in this example:
    Asset, ServiceDocument, LinkBuilders, SyndFeed, SyndEntry
 
 Build

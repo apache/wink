@@ -13,7 +13,7 @@ Description
 - A list of predefined bookmarks is returned as an Atom feed on this URI:
      http://localhost:8080/DynamicResource/rest/bookmarks
       
--Symphony features used in this example:
+-Wink features used in this example:
    DynamicResource, ServiceDocument, LinkBuilders, SyndFeed, SyndEntry
    
 Build

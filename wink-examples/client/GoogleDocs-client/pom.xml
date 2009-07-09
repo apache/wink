@@ -37,7 +37,7 @@
     <build>
         <finalName>GoogleDocs-client</finalName>
     </build>
-    <!-- Dependency on Symphony SDK library -->
+    <!-- Dependency on Wink SDK library -->
     <dependencies>
     	<dependency>
     	  <groupId>commons-cli</groupId>

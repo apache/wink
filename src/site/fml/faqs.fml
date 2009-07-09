@@ -20,22 +20,22 @@
 
 <faqs title="Frequently Asked Questions" toplink="false">
 	<part id="sdk"> 
-		<title>Symphony 2.0</title>
+		<title>Wink 0.1</title>
 		<faq id="sdk-examples"> 
-			<question>Where can I find examples for using the Symphony 2.0?</question> 
+			<question>Where can I find examples for using the Wink 0.1?</question> 
 			<answer> 
 				<p> 
-					The Symphony 2.0 distributions comes bundled with several examples ilustarting how to use the server and client. <br/>
-					All the examples are located in the <code>Symphony/examples</code> directory of the distribution zip.
+					The Wink distributions comes bundled with several examples ilustarting how to use the server and client. <br/>
+					All the examples are located in the <code>Wink/examples</code> directory of the distribution zip.
 				</p> 
 			</answer> 
 		</faq>
 		<faq id="sdk-spring"> 
-			<question>Does the Symphony 2.0 have an integration with spring? Can I expose my REST services using Spring Remoting?</question> 
+			<question>Does the Wink have an integration with spring? Can I expose my REST services using Spring Remoting?</question> 
 			<answer> 
 				<p> 
 					Yes, it provides an extension module with the Spring integration. 
-					However, Symphony 2.0 doesn't use Spring Remoting.
+					However, Wink doesn't use Spring Remoting.
 				</p> 
 			</answer> 
 		</faq>
@@ -43,20 +43,20 @@
 			<question>Is there an integration with Struts?</question> 
 			<answer> 
 				<p> 
-					The Symphony 2.0 does not have an integration with struts.
+					Wink does not have an integration with struts.
 				</p> 
 			</answer> 
 		</faq>
 		<faq id="sdk-struts-usage"> 
-			<question>Can the Symphony 2.0 be used in the same WAR with Struts?</question> 
+			<question>Can the Wink be used in the same WAR with Struts?</question> 
 			<answer> 
 				<p> 
-					Yes, the Symphony and the code you develope over it can be used inside any WAR.
+					Yes, Wink and the code you develope over it can be used inside any WAR.
 				</p> 
 			</answer> 
 		</faq>
 		<faq id="sdk-tested-with-other-clients"> 
-			<question>Have you tested consuming REST resources developed using Symphony 2.0 from a REST client developed using other tools?</question> 
+			<question>Have you tested consuming REST resources developed using Wink from a REST client developed using other tools?</question> 
 			<answer> 
 				<p> 
 					Sure. We have tested it from variety of clients including IE, Firefox, Outlook, Apache Abdera, Sun Rome, etc.
@@ -64,7 +64,7 @@
 			</answer> 
 		</faq>
 		<faq id="sdk-query-parameters"> 
-			<question>Does the Symphony handle query parameters?</question> 
+			<question>Does the Wink query parameters?</question> 
 			<answer> 
 				<p> 
 					Absolutely.
@@ -72,7 +72,7 @@
 			</answer> 
 		</faq>
 		<faq id="sdk-ide-plugin"> 
-			<question>Are there any plans for developing an IDE plugin wrapper for Symphony 2.0?</question> 
+			<question>Are there any plans for developing an IDE plugin wrapper for Wink?</question> 
 			<answer> 
 				<p> 
 					We are considering this option for the Eclipse IDE.
@@ -81,12 +81,12 @@
 		</faq>
 	</part>
 	<part id="sdk-building">
-		<title>Building the Symphony 2.0</title>
+		<title>Building the Apache Wink</title>
 		<faq id="maven-version"> 
-			<question>What version of Maven is used to build the Symphony?</question> 
+			<question>What version of Maven is used to build Wink?</question> 
 			<answer> 
 				<p> 
-					The Symphony is built using Maven 2, version 2.0.9.
+					Wink is built using Maven 2, version 2.0.9.
 				</p> 
 			</answer> 
 		</faq>

@@ -29,7 +29,7 @@ Features Highlight
 
   On top of the JAX-RS specification, Wink provides additional features that facilitate the development of RESTful Web services.
   This section contains a summary of the main additional features.
-  For more detailed information regarding additional features, refer to {{{docs/Symphony_SDK_2.0_Features_List.pdf}Symphony SDK 2.0 Features List}} document
+  For more detailed information regarding additional features, refer to {{{docs/Apache_Wink_0.1_Features_List.pdf}Wink 0.1 Features List}} document
   
   * {{{Link Builders}Link Builders}}
   

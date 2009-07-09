@@ -20,11 +20,11 @@
         "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-	<display-name>Symphony SDK demo</display-name>
+	<display-name>Wink demo</display-name>
 	<description>Demonstration of SDK features</description>
 
 	<!--
-		Symphony SDK servlet configuration. This servlet handles HTTP requests
+		Wink SDK servlet configuration. This servlet handles HTTP requests
 		of SDK web service on application server.
 	-->
 	<servlet>

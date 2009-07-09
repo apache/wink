@@ -29,7 +29,6 @@
     <bannerLeft>
         <name>Wink 0.1</name>
         <src>${module.relative.path}images/SymphonySDKLogo.jpg</src>
-        <!-- href>http://enhanced1.sharepoint.hp.com/teams/aztec/AST/SharedTech/Symphony%20SDK/default.aspx</href-->
     </bannerLeft>
     <poweredBy>
         <logo name="" img="${module.relative.path}images/white.jpg"/>
@@ -56,7 +55,7 @@
             <item name="Features Highlight" href="${module.relative.path}additional-features.html"/>
             <item name="Client" href="${module.relative.path}client.html"/>
             <item href="${module.relative.path}documentation.html" name="Documentation" collapse="true">
-                <item name="Features List" href="${module.relative.path}docs/Symphony_SDK_2.0_Features_List.pdf"/>
+                <item name="Features List" href="${module.relative.path}docs/Apache_Wink_0.1_Features_List.pdf"/>
                 <item name="Javadocs" href="${module.relative.path}apidocs/index.html"/>
             </item>
             <item name="Examples" href="${module.relative.path}examples.html"/>

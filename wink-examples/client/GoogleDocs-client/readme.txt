@@ -3,7 +3,7 @@ GoogleDocs Example
 
 Description 
 ===============================================================================
-- demonstrates the use of Symphony REST Client to interact with google Docs service
+- demonstrates the use of Wink REST Client to interact with google Docs service
 - demonstrates the creation of a custom Handler used to authenticate the user 
   against google authentication service
 - the example provides the following features: list document, upload new document, delete document.

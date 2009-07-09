@@ -10,7 +10,7 @@ Description
 - The list of all defects is returned as an Atom feed on this URI:
   http://localhost:8080/SimpleDefects/rest/defects
 
-- Symphony features used in this example:
+- Wink features used in this example:
    ServiceDocument, Asset, LinkBuilders, SyndFeed, SyndEntry
    
 Build

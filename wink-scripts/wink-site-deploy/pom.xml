@@ -7,9 +7,9 @@
     to you under the Apache License, Version 2.0 (the
     "License"); you may not use this file except in compliance
     with the License.  You may obtain a copy of the License at
-    
+
      http://www.apache.org/licenses/LICENSE-2.0
-    
+
     Unless required by applicable law or agreed to in writing,
     software distributed under the License is distributed on an
     "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -68,7 +68,7 @@
                         <mkdir dir="${site.docs.dir}" />
                         <!-- Copy PDF Developer Guide that exists under trunk/src/doc/DeveloperGuide into the site directory -->
                         <!-- <copy file="${src.doc.dir}/DeveloperGuide/Symphony_SDK_Developer_Guide.pdf" todir="${site.docs.dir}"/> -->
-                        <copy file="${src.doc.dir}/DeveloperGuide/Symphony_SDK_2.0_Features_List.pdf" todir="${site.docs.dir}"/>
+                        <copy file="${src.doc.dir}/DeveloperGuide/Apache_Wink_0.1_Features_List.pdf" todir="${site.docs.dir}"/>
                         <!-- Copy license files to site dir -->
                         <copy file="${src.doc.dir}/LICENSE.txt" todir="${site.docs.dir}"/>
                         <copy file="${src.doc.dir}/third-party-licenses.txt" todir="${site.docs.dir}"/>

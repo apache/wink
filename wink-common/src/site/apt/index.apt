@@ -1,5 +1,5 @@
  -----
- Symphony Common Module
+ Wink Common Module
  -----
  -----
  June 2008
@@ -23,8 +23,8 @@
 ~~ under the License.
 ~~
 
-Symphony Common Module
+Wink Common Module
  
-  Symphony Common Module provides generic utilities like UriTemplates, UriEncoder and implementations of protocols like ASF, APP, OpenSearch 
-  that are common to Symphony Server and Symphony Client Components.
+  Wink Common Module provides generic utilities like UriTemplates, UriEncoder and implementations of protocols like ASF, APP, OpenSearch 
+  that are common to Wink Server and Wink Client Components.
   

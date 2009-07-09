@@ -1,5 +1,5 @@
 
-Symphony SDK Distribution
+Apache Wink Distribution
 ===============================================================================
 
 SDK version
@@ -7,9 +7,9 @@ SDK version
 @PROJECT_VERSION@
 
 
-SDK distribution file
+Wink distribution file
 ===============================================================================
-symphony-sdk-dist-@PROJECT_VERSION@.zip
+wink-dist-@PROJECT_VERSION@.zip
 
 
 Java version
@@ -21,7 +21,7 @@ Java version
 List of files and directories in SDK distribution home
 ===============================================================================
 dist
-  - contains SDK jar files; symphony-sdk-@PROJECT_VERSION@.jar is full version for Java 1.5,
+  - contains SDK jar files; wink-@PROJECT_VERSION@.jar is full version for Java 1.5,
     SDK components are separately available in subdirectory components 
 docs
   - directory containing the SDK documentation
@@ -44,7 +44,7 @@ third-party-licenses.txt
 SDK installation
 ===============================================================================
 Install SDK by unzipping the distribution file. As a result the directory 
-symphony-sdk-@PROJECT_VERSION@ is created. This directory is referred to as SDK_HOME.
+wink-@PROJECT_VERSION@ is created. This directory is referred to as SDK_HOME.
 
 
 SDK documentation
@@ -88,16 +88,16 @@ xercesImpl-2.6.2.jar
 
 Maven
 ===============================================================================
-Symphony SDK is built using using Maven 2, version 2.0.9
+Apache wink is built using using Maven 2, version 2.0.9
 
 
 Product site
 ===============================================================================
-http://enhanced1.sharepoint.hp.com/teams/aztec/AST/SharedTech/Symphony%20SDK/default.aspx
+http://incubator.apache.org/wink
 
 
 Known issues
 ===============================================================================
-See Quality Center, domain TSG_AST, project Symphony.
+See Jira https://issues.apache.org/jira/browse/WINK
 
 --- readme.txt EOF ---

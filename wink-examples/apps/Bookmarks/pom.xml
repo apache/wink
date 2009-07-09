@@ -40,7 +40,7 @@
 	<build>
 		<finalName>Bookmarks</finalName>
 	</build>
-	<!-- Dependency on Symphony SDK library -->
+	<!-- Dependency on Wink SDK library -->
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.wink</groupId>

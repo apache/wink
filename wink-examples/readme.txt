@@ -1,9 +1,9 @@
-This document describes the examples available in Symphony SDK distribution
+This document describes the examples available in Wink SDK distribution
 ===============================================================================
 
 Available examples:
 
-1. "app" module contains simple applications that use both JAX-RS and Symphony extension features (ordered by the level of complexity)
+1. "app" module contains simple applications that use both JAX-RS and Wink extension features (ordered by the level of complexity)
 - HelloWorld
 - Bookmarks
 - QADefect
@@ -16,10 +16,10 @@ Available examples:
 - Jaxb
 - Preconditions
 
-3. "client" module contains Symphony client examples
+3. "client" module contains Wink client examples
 - QADefects-client
 
-4. "ext" module contains examples that demonstrate Symphony additional features 
+4. "ext" module contains examples that demonstrate Wink additional features 
 - Asset
 - DynamicResource
 - History
@@ -114,6 +114,6 @@ e.g. "JBOSS/server/default/deploy".
 
 Product site
 ===============================================================================
-http://enhanced1.sharepoint.hp.com/teams/aztec/AST/SharedTech/Symphony%20SDK/default.aspx
+http://incubator.apache.org/wink/
 
 --- readme.txt EOF ---

@@ -10,7 +10,7 @@ Description
 - A specific bookmark is returned as from this URI:
      http://localhost:8080/Bookmarks/rest/bookmarks/{id}
 
-- Symphony features used in this example:
+- Wink features used in this example:
    LinkBuilders, ServiceDocument, SyndFeed, SyndEntry
 
 Build
