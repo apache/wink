@@ -27,7 +27,7 @@ import org.apache.wink.test.mock.SpringAwareTestCase;
 public class PropertiesOverrideTest extends SpringAwareTestCase {
 
     public void testPropertiesOverride() throws Exception {
-        DeploymentConfiguration configuration = (DeploymentConfiguration) applicationContext.getBean("symphony_deploymentConfiguration");
+        DeploymentConfiguration configuration = (DeploymentConfiguration) applicationContext.getBean("winkInternalDeploymentConfiguration");
         Properties properties = configuration.getProperties();
 
         // check custom

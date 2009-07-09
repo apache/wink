@@ -41,7 +41,7 @@
 		<property name="propertiesArray">
 			<list merge="true">
 				<props>
-					<prop key="symphony.propertiesFactory">custom_propertiesFactory
+					<prop key="winkPropertiesFactory">custom_propertiesFactory
 					</prop>
 				</props>
 			</list>
@@ -49,7 +49,7 @@
 	</bean>
 
 	<!-- Not directly related to this test. Used to validate that all placeholders are resolved -->
-	<bean id="symphony.validatingPlaceholderConfigurer"
+	<bean id="validatingPlaceholderConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 	</bean>
 

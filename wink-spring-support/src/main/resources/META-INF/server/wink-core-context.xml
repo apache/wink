@@ -17,8 +17,6 @@
     specific language governing permissions and limitations
     under the License.
 -->
-
-<!-- Spring root application context for Symphony SDK -->
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
@@ -26,13 +24,13 @@
 
 	<!-- Object Factory-Factories definitions -->
 
-	<bean id="symphony.SpringOFFactory" class="org.apache.wink.spring.internal.SpringLifecycleManager">
+	<bean id="winkInternalLifecycleManager" class="org.apache.wink.spring.internal.SpringLifecycleManager">
 	</bean>
 
-	<bean id="symphony.offRegistry" class="org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry">
+	<bean id="winkInternalLifecycleManagersRegistry" class="org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry">
 		<property name="factoryFactoryArray">
 			<list>
-				<ref local="symphony.SpringOFFactory" />
+				<ref local="winkInternalLifecycleManager" />
 				<bean class="org.apache.wink.common.internal.lifecycle.ScopeLifecycleManager" />
 			</list>
 		</property>
@@ -41,81 +39,74 @@
 
 	<!--  Post Processors -->
 
-	<bean id="symphony.RegistryPostProcessor"
+	<bean id="winkInternalRegistryPostProcessor"
 		class="org.apache.wink.spring.internal.RegistryPostProcessor">
 		<property name="providersRegistry">
 			<util:property-path
-				path="symphony_deploymentConfiguration.providersRegistry" />
+				path="winkInternalDeploymentConfiguration.providersRegistry" />
 		</property>
 		<property name="resourceRegistry">
 			<util:property-path
-				path="symphony_deploymentConfiguration.resourceRegistry" />
+				path="winkInternalDeploymentConfiguration.resourceRegistry" />
 		</property>
 	</bean>
 
-	<bean id="symphony.SpringOFFactoryPostProcessor"
+	<bean id="winkInternalLifecycleManagerPostProcessor"
 		class="org.apache.wink.spring.internal.LifecycleManagerPostProcessor">
 		<property name="springOFFactory">
-			<ref local="symphony.SpringOFFactory" />
+			<ref local="winkInternalLifecycleManager" />
 		</property>
 	</bean>
 
 
-	<bean id="symphony.DependenciesInjectionPostProcessor"
+	<bean id="winkInternalDependenciesInjectionPostProcessor"
 		class="org.apache.wink.spring.internal.DependenciesInjectionPostProcessor">
 		<property name="springOFFactory">
-			<ref local="symphony.SpringOFFactory" />
+			<ref local="winkInternalLifecycleManager" />
 		</property>
 	</bean>
 
 	<!-- Request Processor -->
 
-	<bean id="symphony_deploymentConfiguration" class="org.apache.wink.server.internal.DeploymentConfiguration"
+	<bean id="winkInternalDeploymentConfiguration" class="org.apache.wink.server.internal.DeploymentConfiguration"
 		init-method="init">
 
 		<property name="properties">
-			<ref bean="symphony.propertiesFactory" />
+			<ref bean="winkInternalPropertiesFactory" />
 		</property>
 		<property name="requestHandlersChain">
-			<ref bean="${symphony.requestHandlersChain}" />
+			<ref bean="${winkRequestHandlersChain}" />
 		</property>
         <property name="responseHandlersChain">
-            <ref bean="${symphony.responseHandlersChain}" />
+            <ref bean="${winkResponseHandlersChain}" />
         </property>
 		<property name="errorHandlersChain">
-			<ref bean="${symphony.errorHandlersChain}" />
+			<ref bean="${winkErrorHandlersChain}" />
 		</property>
 		<property name="ofFactoryRegistry">
-			<ref bean="${symphony.offRegistry}" />
+			<ref bean="${winkInternalLifecycleManagersRegistry}" />
 		</property>
 		<property name="mediaTypeMapper">
-			<ref bean="${symphony.MediaTypeMapper}" />
+			<ref bean="${winkMediaTypeMapper}" />
 		</property>
 		<property name="alternateShortcutMap">
-			<ref bean="${symphony.alternateShortcutsMap}" />
+			<ref bean="${winkAlternateShortcutsMap}" />
 		</property>
 	</bean>
 
-
-	<!-- The central bean controlling the whole processing. -->
-	<!-- bean id="symphony_RequestProcessor"  class="org.apache.wink.server.internal.RequestProcessor">
-		<constructor-arg ref="symphony_deploymentConfiguration"
-			type="org.apache.wink.server.internal.DeploymentConfiguration">
-		</constructor-arg>
-	</bean -->
-
-	<bean id="symphony_RequestProcessorBuilder" class="org.apache.wink.spring.internal.RequestProcessorBuilder">
+	<!-- Builds the request processor and stores it on the servlet context-->
+	<bean id="winkInternalRequestProcessorBuilder" class="org.apache.wink.spring.internal.RequestProcessorBuilder">
 		<property name="deploymentConfiguration">
-			<ref local="symphony_deploymentConfiguration" />
+			<ref local="winkInternalDeploymentConfiguration" />
 		</property>
 		<property name="requestProcessorAttribute"
-			value="${symphony.servletContext.requestProcessorAttribute}">
+			value="${winkServletContextRequestProcessorAttribute}">
 		</property>
 	</bean>
 
 	<!-- Properties -->
 
-	<bean id="symphony_defaultPropertiesFactory"
+	<bean id="winkInternalDefaultPropertiesFactory"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="locations">
 			<list>
@@ -125,12 +116,12 @@
 		</property>
 	</bean>
 
-	<bean id="symphony.propertiesFactory"
+	<bean id="winkInternalPropertiesFactory"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="propertiesArray">
 			<list>
-				<ref local="symphony_defaultPropertiesFactory"/>
-				<ref bean="${symphony.propertiesFactory}" />
+				<ref local="winkInternalDefaultPropertiesFactory"/>
+				<ref bean="${winkPropertiesFactory}" />
 			</list>
 		</property>
 	</bean>
@@ -140,32 +131,32 @@
 
 	<!-- Property placeholder configurer -->
 	<!--
-		Used to configure beans that can be replaced. "symphony.null" means to
+		Used to configure beans that can be replaced. "winkInternalNullContant" means to
 		use a default implementation and not to use a bean.
 	-->
-	<bean id="symphony-1.6.defaultPlaceholderConfigurer"
+	<bean id="winkInternalPropertyPlaceholderConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
 		<property name="order" value="0x3fffffff" />
 		<property name="propertiesArray">
 			<list merge="true">
 				<props>
-					<prop key="symphony.propertiesFactory">symphony.null
+					<prop key="winkPropertiesFactory">winkInternalNullContant
 					</prop>
-					<prop key="symphony.MediaTypeMapper">symphony.null</prop>
-					<prop key="symphony.alternateShortcutsMap">symphony.null</prop>
-					<prop key="symphony.offRegistry">symphony.offRegistry</prop>
-					<prop key="symphony.requestHandlersChain">symphony.null</prop>
-                    <prop key="symphony.responseHandlersChain">symphony.null</prop>
-					<prop key="symphony.errorHandlersChain">symphony.null</prop>
-					<prop key="symphony.servletContext.requestProcessorAttribute"></prop>
+					<prop key="winkMediaTypeMapper">winkInternalNullContant</prop>
+					<prop key="winkAlternateShortcutsMap">winkInternalNullContant</prop>
+					<prop key="winkInternalLifecycleManagersRegistry">winkInternalLifecycleManagersRegistry</prop>
+					<prop key="winkRequestHandlersChain">winkInternalNullContant</prop>
+                    <prop key="winkResponseHandlersChain">winkInternalNullContant</prop>
+					<prop key="winkErrorHandlersChain">winkInternalNullContant</prop>
+					<prop key="winkServletContextRequestProcessorAttribute"></prop>
 				</props>
 			</list>
 		</property>
 	</bean>
 
 
-	<util:constant id="symphony.null"
+	<util:constant id="winkInternalNullContant"
 		static-field="org.apache.wink.spring.internal.RequestProcessorBuilder.NULL" />
 
 </beans>

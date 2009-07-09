@@ -45,7 +45,7 @@
 		class="org.apache.wink.spring.RegistrarTest$AnotherResource" />
 
 	<!-- Used to validate that all placeholders are resolved -->
-	<bean id="symphony.validatingPlaceholderConfigurer"
+	<bean id="validatingPlaceholderConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 	</bean>
 
