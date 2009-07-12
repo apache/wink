@@ -18,6 +18,7 @@ Available examples:
 
 3. "client" module contains Wink client examples
 - QADefects-client
+- GoogleDocs-client
 
 4. "ext" module contains examples that demonstrate Wink additional features 
 - Asset

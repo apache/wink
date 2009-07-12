@@ -77,7 +77,7 @@
 		<!-- Create the jar file -->
 		<jar destfile="${example.jar}" basedir="${build.classes}">
 			<manifest>
-				<attribute name="Main-Class" value="org.apache.wink.example.GoogleDocsClient" />
+				<attribute name="Main-Class" value="org.apache.wink.example.googledocs.GoogleDocsClient" />
 				<attribute name="Class-Path" value="${jar.classpath}" />
 			</manifest>
 		</jar>
@@ -92,7 +92,7 @@
 
 
 	<target name="run" depends="dist">
-		<java classname="org.apache.wink.example.GoogleDocsClient">
+		<java classname="org.apache.wink.example.googledocs.GoogleDocsClient">
 			<classpath>
 				<fileset dir="${client.lib}" includes="**/*.jar" />
 				<fileset dir="${client.dist}" includes="**/*.jar" />
