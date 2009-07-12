@@ -135,7 +135,7 @@ public class JAXRSSourceTest extends TestCase {
                 .setRequestEntity(new StringRequestEntity(
                         "<message><user>user1</user><password>user1pwd</password></message>",
                         "application/xml", "UTF-8"));
-        postMethod.addRequestHeader("Accept", "text/plain");
+        postMethod.addRequestHeader("Accept", "not/expected");
         try {
             client.executeMethod(postMethod);
 

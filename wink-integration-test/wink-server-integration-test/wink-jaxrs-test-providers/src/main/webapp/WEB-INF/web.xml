@@ -17,6 +17,7 @@
     specific language governing permissions and limitations
     under the License.
 -->
+
 <!DOCTYPE web-app PUBLIC
  "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
@@ -84,6 +85,60 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>ExceptionMapperMappedProviders</servlet-name>
+        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>org.apache.wink.jaxrs.test.providers.exceptionmappers.mapped.GuestbookApplication</param-value>
+        </init-param>
+        <init-param>
+            <param-name>requestProcessorAttribute</param-name>
+            <param-value>requestProcessorAttribute_exceptionmappers</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>ExceptionMapperNoMapper</servlet-name>
+        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>org.apache.wink.jaxrs.test.providers.exceptionmappers.nomapper.GuestbookApplication</param-value>
+        </init-param>
+        <init-param>
+            <param-name>requestProcessorAttribute</param-name>
+            <param-value>requestProcessorAttribute_noexceptionmappers</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+        
+    <servlet>
+        <servlet-name>ExceptionMapperNull</servlet-name>
+        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>org.apache.wink.jaxrs.test.providers.exceptionmappers.nullconditions.Application</param-value>
+        </init-param>
+        <init-param>
+            <param-name>requestProcessorAttribute</param-name>
+            <param-value>requestProcessorAttribute_nullconditions</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>SubresourceExceptions</servlet-name>
+        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>org.apache.wink.jaxrs.test.providers.subresource.Application</param-value>
+        </init-param>
+        <init-param>
+            <param-name>requestProcessorAttribute</param-name>
+            <param-value>requestProcessorAttribute_subresourceexceptions</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>MessageBodyReaders</servlet-name>
         <url-pattern>/readers/*</url-pattern>
@@ -103,5 +158,21 @@
     <servlet-mapping>
         <servlet-name>StandardEntityProviders</servlet-name>
         <url-pattern>/standard/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ExceptionMapperMappedProviders</servlet-name>
+        <url-pattern>/exceptionsmapped/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ExceptionMapperNoMapper</servlet-name>
+        <url-pattern>/exceptionsnomapper/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ExceptionMapperNull</servlet-name>
+        <url-pattern>/exceptionsnull/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SubresourceExceptions</servlet-name>
+        <url-pattern>/subresourceexceptions/*</url-pattern>
     </servlet-mapping>
 </web-app>

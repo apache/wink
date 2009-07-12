@@ -127,7 +127,7 @@ public class JAXRSMultivaluedMapTest extends TestCase {
         postMethod.setRequestEntity(new StringRequestEntity("tuv=wxyz&abcd=",
                                                             "application/x-www-form-urlencoded",
                                                             "UTF-8"));
-        postMethod.addRequestHeader("Accept", "text/plain");
+        postMethod.addRequestHeader("Accept", "not/expected");
         try {
             client.executeMethod(postMethod);
 
