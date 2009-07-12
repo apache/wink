@@ -96,6 +96,8 @@ public class FlushResultHandler extends AbstractHandler {
             Method reflectionMethod = searchResult.getMethod().getMetadata().getReflectionMethod();
             genericType = reflectionMethod.getGenericReturnType();
             declaredAnnotations = reflectionMethod.getDeclaredAnnotations();
+        } else {
+            declaredAnnotations = new Annotation[0];
         }
 
         Class<?> rawType = null;
