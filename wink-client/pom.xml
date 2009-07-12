@@ -26,7 +26,6 @@
     <packaging>jar</packaging>
     <name>Wink Client</name>
     <properties>
-        <module.relative.path>../</module.relative.path>
         <javadoc.aggregate>false</javadoc.aggregate>
     </properties>
     <parent>

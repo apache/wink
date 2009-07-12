@@ -26,7 +26,6 @@
     <version>0.1-SNAPSHOT</version>
     <name>Wink Examples Clients :: QADefects</name>
     <properties>
-        <module.relative.path>../../../</module.relative.path>
     </properties>
     <parent>
         <groupId>org.apache.wink.example</groupId>

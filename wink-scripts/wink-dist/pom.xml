@@ -27,7 +27,6 @@
 	<properties>
 		<target.zip>target/wink-${project.version}.zip</target.zip>
 		<target.jar>target/dist/wink-${project.version}/dist/wink-${project.version}.jar</target.jar>
-		<module.relative.path>../../</module.relative.path>
 	</properties>
 	<parent>
 		<groupId>org.apache.wink</groupId>

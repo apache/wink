@@ -26,7 +26,6 @@
     <packaging>pom</packaging>
     <name>Wink Scripts :: Site Deploy</name>
     <properties>
-        <module.relative.path>../../</module.relative.path>
     </properties>
     <parent>
         <groupId>org.apache.wink</groupId>

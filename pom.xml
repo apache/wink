@@ -31,7 +31,6 @@
         <version>6</version>
     </parent>
     <properties>
-        <module.relative.path></module.relative.path>
         <javadoc.aggregate>true</javadoc.aggregate>
         <javadoc.exclude.patterns>*internal:org.apache.wink.example</javadoc.exclude.patterns>
         <site.deploy.dir>C:/wink/buildsReports</site.deploy.dir>
@@ -63,13 +62,14 @@
             <plugin>
                 <groupId>com.google.code.maven-license-plugin</groupId>
                 <artifactId>maven-license-plugin</artifactId>
+                <inherited>false</inherited>
                 <configuration>
-                    <header>${module.relative.path}src/etc/header.txt</header>
+                    <header>src/etc/header.txt</header>
                     <quiet>false</quiet>
                     <failIfMissing>true</failIfMissing>
                     <aggregate>true</aggregate>
                     <includes>
-                        <include>src/**</include>
+                        <include>**/src/**</include>
                         <include>**/test/**</include>
                     </includes>
                     <excludes>
