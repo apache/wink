@@ -31,7 +31,6 @@ import org.apache.wink.common.internal.application.ApplicationValidator;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
 
-
 import junit.framework.TestCase;
 
 public class ProvidersContextResolverTest extends TestCase {
@@ -39,13 +38,14 @@ public class ProvidersContextResolverTest extends TestCase {
     public static class NotAProvider {
     }
 
-    private static final String  STRING = "String";
-    private static final String  ATOM   = "Atom";
-    private static final byte[]  BYTE   = new byte[0];
-    private static final Integer _12345 = new Integer(12345);
+    private static final String  STRING  = "String";
+    private static final String  ATOM    = "Atom";
+    private static final byte[]  BYTE    = new byte[0];
+    private static final Integer _12345  = new Integer(12345);
+    private static final MyClass MYCLASS = new MyClass();
 
     @Provider
-    @Produces( { MediaType.TEXT_PLAIN, MediaType.WILDCARD })
+    @Produces( {MediaType.TEXT_PLAIN, MediaType.WILDCARD})
     public static class StringContextResolver implements ContextResolver<String> {
 
         public String getContext(Class<?> type) {
@@ -54,7 +54,21 @@ public class ProvidersContextResolverTest extends TestCase {
     }
 
     @Provider
-    @Produces( { MediaType.APPLICATION_ATOM_XML, MediaType.WILDCARD })
+    @Produces(MediaType.APPLICATION_FORM_URLENCODED)
+    // intentionally using a MediaType with a '-' to exercise regex code
+    public static class MyContextResolver implements ContextResolver<MyClass> {
+
+        public MyClass getContext(Class<?> type) {
+            return MYCLASS;
+        }
+    }
+
+    public static class MyClass {
+
+    }
+
+    @Provider
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.WILDCARD})
     public static class AtomContextResolver implements ContextResolver<String> {
 
         public String getContext(Class<?> type) {
@@ -66,7 +80,7 @@ public class ProvidersContextResolverTest extends TestCase {
     }
 
     @Provider
-    @Produces( { MediaType.TEXT_PLAIN, MediaType.WILDCARD })
+    @Produces( {MediaType.TEXT_PLAIN, MediaType.WILDCARD})
     public static class ByteContextResolver implements ContextResolver<byte[]> {
 
         public byte[] getContext(Class<?> type) {
@@ -75,7 +89,7 @@ public class ProvidersContextResolverTest extends TestCase {
     }
 
     @Provider
-    @Produces( { "text/decimal" })
+    @Produces( {"text/decimal"})
     public static class IntegerContextResolver implements ContextResolver<Integer> {
 
         public Integer getContext(Class<?> type) {
@@ -92,11 +106,12 @@ public class ProvidersContextResolverTest extends TestCase {
     }
 
     private ProvidersRegistry createProvidersRegistryImpl() {
-        ProvidersRegistry providers = new ProvidersRegistry(new LifecycleManagersRegistry(),
-            new ApplicationValidator());;
+        ProvidersRegistry providers =
+            new ProvidersRegistry(new LifecycleManagersRegistry(), new ApplicationValidator());
+        ;
         return providers;
     }
-    
+
     public void testContextResolvers() {
         ProvidersRegistry providers = createProvidersRegistryImpl();
         assertTrue(providers.addProvider(new AtomContextResolver()));
@@ -109,41 +124,71 @@ public class ProvidersContextResolverTest extends TestCase {
         /*
          * String and text/pain, should invoke StringContextResolver
          */
-        assertEquals(STRING,
-            providers.getContextResolver(String.class, MediaType.TEXT_PLAIN_TYPE, null).getContext(null));
+        assertEquals(STRING, providers.getContextResolver(String.class,
+                                                          MediaType.TEXT_PLAIN_TYPE,
+                                                          null).getContext(null));
 
         /*
          * byte[] and text/plain, should invoke ByteContextResolver
          */
-        assertEquals(BYTE,
-            providers.getContextResolver(byte[].class, MediaType.TEXT_PLAIN_TYPE, null).getContext(null));
+        assertEquals(BYTE, providers.getContextResolver(byte[].class,
+                                                        MediaType.TEXT_PLAIN_TYPE,
+                                                        null).getContext(null));
 
         /*
          * There is no context resolver that handlers Integer and /
          */
-        assertEquals(null,
-            providers.getContextResolver(Integer.class, MediaType.WILDCARD_TYPE, null));
+        assertEquals(_12345, providers.getContextResolver(Integer.class,
+                                                        MediaType.WILDCARD_TYPE,
+                                                        null).getContext(null));
 
         /*
          * AtomContextResolver comes before StringContextResolver, therefore it
          * should be invoked after
          */
-        assertEquals(STRING,
-            providers.getContextResolver(String.class, MediaType.WILDCARD_TYPE, null).getContext(null));
+        assertEquals(STRING, providers.getContextResolver(String.class,
+                                                          MediaType.WILDCARD_TYPE,
+                                                          null).getContext(null));
 
         /*
          * AtomContextResolver returnes null, if the parameter is not null,
          * therefore StringContextResolver should be invoked
          */
-        assertEquals(STRING,
-            providers.getContextResolver(String.class, MediaType.WILDCARD_TYPE, null).getContext(
-                String.class));
+        assertEquals(STRING, providers.getContextResolver(String.class,
+                                                          MediaType.WILDCARD_TYPE,
+                                                          null).getContext(String.class));
 
         /*
          * test ContextResolver with collections
          */
         assertEquals(Collections.emptyList(), providers.getContextResolver(List.class,
-            MediaType.WILDCARD_TYPE, null).getContext(null));
+                                                                           MediaType.WILDCARD_TYPE,
+                                                                           null).getContext(null));
+    }
+
+    public void testContextResolverWildCards() {
+        ProvidersRegistry providers = createProvidersRegistryImpl();
+        assertTrue(providers.addProvider(new MyContextResolver()));
+
+        /*
+         * Check various wildcard permutations
+         */
+        assertSame(MYCLASS, providers.getContextResolver(MyClass.class,
+                                                         MediaType.WILDCARD_TYPE,
+                                                         null).getContext(MyClass.class));
+        assertSame(MYCLASS, providers.getContextResolver(MyClass.class,
+                                                         new MediaType("*", "*"),
+                                                         null).getContext(MyClass.class));
+        assertSame(MYCLASS, providers.getContextResolver(MyClass.class,
+                                                         new MediaType("application", "*"),
+                                                         null).getContext(MyClass.class));
+        assertSame(MYCLASS, providers.getContextResolver(MyClass.class,
+                                                         new MediaType("application",
+                                                                       "x-www-form-urlencoded"),
+                                                         null).getContext(MyClass.class));
+        assertSame(MYCLASS, providers
+            .getContextResolver(MyClass.class, new MediaType("*", "x-www-form-urlencoded"), null)
+            .getContext(MyClass.class));
     }
 
 }

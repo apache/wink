@@ -26,11 +26,13 @@ import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Map.Entry;
 import java.util.concurrent.locks.Lock;
@@ -63,23 +65,30 @@ import org.apache.wink.common.internal.utils.GenericsUtils;
  */
 public class ProvidersRegistry {
 
-    private static Logger                                    logger             = LoggerFactory.getLogger(ProvidersRegistry.class);
+    private static Logger                                    logger             =
+                                                                                    LoggerFactory
+                                                                                        .getLogger(ProvidersRegistry.class);
 
-    private final ProducesMediaTypeMap<ContextResolver<?>>   contextResolvers   = new ProducesMediaTypeMap<ContextResolver<?>>(
-                                                                                    ContextResolver.class);
-    private final Set<ObjectFactory<ExceptionMapper<?>>>     exceptionMappers   = new TreeSet<ObjectFactory<ExceptionMapper<?>>>(
-                                                                                    Collections.reverseOrder());
-    private final ConsumesMediaTypeMap<MessageBodyReader<?>> messageBodyReaders = new ConsumesMediaTypeMap<MessageBodyReader<?>>(
-                                                                                    MessageBodyReader.class);
-    private final ProducesMediaTypeMap<MessageBodyWriter<?>> messageBodyWriters = new ProducesMediaTypeMap<MessageBodyWriter<?>>(
-                                                                                    MessageBodyWriter.class);
+    private final ProducesMediaTypeMap<ContextResolver<?>>   contextResolvers   =
+                                                                                    new ProducesMediaTypeMap<ContextResolver<?>>(
+                                                                                                                                 ContextResolver.class);
+    private final Set<ObjectFactory<ExceptionMapper<?>>>     exceptionMappers   =
+                                                                                    new TreeSet<ObjectFactory<ExceptionMapper<?>>>(
+                                                                                                                                   Collections
+                                                                                                                                       .reverseOrder());
+    private final ConsumesMediaTypeMap<MessageBodyReader<?>> messageBodyReaders =
+                                                                                    new ConsumesMediaTypeMap<MessageBodyReader<?>>(
+                                                                                                                                   MessageBodyReader.class);
+    private final ProducesMediaTypeMap<MessageBodyWriter<?>> messageBodyWriters =
+                                                                                    new ProducesMediaTypeMap<MessageBodyWriter<?>>(
+                                                                                                                                   MessageBodyWriter.class);
     private final ApplicationValidator                       applicationValidator;
-    private final LifecycleManagersRegistry                          factoryFactoryRegistry;
+    private final LifecycleManagersRegistry                  factoryFactoryRegistry;
     private final Lock                                       readersLock;
     private final Lock                                       writersLock;
 
     public ProvidersRegistry(LifecycleManagersRegistry factoryRegistry,
-        ApplicationValidator applicationValidator) {
+                             ApplicationValidator applicationValidator) {
         this.factoryFactoryRegistry = factoryRegistry;
         this.applicationValidator = applicationValidator;
         ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
@@ -128,19 +137,19 @@ public class ProvidersRegistry {
         }
 
         if (ContextResolver.class.isAssignableFrom(cls)) {
-            contextResolvers.putProvider((ObjectFactory<ContextResolver<?>>) objectFactory);
+            contextResolvers.putProvider((ObjectFactory<ContextResolver<?>>)objectFactory);
             retValue = true;
         }
         if (ExceptionMapper.class.isAssignableFrom(cls)) {
-            exceptionMappers.add((ObjectFactory<ExceptionMapper<?>>) objectFactory);
+            exceptionMappers.add((ObjectFactory<ExceptionMapper<?>>)objectFactory);
             retValue = true;
         }
         if (MessageBodyReader.class.isAssignableFrom(cls)) {
-            messageBodyReaders.putProvider((ObjectFactory<MessageBodyReader<?>>) objectFactory);
+            messageBodyReaders.putProvider((ObjectFactory<MessageBodyReader<?>>)objectFactory);
             retValue = true;
         }
         if (MessageBodyWriter.class.isAssignableFrom(cls)) {
-            messageBodyWriters.putProvider((ObjectFactory<MessageBodyWriter<?>>) objectFactory);
+            messageBodyWriters.putProvider((ObjectFactory<MessageBodyWriter<?>>)objectFactory);
             retValue = true;
         }
         if (retValue == false) {
@@ -160,7 +169,8 @@ public class ProvidersRegistry {
 
     @SuppressWarnings("unchecked")
     public <T> ContextResolver<T> getContextResolver(final Class<T> contextType,
-        MediaType mediaType, RuntimeContext runtimeContext) {
+                                                     MediaType mediaType,
+                                                     RuntimeContext runtimeContext) {
         if (contextType == null) {
             throw new NullPointerException("contextType");
         }
@@ -169,48 +179,58 @@ public class ProvidersRegistry {
         }
         readersLock.lock();
         try {
-            final List<ObjectFactory<ContextResolver<?>>> factories = contextResolvers.getProvidersByMediaType(
-                mediaType, contextType);
+            final List<ObjectFactory<ContextResolver<?>>> factories =
+                contextResolvers.getProvidersByMediaType(mediaType, contextType);
 
             if (factories.isEmpty()) {
                 return null;
             }
 
             if (factories.size() == 1) {
-                return (ContextResolver<T>) factories.get(0).getInstance(runtimeContext);
+                return (ContextResolver<T>)factories.get(0).getInstance(runtimeContext);
             }
 
             // creates list of providers that is used by the proxy
-            // this solution can be improved by creating providers inside the proxy
+            // this solution can be improved by creating providers inside the
+            // proxy
             // one-by-one and keeping them on the proxy
             // so a new provider will be created only when all the old providers
             // will return null
-            final List<ContextResolver<?>> providers = new ArrayList<ContextResolver<?>>(
-                factories.size());
+            final List<ContextResolver<?>> providers =
+                new ArrayList<ContextResolver<?>>(factories.size());
             for (ObjectFactory<ContextResolver<?>> factory : factories) {
                 providers.add(factory.getInstance(runtimeContext));
             }
 
-            return (ContextResolver<T>) Proxy.newProxyInstance(getClass().getClassLoader(),
-                new Class[] { ContextResolver.class }, new InvocationHandler() {
+            return (ContextResolver<T>)Proxy.newProxyInstance(getClass().getClassLoader(),
+                                                              new Class[] {ContextResolver.class},
+                                                              new InvocationHandler() {
 
-                    public Object invoke(Object proxy, Method method, Object[] args)
-                        throws Throwable {
-                        if (method.getName().equals("getContext") && args != null
-                            && args.length == 1
-                            && (args[0] == null || args[0].getClass().equals(Class.class))) {
-                            for (ContextResolver<?> resolver : providers) {
-                                Object context = resolver.getContext((Class<?>) args[0]);
-                                if (context != null) {
-                                    return context;
-                                }
-                            }
-                            return null;
-                        } else {
-                            return method.invoke(proxy, args);
-                        }
-                    }
-                });
+                                                                  public Object invoke(Object proxy,
+                                                                                       Method method,
+                                                                                       Object[] args)
+                                                                      throws Throwable {
+                                                                      if (method.getName()
+                                                                          .equals("getContext") && args != null
+                                                                          && args.length == 1
+                                                                          && (args[0] == null || args[0]
+                                                                              .getClass()
+                                                                              .equals(Class.class))) {
+                                                                          for (ContextResolver<?> resolver : providers) {
+                                                                              Object context =
+                                                                                  resolver
+                                                                                      .getContext((Class<?>)args[0]);
+                                                                              if (context != null) {
+                                                                                  return context;
+                                                                              }
+                                                                          }
+                                                                          return null;
+                                                                      } else {
+                                                                          return method
+                                                                              .invoke(proxy, args);
+                                                                      }
+                                                                  }
+                                                              });
         } finally {
             readersLock.unlock();
         }
@@ -218,7 +238,7 @@ public class ProvidersRegistry {
 
     @SuppressWarnings("unchecked")
     public <T extends Throwable> ExceptionMapper<T> getExceptionMapper(Class<T> type,
-        RuntimeContext runtimeContext) {
+                                                                       RuntimeContext runtimeContext) {
         if (type == null) {
             throw new NullPointerException("type");
         }
@@ -228,8 +248,9 @@ public class ProvidersRegistry {
 
             for (ObjectFactory<ExceptionMapper<?>> factory : exceptionMappers) {
                 ExceptionMapper<?> exceptionMapper = factory.getInstance(runtimeContext);
-                Type genericType = GenericsUtils.getGenericInterfaceParamType(
-                    exceptionMapper.getClass(), ExceptionMapper.class);
+                Type genericType =
+                    GenericsUtils.getGenericInterfaceParamType(exceptionMapper.getClass(),
+                                                               ExceptionMapper.class);
                 Class<?> classType = GenericsUtils.getClassType(genericType);
                 if (classType.isAssignableFrom(type)) {
                     matchingMappers.add(exceptionMapper);
@@ -241,14 +262,17 @@ public class ProvidersRegistry {
             }
 
             while (matchingMappers.size() > 1) {
-                Type first = GenericsUtils.getGenericInterfaceParamType(
-                    matchingMappers.get(0).getClass(), ExceptionMapper.class);
-                Type second = GenericsUtils.getGenericInterfaceParamType(
-                    matchingMappers.get(1).getClass(), ExceptionMapper.class);
+                Type first =
+                    GenericsUtils.getGenericInterfaceParamType(matchingMappers.get(0).getClass(),
+                                                               ExceptionMapper.class);
+                Type second =
+                    GenericsUtils.getGenericInterfaceParamType(matchingMappers.get(1).getClass(),
+                                                               ExceptionMapper.class);
                 Class<?> firstClass = GenericsUtils.getClassType(first);
                 Class<?> secondClass = GenericsUtils.getClassType(second);
                 if (firstClass == secondClass) {
-                    // the first one has higher priority, so remove the second one for the same classes!
+                    // the first one has higher priority, so remove the second
+                    // one for the same classes!
                     matchingMappers.remove(1);
                 } else if (firstClass.isAssignableFrom(secondClass)) {
                     matchingMappers.remove(0);
@@ -257,15 +281,18 @@ public class ProvidersRegistry {
                 }
             }
 
-            return (ExceptionMapper<T>) matchingMappers.get(0);
+            return (ExceptionMapper<T>)matchingMappers.get(0);
         } finally {
             readersLock.unlock();
         }
     }
 
     @SuppressWarnings("unchecked")
-    public <T> MessageBodyReader<T> getMessageBodyReader(Class<T> type, Type genericType,
-        Annotation[] annotations, MediaType mediaType, RuntimeContext runtimeContext) {
+    public <T> MessageBodyReader<T> getMessageBodyReader(Class<T> type,
+                                                         Type genericType,
+                                                         Annotation[] annotations,
+                                                         MediaType mediaType,
+                                                         RuntimeContext runtimeContext) {
         if (type == null) {
             throw new NullPointerException("type");
         }
@@ -274,12 +301,12 @@ public class ProvidersRegistry {
         }
         readersLock.lock();
         try {
-            List<ObjectFactory<MessageBodyReader<?>>> factories = messageBodyReaders.getProvidersByMediaType(
-                mediaType, type);
+            List<ObjectFactory<MessageBodyReader<?>>> factories =
+                messageBodyReaders.getProvidersByMediaType(mediaType, type);
             for (ObjectFactory<MessageBodyReader<?>> factory : factories) {
                 MessageBodyReader<?> reader = factory.getInstance(runtimeContext);
                 if (reader.isReadable(type, genericType, annotations, mediaType)) {
-                    return (MessageBodyReader<T>) reader;
+                    return (MessageBodyReader<T>)reader;
                 }
             }
             return null;
@@ -289,8 +316,11 @@ public class ProvidersRegistry {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> MessageBodyWriter<T> getMessageBodyWriter(Class<T> type, Type genericType,
-        Annotation[] annotations, MediaType mediaType, RuntimeContext runtimeContext) {
+    public <T> MessageBodyWriter<T> getMessageBodyWriter(Class<T> type,
+                                                         Type genericType,
+                                                         Annotation[] annotations,
+                                                         MediaType mediaType,
+                                                         RuntimeContext runtimeContext) {
         if (type == null) {
             throw new NullPointerException("type");
         }
@@ -299,12 +329,12 @@ public class ProvidersRegistry {
         }
         readersLock.lock();
         try {
-            List<ObjectFactory<MessageBodyWriter<?>>> writersFactories = messageBodyWriters.getProvidersByMediaType(
-                mediaType, type);
+            List<ObjectFactory<MessageBodyWriter<?>>> writersFactories =
+                messageBodyWriters.getProvidersByMediaType(mediaType, type);
             for (ObjectFactory<MessageBodyWriter<?>> factory : writersFactories) {
                 MessageBodyWriter<?> writer = factory.getInstance(runtimeContext);
                 if (writer.isWriteable(type, genericType, annotations, mediaType)) {
-                    return (MessageBodyWriter<T>) writer;
+                    return (MessageBodyWriter<T>)writer;
                 }
             }
             return null;
@@ -361,7 +391,8 @@ public class ProvidersRegistry {
 
     private abstract class MediaTypeMap<T> {
 
-        private final Map<MediaType, Set<ObjectFactory<T>>> data = new LinkedHashMap<MediaType, Set<ObjectFactory<T>>>();
+        private final Map<MediaType, Set<ObjectFactory<T>>> data =
+                                                                     new LinkedHashMap<MediaType, Set<ObjectFactory<T>>>();
         private final Class<?>                              rawType;
 
         public MediaTypeMap(Class<?> rawType) {
@@ -370,26 +401,79 @@ public class ProvidersRegistry {
         }
 
         /**
-         * returns providers by mediaType and by
+         * returns providers by mediaType and by type
          * 
          * @param mediaType
-         * @param type
+         * @param cls
          * @return
          */
-        public List<ObjectFactory<T>> getProvidersByMediaType(MediaType mediaType, Class<?> type) {
-            if (!mediaType.getParameters().isEmpty()) {
-                mediaType = new MediaType(mediaType.getType(), mediaType.getSubtype());
+        public List<ObjectFactory<T>> getProvidersByMediaType(MediaType mediaType, Class<?> cls) {
+
+            String subtype = mediaType.getSubtype();
+            String type = mediaType.getType();
+            if (subtype.equals(MediaType.MEDIA_TYPE_WILDCARD) || type
+                .equals(MediaType.MEDIA_TYPE_WILDCARD)) {
+                return getProvidersByWildcardMediaType(mediaType, cls);
             }
             List<ObjectFactory<T>> list = new ArrayList<ObjectFactory<T>>();
+            if (!mediaType.getParameters().isEmpty()) {
+                mediaType = new MediaType(type, subtype);
+            }
             Set<ObjectFactory<T>> set = data.get(mediaType);
-            limitByType(list, set, type);
-            if (!mediaType.getSubtype().equals("*")) {
-                set = data.get(new MediaType(mediaType.getType(), "*"));
-                limitByType(list, set, type);
-                if (!mediaType.getType().equals("*")) {
-                    set = data.get(MediaType.WILDCARD_TYPE);
-                    limitByType(list, set, type);
+            limitByType(list, set, cls);
+            set = data.get(new MediaType(type, MediaType.WILDCARD));
+            limitByType(list, set, cls);
+            set = data.get(MediaType.WILDCARD_TYPE);
+            limitByType(list, set, cls);
+
+            return list;
+        }
+
+        private List<ObjectFactory<T>> getProvidersByWildcardMediaType(MediaType mediaType,
+                                                                       Class<?> cls) {
+
+            // according to JSR311 3.8, the providers must be searched
+            // using a concrete type
+            // if the providers are searched using a wildcard, it means
+            // that the call is done
+            // from the Providers interface, therefore isCompatible method
+            // should be used
+            // the search here is less efficient that the regular search
+
+            List<ObjectFactory<T>> list = new ArrayList<ObjectFactory<T>>();
+
+            ArrayList<Entry<MediaType, Set<ObjectFactory<T>>>> compatibleList =
+                new ArrayList<Entry<MediaType, Set<ObjectFactory<T>>>>();
+            for (Entry<MediaType, Set<ObjectFactory<T>>> entry : data.entrySet()) {
+                if (entry.getKey().isCompatible(mediaType)) {
+                    compatibleList.add(entry);
                 }
+            }
+            // sort list according to n / m > n / * > * / *
+            Collections.sort(compatibleList,
+                             new Comparator<Entry<MediaType, Set<ObjectFactory<T>>>>() {
+
+                                 public int compare(Entry<MediaType, Set<ObjectFactory<T>>> o1,
+                                                    Entry<MediaType, Set<ObjectFactory<T>>> o2) {
+                                     MediaType m1 = o1.getKey();
+                                     MediaType m2 = o2.getKey();
+                                     if (m1.getType().equals(MediaType.MEDIA_TYPE_WILDCARD)) {
+                                         if (m2.getType().equals(MediaType.MEDIA_TYPE_WILDCARD)) {
+                                             return 0;
+                                         }
+                                         // m2 > m1
+                                         return -1;
+                                     } else {
+                                         if (!m2.getType().equals(MediaType.MEDIA_TYPE_WILDCARD)) {
+                                             return 0;
+                                         }
+                                         // m1 > m2
+                                         return 1;
+                                     }
+                                 }
+                             });
+            for (Entry<MediaType, Set<ObjectFactory<T>>> entry : compatibleList) {
+                limitByType(list, entry.getValue(), cls);
             }
             return list;
         }
@@ -401,8 +485,9 @@ public class ProvidersRegistry {
                 MediaType mediaType = entry.getKey();
                 Set<ObjectFactory<T>> set = entry.getValue();
                 for (ObjectFactory<T> t : set) {
-                    if (GenericsUtils.isGenericInterfaceAssignableFrom(type, t.getInstanceClass(),
-                        rawType)) {
+                    if (GenericsUtils.isGenericInterfaceAssignableFrom(type,
+                                                                       t.getInstanceClass(),
+                                                                       rawType)) {
                         mediaTypes.add(mediaType);
                         continue l1;
                     }
@@ -411,12 +496,14 @@ public class ProvidersRegistry {
             return mediaTypes;
         }
 
-        private void limitByType(List<ObjectFactory<T>> list, Set<ObjectFactory<T>> set,
-            Class<?> type) {
+        private void limitByType(List<ObjectFactory<T>> list,
+                                 Set<ObjectFactory<T>> set,
+                                 Class<?> type) {
             if (set != null) {
                 for (ObjectFactory<T> t : set) {
-                    if (GenericsUtils.isGenericInterfaceAssignableFrom(type, t.getInstanceClass(),
-                        rawType)) {
+                    if (GenericsUtils.isGenericInterfaceAssignableFrom(type,
+                                                                       t.getInstanceClass(),
+                                                                       rawType)) {
                         list.add(t);
                     }
                 }
