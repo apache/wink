@@ -36,6 +36,8 @@ import java.util.Map;
 
 import javax.net.ServerSocketFactory;
 import javax.net.ssl.SSLServerSocketFactory;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 public class MockHttpServer extends Thread {
 
@@ -354,7 +356,12 @@ public class MockHttpServer extends Thread {
 
             OutputStream sos = socket.getOutputStream();
             BufferedOutputStream os = new BufferedOutputStream(sos);
-            os.write(("HTTP/1.1 " + org.apache.wink.common.http.HttpStatus.valueOf(mockResponseCode).toString()).getBytes());
+            String reason = "";
+            Status statusCode = Response.Status.fromStatusCode(mockResponseCode);
+            if(statusCode !=null){
+                reason = statusCode.toString();
+            }
+            os.write(("HTTP/1.1 " + mockResponseCode + " " + reason).getBytes());
             os.write(NEW_LINE);
             processResponseHeaders(os);
             processResponseContent(os);

@@ -46,6 +46,7 @@
         <module>wink-common</module>
         <module>wink-server</module>
         <module>wink-client</module>
+        <module>wink-client/wink-apache-client</module>
         <module>wink-spring-support</module>
         <module>wink-webdav</module>
         <module>wink-examples</module>

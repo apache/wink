@@ -1,0 +1,272 @@
+/*******************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ *  
+ *******************************************************************************/
+
+package org.apache.wink.client.internal.handlers;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URI;
+import java.util.List;
+
+import javax.ws.rs.core.MultivaluedMap;
+
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.params.ClientPNames;
+import org.apache.http.conn.params.ConnRoutePNames;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.CoreConnectionPNames;
+import org.apache.wink.client.ClientConfig;
+import org.apache.wink.client.ClientRequest;
+import org.apache.wink.client.ClientResponse;
+import org.apache.wink.client.handlers.HandlerContext;
+
+public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler {
+    
+    private HttpClient httpclient;
+    
+    public ApacheHttpClientConnectionHandler() {
+        httpclient = null;
+    }
+    
+    public ApacheHttpClientConnectionHandler(HttpClient httpclient) {
+        this.httpclient = httpclient;
+    }
+
+    public ClientResponse handle(ClientRequest request, HandlerContext context) throws Exception {
+        try {
+            HttpResponse response = processRequest(request, context);
+            return processResponse(request, context, response);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    private HttpResponse processRequest(ClientRequest request, HandlerContext context) throws IOException {
+        HttpClient client = openConnection(request);
+        // TODO: move this functionality to the base class
+        NonCloseableOutputStream ncos = new NonCloseableOutputStream();
+        OutputStream os = ncos;
+        
+        EntityWriter entityWriter = null;
+        if (request.getEntity() != null) {
+            os = adaptOutputStream(ncos, request, context.getOutputStreamAdapters());
+            // prepare the entity that will write our entity
+            entityWriter = new EntityWriter(this, request, os, ncos);
+        }
+        
+        HttpRequestBase entityRequest = setupHttpRequest(request, client, entityWriter);
+        
+        return client.execute(entityRequest);
+    }
+    
+    private HttpRequestBase setupHttpRequest(ClientRequest request, HttpClient client, EntityWriter entityWriter) {
+        URI uri = request.getURI();
+        String method = request.getMethod();
+        HttpRequestBase httpRequest = null;
+        if (entityWriter == null) {
+            GenericHttpRequestBase entityRequest = new GenericHttpRequestBase(method);
+            httpRequest = entityRequest;
+        } else {
+            // create a new request with the specified method
+            HttpEntityEnclosingRequestBase entityRequest = new GenericHttpEntityEnclosingRequestBase(method);
+            entityRequest.setEntity(entityWriter);
+            httpRequest = entityRequest;
+        }
+        // set the uri
+        httpRequest.setURI(uri);
+        // add all headers
+        MultivaluedMap<String,String> headers = request.getHeaders();
+        for (String header : headers.keySet()) {
+            List<String> values = headers.get(header);
+            for (String value : values) {
+                if (value != null) {
+                    httpRequest.addHeader(header, value);
+                }
+            }
+        }
+        return httpRequest;
+    }
+
+    private HttpClient openConnection(ClientRequest request) {
+        if (this.httpclient != null) {
+            return this.httpclient;
+        }
+        
+        ClientConfig config = request.getAttribute(ClientConfig.class);
+        BasicHttpParams params = new BasicHttpParams();
+        params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, Integer.valueOf(config.getConnectTimeout()));
+        params.setParameter(CoreConnectionPNames.SO_TIMEOUT, Integer.valueOf(config.getReadTimeout()));
+        params.setParameter(ClientPNames.HANDLE_REDIRECTS, Boolean.valueOf(config.isFollowRedirects()));
+        if (config.isFollowRedirects()) {
+            params.setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, Boolean.TRUE);
+        }
+        // setup proxy
+        if (config.getProxyHost() != null) {
+            params.setParameter(ConnRoutePNames.DEFAULT_PROXY, new HttpHost(config.getProxyHost(), config.getProxyPort()));
+        }
+        HttpClient httpclient = new DefaultHttpClient(params);
+        return httpclient;
+    }
+    
+    private ClientResponse processResponse(ClientRequest request, HandlerContext context, HttpResponse httpResponse) throws IllegalStateException, IOException {
+        ClientResponse response = createResponse(request, httpResponse);
+        InputStream is = httpResponse.getEntity().getContent();
+        is = adaptInputStream(is, response, context.getInputStreamAdapters());
+        response.setEntity(is);
+        return response;
+    }
+
+    private ClientResponse createResponse(ClientRequest request, HttpResponse httpResponse) {
+        ClientResponse response = new ClientResponseImpl();
+        StatusLine statusLine = httpResponse.getStatusLine();
+        response.setStatusCode(statusLine.getStatusCode());
+        response.setMessage(statusLine.getReasonPhrase());
+        response.getAttributes().putAll(request.getAttributes());
+        processResponseHeaders(response, httpResponse);
+        return response;
+    }
+    
+    private void processResponseHeaders(ClientResponse response, HttpResponse httpResponse) {
+        Header[] allHeaders = httpResponse.getAllHeaders();
+        for (Header header : allHeaders) {
+            response.getHeaders().add(header.getName(), header.getValue());
+        }
+    }
+    
+    private static class GenericHttpRequestBase extends HttpRequestBase {
+        private String method;
+        public GenericHttpRequestBase(String method) {
+            this.method = method;
+        }
+        @Override
+        public String getMethod() {
+            return method;
+        }
+    }
+
+    private static class GenericHttpEntityEnclosingRequestBase extends HttpEntityEnclosingRequestBase {
+        private String method;
+        public GenericHttpEntityEnclosingRequestBase(String method) {
+            this.method = method;
+        }
+        @Override
+        public String getMethod() {
+            return method;
+        }
+    }
+    
+    // TODO: move this class to the base class
+    private static class NonCloseableOutputStream extends OutputStream {
+        OutputStream os;
+
+        public NonCloseableOutputStream() {
+        }
+
+        public void setOutputStream(OutputStream os) {
+            this.os = os;
+        }
+
+        @Override
+        public void close() throws IOException {
+            // do nothing
+        }
+
+        @Override
+        public void flush() throws IOException {
+            os.flush();
+        }
+
+        @Override
+        public void write(byte[] b, int off, int len) throws IOException {
+            os.write(b, off, len);
+        }
+
+        @Override
+        public void write(byte[] b) throws IOException {
+            os.write(b);
+        }
+
+        @Override
+        public void write(int b) throws IOException {
+            os.write(b);
+        }
+    }
+    
+    private static class EntityWriter implements HttpEntity {
+        
+        private ApacheHttpClientConnectionHandler apacheHttpClientHandler;
+        private ClientRequest request;
+        private OutputStream adaptedOutputStream;
+        private NonCloseableOutputStream ncos;
+        
+        public EntityWriter(ApacheHttpClientConnectionHandler apacheHttpClientHandler, ClientRequest request, OutputStream adaptedOutputStream, NonCloseableOutputStream ncos) {
+            this.apacheHttpClientHandler = apacheHttpClientHandler;
+            this.request = request;
+            this.adaptedOutputStream = adaptedOutputStream;
+            this.ncos = ncos;
+        }
+
+        public void consumeContent() throws IOException {
+        }
+
+        public InputStream getContent() throws IOException, IllegalStateException {
+            return null;
+        }
+
+        public Header getContentEncoding() {
+            return null;
+        }
+
+        public long getContentLength() {
+            return -1;
+        }
+
+        public Header getContentType() {
+            return null;
+        }
+
+        public boolean isChunked() {
+            return true;
+        }
+
+        public boolean isRepeatable() {
+            return true;
+        }
+
+        public boolean isStreaming() {
+            return true;
+        }
+
+        public void writeTo(OutputStream os) throws IOException {
+            ncos.setOutputStream(os);
+            apacheHttpClientHandler.writeEntity(request, adaptedOutputStream);
+        }
+        
+    }
+}

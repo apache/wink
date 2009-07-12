@@ -70,5 +70,10 @@
             <groupId>javax.activation</groupId>
             <artifactId>activation</artifactId>
         </dependency>
+        <dependency>
+			<groupId>org.apache.wink</groupId>
+			<artifactId>wink-component-test-support</artifactId>
+			<scope>test</scope>
+		</dependency>
     </dependencies>
 </project>
