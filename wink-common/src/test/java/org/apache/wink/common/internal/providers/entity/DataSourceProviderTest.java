@@ -50,8 +50,10 @@ public class DataSourceProviderTest {
         DataSourceProvider.ByteArrayDataSource bads = new DataSourceProvider.ByteArrayDataSource(bais, "text/plain");
 
         // Check if readable - assert true
-        assertFalse(dsp.isReadable(DataSourceProvider.ByteArrayDataSource.class, null, null, null));
+        assertTrue(dsp.isReadable(DataSource.class, null, null, null));
+        assertTrue(dsp.isReadable(Object.class, null, null, null));
         // Check if readable - assert false
+        assertFalse(dsp.isReadable(DataSourceProvider.ByteArrayDataSource.class, null, null, null));
         assertFalse(" Reading to String.class is not supported", dsp.isReadable(String.class, null, null, null));
 
         DataSource ds = null;

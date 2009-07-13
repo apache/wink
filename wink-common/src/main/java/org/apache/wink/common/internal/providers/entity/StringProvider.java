@@ -48,7 +48,7 @@ public class StringProvider implements MessageBodyReader<String>, MessageBodyWri
     private static final Logger logger = LoggerFactory.getLogger(StringProvider.class);
     
     public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-        return type == String.class;
+        return type.isAssignableFrom(String.class);
     }
 
     public String readFrom(Class<String> type, Type genericType, Annotation[] annotations, MediaType mediaType,

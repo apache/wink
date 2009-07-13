@@ -67,7 +67,7 @@ public abstract class SourceProvider implements MessageBodyWriter<Source> {
     public static class StreamSourceProvider extends SourceProvider implements MessageBodyReader<Source> {
 
         public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-            return ((Source.class == type || StreamSource.class == type) && super.isReadable(mediaType));
+            return (type.isAssignableFrom(StreamSource.class) && super.isReadable(mediaType));
         }
 
         public StreamSource readFrom(Class<Source> type, Type genericType, Annotation[] annotations,

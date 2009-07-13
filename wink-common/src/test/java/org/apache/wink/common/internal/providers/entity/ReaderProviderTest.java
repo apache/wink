@@ -48,8 +48,10 @@ public class ReaderProviderTest {
         ReaderProvider rp = new ReaderProvider();
 
         // Check if readable - assert true
-        assertFalse(rp.isReadable(StringReader.class, null, null, null));
+        assertTrue(rp.isReadable(Reader.class, null, null, null));
+        assertTrue(rp.isReadable(Object.class, null, null, null));
         // Check if readable - assert false
+        assertFalse(rp.isReadable(StringReader.class, null, null, null));
         assertFalse(" Reading from String.class is not supported", rp.isReadable(String.class, null, null, null));
 
         Reader reader = null;
