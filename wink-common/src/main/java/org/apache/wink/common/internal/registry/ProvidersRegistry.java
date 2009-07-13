@@ -421,7 +421,7 @@ public class ProvidersRegistry {
             }
             Set<ObjectFactory<T>> set = data.get(mediaType);
             limitByType(list, set, cls);
-            set = data.get(new MediaType(type, MediaType.WILDCARD));
+            set = data.get(new MediaType(type, MediaType.MEDIA_TYPE_WILDCARD));
             limitByType(list, set, cls);
             set = data.get(MediaType.WILDCARD_TYPE);
             limitByType(list, set, cls);

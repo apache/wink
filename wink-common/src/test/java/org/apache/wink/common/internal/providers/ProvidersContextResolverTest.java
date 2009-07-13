@@ -38,11 +38,12 @@ public class ProvidersContextResolverTest extends TestCase {
     public static class NotAProvider {
     }
 
-    private static final String  STRING  = "String";
-    private static final String  ATOM    = "Atom";
-    private static final byte[]  BYTE    = new byte[0];
-    private static final Integer _12345  = new Integer(12345);
-    private static final MyClass MYCLASS = new MyClass();
+    private static final String  STRING    = "String";
+    private static final String  STRING2    = "String2";
+    private static final String  ATOM      = "Atom";
+    private static final byte[]  BYTE      = new byte[0];
+    private static final Integer _12345    = new Integer(12345);
+    private static final MyClass MYCLASS   = new MyClass();
 
     @Provider
     @Produces( {MediaType.TEXT_PLAIN, MediaType.WILDCARD})
@@ -50,6 +51,15 @@ public class ProvidersContextResolverTest extends TestCase {
 
         public String getContext(Class<?> type) {
             return STRING;
+        }
+    }
+    
+    @Provider
+    @Produces( "text/*" )
+    public static class StringContextResolver2 implements ContextResolver<String> {
+
+        public String getContext(Class<?> type) {
+            return STRING2;
         }
     }
 
@@ -108,7 +118,6 @@ public class ProvidersContextResolverTest extends TestCase {
     private ProvidersRegistry createProvidersRegistryImpl() {
         ProvidersRegistry providers =
             new ProvidersRegistry(new LifecycleManagersRegistry(), new ApplicationValidator());
-        ;
         return providers;
     }
 
@@ -169,6 +178,7 @@ public class ProvidersContextResolverTest extends TestCase {
     public void testContextResolverWildCards() {
         ProvidersRegistry providers = createProvidersRegistryImpl();
         assertTrue(providers.addProvider(new MyContextResolver()));
+        assertTrue(providers.addProvider(new StringContextResolver2()));
 
         /*
          * Check various wildcard permutations
@@ -189,6 +199,12 @@ public class ProvidersContextResolverTest extends TestCase {
         assertSame(MYCLASS, providers
             .getContextResolver(MyClass.class, new MediaType("*", "x-www-form-urlencoded"), null)
             .getContext(MyClass.class));
+
+        // should hit an exact match when search expands out to "text/*"
+        assertSame(STRING2, providers.getContextResolver(String.class,
+                new MediaType("text",
+                              "blarg"),
+                null).getContext(String.class));
     }
 
 }
