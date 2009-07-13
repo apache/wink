@@ -31,6 +31,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
@@ -44,6 +46,7 @@ import javax.ws.rs.ext.Providers;
 
 import org.apache.wink.common.internal.PathSegmentImpl;
 import org.apache.wink.common.internal.registry.BoundInjectable;
+import org.apache.wink.common.internal.registry.ContextAccessor;
 import org.apache.wink.common.internal.registry.Injectable;
 import org.apache.wink.common.internal.registry.InjectableFactory;
 import org.apache.wink.common.internal.registry.ValueConvertor.ConversionException;
@@ -54,6 +57,11 @@ import org.apache.wink.common.internal.utils.StringUtils;
 import org.apache.wink.server.internal.handlers.SearchResult;
 
 public class ServerInjectableFactory extends InjectableFactory {
+
+    @Override
+    public Injectable createContextParam(Class<?> classType, Annotation[] annotations, Member member) {
+        return new ServerContextParam(classType, annotations, member);
+    }
 
     @Override
     public Injectable createCookieParam(String value, Class<?> classType, Type genericType,
@@ -95,6 +103,33 @@ public class ServerInjectableFactory extends InjectableFactory {
     public Injectable createQueryParam(String value, Class<?> classType, Type genericType,
         Annotation[] annotations, Member member) {
         return new QueryParamBinding(value, classType, genericType, annotations, member);
+    }
+
+    /**
+     * Used for injecting a field or parameter of JAX-RS resource with a
+     * context, as defined by the JAX-RS spec. First searches for a
+     * ContextResolver to get the context to inject, and if none is found, then
+     * tries one of the built-in types of context
+     */
+    public static class ServerContextParam extends Injectable {
+
+        private ContextAccessor contextAccessor;
+
+        public ServerContextParam(Class<?> type, Annotation[] annotations, Member member) {
+            super(ParamType.CONTEXT, type, type, annotations, member);
+            if (type != HttpServletRequest.class && type != HttpServletResponse.class) {
+                contextAccessor = new ContextAccessor();
+            } else {
+                // due to strict checking of HttpServletRequest and HttpServletResponse
+                // injections, a special injector must be used
+                contextAccessor = new ServletContextAccessor();
+            }
+        }
+
+        @Override
+        public Object getValue(RuntimeContext runtimeContext) {
+            return contextAccessor.getContext(getType(), runtimeContext);
+        }
     }
 
     /**

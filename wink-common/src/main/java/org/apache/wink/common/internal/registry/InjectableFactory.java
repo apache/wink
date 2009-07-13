@@ -169,7 +169,7 @@ public class InjectableFactory {
     /**
      * Used for injecting a field or parameter of JAX-RS resource with a
      * context, as defined by the JAX-RS spec. First searches for a
-     * ContextResolver to get the context to inject, and if non is found, then
+     * ContextResolver to get the context to inject, and if none is found, then
      * tries one of the built-in types of context
      */
     public static class ContextParam extends Injectable {

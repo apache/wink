@@ -109,7 +109,7 @@ public class ContextAccessor {
                 if (e instanceof InvocationTargetException) {
                     Throwable ite = ((InvocationTargetException)e).getTargetException();
                     if (ite instanceof RuntimeException) {
-                        throw (WebApplicationException)ite;
+                        throw (RuntimeException)ite;
                     }
                     throw new WebApplicationException(ite);
                 }

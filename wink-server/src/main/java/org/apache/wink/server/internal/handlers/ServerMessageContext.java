@@ -27,6 +27,7 @@ import java.util.Properties;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import javax.ws.rs.core.HttpHeaders;
@@ -67,8 +68,14 @@ public class ServerMessageContext extends AbstractRuntimeContext implements Mess
 
         // save stuff on attributes
         setAttribute(HttpServletRequest.class, servletRequest);
-        setAttribute(HttpServletResponse.class, new WrappedResponse(servletRequest, servletResponse, configuration
-                .getMediaTypeMapper()));
+
+        // note that a HttpServlet*Wrapper is needed for injection of
+        // singletons that had a @Context HttpServlet*;  see [WINK-73]
+        setAttribute(HttpServletRequestWrapper.class, new HttpServletRequestWrapper(servletRequest));
+        HttpServletResponseWrapper responseWrapper = new WrappedResponse(servletRequest, servletResponse, configuration
+                                                                         .getMediaTypeMapper());
+        setAttribute(HttpServletResponse.class, responseWrapper);
+        setAttribute(HttpServletResponseWrapper.class, responseWrapper);
         setAttribute(ServletContext.class, configuration.getServletContext());
         setAttribute(ServletConfig.class, configuration.getServletConfig());
         setAttribute(DeploymentConfiguration.class, configuration);
@@ -218,5 +225,4 @@ public class ServerMessageContext extends AbstractRuntimeContext implements Mess
             return mediaTypeMapper.mapOutputMediaType(MediaType.valueOf(responseMimeType), userAgent);
         }
     }
-
 }
