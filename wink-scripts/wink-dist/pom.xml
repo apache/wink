@@ -97,12 +97,12 @@
 		</profile>
 
 		<profile>
-			<id>Hudson-dist</id>
+			<id>CI Build</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 				<property>
-					<name>buildType</name>
-					<value>Hudson</value>
+					<name>build</name>
+					<value>CI</value>
 				</property>
 			</activation>
 			<build>

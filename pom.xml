@@ -528,31 +528,23 @@
     </developers>
     <profiles>
         <!--
-            This profile should be activated when we want to deploy a
-            release
+            This profile should be activated during CI build.
         -->
         <profile>
-            <id>Hudson-main</id>
+            <id>CI Build</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
                 <property>
-                    <name>buildType</name>
-                    <value>Hudson</value>
+                    <name>build</name>
+                    <value>CI</value>
                 </property>
             </activation>
-            <reporting>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>cobertura-maven-plugin</artifactId>
-                    </plugin>
-                </plugins>
-            </reporting>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>cobertura-maven-plugin</artifactId>
+                        <version>2.3</version>
                         <executions>
                             <execution>
                                 <phase>install</phase>
