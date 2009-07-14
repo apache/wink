@@ -32,7 +32,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Map.Entry;
 import java.util.concurrent.locks.Lock;
@@ -47,14 +46,14 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.internal.application.ApplicationValidator;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.lifecycle.ObjectFactory;
 import org.apache.wink.common.internal.runtime.RuntimeContext;
 import org.apache.wink.common.internal.utils.GenericsUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Keeps the registry of providers.
@@ -394,7 +393,7 @@ public class ProvidersRegistry {
         private final Map<MediaType, Set<ObjectFactory<T>>> data =
                                                                      new LinkedHashMap<MediaType, Set<ObjectFactory<T>>>();
         private final Class<?>                              rawType;
-
+        
         public MediaTypeMap(Class<?> rawType) {
             super();
             this.rawType = rawType;
@@ -439,6 +438,7 @@ public class ProvidersRegistry {
             // from the Providers interface, therefore isCompatible method
             // should be used
             // the search here is less efficient that the regular search
+            // see https://issues.apache.org/jira/browse/WINK-47
 
             List<ObjectFactory<T>> list = new ArrayList<ObjectFactory<T>>();
 
@@ -449,29 +449,41 @@ public class ProvidersRegistry {
                     compatibleList.add(entry);
                 }
             }
-            // sort list according to n / m > n / * > * / *
-            Collections.sort(compatibleList,
-                             new Comparator<Entry<MediaType, Set<ObjectFactory<T>>>>() {
 
-                                 public int compare(Entry<MediaType, Set<ObjectFactory<T>>> o1,
-                                                    Entry<MediaType, Set<ObjectFactory<T>>> o2) {
-                                     MediaType m1 = o1.getKey();
-                                     MediaType m2 = o2.getKey();
-                                     if (m1.getType().equals(MediaType.MEDIA_TYPE_WILDCARD)) {
-                                         if (m2.getType().equals(MediaType.MEDIA_TYPE_WILDCARD)) {
-                                             return 0;
-                                         }
-                                         // m2 > m1
-                                         return -1;
-                                     } else {
-                                         if (!m2.getType().equals(MediaType.MEDIA_TYPE_WILDCARD)) {
-                                             return 0;
-                                         }
-                                         // m1 > m2
-                                         return 1;
-                                     }
-                                 }
-                             });
+            // sorts according to the following algorithm: n / m  >  n / *  >  * / * in descending order 
+            // see https://issues.apache.org/jira/browse/WINK-82
+            Collections.sort(compatibleList, Collections.reverseOrder(new Comparator<Entry<MediaType, Set<ObjectFactory<T>>>>() {
+
+                public int compare(Entry<MediaType, Set<ObjectFactory<T>>> o1,
+                                   Entry<MediaType, Set<ObjectFactory<T>>> o2) {
+                    MediaType m1 = o1.getKey();
+                    MediaType m2 = o2.getKey();
+                    int compareTypes = compareTypes(m1.getType(), m2.getType());
+                    if (compareTypes == 0) {
+                        return compareTypes(m1.getSubtype(), m2.getSubtype());
+                    }
+                    return compareTypes;
+                }
+                
+                private int compareTypes(String type1, String type2) {
+                    if (type1.equals(MediaType.MEDIA_TYPE_WILDCARD)) {
+                        if (type2.equals(MediaType.MEDIA_TYPE_WILDCARD)) {
+                            // both types are wildcards
+                            return 0;
+                        }
+                        // only type2 is concrete
+                        // type2 > type1
+                        return -1;
+                    }
+                    if (type2.equals(MediaType.MEDIA_TYPE_WILDCARD)) {
+                        // only type1 is concrete
+                        return 1;
+                    }
+                    // both types are concrete
+                    return 0;
+                }
+            }));
+            
             for (Entry<MediaType, Set<ObjectFactory<T>>> entry : compatibleList) {
                 limitByType(list, entry.getValue(), cls);
             }
