@@ -53,6 +53,7 @@
 	<property name="project.common" value="${project.root}/wink-common" />
 	<property name="project.server" value="${project.root}/wink-server" />
 	<property name="project.client" value="${project.root}/wink-client" />
+	<property name="project.apache.httpclient" value="${project.root}/wink-client-apache-httpclient" />
 	<property name="project.webdav" value="${project.root}/wink-webdav" />
 	<property name="project.spring" value="${project.root}/wink-spring-support" />
 	<property name="project.examples" value="${project.root}/wink-examples" />
@@ -127,6 +128,9 @@
 			<fileset dir="${project.client}">
 				<include name="**/*.jar" />
 				<exclude name="**/*xmlbeans-generated*" />
+			</fileset>
+			<fileset dir="${project.apache.httpclient}">
+				<include name="**/*.jar" />
 			</fileset>
 			<fileset dir="${project.webdav}">
 				<include name="**/*.jar" />

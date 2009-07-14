@@ -35,7 +35,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <build>
-	</build>
+    </build>
     <!-- depending on the following jars -->
     <dependencies>
         <dependency>
@@ -71,9 +71,9 @@
             <artifactId>activation</artifactId>
         </dependency>
         <dependency>
-			<groupId>org.apache.wink</groupId>
-			<artifactId>wink-component-test-support</artifactId>
-			<scope>test</scope>
-		</dependency>
+            <groupId>org.apache.wink</groupId>
+            <artifactId>wink-component-test-support</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

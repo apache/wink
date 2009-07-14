@@ -7,7 +7,6 @@
     to you under the Apache License, Version 2.0 (the
     "License"); you may not use this file except in compliance
     with the License.  You may obtain a copy of the License at
-    
      http://www.apache.org/licenses/LICENSE-2.0
     
     Unless required by applicable law or agreed to in writing,
@@ -46,7 +45,7 @@
         <module>wink-common</module>
         <module>wink-server</module>
         <module>wink-client</module>
-        <module>wink-client/wink-apache-client</module>
+        <module>wink-client-apache-httpclient</module>
         <module>wink-spring-support</module>
         <module>wink-webdav</module>
         <module>wink-examples</module>
@@ -112,6 +111,7 @@
                 </executions>
             </plugin>
         </plugins>
+
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -210,29 +210,6 @@
                             </goals>
                         </execution>
                     </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>cobertura-maven-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>clean</goal>
-                                <goal>cobertura</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <instrumentation>
-                            <ignores>
-                                <ignore>org.apache.commons.logging.*</ignore>
-                            </ignores>
-                            <excludes>
-                                <exclude>com/hp/symphony/common/internal/model/admin/**/*.class</exclude>
-                                <exclude>com/hp/symphony/common/model/json/**/*.class</exclude>
-                            </excludes>
-                        </instrumentation>
-                    </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-eclipse-plugin</artifactId>
@@ -474,7 +451,6 @@
                     </reportSet>
                 </reportSets>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
@@ -569,12 +545,37 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>cobertura-maven-plugin</artifactId>
-                        <version>2.3</version>
                     </plugin>
                 </plugins>
             </reporting>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>cobertura-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>cobertura</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <instrumentation>
+                                <ignores>
+                                    <ignore>org.apache.commons.logging.*</ignore>
+                                </ignores>
+                                <excludes>
+                                    <exclude>apache/wink/common/internal/model/admin/**/*.class</exclude>
+                                </excludes>
+                            </instrumentation>
+                            <formats>
+                                <format>xml</format>
+                                <format>html</format>
+                            </formats>
+                        </configuration>
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
