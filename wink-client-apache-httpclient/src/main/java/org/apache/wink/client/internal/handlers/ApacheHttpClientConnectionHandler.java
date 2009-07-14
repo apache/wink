@@ -46,6 +46,10 @@ import org.apache.wink.client.ClientRequest;
 import org.apache.wink.client.ClientResponse;
 import org.apache.wink.client.handlers.HandlerContext;
 
+/**
+ * Extends AbstractConnectionHandler and uses Apache HttpClient to perform HTTP request execution. 
+ * Each outgoing Http request is wrapped by EntityWriter.  
+ */
 public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler {
     
     private HttpClient httpclient;

@@ -26,6 +26,26 @@ import org.apache.wink.client.ClientConfig;
 import org.apache.wink.client.handlers.ConnectionHandler;
 import org.apache.wink.client.internal.handlers.ApacheHttpClientConnectionHandler;
 
+
+/**
+ * Configuration object that wraps Apache HttpClient as underling Http client. 
+ * 
+ *  The following code snippet, demonstrates the typical usage: 
+ *  <p>
+ *      <pre>
+ *      // create the client that uses Apache DefaultHttpClient as underling Http client. 
+ *      RestClient client = new RestClient(new ApacheHttpClientConfig(new DefaultHttpClient()));
+ *      
+ *      // create the resource to make invocations on
+ *      Resource resource = client.resource(&quot;http://myhost:80/my/service&quot;);
+ *      
+ *      // invoke GET on the resource and receive the response entity as a string
+ *      String entity = resource.get(String.class);
+ *      ...
+ *      </pre>
+ *  </p>
+ *
+ */
 public class ApacheHttpClientConfig extends ClientConfig {
 
     private HttpClient client;
