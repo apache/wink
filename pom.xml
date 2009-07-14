@@ -70,26 +70,23 @@
                     <aggregate>true</aggregate>
                     <includes>
                         <include>**/src/**</include>
-                        <include>**/test/**</include>
                     </includes>
                     <excludes>
-                        <exclude>target/**</exclude>
-                        <exclude>**/*.app</exclude>
-                        <exclude>**/*.apt</exclude>
+                        <exclude>**/*.txt</exclude>
                         <exclude>**/*.docx</exclude>
                         <exclude>**/*.pdf</exclude>
-                        <exclude>**/*.JPG</exclude>
-                        <exclude>**/*.txt</exclude>
-                        <exclude>**/JSON*.java</exclude>
                         <exclude>javax.ws.rs.ext.RuntimeDelegate</exclude>
                     </excludes>
                     <useDefaultExcludes>true</useDefaultExcludes>
+                    <mapping>
+                        <app>SCRIPT_STYLE</app>
+                    </mapping>
                     <useDefaultMapping>true</useDefaultMapping>
                     <encoding>UTF-8</encoding>
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>install</phase>
+                        <phase>verify</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>
