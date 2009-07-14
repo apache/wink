@@ -27,10 +27,12 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Variant;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.ext.RuntimeDelegate;
@@ -76,7 +78,13 @@ public class RequestImpl implements Request {
      * returns ResponseBuilder if none of the tags matched
      */
     private ResponseBuilder evaluateIfMatch(EntityTag tag, String headerValue) {
-        EntityTagMatchHeader ifMatchHeader = ifMatchHeaderDelegate.fromString(headerValue);
+        EntityTagMatchHeader ifMatchHeader = null;
+        try {
+            ifMatchHeader = ifMatchHeaderDelegate.fromString(headerValue);
+        } catch (IllegalArgumentException e) {
+            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
+        }
+        
         if (!ifMatchHeader.isMatch(tag)) {
             // none of the tags matches the etag
             ResponseBuilder responseBuilder = delegate.createResponseBuilder();
@@ -90,7 +98,13 @@ public class RequestImpl implements Request {
      * returns ResponseBuilder if any of the tags matched
      */
     private ResponseBuilder evaluateIfNoneMatch(EntityTag tag, String headerValue) {
-        EntityTagMatchHeader ifNoneMatchHeader = ifMatchHeaderDelegate.fromString(headerValue);
+        EntityTagMatchHeader ifNoneMatchHeader = null;
+        try {
+            ifNoneMatchHeader = ifMatchHeaderDelegate.fromString(headerValue);
+        } catch (IllegalArgumentException e) {
+            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
+        }
+        
         if (ifNoneMatchHeader.isMatch(tag)) {
             // some tag matched
             ResponseBuilder responseBuilder = delegate.createResponseBuilder();

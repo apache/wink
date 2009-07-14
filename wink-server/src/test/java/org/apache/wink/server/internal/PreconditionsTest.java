@@ -252,6 +252,84 @@ public class PreconditionsTest extends MockServletInvocationTest {
         assertEquals("status", 200, response.getStatus());
 
     }
+    
+    /**
+     * ensure multiple etags are supported
+     */
+    public void testConditionIfMatchesMultipleOnSingleHeader() throws Exception {
+        String etag = "blablabla";
+
+        // GET
+        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "get/"
+            + etag, "*/*");
+        request.addHeader(HttpHeaders.IF_MATCH, "\"atlantic\",\"" + etag + "\",\"pacific\"");
+        MockHttpServletResponse response = invoke(request);
+        assertEquals("status", 200, response.getStatus());
+
+        // PUT
+        request = MockRequestConstructor.constructMockRequest("PUT", "get/" + etag, "*/*");
+        request.addHeader(HttpHeaders.IF_MATCH, "\"atlantic\",\"" + etag + "\",\"pacific\"");
+        response = invoke(request);
+        assertEquals("status", 200, response.getStatus());
+    }
+    
+    /**
+     * ETags not wrapped in quotes are invalid.  See http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.11
+     */
+    public void testConditionIfMatchesUnquoted() throws Exception {
+        String etag = "blablabla";
+
+        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "get/"
+                + etag, "*/*");
+        // no quotes
+        request.addHeader(HttpHeaders.IF_MATCH, etag);
+        MockHttpServletResponse response = invoke(request);
+        assertEquals("status", 400, response.getStatus());
+        
+        request = MockRequestConstructor.constructMockRequest("GET", "get/"
+                + etag, "*/*");
+        // beginning quote only
+        request.addHeader(HttpHeaders.IF_MATCH, "\"" + etag);
+        response = invoke(request);
+        assertEquals("status", 400, response.getStatus());
+        
+        request = MockRequestConstructor.constructMockRequest("GET", "get/"
+                + etag, "*/*");
+        // end quote only
+        request.addHeader(HttpHeaders.IF_MATCH, etag + "\"");
+        response = invoke(request);
+        assertEquals("status", 400, response.getStatus());
+
+    }
+    
+    /**
+     * ETags not wrapped in quotes are invalid.  See http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.11
+     */
+    public void testConditionIfNoneMatchesUnquoted() throws Exception {
+        String etag = "blablabla";
+
+        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "get/"
+                + etag, "*/*");
+        // no quotes
+        request.addHeader(HttpHeaders.IF_NONE_MATCH, etag);
+        MockHttpServletResponse response = invoke(request);
+        assertEquals("status", 400, response.getStatus());
+        
+        request = MockRequestConstructor.constructMockRequest("GET", "get/"
+                + etag, "*/*");
+        // beginning quote only
+        request.addHeader(HttpHeaders.IF_NONE_MATCH, "\"" + etag);
+        response = invoke(request);
+        assertEquals("status", 400, response.getStatus());
+        
+        request = MockRequestConstructor.constructMockRequest("GET", "get/"
+                + etag, "*/*");
+        // end quote only
+        request.addHeader(HttpHeaders.IF_NONE_MATCH, etag + "\"");
+        response = invoke(request);
+        assertEquals("status", 400, response.getStatus());
+
+    }
 
     public void testConditionGetNotIfMatches() throws Exception {
         String etag = "blablabla";
@@ -286,6 +364,29 @@ public class PreconditionsTest extends MockServletInvocationTest {
         request.addHeader(HttpHeaders.IF_NONE_MATCH, "\"notmatch\"");
         response = invoke(request);
         assertEquals("status", 200, response.getStatus());
+
+    }
+    
+    
+    /**
+     * ensure multiple etags are supported.  These are strange tests;  I need to ensure it goes through
+     * the IF_NONE_MATCH code and hits the second string in the IF_NONE_MATCH header, so I want a 304 or 412 response.
+     */
+    public void testConditionIfNoneMatchesMultipleOnSingleHeader() throws Exception {
+        String etag = "blablabla";
+
+        // GET
+        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "get/"
+            + etag, "*/*");
+        request.addHeader(HttpHeaders.IF_NONE_MATCH, "\"atlantic\",\"" + etag + "\",\"pacific\"");
+        MockHttpServletResponse response = invoke(request);
+        assertEquals("status", 304, response.getStatus());
+
+        // PUT
+        request = MockRequestConstructor.constructMockRequest("PUT", "get/" + etag, "*/*");
+        request.addHeader(HttpHeaders.IF_NONE_MATCH, "\"atlantic\",\"" + etag + "\",\"pacific\"");
+        response = invoke(request);
+        assertEquals("status", 412, response.getStatus());
 
     }
 
