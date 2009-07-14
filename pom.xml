@@ -134,9 +134,9 @@
                     <artifactId>maven-antrun-plugin</artifactId>
                     <dependencies>
                         <!--
-							Override dependencies to use Ant 1.7.0 with regular expressions
-							and maven support
-						-->
+                            Override dependencies to use Ant 1.7.0 with
+                            regular expressions and maven support
+                        -->
                         <dependency>
                             <groupId>org.apache.ant</groupId>
                             <artifactId>ant</artifactId>
@@ -156,9 +156,12 @@
                 </plugin>
 
                 <!--
-                    Build number plug in, should be un comment when defining SVN <plugin>
-                    <groupId>org.codehaus.mojo</groupId> <artifactId>buildnumber-maven-plugin</artifactId>
-                    <version>1.0-beta-2</version> <configuration> <doCheck>false</doCheck> <doUpdate>false</doUpdate>
+                    Build number plug in, should be un comment when
+                    defining SVN <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>buildnumber-maven-plugin</artifactId>
+                    <version>1.0-beta-2</version> <configuration>
+                    <doCheck>false</doCheck> <doUpdate>false</doUpdate>
                     </configuration> </plugin>
                 -->
                 <!-- Write the revision to the Manifest -->
@@ -215,19 +218,11 @@
                         <execution>
                             <goals>
                                 <goal>clean</goal>
+                                <goal>cobertura</goal>
                             </goals>
                         </execution>
                     </executions>
                     <configuration>
-                        <check>
-                            <branchRate>85</branchRate>
-                            <lineRate>85</lineRate>
-                            <haltOnFailure>true</haltOnFailure>
-                            <totalBranchRate>85</totalBranchRate>
-                            <totalLineRate>85</totalLineRate>
-                            <packageLineRate>85</packageLineRate>
-                            <packageBranchRate>85</packageBranchRate>
-                        </check>
                         <instrumentation>
                             <ignores>
                                 <ignore>org.apache.commons.logging.*</ignore>
@@ -258,8 +253,11 @@
                     <artifactId>maven-war-plugin</artifactId>
                     <configuration>
                         <!--
-                            HACK: Include legal files explicity, otherwise they will end up in the wrong path or in
-                            another jar file in the war. NOTE: targetPath is broken for webResources (as documented)
+                            HACK: Include legal files explicity,
+                            otherwise they will end up in the wrong path
+                            or in another jar file in the war. NOTE:
+                            targetPath is broken for webResources (as
+                            documented)
                         -->
                         <webResources>
                             <resource>
@@ -280,16 +278,21 @@
 
     <!-- Repositories that we are working with -->
     <!--
-        <repositories> <repository> <id>central</id> <url>TBD</url> </repository> <repository> <id>snapshots</id>
-        <url>TBD</url> <releases> <enabled>false</enabled> </releases> <snapshots> <enabled>true</enabled> </snapshots>
-        </repository> </repositories>
+        <repositories> <repository> <id>central</id> <url>TBD</url>
+        </repository> <repository> <id>snapshots</id> <url>TBD</url>
+        <releases> <enabled>false</enabled> </releases> <snapshots>
+        <enabled>true</enabled> </snapshots> </repository>
+        </repositories>
     -->
 
     <!-- plugins repositories that we will download from -->
     <!--
-        <pluginRepositories> <pluginRepository> <id>central</id> <url>TBD</url> </pluginRepository> <pluginRepository>
-        <id>snapshots</id> <url>TBD</url> <releases> <enabled>false</enabled> </releases> <snapshots>
-        <enabled>true</enabled> </snapshots> </pluginRepository> </pluginRepositories>
+        <pluginRepositories> <pluginRepository> <id>central</id>
+        <url>TBD</url> </pluginRepository> <pluginRepository>
+        <id>snapshots</id> <url>TBD</url> <releases>
+        <enabled>false</enabled> </releases> <snapshots>
+        <enabled>true</enabled> </snapshots> </pluginRepository>
+        </pluginRepositories>
     -->
     <dependencyManagement>
         <dependencies>
@@ -437,13 +440,17 @@
     <reporting>
         <plugins>
             <!--
-                This plugin creates the changelog report for each module. Should be un comment when the repository is
+                This plugin creates the changelog report for each
+                module. Should be un comment when the repository is
                 define
             -->
             <!--
-                <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-changelog-plugin</artifactId>
-                <reportSets> <reportSet> <id>changelog-report</id> <reports> <report>changelog</report> </reports>
-                </reportSet> </reportSets> <configuration> <type>range</type> <range>30</range> </configuration>
+                <plugin> <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-changelog-plugin</artifactId>
+                <reportSets> <reportSet> <id>changelog-report</id>
+                <reports> <report>changelog</report> </reports>
+                </reportSet> </reportSets> <configuration>
+                <type>range</type> <range>30</range> </configuration>
                 </plugin>
             -->
 
@@ -472,8 +479,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
                 <!--
-					Fix for test's re-run http://jira.codehaus.org/browse/SUREFIRE-257
-				-->
+                    Fix for test's re-run
+                    http://jira.codehaus.org/browse/SUREFIRE-257
+                -->
                 <reportSets>
                     <reportSet>
                         <reports>
@@ -482,17 +490,13 @@
                     </reportSet>
                 </reportSets>
                 <!--
-					End of :Fix for test's re-run
-					http://jira.codehaus.org/browse/SUREFIRE-257
-				-->
+                    End of :Fix for test's re-run
+                    http://jira.codehaus.org/browse/SUREFIRE-257
+                -->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jxr-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </reporting>
@@ -548,8 +552,9 @@
     </developers>
     <profiles>
         <!--
-			This profile should be activated when we want to deploy a release
-		-->
+            This profile should be activated when we want to deploy a
+            release
+        -->
         <profile>
             <id>Hudson-main</id>
             <activation>
@@ -559,6 +564,15 @@
                     <value>Hudson</value>
                 </property>
             </activation>
+            <reporting>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>cobertura-maven-plugin</artifactId>
+                        <version>2.3</version>
+                    </plugin>
+                </plugins>
+            </reporting>
             <build>
                 <plugins>
                     <plugin>
@@ -618,10 +632,10 @@
                 </plugins>
             </build>
             <!--
-				properties>
-				<distribution.deploy.directory>ast</distribution.deploy.directory>
-				</properties
-			-->
+                properties>
+                <distribution.deploy.directory>ast</distribution.deploy.directory>
+                </properties
+            -->
         </profile>
     </profiles>
     <distributionManagement>
@@ -631,8 +645,9 @@
             <name>My Organisation Internal Repository</name>
             <url>${distribution.url}/${distribution.deploy.directory}</url>
             <!--
-				This will not add timestamp to the created outputs in the repository
-			-->
+                This will not add timestamp to the created outputs in
+                the repository
+            -->
             <uniqueVersion>false</uniqueVersion>
         </repository>
         <site>
