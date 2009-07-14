@@ -23,7 +23,7 @@
         "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-	<display-name>Symphony SDK demo</display-name>
+	<display-name>Wink demo</display-name>
 	<description>Demonstration of SDK features</description>
 
 	<servlet>

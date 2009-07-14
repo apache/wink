@@ -19,7 +19,7 @@
 
 # The priority of the providers is the following:
 #   1. Media Type: n/m > n/* > *.*
-#   2. Priority property, if the provider was loaded by SymphonyApplication,
+#   2. Priority property, if the provider was loaded by WinkApplication,
 #      by default the priority is set to 0.5
 #   3. Order of the providers. The later provider was added, the higher priority it has.
 #      This means that if this file is added by a single Application, which occurs by default,

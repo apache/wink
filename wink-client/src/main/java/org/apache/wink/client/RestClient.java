@@ -142,7 +142,7 @@ public class RestClient {
         }
 
         if (application instanceof WinkApplication) {
-            processSymphonyApplication((WinkApplication)application);
+            processWinkApplication((WinkApplication)application);
         }
     }
 
@@ -167,7 +167,7 @@ public class RestClient {
         }
     }
 
-    private void processSymphonyApplication(WinkApplication sApplication) {
+    private void processWinkApplication(WinkApplication sApplication) {
         Set<Object> instances = sApplication.getInstances();
         double priority = sApplication.getPriority();
         if (instances == null) {

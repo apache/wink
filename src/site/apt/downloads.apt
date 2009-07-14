@@ -37,7 +37,7 @@ How to Download
 *-----------+----------------------------------------------+
 || Version || Artifact  || Description
 *-----------+----------------------------------------------+
-| @PROJECT_VERSION@ | {{{@RESPOSITORY_LOCATION@/@DEPLOY_DIRECTORY@/com/hp/sw/bto/ast/symphony/rest/symphony-sdk-dist/@PROJECT_VERSION@/}symphony-sdk-dist:@PROJECT_VERSION@}} | distribution zip - includes sdk jars, dependencies jars, javadocs and sources. |
+| @PROJECT_VERSION@ | {{{@RESPOSITORY_LOCATION@/@DEPLOY_DIRECTORY@/org/apache/wink-dist/@PROJECT_VERSION@/}wink-dist:@PROJECT_VERSION@}} | distribution zip - includes sdk jars, dependencies jars, javadocs and sources. |
 *-----------+----------------------------------------------+
 
 ** Client Module Distribution
@@ -47,5 +47,5 @@ How to Download
 *-----------+----------------------------------------------+
 || Version || Artifact  || Description
 *-----------+----------------------------------------------+
-| @PROJECT_VERSION@ | {{{@RESPOSITORY_LOCATION@/@DEPLOY_DIRECTORY@/com/hp/sw/bto/ast/symphony/rest/symphony-client/@PROJECT_VERSION@/}symphony-client:@PROJECT_VERSION@}}  |
+| @PROJECT_VERSION@ | {{{@RESPOSITORY_LOCATION@/@DEPLOY_DIRECTORY@/org/apache/wink/wink-client/@PROJECT_VERSION@/}wink-client:@PROJECT_VERSION@}}  |
 *-----------+----------------------------------------------+

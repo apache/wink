@@ -8,7 +8,7 @@ Description
 - The application displays a page at http://localhost:8080/RuntimeRegistration for registering 
   the AtomHelloWorldResource and HelloWorldResource.
 
--Symphony features used in this example:
+-Wink features used in this example:
 	Resource runtime registration 
    
 Build

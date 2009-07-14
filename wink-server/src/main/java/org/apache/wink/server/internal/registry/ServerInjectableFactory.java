@@ -263,7 +263,7 @@ public class ServerInjectableFactory extends InjectableFactory {
      */
     public static class FormParamBinding extends BoundInjectable {
 
-        static final String                                FORM_PARAMATERS             = "symphony.formParameters";
+        static final String                                FORM_PARAMATERS             = "wink.formParameters";
         public final static MultivaluedMap<String, String> dummyMultivaluedMap         = null;
         private static Type                                MULTIVALUED_MAP_STRING_TYPE = null;
 

@@ -12,7 +12,7 @@ Description
 - The Prototyoe counter can be obtain from this URI (GET):
     http://localhost:8080/Scope/rest/prototype
      
--Symphony features used in this example:
+-Wink features used in this example:
    Scope, LinkBuilders
      
 Build

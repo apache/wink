@@ -20,7 +20,7 @@
 
 <project name="QADefects" default="dist" basedir=".">
 	<description>
-        Ant build file for Symphony SDK example QA Defects
+        Ant build file for Wink example QA Defects
     </description>
 
 	<property name="final.war.name" value="QADefect.war" />

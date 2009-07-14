@@ -20,7 +20,7 @@
 
 <project name="HelloWorld" default="dist" basedir=".">
 	<description>
-        Ant build file for Symphony SDK example Hello World
+        Ant build file for Wink example Hello World
     </description>
 
 	<property name="final.war.name" value="HelloWorld.war" />

@@ -52,7 +52,7 @@ import org.apache.wink.common.internal.utils.HeaderUtils;
 
 public class ResourceImpl implements Resource {
 
-    private static final String USER_AGENT = "Symphony Client v1.0";
+    private static final String USER_AGENT = "Wink Client v0.1";
 
     private ProvidersRegistry providersRegistry;
     private ClientConfig config;

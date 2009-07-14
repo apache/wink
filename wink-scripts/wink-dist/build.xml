@@ -33,7 +33,7 @@
 	3. When new component is added under the root level components (e.g. under server in addition to server-core),
 	   the following targets are effected:
 	   	a.  create.dist.lib - if component has dependencies
-	4. Assumption of create.dist.lib is that no third parties have word "symphony" in it and should be removed.
+	4. Assumption of create.dist.lib is that no third parties have word "wink" in it and should be removed.
 	5. Changes in examples should not effect this script.
 	-->
 

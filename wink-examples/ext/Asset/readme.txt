@@ -3,7 +3,7 @@ Asset
 
 Description 
 ===============================================================================
-- This is a simple example of an application that uses Symphony Asset concept.
+- This is a simple example of an application that uses Wink Asset concept.
   UsersAsset asset encapsulates a logic of mapping a collection of Users to different media types (atom, xml, json). 
   The UsersAsset can be reused by different applications.    
 - The service is used to get the list of existing users

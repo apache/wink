@@ -421,7 +421,7 @@ public class AdminServlet extends AbstractRestServlet {
             + "<form name=\"AdministrationPage\"  method=\"POST\">\r\n"
             + "<div align=\"left\">\r\n"
             + "</br>\r\n"
-            + "<h1>Symphony Admin Console</h1>\r\n"
+            + "<h1>Wink Admin Console</h1>\r\n"
             + "</br>\r\n"
             + "</div>\r\n"
             + "<h2>\r\n"
@@ -432,7 +432,7 @@ public class AdminServlet extends AbstractRestServlet {
             + "<h2>\r\n"
             + "<a href=\"?doc="
             + DOCUMENT_TYPE_REGISTRY
-            + "\"> Symphony Resource registry xml view</a>&#45&#62\r\n"
+            + "\"> Wink Resource registry xml view</a>&#45&#62\r\n"
             + "</h2>\r\n"
             + "</form>\r\n" + "</body>\r\n" + "</html>");
         response.setStatus(HttpStatus.BAD_REQUEST.getCode());

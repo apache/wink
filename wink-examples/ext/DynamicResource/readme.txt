@@ -6,7 +6,7 @@ Description
 - This example demonstrates the usage of dynamic resources. 
   The Path and Workspace information is defined using the DynamicResource interface and not 
   by annotation as in regular resources.
-  MyApplication class implements a SymphonyApplication and return the dynamic resource 
+  MyApplication class implements a WinkApplication and return the dynamic resource 
   in it’s getInstances method. It is also in charge in this example for setting the Path, 
   WorkspaceTitle and CollectionTitle information to the resource. 
   Functionality wise, this example is the same as the Bookmarks example. 

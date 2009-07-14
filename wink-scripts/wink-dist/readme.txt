@@ -1,8 +1,8 @@
-Symphony REST SDK Distribution
+Wink Distribution
 ==============================
 ==============================
 
-The distribution of Symphony REST SDK occurs during the normal build process at the deploy phase.
+The distribution of Wink REST SDK occurs during the normal build process at the deploy phase.
 All the configuration of the distribution is taken from the maven configuration files.
 
 It's possible to run the generation of the distribution zip by running "mvn antrun:run"

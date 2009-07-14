@@ -19,7 +19,7 @@ Description
 - It is possible to view the versions history of a specific defect in the url:
   http://localhost:8080/History/rest/defects/1/history 
   
--Symphony features used in this example:
+-Wink features used in this example:
    Asset, ServiceDocument, DynamicResource, LinkBuilders, SyndFeed, SyndEntry
      
 Build

@@ -8,8 +8,8 @@ Description
 - A list of predefined bookmarks is returned as an Atom feed on this URI:
      http://localhost:8080/Spring/rest/bookmarks
 
--Symphony features used in this example:
-   Symphony Spring integration.
+-Wink features used in this example:
+   Spring integration.
    
 Build
 ===============================================================================

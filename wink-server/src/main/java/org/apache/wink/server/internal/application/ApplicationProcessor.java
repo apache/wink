@@ -34,7 +34,7 @@ import org.apache.wink.server.internal.registry.ResourceRegistry;
 
 /**
  * Processes the Application object. First singletons are processed and later
- * classes. If the provided Application extends SymphonyApplication, instances
+ * classes. If the provided Application extends WinkApplication, instances
  * are also processed AFTER the singletons and the classes.
  * <p>
  * Pay Attention that classes returned by getSingletons are ignored by both
@@ -76,13 +76,13 @@ public class ApplicationProcessor {
         }
 
         if (application instanceof WinkApplication) {
-            processSymphonyApplication((WinkApplication) application);
+            processWinkApplication((WinkApplication) application);
         }
 
         logger.debug("Processing of Application completed.");
     }
 
-    private void processSymphonyApplication(WinkApplication sApplication) {
+    private void processWinkApplication(WinkApplication sApplication) {
         Set<Object> instances = sApplication.getInstances();
         double priority = sApplication.getPriority();
 

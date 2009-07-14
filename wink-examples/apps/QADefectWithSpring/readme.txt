@@ -8,7 +8,7 @@ Description
 - The list of all defects is returned as an Atom feed on this URI:
   http://localhost:8080/QADefectWithSpring/rest/defects
 
-- Symphony features used in this example:
+- Wink features used in this example:
    ServiceDocument, DynamicResource, App Categories, LinkBuilders, SyndFeed, SyndEntry, Html Representation
    Spring integration.
    

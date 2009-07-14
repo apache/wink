@@ -67,7 +67,7 @@ import org.apache.wink.server.internal.registry.ServerInjectableFactory;
 
 /**
  * <p>
- * This class implements a default deployment configuration for Symphony. In
+ * This class implements a default deployment configuration for Wink. In
  * order to change this configuration, extend this class and override the
  * relevant methods. In general it's possible to override any methods of this
  * class, but the best practices are to override methods the "init" methods. See

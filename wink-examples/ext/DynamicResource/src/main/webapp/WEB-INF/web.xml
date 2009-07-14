@@ -34,7 +34,7 @@
 			<param-value>org.apache.wink.example.dynamicresource.MyApplication</param-value>
 		</init-param>
 		<init-param>
-			<param-name>symphony.propertiesLocation</param-name>
+			<param-name>propertiesLocation</param-name>
 			<param-value>/WEB-INF/bookmarks.properties</param-value>
 		</init-param>
 	</servlet>

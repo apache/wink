@@ -30,7 +30,7 @@
 		<servlet-name>restSdkService</servlet-name>
 		<servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
 		<init-param>
-			<param-name>symphony.propertiesLocation</param-name>
+			<param-name>propertiesLocation</param-name>
 			<param-value>/WEB-INF/configuration.properties</param-value>
 		</init-param>
 		<init-param>

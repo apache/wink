@@ -7,9 +7,9 @@
     to you under the Apache License, Version 2.0 (the
     "License"); you may not use this file except in compliance
     with the License.  You may obtain a copy of the License at
-    
+
      http://www.apache.org/licenses/LICENSE-2.0
-    
+
     Unless required by applicable law or agreed to in writing,
     software distributed under the License is distributed on an
     "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -58,7 +58,7 @@
 				<ref local="resources.DefectTest" />
 				<ref local="resources.tests" />
 				<ref local="resources.categories" />
-				<ref local="symphony.HtmlServiceDocumentResource" />
+				<ref local="wink.HtmlServiceDocumentResource" />
 			</set>
 		</property>
 	</bean>
@@ -132,10 +132,10 @@
 	</bean>
 
 
-	<bean id="symphony.HtmlServiceDocumentResource" class="org.apache.wink.server.internal.resources.HtmlServiceDocumentResource">
+	<bean id="wink.HtmlServiceDocumentResource" class="org.apache.wink.server.internal.resources.HtmlServiceDocumentResource">
 	</bean>
 
-	<bean id="symphony.customPropertiesFactory"
+	<bean id="qaDefect.customPropertiesFactory"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="locations">
 			<list>
@@ -145,14 +145,14 @@
 		</property>
 	</bean>
 
-	<bean id="symphony-1.6.placeholderConfigurer"
+	<bean id="wink.placeholderConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
 		<property name="order" value="1" />
 		<property name="propertiesArray">
 			<list>
 				<props>
-					<prop key="symphony.propertiesFactory">symphony.customPropertiesFactory
+					<prop key="winkPropertiesFactory">qaDefect.customPropertiesFactory
 					</prop>
 				</props>
 			</list>

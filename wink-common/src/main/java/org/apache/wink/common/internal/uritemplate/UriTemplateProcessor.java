@@ -42,8 +42,8 @@ import org.apache.wink.common.internal.uri.UriPathNormalizer;
  */
 public abstract class UriTemplateProcessor implements Comparable<UriTemplateProcessor>, Cloneable {
 
-    protected static final String TEMPLATE_TAIL_NAME = "symphony.TemplateTail";
-    protected static final String TEMPLATE_HEAD_NAME = "symphony.TemplateHead";
+    protected static final String TEMPLATE_TAIL_NAME = "wink.TemplateTail";
+    protected static final String TEMPLATE_HEAD_NAME = "wink.TemplateHead";
     protected static final String TEMPLATE_TAIL_PATTERN = "(/.*)?";
 
     protected String template;

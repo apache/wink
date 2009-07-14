@@ -1,5 +1,5 @@
  -----
- Symphony WebDAV Extension
+ Wink WebDAV Extension
  -----
  -----
  December 2008
@@ -23,9 +23,9 @@
 ~~ under the License.
 ~~
 
-Symphony WebDAV Extension
+Wink WebDAV Extension
  
-  Symphony WebDAV Extension is an extension to the basic Rest support of Symphony. 
+  Wink WebDAV Extension is an extension to the basic Rest support of Wink. 
   It adds support for WebDAV operations as defined in {{{http://tools.ietf.org/rfc/rfc4918.txt}RFC 4918}},
   and provides a Java object model to easily build and handle the XMLs that are defined in the WebDAV RFC.
 

@@ -6,18 +6,18 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *  
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  *  Unless required by applicable law or agreed to in writing,
  *  software distributed under the License is distributed on an
  *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
- *  
+ *
  *******************************************************************************/
- 
+
 
 package org.apache.wink.client;
 
@@ -73,7 +73,7 @@ public class ClientConfig implements Cloneable {
     }
 
     private void initDefaultApplication() {
-        // TODO: use SimpleSymphonyAplication
+        // TODO: use SimpleWinkAplication
         applications(new WinkApplication() {
             @Override
             public Set<Class<?>> getClasses() {
@@ -119,7 +119,7 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Get the proxy host
-     * 
+     *
      * @return the proxy host
      */
     public final String getProxyHost() {
@@ -128,7 +128,7 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Set the proxy host
-     * 
+     *
      * @param proxyHost
      *            proxy host
      * @return this client configuration
@@ -144,7 +144,7 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Get the proxy port
-     * 
+     *
      * @return the proxy port
      */
     public final int getProxyPort() {
@@ -153,7 +153,7 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Set the proxy port
-     * 
+     *
      * @param proxyPort
      *            proxy port
      * @return this client configuration
@@ -172,7 +172,7 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Get the connect timeout in milliseconds
-     * 
+     *
      * @return the connect timeout in milliseconds
      */
     public final int getConnectTimeout() {
@@ -181,7 +181,7 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Set the connect timeout in milliseconds
-     * 
+     *
      * @param connectTimeout
      *            the connect timeout in milliseconds
      * @return this client configuration
@@ -197,7 +197,7 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Get the read timeout in milliseconds
-     * 
+     *
      * @return the read timeout in milliseconds
      */
     public final int getReadTimeout() {
@@ -206,7 +206,7 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Set the read timeout in milliseconds
-     * 
+     *
      * @param readTimeout
      *            the read timeout in milliseconds
      * @return this client configuration
@@ -222,7 +222,7 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Returns whether to client will automatically follow redirects
-     * 
+     *
      * @return true if client will automatically follow redirects; false otherwise
      */
     public final boolean isFollowRedirects() {
@@ -231,7 +231,7 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Set whether to client will automatically follow redirects
-     * 
+     *
      * @param followRedirects
      *            whether to client will automatically follow redirects
      * @return this client configuration
@@ -247,7 +247,7 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Get an unmodifiable list of the client handlers
-     * 
+     *
      * @return an unmodifiable list of the client handlers
      */
     public final List<ClientHandler> getHandlers() {
@@ -256,7 +256,7 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Add client handlers
-     * 
+     *
      * @param handlers
      *            the handlers to add
      * @return this client configuration
@@ -284,7 +284,7 @@ public class ClientConfig implements Cloneable {
      * handlers.
      * <p>
      * This method should be overridden in order to provide an alternate connection handler.
-     * 
+     *
      * @return the connection handler
      */
     protected ConnectionHandler getConnectionHandler() {
@@ -293,7 +293,7 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Get an unmodifiable list of the applications
-     * 
+     *
      * @return
      */
     public final List<Application> getApplications() {
@@ -302,7 +302,7 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Add applications
-     * 
+     *
      * @param applications
      *            the applications to add
      * @return this client configuration

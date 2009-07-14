@@ -12,7 +12,7 @@ Description
 - A single user information can be obtain from this URI (GET):
      http://localhost:8080/LinkBuilders/rest/users/{userId}
      
--Symphony features used in this example:
+-Wink features used in this example:
    ServiceDocument, LinkBuilders, SyndFeed, SyndEntry
      
 Build

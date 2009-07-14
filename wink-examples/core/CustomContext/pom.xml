@@ -39,7 +39,7 @@
     <build>
         <finalName>CustomContext</finalName>
     </build>
-    <!-- Dependency on Symphony SDK library -->
+    <!-- Dependency on Wink library -->
     <dependencies>
         <dependency>
             <groupId>org.apache.wink</groupId>

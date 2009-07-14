@@ -176,7 +176,7 @@ public class ApplicationProcessorTest extends TestCase {
         assertEquals(1, resourceRegistry.instances.size());
     }
 
-    public void testSymphonyApplication() {
+    public void testWinkApplication() {
         ResourceRegistryMock resourceRegistry = new ResourceRegistryMock();
         ProvidersRegistryMock providersRegistry = new ProvidersRegistryMock();
         new ApplicationProcessor(new WinkApplicationMock(), resourceRegistry, providersRegistry).process();

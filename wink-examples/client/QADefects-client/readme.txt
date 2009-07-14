@@ -3,7 +3,7 @@ QADefect Client Example
 
 Description 
 ===============================================================================
-- a simple example that introduces Symphony Client usage
+- a simple example that introduces Wink Client usage
 - demonstrate the consumption of an Atom feed of defects from the QADefect
   service example which can be found at SDK_HOME/examples/apps/QADefect
 

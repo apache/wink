@@ -11,7 +11,7 @@ Description
 - The list of all defects is returned as an Atom feed on this URI:
   http://localhost:8080/QADefect/rest/defects
 
--Symphony features used in this example:
+-Wink features used in this example:
    Asset, ServiceDocument, LinkBuilders, SyndFeed, SyndEntry, Html Representation
    
 Build

@@ -276,34 +276,34 @@ public class Response {
      * <p>
      * <table border="1">
      * <tr>
-     * <td>DAV:creationdate</td><td>org.hp.symphony.dav.model.webdav.Creationdate</td>
+     * <td>DAV:creationdate</td><td>org.apache.wink.webdav.model.Creationdate</td>
      * </tr>
      * <tr>
-     * <td>DAV:displayname</td><td>org.hp.symphony.dav.model.webdav.Displayname</td>
+     * <td>DAV:displayname</td><td>org.apache.wink.webdav.model.Displayname</td>
      * </tr>
      * <tr>
-     * <td>DAV:getcontentlanguage</td><td>org.hp.symphony.dav.model.webdav.Getcontentlanguage</td>
+     * <td>DAV:getcontentlanguage</td><td>org.apache.wink.webdav.model.Getcontentlanguage</td>
      * </tr>
      * <tr>
-     * <td>DAV:getcontentlength</td><td>org.hp.symphony.dav.model.webdav.Getcontentlength</td>
+     * <td>DAV:getcontentlength</td><td>org.apache.wink.webdav.model.Getcontentlength</td>
      * </tr>
      * <tr>
-     * <td>DAV:getcontenttype</td><td>org.hp.symphony.dav.model.webdav.Getcontenttype</td>
+     * <td>DAV:getcontenttype</td><td>org.apache.wink.webdav.model.Getcontenttype</td>
      * </tr>
      * <tr>
-     * <td>DAV:getetag</td><td>org.hp.symphony.dav.model.webdav.Getetag</td>
+     * <td>DAV:getetag</td><td>org.apache.wink.webdav.model.Getetag</td>
      * </tr>
      * <tr>
-     * <td>DAV:getlastmodified</td><td>org.hp.symphony.dav.model.webdav.Getlastmodified</td>
+     * <td>DAV:getlastmodified</td><td>org.apache.wink.webdav.model.Getlastmodified</td>
      * </tr>
      * <tr>
-     * <td>DAV:lockdiscovery</td><td>org.hp.symphony.dav.model.webdav.Lockdiscovery</td>
+     * <td>DAV:lockdiscovery</td><td>org.apache.wink.webdav.model.Lockdiscovery</td>
      * </tr>
      * <tr>
-     * <td>DAV:resourcetype</td><td>org.hp.symphony.dav.model.webdav.Resourcetype</td>
+     * <td>DAV:resourcetype</td><td>org.apache.wink.webdav.model.Resourcetype</td>
      * </tr>
      * <tr>
-     * <td>DAV:supportedlock</td><td>org.hp.symphony.dav.model.webdav.Supportedlock</td>
+     * <td>DAV:supportedlock</td><td>org.apache.wink.webdav.model.Supportedlock</td>
      * </tr>
      * <tr>
      * <td>any other</td><td>org.w3c.dom.Element</td>
@@ -311,7 +311,7 @@ public class Response {
      * </table>
      * 
      * <p>for example, if the property to set is <code>DAV:getcontentlanguage</code> then the 
-     * property should be an instance of org.hp.symphony.dav.model.webdav.Getcontentlanguage.
+     * property should be an instance of org.apache.wink.webdav.model.Getcontentlanguage.
      * 
      * <p>if the property is <code>K:myprop</code> then the property should be an instance of 
      * org.w3c.dom.Element
