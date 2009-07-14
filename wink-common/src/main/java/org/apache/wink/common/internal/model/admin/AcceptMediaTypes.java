@@ -46,7 +46,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="accept-media-type" type="{http://hp.org/symphony/model/admin}media-type" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="accept-media-type" type="{http://apache.org/wink/common/internal/model/admin}media-type" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>

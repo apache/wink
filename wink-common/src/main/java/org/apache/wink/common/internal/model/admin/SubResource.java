@@ -47,10 +47,10 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="method" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="uri" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element ref="{http://hp.org/symphony/model/admin}accept-media-types" minOccurs="0"/>
- *         &lt;element ref="{http://hp.org/symphony/model/admin}produced-media-types" minOccurs="0"/>
- *         &lt;element ref="{http://hp.org/symphony/model/admin}query-parameters" minOccurs="0"/>
- *         &lt;element ref="{http://hp.org/symphony/model/admin}matrix-parameters" minOccurs="0"/>
+ *         &lt;element ref="{http://apache.org/wink/common/internal/model/admin}accept-media-types" minOccurs="0"/>
+ *         &lt;element ref="{http://apache.org/wink/common/internal/model/admin}produced-media-types" minOccurs="0"/>
+ *         &lt;element ref="{http://apache.org/wink/common/internal/model/admin}query-parameters" minOccurs="0"/>
+ *         &lt;element ref="{http://apache.org/wink/common/internal/model/admin}matrix-parameters" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>

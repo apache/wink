@@ -24,5 +24,5 @@
 // Generated on: 2009.05.24 at 01:47:17 PM IDT 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://hp.org/symphony/model/admin", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://apache.org/wink/common/internal/model/admin", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package org.apache.wink.common.internal.model.admin;

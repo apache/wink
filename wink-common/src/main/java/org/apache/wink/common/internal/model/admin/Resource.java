@@ -50,8 +50,8 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="priority" type="{http://www.w3.org/2001/XMLSchema}decimal" minOccurs="0"/>
  *         &lt;element name="workspace" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="collection" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element ref="{http://hp.org/symphony/model/admin}methods"/>
- *         &lt;element ref="{http://hp.org/symphony/model/admin}sub-resources"/>
+ *         &lt;element ref="{http://apache.org/wink/common/internal/model/admin}methods"/>
+ *         &lt;element ref="{http://apache.org/wink/common/internal/model/admin}sub-resources"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
