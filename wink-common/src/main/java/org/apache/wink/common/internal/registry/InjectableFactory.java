@@ -70,7 +70,7 @@ public class InjectableFactory {
     }
 
     public Injectable create(Type genericType, Annotation[] annotations, Member member,
-        boolean enclosingEncoded) {
+        boolean encoded, String defaultValue) {
         Class<?> classType = GenericsUtils.getClassType(genericType);
 
         MatrixParam matrix = null;
@@ -80,8 +80,6 @@ public class InjectableFactory {
         CookieParam cookie = null;
         FormParam form = null;
         Context context = null;
-        Encoded encodedAnn = null;
-        DefaultValue defaultValueAnn = null;
 
         Injectable injectable = null;
         int annotationsCounter = 0;
@@ -108,9 +106,9 @@ public class InjectableFactory {
                 context = (Context) annotations[i];
                 ++annotationsCounter;
             } else if (annotations[i].annotationType().equals(Encoded.class)) {
-                encodedAnn = (Encoded) annotations[i];
+                encoded = true;
             } else if (annotations[i].annotationType().equals(DefaultValue.class)) {
-                defaultValueAnn = (DefaultValue) annotations[i];
+                defaultValue = ((DefaultValue) annotations[i]).value();
             }
         }
 
@@ -143,12 +141,8 @@ public class InjectableFactory {
 
         if (injectable instanceof BoundInjectable) {
             BoundInjectable binding = (BoundInjectable) injectable;
-            if (enclosingEncoded || encodedAnn != null) {
-                binding.setEncoded(true);
-            }
-            if (defaultValueAnn != null) {
-                binding.setDefaultValue(defaultValueAnn.value());
-            }
+            binding.setEncoded(encoded);
+            binding.setDefaultValue(defaultValue);
         }
 
         return injectable;

@@ -30,6 +30,7 @@ import java.lang.reflect.Type;
 import java.util.Set;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.Encoded;
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.Path;
@@ -79,7 +80,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
     @Override
     protected final Injectable parseAccessibleObject(AccessibleObject field, Type fieldType) {
         Injectable injectable = InjectableFactory.getInstance().create(fieldType,
-            field.getAnnotations(), (Member) field, getMetadata().isEncoded());
+            field.getAnnotations(), (Member) field, getMetadata().isEncoded(), null);
         if (injectable.getParamType() == Injectable.ParamType.ENTITY) {
             // EntityParam should be ignored for fields (see JSR-311 3.2)
             return null;
@@ -213,6 +214,12 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             hasAnnotation = true;
             metadata.addProduces(MediaType.valueOf(mediaType));
         }
+        
+        String defaultValue = getDefaultValue(method);
+        if (defaultValue != null) {
+            metadata.setDefaultValue(defaultValue);
+            hasAnnotation = true;
+        }
 
         if (method.getAnnotation(Encoded.class) != null) {
             metadata.setEncoded(true);
@@ -328,6 +335,14 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
         }
         return null;
     }
+    
+    private String getDefaultValue(Method method) {
+        DefaultValue defaultValueAnn = method.getAnnotation(DefaultValue.class);
+        if (defaultValueAnn != null) {
+            return defaultValueAnn.value();
+        }
+        return null;
+    }
 
     private void parseMethodParameters(Method method, MethodMetadata methodMetadata) {
         Annotation[][] parameterAnnotations = method.getParameterAnnotations();
@@ -336,7 +351,8 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
         for (int pos = 0, limit = paramTypes.length; pos < limit; pos++) {
             Injectable fp = InjectableFactory.getInstance().create(paramTypes[pos],
                 parameterAnnotations[pos], method,
-                getMetadata().isEncoded() || methodMetadata.isEncoded());
+                getMetadata().isEncoded() || methodMetadata.isEncoded(),
+                methodMetadata.getDefaultValue());
             if (fp.getParamType() == Injectable.ParamType.ENTITY) {
                 if (entityParamExists) {
                     // we are allowed to have only one entity parameter

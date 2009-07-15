@@ -34,12 +34,15 @@ public abstract class AbstractMetadata {
     private List<String>   paths;
     private Set<MediaType> consumes;
     private Set<MediaType> produces;
-    private boolean        encoded = false;
+    private boolean        encoded;
+    private String         defaultValue;
 
     public AbstractMetadata() {
         paths = new ArrayList<String>();
         consumes = new LinkedHashSet<MediaType>();
         produces = new LinkedHashSet<MediaType>();
+        encoded = false;
+        defaultValue = null;
     }
 
     public String getPath() {
@@ -90,5 +93,13 @@ public abstract class AbstractMetadata {
 
     public boolean isEncoded() {
         return encoded;
+    }
+
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
     }
 }

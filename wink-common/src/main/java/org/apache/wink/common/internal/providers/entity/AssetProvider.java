@@ -314,7 +314,7 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
             Type[] paramTypes = method.getGenericParameterTypes();
             for (int pos = 0, limit = paramTypes.length; pos < limit; pos++) {
                 Injectable fp = InjectableFactory.getInstance().create(paramTypes[pos],
-                    parameterAnnotations[pos], method, false);
+                    parameterAnnotations[pos], method, false, null);
                 formalParameters.add(fp);
             }
         }

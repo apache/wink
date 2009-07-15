@@ -128,7 +128,7 @@ public abstract class AbstractMetadataCollector {
             for (int pos = 0, limit = paramTypes.length; pos < limit; pos++) {
                 Injectable fp = InjectableFactory.getInstance().create(paramTypes[pos],
                     parameterAnnotations[pos], constructor,
-                    getMetadata().isEncoded() || constructorMetadata.isEncoded());
+                    getMetadata().isEncoded() || constructorMetadata.isEncoded(), null);
 
                 if (!isConstructorParameterValid(fp)) {
                     continue L1;
