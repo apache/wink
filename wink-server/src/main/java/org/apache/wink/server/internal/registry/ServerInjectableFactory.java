@@ -155,7 +155,7 @@ public class ServerInjectableFactory extends InjectableFactory {
             if (providers != null) {
                 MediaType mediaType = runtimeContext.getHttpHeaders().getMediaType();
                 if (mediaType == null) {
-                    mediaType = MediaType.WILDCARD_TYPE;
+                    mediaType = MediaType.APPLICATION_OCTET_STREAM_TYPE;
                 }
                 MessageBodyReader mbr = providers.getMessageBodyReader(paramType, getGenericType(),
                     getAnnotations(), mediaType);
