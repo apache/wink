@@ -34,6 +34,7 @@
         <module>wink-jaxrs-test-context</module>
         <module>wink-jaxrs-test-providers</module>
         <module>wink-jaxrs-test-params</module>
+        <module>wink-jaxrs-test-inheritance</module>
   </modules>
 
     <properties>
