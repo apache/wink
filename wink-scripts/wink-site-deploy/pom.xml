@@ -66,7 +66,7 @@
 
                         <mkdir dir="${site.docs.dir}" />
                         <!-- Copy PDF Developer Guide that exists under trunk/src/doc/DeveloperGuide into the site directory -->
-                        <copy file="${src.doc.dir}/DeveloperGuide/Apache_Wink_0.1_Features_List.pdf" todir="${site.docs.dir}"/>
+                        <copy file="${src.doc.dir}/DeveloperGuide/Apache_Wink_User_Guide.pdf" todir="${site.docs.dir}"/>
                         <!-- Copy license files to site dir -->
                         <copy file="${src.doc.dir}/LICENSE.txt" todir="${site.docs.dir}"/>
                         <copy file="${src.doc.dir}/third-party-licenses.txt" todir="${site.docs.dir}"/>

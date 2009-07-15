@@ -7,9 +7,9 @@
     to you under the Apache License, Version 2.0 (the
     "License"); you may not use this file except in compliance
     with the License.  You may obtain a copy of the License at
-    
+
      http://www.apache.org/licenses/LICENSE-2.0
-    
+
     Unless required by applicable law or agreed to in writing,
     software distributed under the License is distributed on an
     "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -26,7 +26,7 @@
 	   It should run either in deploy phase, or by invoking "mvn antrun:run".
 	2. When new component is added to the project at the root level (in addition to common, server and client),
 	   the following targets are effected:
-		a. merge.sources - if component should be added to the javadoc. 
+		a. merge.sources - if component should be added to the javadoc.
 			Notice that only packages that start with org.* are added to the javadoc.
 		b. create.dist.components - if the component's target includes jars that should be included in dist/components and in main jars.
 		c. create.dist.resources - if the component has resources (e.g. *.xsd)
@@ -63,7 +63,7 @@
 	<property name="tmp.binary" value="${tmp}/binary" />
 
 	<property name="wink.main.jar.name" value="wink-sdk-${project.version}.jar" />
-	<property name="project.developerGuide.file" value="${basedir}/../../src/doc/DeveloperGuide/Apache_Wink_0.1_Features_List.pdf" />
+	<property name="project.developerGuide.file" value="${basedir}/../../src/doc/DeveloperGuide/Apache_Wink_User_Guide.pdf" />
 
 	<!-- Init -->
 	<target name="init">
@@ -183,16 +183,16 @@
 		<dependencies filesetId="apis.fileset.retrotranslator">
 			<dependency groupId="org.apache.geronimo.specs" artifactId="geronimo-j2ee_1.4_spec" version="1.1" scope="compile" />
 		</dependencies>
-		
+
 		<dependencies filesetId="examples.lib">
 			<dependency groupId="commons-cli" artifactId="commons-cli" version="1.2" scope="compile" />
 		</dependencies>
-		
+
 		<mkdir dir="${dist.lib}/examples" />
 		<copy todir="${dist.lib}/examples" flatten="true" overwrite="false">
 			<fileset refid="examples.lib" />
 		</copy>
-		
+
 		<mkdir dir="${dist.lib}/apis" />
 		<copy todir="${dist.lib}/apis" flatten="true" overwrite="false">
 			<fileset refid="apis.fileset.retrotranslator" />

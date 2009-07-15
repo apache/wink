@@ -25,7 +25,7 @@
 
 Wink 0.1 Documentation
 
-  * {{{docs/Apache_Wink_0.1_Features_List.pdf}Wink 0.1 Features List}}
+  * {{{docs/Apache_Wink_User_Guide.pdf}Wink 0.1 User Guide}}
   
     "Apache Wink 0.1 Features List" document provides detailed information about Wink 0.1 and describes the\
     additional features that the Wink runtime provides in addition to the JAX-RS Java API for REST Web Service 
