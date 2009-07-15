@@ -91,20 +91,25 @@ public class ApplicationProcessor {
         }
 
         for (Object obj : instances) {
-            logger.debug("Processing instance: {}", obj);
-
-            Class<?> cls = obj.getClass();
-
-            // the validations were moved to registry
-
-            if (ResourceMetadataCollector.isDynamicResource(cls)) {
-                resourceRegistry.addResource(obj, priority);
-            } else if (ResourceMetadataCollector.isStaticResource(cls)) {
-                resourceRegistry.addResource(obj, priority);
-            } else if (ProviderMetadataCollector.isProvider(cls)) {
-                providersRegistry.addProvider(obj, priority);
-            } else {
-                logger.warn("Cannot handle {}. Ignoring.", obj);
+            try {
+                logger.debug("Processing instance: {}", obj);
+    
+                Class<?> cls = obj.getClass();
+    
+                // the validations were moved to registry
+    
+                if (ResourceMetadataCollector.isDynamicResource(cls)) {
+                    resourceRegistry.addResource(obj, priority);
+                } else if (ResourceMetadataCollector.isStaticResource(cls)) {
+                    resourceRegistry.addResource(obj, priority);
+                } else if (ProviderMetadataCollector.isProvider(cls)) {
+                    providersRegistry.addProvider(obj, priority);
+                } else {
+                    logger.warn("Cannot handle {}. Ignoring.", obj);
+                }
+            } catch (Exception e) {
+                logger.warn("The following exception occured during processing of instance {}. Ignoring.", obj.getClass().getCanonicalName());
+                e.printStackTrace();
             }
         }
     }
@@ -112,16 +117,21 @@ public class ApplicationProcessor {
     private void processClasses(Set<Class<?>> classes) {
 
         for (Class<?> cls : classes) {
-            logger.debug("Processing class: {}", cls);
-
-            // the validations were moved to registry
-
-            if (ResourceMetadataCollector.isStaticResource(cls)) {
-                resourceRegistry.addResource(cls);
-            } else if (ProviderMetadataCollector.isProvider(cls)) {
-                providersRegistry.addProvider(cls);
-            } else {
-                logger.warn("{} is not a resource or a provider. Ignored.", cls);
+            try {
+                logger.debug("Processing class: {}", cls);
+    
+                // the validations were moved to registry
+    
+                if (ResourceMetadataCollector.isStaticResource(cls)) {
+                    resourceRegistry.addResource(cls);
+                } else if (ProviderMetadataCollector.isProvider(cls)) {
+                    providersRegistry.addProvider(cls);
+                } else {
+                    logger.warn("{} is not a resource or a provider. Ignored.", cls);
+                }
+            } catch (Exception e) {
+                logger.warn("The following exception occured during processing of class {}. Ignoring.", cls);
+                e.printStackTrace();
             }
         }
     }
@@ -130,16 +140,21 @@ public class ApplicationProcessor {
 
         // add singletons
         for (Object obj : singletons) {
-            logger.debug("Processing singleton: {}", obj);
-
-            Class<?> cls = obj.getClass();
-
-            if (ResourceMetadataCollector.isStaticResource(cls)) {
-                resourceRegistry.addResource(obj);
-            } else if (ProviderMetadataCollector.isProvider(cls)) {
-                providersRegistry.addProvider(obj);
-            } else {
-                logger.warn("{} is not a resource or a provider. Ignoring.", obj);
+            try {
+                logger.debug("Processing singleton: {}", obj);
+    
+                Class<?> cls = obj.getClass();
+    
+                if (ResourceMetadataCollector.isStaticResource(cls)) {
+                    resourceRegistry.addResource(obj);
+                } else if (ProviderMetadataCollector.isProvider(cls)) {
+                    providersRegistry.addProvider(obj);
+                } else {
+                    logger.warn("{} is not a resource or a provider. Ignoring.", obj);
+                }
+            } catch (Exception e) {
+                logger.warn("The following exception occured during processing of singleton {}. Ignoring.", obj.getClass().getCanonicalName());
+                e.printStackTrace();
             }
         }
     }

@@ -20,12 +20,13 @@
 package org.apache.wink.server.internal.application;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.ws.rs.Path;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.ext.Provider;
 
 import org.apache.wink.common.AbstractDynamicResource;
 import org.apache.wink.common.WinkApplication;
@@ -58,6 +59,9 @@ public class ApplicationProcessorTest extends TestCase {
         }
 
         public void addResource(Object instance, double priority) {
+            if (instance instanceof BadResource) {
+                throw new BadResource("BadResource cannot be added");
+            }
             instances.add(instance);
         }
 
@@ -66,11 +70,10 @@ public class ApplicationProcessorTest extends TestCase {
         }
 
         public void addResource(Class<?> clazz, double priority) {
+            if (BadResource.class == clazz) {
+                throw new BadResource("BadResource cannot be added");
+            }
             classes.add(clazz);
-        }
-
-        public Set<String> options(String path) {
-            return new HashSet<String>();
         }
     }
 
@@ -92,13 +95,30 @@ public class ApplicationProcessorTest extends TestCase {
         }
 
         public boolean addProvider(Class<?> cls, double priority) {
+            if (BadProvider.class == cls) {
+                throw new BadProvider("BadProvider cannot be added");
+            }
             return classes.add(cls);
         }
 
         public boolean addProvider(Object provider, double priority) {
+            if (provider instanceof BadProvider) {
+                throw new BadProvider("BadProvider cannot be added");
+            }
             return instances.add(provider);
         }
-
+    }
+    
+    @Provider
+    private static class BadProvider extends RuntimeException {
+        public BadProvider() {super();}
+        public BadProvider(String message) {super(message);}
+    }
+    
+    @Path("bad-resource")
+    private static class BadResource extends RuntimeException {
+        public BadResource() {super();}
+        public BadResource(String message) {super(message);}
     }
 
     private static final StreamingOutputProvider StreamingOutputProvider = new StreamingOutputProvider();
@@ -110,7 +130,9 @@ public class ApplicationProcessorTest extends TestCase {
         public Set<Class<?>> getClasses() {
             LinkedHashSet<Class<?>> classes = new LinkedHashSet<Class<?>>();
             classes.add(FileProvider.class); // provider
+            classes.add(BadResource.class); // simulate resource exception
             classes.add(String.class); // should be ignored
+            classes.add(BadProvider.class); // simulate provider exception
             classes.add(RootResource.class); // resource
             return classes;
         }
@@ -119,7 +141,9 @@ public class ApplicationProcessorTest extends TestCase {
         public Set<Object> getSingletons() {
             LinkedHashSet<Object> instances = new LinkedHashSet<Object>();
             instances.add(StreamingOutputProvider); // provider
+            instances.add(new BadResource()); // simulate resource exception
             instances.add("bla-bla"); // should be ignored
+            instances.add(new BadProvider()); // simulate provider exception
             instances.add(rootResource);
             return instances;
         }
@@ -137,7 +161,9 @@ public class ApplicationProcessorTest extends TestCase {
         public Set<Class<?>> getClasses() {
             LinkedHashSet<Class<?>> classes = new LinkedHashSet<Class<?>>();
             classes.add(FileProvider.class); // provider
+            classes.add(BadResource.class); // simulate resource exception
             classes.add(String.class); // should be ignored
+            classes.add(BadProvider.class); // simulate provider exception
             classes.add(RootResource.class); // resource
             return classes;
         }
@@ -146,7 +172,9 @@ public class ApplicationProcessorTest extends TestCase {
         public Set<Object> getSingletons() {
             LinkedHashSet<Object> instances = new LinkedHashSet<Object>();
             instances.add(StreamingOutputProvider); // provider
+            instances.add(new BadResource()); // simulate resource exception
             instances.add("bla-bla"); // should be ignored
+            instances.add(new BadProvider()); // simulate provider exception
             instances.add(rootResource); // resource
             return instances;
         }
@@ -156,7 +184,9 @@ public class ApplicationProcessorTest extends TestCase {
             LinkedHashSet<Object> instances = new LinkedHashSet<Object>();
             instances.add(StringProvider);
             instances.add("bla-bla"); // should be ignored
+            instances.add(new BadResource()); // simulate resource exception
             instances.add(HtmlServiceDocument);
+            instances.add(new BadProvider()); // simulate provider exception
             instances.add(DynamicResource);
             return instances;
         }
