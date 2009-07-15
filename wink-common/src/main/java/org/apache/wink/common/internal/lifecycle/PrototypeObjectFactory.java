@@ -28,11 +28,11 @@ import org.apache.wink.common.internal.runtime.RuntimeContext;
  * 
  * @param <T>
  */
-class ClassMetadataPrototypeOF<T> implements ObjectFactory<T> {
+class PrototypeObjectFactory<T> implements ObjectFactory<T> {
 
     private final ClassMetadata metadata;
 
-    public ClassMetadataPrototypeOF(ClassMetadata metadata) {
+    public PrototypeObjectFactory(ClassMetadata metadata) {
         this.metadata = metadata;
         if (metadata == null) {
             throw new NullPointerException("metadata");

@@ -37,8 +37,6 @@ import org.apache.wink.common.internal.registry.Injectable;
 import org.apache.wink.common.internal.registry.InjectableFactory;
 import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
 import org.apache.wink.common.internal.registry.metadata.ConstructorMetadata;
-import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
-import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
 import org.apache.wink.common.internal.runtime.RuntimeContext;
 
 public class CreationUtils {
@@ -126,21 +124,4 @@ public class CreationUtils {
             }
         });
     }
-
-    @SuppressWarnings("unchecked")
-    static <T> T createProvider(Class<T> cls, RuntimeContext context) {
-        T provider = (T) createObject(ProviderMetadataCollector.collectMetadata(cls), context);
-        return provider;
-    }
-
-    @SuppressWarnings("unchecked")
-    static <T> T createResource(Class<T> cls, RuntimeContext context) {
-        T resource = (T) createObject(ResourceMetadataCollector.collectMetadata(cls), context);
-        return resource;
-    }
-
-    static <T> T createProvider(Class<T> cls) {
-        return createProvider(cls, null);
-    }
-
 }

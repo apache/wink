@@ -345,12 +345,27 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
             return new ResourceWithSubResourceMethodSimpleGet();
         }
         
+        @Path("sub-resource-with-no-constructor")
+        @Produces("text/plain")
+        public SubResourceNoDefaultConstructor subResourceWithNoConstructor() {
+            return new SubResourceNoDefaultConstructor(1, "2");
+        }
+        
         // locators cannot have an entity param
         @Path("bad-locator")
         public void badLocator(String entity) {
             fail("locator method should not have been invoked");
         }
+    }
+    
+    public static class SubResourceNoDefaultConstructor {
+        public SubResourceNoDefaultConstructor(Integer i, String s) {}
         
+        @GET
+        @Path("{id}")
+        public String getAny(@PathParam("id") String id) {
+            return "SubResourceNoDefaultConstructor.getAny";
+        }
     }
 
     @Path("/mixed/{id}")
@@ -681,6 +696,10 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
         response = invoke(request);
         assertMethodFound(response, ResourceWithSubResourceMethodSimpleGet.class, "getTextPlain");
     
+        request = MockRequestConstructor.constructMockRequest("GET", "/subResourceLocatorSimpleGet/sub-resource-with-no-constructor/2", "text/plain");
+        response = invoke(request);
+        assertMethodFound(response, SubResourceNoDefaultConstructor.class, "getAny");
+
         request = MockRequestConstructor.constructMockRequest("GET", "/subResourceLocatorSimpleGet/bad-locator/2", "text/plain");
         response = invoke(request);
         assertMethodFound(response, ResourceWithSubResourceMethodSimpleGet.class, "getTextPlain");

@@ -149,7 +149,12 @@ public class ProvidersContextResolverTest extends TestCase {
         assertTrue(providers.addProvider(new IntegerContextResolver()));
         assertTrue(providers.addProvider(new ByteContextResolver()));
         assertTrue(providers.addProvider(new ListContextResolver()));
-        assertFalse(providers.addProvider(new NotAProvider()));
+        
+        try {
+            providers.addProvider(new NotAProvider());
+            fail("expected IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+        }
 
         /*
          * String and text/pain, should invoke StringContextResolver

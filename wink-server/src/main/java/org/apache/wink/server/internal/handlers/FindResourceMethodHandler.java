@@ -178,7 +178,7 @@ public class FindResourceMethodHandler implements RequestHandler {
             result.setError(new WebApplicationException(Status.NOT_FOUND));
             return;
         }
-        ResourceRecord record = registry.getRecord(subResource);
+        ResourceRecord record = registry.getRecord(subResource, false);
         ResourceInstance resourceInstance = new ResourceInstance(subResource, record, matcher);
         // save the resource for UriInfo
         result.getData().getMatchedResources().addFirst(resourceInstance);

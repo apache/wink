@@ -151,12 +151,6 @@ public abstract class AbstractMetadataCollector {
             }
         }
 
-        // error if we haven't found a valid constructor 
-        if (constructorMetadata.getConstructor() == null) {
-            throw new IllegalStateException("No valid constrcutor found for resource "
-                + metadata.getResourceClass().getCanonicalName());
-        }
-
         metadata.setConstructor(constructorMetadata);
     }
 

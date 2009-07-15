@@ -61,14 +61,18 @@ public class DefaultOFFactoryTest extends TestCase {
     @SuppressWarnings("unchecked")
     public void testDummy() {
         DefaultLifecycleManager defaultOFFactory = new DefaultLifecycleManager();
-        assertEquals(SingletonObjectFactory.class,
-            defaultOFFactory.createObjectFactory(new Dummy()).getClass());
         
         try {
-            defaultOFFactory.createObjectFactory(Dummy.class);
+            defaultOFFactory.createObjectFactory(new Dummy());
+            fail("IllegalArgumentException should be thrown.");
         } catch (IllegalArgumentException e) {
-            return;
         }
-        fail("IllegalArgumentException should be thrown.");
+
+        try {
+            defaultOFFactory.createObjectFactory(Dummy.class);
+            fail("IllegalArgumentException should be thrown.");
+        } catch (IllegalArgumentException e) {
+        }
+        
     }
 }

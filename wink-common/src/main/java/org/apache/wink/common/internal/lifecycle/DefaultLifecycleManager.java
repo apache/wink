@@ -44,7 +44,7 @@ import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollect
  * 
  * @param <T>
  * @see SingletonObjectFactory
- * @see ClassMetadataPrototypeOF
+ * @see PrototypeObjectFactory
  * @see SimplePrototypeOF
  */
 class DefaultLifecycleManager<T> implements LifecycleManager<T> {
@@ -61,7 +61,7 @@ class DefaultLifecycleManager<T> implements LifecycleManager<T> {
 
         logger.debug("Creating a {} for {}", SingletonObjectFactory.class, object);
 
-        return new SingletonObjectFactory<T>(object);
+        return LifecycleManagerUtils.createSingletonObjectFactory(object);
     }
 
     public ObjectFactory<T> createObjectFactory(final Class<T> cls) {
@@ -73,21 +73,21 @@ class DefaultLifecycleManager<T> implements LifecycleManager<T> {
         if (ResourceMetadataCollector.isDynamicResource(cls)) {
             // default factory cannot create instance of DynamicResource
             throw new IllegalArgumentException(String.format(
-                "Cannot create factory for a DynamicResource: %s", String.valueOf(cls)));
+                "Cannot create default factory for DynamicResource: %s", String.valueOf(cls)));
         }
 
         if (ProviderMetadataCollector.isProvider(cls)) {
             // by default providers are singletons
-            return new SingletonObjectFactory<T>(CreationUtils.createProvider(cls));
+            return LifecycleManagerUtils.createSingletonObjectFactory(cls);
         }
 
         if (ResourceMetadataCollector.isStaticResource(cls)) {
             // by default resources are prototypes (created per request)
-            return new ClassMetadataPrototypeOF<T>(ResourceMetadataCollector.collectMetadata(cls));
+            return LifecycleManagerUtils.createPrototypeObjectFactory(cls);
         }
 
         // unknown object, should never reach this code
-        throw new IllegalArgumentException(String.format("Cannot create factory for a class: %s",
+        throw new IllegalArgumentException(String.format("Cannot create default factory for class: %s",
             String.valueOf(cls)));
     }
 

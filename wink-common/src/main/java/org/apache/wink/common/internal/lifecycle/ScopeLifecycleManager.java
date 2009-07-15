@@ -22,8 +22,6 @@ package org.apache.wink.common.internal.lifecycle;
 
 import org.apache.wink.common.annotations.Scope;
 import org.apache.wink.common.annotations.Scope.ScopeType;
-import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
-import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
 
 /**
  * Implements a LifecycleManager that creates objects based on the Scope annotation.
@@ -44,12 +42,11 @@ public class ScopeLifecycleManager<T> implements LifecycleManager<T> {
         Scope scope = cls.getAnnotation(Scope.class);
 
         if (scope != null) {
-
             if (scope.value() == ScopeType.SINGLETON) {
-                return new SingletonObjectFactory<T>(object);
+                return LifecycleManagerUtils.createSingletonObjectFactory(object);
             } else if (scope.value() == ScopeType.PROTOTYPE) {
                 // It's a prototype
-                return createPrototype(cls);
+                return LifecycleManagerUtils.createPrototypeObjectFactory(cls);
             }
         }
         // has no Scope annotation, do nothing
@@ -65,35 +62,14 @@ public class ScopeLifecycleManager<T> implements LifecycleManager<T> {
         Scope scope = cls.getAnnotation(Scope.class);
         if (scope != null) {
             if (scope.value() == ScopeType.SINGLETON) {
-                T object;
-                if (ProviderMetadataCollector.isProvider(cls)) {
-                    object = CreationUtils.createProvider(cls, null);
-                } else if (ResourceMetadataCollector.isStaticResource(cls)) {
-                    object = CreationUtils.createResource(cls, null);
-                } else {
-                    // unknown object, should never reach this code
-                    throw new IllegalArgumentException(String.format(
-                        "Cannot create factory for a class: %s", String.valueOf(cls)));
-                }
-                return new SingletonObjectFactory<T>(object);
+                return LifecycleManagerUtils.createSingletonObjectFactory(cls);
             } else if (scope.value() == ScopeType.PROTOTYPE) {
-                return createPrototype(cls);
+                return LifecycleManagerUtils.createPrototypeObjectFactory(cls);
             }
         }
         // has no Scope annotation, do nothing
         return null;
     }
 
-    private ObjectFactory<T> createPrototype(final Class<T> cls) {
-        if (ResourceMetadataCollector.isStaticResource(cls)) {
-            return new ClassMetadataPrototypeOF<T>(ResourceMetadataCollector.collectMetadata(cls));
-        }
 
-        if (ProviderMetadataCollector.isProvider(cls)) {
-            return new ClassMetadataPrototypeOF<T>(ProviderMetadataCollector.collectMetadata(cls));
-        }
-        // unknown object, should never reach this code
-        throw new IllegalArgumentException(String.format("Cannot create factory for a class: %s",
-            String.valueOf(cls)));
-    }
 }
