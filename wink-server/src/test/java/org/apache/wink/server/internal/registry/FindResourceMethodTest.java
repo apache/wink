@@ -34,7 +34,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
@@ -67,15 +66,6 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
 
     // /// -- Resources --
 
-    @Path("/{fallback}")
-    public static class ResourceFallback {
-
-        @GET
-        public String get() {
-            return "ResourceFallback.get";
-        }
-    }
-    
     @Path("/simpleGet")
     public static class ResourceSimpleGet {
 
@@ -94,7 +84,7 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
             return "ResourceSimpleGet.get";
         }
     }
-
+    
     @Path("/simpleGetAndPost")
     public static class ResourceSimpleGetAndPost {
 
@@ -424,54 +414,6 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
         }
     }
     
-    // == resources for continued search policy testing 
-
-    @Path("/{continued}")
-    public static class ContinuedSearchResource {
-        @PUT
-        public String put(@Context UriInfo uriInfo) {
-            MultivaluedMap<String,String> variables = uriInfo.getPathParameters();
-            assertEquals("simpleGet", variables.getFirst("continued"));
-            return "ContinuedSearchResource.put";
-        }
-        
-        @PUT
-        @Path("{subPutId}")
-        public String subPut(@Context UriInfo uriInfo) {
-            MultivaluedMap<String,String> variables = uriInfo.getPathParameters();
-            assertEquals("subResourceMethodSimpleGet", variables.getFirst("continued"));
-            assertEquals("1", variables.getFirst("subPutId"));
-            return "ContinuedSearchResource.subPut";
-        }
-        
-        @Path("{subLocatorId}")
-        public LocatedContinuedSearchResource subLocator() {
-            return new LocatedContinuedSearchResource();
-        }
-    }
-    
-    @Path("/continuedSearchResourceLocatorBad")
-    public static class ContinuedSearchResourceLocatorBad {
-        @Path("{badSubLocatorId}")
-        public ResourceWithSubResourceMethodSimpleGet subLocator() {
-            return new ResourceWithSubResourceMethodSimpleGet();
-        }
-    }
-
-    public static class LocatedContinuedSearchResource {
-        @PUT
-        @Path("{locatedSubPutId}")
-        public String subPut(@Context UriInfo uriInfo) {
-            MultivaluedMap<String,String> variables = uriInfo.getPathParameters();
-            assertEquals("continuedSearchResourceLocatorBad", variables.getFirst("continued"));
-            assertEquals("1", variables.getFirst("subLocatorId"));
-            assertEquals("2", variables.getFirst("locatedSubPutId"));
-            assertNull(variables.getFirst("badSubLocatorId"));
-            assertNull(variables.getFirst("id"));
-            return "LocatedContinuedSearchResource.subPut";
-        }        
-    }
-    
     @Path("/exceptionThrowing/{code}")
     public static class ResourceExceptionThrowing {
 
@@ -482,6 +424,16 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
             throw new WebApplicationException(code);
         }
     }
+    
+    @Path("/multipleHttpMethods")
+    public static class ResourceMultipleHttpMethods {
+        @PUT
+        @GET
+        public String get() {
+            return "ResourceMultipleHttpMethods.get";
+        }
+    }    
+
     
     // /// -- Tests --
 
@@ -779,6 +731,9 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
         response = invoke(request);
         assertEquals(500, response.getStatus());
 
+        request = MockRequestConstructor.constructMockRequest("GET", "/multipleHttpMethods", "text/plain");
+        response = invoke(request);
+        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
     }
     
     // // -- Helpers --

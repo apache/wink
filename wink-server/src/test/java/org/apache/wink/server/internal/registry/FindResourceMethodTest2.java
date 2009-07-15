@@ -20,7 +20,6 @@
 
 package org.apache.wink.server.internal.registry;
 
-import org.apache.wink.server.internal.registry.FindResourceMethodTest.LocatedContinuedSearchResource;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
 import org.apache.wink.test.mock.TestUtils;
@@ -50,7 +49,7 @@ public class FindResourceMethodTest2 extends MockServletInvocationTest {
             "text/plain", null);
         response = invoke(request);
         FindResourceMethodTest.assertMethodFound(response,
-            FindResourceMethodTest.ContinuedSearchResource.class, "put");
+            FindResourceMethodTest1.ContinuedSearchResource.class, "put");
     }
 
     public void testContinuedSearch_2_2() throws Exception {
@@ -62,7 +61,7 @@ public class FindResourceMethodTest2 extends MockServletInvocationTest {
             "/subResourceMethodSimpleGet/1", "text/plain", "text/plain", null);
         response = invoke(request);
         FindResourceMethodTest.assertMethodFound(response,
-            FindResourceMethodTest.ContinuedSearchResource.class, "subPut");
+            FindResourceMethodTest1.ContinuedSearchResource.class, "subPut");
 
     }
 
@@ -74,7 +73,7 @@ public class FindResourceMethodTest2 extends MockServletInvocationTest {
         request = MockRequestConstructor.constructMockRequest("PUT",
             "/continuedSearchResourceLocatorBad/1/2", "text/plain", "text/plain", null);
         response = invoke(request);
-        FindResourceMethodTest.assertMethodFound(response, LocatedContinuedSearchResource.class,
+        FindResourceMethodTest.assertMethodFound(response, FindResourceMethodTest1.LocatedContinuedSearchResource.class,
             "subPut");
     }
 }

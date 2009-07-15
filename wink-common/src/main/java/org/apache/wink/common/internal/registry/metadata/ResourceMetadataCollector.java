@@ -188,16 +188,18 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             return null;
         }
 
-        boolean hasAnnotation = false;
-        HttpMethod httpMethod = getHttpMethod(method);
-        Path path = getPath(method);
-
         MethodMetadata metadata = new MethodMetadata(getMetadata());
         metadata.setReflectionMethod(method);
+        
+        boolean hasAnnotation = false;
+        
+        Path path = getPath(method);
         if (path != null) {
             hasAnnotation = true;
             metadata.addPath(path.value());
         }
+
+        HttpMethod httpMethod = getHttpMethod(method);
         if (httpMethod != null) {
             hasAnnotation = true;
             metadata.getHttpMethod().add(httpMethod.value());
@@ -320,20 +322,21 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
     }
 
     private HttpMethod getHttpMethod(Method method) {
-        HttpMethod httpMethod = method.getAnnotation(HttpMethod.class);
-        if (httpMethod != null) {
-            return httpMethod;
-        }
-
         // search if any of the annotations is annotated with HttpMethod
         // such as @GET
+        HttpMethod httpMethod = null;
         for (Annotation annotation : method.getAnnotations()) {
-            httpMethod = annotation.annotationType().getAnnotation(HttpMethod.class);
-            if (httpMethod != null) {
-                return httpMethod;
+            HttpMethod httpMethodCurr = annotation.annotationType().getAnnotation(HttpMethod.class);
+            if (httpMethodCurr != null) {
+                if (httpMethod != null) {
+                    throw new IllegalStateException(String.format(
+                            "Multiple http method annotations on method %s in class %s",
+                            method.getName(), method.getDeclaringClass().getCanonicalName()));
+                }
+                httpMethod = httpMethodCurr;
             }
         }
-        return null;
+        return httpMethod;
     }
     
     private String getDefaultValue(Method method) {
