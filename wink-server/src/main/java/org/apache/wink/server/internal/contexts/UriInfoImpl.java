@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.MultivaluedMapImpl;
 import org.apache.wink.common.internal.PathSegmentImpl;
 import org.apache.wink.common.internal.uri.UriEncoder;
+import org.apache.wink.common.internal.uri.UriPathNormalizer;
 import org.apache.wink.common.internal.utils.UriHelper;
 import org.apache.wink.server.handlers.MessageContext;
 import org.apache.wink.server.internal.handlers.SearchResult;
@@ -325,7 +326,10 @@ public class UriInfoImpl implements UriInfo {
     private String buildRequestPath(HttpServletRequest request) {
         // we cannot use request.getPathInfo() since it cuts off the ';' parameters on Tomcat
         String requestPath = request.getRequestURI();
-
+        
+        // Syntax-Based Normalization (RFC 3986, section 6.2.2)
+        requestPath = UriHelper.normalize(requestPath);
+        
         // cut off the context path from the beginning
         if (request.getContextPath() != null) {
             requestPath = requestPath.substring(request.getContextPath().length());

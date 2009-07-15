@@ -34,7 +34,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.apache.wink.common.http.HttpStatus;
 import org.apache.wink.common.internal.MultivaluedMapImpl;
 import org.apache.wink.common.internal.uri.UriEncoder;
-import org.apache.wink.common.internal.uri.UriPathNormalizer;
+import org.apache.wink.common.internal.utils.UriHelper;
 
 
 /**
@@ -262,16 +262,14 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
     public static String normalizeUri(String uri) {
         String normalizedUri;
         if (uri != null) {
-            normalizedUri = UriPathNormalizer.normalize(uri);
+            normalizedUri = UriHelper.normalize(uri);
         } else {
             normalizedUri = "";
         }
         if (normalizedUri.startsWith("/")) {
             normalizedUri = normalizedUri.substring(1);
         }
-//        if (normalizedUri.endsWith("/")) {
-//            normalizedUri = normalizedUri.substring(0, normalizedUri.length() - 1);
-//        }
+
         return normalizedUri;
     }
 

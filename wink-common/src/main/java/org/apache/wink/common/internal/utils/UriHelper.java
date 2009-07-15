@@ -475,5 +475,21 @@ public class UriHelper {
         }
         return query;
     }
-
+    
+    /**
+     * Normalize input uri according to <a> href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>
+     * section 6.2.2. - Syntax-Based Normalization
+     * @param string
+     * @return normalized instance of uri
+     */
+    public static String normalize(String uri){
+        
+        // Path Segment Normalization
+        uri = UriPathNormalizer.normalize(uri);
+        
+        // Percent-Encoding Normalization & Case Normalization
+        uri = UriEncoder.normalize(uri);
+        
+        return uri;
+    }
 }

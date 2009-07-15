@@ -285,4 +285,9 @@ public class UriHelperTest extends TestCase {
         assertNull(parsedQuery.getFirst("e"));
     }
     
+    public void testNormalize(){
+        // test URI Syntax-Based Normalization according to RFC 3986, section 6.2.2
+        String normalize = UriHelper.normalize("ab%72c%2F123/d%2fdef/a/../b/./c%20sss");
+        assertEquals("abrc%2F123/d%2Fdef/b/c%20sss", normalize);
+    }
 }

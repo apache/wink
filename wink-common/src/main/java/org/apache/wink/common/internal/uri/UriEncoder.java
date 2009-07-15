@@ -20,6 +20,7 @@
  
 package org.apache.wink.common.internal.uri;
 
+import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -44,6 +45,8 @@ public final class UriEncoder {
     /** Hexadecimal digits for escaping. */
     private static final char[] hexDigits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E',
             'F'};
+    
+    private static final byte[] normalizedHexDigits = new byte[128];
 
     private static final boolean[] isHexDigit = new boolean[128];
 
@@ -51,16 +54,16 @@ public final class UriEncoder {
      * Unreserved characters according to RFC 3986. Each character below ASCII 128 has single array
      * item with true if it is unreserved and false if it is reserved.
      */
-    private static final boolean[] unreservedChars = new boolean[128];
-    private static final boolean[] userInfoChars = new boolean[128];
-    private static final boolean[] segmentChars = new boolean[128];
-    private static final boolean[] matrixChars = new boolean[128];
-    private static final boolean[] pathChars = new boolean[128];
-    private static final boolean[] queryChars = new boolean[128];
-    private static final boolean[] queryParamChars = new boolean[128];
-    private static final boolean[] fragmentChars = new boolean[128];
-    private static final boolean[] uriChars = new boolean[128];
-    private static final boolean[] uriTemplateChars = new boolean[128];
+    public static final boolean[] unreservedChars = new boolean[128];
+    public static final boolean[] userInfoChars = new boolean[128];
+    public static final boolean[] segmentChars = new boolean[128];
+    public static final boolean[] matrixChars = new boolean[128];
+    public static final boolean[] pathChars = new boolean[128];
+    public static final boolean[] queryChars = new boolean[128];
+    public static final boolean[] queryParamChars = new boolean[128];
+    public static final boolean[] fragmentChars = new boolean[128];
+    public static final boolean[] uriChars = new boolean[128];
+    public static final boolean[] uriTemplateChars = new boolean[128];
 
     static {
         // unreserved - ALPHA / DIGIT / "-" / "." / "_" / "~"
@@ -132,6 +135,31 @@ public final class UriEncoder {
         Arrays.fill(isHexDigit, '0', '9' + 1, true);
         Arrays.fill(isHexDigit, 'a', 'f' + 1, true);
         Arrays.fill(isHexDigit, 'A', 'F' + 1, true);
+        
+        // fill the normalizedHexDigits array
+        normalizedHexDigits['0'] = '0';
+        normalizedHexDigits['1'] = '1';
+        normalizedHexDigits['2'] = '2';
+        normalizedHexDigits['3'] = '3';
+        normalizedHexDigits['4'] = '4';
+        normalizedHexDigits['5'] = '5';
+        normalizedHexDigits['6'] = '6';
+        normalizedHexDigits['7'] = '7';
+        normalizedHexDigits['8'] = '8';
+        normalizedHexDigits['9'] = '9';
+        normalizedHexDigits['A'] = 'A';
+        normalizedHexDigits['B'] = 'B';
+        normalizedHexDigits['C'] = 'C';
+        normalizedHexDigits['D'] = 'D';
+        normalizedHexDigits['E'] = 'E';
+        normalizedHexDigits['F'] = 'F';
+        normalizedHexDigits['a'] = 'A';
+        normalizedHexDigits['b'] = 'B';
+        normalizedHexDigits['c'] = 'C';
+        normalizedHexDigits['d'] = 'D';
+        normalizedHexDigits['e'] = 'E';
+        normalizedHexDigits['f'] = 'F';
+        
     }
 
     private static int decodeHexDigit(char c) {
@@ -384,7 +412,7 @@ public final class UriEncoder {
      * @return decoded query
      */
     public static String decodeQuery(String string) {
-        return decodeString(string, true);
+        return decodeString(string, true, null);
     }
 
     /**
@@ -395,10 +423,22 @@ public final class UriEncoder {
      * @return decoded uri
      */
     public static String decodeString(String string) {
-        return decodeString(string, false);
+        return decodeString(string, false, null);
+    }
+    
+    /**
+     * Decodes only the unreserved chars, according to <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>
+     * section 6.2.2.2  
+     * 
+     * @param string
+     *            US-ASCII uri to decode
+     * @return decoded uri
+     */
+    public static String normalize(String string){
+        return decodeString(string, false, unreservedChars);
     }
 
-    private static String decodeString(String string, boolean query) {
+    private static String decodeString(String string, boolean query, boolean[] decodeChars) {
         if (string == null) {
             return null;
         }
@@ -420,8 +460,15 @@ public final class UriEncoder {
                 if (d1 >= 0 && d2 >= 0) {
                     v = d1;
                     v = v << 4 | d2;
-                    buffer.put((byte)v);
-                    i += 2;
+                    if(decodeChars != null && !decodeChars[v]){
+                        buffer.put((byte)string.charAt(i));
+                        buffer.put(normalizedHexDigits[string.charAt(i + 1)]);
+                        buffer.put(normalizedHexDigits[string.charAt(i + 2)]);
+                    }
+                    else{
+                        buffer.put((byte)v);
+                    }
+                    i+=2;
                 } else {
                     buffer.put((byte)c);
                 }

@@ -34,12 +34,11 @@ import org.apache.wink.test.mock.MockRequestConstructor;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 
-
 public class UriInfoImplTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] { FooResource.class, TestResource.class};
+        return new Class[] {FooResource.class, TestResource.class};
     }
 
     @Path("/te st/{id}")
@@ -48,20 +47,20 @@ public class UriInfoImplTest extends MockServletInvocationTest {
         @Produces("text/plain")
         public void getFoo(@Context UriInfo uriInfo) {
             assertNotNull(uriInfo.getAbsolutePath());
-            assertEquals("http://localhost:80/te%20st/5", uriInfo.getAbsolutePath().toString()); 
+            assertEquals("http://localhost:80/te%20st/5", uriInfo.getAbsolutePath().toString());
             assertNotNull(uriInfo.getBaseUri());
-            assertEquals("http://localhost:80/",  uriInfo.getBaseUri().toString());
+            assertEquals("http://localhost:80/", uriInfo.getBaseUri().toString());
             assertNotNull(uriInfo.getPath());
-            assertEquals("te st/5",  uriInfo.getPath().toString());
-            assertEquals("te%20st/5",  uriInfo.getPath(false).toString());
+            assertEquals("te st/5", uriInfo.getPath().toString());
+            assertEquals("te%20st/5", uriInfo.getPath(false).toString());
             MultivaluedMap<String, String> pathParameters = uriInfo.getPathParameters();
             assertNotNull(pathParameters);
             assertEquals(1, pathParameters.size());
             List<String> paramValue = pathParameters.get("id");
             assertNotNull(paramValue);
             assertEquals(1, paramValue.size());
-            assertEquals("5",  paramValue.get(0));
-            
+            assertEquals("5", paramValue.get(0));
+
             List<PathSegment> pathSegmentsDecoded = uriInfo.getPathSegments();
             assertNotNull(pathSegmentsDecoded);
             assertEquals(2, pathSegmentsDecoded.size());
@@ -72,22 +71,20 @@ public class UriInfoImplTest extends MockServletInvocationTest {
             assertEquals(2, pathSegmentsEncoded.size());
             assertEquals("5", pathSegmentsEncoded.get(1).getPath());
 
-            
             MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
             assertNotNull(queryParameters);
             assertEquals(1, queryParameters.size());
             List<String> queryParam = queryParameters.get("abc");
             assertNotNull(queryParam);
             assertEquals(1, queryParam.size());
-            assertEquals("6",queryParam.get(0));
-            
+            assertEquals("6", queryParam.get(0));
+
             assertEquals("http://localhost:80/te%20st/5?abc=6", uriInfo.getRequestUri().toString());
-            
+
             return;
         }
     }
-    
-    
+
     @Path("/foo")
     public static class FooResource {
         @GET
@@ -99,7 +96,7 @@ public class UriInfoImplTest extends MockServletInvocationTest {
             assertNotNull(uriInfo.getMatchedURIs());
             assertEquals(1, uriInfo.getMatchedURIs().size());
             assertEquals("foo", uriInfo.getMatchedURIs().get(0));
-            
+
             // test matched Resources
             assertNotNull(uriInfo.getMatchedResources());
             assertEquals(1, uriInfo.getMatchedResources().size());
@@ -118,17 +115,17 @@ public class UriInfoImplTest extends MockServletInvocationTest {
             String firstUri = uriInfo.getMatchedURIs().get(0);
             assertEquals("foo/bar", firstUri);
             String secondUri = uriInfo.getMatchedURIs().get(1);
-            assertEquals("foo",secondUri);
-            
+            assertEquals("foo", secondUri);
+
             // test matched Resources
             assertNotNull(uriInfo.getMatchedResources());
             assertEquals(1, uriInfo.getMatchedResources().size());
             Object matchedResource = uriInfo.getMatchedResources().get(0);
             assertNotNull(matchedResource);
             assertTrue(matchedResource instanceof FooResource);
-           return new BarResource();
+            return new BarResource();
         }
-        
+
         @GET
         @Path("bar1")
         public String getBar1Resource(@Context UriInfo uriInfo) {
@@ -139,25 +136,24 @@ public class UriInfoImplTest extends MockServletInvocationTest {
             String firstUri = uriInfo.getMatchedURIs().get(0);
             assertEquals("foo/bar1", firstUri);
             String secondUri = uriInfo.getMatchedURIs().get(1);
-            assertEquals("foo",secondUri);
-            
+            assertEquals("foo", secondUri);
+
             // test matched Resources
             assertNotNull(uriInfo.getMatchedResources());
             assertEquals(1, uriInfo.getMatchedResources().size());
             Object matchedResource = uriInfo.getMatchedResources().get(0);
             assertNotNull(matchedResource);
             assertTrue(matchedResource instanceof FooResource);
-           return "Bar Resource";
+            return "Bar Resource";
         }
-        
-        
+
     }
 
     public static class BarResource {
         @GET
         @Produces("text/plain")
         public String getBar(@Context UriInfo uriInfo) {
-            
+
             // test matched URIs
             assertNotNull(uriInfo);
             assertNotNull(uriInfo.getMatchedURIs());
@@ -165,24 +161,24 @@ public class UriInfoImplTest extends MockServletInvocationTest {
             String firstUri = uriInfo.getMatchedURIs().get(0);
             assertEquals("foo/bar", firstUri);
             String secondUri = uriInfo.getMatchedURIs().get(1);
-            assertEquals("foo",secondUri);
-            
+            assertEquals("foo", secondUri);
+
             // test matched Resources
             assertNotNull(uriInfo.getMatchedResources());
             assertEquals(2, uriInfo.getMatchedResources().size());
             Object matchedResource = uriInfo.getMatchedResources().get(0);
             assertTrue(matchedResource instanceof BarResource);
-            
+
             matchedResource = uriInfo.getMatchedResources().get(1);
             assertTrue(matchedResource instanceof FooResource);
-            
+
             return "Bar Resurse";
         }
-        
+
         @Path("level3")
         @Produces("text/plain")
         public BarResourceLevel3 getBarLevel3(@Context UriInfo uriInfo) {
-            
+
             // test matched URIs
             assertNotNull(uriInfo);
             assertNotNull(uriInfo.getMatchedURIs());
@@ -190,28 +186,28 @@ public class UriInfoImplTest extends MockServletInvocationTest {
             String firstUri = uriInfo.getMatchedURIs().get(0);
             assertEquals("foo/bar/level3", firstUri);
             String secondUri = uriInfo.getMatchedURIs().get(1);
-            assertEquals("foo/bar",secondUri);
+            assertEquals("foo/bar", secondUri);
             String thirdUri = uriInfo.getMatchedURIs().get(2);
-            assertEquals("foo",thirdUri);
-            
+            assertEquals("foo", thirdUri);
+
             // test matched Resources
             assertNotNull(uriInfo.getMatchedResources());
             assertEquals(2, uriInfo.getMatchedResources().size());
             Object matchedResource = uriInfo.getMatchedResources().get(0);
             assertTrue(matchedResource instanceof BarResource);
-            
+
             matchedResource = uriInfo.getMatchedResources().get(1);
             assertTrue(matchedResource instanceof FooResource);
-            
+
             return new BarResourceLevel3();
         }
     }
-    
+
     public static class BarResourceLevel3 {
         @GET
         @Produces("text/plain")
         public String getBar(@Context UriInfo uriInfo) {
-            
+
             // test matched URIs
             assertNotNull(uriInfo);
             assertNotNull(uriInfo.getMatchedURIs());
@@ -219,11 +215,10 @@ public class UriInfoImplTest extends MockServletInvocationTest {
             String firstUri = uriInfo.getMatchedURIs().get(0);
             assertEquals("foo/bar/level3", firstUri);
             String secondUri = uriInfo.getMatchedURIs().get(1);
-            assertEquals("foo/bar",secondUri);
+            assertEquals("foo/bar", secondUri);
             String thirdUri = uriInfo.getMatchedURIs().get(2);
-            assertEquals("foo",thirdUri);
+            assertEquals("foo", thirdUri);
 
-            
             // test matched Resources
             assertNotNull(uriInfo.getMatchedResources());
             assertEquals(3, uriInfo.getMatchedResources().size());
@@ -233,38 +228,57 @@ public class UriInfoImplTest extends MockServletInvocationTest {
 
             matchedResource = uriInfo.getMatchedResources().get(1);
             assertTrue(matchedResource instanceof BarResource);
-            
+
             matchedResource = uriInfo.getMatchedResources().get(2);
             assertTrue(matchedResource instanceof FooResource);
-            
+
             return "Bar Resourse Level 3";
         }
     }
-    
-    
 
     @Test
     public void testUriInfoMatchedResourcesAndURIs() throws Exception {
 
-        MockHttpServletRequest servletRequest = MockRequestConstructor.constructMockRequest("GET", "/foo", "text/plain");
+        MockHttpServletRequest servletRequest =
+            MockRequestConstructor.constructMockRequest("GET", "/foo", "text/plain");
         invoke(servletRequest);
-        
+
         servletRequest = MockRequestConstructor.constructMockRequest("GET", "/foo/bar", "text/plain");
         invoke(servletRequest);
-        
+
         servletRequest = MockRequestConstructor.constructMockRequest("GET", "/foo/bar1", "text/plain");
         invoke(servletRequest);
-        
+
         servletRequest = MockRequestConstructor.constructMockRequest("GET", "/foo/bar/level3", "text/plain");
         invoke(servletRequest);
-        
 
     }
-    
+
     @Test
     public void testUriInfo() throws Exception {
-        MockHttpServletRequest servletRequest = MockRequestConstructor.constructMockRequest("GET", "/te%20st/5", "text/plain");
+        MockHttpServletRequest servletRequest =
+            MockRequestConstructor.constructMockRequest("GET", "/te%20st/5", "text/plain");
         servletRequest.setQueryString("abc=6");
+        invoke(servletRequest);
+    }
+
+    @Test
+    public void testUriInfoNormalization() throws Exception {
+
+        MockHttpServletRequest servletRequest =
+            MockRequestConstructor.constructMockRequest("GET", "/foo/../foo", "text/plain");
+        invoke(servletRequest);
+
+        servletRequest = MockRequestConstructor.constructMockRequest("GET", "/foo/../foo/bar", "text/plain");
+        invoke(servletRequest);
+
+        servletRequest = MockRequestConstructor.constructMockRequest("GET", "/foo/bar1/../bar1", "text/plain");
+        invoke(servletRequest);
+
+        servletRequest =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/foo/../foo/bar/../bar/level3/../level3/nonsense/..",
+                                                        "text/plain");
         invoke(servletRequest);
     }
 
