@@ -26,17 +26,17 @@ import org.apache.wink.test.mock.TestUtils;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-public class FindResourceMethodTest2 extends MockServletInvocationTest {
+public class FindResourceMethod2Test extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return FindResourceMethodTest1.resourceClasses.toArray(new Class<?>[0]);
+        return FindResourceMethod1Test.resourceClasses.toArray(new Class<?>[0]);
     }
 
    
     @Override
     protected String getPropertiesFile() {
-        return TestUtils.packageToPath(FindResourceMethodTest2.class.getPackage().getName())
+        return TestUtils.packageToPath(FindResourceMethod2Test.class.getPackage().getName())
             + "\\FindResourceMethodTest2.properties";
     }
 
@@ -49,7 +49,7 @@ public class FindResourceMethodTest2 extends MockServletInvocationTest {
             "text/plain", null);
         response = invoke(request);
         FindResourceMethodTest.assertMethodFound(response,
-            FindResourceMethodTest1.ContinuedSearchResource.class, "put");
+            FindResourceMethod1Test.ContinuedSearchResource.class, "put");
     }
 
     public void testContinuedSearch_2_2() throws Exception {
@@ -61,7 +61,7 @@ public class FindResourceMethodTest2 extends MockServletInvocationTest {
             "/subResourceMethodSimpleGet/1", "text/plain", "text/plain", null);
         response = invoke(request);
         FindResourceMethodTest.assertMethodFound(response,
-            FindResourceMethodTest1.ContinuedSearchResource.class, "subPut");
+            FindResourceMethod1Test.ContinuedSearchResource.class, "subPut");
 
     }
 
@@ -73,7 +73,7 @@ public class FindResourceMethodTest2 extends MockServletInvocationTest {
         request = MockRequestConstructor.constructMockRequest("PUT",
             "/continuedSearchResourceLocatorBad/1/2", "text/plain", "text/plain", null);
         response = invoke(request);
-        FindResourceMethodTest.assertMethodFound(response, FindResourceMethodTest1.LocatedContinuedSearchResource.class,
+        FindResourceMethodTest.assertMethodFound(response, FindResourceMethod1Test.LocatedContinuedSearchResource.class,
             "subPut");
     }
 }

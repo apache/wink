@@ -42,7 +42,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 
-public class FindResourceMethodTest1 extends MockServletInvocationTest {
+public class FindResourceMethod1Test extends MockServletInvocationTest {
     
     static List<Class<?>> resourceClasses = new LinkedList<Class<?>>();
     
