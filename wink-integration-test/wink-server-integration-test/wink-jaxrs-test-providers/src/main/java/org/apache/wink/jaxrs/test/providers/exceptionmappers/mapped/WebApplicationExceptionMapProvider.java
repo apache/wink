@@ -21,6 +21,7 @@ package org.apache.wink.jaxrs.test.providers.exceptionmappers.mapped;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -47,7 +48,7 @@ public class WebApplicationExceptionMapProvider implements ExceptionMapper<WebAp
             builder.status(491);
             CommentError error = new CommentError();
             error.setErrorMessage("WebApplicationExceptionMapProvider set message");
-            builder.entity(error);
+            builder.entity(error).type(MediaType.APPLICATION_XML_TYPE);
         }
 
         return builder.build();

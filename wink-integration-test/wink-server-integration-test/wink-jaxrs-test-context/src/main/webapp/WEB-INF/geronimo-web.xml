@@ -18,17 +18,18 @@
     under the License.
 -->
 
-<project>
-    <parent>
-        <artifactId>wink-server-integration-test</artifactId>
-        <groupId>org.apache.wink</groupId>
-        <version>0.1-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>org.apache.wink</groupId>
-    <artifactId>wink-jaxrs-test-context</artifactId>
-    <packaging>war</packaging>
-    <name>wink-jaxrs-test-context Maven Webapp</name>
-    <version>0.1-SNAPSHOT</version>
-    <url>http://maven.apache.org</url>
-</project>
+<web-app xmlns="http://geronimo.apache.org/xml/ns/j2ee/web-2.0.1" 
+         xmlns:naming="http://geronimo.apache.org/xml/ns/naming-1.2" 
+         xmlns:sys="http://geronimo.apache.org/xml/ns/deployment-1.2"> 
+ 
+    <sys:environment> 
+        <sys:moduleId> 
+            <sys:groupId>${groupId}</sys:groupId> 
+            <sys:artifactId>${artifactId}</sys:artifactId> 
+            <sys:version>${version}</sys:version> 
+            <sys:type>war</sys:type> 
+        </sys:moduleId> 
+    </sys:environment>  
+ 
+    <context-root>${artifactId}</context-root> 
+</web-app> 

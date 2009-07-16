@@ -27,32 +27,43 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.Provider;
-
-import org.apache.cxf.helpers.IOUtils;
+import javax.ws.rs.ext.Providers;
 
 @Provider
 public class MessageBodyReaderGenericEntityTypeQueue implements MessageBodyReader<Queue> {
 
+    @Context
+    private Providers providers;
+
     public boolean isReadable(Class<?> arg0, Type arg1, Annotation[] arg2, MediaType arg3) {
         if (arg1 instanceof ParameterizedType) {
-            ParameterizedType pt = (ParameterizedType) arg1;
+            ParameterizedType pt = (ParameterizedType)arg1;
             Type[] actualArgumentTypes = pt.getActualTypeArguments();
-            return actualArgumentTypes != null
-                    && actualArgumentTypes.length == 1
-                    && String.class.equals(actualArgumentTypes[0]);
+            return actualArgumentTypes != null && actualArgumentTypes.length == 1
+                && String.class.equals(actualArgumentTypes[0]);
         }
         return false;
     }
 
-    public Queue readFrom(Class<Queue> arg0, Type arg1, Annotation[] arg2, MediaType arg3, MultivaluedMap<String, String> arg4, InputStream arg5)
-            throws IOException, WebApplicationException {
+    public Queue readFrom(Class<Queue> arg0,
+                          Type arg1,
+                          Annotation[] arg2,
+                          MediaType arg3,
+                          MultivaluedMap<String, String> arg4,
+                          InputStream arg5) throws IOException, WebApplicationException {
         String str = null;
         try {
-            str = IOUtils.toString(arg5);
+            MessageBodyReader<String> strReader =
+                providers.getMessageBodyReader(String.class,
+                                               String.class,
+                                               arg2,
+                                               MediaType.TEXT_PLAIN_TYPE);
+            str = strReader.readFrom(String.class, String.class, arg2, arg3, arg4, arg5);
         } catch (IOException e) {
             throw new WebApplicationException(e);
         }

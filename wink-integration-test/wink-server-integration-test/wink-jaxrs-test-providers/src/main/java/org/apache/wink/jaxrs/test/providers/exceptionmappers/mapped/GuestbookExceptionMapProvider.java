@@ -29,7 +29,7 @@ public class GuestbookExceptionMapProvider implements ExceptionMapper<GuestbookE
     public Response toResponse(GuestbookException arg0) {
         CommentError error = new CommentError();
         error.setErrorMessage(arg0.getMessage());
-        return Response.status(454).entity(error).build();
+        return Response.status(454).entity(error).type("application/xml").build();
     }
 
 }

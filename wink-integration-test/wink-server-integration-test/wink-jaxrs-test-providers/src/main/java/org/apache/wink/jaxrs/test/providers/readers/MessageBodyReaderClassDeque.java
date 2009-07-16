@@ -26,15 +26,18 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.Provider;
-
-import org.apache.cxf.helpers.IOUtils;
+import javax.ws.rs.ext.Providers;
 
 @Provider
 public class MessageBodyReaderClassDeque implements MessageBodyReader<Object> {
+
+    @Context
+    private Providers providers;
 
     public boolean isReadable(Class<?> arg0, Type arg1, Annotation[] arg2, MediaType arg3) {
         if (arg0.equals(Deque.class)) {
@@ -47,7 +50,9 @@ public class MessageBodyReaderClassDeque implements MessageBodyReader<Object> {
             throws IOException, WebApplicationException {
         String str = null;
         try {
-            str = IOUtils.toString(arg5);
+            MessageBodyReader<String> strReader =
+                providers.getMessageBodyReader(String.class, String.class, arg2, arg3);
+            str = strReader.readFrom(String.class, String.class, arg2, arg3, arg4, arg5);
         } catch (IOException e) {
             throw new WebApplicationException(e);
         }

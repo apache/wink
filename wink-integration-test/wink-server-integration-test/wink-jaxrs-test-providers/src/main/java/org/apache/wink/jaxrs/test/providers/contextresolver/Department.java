@@ -17,34 +17,31 @@
  * under the License.
  */
 
-package org.apache.wink.test.integration;
+package org.apache.wink.jaxrs.test.providers.contextresolver;
 
-/**
- * This class provides some basic information for clients about the server.
- */
-final public class ServerEnvironmentInfo {
+import javax.xml.bind.annotation.XmlRootElement;
 
-    public static String getHostname() {
-        return System.getProperty("wink-test-hostname");
+@XmlRootElement
+public class Department {
+
+    private String departmentId;
+
+    private String departmentName;
+
+    public String getDepartmentId() {
+        return departmentId;
     }
 
-    public static String getPort() {
-        return System.getProperty("wink-test-port");
+    public void setDepartmentId(String departmentId) {
+        this.departmentId = departmentId;
     }
 
-    public static String getContextRoot() {
-        return System.getProperty("wink-test-context-root");
+    public String getDepartmentName() {
+        return departmentName;
     }
 
-    public static String getBaseURI() {
-        String contextRoot = getContextRoot();
-        if (contextRoot == null) {
-            return "http://" + getHostname() + ":" + getPort();
-        }
-        return "http://" + getHostname() + ":" + getPort() + "/" + contextRoot;
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
     }
 
-    public static String getWorkDir() {
-        return System.getProperty("wink-test-work-dir");
-    }
 }

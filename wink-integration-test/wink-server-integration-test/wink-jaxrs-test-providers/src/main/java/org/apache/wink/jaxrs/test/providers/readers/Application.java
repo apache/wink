@@ -28,6 +28,15 @@ public class Application extends javax.ws.rs.core.Application {
     public Set<Class<?>> getClasses() {
         Set<Class<?>> clazzes = new HashSet<Class<?>>();
         clazzes.add(ReaderResource.class);
+        // clazzes.add(MessageBodyReaderAnnotationList.class);
+        // clazzes.add(MessageBodyReaderMediaTypeSet.class);
+        // clazzes.add(MessageBodyReaderGenericEntityTypeQueue.class);
+        // clazzes.add(MessageBodyReaderClassDeque.class);
+        // clazzes.add(MessageBodyReaderThrowsExceptions.class);
+        // clazzes.add(MessageBodyReaderIsReadableThrowsRuntimeException.class);
+        // clazzes.add(MessageBodyReaderIsReadableThrowsWebAppException.class);
+        // clazzes.add(MessageBodyReaderReadFromDifferent.class);
+        // clazzes.add(MessageBodyReaderGenericType.class);
         return clazzes;
     }
 

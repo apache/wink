@@ -204,8 +204,11 @@ public class JAXRSSourceTest extends TestCase {
             assertEquals(
                     "<?xml version=\"1.0\" encoding=\"UTF-8\"?><message><user>user1</user><password>user1pwd</password></message>",
                     str);
-            assertEquals("application/xml", getMethod
-                    .getResponseHeader("Content-Type").getValue());
+
+            String contentType =
+                (getMethod.getResponseHeader("Content-Type") == null) ? null : getMethod
+                    .getResponseHeader("Content-Type").getValue();
+            assertNotNull(contentType, contentType);
             Header contentLengthHeader = getMethod
                     .getResponseHeader("Content-Length");
             assertNull(contentLengthHeader == null ? "null"

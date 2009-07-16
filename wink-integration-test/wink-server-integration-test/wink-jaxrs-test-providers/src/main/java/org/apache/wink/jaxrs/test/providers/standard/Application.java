@@ -41,6 +41,7 @@ public class Application extends javax.ws.rs.core.Application {
         objs.add(new MultiValuedMapResource());
         objs.add(new SourceResource());
         objs.add(new DataSourceResource());
+        objs.add(new DSResource());
         return objs;
     }
 

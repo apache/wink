@@ -11,7 +11,4 @@
   <name>wink-jaxrs-test-params Maven Webapp</name>
   <version>0.1-SNAPSHOT</version>
   <url>http://maven.apache.org</url>
-  <build>
-    <finalName>wink-jaxrs-test-params</finalName>
-  </build>
 </project>

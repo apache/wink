@@ -521,7 +521,8 @@ public class JAXRSHttpHeadersTest extends TestCase {
             assertEquals(200, getMethod.getStatusCode());
             String responseBody = getMethod.getResponseBodyAsString();
             assertTrue(responseBody, responseBody.contains("requestheaders:"));
-            assertTrue(responseBody, responseBody.contains(":fOo=[bAr]"));
+            assertTrue(responseBody, responseBody.contains(":fOo=[bAr]") || responseBody
+                .contains(":foo=[bAr]"));
         } finally {
             getMethod.releaseConnection();
         }
@@ -545,7 +546,8 @@ public class JAXRSHttpHeadersTest extends TestCase {
             assertEquals(200, getMethod.getStatusCode());
             String responseBody = getMethod.getResponseBodyAsString();
             assertTrue(responseBody, responseBody.contains("requestheaders:"));
-            assertTrue(responseBody, responseBody.contains(":fOo=[2bAr, bAr]"));
+            assertTrue(responseBody, responseBody.contains(":fOo=[2bAr, bAr]") || responseBody
+                .contains(":foo=[2bAr, bAr]"));
             assertTrue(responseBody, responseBody.contains(":abc=[xyz]"));
         } finally {
             getMethod.releaseConnection();

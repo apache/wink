@@ -28,16 +28,19 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.Provider;
-
-import org.apache.cxf.helpers.IOUtils;
+import javax.ws.rs.ext.Providers;
 
 @Provider
 @Consumes("text/plain")
 public class MessageBodyReaderAnnotationList implements MessageBodyReader<List> {
+
+    @Context
+    Providers providers;
 
     public boolean isReadable(Class<?> arg0, Type arg1, Annotation[] arg2, MediaType arg3) {
         for (Annotation ann : arg2) {
@@ -48,11 +51,20 @@ public class MessageBodyReaderAnnotationList implements MessageBodyReader<List> 
         return false;
     }
 
-    public List readFrom(Class<List> arg0, Type arg1, Annotation[] arg2, MediaType arg3, MultivaluedMap<String, String> arg4, InputStream arg5)
-            throws IOException, WebApplicationException {
+    public List readFrom(Class<List> arg0,
+                         Type arg1,
+                         Annotation[] arg2,
+                         MediaType arg3,
+                         MultivaluedMap<String, String> arg4,
+                         InputStream arg5) throws IOException, WebApplicationException {
         String str = null;
         try {
-            str = IOUtils.toString(arg5);
+            MessageBodyReader<String> strReader =
+                providers.getMessageBodyReader(String.class,
+                                               String.class,
+                                               arg2,
+                                               MediaType.TEXT_PLAIN_TYPE);
+            str = strReader.readFrom(String.class, String.class, arg2, arg3, arg4, arg5);
         } catch (IOException e) {
             throw new WebApplicationException(e);
         }

@@ -19,6 +19,7 @@
 
 package org.apache.wink.jaxrs.test.providers.exceptionmappers.mapped;
 
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -29,7 +30,7 @@ public class GuestbookErrorExceptionMappingProvider implements ExceptionMapper<G
     public Response toResponse(GuestbookError arg0) {
         CommentError error = new CommentError();
         error.setErrorMessage(arg0.getMessage());
-        return Response.status(453).entity(error).build();
+        return Response.status(453).entity(error).type(MediaType.APPLICATION_XML_TYPE).build();
     }
 
 }

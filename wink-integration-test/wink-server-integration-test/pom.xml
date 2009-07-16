@@ -35,6 +35,7 @@
         <module>wink-jaxrs-test-providers</module>
         <module>wink-jaxrs-test-params</module>
         <module>wink-jaxrs-test-inheritance</module>
+        <module>wink-jaxrs-test-targetting</module>
   </modules>
 
     <properties>
@@ -167,6 +168,10 @@
                                         <name>wink-test-port</name>
                                         <value>8080</value>
                                     </property>
+                                    <property>
+                                        <name>wink-test-work-dir</name>
+                                        <value>${project.build.directory}</value>
+                                    </property>
                                 </systemProperties>
                             </configuration>
                         </execution>
@@ -259,7 +264,7 @@
                                 <goal>deploy-module</goal>
                             </goals>
                             <configuration>
-                                <moduleArchive>${project.build.directory}/${artifactId}.war
+                                <moduleArchive>${project.build.directory}/${artifactId}-${version}.war
                             </moduleArchive>
                             </configuration>
                         </execution>
@@ -270,7 +275,7 @@
                                 <goal>undeploy-module</goal>
                             </goals>
                             <configuration>
-                                <moduleId>${groupId}/${artifactId}/${version}/car
+                                <moduleId>${groupId}/${artifactId}/${version}/war
                             </moduleId>
                             </configuration>
                         </execution>

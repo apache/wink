@@ -17,20 +17,20 @@
  * under the License.
  */
 
-package org.apache.wink.jaxrs.test.providers.exceptionmappers.mapped;
+package org.apache.wink.jaxrs.test.providers.contextresolver;
 
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
+import java.util.HashSet;
+import java.util.Set;
 
-@Provider
-public class RuntimeExceptionMappingProvider implements ExceptionMapper<RuntimeException> {
+public class Application extends javax.ws.rs.core.Application {
 
-    public Response toResponse(RuntimeException arg0) {
-        CommentError error = new CommentError();
-        error.setErrorMessage(arg0.getMessage());
-        return Response.status(450).entity(error).type(MediaType.APPLICATION_XML_TYPE).build();
+    @Override
+    public Set<Class<?>> getClasses() {
+        Set<Class<?>> classes = new HashSet<Class<?>>();
+        classes.add(UserAccount.class);
+        classes.add(UserContextProvider.class);
+        classes.add(Departments.class);
+        return classes;
     }
 
 }

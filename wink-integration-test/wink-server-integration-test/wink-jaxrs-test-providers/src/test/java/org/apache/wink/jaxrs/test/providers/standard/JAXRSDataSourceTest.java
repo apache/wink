@@ -25,14 +25,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Random;
 
+import javax.activation.DataSource;
+import javax.ws.rs.core.MediaType;
+
 import junit.framework.TestCase;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.methods.ByteArrayRequestEntity;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
+import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.wink.common.internal.providers.entity.DataSourceProvider;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
 public class JAXRSDataSourceTest extends TestCase {
@@ -118,8 +124,11 @@ public class JAXRSDataSourceTest extends TestCase {
             for (int c = 0; c < barr.length; ++c) {
                 assertEquals(barr[c], receivedBArr[c]);
             }
-            assertEquals("application/xml", getMethod.getResponseHeader("Content-Type")
-                .getValue());
+
+            String contentType =
+                (getMethod.getResponseHeader("Content-Type") == null) ? null : getMethod
+                    .getResponseHeader("Content-Type").getValue();
+            assertNotNull(contentType, contentType);
             assertNull((getMethod.getResponseHeader("Content-Length") == null) ? "" : getMethod
                 .getResponseHeader("Content-Length").getValue(), getMethod
                 .getResponseHeader("Content-Length"));
@@ -203,4 +212,39 @@ public class JAXRSDataSourceTest extends TestCase {
         }
     }
 
+
+    /**
+     * Verify that we can send a DataSource and receive a DataSource. The 'POST'
+     * method on the resource we are calling is a simple echo.
+     *
+     */
+    public void testPOSTDataSource() throws Exception {
+        PostMethod postMethod = null;
+        try {
+            postMethod = new PostMethod(getBaseURI() + "/dstest");
+            String input = "This is some test input";
+            RequestEntity requestEntity = new ByteArrayRequestEntity(input
+                    .getBytes(), "application/datasource");
+            postMethod.setRequestEntity(requestEntity);
+            HttpClient client = new HttpClient();
+            client.executeMethod(postMethod);
+
+            // just use our provider to read the response
+            DataSourceProvider provider = new DataSourceProvider();
+            DataSource returnedData = provider.readFrom(DataSource.class, null,
+                    null, new MediaType("application", "datasource"), null,
+                    postMethod.getResponseBodyAsStream());
+            assertNotNull(returnedData);
+            assertNotNull(returnedData.getInputStream());
+            byte[] responseBytes = new byte[input.getBytes().length];
+            returnedData.getInputStream().read(responseBytes);
+            assertNotNull(responseBytes);
+            String response = new String(responseBytes);
+            assertEquals("This is some test input", response);
+        } finally {
+            if (postMethod != null) {
+                postMethod.releaseConnection();
+            }
+        }
+    }
 }

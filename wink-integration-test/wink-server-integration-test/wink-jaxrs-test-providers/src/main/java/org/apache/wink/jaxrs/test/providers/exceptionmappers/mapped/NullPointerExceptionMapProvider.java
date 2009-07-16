@@ -19,6 +19,7 @@
 
 package org.apache.wink.jaxrs.test.providers.exceptionmappers.mapped;
 
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -29,7 +30,7 @@ public class NullPointerExceptionMapProvider implements ExceptionMapper<NullPoin
     public Response toResponse(NullPointerException arg0) {
         CommentError error = new CommentError();
         error.setErrorMessage(arg0.getMessage());
-        return Response.status(451).entity(error).build();
+        return Response.status(451).entity(error).type(MediaType.APPLICATION_XML_TYPE).build();
     }
 
 }

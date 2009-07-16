@@ -17,20 +17,34 @@
  * under the License.
  */
 
-package org.apache.wink.jaxrs.test.providers.exceptionmappers.mapped;
+package org.apache.wink.jaxrs.test.providers.contextresolver;
 
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
+import java.util.LinkedList;
+import java.util.List;
 
-@Provider
-public class RuntimeExceptionMappingProvider implements ExceptionMapper<RuntimeException> {
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-    public Response toResponse(RuntimeException arg0) {
-        CommentError error = new CommentError();
-        error.setErrorMessage(arg0.getMessage());
-        return Response.status(450).entity(error).type(MediaType.APPLICATION_XML_TYPE).build();
+@XmlRootElement
+public class DepartmentListWrapper {
+
+    @XmlElement
+    private List<Department> departmentList = new LinkedList<Department>();
+
+    public List<Department> getDepartmentList() {
+        return departmentList;
+    }
+
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        for (Department dept : departmentList) {
+            sb.append("ID: " + dept.getDepartmentId());
+            sb.append("\n");
+            sb.append("NAME: " + dept.getDepartmentName());
+            sb.append("\n");
+        }
+
+        return sb.toString();
     }
 
 }

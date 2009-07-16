@@ -124,9 +124,11 @@ public class JAXRSStreamingOutputTest extends TestCase {
             for (int c = 0; c < barr.length; ++c) {
                 assertEquals(barr[c], receivedBArr[c]);
             }
-            assertEquals("application/xml", getMethod
-                    .getResponseHeader("Content-Type").getValue());
 
+            String contentType =
+                (getMethod.getResponseHeader("Content-Type") == null) ? null : getMethod
+                    .getResponseHeader("Content-Type").getValue();
+            assertNotNull(contentType, contentType);
             Header contentLengthHeader = getMethod
                     .getResponseHeader("Content-Length");
             assertNull(contentLengthHeader == null ? "null"

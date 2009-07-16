@@ -29,16 +29,19 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.Provider;
-
-import org.apache.cxf.helpers.IOUtils;
+import javax.ws.rs.ext.Providers;
 
 @Provider
 @Consumes("custom/generic")
 public class MessageBodyReaderGenericType implements MessageBodyReader<Object> {
+
+    @Context
+    Providers providers;
 
     public boolean isReadable(Class<?> arg0, Type arg1, Annotation[] arg2, MediaType arg3) {
         if (List.class.isAssignableFrom(arg0)) {
@@ -81,7 +84,12 @@ public class MessageBodyReaderGenericType implements MessageBodyReader<Object> {
                     if (genericTypeArguments.length == 1) {
                         Class argType = (Class) genericTypeArguments[0];
                         if (Integer.class.isAssignableFrom(argType)) {
-                            String str = IOUtils.toString(arg5);
+                            MessageBodyReader<String> strReader =
+                                providers.getMessageBodyReader(String.class,
+                                                               String.class,
+                                                               arg2,
+                                                               MediaType.TEXT_PLAIN_TYPE);
+                            String str = strReader.readFrom(String.class, String.class, arg2, arg3, arg4, arg5);
                             String[] splitlines = str.split("\r\n");
                             List<Integer> ret = new ArrayList<Integer>();
                             for (String s : splitlines) {
@@ -89,7 +97,12 @@ public class MessageBodyReaderGenericType implements MessageBodyReader<Object> {
                             }
                             return ret;
                         } else if (String.class.isAssignableFrom(argType)) {
-                            String str = IOUtils.toString(arg5);
+                            MessageBodyReader<String> strReader =
+                                providers.getMessageBodyReader(String.class,
+                                                               String.class,
+                                                               arg2,
+                                                               MediaType.TEXT_PLAIN_TYPE);
+                            String str = strReader.readFrom(String.class, String.class, arg2, arg3, arg4, arg5);
                             String[] splitlines = str.split("\r\n");
                             List<String> ret = new ArrayList<String>();
                             for (String s : splitlines) {
@@ -100,7 +113,12 @@ public class MessageBodyReaderGenericType implements MessageBodyReader<Object> {
                     }
                 }
             } else if (arg1 instanceof Class) {
-                String str = IOUtils.toString(arg5);
+                MessageBodyReader<String> strReader =
+                    providers.getMessageBodyReader(String.class,
+                                                   String.class,
+                                                   arg2,
+                                                   MediaType.TEXT_PLAIN_TYPE);
+                String str = strReader.readFrom(String.class, String.class, arg2, arg3, arg4, arg5);
                 String[] splitlines = str.split("\r\n");
                 List<Object> ret = new ArrayList<Object>();
                 for (String s : splitlines) {
@@ -112,7 +130,12 @@ public class MessageBodyReaderGenericType implements MessageBodyReader<Object> {
 
         if (arg1 instanceof Class) {
             if (Integer.class.isAssignableFrom((Class) arg1)) {
-                String str = IOUtils.toString(arg5);
+                MessageBodyReader<String> strReader =
+                    providers.getMessageBodyReader(String.class,
+                                                   String.class,
+                                                   arg2,
+                                                   MediaType.TEXT_PLAIN_TYPE);
+                String str = strReader.readFrom(String.class, String.class, arg2, arg3, arg4, arg5);
                 String[] splitlines = str.split("\r\n");
                 int sum = 0;
                 for (String s : splitlines) {

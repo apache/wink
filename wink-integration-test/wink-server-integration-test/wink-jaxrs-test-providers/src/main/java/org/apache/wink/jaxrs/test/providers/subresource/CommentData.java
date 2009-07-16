@@ -74,7 +74,7 @@ public class CommentData {
             commentError
                     .setErrorMessage("Please include a comment ID, a message, and your name.");
             Response resp = Response.status(Response.Status.BAD_REQUEST)
-                    .entity(commentError).build();
+                    .entity(commentError).type("application/xml").build();
             throw new WebApplicationException(resp);
         }
 

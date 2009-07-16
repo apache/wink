@@ -51,7 +51,7 @@ public class Guestbook {
         public MyWebAppException(int status) {
             CommentError error = new CommentError();
             error.setErrorMessage("Cannot post an invalid message.");
-            resp = Response.status(status).entity(error).build();
+            resp = Response.status(status).entity(error).type("text/xml").build();
         }
 
         @Override
@@ -83,7 +83,7 @@ public class Guestbook {
             CommentError error = new CommentError();
             error.setErrorMessage("Missing the message in the comment.");
             Response malformedCommentResponse =
-                Response.status(Status.BAD_REQUEST).entity(error).build();
+                Response.status(Status.BAD_REQUEST).entity(error).type("text/xml").build();
             WebApplicationException webAppException =
                 new WebApplicationException(malformedCommentResponse);
             throw webAppException;

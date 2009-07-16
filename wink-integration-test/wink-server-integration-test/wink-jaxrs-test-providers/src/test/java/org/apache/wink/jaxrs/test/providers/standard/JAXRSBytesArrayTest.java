@@ -117,8 +117,10 @@ public class JAXRSBytesArrayTest extends TestCase {
             for (int c = 0; c < barr.length; ++c) {
                 assertEquals(barr[c], receivedBArr[c]);
             }
-            assertEquals("application/xml", getMethod.getResponseHeader("Content-Type")
-                .getValue());
+            String contentType =
+                (getMethod.getResponseHeader("Content-Type") == null) ? null : getMethod
+                    .getResponseHeader("Content-Type").getValue();
+            assertNotNull(contentType, contentType);
             assertEquals(barr.length, Integer.valueOf(getMethod.getResponseHeader("Content-Length")
                 .getValue()).intValue());
         } finally {

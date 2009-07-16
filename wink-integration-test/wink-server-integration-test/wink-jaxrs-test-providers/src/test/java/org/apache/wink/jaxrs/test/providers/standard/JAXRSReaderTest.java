@@ -45,17 +45,15 @@ public class JAXRSReaderTest extends TestCase {
 
     /**
      * Tests posting to a Reader parameter.
-     *
+     * 
      * @throws HttpException
      * @throws IOException
      */
     public void testPostReader() throws HttpException, IOException {
         HttpClient client = new HttpClient();
 
-        PostMethod postMethod = new PostMethod(getBaseURI()
-                + "/providers/standard/reader");
-        postMethod.setRequestEntity(new StringRequestEntity("abcd",
-                "text/plain", "UTF-8"));
+        PostMethod postMethod = new PostMethod(getBaseURI() + "/providers/standard/reader");
+        postMethod.setRequestEntity(new StringRequestEntity("abcd", "text/plain", "UTF-8"));
         postMethod.addRequestHeader("Accept", "text/plain");
         try {
             client.executeMethod(postMethod);
@@ -80,12 +78,10 @@ public class JAXRSReaderTest extends TestCase {
             String str = new String(carr);
 
             assertEquals("abcd", str);
-            assertEquals("text/plain", postMethod.getResponseHeader(
-                    "Content-Type").getValue());
-            Header contentLengthHeader = postMethod
-                    .getResponseHeader("Content-Length");
-            assertNull(contentLengthHeader == null ? "null"
-                    : contentLengthHeader.getValue(), contentLengthHeader);
+            assertEquals("text/plain", postMethod.getResponseHeader("Content-Type").getValue());
+            Header contentLengthHeader = postMethod.getResponseHeader("Content-Length");
+            assertNull(contentLengthHeader == null ? "null" : contentLengthHeader.getValue(),
+                       contentLengthHeader);
         } finally {
             postMethod.releaseConnection();
         }
@@ -93,17 +89,15 @@ public class JAXRSReaderTest extends TestCase {
 
     /**
      * Tests putting and then getting a Reader.
-     *
+     * 
      * @throws HttpException
      * @throws IOException
      */
     public void testPutReader() throws HttpException, IOException {
         HttpClient client = new HttpClient();
 
-        PutMethod putMethod = new PutMethod(getBaseURI()
-                + "/providers/standard/reader");
-        putMethod.setRequestEntity(new StringRequestEntity("wxyz",
-                "char/array", "UTF-8"));
+        PutMethod putMethod = new PutMethod(getBaseURI() + "/providers/standard/reader");
+        putMethod.setRequestEntity(new StringRequestEntity("wxyz", "char/array", "UTF-8"));
         try {
             client.executeMethod(putMethod);
             assertEquals(204, putMethod.getStatusCode());
@@ -111,8 +105,7 @@ public class JAXRSReaderTest extends TestCase {
             putMethod.releaseConnection();
         }
 
-        GetMethod getMethod = new GetMethod(getBaseURI()
-                + "/providers/standard/reader");
+        GetMethod getMethod = new GetMethod(getBaseURI() + "/providers/standard/reader");
         try {
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());
@@ -135,32 +128,30 @@ public class JAXRSReaderTest extends TestCase {
             String str = new String(carr);
 
             assertEquals("wxyz", str);
-            assertEquals("application/xml", getMethod
-                    .getResponseHeader("Content-Type").getValue());
 
-            Header contentLengthHeader = getMethod
-                    .getResponseHeader("Content-Length");
-            assertNull(contentLengthHeader == null ? "null"
-                    : contentLengthHeader.getValue(), contentLengthHeader);
+            String contentType =
+                (getMethod.getResponseHeader("Content-Type") == null) ? null : getMethod
+                    .getResponseHeader("Content-Type").getValue();
+            assertNotNull(contentType, contentType);
+
+            Header contentLengthHeader = getMethod.getResponseHeader("Content-Length");
+            assertNull(contentLengthHeader == null ? "null" : contentLengthHeader.getValue(),
+                       contentLengthHeader);
         } finally {
             getMethod.releaseConnection();
         }
     }
 
     /**
-     *
-     *
      * @throws HttpException
      * @throws IOException
      */
-    public void testWithRequestAcceptHeaderWillReturnRequestedContentType()
-            throws HttpException, IOException {
+    public void testWithRequestAcceptHeaderWillReturnRequestedContentType() throws HttpException,
+        IOException {
         HttpClient client = new HttpClient();
 
-        PutMethod putMethod = new PutMethod(getBaseURI()
-                + "/providers/standard/reader");
-        putMethod.setRequestEntity(new StringRequestEntity("wxyz",
-                "char/array", "UTF-8"));
+        PutMethod putMethod = new PutMethod(getBaseURI() + "/providers/standard/reader");
+        putMethod.setRequestEntity(new StringRequestEntity("wxyz", "char/array", "UTF-8"));
         try {
             client.executeMethod(putMethod);
             assertEquals(204, putMethod.getStatusCode());
@@ -168,8 +159,7 @@ public class JAXRSReaderTest extends TestCase {
             putMethod.releaseConnection();
         }
 
-        GetMethod getMethod = new GetMethod(getBaseURI()
-                + "/providers/standard/reader");
+        GetMethod getMethod = new GetMethod(getBaseURI() + "/providers/standard/reader");
         getMethod.addRequestHeader("Accept", "mytype/subtype");
         try {
             client.executeMethod(getMethod);
@@ -193,37 +183,34 @@ public class JAXRSReaderTest extends TestCase {
             String str = new String(carr);
 
             assertEquals("wxyz", str);
-            assertEquals("mytype/subtype", getMethod.getResponseHeader(
-                    "Content-Type").getValue());
+            assertEquals("mytype/subtype", getMethod.getResponseHeader("Content-Type").getValue());
 
-            Header contentLengthHeader = getMethod
-                    .getResponseHeader("Content-Length");
-            assertNull(contentLengthHeader == null ? "null"
-                    : contentLengthHeader.getValue(), contentLengthHeader);
+            Header contentLengthHeader = getMethod.getResponseHeader("Content-Length");
+            assertNull(contentLengthHeader == null ? "null" : contentLengthHeader.getValue(),
+                       contentLengthHeader);
         } finally {
             getMethod.releaseConnection();
         }
     }
 
     /**
-     * Tests a resource method invoked with a BufferedReader as a
-     * parameter. This should fail with a 415 since the reader has no way to
-     * necessarily wrap it to the type.
-     *
+     * Tests a resource method invoked with a BufferedReader as a parameter.
+     * This should fail with a 415 since the reader has no way to necessarily
+     * wrap it to the type.
+     * 
      * @throws HttpException
      * @throws IOException
      */
-    public void testInputStreamImplementation() throws HttpException,
-            IOException {
+    public void testInputStreamImplementation() throws HttpException, IOException {
         HttpClient client = new HttpClient();
 
-        PostMethod postMethod = new PostMethod(getBaseURI()
-                + "/providers/standard/reader/subclasses/shouldfail");
+        PostMethod postMethod =
+            new PostMethod(getBaseURI() + "/providers/standard/reader/subclasses/shouldfail");
         byte[] barr = new byte[1000];
         Random r = new Random();
         r.nextBytes(barr);
-        postMethod.setRequestEntity(new InputStreamRequestEntity(
-                new ByteArrayInputStream(barr), "any/type"));
+        postMethod.setRequestEntity(new InputStreamRequestEntity(new ByteArrayInputStream(barr),
+                                                                 "any/type"));
         try {
             client.executeMethod(postMethod);
             assertEquals(415, postMethod.getStatusCode());

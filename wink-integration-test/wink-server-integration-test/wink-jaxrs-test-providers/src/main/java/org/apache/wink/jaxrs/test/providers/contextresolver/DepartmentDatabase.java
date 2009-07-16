@@ -17,34 +17,34 @@
  * under the License.
  */
 
-package org.apache.wink.test.integration;
+package org.apache.wink.jaxrs.test.providers.contextresolver;
 
-/**
- * This class provides some basic information for clients about the server.
- */
-final public class ServerEnvironmentInfo {
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
-    public static String getHostname() {
-        return System.getProperty("wink-test-hostname");
+public class DepartmentDatabase {
+
+    private static Map<String, Department> departmentDB = new HashMap<String, Department>();
+
+    public static Collection<Department> getDepartments() {
+        return departmentDB.values();
     }
 
-    public static String getPort() {
-        return System.getProperty("wink-test-port");
+    public static void addDepartment(Department department) {
+        departmentDB.put(department.getDepartmentId(), department);
     }
 
-    public static String getContextRoot() {
-        return System.getProperty("wink-test-context-root");
+    public static Department getDepartment(String departmentId) {
+        return departmentDB.get(departmentId);
     }
 
-    public static String getBaseURI() {
-        String contextRoot = getContextRoot();
-        if (contextRoot == null) {
-            return "http://" + getHostname() + ":" + getPort();
-        }
-        return "http://" + getHostname() + ":" + getPort() + "/" + contextRoot;
+    public static Department removeDepartment(String departmentId) {
+        return departmentDB.remove(departmentId);
     }
 
-    public static String getWorkDir() {
-        return System.getProperty("wink-test-work-dir");
+    public static void clearEntries() {
+        departmentDB.clear();
     }
+
 }

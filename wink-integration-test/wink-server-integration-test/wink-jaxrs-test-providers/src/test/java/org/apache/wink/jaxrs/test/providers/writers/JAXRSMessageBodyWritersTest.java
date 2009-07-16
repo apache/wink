@@ -19,6 +19,7 @@
 package org.apache.wink.jaxrs.test.providers.writers;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -30,7 +31,6 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.cxf.helpers.IOUtils;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
 public class JAXRSMessageBodyWritersTest extends TestCase {
@@ -86,7 +86,11 @@ public class JAXRSMessageBodyWritersTest extends TestCase {
 
             assertEquals(200, getMethod.getStatusCode());
             assertEquals("str:foobarcontenttype", getMethod.getResponseBodyAsString());
-            assertEquals("application/xml", getMethod.getResponseHeader("Content-Type").getValue());
+
+            String contentType =
+                (getMethod.getResponseHeader("Content-Type") == null) ? null : getMethod
+                    .getResponseHeader("Content-Type").getValue();
+            assertNotNull(contentType, contentType);
             assertEquals("21", getMethod.getResponseHeader("Content-Length").getValue());
         } finally {
             getMethod.releaseConnection();
@@ -100,7 +104,11 @@ public class JAXRSMessageBodyWritersTest extends TestCase {
 
             assertEquals(200, getMethod.getStatusCode());
             assertEquals("str:foobar", getMethod.getResponseBodyAsString());
-            assertEquals("application/xml", getMethod.getResponseHeader("Content-Type").getValue());
+
+            String contentType =
+                (getMethod.getResponseHeader("Content-Type") == null) ? null : getMethod
+                    .getResponseHeader("Content-Type").getValue();
+            assertNotNull(contentType, contentType);
             assertEquals("10", getMethod.getResponseHeader("Content-Length").getValue());
         } finally {
             getMethod.releaseConnection();
@@ -137,9 +145,10 @@ public class JAXRSMessageBodyWritersTest extends TestCase {
             client.executeMethod(getMethod);
 
             assertEquals(200, getMethod.getStatusCode());
-            byte[] barr = IOUtils.readBytesFromStream(getMethod.getResponseBodyAsStream());
-            for (int c = 0; c < barr.length; ++c) {
-                assertEquals(barr[c], (byte)c);
+            InputStream is = getMethod.getResponseBodyAsStream();
+            int read = is.read();
+            for (int c = 0; read != -1; ++c, read = is.read()) {
+                assertEquals(c % 256, read);
             }
             assertEquals("length/shorter", getMethod.getResponseHeader("Content-Type").getValue());
             assertEquals("99990", getMethod.getResponseHeader("Content-Length").getValue());
@@ -165,7 +174,11 @@ public class JAXRSMessageBodyWritersTest extends TestCase {
 
             assertEquals(200, getMethod.getStatusCode());
             assertEquals("vector:HelloThere", getMethod.getResponseBodyAsString());
-            assertEquals("application/xml", getMethod.getResponseHeader("Content-Type").getValue());
+
+            String contentType =
+                (getMethod.getResponseHeader("Content-Type") == null) ? null : getMethod
+                    .getResponseHeader("Content-Type").getValue();
+            assertNotNull(contentType, contentType);
             assertEquals("17", getMethod.getResponseHeader("Content-Length").getValue());
         } finally {
             getMethod.releaseConnection();
@@ -188,7 +201,11 @@ public class JAXRSMessageBodyWritersTest extends TestCase {
 
             assertEquals(200, getMethod.getStatusCode());
             assertEquals("listinteger:12", getMethod.getResponseBodyAsString());
-            assertEquals("application/xml", getMethod.getResponseHeader("Content-Type").getValue());
+
+            String contentType =
+                (getMethod.getResponseHeader("Content-Type") == null) ? null : getMethod
+                    .getResponseHeader("Content-Type").getValue();
+            assertNotNull(contentType, contentType);
             assertEquals("14", getMethod.getResponseHeader("Content-Length").getValue());
         } finally {
             getMethod.releaseConnection();
@@ -211,8 +228,11 @@ public class JAXRSMessageBodyWritersTest extends TestCase {
 
             assertEquals(200, getMethod.getStatusCode());
             assertEquals("string:hello there", getMethod.getResponseBodyAsString());
-            assertEquals("application/xml", getMethod.getResponseHeader("Content-Type")
-                .getValue());
+
+            String contentType =
+                (getMethod.getResponseHeader("Content-Type") == null) ? null : getMethod
+                    .getResponseHeader("Content-Type").getValue();
+            assertNotNull(contentType, contentType);
             assertEquals("18", getMethod.getResponseHeader("Content-Length").getValue());
         } finally {
             getMethod.releaseConnection();
@@ -235,9 +255,11 @@ public class JAXRSMessageBodyWritersTest extends TestCase {
             client.executeMethod(getMethod);
 
             assertEquals(200, getMethod.getStatusCode());
-            byte[] barr = IOUtils.readBytesFromStream(getMethod.getResponseBodyAsStream());
-            for (int c = 0; c < barr.length; ++c) {
-                assertEquals(barr[c], (byte)c);
+
+            InputStream is = getMethod.getResponseBodyAsStream();
+            int read = is.read();
+            for (int c = 0; read != -1; ++c, read = is.read()) {
+                assertEquals(c % 256, read);
             }
             assertEquals("length/longer", getMethod.getResponseHeader("Content-Type").getValue());
             assertEquals("100010", getMethod.getResponseHeader("Content-Length").getValue());
@@ -260,11 +282,16 @@ public class JAXRSMessageBodyWritersTest extends TestCase {
             client.executeMethod(getMethod);
 
             assertEquals(200, getMethod.getStatusCode());
-            byte[] barr = IOUtils.readBytesFromStream(getMethod.getResponseBodyAsStream());
-            for (int c = 0; c < barr.length; ++c) {
-                assertEquals(barr[c], (byte)c);
+            InputStream is = getMethod.getResponseBodyAsStream();
+            int read = is.read();
+            for (int c = 0; read != -1; ++c, read = is.read()) {
+                assertEquals(c % 256, read);
             }
-            assertEquals("application/xml", getMethod.getResponseHeader("Content-Type").getValue());
+
+            String contentType =
+                (getMethod.getResponseHeader("Content-Type") == null) ? null : getMethod
+                    .getResponseHeader("Content-Type").getValue();
+            assertNotNull(contentType, contentType);
             assertNull((getMethod.getResponseHeader("Content-Length") == null) ? "" : getMethod
                 .getResponseHeader("Content-Length").getValue(), getMethod
                 .getResponseHeader("Content-Length"));
@@ -286,7 +313,11 @@ public class JAXRSMessageBodyWritersTest extends TestCase {
 
             assertEquals(200, getMethod.getStatusCode());
             assertEquals("Hello there", getMethod.getResponseBodyAsString());
-            assertEquals("application/xml", getMethod.getResponseHeader("Content-Type").getValue());
+
+            String contentType =
+                (getMethod.getResponseHeader("Content-Type") == null) ? null : getMethod
+                    .getResponseHeader("Content-Type").getValue();
+            assertNotNull(contentType, contentType);
         } finally {
             getMethod.releaseConnection();
         }
@@ -298,7 +329,11 @@ public class JAXRSMessageBodyWritersTest extends TestCase {
 
             assertEquals(200, getMethod.getStatusCode());
             assertEquals("Hello there", getMethod.getResponseBodyAsString());
-            assertEquals("application/xml", getMethod.getResponseHeader("Content-Type").getValue());
+
+            String contentType =
+                (getMethod.getResponseHeader("Content-Type") == null) ? null : getMethod
+                    .getResponseHeader("Content-Type").getValue();
+            assertNotNull(contentType, contentType);
         } finally {
             getMethod.releaseConnection();
         }
@@ -643,7 +678,7 @@ public class JAXRSMessageBodyWritersTest extends TestCase {
 
             assertEquals("throwiswritableexception", postMethod.getResponseBodyAsString());
             assertEquals(461, postMethod.getStatusCode());
-            
+
         } finally {
             postMethod.releaseConnection();
         }

@@ -138,7 +138,19 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
-
+    <servlet>
+        <servlet-name>SimpleContestResolver</servlet-name>
+        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>org.apache.wink.jaxrs.test.providers.contextresolver.Application</param-value>
+        </init-param>
+        <init-param>
+            <param-name>requestProcessorAttribute</param-name>
+            <param-value>requestProcessorAttribute_simplecontextresolver</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
     <servlet-mapping>
         <servlet-name>MessageBodyReaders</servlet-name>
         <url-pattern>/readers/*</url-pattern>
@@ -175,4 +187,9 @@
         <servlet-name>SubresourceExceptions</servlet-name>
         <url-pattern>/subresourceexceptions/*</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SimpleContestResolver</servlet-name>
+        <url-pattern>/simplecontextresolver/*</url-pattern>
+    </servlet-mapping>
+    
 </web-app>
