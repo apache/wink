@@ -30,6 +30,7 @@
         <version>6</version>
     </parent>
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javadoc.aggregate>true</javadoc.aggregate>
         <javadoc.exclude.patterns>*internal:org.apache.wink.example</javadoc.exclude.patterns>
         <site.deploy.dir>C:/wink/buildsReports</site.deploy.dir>
@@ -38,7 +39,6 @@
         <distribution.deploy.directory.release>TBD</distribution.deploy.directory.release>
         <distribution.deploy.directory>${distribution.deploy.directory.snapshots}</distribution.deploy.directory>
         <distribution.url>http://TBD/</distribution.url>
-        <scm.url>TBD</scm.url>
     </properties>
     <modules>
         <module>wink-component-test-support</module>
@@ -52,10 +52,9 @@
         <module>wink-scripts</module>
     </modules>
     <scm>
-        <connection>scm:svn:${scm.url}</connection>
-        <developerConnection>scm:svn:${scm.url}</developerConnection>
-        <tag>HEAD</tag>
-        <url>${scm.url}</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/wink/trunk</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/wink/trunk</developerConnection>
+        <url>http://svn.apache.org/viewvc/incubator/wink/trunk</url>
     </scm>
     <build>
         <plugins>
