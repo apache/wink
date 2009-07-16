@@ -28,7 +28,7 @@
     </bannerRight>
     <bannerLeft>
         <name>Wink 0.1</name>
-        <src>${module.relative.path}images/SymphonySDKLogo.jpg</src>
+        <src>${module.relative.path}images/ApacheWinkLogo.jpg</src>
     </bannerLeft>
     <poweredBy>
         <logo name="" img="${module.relative.path}images/white.jpg"/>
