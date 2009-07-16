@@ -27,58 +27,115 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.wink.common.internal.uri.UriEncoder;
 
-
 public class MediaTypeUtils {
 
-    public static final String ATOM_SERVICE_DOCUMENT = "application/atomsvc+xml";
-    public static final MediaType ATOM_SERVICE_DOCUMENT_TYPE = new MediaType("application", "atomsvc+xml");
-    public static final String ATOM_CATEGORIES_DOCUMENT = "application/atomcat+xml";
-    public static final MediaType ATOM_CATEGORIES_DOCUMENT_TYPE = new MediaType("application", "atomcat+xml");
-    public static final String ATOM_ENTRY = "application/atom+xml;type=entry";
-    public static final MediaType ATOM_ENTRY_TYPE = new MediaType("application", "atom+xml", Collections.singletonMap(
-            "type", "entry"));
+    public static final String         ATOM_SERVICE_DOCUMENT         = "application/atomsvc+xml";
+    public static final MediaType      ATOM_SERVICE_DOCUMENT_TYPE    =
+                                                                         new MediaType(
+                                                                                       "application",
+                                                                                       "atomsvc+xml");
+    public static final String         ATOM_CATEGORIES_DOCUMENT      = "application/atomcat+xml";
+    public static final MediaType      ATOM_CATEGORIES_DOCUMENT_TYPE =
+                                                                         new MediaType(
+                                                                                       "application",
+                                                                                       "atomcat+xml");
+    public static final String         ATOM_ENTRY                    =
+                                                                         "application/atom+xml;type=entry";
+    public static final MediaType      ATOM_ENTRY_TYPE               =
+                                                                         new MediaType(
+                                                                                       "application",
+                                                                                       "atom+xml",
+                                                                                       Collections
+                                                                                           .singletonMap("type",
+                                                                                                         "entry"));
 
-    public static final String ATOM_FEED = "application/atom+xml;type=feed";
-    public static final MediaType ATOM_FEED_TYPE = new MediaType("application", "atom+xml", Collections.singletonMap(
-            "type", "feed"));
+    public static final String         ATOM_FEED                     =
+                                                                         "application/atom+xml;type=feed";
+    public static final MediaType      ATOM_FEED_TYPE                =
+                                                                         new MediaType(
+                                                                                       "application",
+                                                                                       "atom+xml",
+                                                                                       Collections
+                                                                                           .singletonMap("type",
+                                                                                                         "feed"));
 
-    public static final MediaType IMAGE_X_ICON = new MediaType("image", "x-icon");
-    public static final MediaType IMAGE_PNG = new MediaType("image", "png");
-    public static final MediaType IMAGE_VND = new MediaType("image", "vnd.microsoft.icon");
-    public static final String IMAGE_JPEG = "image/jpeg";
-    public static final MediaType IMAGE_JPEG_TYPE = new MediaType("image", "jpeg");
+    public static final MediaType      IMAGE_X_ICON                  =
+                                                                         new MediaType("image",
+                                                                                       "x-icon");
+    public static final MediaType      IMAGE_PNG                     =
+                                                                         new MediaType("image",
+                                                                                       "png");
+    public static final MediaType      IMAGE_VND                     =
+                                                                         new MediaType("image",
+                                                                                       "vnd.microsoft.icon");
+    public static final String         IMAGE_JPEG                    = "image/jpeg";
+    public static final MediaType      IMAGE_JPEG_TYPE               =
+                                                                         new MediaType("image",
+                                                                                       "jpeg");
 
-    public static final String UNKNOWN = "x-internal/unknown";
+    public static final String         UNKNOWN                       = "x-internal/unknown";
 
-    public static final MediaType UNKNOWN_TYPE = new MediaType("x-internal", "unknown");
+    public static final MediaType      UNKNOWN_TYPE                  =
+                                                                         new MediaType(
+                                                                                       "x-internal",
+                                                                                       "unknown");
 
-    public static final String OPENSEARCH = "application/opensearchdescription+xml";
-    public static final MediaType OPENSEARCH_TYPE = new MediaType("application", "opensearchdescription+xml");
+    public static final String         OPENSEARCH                    =
+                                                                         "application/opensearchdescription+xml";
+    public static final MediaType      OPENSEARCH_TYPE               =
+                                                                         new MediaType(
+                                                                                       "application",
+                                                                                       "opensearchdescription+xml");
 
-    public static final String JAVASCRIPT = "application/javascript";
+    public static final String         JAVASCRIPT                    = "application/javascript";
 
-    public static final MediaType JAVASCRIPT_TYPE = new MediaType("application", "javascript");
+    public static final MediaType      JAVASCRIPT_TYPE               =
+                                                                         new MediaType(
+                                                                                       "application",
+                                                                                       "javascript");
 
-    public static final String ECMASCRIPT = "application/ecmascript";
-    public static final MediaType ECMASCRIPT_TYPE = new MediaType("application", "ecmascript");
+    public static final String         ECMASCRIPT                    = "application/ecmascript";
+    public static final MediaType      ECMASCRIPT_TYPE               =
+                                                                         new MediaType(
+                                                                                       "application",
+                                                                                       "ecmascript");
 
-    public static final String TEXT_ECMASCRIPT = "text/ecmascript";
-    public static final MediaType TEXT_ECMASCRIPT_TYPE = new MediaType("text", "ecmascript");
-    public static final String TEXT_JAVASCRIPT = "text/javascript";
+    public static final String         TEXT_ECMASCRIPT               = "text/ecmascript";
+    public static final MediaType      TEXT_ECMASCRIPT_TYPE          =
+                                                                         new MediaType("text",
+                                                                                       "ecmascript");
+    public static final String         TEXT_JAVASCRIPT               = "text/javascript";
 
-    public static final MediaType TEXT_JAVASCRIPT_TYPE = new MediaType("text", "javascript");
+    public static final MediaType      TEXT_JAVASCRIPT_TYPE          =
+                                                                         new MediaType("text",
+                                                                                       "javascript");
 
-    public static final MediaType CSV = new MediaType("text", "csv");
-    public static final String PDF = "application/pdf";
-    public static final MediaType PDF_TYPE = new MediaType("application", "pdf");
-    public static final String ZIP = "application/zip";
-    public static final MediaType ZIP_TYPE = new MediaType("application", "zip");
+    public static final MediaType      CSV                           = new MediaType("text", "csv");
+    public static final String         PDF                           = "application/pdf";
+    public static final MediaType      PDF_TYPE                      =
+                                                                         new MediaType(
+                                                                                       "application",
+                                                                                       "pdf");
+    public static final String         ZIP                           = "application/zip";
+    public static final MediaType      ZIP_TYPE                      =
+                                                                         new MediaType(
+                                                                                       "application",
+                                                                                       "zip");
 
-    public static final MediaType MS_WORD = new MediaType("application", "msword");
-    public static final MediaType MS_EXCEL = new MediaType("application", "vnd.ms-excel");
-    public static final MediaType MS_PPT = new MediaType("application", "vnd.ms-powerpoint");
+    public static final MediaType      MS_WORD                       =
+                                                                         new MediaType(
+                                                                                       "application",
+                                                                                       "msword");
+    public static final MediaType      MS_EXCEL                      =
+                                                                         new MediaType(
+                                                                                       "application",
+                                                                                       "vnd.ms-excel");
+    public static final MediaType      MS_PPT                        =
+                                                                         new MediaType(
+                                                                                       "application",
+                                                                                       "vnd.ms-powerpoint");
 
-    public static final Set<MediaType> JSON_TYPES = createJsonTypes();
+    public static final Set<MediaType> JSON_TYPES                    = createJsonTypes();
 
     private static Set<MediaType> createJsonTypes() {
         Set<MediaType> result = new LinkedHashSet<MediaType>();
@@ -91,9 +148,9 @@ public class MediaTypeUtils {
     }
 
     public static boolean isXmlType(MediaType mediaType) {
-        return (MediaTypeUtils.equalsIgnoreParameters(mediaType, MediaType.TEXT_XML_TYPE) || 
-                MediaTypeUtils.equalsIgnoreParameters(mediaType, MediaType.APPLICATION_XML_TYPE) || 
-                (mediaType.getType().equals("application") && mediaType.getSubtype().endsWith("+xml")));
+        return (MediaTypeUtils.equalsIgnoreParameters(mediaType, MediaType.TEXT_XML_TYPE) || MediaTypeUtils
+            .equalsIgnoreParameters(mediaType, MediaType.APPLICATION_XML_TYPE) || (mediaType
+            .getType().equals("application") && mediaType.getSubtype().endsWith("+xml")));
     }
 
     public static MediaType clone(MediaType mt) {
@@ -105,6 +162,32 @@ public class MediaTypeUtils {
         return UriEncoder.encodeString(mediaType.toString());
     }
 
+    /**
+     * The method returns true if m1 is compatible to m2.
+     * However, the method doesn't check that m2 is compatible to m1.
+     * 
+     * For example: isCompatibleNonCommutative("text/*", "text/plain") returns true,
+     * but isCompatibleNonCommutative("text/plain", "text/*") returns false
+     * @param m1
+     * @param m2
+     * @return
+     */
+    public static boolean isCompatibleNonCommutative(MediaType m1, MediaType m2) {
+        if (m1 == m2) {
+            return true;
+        }
+        if (m1 == null || m2 == null) {
+            return false;
+        }
+        if (m1.getType().equals(MediaType.MEDIA_TYPE_WILDCARD))
+            return true;
+        else if (m1.getType().equalsIgnoreCase(m2.getType()) && (m1.getSubtype().equals(MediaType.MEDIA_TYPE_WILDCARD)))
+            return true;
+        else
+            return m1.getType().equalsIgnoreCase(m2.getType()) && m1.getSubtype()
+                .equalsIgnoreCase(m2.getSubtype());
+    }
+
     public static boolean equalsIgnoreParameters(MediaType m1, MediaType m2) {
         if (m1 == m2) {
             return true;
@@ -112,7 +195,8 @@ public class MediaTypeUtils {
         if (m1 == null || m2 == null) {
             return false;
         }
-        return (m1.getType().equalsIgnoreCase(m2.getType()) && m1.getSubtype().equalsIgnoreCase(m2.getSubtype()));
+        return (m1.getType().equalsIgnoreCase(m2.getType()) && m1.getSubtype().equalsIgnoreCase(m2
+            .getSubtype()));
     }
 
     /**

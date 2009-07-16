@@ -50,24 +50,24 @@ import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 
 /**
- * Registry for maintaining a set of all the known root resources and finding the dispatch method of
- * a request, following the JAX-RS spec.
+ * Registry for maintaining a set of all the known root resources and finding
+ * the dispatch method of a request, following the JAX-RS spec.
  */
 public class ResourceRegistry {
 
-    private static final Logger logger = LoggerFactory.getLogger(ResourceRegistry.class);
+    private static final Logger        logger = LoggerFactory.getLogger(ResourceRegistry.class);
 
-    private List<ResourceRecord> rootResources;
-    private boolean dirty;
+    private List<ResourceRecord>       rootResources;
+    private boolean                    dirty;
 
-    private ResourceRecordFactory resourceRecordsFactory;
+    private ResourceRecordFactory      resourceRecordsFactory;
 
-    private Lock readersLock;
-    private Lock writersLock;
+    private Lock                       readersLock;
+    private Lock                       writersLock;
     private final ApplicationValidator applicationValidator;
 
     public ResourceRegistry(LifecycleManagersRegistry factoryRegistry,
-            ApplicationValidator applicationValidator) {
+                            ApplicationValidator applicationValidator) {
         this.applicationValidator = applicationValidator;
         rootResources = new LinkedList<ResourceRecord>();
         dirty = false;
@@ -80,8 +80,7 @@ public class ResourceRegistry {
     /**
      * Add a resource as an object to the registry
      * 
-     * @param instance
-     *            the object to add
+     * @param instance the object to add
      */
     public void addResource(Object instance) {
         addResource(instance, WinkApplication.DEFAULT_PRIORITY);
@@ -90,8 +89,7 @@ public class ResourceRegistry {
     /**
      * Add a resource class to the registry
      * 
-     * @param clazz
-     *            the resource class to add
+     * @param clazz the resource class to add
      */
     public void addResource(Class<?> clazz) {
         addResource(clazz, WinkApplication.DEFAULT_PRIORITY);
@@ -100,10 +98,8 @@ public class ResourceRegistry {
     /**
      * Add a resource as an object to the registry with a priority
      * 
-     * @param clazz
-     *            the resource class to add
-     * @param priority
-     *            priority of the resource
+     * @param clazz the resource class to add
+     * @param priority priority of the resource
      */
     public void addResource(Object instance, double priority) {
         logger.debug("Adding resource instance: {} with priority: {}", instance, priority);
@@ -127,10 +123,8 @@ public class ResourceRegistry {
     /**
      * Add a resource class to the registry with a priority
      * 
-     * @param clazz
-     *            the resource class to add
-     * @param priority
-     *            priority of the resource
+     * @param clazz the resource class to add
+     * @param priority priority of the resource
      */
     public void addResource(Class<?> clazz, double priority) {
         logger.debug("Adding resource class: {} with priority: {}", clazz, priority);
@@ -151,11 +145,10 @@ public class ResourceRegistry {
     }
 
     /**
-     * Get the {@link ResourceRecord} of the specified root resource instance. This is a
-     * shortcut for {@code getRecord(instance, true)}
+     * Get the {@link ResourceRecord} of the specified root resource instance.
+     * This is a shortcut for {@code getRecord(instance, true)}
      * 
-     * @param instance
-     *            the resource instance to get the record for
+     * @param instance the resource instance to get the record for
      * @return {@link ResourceRecord} of the instance
      */
     public ResourceRecord getRecord(Object instance) {
@@ -165,10 +158,9 @@ public class ResourceRegistry {
     /**
      * Get the {@link ResourceRecord} of the specified resource instance
      * 
-     * @param instance
-     *            the resource instance to get the record for
-     * @param isRootResource
-     *            specifies whether the instance is a root resource (true) or sub-resource (false)
+     * @param instance the resource instance to get the record for
+     * @param isRootResource specifies whether the instance is a root resource
+     *            (true) or sub-resource (false)
      * @return {@link ResourceRecord} of the instance
      */
     public ResourceRecord getRecord(Object instance, boolean isRootResource) {
@@ -178,8 +170,7 @@ public class ResourceRegistry {
     /**
      * Get the {@link ResourceRecord} of the specified resource class
      * 
-     * @param clazz
-     *            the resource class to get the record for
+     * @param clazz the resource class to get the record for
      * @return {@link ResourceRecord} of the instance
      */
     public ResourceRecord getRecord(Class<?> clazz) {
@@ -204,8 +195,8 @@ public class ResourceRegistry {
             resourceMethods = resource.getRecord().getMetadata().getResourceMethods();
         } else {
             String uri = UriTemplateProcessor.normalizeUri(resource.getMatcher().getTail(false));
-            List<SubResourceInstance> matchingMethods = resource.getRecord()
-                    .getMatchingSubResourceMethods(uri);
+            List<SubResourceInstance> matchingMethods =
+                resource.getRecord().getMatchingSubResourceMethods(uri);
             resourceMethods = new LinkedList<MethodMetadata>();
             for (SubResourceInstance subResource : matchingMethods) {
                 resourceMethods.add(subResource.getRecord().getMetadata());
@@ -269,17 +260,15 @@ public class ResourceRegistry {
     /**
      * Attempts to find a resource method to invoke in the specified resource
      * 
-     * @param resource
-     *            the resource to find the method in
-     * @param variablesValues
-     *            a multivalued map of variables values that stores the variables of the templates
-     *            that are matched during the search
-     * @param context
-     *            the context of the current request
+     * @param resource the resource to find the method in
+     * @param variablesValues a multivalued map of variables values that stores
+     *            the variables of the templates that are matched during the
+     *            search
+     * @param context the context of the current request
      * @return
      */
     public MethodRecord findMethod(ResourceInstance resource, RuntimeContext context)
-            throws WebApplicationException {
+        throws WebApplicationException {
         List<MethodMetadata> methods = resource.getRecord().getMetadata().getResourceMethods();
         List<MethodMetadataRecord> records = new LinkedList<MethodMetadataRecord>();
         for (MethodMetadata metadata : methods) {
@@ -294,29 +283,29 @@ public class ResourceRegistry {
     }
 
     /**
-     * Attempts to find a sub-resource method to invoke in the specified resource
+     * Attempts to find a sub-resource method to invoke in the specified
+     * resource
      * 
-     * @param pattern
-     *            the regex pattern that the 'path' specified on the sub-resource method must match
-     * @param subResourceRecords
-     *            a list of all the sub-resources (methods and locators) in the specified resource
-     *            that matched the request
-     * @param resource
-     *            the resource to find the method in
-     * @param variablesValues
-     *            a multivalued map of variables values that stores the variables of the templates
-     *            that are matched during the search
-     * @param context
-     *            the context of the current request
+     * @param pattern the regex pattern that the 'path' specified on the
+     *            sub-resource method must match
+     * @param subResourceRecords a list of all the sub-resources (methods and
+     *            locators) in the specified resource that matched the request
+     * @param resource the resource to find the method in
+     * @param variablesValues a multivalued map of variables values that stores
+     *            the variables of the templates that are matched during the
+     *            search
+     * @param context the context of the current request
      * @return
      */
     public SubResourceInstance findSubResourceMethod(String pattern,
-            List<SubResourceInstance> subResourceRecords, ResourceInstance resource,
-            RuntimeContext context) throws WebApplicationException {
+                                                     List<SubResourceInstance> subResourceRecords,
+                                                     ResourceInstance resource,
+                                                     RuntimeContext context)
+        throws WebApplicationException {
         // extract the sub-resource methods that have the same path template
         // as the first sub-resource method
-        List<SubResourceInstance> subResourceMethods = extractSubResourceMethods(pattern,
-                subResourceRecords);
+        List<SubResourceInstance> subResourceMethods =
+            extractSubResourceMethods(pattern, subResourceRecords);
 
         // filter the methods according to http method/consumes/produces
         filterDispatchMethods(resource, subResourceMethods, context);
@@ -326,15 +315,16 @@ public class ResourceRegistry {
     }
 
     /**
-     * Extract the sub-resource methods from the specified list that have the same path pattern as
-     * the specified pattern
+     * Extract the sub-resource methods from the specified list that have the
+     * same path pattern as the specified pattern
      * 
      * @param pattern
      * @param subResourceRecords
-     * @return a list of sub-resource methods whose 'path' pattern match the specified pattern
+     * @return a list of sub-resource methods whose 'path' pattern match the
+     *         specified pattern
      */
     private List<SubResourceInstance> extractSubResourceMethods(String pattern,
-            List<SubResourceInstance> subResourceRecords) {
+                                                                List<SubResourceInstance> subResourceRecords) {
 
         List<SubResourceInstance> subResourceMethods = new LinkedList<SubResourceInstance>();
         for (SubResourceInstance instance : subResourceRecords) {
@@ -348,28 +338,28 @@ public class ResourceRegistry {
     }
 
     /**
-     * Filter the methods that do not conform to the current request by modifying the input list:
+     * Filter the methods that do not conform to the current request by
+     * modifying the input list:
      * <ol>
-     * <li>Filter all methods that do not match the http method of the request. If a method does not
-     * have an http method, it passes the filter.</li>
-     * <li>Filter all methods that do not match the media type of the input entity. If a method does
-     * not have the @Consumes annotation, it passes the filter</li>
-     * <li>Filter all methods that do not match the Accept header. If a method does not have the @Produces
-     * annotation, it passes the filter</li>
+     * <li>Filter all methods that do not match the http method of the request.
+     * If a method does not have an http method, it passes the filter.</li>
+     * <li>Filter all methods that do not match the media type of the input
+     * entity. If a method does not have the @Consumes annotation, it passes the
+     * filter</li>
+     * <li>Filter all methods that do not match the Accept header. If a method
+     * does not have the @Produces annotation, it passes the filter</li>
      * </ol>
      * The elements in the list remain in the same order
      * 
      * @param resource
-     * 
-     * @param methodRecords
-     *            a list of method records to filter according to the request context
-     * @param context
-     *            the context of the current request
+     * @param methodRecords a list of method records to filter according to the
+     *            request context
+     * @param context the context of the current request
      * @return
      */
     private void filterDispatchMethods(ResourceInstance resource,
-            List<? extends MethodRecord> methodRecords, RuntimeContext context)
-            throws WebApplicationException {
+                                       List<? extends MethodRecord> methodRecords,
+                                       RuntimeContext context) throws WebApplicationException {
         // filter by http method
         ListIterator<? extends MethodRecord> iterator = methodRecords.listIterator();
         while (iterator.hasNext()) {
@@ -380,7 +370,7 @@ public class ResourceRegistry {
         }
         if (methodRecords.size() == 0) {
             logger.info("Could not find any method in class {} that supports {}", resource
-                    .getResourceClass().getName(), context.getRequest().getMethod());
+                .getResourceClass().getName(), context.getRequest().getMethod());
             throw new WebApplicationException(HttpStatus.METHOD_NOT_ALLOWED.getCode());
         }
 
@@ -394,7 +384,7 @@ public class ResourceRegistry {
         }
         if (methodRecords.size() == 0) {
             logger.info("Could not find any method in class {} that consumes {}", resource
-                    .getResourceClass().getName(), context.getHttpHeaders().getMediaType());
+                .getResourceClass().getName(), context.getHttpHeaders().getMediaType());
             throw new WebApplicationException(Response.Status.UNSUPPORTED_MEDIA_TYPE);
         }
 
@@ -408,8 +398,8 @@ public class ResourceRegistry {
         }
         if (methodRecords.size() == 0) {
             logger.info("Could not find any method in class {} capable of producing {}", resource
-                    .getResourceClass().getName(), context.getHttpHeaders().getRequestHeader(
-                    HttpHeaders.ACCEPT));
+                .getResourceClass().getName(), context.getHttpHeaders()
+                .getRequestHeader(HttpHeaders.ACCEPT));
             throw new WebApplicationException(Response.Status.NOT_ACCEPTABLE);
         }
     }
@@ -417,40 +407,34 @@ public class ResourceRegistry {
     /**
      * Checks if the method record matches the http method of the request
      * 
-     * @param record
-     *            the method record to check
-     * @param context
-     *            the context of the current request
-     * 
+     * @param record the method record to check
+     * @param context the context of the current request
      * @return true if the method should be filtered, false otherwise
      */
     private boolean filterByHttpMethod(MethodRecord record, RuntimeContext context) {
         String httpMethod = context.getRequest().getMethod();
         String recordHttpMethod = record.getMetadata().getHttpMethod();
-        
-        // non existing http method (with a path on the method), 
+
+        // non existing http method (with a path on the method),
         // then it's a sub-resource locator and it's ok
         if (recordHttpMethod == null) {
             return false;
         }
-        
-        // the http method is different than the request http method, 
-        // then the resource method should be filtered 
+
+        // the http method is different than the request http method,
+        // then the resource method should be filtered
         if (!recordHttpMethod.equals(httpMethod)) {
             return true;
         }
-        
+
         return false;
     }
 
     /**
      * Checks if the method record matches the media type of the input entity
      * 
-     * @param record
-     *            the method record to check
-     * @param context
-     *            the context of the current request
-     * 
+     * @param record the method record to check
+     * @param context the context of the current request
      * @return true if the method should be filtered, false otherwise
      */
     private boolean filterByConsumes(MethodRecord record, RuntimeContext context) {
@@ -474,11 +458,8 @@ public class ResourceRegistry {
     /**
      * Checks if the method record matches the Accept header of the request
      * 
-     * @param record
-     *            the method record to check
-     * @param context
-     *            the context of the current request
-     * 
+     * @param record the method record to check
+     * @param context the context of the current request
      * @return true if the method should be filtered, false otherwise
      */
     private boolean filterByProduces(MethodRecord record, RuntimeContext context) {
@@ -487,13 +468,30 @@ public class ResourceRegistry {
         if (producedMimes.size() == 0) {
             return false;
         }
-        List<MediaType> acceptableMediaTypes = context.getHttpHeaders().getAcceptableMediaTypes();
+        List<MediaType> receivedMediaTypes = context.getHttpHeaders().getAcceptableMediaTypes();
         // if no accept media type was specified
-        if (acceptableMediaTypes.size() == 0) {
+        if (receivedMediaTypes.size() == 0) {
             return false;
         }
-        for (MediaType acceptableMediaType : acceptableMediaTypes) {
-            for (MediaType mediaType : producedMimes) {
+        List<MediaType> deniableMediaTypes = new ArrayList<MediaType>();
+        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+
+        for (MediaType received : receivedMediaTypes) {
+            String q = received.getParameters().get("q");
+            if (q != null && Double.valueOf(q).equals(0.0)) {
+                deniableMediaTypes.add(received);
+            } else {
+                acceptableMediaTypes.add(received);
+            }
+        }
+
+        l1: for (MediaType mediaType : producedMimes) {
+            for (MediaType deniable : deniableMediaTypes) {
+                if (MediaTypeUtils.isCompatibleNonCommutative(deniable, mediaType)) {
+                    continue l1;
+                }
+            }
+            for (MediaType acceptableMediaType : acceptableMediaTypes) {
                 if (mediaType.isCompatible(acceptableMediaType)) {
                     return false;
                 }
@@ -503,17 +501,16 @@ public class ResourceRegistry {
     }
 
     /**
-     * Select the method that best matches the details of the request by comparing the media types
-     * of the input entity and those specified in the Accept header
+     * Select the method that best matches the details of the request by
+     * comparing the media types of the input entity and those specified in the
+     * Accept header
      * 
-     * @param methodRecords
-     *            the list of methods to select the best match from
-     * @param context
-     *            the context of the current request
+     * @param methodRecords the list of methods to select the best match from
+     * @param context the context of the current request
      * @return
      */
     private MethodRecord selectBestMatchingMethod(List<? extends MethodRecord> methodRecords,
-            RuntimeContext context) {
+                                                  RuntimeContext context) {
         HttpHeaders httpHeaders = context.getHttpHeaders();
         MediaType inputMediaType = httpHeaders.getMediaType();
         List<MediaType> acceptableMediaTypes = httpHeaders.getAcceptableMediaTypes();
@@ -528,22 +525,22 @@ public class ResourceRegistry {
     }
 
     /**
-     * Compare two methods in terms of "which is a better match to the request". First a match to
-     * the input media type is compared, then a match to the Accept header media types is compared
+     * Compare two methods in terms of "which is a better match to the request".
+     * First a match to the input media type is compared, then a match to the
+     * Accept header media types is compared
      * 
-     * @param record1
-     *            the first method
-     * @param record2
-     *            the second method
-     * @param inputMediaType
-     *            the input entity media type
-     * @param acceptableMediaTypes
-     *            the media types of the Accept header
-     * @return positive integer if record1 is a better match, negative integer if record2 is a
-     *         better match, 0 if they are equal in matching terms
+     * @param record1 the first method
+     * @param record2 the second method
+     * @param inputMediaType the input entity media type
+     * @param acceptableMediaTypes the media types of the Accept header
+     * @return positive integer if record1 is a better match, negative integer
+     *         if record2 is a better match, 0 if they are equal in matching
+     *         terms
      */
-    private int compareMethods(MethodRecord record1, MethodRecord record2,
-            MediaType inputMediaType, List<MediaType> acceptableMediaTypes) {
+    private int compareMethods(MethodRecord record1,
+                               MethodRecord record2,
+                               MediaType inputMediaType,
+                               List<MediaType> acceptableMediaTypes) {
 
         if (record1 == null && record2 == null) {
             return 0;
@@ -571,19 +568,19 @@ public class ResourceRegistry {
 
         // this is just to make the search a bit more deterministic,
         // and it should remain undocumented and application implementors
-        // should not rely on this behavior (i.e. comparing the number of parameters)
+        // should not rely on this behavior (i.e. comparing the number of
+        // parameters)
         return compareMethodsParameters(record1, record2);
     }
 
     /**
      * Compares two methods the in terms of the number of parameters
      * 
-     * @param record1
-     *            the first method
-     * @param record2
-     *            the second method
-     * @return positive integer if record1 has more parameters, negative integer if record2 has more
-     *         parameters, 0 if they are equal in number of parameters
+     * @param record1 the first method
+     * @param record2 the second method
+     * @return positive integer if record1 has more parameters, negative integer
+     *         if record2 has more parameters, 0 if they are equal in number of
+     *         parameters
      */
     private int compareMethodsParameters(MethodRecord record1, MethodRecord record2) {
         List<Injectable> params1 = record1.getMetadata().getFormalParameters();
@@ -594,23 +591,22 @@ public class ResourceRegistry {
     /**
      * Compare two methods in terms of matching to the input media type
      * 
-     * @param record1
-     *            the first method
-     * @param record2
-     *            the second method
-     * @param inputMediaType
-     *            the input entity media type
-     * @return positive integer if record1 is a better match, negative integer if record2 is a
-     *         better match, 0 if they are equal in matching terms
+     * @param record1 the first method
+     * @param record2 the second method
+     * @param inputMediaType the input entity media type
+     * @return positive integer if record1 is a better match, negative integer
+     *         if record2 is a better match, 0 if they are equal in matching
+     *         terms
      */
-    private int compareMethodsConsumes(MethodRecord record1, MethodRecord record2,
-            MediaType inputMediaType) {
+    private int compareMethodsConsumes(MethodRecord record1,
+                                       MethodRecord record2,
+                                       MediaType inputMediaType) {
         // get media type of metadata 1 best matching the input media type
-        MediaType bestMatch1 = selectBestMatchingMediaType(inputMediaType, record1.getMetadata()
-                .getConsumes());
+        MediaType bestMatch1 =
+            selectBestMatchingMediaType(inputMediaType, record1.getMetadata().getConsumes());
         // get media type of metadata 2 best matching the input media type
-        MediaType bestMatch2 = selectBestMatchingMediaType(inputMediaType, record2.getMetadata()
-                .getConsumes());
+        MediaType bestMatch2 =
+            selectBestMatchingMediaType(inputMediaType, record2.getMetadata().getConsumes());
 
         if (bestMatch1 == null && bestMatch2 == null) {
             return 0;
@@ -630,29 +626,33 @@ public class ResourceRegistry {
     /**
      * Compare two methods in terms of matching to the Accept header media types
      * 
-     * @param record1
-     *            the first method
-     * @param record2
-     *            the second method
-     * @param acceptableMediaTypes
-     *            the media types of the Accept header
-     * @return positive integer if record1 is a better match, negative integer if record2 is a
-     *         better match, 0 if they are equal in matching terms
+     * @param record1 the first method
+     * @param record2 the second method
+     * @param acceptableMediaTypes the media types of the Accept header
+     * @return positive integer if record1 is a better match, negative integer
+     *         if record2 is a better match, 0 if they are equal in matching
+     *         terms
      */
-    private int compareMethodsProduces(MethodRecord record1, MethodRecord record2,
-            List<MediaType> acceptableMediaTypes) {
+    private int compareMethodsProduces(MethodRecord record1,
+                                       MethodRecord record2,
+                                       List<MediaType> acceptableMediaTypes) {
 
         MediaType bestMatch1 = null;
         MediaType bestMatch2 = null;
 
-        // the acceptMediaTypes list is already sorted according to preference of media types,
+        // the acceptMediaTypes list is already sorted according to preference
+        // of media types,
         // so we need to stop with the first media type that has a match
         for (MediaType acceptableMediaType : acceptableMediaTypes) {
-            // get media type of metadata 1 best matching the current acceptable media type
-            bestMatch1 = selectBestMatchingMediaType(acceptableMediaType, record1.getMetadata()
+            // get media type of metadata 1 best matching the current acceptable
+            // media type
+            bestMatch1 =
+                selectBestMatchingMediaType(acceptableMediaType, record1.getMetadata()
                     .getProduces());
-            // get media type of metadata 2 best matching the current acceptable media type
-            bestMatch2 = selectBestMatchingMediaType(acceptableMediaType, record2.getMetadata()
+            // get media type of metadata 2 best matching the current acceptable
+            // media type
+            bestMatch2 =
+                selectBestMatchingMediaType(acceptableMediaType, record2.getMetadata()
                     .getProduces());
             // if either of them returned a match, it's enough for a comparison
             if (bestMatch1 != null || bestMatch2 != null) {
@@ -676,12 +676,11 @@ public class ResourceRegistry {
     }
 
     /**
-     * Select the media type from the list of media types that best matches the specified media type
+     * Select the media type from the list of media types that best matches the
+     * specified media type
      * 
-     * @param mediaType
-     *            the media type to match against
-     * @param mediaTypes
-     *            the list of media types to select the best match from
+     * @param mediaType the media type to match against
+     * @param mediaTypes the list of media types to select the best match from
      * @return the best matching media type from the list
      */
     private MediaType selectBestMatchingMediaType(MediaType mediaType, Set<MediaType> mediaTypes) {

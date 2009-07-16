@@ -403,7 +403,9 @@ public class DeploymentConfiguration {
         ResponseHandlersChain handlersChain = new ResponseHandlersChain();
         handlersChain.addHandler(createHandler(PopulateErrorResponseHandler.class));
         handlersChain.addHandler(createHandler(PopulateResponseStatusHandler.class));
-        handlersChain.addHandler(createHandler(PopulateResponseMediaTypeHandler.class));
+        PopulateResponseMediaTypeHandler populateMediaTypeHandler = createHandler(PopulateResponseMediaTypeHandler.class);
+        populateMediaTypeHandler.setErrorFlow(true);
+        handlersChain.addHandler(populateMediaTypeHandler);
         for (ResponseHandler h : errorUserHandlers) {
             h.init(properties);
             handlersChain.addHandler(h);

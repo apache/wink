@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.contexts;
 
@@ -46,17 +45,16 @@ import org.apache.wink.common.internal.utils.UnmodifiableMultivaluedMap;
 import org.apache.wink.server.handlers.MessageContext;
 import org.apache.wink.server.internal.DeploymentConfiguration;
 
-
 public class HttpHeadersImpl implements HttpHeaders {
-    
-    private MessageContext msgContext;
-    private MultivaluedMap<String,String> headers;
-    private List<Locale> acceptableLanguages;
-    private List<MediaType> acceptableMediaTypes;
-    private Map<String,Cookie> cookies;
-    private Locale language;
-    private MediaType mediaType;
-    
+
+    private MessageContext                 msgContext;
+    private MultivaluedMap<String, String> headers;
+    private List<Locale>                   acceptableLanguages;
+    private List<MediaType>                acceptableMediaTypes;
+    private Map<String, Cookie>            cookies;
+    private Locale                         language;
+    private MediaType                      mediaType;
+
     public HttpHeadersImpl(MessageContext msgContext) {
         this.msgContext = msgContext;
         headers = buildRequestHeaders();
@@ -69,7 +67,7 @@ public class HttpHeadersImpl implements HttpHeaders {
 
     public List<Locale> getAcceptableLanguages() {
         if (acceptableLanguages == null) {
-            List<String> requestHeader = getRequestHeader("Accept-Language");
+            List<String> requestHeader = getRequestHeader(HttpHeaders.ACCEPT_LANGUAGE);
             if (requestHeader == null || requestHeader.isEmpty()) {
                 acceptableLanguages = new LinkedList<Locale>();
             } else {
@@ -80,39 +78,48 @@ public class HttpHeadersImpl implements HttpHeaders {
         }
         return acceptableLanguages;
     }
-    
+
     public List<MediaType> getAcceptableMediaTypes() {
         if (acceptableMediaTypes == null) {
-            String alternateParameter = msgContext.getUriInfo().getQueryParameters().getFirst(RestConstants.REST_PARAM_MEDIA_TYPE);
-            String acceptValue = null;
-            if (alternateParameter != null) {
-                // try to map alternate parameter shortcut to a real media type
-                DeploymentConfiguration deploymentConfiguration = msgContext.getAttribute(DeploymentConfiguration.class);
-                Map<String,String> alternateShortcutMap = deploymentConfiguration.getAlternateShortcutMap();
-                if (alternateShortcutMap != null) {
-                    acceptValue = alternateShortcutMap.get(alternateParameter);
-                }
-                if (acceptValue == null) {
-                    acceptValue = alternateParameter;
-                }
-            } else {
-                List<String> requestHeader = getRequestHeader("Accept");
-                if (requestHeader == null || requestHeader.isEmpty()) {
-                    acceptValue = null;
-                } else {
-                    acceptValue = requestHeader.get(0);
-                }
-            }
-            Accept acceptHeader = Accept.valueOf(acceptValue);
+            Accept acceptHeader = getAcceptHeader();
             acceptableMediaTypes = acceptHeader.getSortedMediaTypes();
         }
         return acceptableMediaTypes;
     }
 
-    public Map<String,Cookie> getCookies() {
+    private Accept getAcceptHeader() {
+        String alternateParameter =
+            msgContext.getUriInfo().getQueryParameters()
+                .getFirst(RestConstants.REST_PARAM_MEDIA_TYPE);
+        String acceptValue = null;
+        if (alternateParameter != null) {
+            // try to map alternate parameter shortcut to a real media type
+            DeploymentConfiguration deploymentConfiguration =
+                msgContext.getAttribute(DeploymentConfiguration.class);
+            Map<String, String> alternateShortcutMap =
+                deploymentConfiguration.getAlternateShortcutMap();
+            if (alternateShortcutMap != null) {
+                acceptValue = alternateShortcutMap.get(alternateParameter);
+            }
+            if (acceptValue == null) {
+                acceptValue = alternateParameter;
+            }
+        } else {
+            List<String> requestHeader = getRequestHeader(HttpHeaders.ACCEPT);
+            if (requestHeader == null || requestHeader.isEmpty()) {
+                acceptValue = null;
+            } else {
+                acceptValue = requestHeader.get(0);
+            }
+        }
+        Accept acceptHeader = Accept.valueOf(acceptValue);
+        return acceptHeader;
+    }
+
+    public Map<String, Cookie> getCookies() {
         if (cookies == null) {
-            cookies = new HashMap<String,Cookie>();
-            List<String> cookiesHeaders = headers.get("Cookie");
+            cookies = new HashMap<String, Cookie>();
+            List<String> cookiesHeaders = headers.get(HttpHeaders.COOKIE);
             if (cookiesHeaders != null) {
                 for (String cookieHeader : cookiesHeaders) {
                     Cookie cookie = Cookie.valueOf(cookieHeader);
@@ -125,7 +132,7 @@ public class HttpHeadersImpl implements HttpHeaders {
 
     public Locale getLanguage() {
         if (language == null) {
-            String languageStr = headers.getFirst("Content-Language");
+            String languageStr = headers.getFirst(HttpHeaders.CONTENT_LANGUAGE);
             if (languageStr == null) {
                 return null;
             }
@@ -137,7 +144,7 @@ public class HttpHeadersImpl implements HttpHeaders {
 
     public MediaType getMediaType() {
         if (mediaType == null) {
-            String contentType = headers.getFirst("Content-Type");
+            String contentType = headers.getFirst(HttpHeaders.CONTENT_TYPE);
             if (contentType == null) {
                 return null;
             }
@@ -153,29 +160,30 @@ public class HttpHeadersImpl implements HttpHeaders {
         }
         return Collections.unmodifiableList(list);
     }
-    
-    public MultivaluedMap<String,String> getRequestHeaders() {
+
+    public MultivaluedMap<String, String> getRequestHeaders() {
         return headers;
     }
-    
-    private MultivaluedMap<String,String> buildRequestHeaders() {
-        MultivaluedMap<String,String> map = new CaseInsensitiveMultivaluedMap<String>();
+
+    private MultivaluedMap<String, String> buildRequestHeaders() {
+        MultivaluedMap<String, String> map = new CaseInsensitiveMultivaluedMap<String>();
         Enumeration<?> names = msgContext.getAttribute(HttpServletRequest.class).getHeaderNames();
-        
+
         if (names == null) {
             return map;
         }
-        
+
         while (names.hasMoreElements()) {
             String name = (String)names.nextElement();
-            Enumeration<?> headerValues = msgContext.getAttribute(HttpServletRequest.class).getHeaders(name);
-            List<String> values = new ArrayList<String>(); 
+            Enumeration<?> headerValues =
+                msgContext.getAttribute(HttpServletRequest.class).getHeaders(name);
+            List<String> values = new ArrayList<String>();
             while (headerValues.hasMoreElements()) {
                 values.add((String)headerValues.nextElement());
             }
             map.put(name, values);
         }
-        return new UnmodifiableMultivaluedMap<String,String>(map);
+        return new UnmodifiableMultivaluedMap<String, String>(map);
     }
-    
+
 }

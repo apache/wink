@@ -34,10 +34,11 @@ import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.server.handlers.AbstractHandler;
 import org.apache.wink.server.handlers.MessageContext;
 
-
 public class PopulateResponseMediaTypeHandler extends AbstractHandler {
 
     private static final MediaType APPLICATION_TYPE = new MediaType("application", "*");
+
+    private boolean errorFlow = false;
     
     public void handleResponse(MessageContext context) throws Throwable {
 
@@ -61,7 +62,7 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
                 }
             }
         }
-        
+
         if (responseMediaType == null) {
             Set<MediaType> producedMime = null;
             SearchResult searchResult = context.getAttribute(SearchResult.class);
@@ -70,13 +71,16 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
                 producedMime = methodMetadata.getProduces();
             }
             if (producedMime == null || producedMime.isEmpty()) {
-                producedMime = context.getAttribute(ProvidersRegistry.class).getMessageBodyWriterMediaTypes(result.getClass());
+                producedMime =
+                    context.getAttribute(ProvidersRegistry.class)
+                        .getMessageBodyWriterMediaTypes(result.getClass());
             }
             if (producedMime.isEmpty()) {
                 producedMime.add(MediaType.WILDCARD_TYPE);
             }
-            
-            List<MediaType> acceptableMediaTypes = context.getHttpHeaders().getAcceptableMediaTypes();
+
+            List<MediaType> acceptableMediaTypes =
+                context.getHttpHeaders().getAcceptableMediaTypes();
 
             // collect all candidates
             List<CandidateMediaType> candidates = new LinkedList<CandidateMediaType>();
@@ -90,37 +94,46 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
                             candidateMediaType = acceptableMediaType;
                         }
                         String q = acceptableMediaType.getParameters().get("q");
-                        candidates.add(new CandidateMediaType(candidateMediaType, q));
+                        CandidateMediaType candidate =
+                            new CandidateMediaType(candidateMediaType, q);
+                        if (Double.compare(candidate.q, 0.0) != 0) {
+                            candidates.add(candidate);
+                        }
                     }
                 }
             }
-            
+
             // there are no candidates
             if (candidates.isEmpty()) {
+                if (isErrorFlow()) {
+                    return;
+                }
                 throw new WebApplicationException(Response.Status.NOT_ACCEPTABLE);
             }
-            
+
             // select the best candidate.
-            // we don't need to sort the whole thing, just to select the best one
+            // we don't need to sort the whole thing, just to select the best
+            // one
             CandidateMediaType max = null;
             boolean useOctetStream = false;
             for (CandidateMediaType candidate : candidates) {
                 if (max == null) {
                     max = candidate;
                 } else {
-                    // select the more specific media type before a media type that has a wildcard in it
+                    // select the more specific media type before a media type
+                    // that has a wildcard in it
                     // even if its q value is greater
-                    int comparison = MediaTypeUtils.compareTo(candidate.getMediaType(), max.getMediaType());
+                    int comparison =
+                        MediaTypeUtils.compareTo(candidate.getMediaType(), max.getMediaType());
                     if (comparison > 0) {
                         max = candidate;
                     } else if (comparison == 0 && candidate.getQ() > max.getQ()) {
                         max = candidate;
                     }
                 }
-                
-                if (!useOctetStream
-                        && (candidate.getMediaType().equals(MediaType.WILDCARD_TYPE) || candidate.getMediaType()
-                                .equals(APPLICATION_TYPE))) {
+
+                if (!useOctetStream && (candidate.getMediaType().equals(MediaType.WILDCARD_TYPE) || candidate
+                    .getMediaType().equals(APPLICATION_TYPE))) {
                     useOctetStream = true;
                 }
             }
@@ -130,16 +143,34 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
             } else if (useOctetStream) {
                 responseMediaType = MediaType.APPLICATION_OCTET_STREAM_TYPE;
             } else {
+                if (isErrorFlow()) {
+                    return;
+                }
                 throw new WebApplicationException(Response.Status.NOT_ACCEPTABLE);
             }
 
         }
         context.setResponseMediaType(responseMediaType);
     }
-    
+
+
+
+    public void setErrorFlow(boolean errorFlow) {
+        this.errorFlow = errorFlow;
+    }
+
+
+
+    public boolean isErrorFlow() {
+        return errorFlow;
+    }
+
+
+
     private static class CandidateMediaType {
         private MediaType mediaType;
-        private double q;
+        private double    q;
+
         public CandidateMediaType(MediaType mediaType, String q) {
             this.mediaType = mediaType;
             if (q != null) {
@@ -148,9 +179,11 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
                 this.q = 1.0d;
             }
         }
+
         public MediaType getMediaType() {
             return mediaType;
         }
+
         public double getQ() {
             return q;
         }
