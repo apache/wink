@@ -145,8 +145,8 @@ public class SystemLinksBuilderImpl extends AbstractLinksBuilderImpl<SystemLinks
         if (systemLinksToGenerate.contains(LinkType.EDIT)
             && getLink(set, AtomConstants.ATOM_REL_EDIT) == null) {
             for (MethodMetadata methodRecord : methods) {
-                Set<String> httpMethods = methodRecord.getHttpMethod();
-                if (httpMethods.contains(HttpMethod.PUT) || httpMethods.contains(HttpMethod.DELETE)) {
+                String httpMethod = methodRecord.getHttpMethod();
+                if (httpMethod.equalsIgnoreCase(HttpMethod.PUT) || httpMethod.equalsIgnoreCase(HttpMethod.DELETE)) {
                     set.add(createLink(AtomConstants.ATOM_REL_EDIT, null, selfUri));
                     break;
                 }
@@ -176,7 +176,7 @@ public class SystemLinksBuilderImpl extends AbstractLinksBuilderImpl<SystemLinks
         Set<MediaType> getResponses = new LinkedHashSet<MediaType>();
         if (methods != null) {
             for (MethodMetadata methodRecord : methods) {
-                if (methodRecord.getHttpMethod().contains(HttpMethod.GET)) {
+                if (methodRecord.getHttpMethod().equals(HttpMethod.GET)) {
                     getResponses.addAll(methodRecord.getProduces());
                 }
             }

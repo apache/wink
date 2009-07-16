@@ -432,7 +432,16 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
         public String get() {
             return "ResourceMultipleHttpMethods.get";
         }
-    }    
+    }
+    
+    @Path("/noHttpMethod")
+    public static class ResourceNoHttpMethod {
+        @Produces("text/plain")
+        public String get() {
+            fail("method ResourceNoHttpMethod.get shouldn't have been invoked");
+            return "ResourceNoHttpMethod.get";
+        }
+    }
 
     
     // /// -- Tests --
@@ -734,6 +743,10 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
         request = MockRequestConstructor.constructMockRequest("GET", "/multipleHttpMethods", "text/plain");
         response = invoke(request);
         assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+
+        request = MockRequestConstructor.constructMockRequest("GET", "/noHttpMethod", "text/plain");
+        response = invoke(request);
+        assertEquals(HttpStatus.METHOD_NOT_ALLOWED.getCode(), response.getStatus());
     }
     
     // // -- Helpers --

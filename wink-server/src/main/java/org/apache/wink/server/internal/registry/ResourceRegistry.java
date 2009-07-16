@@ -213,7 +213,7 @@ public class ResourceRegistry {
         }
 
         for (MethodMetadata method : resourceMethods) {
-            set.addAll(method.getHttpMethod());
+            set.add(method.getHttpMethod());
         }
 
         return set;
@@ -426,14 +426,20 @@ public class ResourceRegistry {
      */
     private boolean filterByHttpMethod(MethodRecord record, RuntimeContext context) {
         String httpMethod = context.getRequest().getMethod();
-        Set<String> recordHttpMethod = record.getMetadata().getHttpMethod();
-        // non existing http method, it's ok
-        if (recordHttpMethod.size() == 0) {
+        String recordHttpMethod = record.getMetadata().getHttpMethod();
+        
+        // non existing http method (with a path on the method), 
+        // then it's a sub-resource locator and it's ok
+        if (recordHttpMethod == null) {
             return false;
         }
-        if (!recordHttpMethod.contains(httpMethod)) {
+        
+        // the http method is different than the request http method, 
+        // then the resource method should be filtered 
+        if (!recordHttpMethod.equals(httpMethod)) {
             return true;
         }
+        
         return false;
     }
 

@@ -22,7 +22,6 @@ package org.apache.wink.common.internal.registry.metadata;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -34,13 +33,14 @@ public class MethodMetadata extends AbstractMetadata {
 
     private ClassMetadata    parent;
     private Method           reflectionMethod;
-    private Set<String>      httpMethod;
+    private String           httpMethod;
     private List<Injectable> formalParameters;
 
     public MethodMetadata(ClassMetadata parent) {
         this.parent = parent;
-        this.httpMethod = new LinkedHashSet<String>(); // linked hash sets to make the behaviour deterministic
         this.formalParameters = new ArrayList<Injectable>();
+        this.httpMethod = null;
+        this.reflectionMethod = null;
     }
 
     public Method getReflectionMethod() {
@@ -51,8 +51,12 @@ public class MethodMetadata extends AbstractMetadata {
         this.reflectionMethod = reflectionMethod;
     }
 
-    public Set<String> getHttpMethod() {
+    public String getHttpMethod() {
         return httpMethod;
+    }
+    
+    public void setHttpMethod(String httpMethod) {
+        this.httpMethod = httpMethod;
     }
 
     public List<Injectable> getFormalParameters() {

@@ -263,8 +263,8 @@ public class HtmlServiceDocumentResource extends RootResource {
     }
 
     private boolean providesOpenSearch(MethodMetadata method) {
-        if (method.getHttpMethod().contains(HttpMethod.GET)
-                && method.getProduces().contains(MediaTypeUtils.OPENSEARCH_TYPE)) {
+        if (method.getHttpMethod().equals(HttpMethod.GET)
+                && method.getProduces().equals(MediaTypeUtils.OPENSEARCH_TYPE)) {
             return true;
         }
         return false;

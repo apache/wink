@@ -27,7 +27,6 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
-import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -144,10 +143,10 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             MethodMetadata methodMetadata = createMethodMetadata(method);
             if (methodMetadata != null) {
                 String path = methodMetadata.getPath();
-                // sub-resource
+                String httpMethod = methodMetadata.getHttpMethod();
                 if (path != null) {
-                    Set<String> httpMethods = methodMetadata.getHttpMethod();
-                    if (!httpMethods.isEmpty()) {
+                    // sub-resource
+                    if (httpMethod != null) {
                         // sub-resource method
                         getMetadata().getSubResourceMethods().add(methodMetadata);
                     } else {
@@ -193,16 +192,16 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
         
         boolean hasAnnotation = false;
         
+        HttpMethod httpMethod = getHttpMethod(method);
+        if (httpMethod != null) {
+            hasAnnotation = true;
+            metadata.setHttpMethod(httpMethod.value());
+        }
+
         Path path = getPath(method);
         if (path != null) {
             hasAnnotation = true;
             metadata.addPath(path.value());
-        }
-
-        HttpMethod httpMethod = getHttpMethod(method);
-        if (httpMethod != null) {
-            hasAnnotation = true;
-            metadata.getHttpMethod().add(httpMethod.value());
         }
 
         String[] consumes = getConsumes(method);
@@ -255,9 +254,18 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                 }
             }
 
+            // annotations are not inherited. ignore this method.
             return null;
         }
 
+        // check if it's a valid resource method/sub-resource method/sub-resource locator,
+        // since there is at least one JAX-RS annotation on the method
+        if (metadata.getHttpMethod() == null && metadata.getPath() == null) {
+            logger.warn("The method {} in class {} is not annotated with an http method designator nor the Path annotation. " +
+                    "This method will be ignored.", method.getName(), method.getDeclaringClass().getCanonicalName());
+            return null;
+        }
+        
         parseMethodParameters(method, metadata);
 
         return metadata;

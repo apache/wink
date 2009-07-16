@@ -88,7 +88,7 @@ public class EncodedTest extends MockServletInvocationTest {
     @Encoded
     @Path("/encoded")
     public static class EncodedResource {
-
+        @GET
         @Produces(MediaType.TEXT_HTML)
         public String getParam(@QueryParam("kulu") String kulu) {
             return kulu;

@@ -238,12 +238,12 @@ public class ServiceDocumentCollectionData {
     private static Set<MediaType> getCollectionConsumes(ClassMetadata metadata) {
         Set<MediaType> consumes = new HashSet<MediaType>();
         for (MethodMetadata method : metadata.getResourceMethods()) {
-            if (method.getHttpMethod().contains(HttpMethod.POST)) {
+            if (method.getHttpMethod().equals(HttpMethod.POST)) {
                 consumes.addAll(method.getConsumes());
             }
         }
         for (MethodMetadata method : metadata.getSubResourceMethods()) {
-            if (method.getHttpMethod().contains(HttpMethod.POST)) {
+            if (method.getHttpMethod().equals(HttpMethod.POST)) {
                 consumes.addAll(method.getConsumes());
             }
         }
