@@ -39,6 +39,8 @@
   </modules>
 
     <properties>
+        <wink.server.hostname>localhost</wink.server.hostname>
+        <wink.server.port>8080</wink.server.port>
     </properties>
 
     <dependencies>
@@ -162,11 +164,11 @@
                                     </property>
                                     <property>
                                         <name>wink-test-hostname</name>
-                                        <value>localhost</value>
+                                        <value>${wink.server.hostname}</value>
                                     </property>
                                     <property>
                                         <name>wink-test-port</name>
-                                        <value>8080</value>
+                                        <value>${wink.server.port}</value>
                                     </property>
                                     <property>
                                         <name>wink-test-work-dir</name>
