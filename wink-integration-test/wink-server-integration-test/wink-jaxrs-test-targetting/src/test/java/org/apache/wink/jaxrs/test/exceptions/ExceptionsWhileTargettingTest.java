@@ -27,6 +27,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.apache.wink.test.integration.ServerContainerAssertions;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
 public class ExceptionsWhileTargettingTest extends TestCase {
@@ -48,7 +49,8 @@ public class ExceptionsWhileTargettingTest extends TestCase {
         try {
             client.executeMethod(getMethod);
             assertEquals(404, getMethod.getStatusCode());
-            assertEquals("", getMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(404, getMethod
+                .getResponseBodyAsString());
         } finally {
             getMethod.releaseConnection();
         }
@@ -67,7 +69,9 @@ public class ExceptionsWhileTargettingTest extends TestCase {
         try {
             client.executeMethod(getMethod);
             assertEquals(405, getMethod.getStatusCode());
-            assertEquals("", getMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(405, getMethod
+                .getResponseBodyAsString());
+
         } finally {
             getMethod.releaseConnection();
         }
@@ -86,7 +90,8 @@ public class ExceptionsWhileTargettingTest extends TestCase {
         try {
             client.executeMethod(getMethod);
             assertEquals(404, getMethod.getStatusCode());
-            assertEquals("", getMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(404, getMethod
+                .getResponseBodyAsString());
 
             getMethod.setURI(new URI(getBaseURI() + "/targeting/resourcewithmethod", true));
             client.executeMethod(getMethod);
@@ -97,7 +102,8 @@ public class ExceptionsWhileTargettingTest extends TestCase {
                                      true));
             client.executeMethod(getMethod);
             assertEquals(404, getMethod.getStatusCode());
-            assertEquals("", getMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(404, getMethod
+                .getResponseBodyAsString());
         } finally {
             getMethod.releaseConnection();
         }
@@ -116,7 +122,9 @@ public class ExceptionsWhileTargettingTest extends TestCase {
         try {
             client.executeMethod(getMethod);
             assertEquals(404, getMethod.getStatusCode());
-            assertEquals("", getMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(404, getMethod
+                .getResponseBodyAsString());
+
         } finally {
             getMethod.releaseConnection();
         }
@@ -125,7 +133,8 @@ public class ExceptionsWhileTargettingTest extends TestCase {
         try {
             client.executeMethod(postMethod);
             assertEquals(405, postMethod.getStatusCode());
-            assertEquals("", postMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(405, postMethod
+                .getResponseBodyAsString());
         } finally {
             getMethod.releaseConnection();
         }
@@ -157,7 +166,9 @@ public class ExceptionsWhileTargettingTest extends TestCase {
                                                                "customplain/something", "UTF-8"));
             client.executeMethod(putMethod);
             assertEquals(415, putMethod.getStatusCode());
-            assertEquals("", putMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(415, putMethod
+                .getResponseBodyAsString());
+
         } finally {
             putMethod.releaseConnection();
         }
@@ -194,7 +205,8 @@ public class ExceptionsWhileTargettingTest extends TestCase {
             client.executeMethod(putMethod);
 
             assertEquals(406, putMethod.getStatusCode());
-            assertEquals("", putMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(406, putMethod
+                .getResponseBodyAsString());
         } finally {
             putMethod.releaseConnection();
         }

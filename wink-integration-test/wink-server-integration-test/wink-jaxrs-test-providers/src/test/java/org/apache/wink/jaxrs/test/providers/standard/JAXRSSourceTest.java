@@ -185,7 +185,7 @@ public class JAXRSSourceTest extends TestCase {
                 + "/providers/standard/source");
         putMethod
                 .setRequestEntity(new StringRequestEntity(
-                        "<message><user>user1</user><password>user1pwd</password></message>",
+                        "<?xml version=\"1.0\" encoding=\"UTF-8\"?><message><user>user1</user><password>user1pwd</password></message>",
                         "application/xml", "UTF-8"));
         try {
             client.executeMethod(putMethod);
@@ -198,9 +198,10 @@ public class JAXRSSourceTest extends TestCase {
                 + "/providers/standard/source");
         try {
             client.executeMethod(getMethod);
-            assertEquals(200, getMethod.getStatusCode());
 
             String str = getMethod.getResponseBodyAsString();
+            assertEquals(str, 200, getMethod.getStatusCode());
+
             assertEquals(
                     "<?xml version=\"1.0\" encoding=\"UTF-8\"?><message><user>user1</user><password>user1pwd</password></message>",
                     str);

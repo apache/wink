@@ -31,6 +31,7 @@ import org.apache.commons.httpclient.methods.DeleteMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
+import org.apache.wink.test.integration.ServerContainerAssertions;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
 /**
@@ -243,7 +244,8 @@ public class QueryParamTest extends TestCase {
         try {
             httpclient.executeMethod(httpMethod);
             assertEquals(404, httpMethod.getStatusCode());
-            assertEquals("", httpMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(404, httpMethod
+                .getResponseBodyAsString());
         } finally {
             httpMethod.releaseConnection();
         }
@@ -254,7 +256,8 @@ public class QueryParamTest extends TestCase {
         try {
             httpclient.executeMethod(httpMethod);
             assertEquals(404, httpMethod.getStatusCode());
-            assertEquals("", httpMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(404, httpMethod
+                .getResponseBodyAsString());
         } finally {
             httpMethod.releaseConnection();
         }
@@ -279,7 +282,8 @@ public class QueryParamTest extends TestCase {
         try {
             httpclient.executeMethod(httpMethod);
             assertEquals(404, httpMethod.getStatusCode());
-            assertEquals("", httpMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(404, httpMethod
+                .getResponseBodyAsString());
         } finally {
             httpMethod.releaseConnection();
         }
@@ -290,7 +294,8 @@ public class QueryParamTest extends TestCase {
         try {
             httpclient.executeMethod(httpMethod);
             assertEquals(404, httpMethod.getStatusCode());
-            assertEquals("", httpMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(404, httpMethod
+                .getResponseBodyAsString());
         } finally {
             httpMethod.releaseConnection();
         }
@@ -315,7 +320,8 @@ public class QueryParamTest extends TestCase {
         try {
             httpclient.executeMethod(httpMethod);
             assertEquals(404, httpMethod.getStatusCode());
-            assertEquals("", httpMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(404, httpMethod
+                .getResponseBodyAsString());
         } finally {
             httpMethod.releaseConnection();
         }
@@ -326,7 +332,8 @@ public class QueryParamTest extends TestCase {
         try {
             httpclient.executeMethod(httpMethod);
             assertEquals(404, httpMethod.getStatusCode());
-            assertEquals("", httpMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(404, httpMethod
+                .getResponseBodyAsString());
         } finally {
             httpMethod.releaseConnection();
         }
@@ -351,7 +358,8 @@ public class QueryParamTest extends TestCase {
         try {
             httpclient.executeMethod(httpMethod);
             assertEquals(404, httpMethod.getStatusCode());
-            assertEquals("", httpMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(404, httpMethod
+                .getResponseBodyAsString());
         } finally {
             httpMethod.releaseConnection();
         }
@@ -362,7 +370,8 @@ public class QueryParamTest extends TestCase {
         try {
             httpclient.executeMethod(httpMethod);
             assertEquals(404, httpMethod.getStatusCode());
-            assertEquals("", httpMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(404, httpMethod
+                .getResponseBodyAsString());
         } finally {
             httpMethod.releaseConnection();
         }
@@ -373,7 +382,8 @@ public class QueryParamTest extends TestCase {
         try {
             httpclient.executeMethod(httpMethod);
             assertEquals(404, httpMethod.getStatusCode());
-            assertEquals("", httpMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(404, httpMethod
+                .getResponseBodyAsString());
         } finally {
             httpMethod.releaseConnection();
         }

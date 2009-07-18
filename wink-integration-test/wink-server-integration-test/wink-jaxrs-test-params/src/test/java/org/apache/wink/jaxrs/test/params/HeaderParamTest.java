@@ -32,6 +32,7 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.wink.test.integration.ServerContainerAssertions;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
 /**
@@ -48,8 +49,8 @@ public class HeaderParamTest extends TestCase {
     }
 
     /**
-     * Tests that a custom header is sent and received properly. Uses constructor, property, field,
-     * and parameter parameters.
+     * Tests that a custom header is sent and received properly. Uses
+     * constructor, property, field, and parameter parameters.
      */
     public void testCustomHeaderParam() {
         HttpClient httpclient = new HttpClient();
@@ -174,7 +175,7 @@ public class HeaderParamTest extends TestCase {
             int result = httpclient.executeMethod(getMethod);
             String responseBody = getMethod.getResponseBodyAsString();
             assertEquals(400, result);
-            assertEquals("", responseBody);
+            ServerContainerAssertions.assertExceptionBodyFromServer(400, responseBody);
         } finally {
             getMethod.releaseConnection();
         }
@@ -184,9 +185,10 @@ public class HeaderParamTest extends TestCase {
      * Tests that a custom header with a custom constructor can be used.
      * <ul>
      * <li>If the header is not set, then the header parameter is set to null.</li>
-     * <li>If the header constructor throws an exception, then 400 Bad Request status is returned.</li>
-     * <li>If a <code>WebApplicationException</code> is thrown during parameter construction, then
-     * use that.</li>
+     * <li>If the header constructor throws an exception, then 400 Bad Request
+     * status is returned.</li>
+     * <li>If a <code>WebApplicationException</code> is thrown during parameter
+     * construction, then use that.</li>
      * </ul>
      */
     public void testHeaderParamStringConstructorException() throws IOException, HttpException {
@@ -195,12 +197,14 @@ public class HeaderParamTest extends TestCase {
     }
 
     /**
-     * Tests that a custom header with a custom static valueOf method can be used.
+     * Tests that a custom header with a custom static valueOf method can be
+     * used.
      * <ul>
      * <li>If the header is not set, then the header parameter is set to null.</li>
-     * <li>If the header valueOf throws an exception, then 400 Bad Request status is returned.</li>
-     * <li>If a <code>WebApplicationException</code> is thrown during parameter valueOf
-     * construction, then use that.</li>
+     * <li>If the header valueOf throws an exception, then 400 Bad Request
+     * status is returned.</li>
+     * <li>If a <code>WebApplicationException</code> is thrown during parameter
+     * valueOf construction, then use that.</li>
      * </ul>
      */
     public void testHeaderParamValueOfException() throws IOException, HttpException {
@@ -208,13 +212,14 @@ public class HeaderParamTest extends TestCase {
     }
 
     /**
-     * Tests that a custom header is set correctly in a List of a type with a custom static valueOf
-     * method.
+     * Tests that a custom header is set correctly in a List of a type with a
+     * custom static valueOf method.
      * <ul>
      * <li>If the header is not set, then the header parameter is set to null.</li>
-     * <li>If the header valueOf throws an exception, then 400 Bad Request status is returned.</li>
-     * <li>If a <code>WebApplicationException</code> is thrown during parameter valueOf
-     * construction, then use that.</li>
+     * <li>If the header valueOf throws an exception, then 400 Bad Request
+     * status is returned.</li>
+     * <li>If a <code>WebApplicationException</code> is thrown during parameter
+     * valueOf construction, then use that.</li>
      * </ul>
      */
     public void testHeaderParamListValueOfException() throws IOException {
@@ -223,13 +228,14 @@ public class HeaderParamTest extends TestCase {
     }
 
     /**
-     * Tests that a custom header is set correctly in a Set of a type with a custom static valueOf
-     * method.
+     * Tests that a custom header is set correctly in a Set of a type with a
+     * custom static valueOf method.
      * <ul>
      * <li>If the header is not set, then the header parameter is set to null.</li>
-     * <li>If the header valueOf throws an exception, then 400 Bad Request status is returned.</li>
-     * <li>If a <code>WebApplicationException</code> is thrown during parameter valueOf
-     * construction, then use that.</li>
+     * <li>If the header valueOf throws an exception, then 400 Bad Request
+     * status is returned.</li>
+     * <li>If a <code>WebApplicationException</code> is thrown during parameter
+     * valueOf construction, then use that.</li>
      * </ul>
      */
     public void testHeaderParamSetValueOfException() throws IOException {
@@ -238,13 +244,14 @@ public class HeaderParamTest extends TestCase {
     }
 
     /**
-     * Tests that a custom header is set correctly in a Set of a type with a custom static valueOf
-     * method.
+     * Tests that a custom header is set correctly in a Set of a type with a
+     * custom static valueOf method.
      * <ul>
      * <li>If the header is not set, then the header parameter is set to null.</li>
-     * <li>If the header valueOf throws an exception, then 400 Bad Request status is returned.</li>
-     * <li>If a <code>WebApplicationException</code> is thrown during parameter valueOf
-     * construction, then use that.</li>
+     * <li>If the header valueOf throws an exception, then 400 Bad Request
+     * status is returned.</li>
+     * <li>If a <code>WebApplicationException</code> is thrown during parameter
+     * valueOf construction, then use that.</li>
      * </ul>
      */
     public void testHeaderParamSortedSetValueOfException() throws IOException {
@@ -253,12 +260,14 @@ public class HeaderParamTest extends TestCase {
     }
 
     /**
-     * Tests that a custom header is set correctly in a field with a String constructor type.
+     * Tests that a custom header is set correctly in a field with a String
+     * constructor type.
      * <ul>
      * <li>If the header is not set, then the header parameter is set to null.</li>
-     * <li>If the header valueOf throws an exception, then 400 Bad Request status is returned.</li>
-     * <li>If a <code>WebApplicationException</code> is thrown during parameter valueOf
-     * construction, then use that.</li>
+     * <li>If the header valueOf throws an exception, then 400 Bad Request
+     * status is returned.</li>
+     * <li>If a <code>WebApplicationException</code> is thrown during parameter
+     * valueOf construction, then use that.</li>
      * </ul>
      */
     public void testHeaderFieldStringConstructorException() throws IOException {
@@ -267,12 +276,14 @@ public class HeaderParamTest extends TestCase {
     }
 
     /**
-     * Tests that a custom header is set correctly in a field with a static valueOf method.
+     * Tests that a custom header is set correctly in a field with a static
+     * valueOf method.
      * <ul>
      * <li>If the header is not set, then the header parameter is set to null.</li>
-     * <li>If the header valueOf throws an exception, then 400 Bad Request status is returned.</li>
-     * <li>If a <code>WebApplicationException</code> is thrown during parameter valueOf
-     * construction, then use that.</li>
+     * <li>If the header valueOf throws an exception, then 400 Bad Request
+     * status is returned.</li>
+     * <li>If a <code>WebApplicationException</code> is thrown during parameter
+     * valueOf construction, then use that.</li>
      * </ul>
      */
     public void testHeaderFieldValueOfException() throws IOException {
@@ -281,12 +292,14 @@ public class HeaderParamTest extends TestCase {
     }
 
     /**
-     * Tests that a custom header is set correctly in a field with a string constructor.
+     * Tests that a custom header is set correctly in a field with a string
+     * constructor.
      * <ul>
      * <li>If the header is not set, then the header parameter is set to null.</li>
-     * <li>If the header valueOf throws an exception, then 400 Bad Request status is returned.</li>
-     * <li>If a <code>WebApplicationException</code> is thrown during parameter valueOf
-     * construction, then use that.</li>
+     * <li>If the header valueOf throws an exception, then 400 Bad Request
+     * status is returned.</li>
+     * <li>If a <code>WebApplicationException</code> is thrown during parameter
+     * valueOf construction, then use that.</li>
      * </ul>
      */
     public void testHeaderPropertyStringConstructorException() throws IOException {
@@ -295,13 +308,14 @@ public class HeaderParamTest extends TestCase {
     }
 
     /**
-     * Tests that a custom header is set correctly in a field with a type with a static valueOf
-     * method.
+     * Tests that a custom header is set correctly in a field with a type with a
+     * static valueOf method.
      * <ul>
      * <li>If the header is not set, then the header parameter is set to null.</li>
-     * <li>If the header valueOf throws an exception, then 400 Bad Request status is returned.</li>
-     * <li>If a <code>WebApplicationException</code> is thrown during parameter valueOf
-     * construction, then use that.</li>
+     * <li>If the header valueOf throws an exception, then 400 Bad Request
+     * status is returned.</li>
+     * <li>If a <code>WebApplicationException</code> is thrown during parameter
+     * valueOf construction, then use that.</li>
      * </ul>
      */
     public void testHeaderPropertyValueOfException() throws IOException {
@@ -364,7 +378,8 @@ public class HeaderParamTest extends TestCase {
         try {
             int result = httpclient.executeMethod(getMethod);
             assertEquals(400, result);
-            assertEquals("", getMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(400, getMethod
+                .getResponseBodyAsString());
         } finally {
             getMethod.releaseConnection();
         }
@@ -375,7 +390,8 @@ public class HeaderParamTest extends TestCase {
         try {
             int result = httpclient.executeMethod(getMethod);
             assertEquals(400, result);
-            assertEquals("", getMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(400, getMethod
+                .getResponseBodyAsString());
         } finally {
             getMethod.releaseConnection();
         }
@@ -437,7 +453,8 @@ public class HeaderParamTest extends TestCase {
         try {
             int result = httpclient.executeMethod(getMethod);
             assertEquals(400, result);
-            assertEquals("", getMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(400, getMethod
+                .getResponseBodyAsString());
         } finally {
             getMethod.releaseConnection();
         }
@@ -448,7 +465,8 @@ public class HeaderParamTest extends TestCase {
         try {
             int result = httpclient.executeMethod(getMethod);
             assertEquals(400, result);
-            assertEquals("", getMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(400, getMethod
+                .getResponseBodyAsString());
         } finally {
             getMethod.releaseConnection();
         }

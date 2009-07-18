@@ -137,6 +137,14 @@ public class SequenceTest extends TestCase {
             deleteMethod.releaseConnection();
         }
 
+        deleteMethod = new DeleteMethod(getBaseURI() + "/singletonsequence/");
+        try {
+            client.executeMethod(deleteMethod);
+            assertEquals(204, deleteMethod.getStatusCode());
+        } finally {
+            deleteMethod.releaseConnection();
+        }
+
         for (int c = 0; c < 10; ++c) {
             GetMethod getMethod = new GetMethod(getBaseURI() + "/singletonsequence");
             try {

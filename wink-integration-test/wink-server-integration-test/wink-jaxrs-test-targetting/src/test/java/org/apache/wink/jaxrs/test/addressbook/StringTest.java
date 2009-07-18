@@ -29,6 +29,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.wink.test.integration.ServerContainerAssertions;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
 /**
@@ -192,7 +193,8 @@ public class StringTest extends TestCase {
             client.executeMethod(getMethod);
             assertEquals(404, getMethod.getStatusCode());
             responseBody = getMethod.getResponseBodyAsString();
-            assertEquals("", responseBody);
+            ServerContainerAssertions.assertExceptionBodyFromServer(404, getMethod
+                .getResponseBodyAsString());
 
         } catch (Exception e) {
             e.printStackTrace();

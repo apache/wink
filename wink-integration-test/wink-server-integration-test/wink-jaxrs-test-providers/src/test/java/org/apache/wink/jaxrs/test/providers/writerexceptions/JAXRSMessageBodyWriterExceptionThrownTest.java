@@ -31,6 +31,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.wink.test.integration.ServerContainerAssertions;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
 public class JAXRSMessageBodyWriterExceptionThrownTest extends TestCase {
@@ -418,7 +419,8 @@ public class JAXRSMessageBodyWriterExceptionThrownTest extends TestCase {
         try {
             client.executeMethod(getMethod);
             assertEquals(500, getMethod.getStatusCode());
-            assertEquals("", getMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(500, getMethod
+                .getResponseBodyAsString());
         } finally {
             getMethod.releaseConnection();
         }

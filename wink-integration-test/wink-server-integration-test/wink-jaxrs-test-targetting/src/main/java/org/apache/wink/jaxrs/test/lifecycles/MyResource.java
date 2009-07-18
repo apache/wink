@@ -21,6 +21,7 @@ package org.apache.wink.jaxrs.test.lifecycles;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -58,6 +59,15 @@ public class MyResource {
             + invokedMethod.get()
             + ":"
             + invokedCounterMethod.get();
+    }
+
+    @DELETE
+    public void resetMethodCounters() {
+        invokedMethod.set(0);
+        invokedCounterMethod.set(0);
+        constructorCounter.set(0);
+        MyMessageBodyReaderAndWriter.readFromCounter.set(0);
+        MyMessageBodyReaderAndWriter.writeToCounter.set(0);
     }
 
 }

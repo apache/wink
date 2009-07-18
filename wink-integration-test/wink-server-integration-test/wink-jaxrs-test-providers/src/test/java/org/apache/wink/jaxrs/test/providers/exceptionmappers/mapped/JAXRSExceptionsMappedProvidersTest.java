@@ -28,6 +28,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.apache.wink.test.integration.ServerContainerAssertions;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
 public class JAXRSExceptionsMappedProvidersTest extends TestCase {
@@ -76,7 +77,8 @@ public class JAXRSExceptionsMappedProvidersTest extends TestCase {
         client.executeMethod(postMethod);
         assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), postMethod.getStatusCode());
         assertEquals(getBaseURI(), postMethod.getResponseHeader("ExceptionPage").getValue());
-        assertEquals("", postMethod.getResponseBodyAsString());
+        ServerContainerAssertions.assertExceptionBodyFromServer(500, postMethod
+                                                                .getResponseBodyAsString());
     }
 
     /**
@@ -95,7 +97,9 @@ public class JAXRSExceptionsMappedProvidersTest extends TestCase {
         client.executeMethod(postMethod);
         assertEquals(497, postMethod.getStatusCode());
         assertEquals(getBaseURI(), postMethod.getResponseHeader("ExceptionPage").getValue());
-        assertEquals("", postMethod.getResponseBodyAsString());
+        ServerContainerAssertions.assertExceptionBodyFromServer(497, postMethod
+                                                                .getResponseBodyAsString());
+
     }
 
     /**
@@ -111,7 +115,8 @@ public class JAXRSExceptionsMappedProvidersTest extends TestCase {
         client.executeMethod(postMethod);
         assertEquals(496, postMethod.getStatusCode());
         assertEquals(getBaseURI(), postMethod.getResponseHeader("ExceptionPage").getValue());
-        assertEquals("", postMethod.getResponseBodyAsString());
+        ServerContainerAssertions.assertExceptionBodyFromServer(496, postMethod
+                                                                .getResponseBodyAsString());
     }
 
     /**

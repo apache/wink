@@ -47,4 +47,11 @@ final public class ServerEnvironmentInfo {
     public static String getWorkDir() {
         return System.getProperty("wink-test-work-dir");
     }
+
+    static String getContainerName() {
+        /*
+         * tests should not use this
+         */
+        return System.getProperty("wink-test-container");
+    }
 }

@@ -25,6 +25,7 @@ import junit.framework.TestCase;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.methods.DeleteMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
@@ -48,6 +49,11 @@ public class LifeCycleTest extends TestCase {
         for (long c = 0; c < 5000; ++c) {
             sb.append("a");
         }
+
+        DeleteMethod deleteMethod = new DeleteMethod(getBaseURI() + "/jaxrs/tests/lifecycles");
+        client.executeMethod(deleteMethod);
+        assertEquals(204, deleteMethod.getStatusCode());
+
         for (int counter = 0; counter < 100; ++counter) {
             PostMethod postMethod = new PostMethod(getBaseURI() + "/jaxrs/tests/lifecycles");
             try {

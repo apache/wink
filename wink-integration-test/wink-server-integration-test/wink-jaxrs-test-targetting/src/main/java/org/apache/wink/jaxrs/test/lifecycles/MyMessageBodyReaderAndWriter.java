@@ -27,6 +27,7 @@ import java.lang.reflect.Type;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
@@ -40,7 +41,8 @@ import javax.ws.rs.ext.Providers;
 @Provider
 @Produces("text/plain")
 @Consumes("text/plain")
-public class MyMessageBodyReaderAndWriter implements MessageBodyWriter<Object>, MessageBodyReader<Object> {
+public class MyMessageBodyReaderAndWriter implements MessageBodyWriter<Object>,
+    MessageBodyReader<Object> {
 
     public static AtomicInteger readFromCounter    = new AtomicInteger(0);
 
@@ -93,6 +95,12 @@ public class MyMessageBodyReaderAndWriter implements MessageBodyWriter<Object>, 
                                            arg2,
                                            MediaType.APPLICATION_OCTET_STREAM_TYPE);
         return strReader.readFrom(String.class, String.class, arg2, arg3, arg4, arg5);
+    }
+
+    @DELETE
+    public void resetMethodCounters() {
+        writeToCounter.set(0);
+        readFromCounter.set(0);
     }
 
 }

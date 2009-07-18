@@ -26,11 +26,13 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.apache.wink</groupId>
     <artifactId>wink-server-integration-test-support</artifactId>
     <name>Wink Server Integration Test Support</name>
-    <version>0.1-SNAPSHOT</version>
-    <properties>
-        <wink-test-context-root>fdsfdsfds</wink-test-context-root>
-    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 </project>

@@ -28,16 +28,17 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import javax.xml.transform.Source;
+import javax.xml.transform.dom.DOMSource;
 
 @Path("providers/standard/source")
 public class SourceResource {
 
-    private Source source = null;
+    private static Source source = null;
 
     @GET
     @Produces("text/xml")
     public Response getSource() {
-        return Response.ok(source).build();
+        return Response.ok(source).type("text/xml").build();
     }
 
     @POST
@@ -66,7 +67,7 @@ public class SourceResource {
     }
 
     @PUT
-    public void putSource(Source source) throws IOException {
+    public void putSource(DOMSource source) throws IOException {
         this.source = source;
     }
 }

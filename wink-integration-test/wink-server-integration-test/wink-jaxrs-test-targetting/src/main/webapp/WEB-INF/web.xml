@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-    <!--
-        Licensed to the Apache Software Foundation (ASF) under one or
-        more contributor license agreements. See the NOTICE file
-        distributed with this work for additional information regarding
-        copyright ownership. The ASF licenses this file to you under the
-        Apache License, Version 2.0 (the "License"); you may not use
-        this file except in compliance with the License. You may obtain
-        a copy of the License at
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
 
-        http://www.apache.org/licenses/LICENSE-2.0 Unless required by
-        applicable law or agreed to in writing, software distributed
-        under the License is distributed on an "AS IS" BASIS, WITHOUT
-        WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-        See the License for the specific language governing permissions
-        and limitations under the License.
-    -->
+     http://www.apache.org/licenses/LICENSE-2.0
 
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
 <!DOCTYPE web-app PUBLIC
  "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
@@ -178,6 +179,32 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>ContentEncoding</servlet-name>
+        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>org.apache.wink.jaxrs.test.contentencoding.ContentEncodingApplication</param-value>
+        </init-param>
+        <init-param>
+            <param-name>requestProcessorAttribute</param-name>
+            <param-value>requestProcessorAttribute_contentencoding</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>TransferEncoding</servlet-name>
+        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>org.apache.wink.jaxrs.test.transferencoding.TransferEncodingApplication</param-value>
+        </init-param>
+        <init-param>
+            <param-name>requestProcessorAttribute</param-name>
+            <param-value>requestProcessorAttribute_transferencoding</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CustomHTTPMethodAnnotations</servlet-name>
         <url-pattern>/customannotations/*</url-pattern>
@@ -225,5 +252,13 @@
     <servlet-mapping>
         <servlet-name>VersionTests</servlet-name>
         <url-pattern>/version/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ContentEncoding</servlet-name>
+        <url-pattern>/contentencoding/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TransferEncoding</servlet-name>
+        <url-pattern>/transferencoding/*</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -31,9 +31,9 @@ import javax.ws.rs.Path;
 @Path("/singletonsequence")
 public class SequenceSingletonResource {
 
-    private int hits = 0;
+    private int        hits                = 0;
 
-    private static int staticHitCount = 0;
+    private static int staticHitCount      = 0;
 
     private static int constructorHitCount = 0;
 
@@ -52,6 +52,11 @@ public class SequenceSingletonResource {
         ++hits;
         ++staticHitCount;
         return "" + hits;
+    }
+
+    @DELETE
+    public void clearHits() {
+        hits = 0;
     }
 
     @DELETE

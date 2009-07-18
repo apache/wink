@@ -29,6 +29,7 @@ import junit.framework.TestCase;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.ByteArrayRequestEntity;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.wink.test.integration.ServerContainerAssertions;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
 public class NullValuesDuringTargettingTest extends TestCase {
@@ -52,8 +53,11 @@ public class NullValuesDuringTargettingTest extends TestCase {
         try {
             client.executeMethod(postMethod);
             assertEquals(415, postMethod.getStatusCode());
-            assertEquals("", postMethod.getResponseBodyAsString());
-            assertNull(postMethod.getResponseHeader("Content-Type"));
+            String responseBody = postMethod.getResponseBodyAsString();
+            ServerContainerAssertions.assertExceptionBodyFromServer(415, responseBody);
+            if(responseBody == null || "".equals(responseBody)) {
+                assertNull(postMethod.getResponseHeader("Content-Type"));
+            }
         } finally {
             postMethod.releaseConnection();
         }
@@ -75,8 +79,11 @@ public class NullValuesDuringTargettingTest extends TestCase {
         try {
             client.executeMethod(postMethod);
             assertEquals(415, postMethod.getStatusCode());
-            assertEquals("", postMethod.getResponseBodyAsString());
-            assertNull(postMethod.getResponseHeader("Content-Type"));
+            String responseBody = postMethod.getResponseBodyAsString();
+            ServerContainerAssertions.assertExceptionBodyFromServer(415, responseBody);
+            if(responseBody == null || "".equals(responseBody)) {
+                assertNull(postMethod.getResponseHeader("Content-Type"));
+            }
         } finally {
             postMethod.releaseConnection();
         }

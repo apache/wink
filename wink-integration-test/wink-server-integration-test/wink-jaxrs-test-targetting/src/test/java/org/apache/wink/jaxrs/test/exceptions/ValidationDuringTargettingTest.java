@@ -26,6 +26,7 @@ import junit.framework.TestCase;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.wink.test.integration.ServerContainerAssertions;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
 public class ValidationDuringTargettingTest extends TestCase {
@@ -75,7 +76,8 @@ public class ValidationDuringTargettingTest extends TestCase {
             client.executeMethod(getMethod);
 
             assertEquals(406, getMethod.getStatusCode());
-            assertEquals("", getMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(406, getMethod
+                                                                    .getResponseBodyAsString());
         } finally {
             getMethod.releaseConnection();
         }
@@ -119,7 +121,8 @@ public class ValidationDuringTargettingTest extends TestCase {
             client.executeMethod(getMethod);
 
             assertEquals(415, getMethod.getStatusCode());
-            assertEquals("", getMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(415, getMethod
+                                                                    .getResponseBodyAsString());
         } finally {
             getMethod.releaseConnection();
         }

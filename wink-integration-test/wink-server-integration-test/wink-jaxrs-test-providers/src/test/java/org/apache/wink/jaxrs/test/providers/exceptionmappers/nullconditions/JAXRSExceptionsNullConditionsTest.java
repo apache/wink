@@ -28,6 +28,7 @@ import org.apache.commons.httpclient.methods.DeleteMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
+import org.apache.wink.test.integration.ServerContainerAssertions;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
 /**
@@ -54,7 +55,8 @@ public class JAXRSExceptionsNullConditionsTest extends TestCase {
         try {
             client.executeMethod(getMethod);
             assertEquals(500, getMethod.getStatusCode());
-            assertEquals("", getMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(500, getMethod
+                .getResponseBodyAsString());
         } finally {
             getMethod.releaseConnection();
         }
@@ -73,7 +75,8 @@ public class JAXRSExceptionsNullConditionsTest extends TestCase {
         try {
             client.executeMethod(getMethod);
             assertEquals(500, getMethod.getStatusCode());
-            assertEquals("", getMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(500, getMethod
+                                                                    .getResponseBodyAsString());
         } finally {
             getMethod.releaseConnection();
         }
@@ -92,7 +95,8 @@ public class JAXRSExceptionsNullConditionsTest extends TestCase {
         try {
             client.executeMethod(postMethod);
             assertEquals(499, postMethod.getStatusCode());
-            assertEquals("", postMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(499, postMethod
+                                                                    .getResponseBodyAsString());
         } finally {
             postMethod.releaseConnection();
         }
@@ -132,7 +136,8 @@ public class JAXRSExceptionsNullConditionsTest extends TestCase {
         try {
             client.executeMethod(deleteMethod);
             assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), deleteMethod.getStatusCode());
-            assertEquals("", deleteMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(400, deleteMethod
+                                                                    .getResponseBodyAsString());
         } finally {
             deleteMethod.releaseConnection();
         }
@@ -171,7 +176,8 @@ public class JAXRSExceptionsNullConditionsTest extends TestCase {
             client.executeMethod(postMethod);
             assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), postMethod
                 .getStatusCode());
-            assertEquals("", postMethod.getResponseBodyAsString());
+            ServerContainerAssertions.assertExceptionBodyFromServer(500, postMethod
+                                                                    .getResponseBodyAsString());
         } finally {
             postMethod.releaseConnection();
         }
