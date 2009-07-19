@@ -119,6 +119,16 @@ public class FindResourceMethod3Test extends MockServletInvocationTest {
         }
         
     }
+    
+    @Path("/hello")
+    public static class ResourceHello {
+     
+        @GET
+        @Produces("*/*")
+        public String get() {
+            return "ResourceHello.get";
+        }
+    }
 
     /**
      * test the q=0 param on accept-header media types.  See http spec section 14 for q=0 behavior:
@@ -204,6 +214,16 @@ public class FindResourceMethod3Test extends MockServletInvocationTest {
         request = MockRequestConstructor.constructMockRequest("GET", "/simpleGetProduces", "mytype/mysubtype");
         response = invoke(request);
         assertMethodFound(response, ResourceSimpleGetProduces.class, "getAny");
+        
+        // https://issues.apache.org/jira/browse/WINK-106 (positive result)
+        request = MockRequestConstructor.constructMockRequest("GET", "/hello", "text/xml");
+        response = invoke(request);
+        assertMethodFound(response, ResourceHello.class, "get");
+
+        // https://issues.apache.org/jira/browse/WINK-106 (negative result)
+        request = MockRequestConstructor.constructMockRequest("GET", "/hello", "text/xml;q=0");
+        response = invoke(request);
+        assertMethodNotFound(response);
     }
 
 //    // TODO: review and implement test
