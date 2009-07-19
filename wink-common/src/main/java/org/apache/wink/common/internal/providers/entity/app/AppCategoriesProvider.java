@@ -21,7 +21,6 @@ package org.apache.wink.common.internal.providers.entity.app;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
@@ -33,6 +32,7 @@ import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
 
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.model.app.AppCategories;
@@ -59,12 +59,14 @@ public class AppCategoriesProvider implements MessageBodyWriter<AppCategories> {
 
     public void writeTo(AppCategories t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
             OutputStream entityStream) throws IOException, WebApplicationException {
-        ObjectFactory objectFactory = new ObjectFactory();
-        JAXBElement<AppCategories> feedElement = objectFactory.createCategories(t);
-        Marshaller marshaller = AppCategories.getMarshaller();
-        OutputStreamWriter writer = new OutputStreamWriter(entityStream,
-            ProviderUtils.getCharset(mediaType));
-        AtomJAXBUtils.marshal(marshaller, feedElement, null, writer);
-        writer.flush();
+        try {
+            ObjectFactory objectFactory = new ObjectFactory();
+            JAXBElement<AppCategories> feedElement = objectFactory.createCategories(t);
+            Marshaller marshaller = AppCategories.getMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_ENCODING, ProviderUtils.getCharset(mediaType));
+            AtomJAXBUtils.marshal(marshaller, feedElement, entityStream);
+        } catch (PropertyException e) {
+            throw new WebApplicationException(e);
+        }
     }
 }

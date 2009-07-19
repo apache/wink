@@ -17,12 +17,11 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common.internal.providers.entity.opensearch;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.Writer;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
@@ -34,6 +33,7 @@ import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
 
 import org.apache.wink.common.internal.utils.JAXBUtils;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
@@ -43,36 +43,45 @@ import org.apache.wink.common.model.opensearch.ObjectFactory;
 import org.apache.wink.common.model.opensearch.OpenSearchDescription;
 import org.apache.wink.common.utils.ProviderUtils;
 
-
-
 @Provider
 @Produces(MediaTypeUtils.OPENSEARCH)
 public class OpenSearchDescriptionProvider implements MessageBodyWriter<OpenSearchDescription> {
 
     private final ObjectFactory of = new ObjectFactory();
 
-    public long getSize(OpenSearchDescription t, Class<?> type, Type genericType,
-        Annotation[] annotations, MediaType mediaType) {
+    public long getSize(OpenSearchDescription t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
         return -1;
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
         return (type == OpenSearchDescription.class);
     }
 
-    public void writeTo(OpenSearchDescription openSearchDescriptor, Class<?> type,
-        Type genericType, Annotation[] annotations, MediaType mediaType,
-        MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException,
-        WebApplicationException {
-        JAXBElement<OpenSearchDescription> openSearchDocumentWrapper = of.createOpenSearchDescription(openSearchDescriptor);
-        Marshaller marshaller = OpenSearchDescription.getMarshaller();
-        JAXBUtils.setXmlFormattingOptions(marshaller,
-            XmlFormattingOptions.getDefaultXmlFormattingOptions());
-
-        Writer writer = ProviderUtils.createWriter(entityStream, mediaType);
-        AtomJAXBUtils.marshal(marshaller, openSearchDocumentWrapper, null, writer);
-        writer.flush();
+    public void writeTo(OpenSearchDescription openSearchDescriptor,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
+        try {
+            JAXBElement<OpenSearchDescription> openSearchDocumentWrapper =
+                of.createOpenSearchDescription(openSearchDescriptor);
+            Marshaller marshaller = OpenSearchDescription.getMarshaller();
+            JAXBUtils.setXmlFormattingOptions(marshaller, XmlFormattingOptions
+                .getDefaultXmlFormattingOptions());
+            marshaller.setProperty(Marshaller.JAXB_ENCODING, ProviderUtils.getCharset(mediaType));
+            AtomJAXBUtils.marshal(marshaller, openSearchDocumentWrapper, entityStream);
+        } catch (PropertyException e) {
+            throw new WebApplicationException(e);
+        }
     }
 
 }

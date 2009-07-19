@@ -21,6 +21,7 @@
 
 package org.apache.wink.common.model.app;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -114,9 +115,9 @@ public class AppTest extends TestCase {
         
         AppService service = getService();
         JAXBElement<AppService> element = (new ObjectFactory()).createService(service);
-        StringWriter writer = new StringWriter();
-        AtomJAXBUtils.marshal(m, element, null, writer);
-        assertEquals(SERVICE_DOCUMENT, writer.toString());
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        AtomJAXBUtils.marshal(m, element, null, os);
+        assertEquals(SERVICE_DOCUMENT, os.toString());
     }
 
     public void testAppUnmarshal() throws IOException {
@@ -141,9 +142,9 @@ public class AppTest extends TestCase {
         
         Object service = AtomJAXBUtils.unmarshal(u, new StringReader(SERVICE_DOCUMENT));
         JAXBElement<AppService> element = (new ObjectFactory()).createService((AppService)service);
-        StringWriter writer = new StringWriter();
-        AtomJAXBUtils.marshal(m, element, null, writer);
-        assertEquals(SERVICE_DOCUMENT, writer.toString());
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        AtomJAXBUtils.marshal(m, element, null, os);
+        assertEquals(SERVICE_DOCUMENT, os.toString());
     }
 
     public void testCategories() {

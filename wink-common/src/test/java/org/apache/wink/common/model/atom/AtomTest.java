@@ -18,11 +18,11 @@
  *
  *******************************************************************************/
 
-
 package org.apache.wink.common.model.atom;
 
+import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
-import java.io.StringWriter;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -37,234 +37,221 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 
+import junit.framework.TestCase;
+
 import org.apache.wink.common.RestConstants;
 import org.apache.wink.common.internal.utils.JAXBUtils;
 import org.apache.wink.common.model.JAXBNamespacePrefixMapper;
-import org.apache.wink.common.model.atom.AtomCategory;
-import org.apache.wink.common.model.atom.AtomContent;
-import org.apache.wink.common.model.atom.AtomEntry;
-import org.apache.wink.common.model.atom.AtomFeed;
-import org.apache.wink.common.model.atom.AtomGenerator;
-import org.apache.wink.common.model.atom.AtomJAXBUtils;
-import org.apache.wink.common.model.atom.AtomLink;
-import org.apache.wink.common.model.atom.AtomPerson;
-import org.apache.wink.common.model.atom.AtomText;
-import org.apache.wink.common.model.atom.AtomTextType;
-import org.apache.wink.common.model.atom.ObjectFactory;
 import org.apache.wink.common.model.opensearch.OpenSearchQuery;
-
-import junit.framework.TestCase;
-
-
 
 public class AtomTest extends TestCase {
 
-    private static final String ATOM_TEXT_TEXT = "<title type=\"text\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">title</title>\n";
-    private static final String ATOM_TEXT_HTML = "<title type=\"html\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">&lt;h1&gt;title&lt;/h1&gt;</title>\n";
-    private static final String ATOM_TEXT_XHTML =
-        "<title type=\"xhtml\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">\n" +
-        "    <div xmlns=\""+RestConstants.NAMESPACE_XHTML+"\">\n" +
-        "        <h1>title</h1>\n" +
-        "    </div>\n" +
-        "</title>\n";
+    private static final String ATOM_TEXT_TEXT           =
+                                                             "<title type=\"text\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">title</title>\n";
+    private static final String ATOM_TEXT_HTML           =
+                                                             "<title type=\"html\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">&lt;h1&gt;title&lt;/h1&gt;</title>\n";
+    private static final String ATOM_TEXT_XHTML          =
+                                                             "<title type=\"xhtml\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + "    <div xmlns=\""
+                                                                 + RestConstants.NAMESPACE_XHTML
+                                                                 + "\">\n"
+                                                                 + "        <h1>title</h1>\n"
+                                                                 + "    </div>\n"
+                                                                 + "</title>\n";
     private static final String ATOM_TEXT_XHTML_WITH_DIV =
-        "<title type=\"xhtml\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">\n" +
-        "    <div xmlns=\""+RestConstants.NAMESPACE_XHTML+"\">\n" +
-        "        <h1>\n" +
-        "            <div>title</div>\n" +
-        "        </h1>\n" +
-        "    </div>\n" +
-        "</title>\n";
+                                                             "<title type=\"xhtml\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + "    <div xmlns=\""
+                                                                 + RestConstants.NAMESPACE_XHTML
+                                                                 + "\">\n"
+                                                                 + "        <h1>\n"
+                                                                 + "            <div>title</div>\n"
+                                                                 + "        </h1>\n"
+                                                                 + "    </div>\n"
+                                                                 + "</title>\n";
 
+    private static final String ATOM_CONTENT_TEXT        =
+                                                             "<content type=\"text\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">title</content>\n";
+    private static final String ATOM_CONTENT_HTML        =
+                                                             "<content type=\"html\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">&lt;h1&gt;title&lt;/h1&gt;</content>\n";
+    private static final String ATOM_CONTENT_XHTML       =
+                                                             "<content type=\"xhtml\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + "    <div xmlns=\""
+                                                                 + RestConstants.NAMESPACE_XHTML
+                                                                 + "\">\n"
+                                                                 + "        <h1>title</h1>\n"
+                                                                 + "    </div>\n"
+                                                                 + "</content>\n";
+    private static final String ATOM_CONTENT_XML         =
+                                                             "<content type=\"application/xml\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + "    <x xmlns=\"http://x/\">title</x>\n"
+                                                                 + "</content>\n";
 
-    private static final String ATOM_CONTENT_TEXT = "<content type=\"text\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">title</content>\n";
-    private static final String ATOM_CONTENT_HTML = "<content type=\"html\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">&lt;h1&gt;title&lt;/h1&gt;</content>\n";
-    private static final String ATOM_CONTENT_XHTML =
-        "<content type=\"xhtml\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">\n" +
-        "    <div xmlns=\""+RestConstants.NAMESPACE_XHTML+"\">\n" +
-        "        <h1>title</h1>\n" +
-        "    </div>\n" +
-        "</content>\n";
-    private static final String ATOM_CONTENT_XML =
-        "<content type=\"application/xml\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">\n" +
-        "    <x xmlns=\"http://x/\">title</x>\n" +
-        "</content>\n";
+    private static final String ATOM_ENTRY_1             =
+                                                             replaceTimeToken("<entry xml:lang=\"en-us\" xml:base=\"http://entry/base\" anyAttr=\"anyAttrValue\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + "    <id>1</id>\n"
+                                                                 + "    <updated>@TIME@</updated>\n"
+                                                                 + "    <title type=\"text\">title</title>\n"
+                                                                 + "    <summary type=\"text\">summary</summary>\n"
+                                                                 + "    <published>@TIME@</published>\n"
+                                                                 + "    <link href=\"href\" type=\"text/plain\" rel=\"rel\" hreflang=\"en-us\" title=\"title\" length=\"10\"/>\n"
+                                                                 + "    <author>\n"
+                                                                 + "        <email>author@hp.com</email>\n"
+                                                                 + "        <name>author</name>\n"
+                                                                 + "        <uri>http://uri</uri>\n"
+                                                                 + "    </author>\n"
+                                                                 + "    <contributor>\n"
+                                                                 + "        <email>cont@hp.com</email>\n"
+                                                                 + "        <name>cont</name>\n"
+                                                                 + "        <uri>http://uri</uri>\n"
+                                                                 + "    </contributor>\n"
+                                                                 + "    <category label=\"label\" scheme=\"scheme\" term=\"term\"/>\n"
+                                                                 + "</entry>\n");
+    private static final String ATOM_ENTRY_2             =
+                                                             replaceTimeToken("<entry xml:lang=\"en-us\" xml:base=\"http://entry/base\" anyAttr=\"anyAttrValue\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + "    <id>2</id>\n"
+                                                                 + "    <updated>@TIME@</updated>\n"
+                                                                 + "    <title type=\"text\">title</title>\n"
+                                                                 + "    <summary type=\"text\">summary</summary>\n"
+                                                                 + "    <published>@TIME@</published>\n"
+                                                                 + "    <link href=\"href\" type=\"text/plain\" rel=\"rel\" hreflang=\"en-us\" title=\"title\" length=\"10\"/>\n"
+                                                                 + "    <author>\n"
+                                                                 + "        <email>author@hp.com</email>\n"
+                                                                 + "        <name>author</name>\n"
+                                                                 + "        <uri>http://uri</uri>\n"
+                                                                 + "    </author>\n"
+                                                                 + "    <contributor>\n"
+                                                                 + "        <email>cont@hp.com</email>\n"
+                                                                 + "        <name>cont</name>\n"
+                                                                 + "        <uri>http://uri</uri>\n"
+                                                                 + "    </contributor>\n"
+                                                                 + "    <category label=\"label\" scheme=\"scheme\" term=\"term\"/>\n"
+                                                                 + "    <content type=\"text/plain\">Gustaf's Knäckebröd</content>\n"
+                                                                 + "</entry>\n");
+    private static final String ATOM_ENTRY_3             =
+                                                             replaceTimeToken("<entry xml:lang=\"en-us\" xml:base=\"http://entry/base\" anyAttr=\"anyAttrValue\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + "    <id>3</id>\n"
+                                                                 + "    <updated>@TIME@</updated>\n"
+                                                                 + "    <title type=\"text\">title</title>\n"
+                                                                 + "    <summary type=\"text\">summary</summary>\n"
+                                                                 + "    <published>@TIME@</published>\n"
+                                                                 + "    <link href=\"href\" type=\"text/plain\" rel=\"rel\" hreflang=\"en-us\" title=\"title\" length=\"10\"/>\n"
+                                                                 + "    <author>\n"
+                                                                 + "        <email>author@hp.com</email>\n"
+                                                                 + "        <name>author</name>\n"
+                                                                 + "        <uri>http://uri</uri>\n"
+                                                                 + "    </author>\n"
+                                                                 + "    <contributor>\n"
+                                                                 + "        <email>cont@hp.com</email>\n"
+                                                                 + "        <name>cont</name>\n"
+                                                                 + "        <uri>http://uri</uri>\n"
+                                                                 + "    </contributor>\n"
+                                                                 + "    <category label=\"label\" scheme=\"scheme\" term=\"term\"/>\n"
+                                                                 + "    <content type=\"application/xml\">\n"
+                                                                 + "        <x1 xmlns=\"xxx\" xmlns:y=\"yyy\">\n"
+                                                                 + "            <x2>\n"
+                                                                 + "                <y:y1>Gustaf's Knäckebröd</y:y1>\n"
+                                                                 + "            </x2>\n"
+                                                                 + "        </x1>\n"
+                                                                 + "    </content>\n"
+                                                                 + "</entry>\n");
 
-    private static final String ATOM_ENTRY_1 = replaceTimeToken(
-        "<entry xml:lang=\"en-us\" xml:base=\"http://entry/base\" anyAttr=\"anyAttrValue\" xmlns=\"http://www.w3.org/2005/Atom\">\n" +
-        "    <id>1</id>\n" +
-        "    <updated>@TIME@</updated>\n" +
-        "    <title type=\"text\">title</title>\n" +
-        "    <summary type=\"text\">summary</summary>\n" +
-        "    <published>@TIME@</published>\n" +
-        "    <link href=\"href\" type=\"text/plain\" rel=\"rel\" hreflang=\"en-us\" title=\"title\" length=\"10\"/>\n" +
-        "    <author>\n" +
-        "        <email>author@hp.com</email>\n" +
-        "        <name>author</name>\n" +
-        "        <uri>http://uri</uri>\n" +
-        "    </author>\n" +
-        "    <contributor>\n" +
-        "        <email>cont@hp.com</email>\n" +
-        "        <name>cont</name>\n" +
-        "        <uri>http://uri</uri>\n" +
-        "    </contributor>\n" +
-        "    <category label=\"label\" scheme=\"scheme\" term=\"term\"/>\n" +
-        "</entry>\n");
-    private static final String ATOM_ENTRY_2 = replaceTimeToken(
-        "<entry xml:lang=\"en-us\" xml:base=\"http://entry/base\" anyAttr=\"anyAttrValue\" xmlns=\"http://www.w3.org/2005/Atom\">\n" +
-        "    <id>2</id>\n" +
-        "    <updated>@TIME@</updated>\n" +
-        "    <title type=\"text\">title</title>\n" +
-        "    <summary type=\"text\">summary</summary>\n" +
-        "    <published>@TIME@</published>\n" +
-        "    <link href=\"href\" type=\"text/plain\" rel=\"rel\" hreflang=\"en-us\" title=\"title\" length=\"10\"/>\n" +
-        "    <author>\n" +
-        "        <email>author@hp.com</email>\n" +
-        "        <name>author</name>\n" +
-        "        <uri>http://uri</uri>\n" +
-        "    </author>\n" +
-        "    <contributor>\n" +
-        "        <email>cont@hp.com</email>\n" +
-        "        <name>cont</name>\n" +
-        "        <uri>http://uri</uri>\n" +
-        "    </contributor>\n" +
-        "    <category label=\"label\" scheme=\"scheme\" term=\"term\"/>\n" +
-        "    <content type=\"text/plain\">Gustaf's Knäckebröd</content>\n" +
-        "</entry>\n");
-    private static final String ATOM_ENTRY_3 = replaceTimeToken(
-        "<entry xml:lang=\"en-us\" xml:base=\"http://entry/base\" anyAttr=\"anyAttrValue\" xmlns=\"http://www.w3.org/2005/Atom\">\n" +
-        "    <id>3</id>\n" +
-        "    <updated>@TIME@</updated>\n" +
-        "    <title type=\"text\">title</title>\n" +
-        "    <summary type=\"text\">summary</summary>\n" +
-        "    <published>@TIME@</published>\n" +
-        "    <link href=\"href\" type=\"text/plain\" rel=\"rel\" hreflang=\"en-us\" title=\"title\" length=\"10\"/>\n" +
-        "    <author>\n" +
-        "        <email>author@hp.com</email>\n" +
-        "        <name>author</name>\n" +
-        "        <uri>http://uri</uri>\n" +
-        "    </author>\n" +
-        "    <contributor>\n" +
-        "        <email>cont@hp.com</email>\n" +
-        "        <name>cont</name>\n" +
-        "        <uri>http://uri</uri>\n" +
-        "    </contributor>\n" +
-        "    <category label=\"label\" scheme=\"scheme\" term=\"term\"/>\n" +
-        "    <content type=\"application/xml\">\n" +
-        "        <x1 xmlns=\"xxx\" xmlns:y=\"yyy\">\n" +
-        "            <x2>\n" +
-        "                <y:y1>Gustaf's Knäckebröd</y:y1>\n" +
-        "            </x2>\n" +
-        "        </x1>\n" +
-        "    </content>\n" +
-        "</entry>\n");
+    private static final String ATOM_FEED_1              =
+                                                             replaceTimeToken("<feed xml:lang=\"en-us\" xml:base=\"http://feed/base\" anyAttr=\"anyAttrValue\" xmlns:opensearch=\"http://a9.com/-/spec/opensearch/1.1/\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + "    <id>id</id>\n"
+                                                                 + "    <updated>@TIME@</updated>\n"
+                                                                 + "    <title type=\"text\">title</title>\n"
+                                                                 + "    <subtitle type=\"text\">subtitle</subtitle>\n"
+                                                                 + "    <opensearch:itemsPerPage>5</opensearch:itemsPerPage>\n"
+                                                                 + "    <opensearch:startIndex>6</opensearch:startIndex>\n"
+                                                                 + "    <opensearch:totalResults>7</opensearch:totalResults>\n"
+                                                                 + "    <opensearch:Query searchTerms=\"query 1\"/>\n"
+                                                                 + "    <opensearch:Query searchTerms=\"query 2\"/>\n"
+                                                                 + "    <link href=\"href\" type=\"text/plain\" rel=\"rel\" hreflang=\"en-us\" title=\"title\" length=\"10\"/>\n"
+                                                                 + "    <author>\n"
+                                                                 + "        <email>author@hp.com</email>\n"
+                                                                 + "        <name>author</name>\n"
+                                                                 + "        <uri>http://uri</uri>\n"
+                                                                 + "    </author>\n"
+                                                                 + "    <contributor>\n"
+                                                                 + "        <email>cont@hp.com</email>\n"
+                                                                 + "        <name>cont</name>\n"
+                                                                 + "        <uri>http://uri</uri>\n"
+                                                                 + "    </contributor>\n"
+                                                                 + "    <category label=\"label\" scheme=\"scheme\" term=\"term\"/>\n"
+                                                                 + "    <generator version=\"1.0\" uri=\"http://generator/uri\" xml:lang=\"en-us\" xml:base=\"http://generator/base\">wink</generator>\n"
+                                                                 + "    <icon>icon</icon>\n"
+                                                                 + "    <logo>logo</logo>\n"
+                                                                 + "    <rights type=\"text\">rights</rights>\n"
+                                                                 + "    <entry xml:lang=\"en-us\" xml:base=\"http://entry/base\" anyAttr=\"anyAttrValue\">\n"
+                                                                 + "        <id>1</id>\n"
+                                                                 + "        <updated>@TIME@</updated>\n"
+                                                                 + "        <title type=\"text\">title</title>\n"
+                                                                 + "        <summary type=\"text\">summary</summary>\n"
+                                                                 + "        <published>@TIME@</published>\n"
+                                                                 + "        <link href=\"href\" type=\"text/plain\" rel=\"rel\" hreflang=\"en-us\" title=\"title\" length=\"10\"/>\n"
+                                                                 + "        <author>\n"
+                                                                 + "            <email>author@hp.com</email>\n"
+                                                                 + "            <name>author</name>\n"
+                                                                 + "            <uri>http://uri</uri>\n"
+                                                                 + "        </author>\n"
+                                                                 + "        <contributor>\n"
+                                                                 + "            <email>cont@hp.com</email>\n"
+                                                                 + "            <name>cont</name>\n"
+                                                                 + "            <uri>http://uri</uri>\n"
+                                                                 + "        </contributor>\n"
+                                                                 + "        <category label=\"label\" scheme=\"scheme\" term=\"term\"/>\n"
+                                                                 + "        <content type=\"application/xml\">\n"
+                                                                 + "            <x1 xmlns=\"xxx\" xmlns:y=\"yyy\">\n"
+                                                                 + "                <x2>\n"
+                                                                 + "                    <y:y1>Gustaf's Knäckebröd</y:y1>\n"
+                                                                 + "                </x2>\n"
+                                                                 + "            </x1>\n"
+                                                                 + "        </content>\n"
+                                                                 + "    </entry>\n"
+                                                                 + "</feed>\n");
 
-    private static final String ATOM_FEED_1 = replaceTimeToken(
-        "<feed xml:lang=\"en-us\" xml:base=\"http://feed/base\" anyAttr=\"anyAttrValue\" xmlns:opensearch=\"http://a9.com/-/spec/opensearch/1.1/\" xmlns=\"http://www.w3.org/2005/Atom\">\n" +
-        "    <id>id</id>\n" +
-        "    <updated>@TIME@</updated>\n" +
-        "    <title type=\"text\">title</title>\n" +
-        "    <subtitle type=\"text\">subtitle</subtitle>\n" +
-        "    <opensearch:itemsPerPage>5</opensearch:itemsPerPage>\n" +
-        "    <opensearch:startIndex>6</opensearch:startIndex>\n" +
-        "    <opensearch:totalResults>7</opensearch:totalResults>\n" +
-        "    <opensearch:Query searchTerms=\"query 1\"/>\n" +
-        "    <opensearch:Query searchTerms=\"query 2\"/>\n" +
-        "    <link href=\"href\" type=\"text/plain\" rel=\"rel\" hreflang=\"en-us\" title=\"title\" length=\"10\"/>\n" +
-        "    <author>\n" +
-        "        <email>author@hp.com</email>\n" +
-        "        <name>author</name>\n" +
-        "        <uri>http://uri</uri>\n" +
-        "    </author>\n" +
-        "    <contributor>\n" +
-        "        <email>cont@hp.com</email>\n" +
-        "        <name>cont</name>\n" +
-        "        <uri>http://uri</uri>\n" +
-        "    </contributor>\n" +
-        "    <category label=\"label\" scheme=\"scheme\" term=\"term\"/>\n" +
-        "    <generator version=\"1.0\" uri=\"http://generator/uri\" xml:lang=\"en-us\" xml:base=\"http://generator/base\">wink</generator>\n" +
-        "    <icon>icon</icon>\n" +
-        "    <logo>logo</logo>\n" +
-        "    <rights type=\"text\">rights</rights>\n" +
-        "    <entry xml:lang=\"en-us\" xml:base=\"http://entry/base\" anyAttr=\"anyAttrValue\">\n" +
-        "        <id>1</id>\n" +
-        "        <updated>@TIME@</updated>\n" +
-        "        <title type=\"text\">title</title>\n" +
-        "        <summary type=\"text\">summary</summary>\n" +
-        "        <published>@TIME@</published>\n" +
-        "        <link href=\"href\" type=\"text/plain\" rel=\"rel\" hreflang=\"en-us\" title=\"title\" length=\"10\"/>\n" +
-        "        <author>\n" +
-        "            <email>author@hp.com</email>\n" +
-        "            <name>author</name>\n" +
-        "            <uri>http://uri</uri>\n" +
-        "        </author>\n" +
-        "        <contributor>\n" +
-        "            <email>cont@hp.com</email>\n" +
-        "            <name>cont</name>\n" +
-        "            <uri>http://uri</uri>\n" +
-        "        </contributor>\n" +
-        "        <category label=\"label\" scheme=\"scheme\" term=\"term\"/>\n" +
-        "        <content type=\"application/xml\">\n" +
-        "            <x1 xmlns=\"xxx\" xmlns:y=\"yyy\">\n" +
-        "                <x2>\n" +
-        "                    <y:y1>Gustaf's Knäckebröd</y:y1>\n" +
-        "                </x2>\n" +
-        "            </x1>\n" +
-        "        </content>\n" +
-        "    </entry>\n" +
-        "</feed>\n");
+    private static final String ATOM_FEED_2              =
+                                                             replaceTimeToken("<feed xml:lang=\"en-us\" xml:base=\"http://feed/base\" anyAttr=\"anyAttrValue\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + "    <id>id</id>\n"
+                                                                 + "    <updated>@TIME@</updated>\n"
+                                                                 + "    <title type=\"text\">title</title>\n"
+                                                                 + "    <subtitle type=\"text\">subtitle</subtitle>\n"
+                                                                 + "    <link href=\"href\" type=\"text/plain\" rel=\"rel\" hreflang=\"en-us\" title=\"title\" length=\"10\"/>\n"
+                                                                 + "    <author>\n"
+                                                                 + "        <email>author@hp.com</email>\n"
+                                                                 + "        <name>author</name>\n"
+                                                                 + "        <uri>http://uri</uri>\n"
+                                                                 + "    </author>\n"
+                                                                 + "    <contributor>\n"
+                                                                 + "        <email>cont@hp.com</email>\n"
+                                                                 + "        <name>cont</name>\n"
+                                                                 + "        <uri>http://uri</uri>\n"
+                                                                 + "    </contributor>\n"
+                                                                 + "    <category label=\"label\" scheme=\"scheme\" term=\"term\"/>\n"
+                                                                 + "    <generator version=\"1.0\" uri=\"http://generator/uri\" xml:lang=\"en-us\" xml:base=\"http://generator/base\">wink</generator>\n"
+                                                                 + "    <icon>icon</icon>\n"
+                                                                 + "    <logo>logo</logo>\n"
+                                                                 + "    <rights type=\"text\">rights</rights>\n"
+                                                                 + "    <entry xml:lang=\"en-us\" xml:base=\"http://entry/base\" anyAttr=\"anyAttrValue\">\n"
+                                                                 + "        <id>1</id>\n"
+                                                                 + "        <updated>@TIME@</updated>\n"
+                                                                 + "        <title type=\"text\">title</title>\n"
+                                                                 + "        <summary type=\"text\">summary</summary>\n"
+                                                                 + "        <published>@TIME@</published>\n"
+                                                                 + "        <link href=\"href\" type=\"text/plain\" rel=\"rel\" hreflang=\"en-us\" title=\"title\" length=\"10\"/>\n"
+                                                                 + "        <author>\n"
+                                                                 + "            <email>author@hp.com</email>\n"
+                                                                 + "            <name>author</name>\n"
+                                                                 + "            <uri>http://uri</uri>\n"
+                                                                 + "        </author>\n"
+                                                                 + "        <contributor>\n"
+                                                                 + "            <email>cont@hp.com</email>\n"
+                                                                 + "            <name>cont</name>\n"
+                                                                 + "            <uri>http://uri</uri>\n"
+                                                                 + "        </contributor>\n"
+                                                                 + "        <category label=\"label\" scheme=\"scheme\" term=\"term\"/>\n"
+                                                                 + "        <content type=\"application/xml\">\n"
+                                                                 + "            <x1 xmlns=\"xxx\" xmlns:y=\"yyy\">\n"
+                                                                 + "                <x2>\n"
+                                                                 + "                    <y:y1>Gustaf's Knäckebröd</y:y1>\n"
+                                                                 + "                </x2>\n"
+                                                                 + "            </x1>\n"
+                                                                 + "        </content>\n"
+                                                                 + "    </entry>\n"
+                                                                 + "</feed>\n");
 
-    private static final String ATOM_FEED_2 = replaceTimeToken(
-            "<feed xml:lang=\"en-us\" xml:base=\"http://feed/base\" anyAttr=\"anyAttrValue\" xmlns=\"http://www.w3.org/2005/Atom\">\n" +
-            "    <id>id</id>\n" +
-            "    <updated>@TIME@</updated>\n" +
-            "    <title type=\"text\">title</title>\n" +
-            "    <subtitle type=\"text\">subtitle</subtitle>\n" +
-            "    <link href=\"href\" type=\"text/plain\" rel=\"rel\" hreflang=\"en-us\" title=\"title\" length=\"10\"/>\n" +
-            "    <author>\n" +
-            "        <email>author@hp.com</email>\n" +
-            "        <name>author</name>\n" +
-            "        <uri>http://uri</uri>\n" +
-            "    </author>\n" +
-            "    <contributor>\n" +
-            "        <email>cont@hp.com</email>\n" +
-            "        <name>cont</name>\n" +
-            "        <uri>http://uri</uri>\n" +
-            "    </contributor>\n" +
-            "    <category label=\"label\" scheme=\"scheme\" term=\"term\"/>\n" +
-            "    <generator version=\"1.0\" uri=\"http://generator/uri\" xml:lang=\"en-us\" xml:base=\"http://generator/base\">wink</generator>\n" +
-            "    <icon>icon</icon>\n" +
-            "    <logo>logo</logo>\n" +
-            "    <rights type=\"text\">rights</rights>\n" +
-            "    <entry xml:lang=\"en-us\" xml:base=\"http://entry/base\" anyAttr=\"anyAttrValue\">\n" +
-            "        <id>1</id>\n" +
-            "        <updated>@TIME@</updated>\n" +
-            "        <title type=\"text\">title</title>\n" +
-            "        <summary type=\"text\">summary</summary>\n" +
-            "        <published>@TIME@</published>\n" +
-            "        <link href=\"href\" type=\"text/plain\" rel=\"rel\" hreflang=\"en-us\" title=\"title\" length=\"10\"/>\n" +
-            "        <author>\n" +
-            "            <email>author@hp.com</email>\n" +
-            "            <name>author</name>\n" +
-            "            <uri>http://uri</uri>\n" +
-            "        </author>\n" +
-            "        <contributor>\n" +
-            "            <email>cont@hp.com</email>\n" +
-            "            <name>cont</name>\n" +
-            "            <uri>http://uri</uri>\n" +
-            "        </contributor>\n" +
-            "        <category label=\"label\" scheme=\"scheme\" term=\"term\"/>\n" +
-            "        <content type=\"application/xml\">\n" +
-            "            <x1 xmlns=\"xxx\" xmlns:y=\"yyy\">\n" +
-            "                <x2>\n" +
-            "                    <y:y1>Gustaf's Knäckebröd</y:y1>\n" +
-            "                </x2>\n" +
-            "            </x1>\n" +
-            "        </content>\n" +
-            "    </entry>\n" +
-            "</feed>\n");
-
-    private static JAXBContext ctx;
+    private static JAXBContext  ctx;
 
     static {
         try {
@@ -281,32 +268,33 @@ public class AtomTest extends TestCase {
         text.setBase("http://title/base");
         text.setLang("en-us");
 
-        JAXBNamespacePrefixMapper mapper = new JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_ATOM);
+        JAXBNamespacePrefixMapper mapper =
+            new JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_ATOM);
         mapper.omitNamespace(RestConstants.NAMESPACE_OPENSEARCH);
 
         // test type TEXT
         text.setType(AtomTextType.text);
         text.setValue("title");
         JAXBElement<AtomText> element = (new ObjectFactory()).createTitle(text);
-        StringWriter writer = new StringWriter();
-        AtomJAXBUtils.marshal(m, element, null, mapper, writer);
-        assertEquals(ATOM_TEXT_TEXT, writer.toString());
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        AtomJAXBUtils.marshal(m, element, null, mapper, os);
+        assertEquals(ATOM_TEXT_TEXT, os.toString());
 
         // test type HTML
         text.setType(AtomTextType.html);
         text.setValue("<h1>title</h1>");
         element = (new ObjectFactory()).createTitle(text);
-        writer = new StringWriter();
-        AtomJAXBUtils.marshal(m, element, null, mapper, writer);
-        assertEquals(ATOM_TEXT_HTML, writer.toString());
+        os = new ByteArrayOutputStream();
+        AtomJAXBUtils.marshal(m, element, null, mapper, os);
+        assertEquals(ATOM_TEXT_HTML, os.toString());
 
         // test type XHTML
         text.setType(AtomTextType.xhtml);
         text.setValue("<h1>title</h1>");
         element = (new ObjectFactory()).createTitle(text);
-        writer = new StringWriter();
-        AtomJAXBUtils.marshal(m, element, null, mapper, writer);
-        assertEquals(ATOM_TEXT_XHTML, writer.toString());
+        os = new ByteArrayOutputStream();
+        AtomJAXBUtils.marshal(m, element, null, mapper, os);
+        assertEquals(ATOM_TEXT_XHTML, os.toString());
     }
 
     public void testAtomTextUnmarshal() throws Exception {
@@ -338,7 +326,8 @@ public class AtomTest extends TestCase {
         assertNotNull(text);
         assertEquals("en-us", text.getLang());
         assertEquals("http://title/base", text.getBase());
-        assertEquals("<h1 xmlns=\""+RestConstants.NAMESPACE_XHTML+"\">title</h1>", text.getValue());
+        assertEquals("<h1 xmlns=\"" + RestConstants.NAMESPACE_XHTML + "\">title</h1>", text
+            .getValue());
         assertEquals(AtomTextType.xhtml, text.getType());
     }
 
@@ -352,14 +341,16 @@ public class AtomTest extends TestCase {
         assertNotNull(text);
         assertEquals("en-us", text.getLang());
         assertEquals("http://title/base", text.getBase());
-        assertEquals("<h1 xmlns=\""+RestConstants.NAMESPACE_XHTML+"\"><div>title</div></h1>", text.getValue().replaceAll("\n", "").replaceAll("    ", ""));
+        assertEquals("<h1 xmlns=\"" + RestConstants.NAMESPACE_XHTML + "\"><div>title</div></h1>",
+                     text.getValue().replaceAll("\n", "").replaceAll("    ", ""));
         assertEquals(AtomTextType.xhtml, text.getType());
     }
 
     public void testAtomContentMarshal() throws Exception {
         Marshaller m = JAXBUtils.createMarshaller(ctx);
 
-        JAXBNamespacePrefixMapper mapper = new JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_ATOM);
+        JAXBNamespacePrefixMapper mapper =
+            new JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_ATOM);
         mapper.omitNamespace(RestConstants.NAMESPACE_OPENSEARCH);
 
         AtomContent content = new AtomContent();
@@ -369,31 +360,31 @@ public class AtomTest extends TestCase {
         content.setType("text");
         content.setValue("title");
         JAXBElement<AtomContent> element = (new ObjectFactory()).createContent(content);
-        StringWriter writer = new StringWriter();
-        AtomJAXBUtils.marshal(m, element, null, mapper, writer);
-        assertEquals(ATOM_CONTENT_TEXT, writer.toString());
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        AtomJAXBUtils.marshal(m, element, null, mapper, os);
+        assertEquals(ATOM_CONTENT_TEXT, os.toString());
 
         content.setType("html");
         content.setValue("<h1>title</h1>");
         element = (new ObjectFactory()).createContent(content);
-        writer = new StringWriter();
-        AtomJAXBUtils.marshal(m, element, null, mapper, writer);
-        assertEquals(ATOM_CONTENT_HTML, writer.toString());
+        os = new ByteArrayOutputStream();
+        AtomJAXBUtils.marshal(m, element, null, mapper, os);
+        assertEquals(ATOM_CONTENT_HTML, os.toString());
 
         content.setType("xhtml");
         content.setValue("<h1>title</h1>");
         element = (new ObjectFactory()).createContent(content);
-        writer = new StringWriter();
-        AtomJAXBUtils.marshal(m, element, null, mapper, writer);
-        assertEquals(ATOM_CONTENT_XHTML, writer.toString());
+        os = new ByteArrayOutputStream();
+        AtomJAXBUtils.marshal(m, element, null, mapper, os);
+        assertEquals(ATOM_CONTENT_XHTML, os.toString());
 
         content.setType("application/xml");
         content.setValue("<x xmlns=\"http://x/\">title</x>");
         element = (new ObjectFactory()).createContent(content);
-        writer = new StringWriter();
-        AtomJAXBUtils.marshal(m, element, null, mapper, writer);
-        assertEquals(ATOM_CONTENT_XML, writer.toString());
-}
+        os = new ByteArrayOutputStream();
+        AtomJAXBUtils.marshal(m, element, null, mapper, os);
+        assertEquals(ATOM_CONTENT_XML, os.toString());
+    }
 
     public void testAtomContentUnmarshal() throws Exception {
         Unmarshaller u = JAXBUtils.createUnmarshaller(ctx);
@@ -424,7 +415,8 @@ public class AtomTest extends TestCase {
         assertNotNull(content);
         assertEquals("en-us", content.getLang());
         assertEquals("http://title/base", content.getBase());
-        assertEquals("<h1 xmlns=\""+RestConstants.NAMESPACE_XHTML+"\">title</h1>", content.getValue());
+        assertEquals("<h1 xmlns=\"" + RestConstants.NAMESPACE_XHTML + "\">title</h1>", content
+            .getValue());
         assertEquals("xhtml", content.getType());
 
         element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_CONTENT_XML));
@@ -443,23 +435,22 @@ public class AtomTest extends TestCase {
 
         AtomEntry entry = getEntryWithoutContent("1");
         JAXBElement<AtomEntry> element = (new ObjectFactory()).createEntry(entry);
-        StringWriter writer = new StringWriter();
-        AtomJAXBUtils.marshal(m, element, null, writer);
-        assertEquals(ATOM_ENTRY_1, writer.toString());
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        AtomJAXBUtils.marshal(m, element, null, os);
+        assertEquals(ATOM_ENTRY_1, os.toString());
 
         entry = getEntryWithPlainTextContent("2");
         element = (new ObjectFactory()).createEntry(entry);
-        writer = new StringWriter();
-        AtomJAXBUtils.marshal(m, element, null, writer);
-        assertEquals(ATOM_ENTRY_2, writer.toString());
+        os = new ByteArrayOutputStream();
+        AtomJAXBUtils.marshal(m, element, null, os);
+        assertTrue(Arrays.equals(ATOM_ENTRY_2.getBytes("UTF-8"), os.toByteArray()));
 
         entry = getEntryWithXmlContent("3");
         element = (new ObjectFactory()).createEntry(entry);
-        writer = new StringWriter();
-        AtomJAXBUtils.marshal(m, element, null, writer);
-        assertEquals(ATOM_ENTRY_3, writer.toString());
+        os = new ByteArrayOutputStream();
+        AtomJAXBUtils.marshal(m, element, null, os);
+        assertTrue(Arrays.equals(ATOM_ENTRY_3.getBytes("UTF-8"), os.toByteArray()));
     }
-
 
     public void testAtomEntryUnmarshal() throws Exception {
         Unmarshaller u = AtomEntry.getUnmarshaller();
@@ -510,7 +501,8 @@ public class AtomTest extends TestCase {
         assertEquals("3", entry.getId());
         assertNotNull(entry.getContent());
         assertEquals("application/xml", entry.getContent().getType());
-        assertEquals("<x1 xmlns=\"xxx\" xmlns:y=\"yyy\"><x2><y:y1>Gustaf's Knäckebröd</y:y1></x2></x1>", entry.getContent().getValue().replaceAll("\n", "").replaceAll("    ", ""));
+        assertEquals("<x1 xmlns=\"xxx\" xmlns:y=\"yyy\"><x2><y:y1>Gustaf's Knäckebröd</y:y1></x2></x1>",
+                     entry.getContent().getValue().replaceAll("\n", "").replaceAll("    ", ""));
     }
 
     public void testAtomFeedMarshal() throws Exception {
@@ -518,9 +510,9 @@ public class AtomTest extends TestCase {
 
         AtomFeed feed = getFeed();
         JAXBElement<AtomFeed> element = (new ObjectFactory()).createFeed(feed);
-        StringWriter writer = new StringWriter();
-        AtomJAXBUtils.marshal(m, element, null, writer);
-        assertEquals(ATOM_FEED_1, writer.toString());
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        AtomJAXBUtils.marshal(m, element, null, os);
+        assertTrue(Arrays.equals(ATOM_FEED_1.getBytes("UTF-8"), os.toByteArray()));
     }
 
     public void testAtomFeedUnmarshal() throws Exception {
@@ -570,9 +562,9 @@ public class AtomTest extends TestCase {
         Unmarshaller u = AtomFeed.getUnmarshaller();
         AtomFeed feed = (AtomFeed)AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_FEED_1));
         JAXBElement<AtomFeed> element = (new ObjectFactory()).createFeed(feed);
-        StringWriter writer = new StringWriter();
-        AtomJAXBUtils.marshal(m, element, null, feed.getNamespacePrefixMapper(), writer);
-        assertEquals(ATOM_FEED_1, writer.toString());
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        AtomJAXBUtils.marshal(m, element, null, feed.getNamespacePrefixMapper(), os);
+        assertTrue(Arrays.equals(ATOM_FEED_1.getBytes("UTF-8"), os.toByteArray()));
     }
 
     public void testAtomFeedMarshalUnmarshalWithoutOpenSearch() throws Exception {
@@ -584,9 +576,9 @@ public class AtomTest extends TestCase {
         assertEquals(-1, feed.getTotalResults());
         assertEquals(0, feed.getOpenSearchQueries().size());
         JAXBElement<AtomFeed> element = (new ObjectFactory()).createFeed(feed);
-        StringWriter writer = new StringWriter();
-        AtomJAXBUtils.marshal(m, element, null, feed.getNamespacePrefixMapper(), writer);
-        assertEquals(ATOM_FEED_2, writer.toString());
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        AtomJAXBUtils.marshal(m, element, null, feed.getNamespacePrefixMapper(), os);
+        assertTrue(Arrays.equals(ATOM_FEED_2.getBytes("UTF-8"), os.toByteArray()));
     }
 
     public void testGetLinkFromEntry() {
@@ -615,7 +607,6 @@ public class AtomTest extends TestCase {
         link3.setRel("rel2");
         entry.getLinks().add(link5NoType);
 
-
         List<AtomLink> links = entry.getLinks("rel1", "type1");
         assertEquals(1, links.size());
         assertEquals("href1", links.get(0).getHref());
@@ -638,28 +629,28 @@ public class AtomTest extends TestCase {
         try {
             entry.getLinks(null, "");
             fail("expected NullPointerException");
-        } catch(NullPointerException e) {
+        } catch (NullPointerException e) {
             // passed!
         }
 
         try {
             entry.getLinks("", null);
             fail("expected NullPointerException");
-        } catch(NullPointerException e) {
+        } catch (NullPointerException e) {
             // passed!
         }
 
         try {
             entry.getLinks("", null);
             fail("expected NullPointerException");
-        } catch(NullPointerException e) {
+        } catch (NullPointerException e) {
             // passed!
         }
 
         try {
             entry.getLinks("", null);
             fail("expected NullPointerException");
-        } catch(NullPointerException e) {
+        } catch (NullPointerException e) {
             // passed!
         }
 
@@ -808,9 +799,30 @@ public class AtomTest extends TestCase {
         AtomEntry entry = getEntryWithoutContent(id);
         AtomContent content = new AtomContent();
         content.setType("application/xml");
-        content.setValue("<x1 xmlns=\"xxx\" xmlns:y=\"yyy\"><x2><y:y1>Gustaf's Knäckebröd</y:y1></x2></x1>");
+        content
+            .setValue("<x1 xmlns=\"xxx\" xmlns:y=\"yyy\"><x2><y:y1>Gustaf's Knäckebröd</y:y1></x2></x1>");
         entry.setContent(content);
         return entry;
+    }
+
+    public void testEncoding() throws Exception {
+        AtomEntry atomEntry = getEntryWithoutContent("1111");
+
+        JAXBElement<AtomEntry> element = (new ObjectFactory()).createEntry(atomEntry);
+        Marshaller marshaller = AtomEntry.getMarshaller();
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        AtomJAXBUtils.marshal(marshaller, element, os);
+        String defaultContent = new String(os.toByteArray(), "UTF-8");
+
+        String[] encodings = {"US-ASCII", "UTF-8", "UTF-16"};
+        for (String enc : encodings) {
+            element = (new ObjectFactory()).createEntry(atomEntry);
+            marshaller = AtomEntry.getMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_ENCODING, enc);
+            os = new ByteArrayOutputStream();
+            AtomJAXBUtils.marshal(marshaller, element, os);
+            assertEquals(enc + " failed", defaultContent, new String(os.toByteArray(), enc));
+        }
     }
 
 }

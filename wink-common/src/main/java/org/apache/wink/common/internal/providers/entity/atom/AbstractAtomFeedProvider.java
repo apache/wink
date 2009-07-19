@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
@@ -33,53 +32,72 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response.Status;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wink.common.model.atom.AtomFeed;
 import org.apache.wink.common.model.atom.AtomJAXBUtils;
 import org.apache.wink.common.model.atom.ObjectFactory;
 import org.apache.wink.common.utils.ProviderUtils;
-
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class AbstractAtomFeedProvider<T> {
 
-    private static final Logger logger = LoggerFactory.getLogger(AbstractAtomFeedProvider.class);
+    private static final Logger logger            =
+                                                      LoggerFactory
+                                                          .getLogger(AbstractAtomFeedProvider.class);
 
-    protected ObjectFactory atomObjectFactory = new org.apache.wink.common.model.atom.ObjectFactory();
+    protected ObjectFactory     atomObjectFactory =
+                                                      new org.apache.wink.common.model.atom.ObjectFactory();
 
-    public long getSize(T t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public long getSize(T t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
         return -1;
     }
 
-    protected void writeFeed(AtomFeed feed, Class<?> type, Type genericType, Annotation[] annotations,
-            MediaType mediaType, MultivaluedMap<String,Object> httpHeaders, OutputStream entityStream)
-            throws IOException, WebApplicationException {
+    protected void writeFeed(AtomFeed feed,
+                             Class<?> type,
+                             Type genericType,
+                             Annotation[] annotations,
+                             MediaType mediaType,
+                             MultivaluedMap<String, Object> httpHeaders,
+                             OutputStream entityStream) throws IOException, WebApplicationException {
         if (feed == null) {
             return;
         }
 
-        JAXBElement<AtomFeed> feedElement = atomObjectFactory.createFeed(feed);
-        Marshaller marshaller = AtomFeed.getMarshaller();
-        OutputStreamWriter writer = new OutputStreamWriter(entityStream, ProviderUtils.getCharset(mediaType));
-        AtomJAXBUtils.marshal(marshaller, feedElement, null, writer);
-        writer.flush();
+        try {
+            JAXBElement<AtomFeed> feedElement = atomObjectFactory.createFeed(feed);
+            Marshaller marshaller = AtomFeed.getMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_ENCODING, ProviderUtils.getCharset(mediaType));
+            AtomJAXBUtils.marshal(marshaller, feedElement, entityStream);
+        } catch (PropertyException e) {
+            throw new WebApplicationException(e);
+        }
     }
 
-    protected AtomFeed readFeed(Class<AtomFeed> type, Type genericType, Annotation[] annotations, MediaType mediaType,
-            MultivaluedMap<String,String> httpHeaders, InputStream entityStream) throws IOException,
-            WebApplicationException {
+    protected AtomFeed readFeed(Class<AtomFeed> type,
+                                Type genericType,
+                                Annotation[] annotations,
+                                MediaType mediaType,
+                                MultivaluedMap<String, String> httpHeaders,
+                                InputStream entityStream) throws IOException,
+        WebApplicationException {
 
         Unmarshaller unmarshaller = AtomFeed.getUnmarshaller();
-        InputStreamReader reader = new InputStreamReader(entityStream, ProviderUtils.getCharset(mediaType));
+        InputStreamReader reader =
+            new InputStreamReader(entityStream, ProviderUtils.getCharset(mediaType));
         Object object = AtomJAXBUtils.unmarshal(unmarshaller, reader);
         AtomFeed feed = null;
         if (object instanceof AtomFeed) {
             feed = (AtomFeed)object;
         } else {
-            logger.error("request entity is not an atom feed (it was unmarshalled as {})", object.getClass());
+            logger.error("request entity is not an atom feed (it was unmarshalled as {})", object
+                .getClass());
             throw new WebApplicationException(Status.BAD_REQUEST);
         }
 

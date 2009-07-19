@@ -21,7 +21,6 @@ package org.apache.wink.common.internal.providers.entity.app;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
@@ -33,13 +32,13 @@ import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
 
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.model.app.AppService;
 import org.apache.wink.common.model.app.ObjectFactory;
 import org.apache.wink.common.model.atom.AtomJAXBUtils;
 import org.apache.wink.common.utils.ProviderUtils;
-
 
 /**
  * Representation of Atom Service Document.
@@ -48,23 +47,38 @@ import org.apache.wink.common.utils.ProviderUtils;
 @Produces(MediaTypeUtils.ATOM_SERVICE_DOCUMENT)
 public class AppServiceProvider implements MessageBodyWriter<AppService> {
 
-    public long getSize(AppService t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public long getSize(AppService t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
         return -1;
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
         return type == AppService.class;
     }
 
-    public void writeTo(AppService t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
-            OutputStream entityStream) throws IOException, WebApplicationException {
+    public void writeTo(AppService t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
 
-        ObjectFactory objectFactory = new ObjectFactory();
-        JAXBElement<AppService> sd = objectFactory.createService(t);
-        Marshaller marshaller = AppService.getMarshaller();
-        OutputStreamWriter writer = new OutputStreamWriter(entityStream, ProviderUtils.getCharset(mediaType));
-        AtomJAXBUtils.marshal(marshaller, sd, null, writer);
-        writer.flush();
+        try {
+            ObjectFactory objectFactory = new ObjectFactory();
+            JAXBElement<AppService> sd = objectFactory.createService(t);
+            Marshaller marshaller = AppService.getMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_ENCODING, ProviderUtils.getCharset(mediaType));
+            AtomJAXBUtils.marshal(marshaller, sd, entityStream);
+        } catch (PropertyException e) {
+            throw new WebApplicationException(e);
+        }
     }
 
 }

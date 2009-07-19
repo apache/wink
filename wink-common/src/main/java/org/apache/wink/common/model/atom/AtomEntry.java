@@ -24,17 +24,15 @@
 // Generated on: 2008.05.27 at 11:24:25 AM IDT 
 //
 
-
 package org.apache.wink.common.model.atom;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Reader;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.ws.rs.WebApplicationException;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -62,7 +60,6 @@ import org.apache.wink.common.model.synd.SyndLink;
 import org.apache.wink.common.model.synd.SyndPerson;
 import org.apache.wink.common.model.synd.SyndText;
 import org.w3c.dom.Element;
-
 
 /**
  * The "atom:entry" element Per RFC4287
@@ -139,43 +136,28 @@ import org.w3c.dom.Element;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlAccessorOrder(XmlAccessOrder.UNDEFINED)
-@XmlType(name = "atomEntry", propOrder = {
-    "id",
-    "updated",
-    "title",
-    "summary",
-    "published",
-    "link",
-    "author",
-    "contributor",
-    "category",
-    "any",
-    "content"
-})
-public class AtomEntry
-    extends AtomCommonAttributes
-    implements NamespacePrefixMapperProvider
-{
+@XmlType(name = "atomEntry", propOrder = {"id", "updated", "title", "summary", "published", "link",
+                                          "author", "contributor", "category", "any", "content"})
+public class AtomEntry extends AtomCommonAttributes implements NamespacePrefixMapperProvider {
 
-    private static final String MATCH_ANY_PATTERN = ".*";
-    
+    private static final String      MATCH_ANY_PATTERN = ".*";
+
     @XmlElement(required = true)
-    protected String id;
+    protected String                 id;
     @XmlElement(required = true)
-    protected XMLGregorianCalendar updated;
+    protected XMLGregorianCalendar   updated;
     @XmlElement(required = true)
-    protected AtomText title;
-    protected AtomText summary;
-    protected XMLGregorianCalendar published;
-    protected List<AtomLink> link;
-    protected List<AtomPerson> author;
-    protected List<AtomPerson> contributor;
-    protected List<AtomCategory> category;
+    protected AtomText               title;
+    protected AtomText               summary;
+    protected XMLGregorianCalendar   published;
+    protected List<AtomLink>         link;
+    protected List<AtomPerson>       author;
+    protected List<AtomPerson>       contributor;
+    protected List<AtomCategory>     category;
     @XmlAnyElement
-    protected List<Element> any;
-    protected AtomContent content;
+    protected List<Element>          any;
+    protected AtomContent            content;
 
-    
     @XmlTransient
     private static final JAXBContext atomContext;
 
@@ -190,43 +172,37 @@ public class AtomEntry
     public static Marshaller getMarshaller() {
         return JAXBUtils.createMarshaller(atomContext);
     }
-    
+
     public static Unmarshaller getUnmarshaller() {
         return JAXBUtils.createUnmarshaller(atomContext);
     }
 
     /**
      * Convenience method for creating an AtomEntry from xml
+     * 
      * @param reader input reader
      * @return AtomEntry instance from the input
      */
-    public static AtomEntry unmarshal(Reader reader) {
-        try {
-            return (AtomEntry)AtomJAXBUtils.unmarshal(AtomEntry.getUnmarshaller(), reader);
-        } catch (IOException e) {
-            throw new RestException(e);
-        }
+    public static AtomEntry unmarshal(Reader reader) throws IOException {
+        return (AtomEntry)AtomJAXBUtils.unmarshal(AtomEntry.getUnmarshaller(), reader);
     }
 
-    public static void marshal(AtomEntry entry, Writer writer) {
-        try {
-            JAXBElement<AtomEntry> entryElement = new ObjectFactory().createEntry(entry);
-            Marshaller marshaller = AtomEntry.getMarshaller();
-            AtomJAXBUtils.marshal(marshaller, entryElement, null, writer);
-            writer.flush();
-        } catch (IOException e) {
-            throw new WebApplicationException(e);
-        }
+    public static void marshal(AtomEntry entry, OutputStream os) throws IOException {
+        JAXBElement<AtomEntry> entryElement = new ObjectFactory().createEntry(entry);
+        Marshaller marshaller = AtomEntry.getMarshaller();
+        AtomJAXBUtils.marshal(marshaller, entryElement, null, os);
     }
-    
+
     public JAXBNamespacePrefixMapper getNamespacePrefixMapper() {
-        JAXBNamespacePrefixMapper mapper = new JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_ATOM);
+        JAXBNamespacePrefixMapper mapper =
+            new JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_ATOM);
         mapper.omitNamespace(RestConstants.NAMESPACE_OPENSEARCH);
         return mapper;
     }
-    
-    public AtomEntry() {}
-    
+
+    public AtomEntry() {
+    }
+
     public AtomEntry(SyndEntry value) {
         super(value);
         if (value == null) {
@@ -259,7 +235,7 @@ public class AtomEntry
         value.getLinks().addAll(getLinksAsSynd());
         return value;
     }
-    
+
     private List<SyndPerson> getAuthorsAsSynd() {
         List<SyndPerson> authors = new ArrayList<SyndPerson>();
         for (AtomPerson value : getAuthors()) {
@@ -298,7 +274,7 @@ public class AtomEntry
             }
         }
     }
-    
+
     private void setCategories(List<SyndCategory> values) {
         category = new ArrayList<AtomCategory>();
         for (SyndCategory value : values) {
@@ -333,6 +309,7 @@ public class AtomEntry
 
     /**
      * Gets the value of updated as a long value
+     * 
      * @return the updated value, or -1 if it is not set
      */
     public long getUpdatedAsTime() {
@@ -356,7 +333,7 @@ public class AtomEntry
     public void setUpdated(XMLGregorianCalendar value) {
         this.updated = value;
     }
-    
+
     /**
      * Sets the value of updated.
      */
@@ -405,6 +382,7 @@ public class AtomEntry
 
     /**
      * Gets the value of published as a long value
+     * 
      * @return the published value, or -1 if it is not set
      */
     public long getPublishedAsTime() {
@@ -428,7 +406,7 @@ public class AtomEntry
     public void setPublished(XMLGregorianCalendar value) {
         this.published = value;
     }
-    
+
     /**
      * Sets the value of published.
      */
@@ -449,25 +427,19 @@ public class AtomEntry
 
     /**
      * Gets the value of link.
-     * 
      * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the link.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the link.
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getLink().add(newItem);
+     * getLink().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link AtomLink }
-     * 
-     * 
+     * Objects of the following type(s) are allowed in the list {@link AtomLink }
      */
     public List<AtomLink> getLinks() {
         if (link == null) {
@@ -475,9 +447,10 @@ public class AtomEntry
         }
         return this.link;
     }
-    
+
     /**
      * Get the list of links that match the relation and type regex patterns
+     * 
      * @param relationPattern the regex relation pattern to match
      * @param typePattern the regex type pattern to match
      * @return the list of links matching the given regex patterns
@@ -486,7 +459,7 @@ public class AtomEntry
         if (relationPattern == null || typePattern == null) {
             throw new NullPointerException("pattern");
         }
-        
+
         List<AtomLink> matchingLinks = new ArrayList<AtomLink>();
         List<AtomLink> links = getLinks();
         for (AtomLink link : links) {
@@ -504,46 +477,43 @@ public class AtomEntry
         }
         return matchingLinks;
     }
-    
+
     /**
      * Get the list of links that match the relation regex pattern
+     * 
      * @param relationPattern the regex relation pattern to match
      * @return the link matching the given regex pattern, or <code>null</code>
      */
     public List<AtomLink> getLinksByType(String typePattern) {
         return getLinks(MATCH_ANY_PATTERN, typePattern);
     }
-    
+
     /**
      * Get the list of links that match the type regex pattern
+     * 
      * @param typePattern the regex type pattern to match
      * @return the link matching the given regex pattern, or <code>null</code>
      */
     public List<AtomLink> getLinksByRelation(String relationPattern) {
         return getLinks(relationPattern, MATCH_ANY_PATTERN);
     }
-    
+
     /**
      * Gets the value of author.
-     * 
      * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the author.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the author.
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getAuthor().add(newItem);
+     * getAuthor().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AtomPerson }
-     * 
-     * 
      */
     public List<AtomPerson> getAuthors() {
         if (author == null) {
@@ -554,25 +524,20 @@ public class AtomEntry
 
     /**
      * Gets the value of contributor.
-     * 
      * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the contributor.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the contributor.
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getContributor().add(newItem);
+     * getContributor().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AtomPerson }
-     * 
-     * 
      */
     public List<AtomPerson> getContributors() {
         if (contributor == null) {
@@ -583,25 +548,20 @@ public class AtomEntry
 
     /**
      * Gets the value of category.
-     * 
      * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the category.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the category.
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getCategory().add(newItem);
+     * getCategory().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AtomCategory }
-     * 
-     * 
      */
     public List<AtomCategory> getCategories() {
         if (category == null) {
@@ -612,25 +572,19 @@ public class AtomEntry
 
     /**
      * Gets extension elements
-     * 
      * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the any.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the any.
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getAny().add(newItem);
+     * getAny().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Element }
-     * 
-     * 
+     * Objects of the following type(s) are allowed in the list {@link Element }
      */
     public List<Element> getAny() {
         if (any == null) {

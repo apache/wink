@@ -21,6 +21,7 @@
 
 package org.apache.wink.server.internal.providers.entity;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -56,7 +57,7 @@ public class AtomEntryProviderTest extends MockServletInvocationTest {
         @GET
         @Path("atomentry")
         @Produces("application/atom+xml")
-        public AtomEntry getAtomEntry() {
+        public AtomEntry getAtomEntry() throws IOException {
             AtomEntry entry = AtomEntry.unmarshal(new StringReader(ENTRY));
             return entry;
         }
@@ -64,7 +65,7 @@ public class AtomEntryProviderTest extends MockServletInvocationTest {
         @GET
         @Path("atomentryelement")
         @Produces("application/atom+xml")
-        public JAXBElement<AtomEntry> getAtomEntryElement() {
+        public JAXBElement<AtomEntry> getAtomEntryElement() throws IOException {
             AtomEntry entry = AtomEntry.unmarshal(new StringReader(ENTRY));
             org.apache.wink.common.model.atom.ObjectFactory of = new org.apache.wink.common.model.atom.ObjectFactory();
             return of.createEntry(entry);
@@ -73,7 +74,7 @@ public class AtomEntryProviderTest extends MockServletInvocationTest {
         @GET
         @Path("atomsyndentry")
         @Produces("application/atom+xml")
-        public SyndEntry getSyndEntry() {
+        public SyndEntry getSyndEntry() throws IOException {
             AtomEntry entry = AtomEntry.unmarshal(new StringReader(ENTRY));
             return entry.toSynd(new SyndEntry());
         }

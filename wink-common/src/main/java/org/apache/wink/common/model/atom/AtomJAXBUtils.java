@@ -17,15 +17,15 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.model.atom;
 
 import java.io.CharArrayWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringReader;
-import java.io.Writer;
+import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Map;
@@ -58,12 +58,11 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.ext.LexicalHandler;
 
-
 public class AtomJAXBUtils {
 
     private final static SAXParserFactory spf;
-    private final static EncodingInfo encodingInfo;
-    private static final DatatypeFactory datatypeFactory;
+    private final static EncodingInfo     encodingInfo;
+    private static final DatatypeFactory  datatypeFactory;
 
     static {
         try {
@@ -87,9 +86,11 @@ public class AtomJAXBUtils {
 
         // as per RFC3023 and Atom specification
         type = type.toLowerCase();
-        if (type.endsWith("/xml") || type.endsWith("+xml") || type.equals("xhtml")
-                || type.equals("text/xml-external-parsed-entity")
-                || type.equals("application/xml-external-parsed-entity") || type.equals("application/xml-dtd")) {
+        if (type.endsWith("/xml") || type.endsWith("+xml")
+            || type.equals("xhtml")
+            || type.equals("text/xml-external-parsed-entity")
+            || type.equals("application/xml-external-parsed-entity")
+            || type.equals("application/xml-dtd")) {
             return true;
         }
 
@@ -118,7 +119,8 @@ public class AtomJAXBUtils {
         try {
             xmlReader = spf.newSAXParser().getXMLReader();
             xmlReader.setContentHandler(handler);
-            // setting this property will cause the handler to get lexical events as well
+            // setting this property will cause the handler to get lexical
+            // events as well
             if (handler instanceof LexicalHandler) {
                 xmlReader.setProperty("http://xml.org/sax/properties/lexical-handler", handler);
             }
@@ -137,16 +139,17 @@ public class AtomJAXBUtils {
         Object result = null;
         try {
             UnmarshallerHandler unmarshallerHandler = unmarshaller.getUnmarshallerHandler();
-            AtomUnmarshallingListener.AtomUnmarshallerHandler handler = new AtomUnmarshallingListener.AtomUnmarshallerHandler(
-                    unmarshallerHandler);
+            AtomUnmarshallingListener.AtomUnmarshallerHandler handler =
+                new AtomUnmarshallingListener.AtomUnmarshallerHandler(unmarshallerHandler);
             AtomUnmarshallingListener listener = new AtomUnmarshallingListener(handler);
             unmarshaller.setListener(listener);
             // here is where the magic begins.
-            // SAX will parse the XML document, and our handler will get all the SAX events
+            // SAX will parse the XML document, and our handler will get all the
+            // SAX events
             saxParse(reader, handler, "failed to unmarshal object");
             // parsing is done and the JAXB object is ready
             result = handler.getResult();
-            if (result instanceof JAXBElement) {
+            if (result instanceof JAXBElement<?>) {
                 result = ((JAXBElement<?>)result).getValue();
             }
         } catch (IllegalStateException e) {
@@ -157,50 +160,68 @@ public class AtomJAXBUtils {
         return result;
     }
 
-    public static void marshal(Marshaller marshaller, Object jaxbObject, Map<String,String> processingInstructions,
-            Writer writer) throws IOException {
-        marshal(marshaller, jaxbObject, processingInstructions, null, writer);
+    public static void marshal(Marshaller marshaller, Object jaxbObject, OutputStream os)
+        throws IOException {
+        marshal(marshaller, jaxbObject, null, null, os);
     }
 
-    public static void marshal(Marshaller marshaller, Object jaxbObject, Map<String,String> processingInstructions,
-            JAXBNamespacePrefixMapper namespacePrefixMapper, Writer writer) throws IOException {
+    public static void marshal(Marshaller marshaller,
+                               Object jaxbObject,
+                               Map<String, String> processingInstructions,
+                               OutputStream os) throws IOException {
+        marshal(marshaller, jaxbObject, processingInstructions, null, os);
+    }
+
+    public static void marshal(Marshaller marshaller,
+                               Object jaxbObject,
+                               Map<String, String> processingInstructions,
+                               JAXBNamespacePrefixMapper namespacePrefixMapper,
+                               OutputStream os) throws IOException {
         try {
             // create a new SAX serializer for creating the XML output.
-            // we will invoke the marshal of JAXB to send all its marshaling events to this handler
-            AtomMarshallingListener.AtomMarshallerHandler handler = new AtomMarshallingListener.AtomMarshallerHandler(
-                    processingInstructions, marshaller);
+            // we will invoke the marshal of JAXB to send all its marshaling
+            // events to this handler
+            AtomMarshallingListener.AtomMarshallerHandler handler =
+                new AtomMarshallingListener.AtomMarshallerHandler(processingInstructions,
+                                                                  marshaller);
             if (namespacePrefixMapper == null) {
                 Object jaxb = jaxbObject;
-                if (jaxbObject instanceof JAXBElement) {
+                if (jaxbObject instanceof JAXBElement<?>) {
                     jaxb = ((JAXBElement<?>)jaxbObject).getValue();
                 }
                 if (jaxb instanceof NamespacePrefixMapperProvider) {
-                    namespacePrefixMapper = ((NamespacePrefixMapperProvider)jaxb).getNamespacePrefixMapper();
+                    namespacePrefixMapper =
+                        ((NamespacePrefixMapperProvider)jaxb).getNamespacePrefixMapper();
                 }
             }
             handler.setNamespacePrefixMapper(namespacePrefixMapper);
-            handler.setOutputCharStream(writer);
-            // add our listener to the marshaler so we will receive events from JAXB
+            handler.setOutputByteStream(os);
+            // add our listener to the marshaler so we will receive events from
+            // JAXB
             marshaller.setListener(new AtomMarshallingListener(handler));
-            // perform the marshaling so that our marshaler (xml serializer) will receive all the
+            // perform the marshaling so that our marshaler (xml serializer)
+            // will receive all the
             // SAX events
             ContentHandler xmlSerializer = handler.asContentHandler();
             marshaller.marshal(jaxbObject, xmlSerializer);
         } catch (JAXBException e) {
             throw new RestException("failed to marshal object (" + jaxbObject.getClass().getName()
-                    + ")", e);
+                + ")", e);
         }
     }
 
-    // ========================== AtomMarshallingListener =================================
+    // ========================== AtomMarshallingListener
+    // =================================
 
     //
-    // JAXB marshaling listener which is used to get events from JAXB during the marshaling of an
+    // JAXB marshaling listener which is used to get events from JAXB during the
+    // marshaling of an
     // XML
     //
     public static class AtomMarshallingListener extends Marshaller.Listener {
 
-        // this is the AtomMarshallerHandler that will receive all the SAX events from JAXB for
+        // this is the AtomMarshallerHandler that will receive all the SAX
+        // events from JAXB for
         // creating the
         // XML output.
         private AtomMarshallerHandler handler;
@@ -222,14 +243,15 @@ public class AtomJAXBUtils {
                     }
                 } else if (source instanceof AtomText) {
                     AtomText text = (AtomText)source;
-                    // we know that the type is xhtml, or we wouldn't have gotten here
+                    // we know that the type is xhtml, or we wouldn't have
+                    // gotten here
                     xmlContent = text.saveValue();
                     xmlContent = surroundWithXhtmlDiv(xmlContent);
                 }
                 handler.pushXmlContent(xmlContent);
             }
         }
-        
+
         private String surroundWithXhtmlDiv(String xhtml) {
             if (xhtml == null) {
                 return null;
@@ -252,21 +274,23 @@ public class AtomJAXBUtils {
         }
 
         /**
-         * AtomMarshallerHandler is a SAX ContentHandler which extends XMLSerliazer to create an XML
-         * output from SAX events.
+         * AtomMarshallerHandler is a SAX ContentHandler which extends
+         * XMLSerliazer to create an XML output from SAX events.
          */
         public static class AtomMarshallerHandler extends XMLSerializer {
-            // this is used to control the output of the xml that the XMLSerializer will produce
-            private OutputFormat of;
-            private int indentation = 4;
+            // this is used to control the output of the xml that the
+            // XMLSerializer will produce
+            private OutputFormat              of;
+            private int                       indentation = 4;
 
-            private Map<String,String> processingInstructions;
+            private Map<String, String>       processingInstructions;
             private JAXBNamespacePrefixMapper namespacePrefixMapper;
 
-            private String xmlContent;
+            private String                    xmlContent;
 
-            public AtomMarshallerHandler(Map<String,String> processingInstructions, Marshaller marshaller)
-                    throws JAXBException {
+            public AtomMarshallerHandler(Map<String, String> processingInstructions,
+                                         Marshaller marshaller) throws JAXBException,
+                UnsupportedEncodingException {
                 this.processingInstructions = processingInstructions;
                 namespacePrefixMapper = null;
                 xmlContent = null;
@@ -274,8 +298,12 @@ public class AtomJAXBUtils {
                 // prepare the OutputFormat to output the XML as desired
                 of = new OutputFormat();
                 of.setMethod(Method.XML);
-                of.setEncoding(encodingInfo);
-                Boolean property = (Boolean)marshaller.getProperty(Marshaller.JAXB_FORMATTED_OUTPUT);
+                String encoding = (String)marshaller.getProperty(Marshaller.JAXB_ENCODING);
+                of.setEncoding(encoding == null ? encodingInfo : new OutputFormat(Method.XML,
+                                                                                  encoding, true)
+                    .getEncodingInfo());
+                Boolean property =
+                    (Boolean)marshaller.getProperty(Marshaller.JAXB_FORMATTED_OUTPUT);
                 boolean formattedOutput = false;
                 if (property != null) {
                     formattedOutput = property.booleanValue();
@@ -317,7 +345,8 @@ public class AtomJAXBUtils {
 
             @Override
             public void startDocument(String rootTagName) throws IOException {
-                // if the user supplied additional processing instructions, add them now
+                // if the user supplied additional processing instructions, add
+                // them now
                 if (processingInstructions != null) {
                     Set<String> keys = processingInstructions.keySet();
                     String attributes = null;
@@ -327,7 +356,9 @@ public class AtomJAXBUtils {
                             super.processingInstruction(key, attributes);
                         } catch (SAXException e) {
                             throw new RestException("failed to add processing instruction '" + key
-                                    + "' with attributes '" + attributes + "'", e);
+                                + "' with attributes '"
+                                + attributes
+                                + "'", e);
                         }
                     }
                 }
@@ -346,11 +377,14 @@ public class AtomJAXBUtils {
             }
 
             @Override
-            public void startElement(String namespaceURI, String localName, String rawName, Attributes attrs)
-                    throws SAXException {
+            public void startElement(String namespaceURI,
+                                     String localName,
+                                     String rawName,
+                                     Attributes attrs) throws SAXException {
 
                 if (namespacePrefixMapper != null) {
-                    String prefix = namespacePrefixMapper.getPreferredPrefix(namespaceURI, null, false);
+                    String prefix =
+                        namespacePrefixMapper.getPreferredPrefix(namespaceURI, null, false);
                     if (prefix != null) {
                         if (prefix.length() == 0) {
                             rawName = localName;
@@ -373,14 +407,16 @@ public class AtomJAXBUtils {
                 namespacePrefixMapper = null;
                 // parse the xml content and send all events to this handler,
                 // except for the startDocument and endDocument events
-                saxParse(new StringReader(xmlContent), new XmlContentHandler(this), "Bad XML content in Atom");
+                saxParse(new StringReader(xmlContent),
+                         new XmlContentHandler(this),
+                         "Bad XML content in Atom");
                 // restore the prefix mapper
                 namespacePrefixMapper = mapper;
             }
 
             /**
-             * Delegates all SAX events to the contained handler except for the start and end
-             * document events
+             * Delegates all SAX events to the contained handler except for the
+             * start and end document events
              */
             private static class XmlContentHandler extends SAXHandlerWrapper {
                 public XmlContentHandler(ContentHandler handler) {
@@ -401,7 +437,8 @@ public class AtomJAXBUtils {
 
     }
 
-    // ========================== AtomUnmarshallingListener =================================
+    // ========================== AtomUnmarshallingListener
+    // =================================
 
     public static class AtomUnmarshallingListener extends Unmarshaller.Listener {
 
@@ -417,7 +454,8 @@ public class AtomJAXBUtils {
             if (target instanceof AtomContent) {
                 unmarshallerHandler.startSpecialContent(target);
 
-                // if JAXB is just about to unmarshal an AtomText construct element
+                // if JAXB is just about to unmarshal an AtomText construct
+                // element
             } else if (target instanceof AtomText) {
                 unmarshallerHandler.startSpecialContent(target);
             }
@@ -433,26 +471,32 @@ public class AtomJAXBUtils {
         }
 
         /**
-         * This handler is used to receive all SAX events during the parsing of an incoming Atom
-         * feed or entry. During the parsing of the XML we will delegate almost all of the events to
-         * JAXB so it can do its magic. Events that are related to the contents of a &lt;content>
-         * element or to a text construct element will be redirected to an instance of a
-         * SpecialContentHandler for converting the contents into a string even if it is xml
+         * This handler is used to receive all SAX events during the parsing of
+         * an incoming Atom feed or entry. During the parsing of the XML we will
+         * delegate almost all of the events to JAXB so it can do its magic.
+         * Events that are related to the contents of a &lt;content> element or
+         * to a text construct element will be redirected to an instance of a
+         * SpecialContentHandler for converting the contents into a string even
+         * if it is xml
          */
         public static class AtomUnmarshallerHandler implements UnmarshallerHandler, LexicalHandler {
 
-            // the JAXB ContentHandler that will receive all the delegated SAX parser events other
-            // than the events related to elements whose xml contents need to be treated as text
-            private UnmarshallerHandler jaxbHandler;
+            // the JAXB ContentHandler that will receive all the delegated SAX
+            // parser events other
+            // than the events related to elements whose xml contents need to be
+            // treated as text
+            private UnmarshallerHandler   jaxbHandler;
 
             // this is an xml serializer to handle SAX events during the parsing
-            // of an element whose xml contents needs to be treated as text, even
+            // of an element whose xml contents needs to be treated as text,
+            // even
             // if it is xml
             private SpecialContentHandler specialContentHandler;
 
-            // flag for indicating that we are currently handing an element whose
+            // flag for indicating that we are currently handing an element
+            // whose
             // contents needs to be treated as text, even if it is xml
-            private boolean isSpecialContent;
+            private boolean               isSpecialContent;
 
             public AtomUnmarshallerHandler(UnmarshallerHandler handler) {
                 jaxbHandler = handler;
@@ -460,7 +504,8 @@ public class AtomJAXBUtils {
             }
 
             public void startSpecialContent(Object target) {
-                // this method is called from the UnmarshallerListener, who received a notification
+                // this method is called from the UnmarshallerListener, who
+                // received a notification
                 // that a JAXB element is going to be unmarshalled.
                 isSpecialContent = true;
                 specialContentHandler = new SpecialContentHandler(target);
@@ -504,7 +549,8 @@ public class AtomJAXBUtils {
                 jaxbHandler.endElement(uri, localName, name);
             }
 
-            public void startElement(String uri, String localName, String name, Attributes atts) throws SAXException {
+            public void startElement(String uri, String localName, String name, Attributes atts)
+                throws SAXException {
                 if (isSpecialContent) {
                     specialContentHandler.startElement(uri, localName, name, atts);
                     return;
@@ -631,12 +677,12 @@ public class AtomJAXBUtils {
 
         private static class SpecialContentHandler extends SAXHandlerWrapper {
             // the JAXB object whose value may be text or xml
-            private Object target;
+            private Object          target;
 
             private CharArrayWriter writer;
-            private int elementCounter;
-            private boolean isXhtml;
-            private boolean isXmlOpen;
+            private int             elementCounter;
+            private boolean         isXhtml;
+            private boolean         isXmlOpen;
 
             public SpecialContentHandler(Object target) {
                 super(initXmlSerializer());
@@ -665,7 +711,8 @@ public class AtomJAXBUtils {
                 if (isXmlOpen) {
                     result = result.trim();
                     if (!result.startsWith("<")) {
-                        throw new RuntimeException("Illegal atom content: must contain a single child element");
+                        throw new RuntimeException(
+                                                   "Illegal atom content: must contain a single child element");
                     }
                 }
                 return result;
@@ -692,7 +739,8 @@ public class AtomJAXBUtils {
             }
 
             @Override
-            public void startElement(String uri, String localName, String name, Attributes atts) throws SAXException {
+            public void startElement(String uri, String localName, String name, Attributes atts)
+                throws SAXException {
                 if (isRootElement()) {
                     openXml();
                 }
@@ -700,13 +748,17 @@ public class AtomJAXBUtils {
                 ++elementCounter;
                 // if we need to skip processing of the first <div> element
                 if (isFirstElement() && isXhtml) {
-                    // if we are unmarshalling xhtml, we need to skip processing of the first <div>
+                    // if we are unmarshalling xhtml, we need to skip processing
+                    // of the first <div>
                     // element
-                    if (uri.equals(RestConstants.NAMESPACE_XHTML) && localName.equalsIgnoreCase("div")) {
-                        // if this is the first div element, then we must ignore it
+                    if (uri.equals(RestConstants.NAMESPACE_XHTML) && localName
+                        .equalsIgnoreCase("div")) {
+                        // if this is the first div element, then we must ignore
+                        // it
                         return;
                     } else {
-                        throw new RuntimeException("Illegal content: xhtml content must have a div root element");
+                        throw new RuntimeException(
+                                                   "Illegal content: xhtml content must have a div root element");
                     }
                 }
 
@@ -716,7 +768,8 @@ public class AtomJAXBUtils {
 
             private void openXml() {
                 if (isXmlOpen) {
-                    throw new RuntimeException("Illegal atom content: must have only one root element");
+                    throw new RuntimeException(
+                                               "Illegal atom content: must have only one root element");
                 }
 
                 // get the type of contents of the JAXB object
@@ -732,7 +785,8 @@ public class AtomJAXBUtils {
                 }
 
                 if (!isXhtml && !isTypeXml(type)) {
-                    throw new RuntimeException("Illegal atom content: must not contain child elements");
+                    throw new RuntimeException(
+                                               "Illegal atom content: must not contain child elements");
                 }
                 isXmlOpen = true;
             }
@@ -742,7 +796,8 @@ public class AtomJAXBUtils {
                 --elementCounter;
                 // if we need to skip processing of the first <div> element
                 if (isLastElement() && isXhtml) {
-                    if (uri.equals(RestConstants.NAMESPACE_XHTML) && localName.equalsIgnoreCase("div")) {
+                    if (uri.equals(RestConstants.NAMESPACE_XHTML) && localName
+                        .equalsIgnoreCase("div")) {
                         return;
                     }
                 }
@@ -761,30 +816,30 @@ public class AtomJAXBUtils {
         }
     }
 
-//    /**
-//     * Remove xml declaration from XML.
-//     * 
-//     * @param xmlStr
-//     *            The XML
-//     * @return String The XML without xml declaration
-//     */
-//    public static String stripXmlDecl(String xmlStr) {
-//
-//        if (xmlStr == null) {
-//            return null;
-//        }
-//
-//        int startInd;
-//        int endInd;
-//        StringBuilder xmlStrBuilder = new StringBuilder(xmlStr);
-//
-//        while ((startInd = xmlStrBuilder.indexOf("<?")) >= 0) {
-//            endInd = xmlStrBuilder.indexOf("?>") + 2;
-//            xmlStrBuilder.replace(startInd, endInd, "");
-//        }
-//        return xmlStrBuilder.toString();
-//    }
-//
+    // /**
+    // * Remove xml declaration from XML.
+    // *
+    // * @param xmlStr
+    // * The XML
+    // * @return String The XML without xml declaration
+    // */
+    // public static String stripXmlDecl(String xmlStr) {
+    //
+    // if (xmlStr == null) {
+    // return null;
+    // }
+    //
+    // int startInd;
+    // int endInd;
+    // StringBuilder xmlStrBuilder = new StringBuilder(xmlStr);
+    //
+    // while ((startInd = xmlStrBuilder.indexOf("<?")) >= 0) {
+    // endInd = xmlStrBuilder.indexOf("?>") + 2;
+    // xmlStrBuilder.replace(startInd, endInd, "");
+    // }
+    // return xmlStrBuilder.toString();
+    // }
+    //
     public static XMLGregorianCalendar timeToXmlGregorianCalendar(long time) {
         if (time == -1) {
             return null;

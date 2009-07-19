@@ -24,18 +24,16 @@
 // Generated on: 2008.05.27 at 11:24:25 AM IDT 
 //
 
-
 package org.apache.wink.common.model.atom;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Reader;
-import java.io.Writer;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.ws.rs.WebApplicationException;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -66,7 +64,6 @@ import org.apache.wink.common.model.synd.SyndLink;
 import org.apache.wink.common.model.synd.SyndPerson;
 import org.apache.wink.common.model.synd.SyndText;
 import org.w3c.dom.Element;
-
 
 /**
  * The "atom:feed" element Per RFC4287
@@ -142,79 +139,59 @@ import org.w3c.dom.Element;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlAccessorOrder(XmlAccessOrder.UNDEFINED)
-@XmlType(name = "atomFeed", propOrder = {
-    "id",
-    "updated",
-    "title",
-    "subtitle",
-    "itemsPerPage",
-    "startIndex",
-    "totalResults",
-    "opensearchQuery",
-    "link",
-    "author",
-    "contributor",
-    "category",
-    "generator",
-    "icon",
-    "logo",
-    "rights",
-    "any",
-    "entry"
-})
-public class AtomFeed
-    extends AtomCommonAttributes
-    implements NamespacePrefixMapperProvider
-{
+@XmlType(name = "atomFeed", propOrder = {"id", "updated", "title", "subtitle", "itemsPerPage",
+                                         "startIndex", "totalResults", "opensearchQuery", "link",
+                                         "author", "contributor", "category", "generator", "icon",
+                                         "logo", "rights", "any", "entry"})
+public class AtomFeed extends AtomCommonAttributes implements NamespacePrefixMapperProvider {
 
     @XmlElement(required = true)
-    protected String id;
+    protected String                                                id;
     @XmlElement(required = true)
-    protected XMLGregorianCalendar updated;
+    protected XMLGregorianCalendar                                  updated;
     @XmlElement(required = true)
-    protected AtomText title;
-    protected AtomText subtitle;
-    protected List<AtomLink> link;
-    protected List<AtomPerson> author;
-    protected List<AtomPerson> contributor;
-    protected List<AtomCategory> category;
-    protected AtomGenerator generator;
-    protected String icon;
-    protected String logo;
-    protected AtomText rights;
+    protected AtomText                                              title;
+    protected AtomText                                              subtitle;
+    protected List<AtomLink>                                        link;
+    protected List<AtomPerson>                                      author;
+    protected List<AtomPerson>                                      contributor;
+    protected List<AtomCategory>                                    category;
+    protected AtomGenerator                                         generator;
+    protected String                                                icon;
+    protected String                                                logo;
+    protected AtomText                                              rights;
     @XmlAnyElement
-    protected List<Object> any;
-    protected List<AtomEntry> entry;
-    
-    @XmlElement(namespace=RestConstants.NAMESPACE_OPENSEARCH)
-    protected BigInteger totalResults;
-    @XmlElement(namespace=RestConstants.NAMESPACE_OPENSEARCH)
-    protected BigInteger itemsPerPage;
-    @XmlElement(namespace=RestConstants.NAMESPACE_OPENSEARCH)
-    protected BigInteger startIndex;
-    @XmlElement(name="Query",namespace=RestConstants.NAMESPACE_OPENSEARCH)
-    protected List<OpenSearchQuery> opensearchQuery;
-    
-    
+    protected List<Object>                                          any;
+    protected List<AtomEntry>                                       entry;
+
+    @XmlElement(namespace = RestConstants.NAMESPACE_OPENSEARCH)
+    protected BigInteger                                            totalResults;
+    @XmlElement(namespace = RestConstants.NAMESPACE_OPENSEARCH)
+    protected BigInteger                                            itemsPerPage;
+    @XmlElement(namespace = RestConstants.NAMESPACE_OPENSEARCH)
+    protected BigInteger                                            startIndex;
+    @XmlElement(name = "Query", namespace = RestConstants.NAMESPACE_OPENSEARCH)
+    protected List<OpenSearchQuery>                                 opensearchQuery;
+
     @XmlTransient
-    private static final JAXBContext atomContext;
+    private static final JAXBContext                                atomContext;
     @XmlTransient
     protected org.apache.wink.common.model.opensearch.ObjectFactory opensearchFactory;
 
     static {
         try {
-            atomContext = JAXBContext.newInstance(
-                    AtomFeed.class.getPackage().getName() + ":" +
-                    OpenSearchDescription.class.getPackage().getName());
+            atomContext =
+                JAXBContext.newInstance(AtomFeed.class.getPackage().getName() + ":"
+                    + OpenSearchDescription.class.getPackage().getName());
         } catch (JAXBException e) {
             throw new RestException("Failed to create JAXBContext for AtomFeed", e);
         }
     }
-    
+
     public AtomFeed() {
         opensearchFactory = new org.apache.wink.common.model.opensearch.ObjectFactory();
     }
-    
+
     public AtomFeed(SyndFeed value) {
         super(value);
         if (value == null) {
@@ -236,14 +213,15 @@ public class AtomFeed
         setLinks(value.getLinks());
         setEntries(value.getEntries());
     }
-    
+
     public SyndFeed toSynd(SyndFeed value) {
         if (value == null) {
             return value;
         }
         super.toSynd(value);
         value.setUpdated(getUpdated());
-        value.setGenerator(getGenerator() != null ? getGenerator().toSynd(new SyndGenerator()) : null);
+        value.setGenerator(getGenerator() != null ? getGenerator().toSynd(new SyndGenerator())
+            : null);
         value.setIcon(getIcon());
         value.setId(getId());
         value.setItemsPerPage(getItemsPerPage());
@@ -259,56 +237,45 @@ public class AtomFeed
         value.getEntries().addAll(getEntriesAsSynd());
         return value;
     }
-    
+
     public static Marshaller getMarshaller() {
         return JAXBUtils.createMarshaller(atomContext);
     }
-    
+
     public static Unmarshaller getUnmarshaller() {
         return JAXBUtils.createUnmarshaller(atomContext);
     }
-    
+
     /**
      * Convenience method for creating an AtomFeed from xml
+     * 
      * @param reader input reader
      * @return AtomFeed instance from the input
      */
-    public static AtomFeed unmarshal(Reader reader) {
-        try {
-            return (AtomFeed)AtomJAXBUtils.unmarshal(AtomFeed.getUnmarshaller(), reader);
-        } catch (IOException e) {
-            throw new WebApplicationException(e);
-        }
+    public static AtomFeed unmarshal(Reader reader) throws IOException {
+        return (AtomFeed)AtomJAXBUtils.unmarshal(AtomFeed.getUnmarshaller(), reader);
     }
-    
-    public static void marshal(AtomFeed feed, Writer writer) {
-        try {
-            JAXBElement<AtomFeed> feedElement = new ObjectFactory().createFeed(feed);
-            Marshaller marshaller = AtomFeed.getMarshaller();
-            AtomJAXBUtils.marshal(marshaller, feedElement, null, writer);
-            writer.flush();
-        } catch (IOException e) {
-            throw new WebApplicationException(e);
-        }
+
+    public static void marshal(AtomFeed feed, OutputStream os) throws IOException {
+        JAXBElement<AtomFeed> feedElement = new ObjectFactory().createFeed(feed);
+        Marshaller marshaller = AtomFeed.getMarshaller();
+        AtomJAXBUtils.marshal(marshaller, feedElement, null, os);
     }
 
     public JAXBNamespacePrefixMapper getNamespacePrefixMapper() {
-        JAXBNamespacePrefixMapper mapper = new JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_ATOM);
+        JAXBNamespacePrefixMapper mapper =
+            new JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_ATOM);
         if (!openSearchElementsExist()) {
             mapper.omitNamespace(RestConstants.NAMESPACE_OPENSEARCH);
         }
         return mapper;
     }
-    
+
     private boolean openSearchElementsExist() {
-        return 
-            (totalResults != null ||
-             itemsPerPage != null ||
-             startIndex != null ||
-             (opensearchQuery != null && opensearchQuery.size() > 0));
+        return (totalResults != null || itemsPerPage != null || startIndex != null || (opensearchQuery != null && opensearchQuery
+            .size() > 0));
     }
-    
-    
+
     private List<SyndPerson> getAuthorsAsSynd() {
         List<SyndPerson> authors = new ArrayList<SyndPerson>();
         for (AtomPerson value : getAuthors()) {
@@ -338,7 +305,7 @@ public class AtomFeed
         }
         return authors;
     }
-    
+
     private List<SyndEntry> getEntriesAsSynd() {
         List<SyndEntry> authors = new ArrayList<SyndEntry>();
         for (AtomEntry value : getEntries()) {
@@ -348,7 +315,7 @@ public class AtomFeed
         }
         return authors;
     }
-    
+
     private void setAuthors(List<SyndPerson> values) {
         getAuthors().clear();
         if (values == null) {
@@ -360,7 +327,7 @@ public class AtomFeed
             }
         }
     }
-    
+
     private void setCategories(List<SyndCategory> values) {
         getCategories().clear();
         if (values == null) {
@@ -384,7 +351,7 @@ public class AtomFeed
             }
         }
     }
-    
+
     private void setEntries(List<SyndEntry> values) {
         getEntries().clear();
         if (values == null) {
@@ -413,6 +380,7 @@ public class AtomFeed
 
     /**
      * Gets the value of updated as a long value
+     * 
      * @return the updated value, or -1 if it is not set
      */
     public long getUpdatedAsTime() {
@@ -436,7 +404,7 @@ public class AtomFeed
     public void setUpdated(XMLGregorianCalendar value) {
         this.updated = value;
     }
-    
+
     /**
      * Sets the value of updated.
      */
@@ -485,25 +453,19 @@ public class AtomFeed
 
     /**
      * Gets the value of link.
-     * 
      * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the link.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the link.
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getLink().add(newItem);
+     * getLink().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link AtomLink }
-     * 
-     * 
+     * Objects of the following type(s) are allowed in the list {@link AtomLink }
      */
     public List<AtomLink> getLinks() {
         if (link == null) {
@@ -514,25 +476,20 @@ public class AtomFeed
 
     /**
      * Gets the value of author.
-     * 
      * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the author.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the author.
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getAuthor().add(newItem);
+     * getAuthor().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AtomPerson }
-     * 
-     * 
      */
     public List<AtomPerson> getAuthors() {
         if (author == null) {
@@ -543,25 +500,20 @@ public class AtomFeed
 
     /**
      * Gets the value of contributor.
-     * 
      * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the contributor.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the contributor.
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getContributor().add(newItem);
+     * getContributor().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AtomPerson }
-     * 
-     * 
      */
     public List<AtomPerson> getContributors() {
         if (contributor == null) {
@@ -572,25 +524,20 @@ public class AtomFeed
 
     /**
      * Gets the value of category.
-     * 
      * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the category.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the category.
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getCategory().add(newItem);
+     * getCategory().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AtomCategory }
-     * 
-     * 
      */
     public List<AtomCategory> getCategories() {
         if (category == null) {
@@ -657,25 +604,19 @@ public class AtomFeed
 
     /**
      * Gets extension elements
-     * 
      * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the any.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the any.
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getAny().add(newItem);
+     * getAny().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Element }
-     * 
-     * 
+     * Objects of the following type(s) are allowed in the list {@link Element }
      */
     public List<Object> getAny() {
         if (any == null) {
@@ -686,25 +627,20 @@ public class AtomFeed
 
     /**
      * Gets the value of entry.
-     * 
      * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the entry.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the entry.
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getEntry().add(newItem);
+     * getEntry().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AtomEntry }
-     * 
-     * 
      */
     public List<AtomEntry> getEntries() {
         if (entry == null) {
@@ -775,8 +711,8 @@ public class AtomFeed
         } else {
             this.itemsPerPage = null;
         }
-     }
- 
+    }
+
     /**
      * Gets the list of opensearch Query elements
      */
@@ -786,7 +722,7 @@ public class AtomFeed
         }
         return opensearchQuery;
     }
-    
+
     /**
      * Sets the list of opensearch Query elements
      */
@@ -801,6 +737,6 @@ public class AtomFeed
         if (query != null) {
             getOpenSearchQueries().add(query);
         }
-     }
-    
+    }
+
 }

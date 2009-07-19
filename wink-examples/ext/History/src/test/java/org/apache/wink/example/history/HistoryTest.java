@@ -20,13 +20,12 @@
 
 package org.apache.wink.example.history;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Properties;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
@@ -34,7 +33,6 @@ import javax.ws.rs.core.MediaType;
 import org.apache.wink.common.model.atom.AtomEntry;
 import org.apache.wink.common.model.atom.AtomFeed;
 import org.apache.wink.example.history.resources.DefectsResource;
-import org.apache.wink.server.internal.resources.HtmlServiceDocumentResource;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.diff.DiffIgnoreUpdateWithAttributeQualifier;
 import org.apache.wink.test.mock.MockRequestConstructor;
@@ -194,13 +192,13 @@ public class HistoryTest extends MockServletInvocationTest {
         Collections.sort(actualFeed.getEntries(), new AtomEntryComparator());
         Collections.sort(expectedFeed.getEntries(), new AtomEntryComparator());
 
-        StringWriter expectedWriter = new StringWriter();
-        StringWriter actualWriter = new StringWriter();
-        AtomFeed.marshal(expectedFeed, expectedWriter);
-        AtomFeed.marshal(actualFeed, actualWriter);
+        ByteArrayOutputStream actualOS = new ByteArrayOutputStream();
+        ByteArrayOutputStream expectedOS = new ByteArrayOutputStream();
+        AtomFeed.marshal(expectedFeed, expectedOS);
+        AtomFeed.marshal(actualFeed,  actualOS);
 
-        Document expectedXml = TestUtils.getXML(expectedWriter.getBuffer().toString().getBytes());
-        Document actualXml = TestUtils.getXML(actualWriter.getBuffer().toString().getBytes());
+        Document expectedXml = TestUtils.getXML(expectedOS.toByteArray());
+        Document actualXml = TestUtils.getXML(actualOS.toByteArray());
 
         DiffIgnoreUpdateWithAttributeQualifier diff = new DiffIgnoreUpdateWithAttributeQualifier(
             expectedXml, actualXml);
