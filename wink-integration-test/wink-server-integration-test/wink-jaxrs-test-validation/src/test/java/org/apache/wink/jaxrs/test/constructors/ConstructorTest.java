@@ -21,8 +21,6 @@ package org.apache.wink.jaxrs.test.constructors;
 
 import java.io.IOException;
 
-import javax.xml.ws.http.HTTPException;
-
 import junit.framework.TestCase;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -46,7 +44,7 @@ public class ConstructorTest extends TestCase {
      * @throws IOException
      * @throws HTTPException
      */
-    public void testConstructorWithMostParams() throws IOException, HTTPException {
+    public void testConstructorWithMostParams() throws IOException {
         HttpClient client = new HttpClient();
 
         GetMethod getMethod = new GetMethod(getBaseURI() + "/constructors/multi");
@@ -67,7 +65,7 @@ public class ConstructorTest extends TestCase {
      * @throws IOException
      * @throws HTTPException
      */
-    public void testConstructorWithMostParams2() throws IOException, HTTPException {
+    public void testConstructorWithMostParams2() throws IOException {
         HttpClient client = new HttpClient();
 
         GetMethod getMethod = new GetMethod(getBaseURI() + "/constructors/multi2/somepath");
@@ -88,7 +86,7 @@ public class ConstructorTest extends TestCase {
      * @throws IOException
      * @throws HTTPException
      */
-    public void testConstructorWithSameParamWarning() throws IOException, HTTPException {
+    public void testConstructorWithSameParamWarning() throws IOException {
         HttpClient client = new HttpClient();
 
         GetMethod getMethod = new GetMethod(getBaseURI() + "/constructors/samenumparam");
@@ -116,7 +114,7 @@ public class ConstructorTest extends TestCase {
      * @throws IOException
      * @throws HTTPException
      */
-    public void testConstructorWithSameParamWarning2() throws IOException, HTTPException {
+    public void testConstructorWithSameParamWarning2() throws IOException {
         HttpClient client = new HttpClient();
 
         GetMethod getMethod = new GetMethod(getBaseURI() + "/constructors/samenumparam2?q=15");
@@ -142,7 +140,7 @@ public class ConstructorTest extends TestCase {
      * @throws IOException
      * @throws HTTPException
      */
-    public void testSubResourceLocatorPackageEmptyConstructor() throws IOException, HTTPException {
+    public void testSubResourceLocatorPackageEmptyConstructor() throws IOException {
         HttpClient client = new HttpClient();
 
         GetMethod getMethod =
@@ -163,7 +161,7 @@ public class ConstructorTest extends TestCase {
      * @throws IOException
      * @throws HTTPException
      */
-    public void testSubResourceLocatorPackageStringConstructor() throws IOException, HTTPException {
+    public void testSubResourceLocatorPackageStringConstructor() throws IOException {
         HttpClient client = new HttpClient();
 
         GetMethod getMethod =
@@ -183,7 +181,7 @@ public class ConstructorTest extends TestCase {
      * @throws IOException
      * @throws HTTPException
      */
-    public void testSubResourceLocatorPublicDefaultConstructor() throws IOException, HTTPException {
+    public void testSubResourceLocatorPublicDefaultConstructor() throws IOException {
         HttpClient client = new HttpClient();
 
         GetMethod getMethod = new GetMethod(getBaseURI() + "/constructors/subresource/emptypublic");
@@ -203,7 +201,7 @@ public class ConstructorTest extends TestCase {
      * @throws IOException
      * @throws HTTPException
      */
-    public void testSubResourceLocatorPublicStringConstructor() throws IOException, HTTPException {
+    public void testSubResourceLocatorPublicStringConstructor() throws IOException {
         HttpClient client = new HttpClient();
 
         GetMethod getMethod =
@@ -223,7 +221,7 @@ public class ConstructorTest extends TestCase {
      * @throws IOException
      * @throws HTTPException
      */
-    public void testSubResourceLocatorPrivateDefaultConstructor() throws IOException, HTTPException {
+    public void testSubResourceLocatorPrivateDefaultConstructor() throws IOException {
         HttpClient client = new HttpClient();
 
         GetMethod getMethod = new GetMethod(getBaseURI() + "/constructors/subresource/emptyprivate");
@@ -243,7 +241,7 @@ public class ConstructorTest extends TestCase {
      * @throws IOException
      * @throws HTTPException
      */
-    public void testSubResourceLocatorPrivateStringConstructor() throws IOException, HTTPException {
+    public void testSubResourceLocatorPrivateStringConstructor() throws IOException {
         HttpClient client = new HttpClient();
 
         GetMethod getMethod =
@@ -263,7 +261,7 @@ public class ConstructorTest extends TestCase {
      * @throws IOException
      * @throws HTTPException
      */
-    public void testSubResourceOtherSubPublicToPackage() throws IOException, HTTPException {
+    public void testSubResourceOtherSubPublicToPackage() throws IOException {
         HttpClient client = new HttpClient();
 
         GetMethod getMethod =
@@ -283,7 +281,7 @@ public class ConstructorTest extends TestCase {
      * @throws IOException
      * @throws HTTPException
      */
-    public void testSubResourceOtherSubPackageToPublic() throws IOException, HTTPException {
+    public void testSubResourceOtherSubPackageToPublic() throws IOException {
         HttpClient client = new HttpClient();
 
         GetMethod getMethod =
@@ -303,7 +301,7 @@ public class ConstructorTest extends TestCase {
      * @throws IOException
      * @throws HTTPException
      */
-    public void testSubResourceDecideSubDynamic() throws IOException, HTTPException {
+    public void testSubResourceDecideSubDynamic() throws IOException {
         HttpClient client = new HttpClient();
 
         GetMethod getMethod =
