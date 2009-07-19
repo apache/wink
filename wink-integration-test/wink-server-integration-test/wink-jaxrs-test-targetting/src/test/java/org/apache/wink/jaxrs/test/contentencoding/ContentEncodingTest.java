@@ -137,7 +137,7 @@ public class ContentEncodingTest extends TestCase {
         postMethod.setRequestHeader("Accept-Encoding", "gzip");
         postMethod.setRequestHeader("Content-Encoding", "gzip");
         ByteArrayOutputStream originalContent = new ByteArrayOutputStream();
-        for (int c = 0; c < 50000000; ++c) {
+        for (int c = 0; c < 5000000; ++c) {
             originalContent.write(c);
         }
 

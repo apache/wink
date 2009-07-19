@@ -37,7 +37,8 @@
         <module>wink-jaxrs-test-params</module>
         <module>wink-jaxrs-test-inheritance</module>
         <module>wink-jaxrs-test-targetting</module>
-  </modules>
+        <module>wink-jaxrs-test-validation</module>
+    </modules>
 
     <properties>
         <wink.server.hostname>localhost</wink.server.hostname>
