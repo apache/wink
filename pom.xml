@@ -537,7 +537,7 @@
             </activation>
             <build>
                 <plugins>
-                    <!-- Hudson fails with obertura-maven-plugin. Comment it out   
+                    <!-- Hudson  fails with obertura-maven-plugin. Comment it out   
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>cobertura-maven-plugin</artifactId>
