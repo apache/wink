@@ -23,14 +23,14 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.wink.example</groupId>
     <artifactId>GoogleDocs-client</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1-incubating-SNAPSHOT</version>
     <name>Wink Examples Clients :: GoogleDocs</name>
     <properties>
     </properties>
     <parent>
         <groupId>org.apache.wink.example</groupId>
         <artifactId>client</artifactId>
-        <version>0.1-SNAPSHOT</version>
+        <version>0.1-incubating-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <build>

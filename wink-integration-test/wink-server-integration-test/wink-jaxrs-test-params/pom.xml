@@ -2,13 +2,13 @@
   <parent>
     <artifactId>wink-server-integration-test</artifactId>
     <groupId>org.apache.wink</groupId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1-incubating-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.wink</groupId>
   <artifactId>wink-jaxrs-test-params</artifactId>
   <packaging>war</packaging>
   <name>wink-jaxrs-test-params Maven Webapp</name>
-  <version>0.1-SNAPSHOT</version>
+  <version>0.1-incubating-SNAPSHOT</version>
   <url>http://maven.apache.org</url>
 </project>

@@ -147,12 +147,12 @@ public class LargeEntityTest extends TestCase {
         try {
             System.out
                 .println(new File(
-                                  ServerEnvironmentInfo.getWorkDir() + "/wink-jaxrs-test-targetting-0.1-SNAPSHOT.war")
+                                  ServerEnvironmentInfo.getWorkDir() + "/wink-jaxrs-test-targetting-0.1-incubating-SNAPSHOT.war")
                     .getAbsoluteFile().getAbsolutePath());
             postMethod
                 .setRequestEntity(new FileRequestEntity(
                                                         new File(
-                                                                 ServerEnvironmentInfo.getWorkDir() + "/wink-jaxrs-test-targetting-0.1-SNAPSHOT.war"),
+                                                                 ServerEnvironmentInfo.getWorkDir() + "/wink-jaxrs-test-targetting-0.1-incubating-SNAPSHOT.war"),
                                                         "application/jar"));
             client.executeMethod(postMethod);
             assertEquals(290, postMethod.getStatusCode());
@@ -175,12 +175,12 @@ public class LargeEntityTest extends TestCase {
         try {
             System.out
                 .println(new File(
-                                  ServerEnvironmentInfo.getWorkDir() + "/wink-jaxrs-test-targetting-0.1-SNAPSHOT.war")
+                                  ServerEnvironmentInfo.getWorkDir() + "/wink-jaxrs-test-targetting-0.1-incubating-SNAPSHOT.war")
                     .getAbsoluteFile().getAbsolutePath());
             postMethod
                 .setRequestEntity(new FileRequestEntity(
                                                         new File(
-                                                                 ServerEnvironmentInfo.getWorkDir() + "/wink-jaxrs-test-targetting-0.1-SNAPSHOT.war"),
+                                                                 ServerEnvironmentInfo.getWorkDir() + "/wink-jaxrs-test-targetting-0.1-incubating-SNAPSHOT.war"),
                                                         "application/jar"));
             client.executeMethod(postMethod);
             assertEquals(290, postMethod.getStatusCode());

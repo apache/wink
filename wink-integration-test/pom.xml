@@ -23,14 +23,14 @@
     <parent>
         <artifactId>wink</artifactId>
         <groupId>org.apache.wink</groupId>
-        <version>0.1-SNAPSHOT</version>
+        <version>0.1-incubating-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.wink</groupId>
     <artifactId>wink-integration-test</artifactId>
     <packaging>pom</packaging>
     <name>Wink Integration Tests</name>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1-incubating-SNAPSHOT</version>
     <modules>
         <module>wink-server-integration-test-support</module>
         <module>wink-server-integration-test</module>

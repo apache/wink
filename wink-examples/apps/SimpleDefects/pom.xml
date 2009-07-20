@@ -25,14 +25,14 @@
     <groupId>org.apache.wink.example</groupId>
     <artifactId>SimpleDefects</artifactId>
     <packaging>war</packaging>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1-incubating-SNAPSHOT</version>
     <name>Wink Examples Apps :: SimpleDefects</name>
     <properties>
     </properties>
     <parent>
         <groupId>org.apache.wink.example</groupId>
         <artifactId>apps</artifactId>
-        <version>0.1-SNAPSHOT</version>
+        <version>0.1-incubating-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <build>

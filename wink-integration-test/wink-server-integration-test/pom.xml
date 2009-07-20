@@ -21,14 +21,14 @@
     <parent>
         <artifactId>wink-integration-test</artifactId>
         <groupId>org.apache.wink</groupId>
-        <version>0.1-SNAPSHOT</version>
+        <version>0.1-incubating-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.wink</groupId>
     <artifactId>wink-server-integration-test</artifactId>
     <packaging>pom</packaging>
     <name>Wink Server Integration Test</name>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1-incubating-SNAPSHOT</version>
     <description>This is the base module for wink-server integration
         tests.</description>
     <modules>
@@ -82,7 +82,7 @@
         <dependency>
             <groupId>org.apache.wink</groupId>
             <artifactId>wink-server-integration-test-support</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <version>0.1-incubating-SNAPSHOT</version>
             <type>jar</type>
             <scope>test</scope>
         </dependency>
