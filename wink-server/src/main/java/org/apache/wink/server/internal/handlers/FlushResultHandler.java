@@ -148,10 +148,12 @@ public class FlushResultHandler extends AbstractHandler {
                 headers.putSingle(HttpHeaders.CONTENT_LENGTH, String.valueOf(size));
             }
 
+            FlushHeadersOutputStream outputStream = new FlushHeadersOutputStream(httpResponse, headers);
             messageBodyWriter.writeTo(entity, rawType, genericType, declaredAnnotations, responseMediaType,
-                    httpHeaders, new FlushHeadersOutputStream(httpResponse, headers));
+                    httpHeaders, outputStream);
+            outputStream.flushHeaders();
             return;
-            
+
         } else {
             logger.warn("Could not find a writer for {} and {}. Try to find JAF DataSourceProvider", entity.getClass().getName(), responseMediaType);
         }
@@ -170,9 +172,11 @@ public class FlushResultHandler extends AbstractHandler {
             throw new WebApplicationException(500);
         }
 
+        FlushHeadersOutputStream outputStream = new FlushHeadersOutputStream(httpResponse, httpHeaders);
         dataContentHandler.writeTo(entity,
                                    responseMediaType.toString(),
-                                   new FlushHeadersOutputStream(httpResponse, httpHeaders));
+                                   outputStream);
+        outputStream.flushHeaders();
     }
 
     @SuppressWarnings("unchecked")
@@ -232,6 +236,12 @@ public class FlushResultHandler extends AbstractHandler {
         public void flush() throws IOException {
             flushHeaders();
             outputStream.flush();
+        }
+
+        @Override
+        public void close() throws IOException {
+            flushHeaders();
+            outputStream.close();
         }
 
         private void flushHeaders() {
