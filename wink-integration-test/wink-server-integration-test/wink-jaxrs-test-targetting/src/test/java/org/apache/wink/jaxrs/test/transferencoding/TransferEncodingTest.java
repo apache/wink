@@ -17,7 +17,6 @@
  * under the License.
  */
 
-
 package org.apache.wink.jaxrs.test.transferencoding;
 
 import java.io.ByteArrayOutputStream;

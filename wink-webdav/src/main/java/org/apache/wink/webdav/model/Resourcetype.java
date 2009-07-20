@@ -36,7 +36,8 @@ import javax.xml.bind.annotation.XmlType;
 import org.w3c.dom.Element;
 
 /**
- * The <code>resourcetype</code> Property per the WebDAV specification [RFC 4918]
+ * The <code>resourcetype</code> Property per the WebDAV specification [RFC
+ * 4918]
  * 
  * <pre>
  *    Name:       resourcetype
@@ -53,7 +54,7 @@ import org.w3c.dom.Element;
 @XmlRootElement(name = "resourcetype")
 public class Resourcetype {
 
-    protected Collection collection;
+    protected Collection    collection;
     @XmlAnyElement
     protected List<Element> any;
 
@@ -61,7 +62,6 @@ public class Resourcetype {
      * Gets the value of the collection property.
      * 
      * @return possible object is {@link Collection }
-     * 
      */
     public Collection getCollection() {
         return collection;
@@ -70,9 +70,7 @@ public class Resourcetype {
     /**
      * Sets the value of the collection property.
      * 
-     * @param value
-     *            allowed object is {@link Collection }
-     * 
+     * @param value allowed object is {@link Collection }
      */
     public void setCollection(Collection value) {
         this.collection = value;
@@ -80,24 +78,19 @@ public class Resourcetype {
 
     /**
      * Gets the value of the any property.
-     * 
      * <p>
-     * This accessor method returns a reference to the live list, not a snapshot. Therefore any
-     * modification you make to the returned list will be present inside the JAXB object. This is
-     * why there is not a <CODE>set</CODE> method for the any property.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the any property.
      * <p>
      * For example, to add a new item, do as follows:
      * 
      * <pre>
      * getAny().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
      * Objects of the following type(s) are allowed in the list {@link Element }
-     * 
-     * 
      */
     public List<Element> getAny() {
         if (any == null) {

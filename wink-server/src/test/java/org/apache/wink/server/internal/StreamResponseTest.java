@@ -21,7 +21,6 @@
 package org.apache.wink.server.internal;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.StringReader;
 
 import javax.ws.rs.GET;
@@ -40,12 +39,12 @@ import org.springframework.mock.web.MockHttpServletResponse;
  */
 public class StreamResponseTest extends MockServletInvocationTest {
 
-    private static byte[] BYTES  = new byte[] { 123, 23, 43, 54, 34, 66, 89, 77 };
+    private static byte[] BYTES  = new byte[] {123, 23, 43, 54, 34, 66, 89, 77};
     private static String STRING = createTestString();
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class<?>[] { Resource.class };
+        return new Class<?>[] {Resource.class};
     }
 
     private static String createTestString() {
@@ -76,8 +75,10 @@ public class StreamResponseTest extends MockServletInvocationTest {
     } // 
 
     public void testStreamResponse() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "path",
-            MediaTypeUtils.IMAGE_JPEG_TYPE);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "path",
+                                                        MediaTypeUtils.IMAGE_JPEG_TYPE);
         MockHttpServletResponse response = invoke(request);
         byte[] responseBytes = response.getContentAsByteArray();
         assertEquals("len", BYTES.length, responseBytes.length);
@@ -87,8 +88,8 @@ public class StreamResponseTest extends MockServletInvocationTest {
     }
 
     public void testReaderResponse() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "path",
-            MediaType.TEXT_PLAIN_TYPE);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "path", MediaType.TEXT_PLAIN_TYPE);
         MockHttpServletResponse response = invoke(request);
         assertEquals("len", STRING, response.getContentAsString());
     }

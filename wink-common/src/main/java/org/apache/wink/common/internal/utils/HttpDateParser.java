@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common.internal.utils;
 
 import java.text.ParseException;
@@ -43,11 +43,9 @@ public final class HttpDateParser {
     /**
      * Converts HTTP date to Java Date.
      * 
-     * @param date
-     *            not <code>null</code>
+     * @param date not <code>null</code>
      * @return Java Date
-     * @throws IllegalArgumentException
-     *             if parsing fails
+     * @throws IllegalArgumentException if parsing fails
      */
     public static Date parseHttpDate(String date) {
 
@@ -64,7 +62,7 @@ public final class HttpDateParser {
             throw new IllegalArgumentException(e);
         }
     }
-    
+
     private static SimpleDateFormat createSimpleDateFormat(String format) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.US);
         simpleDateFormat.setTimeZone(tz);
@@ -74,8 +72,7 @@ public final class HttpDateParser {
     /**
      * Converts Java Data to HTTP date string.
      * 
-     * @param date
-     *            Java Date
+     * @param date Java Date
      * @return the HTTP date string
      */
     public static String toHttpDate(Date date) {

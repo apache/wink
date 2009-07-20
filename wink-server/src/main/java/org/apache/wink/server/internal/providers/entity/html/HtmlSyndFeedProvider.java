@@ -35,7 +35,6 @@ import javax.ws.rs.ext.Providers;
 
 import org.apache.wink.common.model.synd.SyndFeed;
 
-
 @Provider
 @Produces(MediaType.TEXT_HTML)
 public class HtmlSyndFeedProvider implements MessageBodyWriter<SyndFeed> {
@@ -43,25 +42,42 @@ public class HtmlSyndFeedProvider implements MessageBodyWriter<SyndFeed> {
     @Context
     private Providers providers;
 
-    public long getSize(SyndFeed t, Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType) {
+    public long getSize(SyndFeed t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
         return -1;
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
         return SyndFeed.class.isAssignableFrom(type);
     }
 
-    public void writeTo(SyndFeed t, Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
-        throws IOException, WebApplicationException {
+    public void writeTo(SyndFeed t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
 
-        MessageBodyWriter<HtmlDescriptor> writer = providers.getMessageBodyWriter(
-            HtmlDescriptor.class, HtmlDescriptor.class, annotations, mediaType);
+        MessageBodyWriter<HtmlDescriptor> writer =
+            providers.getMessageBodyWriter(HtmlDescriptor.class,
+                                           HtmlDescriptor.class,
+                                           annotations,
+                                           mediaType);
 
-        writer.writeTo(new HtmlDescriptor(t), HtmlDescriptor.class, HtmlDescriptor.class,
-            annotations, mediaType, httpHeaders, entityStream);
+        writer.writeTo(new HtmlDescriptor(t),
+                       HtmlDescriptor.class,
+                       HtmlDescriptor.class,
+                       annotations,
+                       mediaType,
+                       httpHeaders,
+                       entityStream);
     }
 
 }

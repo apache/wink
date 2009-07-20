@@ -24,8 +24,8 @@ import javax.ws.rs.PathParam;
 
 public class Orange extends Fruit {
 
-	@POST
-	public String getFruitName(@PathParam("p") String suffix) {
-		return Orange.class.getName()+";"+suffix;
-	}
+    @POST
+    public String getFruitName(@PathParam("p") String suffix) {
+        return Orange.class.getName() + ";" + suffix;
+    }
 }

@@ -224,7 +224,8 @@ public class ConstructorTest extends TestCase {
     public void testSubResourceLocatorPrivateDefaultConstructor() throws IOException {
         HttpClient client = new HttpClient();
 
-        GetMethod getMethod = new GetMethod(getBaseURI() + "/constructors/subresource/emptyprivate");
+        GetMethod getMethod =
+            new GetMethod(getBaseURI() + "/constructors/subresource/emptyprivate");
         try {
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());

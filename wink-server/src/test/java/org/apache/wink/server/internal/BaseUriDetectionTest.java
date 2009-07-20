@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal;
 
 import javax.ws.rs.GET;
@@ -32,7 +32,6 @@ import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 /**
  * Test the functionality of automatic base uri detection from http servlet
  * request.
@@ -41,7 +40,7 @@ public class BaseUriDetectionTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] { GetBaseUriResource.class };
+        return new Class[] {GetBaseUriResource.class};
     }
 
     @Path("/baseUri")
@@ -56,8 +55,8 @@ public class BaseUriDetectionTest extends MockServletInvocationTest {
     } // class GetBaseUriResource
 
     public void testDetection() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-            "/context/baseUri", "*/*");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "/context/baseUri", "*/*");
         request.setScheme("http");
         request.setServerName("myServer");
         request.setContextPath("/context");

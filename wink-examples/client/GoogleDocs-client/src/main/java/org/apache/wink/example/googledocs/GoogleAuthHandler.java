@@ -33,7 +33,6 @@ import org.apache.wink.client.handlers.ClientHandler;
 import org.apache.wink.client.handlers.HandlerContext;
 import org.apache.wink.common.internal.MultivaluedMapImpl;
 
-
 /**
  * Fetches a Google Authentication token for Google Docs
  */
@@ -55,7 +54,8 @@ public class GoogleAuthHandler implements ClientHandler {
 
             // invoke a call to google authentication service
             RestClient client = new RestClient();
-            org.apache.wink.client.Resource authResource = client.resource("https://www.google.com/accounts/ClientLogin");
+            org.apache.wink.client.Resource authResource =
+                client.resource("https://www.google.com/accounts/ClientLogin");
             MultivaluedMapImpl<String, String> params = new MultivaluedMapImpl<String, String>();
             params.putSingle("accountType", "HOSTED_OR_GOOGLE");
             params.putSingle("Email", email);
@@ -64,11 +64,15 @@ public class GoogleAuthHandler implements ClientHandler {
             params.putSingle("source", "my-test-application");
 
             // send auth request to google
-            // in real application the flow should be checking for error at this point.
-            // may be the handler can handle this error and create authentication
-            // but in the example the error will be just thrown to the user with the exception
-            String post = authResource.contentType(MediaType.APPLICATION_FORM_URLENCODED_TYPE).post(
-                String.class, params);
+            // in real application the flow should be checking for error at this
+            // point.
+            // may be the handler can handle this error and create
+            // authentication
+            // but in the example the error will be just thrown to the user with
+            // the exception
+            String post =
+                authResource.contentType(MediaType.APPLICATION_FORM_URLENCODED_TYPE)
+                    .post(String.class, params);
 
             BufferedReader reader = new BufferedReader(new StringReader(post));
             String auth = null;
@@ -84,7 +88,8 @@ public class GoogleAuthHandler implements ClientHandler {
         request.getHeaders().add("Authorization", authHeader);
 
         // continue the chain
-        // in real application it's useful to check the response if it returned 401
+        // in real application it's useful to check the response if it returned
+        // 401
         // and then to re-request auth token, but for example purpose
         // it's simplier just to return the error to the user.
         return context.doChain(request);

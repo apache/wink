@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common.categories;
 
 import java.util.ArrayList;
@@ -28,59 +28,61 @@ import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.wink.common.model.atom.AtomCategory;
 
-
 /**
- * The Atom Publishing Protocol introduces the notion of a "Category Document" and the
- * app:categories element. These are used to provide a listing of atom:Category elements that may be
- * used with the members of an Atom Publishing Protocol collection.
+ * The Atom Publishing Protocol introduces the notion of a "Category Document"
+ * and the app:categories element. These are used to provide a listing of
+ * atom:Category elements that may be used with the members of an Atom
+ * Publishing Protocol collection.
  */
 public class Categories {
 
     /**
-     * The app:categories "scheme" attribute is an IRI that identifies a categorization scheme. <h4>
-     * NOTE</h4> An atom:category child element that has no "scheme" attribute inherits the
-     * attribute from its app:categories parent.
+     * The app:categories "scheme" attribute is an IRI that identifies a
+     * categorization scheme. <h4>NOTE</h4> An atom:category child element that
+     * has no "scheme" attribute inherits the attribute from its app:categories
+     * parent.
      */
-    private String scheme;
+    private String                         scheme;
 
     /**
-     * The app:categories element MAY contain an "href" attribute, whose value MUST be an IRI
-     * reference identifying a Category Document
+     * The app:categories element MAY contain an "href" attribute, whose value
+     * MUST be an IRI reference identifying a Category Document
      */
-    private String href;
+    private String                         href;
 
     /**
-     * The app:categories element can contain a "fixed" attribute, with a value of either "yes" or
-     * "no", indicating whether the list of categories is a fixed or an open set. The absence of the
-     * "fixed" attribute is equivalent to the presence of a "fixed" attribute with a value of "no".
-     * 
+     * The app:categories element can contain a "fixed" attribute, with a value
+     * of either "yes" or "no", indicating whether the list of categories is a
+     * fixed or an open set. The absence of the "fixed" attribute is equivalent
+     * to the presence of a "fixed" attribute with a value of "no".
      */
-    private boolean isFixed;
+    private boolean                        isFixed;
 
     /**
-     * List of atom:category elements. <h4>NOTE</h4> An app:categories element can contain zero or
-     * more atom:category elements from the Atom Syndication Format [RFC4287] namespace
-     * ("http://www.w3.org/2005/Atom"). An atom:category child element that has no "scheme"
-     * attribute inherits the attribute from its app:categories parent. An atom:category child
-     * element with an existing "scheme" attribute does not inherit the "scheme" value of its
-     * app:categories parent element.
+     * List of atom:category elements. <h4>NOTE</h4> An app:categories element
+     * can contain zero or more atom:category elements from the Atom Syndication
+     * Format [RFC4287] namespace ("http://www.w3.org/2005/Atom"). An
+     * atom:category child element that has no "scheme" attribute inherits the
+     * attribute from its app:categories parent. An atom:category child element
+     * with an existing "scheme" attribute does not inherit the "scheme" value
+     * of its app:categories parent element.
      */
-    private List<AtomCategory> categories;
+    private List<AtomCategory>             categories;
 
     /**
      * Class that will provide Categories Document
      */
-    private Class<?> handlingClass;
+    private Class<?>                       handlingClass;
 
     /**
      * Instance that will provide Categories Document
      */
-    private Object handlingInstance;
+    private Object                         handlingInstance;
 
     /**
      * Uri parameters for handling Resource
      */
-    private MultivaluedMap<String,String> templateParams;
+    private MultivaluedMap<String, String> templateParams;
 
     /**
      * Constructor
@@ -103,8 +105,9 @@ public class Categories {
     }
 
     /**
-     * When contained within an app:collection element, the app:categories element can have an href
-     * attribute whose value MUST point to an Atompub Categories Document.
+     * When contained within an app:collection element, the app:categories
+     * element can have an href attribute whose value MUST point to an Atompub
+     * Categories Document.
      * 
      * @return The href attribute value
      */
@@ -115,8 +118,7 @@ public class Categories {
     /**
      * Sets the value of the href attribute.
      * 
-     * @param href
-     *            The location of an Atompub Categories Document
+     * @param href The location of an Atompub Categories Document
      */
     public Categories setHref(String href) {
         this.href = href;
@@ -131,12 +133,10 @@ public class Categories {
     /**
      * Set Resource class that will generate Categories Document
      * 
-     * @param handlingClass
-     *            Resource Class
-     * @param templateParams
-     *            Map of URI variable names and their values
+     * @param handlingClass Resource Class
+     * @param templateParams Map of URI variable names and their values
      */
-    public void setHref(Class<?> handlingClass, MultivaluedMap<String,String> templateParams) {
+    public void setHref(Class<?> handlingClass, MultivaluedMap<String, String> templateParams) {
         this.handlingClass = handlingClass;
         this.templateParams = templateParams;
 
@@ -148,12 +148,10 @@ public class Categories {
     /**
      * Set Resource that will generate Categories Document
      * 
-     * @param handlingInstance
-     *            Resource instance
-     * @param templateParams
-     *            Map of URI variable names and their values
+     * @param handlingInstance Resource instance
+     * @param templateParams Map of URI variable names and their values
      */
-    public void setHref(Object handlingInstance, MultivaluedMap<String,String> templateParams) {
+    public void setHref(Object handlingInstance, MultivaluedMap<String, String> templateParams) {
         this.handlingInstance = handlingInstance;
         this.templateParams = templateParams;
 
@@ -163,9 +161,10 @@ public class Categories {
     }
 
     /**
-     * If an app:categories element is marked as fixed, then the set of atom:Category elements is
-     * considered to be a closed set. That is, Atom Publishing Protocol clients SHOULD only use the
-     * atom:Category elements listed. The default is false (fixed="no")
+     * If an app:categories element is marked as fixed, then the set of
+     * atom:Category elements is considered to be a closed set. That is, Atom
+     * Publishing Protocol clients SHOULD only use the atom:Category elements
+     * listed. The default is false (fixed="no")
      * 
      * @return True if the categories listing is fixed
      */
@@ -174,11 +173,11 @@ public class Categories {
     }
 
     /**
-     * Sets whether or not this is a fixed listing of categories. If set to false, the fixed
-     * attribute will be removed from the app:categories element.
+     * Sets whether or not this is a fixed listing of categories. If set to
+     * false, the fixed attribute will be removed from the app:categories
+     * element.
      * 
-     * @param fixed
-     *            True if the app:categories listing is fixed
+     * @param fixed True if the app:categories listing is fixed
      */
     public Categories setFixed(boolean fixed) {
         isFixed = fixed;
@@ -186,8 +185,9 @@ public class Categories {
     }
 
     /**
-     * The app:categories element may specify a default scheme attribute for listed atom:Category
-     * elements that do not have their own scheme attribute.
+     * The app:categories element may specify a default scheme attribute for
+     * listed atom:Category elements that do not have their own scheme
+     * attribute.
      * 
      * @return The scheme String
      */
@@ -198,8 +198,7 @@ public class Categories {
     /**
      * Sets the default scheme for this listing of categories
      * 
-     * @param scheme
-     *            The default scheme used for this listing of categories
+     * @param scheme The default scheme used for this listing of categories
      */
     public Categories setScheme(String scheme) {
         this.scheme = scheme;
@@ -218,8 +217,7 @@ public class Categories {
     /**
      * Lists the complete set of categories that use the specified scheme
      * 
-     * @param scheme
-     *            The String of an atom:Category scheme
+     * @param scheme The String of an atom:Category scheme
      * @return A listing of atom:Category elements that use the specified scheme
      */
     public List<AtomCategory> getCategories(String scheme) {
@@ -235,8 +233,7 @@ public class Categories {
     /**
      * Add an atom:Category to the listing
      * 
-     * @param Category
-     *            The atom:Category to add to the listing
+     * @param Category The atom:Category to add to the listing
      */
     public Categories addCategory(AtomCategory category) {
         categories.add(category);
@@ -246,8 +243,7 @@ public class Categories {
     /**
      * Create and add an atom:Category to the listing
      * 
-     * @param term
-     *            The string term
+     * @param term The string term
      * @return The newly created atom:Category
      */
     public AtomCategory addCategory(String term) {
@@ -260,12 +256,9 @@ public class Categories {
     /**
      * Create an add an atom:Category to the listing
      * 
-     * @param scheme
-     *            The scheme String for the newly created Category
-     * @param term
-     *            The string term
-     * @param label
-     *            The human readable label for the Category
+     * @param scheme The scheme String for the newly created Category
+     * @param term The string term
+     * @param label The human readable label for the Category
      * @return The newly created atom:Category
      */
     public AtomCategory addCategory(String scheme, String term, String label) {
@@ -278,10 +271,10 @@ public class Categories {
     }
 
     /**
-     * Returns true if this app:categories listing contains a Category with the specified term
+     * Returns true if this app:categories listing contains a Category with the
+     * specified term
      * 
-     * @param term
-     *            The term to look for
+     * @param term The term to look for
      * @return True if the term is found
      */
     public boolean contains(String term) {
@@ -289,13 +282,11 @@ public class Categories {
     }
 
     /**
-     * Returns true if this app:categories listing contains a Category with the specified term and
-     * scheme
+     * Returns true if this app:categories listing contains a Category with the
+     * specified term and scheme
      * 
-     * @param term
-     *            The term to look for
-     * @param scheme
-     *            The String scheme
+     * @param term The term to look for
+     * @param scheme The String scheme
      * @return True if the term and scheme are found
      */
     public boolean contains(String term, String scheme) {
@@ -356,7 +347,7 @@ public class Categories {
      * 
      * @return templateParams
      */
-    public MultivaluedMap<String,String> getTemplateParameters() {
+    public MultivaluedMap<String, String> getTemplateParameters() {
         return templateParams;
     }
 
@@ -365,7 +356,7 @@ public class Categories {
      * 
      * @param templateParams
      */
-    public void setTemplateParameters(MultivaluedMap<String,String> templateParams) {
+    public void setTemplateParameters(MultivaluedMap<String, String> templateParams) {
         this.templateParams = templateParams;
     }
 }

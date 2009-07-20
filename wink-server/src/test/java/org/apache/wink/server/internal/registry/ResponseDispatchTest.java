@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal.registry;
 
 import java.net.URI;
@@ -36,16 +36,14 @@ import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 /**
  * Test of dispatch process with Resource using Response.
  */
-public class ResponseDispatchTest extends
-    MockServletInvocationTest {
+public class ResponseDispatchTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] { ResponseResource.class };
+        return new Class[] {ResponseResource.class};
     }
 
     @Path("a")
@@ -55,20 +53,21 @@ public class ResponseDispatchTest extends
         @Consumes("*/*")
         @Produces(MediaType.APPLICATION_ATOM_XML)
         public Response put() throws URISyntaxException {
-            Response response = Response.created(new URI("unknown")).entity(new SyndEntry()).build();
+            Response response =
+                Response.created(new URI("unknown")).entity(new SyndEntry()).build();
             return response;
         }
 
     } // class ResponseResource
 
     public void testPut() throws Exception {
-        MockHttpServletRequest servletRequest = MockRequestConstructor.constructMockRequest("PUT",
-            "a", "*/*");
+        MockHttpServletRequest servletRequest =
+            MockRequestConstructor.constructMockRequest("PUT", "a", "*/*");
         servletRequest.setContentType("text/xml");
         MockHttpServletResponse response = invoke(servletRequest);
         assertEquals("status", 201, response.getStatus());
-        assertEquals("content", "<entry xmlns=\"http://www.w3.org/2005/Atom\"/>",
-            response.getContentAsString().trim());
+        assertEquals("content", "<entry xmlns=\"http://www.w3.org/2005/Atom\"/>", response
+            .getContentAsString().trim());
     }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.providers.header;
 
@@ -31,17 +30,16 @@ import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 import org.apache.wink.common.internal.http.AcceptLanguage;
 import org.apache.wink.common.internal.utils.HeaderUtils;
 
-
 public class AcceptLanguageHeaderDelegate implements HeaderDelegate<AcceptLanguage> {
 
     public AcceptLanguage fromString(String value) throws IllegalArgumentException {
         List<Locale> acceptable = new LinkedList<Locale>();
         List<Locale> banned = new LinkedList<Locale>();
         boolean anyAllowed = (value == null);
-        
+
         // parse the Accept-Language header
         List<ValuedLocale> qLocales = parseAcceptLanguage(value);
-        
+
         for (ValuedLocale qLocale : qLocales) {
             if (anyAllowed) {
                 if (qLocale.qValue == 0 && !qLocale.isWildcard()) {
@@ -49,7 +47,7 @@ public class AcceptLanguageHeaderDelegate implements HeaderDelegate<AcceptLangua
                 }
             } else {
                 if (qLocale.qValue == 0) {
-                    break;      // gone through all acceptable languages
+                    break; // gone through all acceptable languages
                 }
                 if (qLocale.isWildcard()) {
                     anyAllowed = true;
@@ -60,13 +58,13 @@ public class AcceptLanguageHeaderDelegate implements HeaderDelegate<AcceptLangua
         }
         return new AcceptLanguage(value, acceptable, banned, anyAllowed);
     }
-    
+
     private List<ValuedLocale> parseAcceptLanguage(String acceptLanguageValue) {
         List<ValuedLocale> qLocales = new LinkedList<ValuedLocale>();
         if (acceptLanguageValue == null) {
             return qLocales;
         }
-        
+
         for (String languageRange : acceptLanguageValue.split(",")) {
             int semicolonIndex = languageRange.indexOf(';');
             double qValue;
@@ -77,7 +75,9 @@ public class AcceptLanguageHeaderDelegate implements HeaderDelegate<AcceptLangua
             } else {
                 languageSpec = languageRange.substring(0, semicolonIndex);
                 int equalsIndex = languageRange.indexOf('=', semicolonIndex + 1);
-                String qString = languageRange.substring(equalsIndex != -1 ? equalsIndex + 1: languageRange.length());
+                String qString =
+                    languageRange.substring(equalsIndex != -1 ? equalsIndex + 1 : languageRange
+                        .length());
                 try {
                     qValue = Double.parseDouble(qString.trim());
                 } catch (NumberFormatException nfe) {
@@ -90,10 +90,10 @@ public class AcceptLanguageHeaderDelegate implements HeaderDelegate<AcceptLangua
                 // ignore empty language specifications
                 continue;
             } else if (languageSpec.equals("*")) {
-                qLocales.add( new ValuedLocale(qValue, null) );
+                qLocales.add(new ValuedLocale(qValue, null));
             } else {
                 Locale newLocale = HeaderUtils.languageToLocale(languageSpec);
-                qLocales.add( new ValuedLocale(qValue, newLocale) );
+                qLocales.add(new ValuedLocale(qValue, newLocale));
             }
         }
         Collections.sort(qLocales, Collections.reverseOrder());
@@ -103,13 +103,16 @@ public class AcceptLanguageHeaderDelegate implements HeaderDelegate<AcceptLangua
     private static final class ValuedLocale implements Comparable<ValuedLocale> {
         final double qValue;
         final Locale locale;
+
         ValuedLocale(double qValue, Locale locale) {
             this.qValue = qValue;
             this.locale = locale;
         }
+
         public int compareTo(ValuedLocale other) {
             return Double.compare(qValue, other.qValue);
         }
+
         boolean isWildcard() {
             return locale == null;
         }
@@ -118,5 +121,5 @@ public class AcceptLanguageHeaderDelegate implements HeaderDelegate<AcceptLangua
     public String toString(AcceptLanguage value) {
         return value.getAcceptLanguageHeader();
     }
-    
+
 }

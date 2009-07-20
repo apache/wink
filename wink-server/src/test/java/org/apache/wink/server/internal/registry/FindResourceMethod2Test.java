@@ -33,35 +33,47 @@ public class FindResourceMethod2Test extends MockServletInvocationTest {
         return FindResourceMethod1Test.resourceClasses.toArray(new Class<?>[0]);
     }
 
-   
     @Override
     protected String getPropertiesFile() {
-        return TestUtils.packageToPath(FindResourceMethod2Test.class.getPackage().getName())
-            + "\\FindResourceMethodTest2.properties";
+        return TestUtils.packageToPath(FindResourceMethod2Test.class.getPackage().getName()) + "\\FindResourceMethodTest2.properties";
     }
 
     public void testContinuedSearch_1_2() throws Exception {
         MockHttpServletRequest request = null;
         MockHttpServletResponse response = null;
 
-        // 1.2. make sure that ContinuedSearchResource is reachable when continued search policy is activated 
-        request = MockRequestConstructor.constructMockRequest("PUT", "/simpleGet", "text/plain",
-            "text/plain", null);
+        // 1.2. make sure that ContinuedSearchResource is reachable when
+        // continued search policy is activated
+        request =
+            MockRequestConstructor.constructMockRequest("PUT",
+                                                        "/simpleGet",
+                                                        "text/plain",
+                                                        "text/plain",
+                                                        null);
         response = invoke(request);
-        FindResourceMethodTest.assertMethodFound(response,
-            FindResourceMethod1Test.ContinuedSearchResource.class, "put");
+        FindResourceMethodTest
+            .assertMethodFound(response,
+                               FindResourceMethod1Test.ContinuedSearchResource.class,
+                               "put");
     }
 
     public void testContinuedSearch_2_2() throws Exception {
         MockHttpServletRequest request = null;
         MockHttpServletResponse response = null;
 
-        // 2.2. make sure that ContinuedSearchResource is reachable when continued search policy is activated 
-        request = MockRequestConstructor.constructMockRequest("PUT",
-            "/subResourceMethodSimpleGet/1", "text/plain", "text/plain", null);
+        // 2.2. make sure that ContinuedSearchResource is reachable when
+        // continued search policy is activated
+        request =
+            MockRequestConstructor.constructMockRequest("PUT",
+                                                        "/subResourceMethodSimpleGet/1",
+                                                        "text/plain",
+                                                        "text/plain",
+                                                        null);
         response = invoke(request);
-        FindResourceMethodTest.assertMethodFound(response,
-            FindResourceMethod1Test.ContinuedSearchResource.class, "subPut");
+        FindResourceMethodTest
+            .assertMethodFound(response,
+                               FindResourceMethod1Test.ContinuedSearchResource.class,
+                               "subPut");
 
     }
 
@@ -69,11 +81,18 @@ public class FindResourceMethod2Test extends MockServletInvocationTest {
         MockHttpServletRequest request = null;
         MockHttpServletResponse response = null;
 
-        // 3.2. make sure that ContinuedSearchResource is reachable when continued search policy is activated 
-        request = MockRequestConstructor.constructMockRequest("PUT",
-            "/continuedSearchResourceLocatorBad/1/2", "text/plain", "text/plain", null);
+        // 3.2. make sure that ContinuedSearchResource is reachable when
+        // continued search policy is activated
+        request =
+            MockRequestConstructor.constructMockRequest("PUT",
+                                                        "/continuedSearchResourceLocatorBad/1/2",
+                                                        "text/plain",
+                                                        "text/plain",
+                                                        null);
         response = invoke(request);
-        FindResourceMethodTest.assertMethodFound(response, FindResourceMethod1Test.LocatedContinuedSearchResource.class,
-            "subPut");
+        FindResourceMethodTest
+            .assertMethodFound(response,
+                               FindResourceMethod1Test.LocatedContinuedSearchResource.class,
+                               "subPut");
     }
 }

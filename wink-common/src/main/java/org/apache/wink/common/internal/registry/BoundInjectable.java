@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.registry;
 
@@ -31,22 +30,27 @@ import javax.ws.rs.Encoded;
 
 import org.apache.wink.common.internal.uri.UriEncoder;
 
-
 /**
  * Base class for all types that perform some sort of data binding
  */
 public abstract class BoundInjectable extends Injectable {
 
-    // name of bound element (variable name, query param name, matrix param name...)
-    private String name;
+    // name of bound element (variable name, query param name, matrix param
+    // name...)
+    private String         name;
     // converter from string to actual injected type
     private ValueConvertor convertor;
     // the default value in case of null
-    private String defaultValue;
+    private String         defaultValue;
     // should the value be encoded when injected
-    private boolean encoded;
+    private boolean        encoded;
 
-    protected BoundInjectable(ParamType paramType, String name, Class<?> type, Type genericType, Annotation[] annotations, Member member) {
+    protected BoundInjectable(ParamType paramType,
+                              String name,
+                              Class<?> type,
+                              Type genericType,
+                              Annotation[] annotations,
+                              Member member) {
         super(paramType, type, genericType, annotations, member);
         this.name = name;
         this.convertor = ValueConvertor.createValueConvertor(type, genericType);
@@ -94,7 +98,8 @@ public abstract class BoundInjectable extends Injectable {
     }
 
     /**
-     * Return true if the {@link Encoded} annotation exists on the bound parameter
+     * Return true if the {@link Encoded} annotation exists on the bound
+     * parameter
      * 
      * @return
      */

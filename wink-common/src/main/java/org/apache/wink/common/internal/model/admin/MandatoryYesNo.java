@@ -24,36 +24,35 @@
 // Generated on: 2009.05.24 at 01:47:17 PM IDT 
 //
 
-
 package org.apache.wink.common.internal.model.admin;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for MandatoryYesNo.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
- * <pre>
- * &lt;simpleType name="MandatoryYesNo">
- *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *     &lt;enumeration value="yes"/>
- *     &lt;enumeration value="no"/>
- *   &lt;/restriction>
- * &lt;/simpleType>
- * </pre>
+ * Java class for MandatoryYesNo.
+ * <p>
+ * The following schema fragment specifies the expected content contained within
+ * this class.
+ * <p>
  * 
+ * <pre>
+ * &lt;simpleType name=&quot;MandatoryYesNo&quot;&gt;
+ *   &lt;restriction base=&quot;{http://www.w3.org/2001/XMLSchema}string&quot;&gt;
+ *     &lt;enumeration value=&quot;yes&quot;/&gt;
+ *     &lt;enumeration value=&quot;no&quot;/&gt;
+ *   &lt;/restriction&gt;
+ * &lt;/simpleType&gt;
+ * </pre>
  */
 @XmlType(name = "MandatoryYesNo")
 @XmlEnum
 public enum MandatoryYesNo {
 
     @XmlEnumValue("yes")
-    YES("yes"),
-    @XmlEnumValue("no")
+    YES("yes"), @XmlEnumValue("no")
     NO("no");
     private final String value;
 
@@ -66,7 +65,7 @@ public enum MandatoryYesNo {
     }
 
     public static MandatoryYesNo fromValue(String v) {
-        for (MandatoryYesNo c: MandatoryYesNo.values()) {
+        for (MandatoryYesNo c : MandatoryYesNo.values()) {
             if (c.value.equals(v)) {
                 return c;
             }

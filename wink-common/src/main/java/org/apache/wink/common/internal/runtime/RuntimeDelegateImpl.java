@@ -52,10 +52,10 @@ import org.apache.wink.common.internal.providers.header.EntityTagMatchHeaderDele
 import org.apache.wink.common.internal.providers.header.MediaTypeHeaderDelegate;
 import org.apache.wink.common.internal.providers.header.NewCookieHeaderDelegate;
 
-
 public class RuntimeDelegateImpl extends RuntimeDelegate {
 
-    private Map<Class<?>, HeaderDelegate<?>> headerDelegates = new HashMap<Class<?>, HeaderDelegate<?>>();
+    private Map<Class<?>, HeaderDelegate<?>> headerDelegates =
+                                                                 new HashMap<Class<?>, HeaderDelegate<?>>();
 
     public RuntimeDelegateImpl() {
         headerDelegates.put(MediaType.class, new MediaTypeHeaderDelegate());
@@ -82,7 +82,7 @@ public class RuntimeDelegateImpl extends RuntimeDelegate {
         if (type == null) {
             throw new IllegalArgumentException();
         }
-        return (HeaderDelegate<T>) headerDelegates.get(type);
+        return (HeaderDelegate<T>)headerDelegates.get(type);
     }
 
     @Override

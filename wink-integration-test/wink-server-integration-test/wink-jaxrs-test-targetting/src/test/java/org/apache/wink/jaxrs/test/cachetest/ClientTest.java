@@ -40,9 +40,10 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
 public class ClientTest extends TestCase {
 
-    final private static String     NEWS_BASE_URI = ServerEnvironmentInfo.getBaseURI() + "/cache/news";
+    final private static String     NEWS_BASE_URI =
+                                                      ServerEnvironmentInfo.getBaseURI() + "/cache/news";
 
-    private static final DateFormat formatter        =
+    private static final DateFormat formatter     =
                                                       new SimpleDateFormat(
                                                                            "EEE, dd MMM yyyy HH:mm:ss zzz",
                                                                            Locale.ENGLISH);

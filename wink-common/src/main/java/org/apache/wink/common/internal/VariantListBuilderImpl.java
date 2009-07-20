@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal;
 
@@ -30,12 +29,12 @@ import javax.ws.rs.core.Variant;
 import javax.ws.rs.core.Variant.VariantListBuilder;
 
 public class VariantListBuilderImpl extends VariantListBuilder {
-    
+
     private List<MediaType> mediaTypes;
-    private List<Locale> languages;
-    private List<String> encodings;
-    private List<Variant> variants;
-    
+    private List<Locale>    languages;
+    private List<String>    encodings;
+    private List<Variant>   variants;
+
     public VariantListBuilderImpl() {
         variants = null;
         mediaTypes = new ArrayList<MediaType>();
@@ -54,9 +53,9 @@ public class VariantListBuilderImpl extends VariantListBuilder {
         if (variants == null) {
             variants = new ArrayList<Variant>();
         }
-        
+
         verifyNonEmpty();
-        
+
         for (MediaType mediaType : mediaTypes) {
             for (Locale language : languages) {
                 for (String encoding : encodings) {
@@ -70,13 +69,13 @@ public class VariantListBuilderImpl extends VariantListBuilder {
 
     private void verifyNonEmpty() {
         if (mediaTypes.size() == 0) {
-            mediaTypes.add(null); 
+            mediaTypes.add(null);
         }
         if (languages.size() == 0) {
-            languages.add(null); 
+            languages.add(null);
         }
         if (encodings.size() == 0) {
-            encodings.add(null); 
+            encodings.add(null);
         }
     }
 

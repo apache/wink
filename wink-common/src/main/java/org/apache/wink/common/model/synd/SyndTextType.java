@@ -17,13 +17,12 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.model.synd;
 
 /**
- * An enum for specifying the type of a Text construct 
+ * An enum for specifying the type of a Text construct
  */
 public enum SyndTextType {
-    text, html, xhtml; 
+    text, html, xhtml;
 }

@@ -21,12 +21,9 @@ package org.apache.wink.jaxrs.test.params;
 
 import java.io.IOException;
 
-import javax.ws.rs.core.MediaType;
-
 import junit.framework.TestCase;
 
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
 import org.apache.commons.httpclient.methods.GetMethod;

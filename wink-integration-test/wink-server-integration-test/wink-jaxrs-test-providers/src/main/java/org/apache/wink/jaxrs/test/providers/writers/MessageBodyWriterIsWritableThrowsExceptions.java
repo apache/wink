@@ -44,15 +44,19 @@ public class MessageBodyWriterIsWritableThrowsExceptions implements MessageBodyW
         } else if (arg3.equals(new MediaType("throw", "nullpointer"))) {
             throw new NullPointerException();
         } else if (arg3.equals(new MediaType("throw", "webapplicationexception"))) {
-            throw new WebApplicationException(Response.status(461).entity(
-                "throwiswritableexception").build());
+            throw new WebApplicationException(Response.status(461)
+                .entity("throwiswritableexception").build());
         }
         return false;
     }
 
-    public void writeTo(Object arg0, Class<?> arg1, Type arg2, Annotation[] arg3, MediaType arg4,
-        MultivaluedMap<String, Object> arg5, OutputStream arg6) throws IOException,
-        WebApplicationException {
+    public void writeTo(Object arg0,
+                        Class<?> arg1,
+                        Type arg2,
+                        Annotation[] arg3,
+                        MediaType arg4,
+                        MultivaluedMap<String, Object> arg5,
+                        OutputStream arg6) throws IOException, WebApplicationException {
         /* do nothing */
     }
 

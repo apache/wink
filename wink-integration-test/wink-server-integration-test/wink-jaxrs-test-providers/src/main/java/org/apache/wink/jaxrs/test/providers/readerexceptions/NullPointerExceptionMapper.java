@@ -28,7 +28,8 @@ import javax.ws.rs.ext.Provider;
 public class NullPointerExceptionMapper implements ExceptionMapper<NullPointerException> {
 
     public Response toResponse(NullPointerException arg0) {
-        return Response.status(495).entity("Invoked" + this.getClass().getName()).type(MediaType.TEXT_PLAIN).build();
+        return Response.status(495).entity("Invoked" + this.getClass().getName())
+            .type(MediaType.TEXT_PLAIN).build();
     }
 
 }

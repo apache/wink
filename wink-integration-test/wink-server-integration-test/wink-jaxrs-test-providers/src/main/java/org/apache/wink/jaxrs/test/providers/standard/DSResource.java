@@ -45,12 +45,12 @@ public class DSResource {
                 if (i == inputBytes.length) {
                     inputBytes = ArrayUtils.copyOf(inputBytes, 2 * i);
                 }
-                inputBytes[i] = (byte) next;
+                inputBytes[i] = (byte)next;
                 next = inputStream.read();
                 i++;
             }
-            TestDataSource entity = new TestDataSource(inputBytes, dataSource
-                    .getName(), dataSource.getContentType());
+            TestDataSource entity =
+                new TestDataSource(inputBytes, dataSource.getName(), dataSource.getContentType());
             ResponseBuilder rb = Response.ok();
             rb.entity(entity);
             resp = rb.build();

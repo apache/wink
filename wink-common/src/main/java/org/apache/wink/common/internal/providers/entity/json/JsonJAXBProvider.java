@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.providers.entity.json;
 
@@ -45,52 +44,68 @@ import org.apache.wink.common.annotations.Scope.ScopeType;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.json.JSONObject;
 
-
 @Scope(ScopeType.PROTOTYPE)
 @Provider
-@Produces( { MediaType.APPLICATION_JSON, MediaTypeUtils.JAVASCRIPT })
+@Produces( {MediaType.APPLICATION_JSON, MediaTypeUtils.JAVASCRIPT})
 public class JsonJAXBProvider extends AbstractJsonXmlProvider implements MessageBodyWriter<Object> {
 
-    private static final Logger logger = LoggerFactory.getLogger(JsonJAXBProvider.class);
+    private static final Logger           logger = LoggerFactory.getLogger(JsonJAXBProvider.class);
 
     @Context
     private Providers                     providers;
 
     private MessageBodyWriter<JSONObject> bodyWriter;
 
-    public long getSize(Object t, Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType) {
+    public long getSize(Object t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
         return -1;
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
         // we can handle only JAXB objects
         if (!isJAXBObject(type, genericType) && !isJAXBElement(type, genericType)) {
             return false;
         }
         // verify we have a writer for JSONObject
-        bodyWriter = providers.getMessageBodyWriter(JSONObject.class, JSONObject.class,
-            annotations, mediaType);
+        bodyWriter =
+            providers.getMessageBodyWriter(JSONObject.class,
+                                           JSONObject.class,
+                                           annotations,
+                                           mediaType);
         if (bodyWriter == null) {
             return false;
         }
         return true;
     }
 
-    public void writeTo(Object t, Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
-        throws IOException, WebApplicationException {
+    public void writeTo(Object t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
         Object jaxb = super.getEntityToMarshal(t, type);
         JSONObject json = jaxbToJson(jaxb, type, mediaType);
-        bodyWriter.writeTo(json, JSONObject.class, JSONObject.class, annotations, mediaType,
-            httpHeaders, entityStream);
+        bodyWriter.writeTo(json,
+                           JSONObject.class,
+                           JSONObject.class,
+                           annotations,
+                           mediaType,
+                           httpHeaders,
+                           entityStream);
     }
 
     private JSONObject jaxbToJson(Object jaxbObject, Class<?> type, MediaType mediaType) {
         try {
             if (type == JAXBElement.class) {
-                type = ((JAXBElement<?>) jaxbObject).getDeclaredType();
+                type = ((JAXBElement<?>)jaxbObject).getDeclaredType();
             }
             Marshaller marshaller = super.getMarshaller(type, mediaType);
             JsonContentHandler handler = new JsonContentHandler();

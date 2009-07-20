@@ -65,8 +65,8 @@ public class ValueConvertorTest extends MockServletInvocationTest {
 
         public StringConstructorClass(String value) {
             if (value.equals("3"))
-                throw new WebApplicationException(Response.status(499).entity(
-                    "WebApplicationException in StringConstructorClass").build());
+                throw new WebApplicationException(Response.status(499)
+                    .entity("WebApplicationException in StringConstructorClass").build());
             else if (value.equals("4"))
                 throw new RuntimeException();
             this.value = value;
@@ -74,7 +74,7 @@ public class ValueConvertorTest extends MockServletInvocationTest {
 
         @Override
         public boolean equals(Object obj) {
-            return value.equals(((StringConstructorClass) obj).value);
+            return value.equals(((StringConstructorClass)obj).value);
         }
 
         @Override
@@ -101,7 +101,7 @@ public class ValueConvertorTest extends MockServletInvocationTest {
 
         @Override
         public boolean equals(Object obj) {
-            return value.equals(((ValueOfClass) obj).value);
+            return value.equals(((ValueOfClass)obj).value);
         }
 
         @Override
@@ -140,7 +140,7 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         @Path("Byte")
         @Produces
         public void getByte(@PathParam("p") Byte p) {
-            assertEquals(new Byte((byte) 1), p);
+            assertEquals(new Byte((byte)1), p);
         }
 
         @GET
@@ -168,7 +168,7 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         @Path("Short")
         @Produces
         public void getShort(@PathParam("p") Short p) {
-            assertEquals(new Short((short) 1), p);
+            assertEquals(new Short((short)1), p);
         }
 
         @GET
@@ -583,8 +583,7 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         @GET
         @Path("SortedSetStringConstructor/{p}")
         @Produces
-        public void getSortedSetStringConstructor(
-            @PathParam("p") SortedSet<StringConstructorClass> p) {
+        public void getSortedSetStringConstructor(@PathParam("p") SortedSet<StringConstructorClass> p) {
             SortedSet<StringConstructorClass> list = new TreeSet<StringConstructorClass>();
             list.add(new StringConstructorClass("1"));
             list.add(new StringConstructorClass("2"));
@@ -594,8 +593,7 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         @GET
         @Path("SortedSetStringConstructorDefault")
         @Produces
-        public void getSortedSetStringConstructorDefault(
-            @PathParam("k") SortedSet<StringConstructorClass> p) {
+        public void getSortedSetStringConstructorDefault(@PathParam("k") SortedSet<StringConstructorClass> p) {
             assertEquals(new TreeSet<StringConstructorClass>(), p);
         }
 
@@ -625,8 +623,8 @@ public class ValueConvertorTest extends MockServletInvocationTest {
     }
 
     private void assertInvocation(String path) {
-        MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
-            path, MediaType.APPLICATION_XML);
+        MockHttpServletRequest mockRequest =
+            MockRequestConstructor.constructMockRequest("GET", path, MediaType.APPLICATION_XML);
         try {
             MockHttpServletResponse mockResponse = invoke(mockRequest);
             assertEquals(204, mockResponse.getStatus());
@@ -637,8 +635,8 @@ public class ValueConvertorTest extends MockServletInvocationTest {
     }
 
     private void assertWebAppException(String path, int status) throws Exception {
-        MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
-            path, MediaType.APPLICATION_XML);
+        MockHttpServletRequest mockRequest =
+            MockRequestConstructor.constructMockRequest("GET", path, MediaType.APPLICATION_XML);
         try {
             MockHttpServletResponse mockResponse = invoke(mockRequest);
             assertEquals(status, mockResponse.getStatus());

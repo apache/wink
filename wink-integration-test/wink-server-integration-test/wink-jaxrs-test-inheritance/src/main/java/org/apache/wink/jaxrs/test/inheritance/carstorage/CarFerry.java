@@ -30,8 +30,8 @@ import org.slf4j.LoggerFactory;
 
 @Path(value = "/carferry")
 public class CarFerry extends ParkingGarage {
-	
-	Logger logger = LoggerFactory.getLogger(CarFerry.class);
+
+    Logger            logger = LoggerFactory.getLogger(CarFerry.class);
 
     @Context
     protected UriInfo uriInfo;
@@ -52,8 +52,8 @@ public class CarFerry extends ParkingGarage {
 
     @GET
     public Response removeCar(String licenseNum) {
-    	super.setURIInfo(uriInfo);
-    	Response resp = super.getCars();
+        super.setURIInfo(uriInfo);
+        Response resp = super.getCars();
         resp.getMetadata().putSingle("Invoked", "CarFerry.removeCar");
         return resp;
     }

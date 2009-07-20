@@ -24,24 +24,22 @@
 // Generated on: 2008.09.15 at 09:38:06 AM IDT 
 //
 
-
 package org.apache.wink.common.model.app;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * An enum for specifying the value of a "fixed" attribute of the app:categories element
+ * An enum for specifying the value of a "fixed" attribute of the app:categories
+ * element
  */
 @XmlType(name = "appYesNo")
 @XmlEnum
 public enum AppYesNo {
 
     @XmlEnumValue("yes")
-    YES("yes"),
-    @XmlEnumValue("no")
+    YES("yes"), @XmlEnumValue("no")
     NO("no");
     private final String value;
 
@@ -58,7 +56,7 @@ public enum AppYesNo {
     }
 
     public static AppYesNo fromValue(String v) {
-        for (AppYesNo c: AppYesNo.values()) {
+        for (AppYesNo c : AppYesNo.values()) {
             if (c.value.equals(v)) {
                 return c;
             }

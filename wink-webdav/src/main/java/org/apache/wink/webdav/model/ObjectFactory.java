@@ -24,7 +24,6 @@
 // Generated on: 2008.12.04 at 08:36:58 PM IST 
 //
 
-
 package org.apache.wink.webdav.model;
 
 import javax.xml.bind.JAXBElement;
@@ -32,43 +31,38 @@ import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.namespace.QName;
 
-
-
 /**
- * This object contains factory methods for each 
- * Java content interface and Java element interface 
- * generated in the org.apache.wink.webdav.model package. 
- * <p>An ObjectFactory allows you to programatically 
- * construct new instances of the Java representation 
- * for XML content. The Java representation of XML 
- * content can consist of schema derived interfaces 
- * and classes representing the binding of schema 
- * type definitions, element declarations and model 
- * groups.  Factory methods for each of these are 
- * provided in this class.
- * 
+ * This object contains factory methods for each Java content interface and Java
+ * element interface generated in the org.apache.wink.webdav.model package.
+ * <p>
+ * An ObjectFactory allows you to programatically construct new instances of the
+ * Java representation for XML content. The Java representation of XML content
+ * can consist of schema derived interfaces and classes representing the binding
+ * of schema type definitions, element declarations and model groups. Factory
+ * methods for each of these are provided in this class.
  */
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _Status_QNAME = new QName("DAV:", "status");
-    private final static QName _Depth_QNAME = new QName("DAV:", "depth");
-    private final static QName _Dst_QNAME = new QName("DAV:", "dst");
-    private final static QName _Responsedescription_QNAME = new QName("DAV:", "responsedescription");
-    private final static QName _Timeout_QNAME = new QName("DAV:", "timeout");
-    private final static QName _Src_QNAME = new QName("DAV:", "src");
-    private final static QName _Href_QNAME = new QName("DAV:", "href");
+    private final static QName _Status_QNAME              = new QName("DAV:", "status");
+    private final static QName _Depth_QNAME               = new QName("DAV:", "depth");
+    private final static QName _Dst_QNAME                 = new QName("DAV:", "dst");
+    private final static QName _Responsedescription_QNAME =
+                                                              new QName("DAV:",
+                                                                        "responsedescription");
+    private final static QName _Timeout_QNAME             = new QName("DAV:", "timeout");
+    private final static QName _Src_QNAME                 = new QName("DAV:", "src");
+    private final static QName _Href_QNAME                = new QName("DAV:", "href");
 
     /**
-     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: org.apache.wink.webdav.model
-     * 
+     * Create a new ObjectFactory that can be used to create new instances of
+     * schema derived classes for package: org.apache.wink.webdav.model
      */
     public ObjectFactory() {
     }
 
     /**
      * Create an instance of {@link Lockdiscovery }
-     * 
      */
     public Lockdiscovery createLockdiscovery() {
         return new Lockdiscovery();
@@ -76,7 +70,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Supportedlock }
-     * 
      */
     public Supportedlock createSupportedlock() {
         return new Supportedlock();
@@ -84,7 +77,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Write }
-     * 
      */
     public Write createWrite() {
         return new Write();
@@ -92,7 +84,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Lockentry }
-     * 
      */
     public Lockentry createLockentry() {
         return new Lockentry();
@@ -100,7 +91,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Lockinfo }
-     * 
      */
     public Lockinfo createLockinfo() {
         return new Lockinfo();
@@ -108,7 +98,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Getcontentlanguage }
-     * 
      */
     public Getcontentlanguage createGetcontentlanguage() {
         return new Getcontentlanguage();
@@ -116,7 +105,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Activelock }
-     * 
      */
     public Activelock createActivelock() {
         return new Activelock();
@@ -124,7 +112,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Exclusive }
-     * 
      */
     public Exclusive createExclusive() {
         return new Exclusive();
@@ -132,7 +119,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Locktype }
-     * 
      */
     public Locktype createLocktype() {
         return new Locktype();
@@ -140,7 +126,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Response }
-     * 
      */
     public Response createResponse() {
         return new Response();
@@ -148,7 +133,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Keepalive }
-     * 
      */
     public Keepalive createKeepalive() {
         return new Keepalive();
@@ -156,7 +140,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Link }
-     * 
      */
     public Link createLink() {
         return new Link();
@@ -164,7 +147,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Propname }
-     * 
      */
     public Propname createPropname() {
         return new Propname();
@@ -172,7 +154,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Resourcetype }
-     * 
      */
     public Resourcetype createResourcetype() {
         return new Resourcetype();
@@ -180,7 +161,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Remove }
-     * 
      */
     public Remove createRemove() {
         return new Remove();
@@ -188,7 +168,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Allprop }
-     * 
      */
     public Allprop createAllprop() {
         return new Allprop();
@@ -196,7 +175,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Shared }
-     * 
      */
     public Shared createShared() {
         return new Shared();
@@ -204,7 +182,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Propertyupdate }
-     * 
      */
     public Propertyupdate createPropertyupdate() {
         return new Propertyupdate();
@@ -212,7 +189,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Displayname }
-     * 
      */
     public Displayname createDisplayname() {
         return new Displayname();
@@ -220,7 +196,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Owner }
-     * 
      */
     public Owner createOwner() {
         return new Owner();
@@ -228,7 +203,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Getlastmodified }
-     * 
      */
     public Getlastmodified createGetlastmodified() {
         return new Getlastmodified();
@@ -236,7 +210,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Set }
-     * 
      */
     public Set createSet() {
         return new Set();
@@ -244,7 +217,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Lockscope }
-     * 
      */
     public Lockscope createLockscope() {
         return new Lockscope();
@@ -252,7 +224,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Omit }
-     * 
      */
     public Omit createOmit() {
         return new Omit();
@@ -260,7 +231,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Getcontentlength }
-     * 
      */
     public Getcontentlength createGetcontentlength() {
         return new Getcontentlength();
@@ -268,7 +238,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Propfind }
-     * 
      */
     public Propfind createPropfind() {
         return new Propfind();
@@ -276,7 +245,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Propertybehavior }
-     * 
      */
     public Propertybehavior createPropertybehavior() {
         return new Propertybehavior();
@@ -284,7 +252,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Multistatus }
-     * 
      */
     public Multistatus createMultistatus() {
         return new Multistatus();
@@ -292,7 +259,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Getetag }
-     * 
      */
     public Getetag createGetetag() {
         return new Getetag();
@@ -300,7 +266,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Getcontenttype }
-     * 
      */
     public Getcontenttype createGetcontenttype() {
         return new Getcontenttype();
@@ -308,7 +273,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Error }
-     * 
      */
     public Error createError() {
         return new Error();
@@ -316,7 +280,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Creationdate }
-     * 
      */
     public Creationdate createCreationdate() {
         return new Creationdate();
@@ -324,7 +287,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Propstat }
-     * 
      */
     public Propstat createPropstat() {
         return new Propstat();
@@ -332,7 +294,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Collection }
-     * 
      */
     public Collection createCollection() {
         return new Collection();
@@ -340,7 +301,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Prop }
-     * 
      */
     public Prop createProp() {
         return new Prop();
@@ -348,15 +308,13 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Locktoken }
-     * 
      */
     public Locktoken createLocktoken() {
         return new Locktoken();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
      */
     @XmlElementDecl(namespace = "DAV:", name = "status")
     public JAXBElement<String> createStatus(String value) {
@@ -364,8 +322,7 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
      */
     @XmlElementDecl(namespace = "DAV:", name = "depth")
     public JAXBElement<String> createDepth(String value) {
@@ -373,8 +330,7 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
      */
     @XmlElementDecl(namespace = "DAV:", name = "dst")
     public JAXBElement<String> createDst(String value) {
@@ -382,8 +338,7 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
      */
     @XmlElementDecl(namespace = "DAV:", name = "responsedescription")
     public JAXBElement<String> createResponsedescription(String value) {
@@ -391,8 +346,7 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
      */
     @XmlElementDecl(namespace = "DAV:", name = "timeout")
     public JAXBElement<String> createTimeout(String value) {
@@ -400,8 +354,7 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
      */
     @XmlElementDecl(namespace = "DAV:", name = "src")
     public JAXBElement<String> createSrc(String value) {
@@ -409,8 +362,7 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
      */
     @XmlElementDecl(namespace = "DAV:", name = "href")
     public JAXBElement<String> createHref(String value) {

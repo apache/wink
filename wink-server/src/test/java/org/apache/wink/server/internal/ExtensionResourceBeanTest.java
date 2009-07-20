@@ -32,29 +32,29 @@ import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 
 /**
  * This test checks scenarios with Resource that are defined as beans.
- * 
  */
 public class ExtensionResourceBeanTest extends MockServletInvocationTest {
 
     @Override
     protected Object[] getSingletons() {
         BasicBeanResource basicResourceResource = new BasicBeanResource();
-        basicResourceResource.setDispatchedPath(new String[] { "/basicBeanUrl",
-            "/basicBeanUrlNoParent" });
+        basicResourceResource.setDispatchedPath(new String[] {"/basicBeanUrl",
+            "/basicBeanUrlNoParent"});
 
         BasicResource basit = new BasicResource();
 
         ExtendedBasicBeanResource extendedBasicBeanResource = new ExtendedBasicBeanResource();
-        extendedBasicBeanResource.setDispatchedPath(new String[] { "" });
-        extendedBasicBeanResource.setParents(new Object[] { basicResourceResource });
+        extendedBasicBeanResource.setDispatchedPath(new String[] {""});
+        extendedBasicBeanResource.setParents(new Object[] {basicResourceResource});
 
-        ExtendedBasicBeanWithNoParentResource extendedBasicBeanWithNoParentResource = new ExtendedBasicBeanWithNoParentResource();
-        extendedBasicBeanWithNoParentResource.setDispatchedPath(new String[] { "/basicBeanUrl",
-            "/basicBeanUrlNoParent" });
+        ExtendedBasicBeanWithNoParentResource extendedBasicBeanWithNoParentResource =
+            new ExtendedBasicBeanWithNoParentResource();
+        extendedBasicBeanWithNoParentResource.setDispatchedPath(new String[] {"/basicBeanUrl",
+            "/basicBeanUrlNoParent"});
 
         ExtendedBasicResource extendedBasicResource = new ExtendedBasicResource();
-        extendedBasicResource.setDispatchedPath(new String[] { "" });
-        extendedBasicResource.setParents(new Object[] { basicResourceResource });
+        extendedBasicResource.setDispatchedPath(new String[] {""});
+        extendedBasicResource.setParents(new Object[] {basicResourceResource});
 
         Set<Object> set = new HashSet<Object>();
         set.add(basicResourceResource);
@@ -62,25 +62,24 @@ public class ExtensionResourceBeanTest extends MockServletInvocationTest {
         set.add(extendedBasicBeanResource);
         set.add(extendedBasicBeanWithNoParentResource);
         set.add(extendedBasicResource);
-        return new Object[] { basicResourceResource, basit, extendedBasicBeanResource,
-            extendedBasicBeanWithNoParentResource, extendedBasicResource };
+        return new Object[] {basicResourceResource, basit, extendedBasicBeanResource,
+            extendedBasicBeanWithNoParentResource, extendedBasicResource};
     }
 
     /**
      * Basic Resource Bean with class annotations defined on the configuration
      * file.
-     * 
      */
     public static class BasicBeanResource extends AbstractDynamicResource {
 
         @GET
-        @Produces( { MediaType.APPLICATION_ATOM_XML })
+        @Produces( {MediaType.APPLICATION_ATOM_XML})
         public String getCollectionAtom() {
             return "basic resource bean get";
         }
 
         @GET
-        @Produces( { MediaType.TEXT_HTML })
+        @Produces( {MediaType.TEXT_HTML})
         public String getCollectionHtml() {
             return "<b>basic resource bean get</b>";
         }
@@ -88,12 +87,11 @@ public class ExtensionResourceBeanTest extends MockServletInvocationTest {
 
     /**
      * Extension to resource Bean.
-     * 
      */
     public static class ExtendedBasicBeanResource extends AbstractDynamicResource {
 
         @GET
-        @Produces( { MediaType.APPLICATION_ATOM_XML })
+        @Produces( {MediaType.APPLICATION_ATOM_XML})
         public String getCollection() {
             return "extension resource bean get";
         }
@@ -101,19 +99,18 @@ public class ExtensionResourceBeanTest extends MockServletInvocationTest {
 
     /**
      * Basic resource with class annotations defined on the class definition.
-     * 
      */
     @Path("/basicUrl")
     public static class BasicResource {
 
         @GET
-        @Produces( { MediaType.APPLICATION_ATOM_XML })
+        @Produces( {MediaType.APPLICATION_ATOM_XML})
         public String getCollectionAtom() {
             return "basic get";
         }
 
         @GET
-        @Produces( { MediaType.TEXT_HTML })
+        @Produces( {MediaType.TEXT_HTML})
         public String getCollectionHtml() {
             return "<b>basic get</b>";
         }
@@ -121,12 +118,11 @@ public class ExtensionResourceBeanTest extends MockServletInvocationTest {
 
     /**
      * Extension to Basic resource with defining parent.
-     * 
      */
     public static class ExtendedBasicResource extends AbstractDynamicResource {
 
         @GET
-        @Produces( { MediaType.APPLICATION_ATOM_XML })
+        @Produces( {MediaType.APPLICATION_ATOM_XML})
         public String getCollection() {
             return "extension resource basic get";
         }
@@ -134,12 +130,11 @@ public class ExtensionResourceBeanTest extends MockServletInvocationTest {
 
     /**
      * Extension to Basic resource without defining parent.
-     * 
      */
     public static class ExtendedBasicBeanWithNoParentResource extends AbstractDynamicResource {
 
         @GET
-        @Produces( { MediaType.APPLICATION_ATOM_XML })
+        @Produces( {MediaType.APPLICATION_ATOM_XML})
         public String getCollection() {
             return "extension resource bean with no parent get";
         }

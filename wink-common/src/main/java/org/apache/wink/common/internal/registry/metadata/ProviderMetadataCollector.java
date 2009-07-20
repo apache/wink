@@ -30,7 +30,6 @@ import org.apache.wink.common.internal.registry.Injectable;
 import org.apache.wink.common.internal.registry.InjectableFactory;
 import org.apache.wink.common.internal.utils.GenericsUtils;
 
-
 public class ProviderMetadataCollector extends AbstractMetadataCollector {
 
     private ProviderMetadataCollector(Class<?> clazz) {
@@ -47,10 +46,11 @@ public class ProviderMetadataCollector extends AbstractMetadataCollector {
         collector.parseFields();
         return collector.getMetadata();
     }
-    
+
     @Override
     protected final boolean isConstructorParameterValid(Injectable fp) {
-        // This method is declared as final, since parseConstructors(), which calls it, is invoked from the constructor
+        // This method is declared as final, since parseConstructors(), which
+        // calls it, is invoked from the constructor
         return fp.getParamType() == Injectable.ParamType.CONTEXT;
     }
 
@@ -58,7 +58,10 @@ public class ProviderMetadataCollector extends AbstractMetadataCollector {
     protected Injectable parseAccessibleObject(AccessibleObject field, Type fieldType) {
         Context context = field.getAnnotation(Context.class);
         if (context != null) {
-            return InjectableFactory.getInstance().createContextParam(GenericsUtils.getClassType(fieldType), field.getAnnotations(), (Member) field);
+            return InjectableFactory.getInstance().createContextParam(GenericsUtils
+                                                                          .getClassType(fieldType),
+                                                                      field.getAnnotations(),
+                                                                      (Member)field);
         }
 
         return null;

@@ -48,9 +48,8 @@ import org.apache.wink.client.RestClient;
 import org.apache.wink.common.internal.providers.entity.StringProvider;
 import org.apache.wink.common.utils.ProviderUtils;
 
-
 public class ConfigurationTest extends BaseTest {
-    
+
     public void testConfiguration() {
         ClientConfig conf = new ClientConfig();
         conf.proxyHost("localhost").proxyPort(8080);
@@ -64,7 +63,7 @@ public class ConfigurationTest extends BaseTest {
 
         RestClient rc = new RestClient(conf);
         ClientConfig config = rc.getConfig();
-        
+
         // test configuration locking
         try {
             config.proxyHost("localhost");
@@ -88,7 +87,7 @@ public class ConfigurationTest extends BaseTest {
         resource.get(String.class);
         assertEquals(resourceUrl, server.getRequestUrl());
     }
-    
+
     public void testConnectTimeout() {
         int connectTimeout = 2000;
         ClientConfig config = new ClientConfig();
@@ -111,7 +110,9 @@ public class ConfigurationTest extends BaseTest {
             long tolerance = 1000;
             long expectedTimeout = connectTimeout + tolerance;
             long duration = after - before;
-            assertTrue("Expected a duration of less than " + expectedTimeout + " ms, but was " + duration, duration <= expectedTimeout);
+            assertTrue("Expected a duration of less than " + expectedTimeout
+                + " ms, but was "
+                + duration, duration <= expectedTimeout);
         }
     }
 
@@ -134,7 +135,8 @@ public class ConfigurationTest extends BaseTest {
             // assert that about 2 seconds have passed
             long after = System.currentTimeMillis();
             long duration = after - before;
-            assertTrue("Expected a duration of about 2000 ms, but was " + duration, duration >= 1500 && duration <= 5000);
+            assertTrue("Expected a duration of about 2000 ms, but was " + duration,
+                       duration >= 1500 && duration <= 5000);
 
             // get to the SocketTimeoutException
             Throwable throwable = e;
@@ -146,82 +148,102 @@ public class ConfigurationTest extends BaseTest {
         }
     }
 
-    
-    public void testApplication (){
+    public void testApplication() {
         server.setMockResponseCode(200);
         server.setDelayResponse(0);
         ClientConfig conf = new ClientConfig();
-        
+
         // Create new JAX-RS Application
         Application app = new Application() {
-           @Override
+            @Override
             public Set<Class<?>> getClasses() {
-               HashSet<Class<?>> set = new HashSet<Class<?>>();
-               set.add(FooProvider.class);
-              return set;
-            }};
-        
+                HashSet<Class<?>> set = new HashSet<Class<?>>();
+                set.add(FooProvider.class);
+                return set;
+            }
+        };
+
         conf.applications(app);
-        
+
         RestClient client = new RestClient(conf);
         Resource resource = client.resource(serviceURL + "/testResourcePut");
-        Foo response = resource.contentType("text/plain").accept("text/plain").post(Foo.class, new Foo(SENT_MESSAGE));
+        Foo response =
+            resource.contentType("text/plain").accept("text/plain").post(Foo.class,
+                                                                         new Foo(SENT_MESSAGE));
         assertEquals(RECEIVED_MESSAGE, response.foo);
-        
-        
+
         // Negative test - Foo Provider not registered
         try {
             client = new RestClient();
             resource = client.resource(serviceURL + "/testResourcePut");
-            response = resource.contentType("text/plain").accept("text/plain").post(Foo.class, new Foo(SENT_MESSAGE));
+            response =
+                resource.contentType("text/plain").accept("text/plain").post(Foo.class,
+                                                                             new Foo(SENT_MESSAGE));
             fail("ClientRuntimeException must be thrown");
         } catch (ClientRuntimeException e) {
             // Success
         }
-        
+
     }
-    
+
     @Provider
     @Consumes
     @Produces
     public static class FooProvider implements MessageBodyReader<Foo>, MessageBodyWriter<Foo> {
 
-        
         private static final Logger logger = LoggerFactory.getLogger(StringProvider.class);
-        
-        public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-            return type == Foo.class ;
+
+        public boolean isReadable(Class<?> type,
+                                  Type genericType,
+                                  Annotation[] annotations,
+                                  MediaType mediaType) {
+            return type == Foo.class;
         }
 
-        public Foo readFrom(Class<Foo> type, Type genericType, Annotation[] annotations, MediaType mediaType,
-            MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException,
-            WebApplicationException {
+        public Foo readFrom(Class<Foo> type,
+                            Type genericType,
+                            Annotation[] annotations,
+                            MediaType mediaType,
+                            MultivaluedMap<String, String> httpHeaders,
+                            InputStream entityStream) throws IOException, WebApplicationException {
             byte[] bytes = ProviderUtils.readFromStreamAsBytes(entityStream);
             String string = new String(bytes, ProviderUtils.getCharset(mediaType));
             return new Foo(string);
         }
 
-        public long getSize(Foo t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        public long getSize(Foo t,
+                            Class<?> type,
+                            Type genericType,
+                            Annotation[] annotations,
+                            MediaType mediaType) {
             return t.foo.length();
         }
 
-        public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        public boolean isWriteable(Class<?> type,
+                                   Type genericType,
+                                   Annotation[] annotations,
+                                   MediaType mediaType) {
             return type == Foo.class;
         }
 
-        public void writeTo(Foo t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
-            MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException,
-            WebApplicationException {
+        public void writeTo(Foo t,
+                            Class<?> type,
+                            Type genericType,
+                            Annotation[] annotations,
+                            MediaType mediaType,
+                            MultivaluedMap<String, Object> httpHeaders,
+                            OutputStream entityStream) throws IOException, WebApplicationException {
 
             logger.debug("Writing {} to stream using {}", t, getClass().getName());
 
             entityStream.write(t.foo.getBytes(ProviderUtils.getCharset(mediaType)));
         }
-   }
-    
-    public static class Foo{
+    }
+
+    public static class Foo {
         public String foo;
-        public Foo(String foo){
+
+        public Foo(String foo) {
             this.foo = foo;
         }
     }

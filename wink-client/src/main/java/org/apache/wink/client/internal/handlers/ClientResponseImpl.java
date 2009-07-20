@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.client.internal.handlers;
 
@@ -38,12 +37,11 @@ import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.common.internal.runtime.RuntimeContext;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 
-
 public class ClientResponseImpl extends BaseRequestResponseImpl implements ClientResponse {
 
     private Object entity;
     private String message;
-    private int status;
+    private int    status;
 
     public <T> T getEntity(Class<T> type) {
         return getEntity(type, type);
@@ -52,7 +50,7 @@ public class ClientResponseImpl extends BaseRequestResponseImpl implements Clien
     public <T> T getEntity(EntityType<T> entityType) {
         return getEntity(entityType.getRawClass(), entityType.getType());
     }
-    
+
     @SuppressWarnings("unchecked")
     private <T> T getEntity(Class<T> type, Type genericType) {
         if (type.isInstance(entity)) {
@@ -63,8 +61,10 @@ public class ClientResponseImpl extends BaseRequestResponseImpl implements Clien
             setEntity(t);
             return t;
         }
-        throw new ClassCastException(String.format("entity of type %s cannot be retrieved as type %s", entity
-                .getClass().getName(), type.getName()));
+        throw new ClassCastException(String
+            .format("entity of type %s cannot be retrieved as type %s",
+                    entity.getClass().getName(),
+                    type.getName()));
     }
 
     public String getMessage() {
@@ -102,11 +102,16 @@ public class ClientResponseImpl extends BaseRequestResponseImpl implements Clien
         try {
             String contentType = getHeaders().getFirst(HttpHeaders.CONTENT_TYPE);
             MediaType contentMediaType = MediaType.valueOf(contentType);
-            MessageBodyReader<T> reader = providersRegistry.getMessageBodyReader(type, genericType, null,
-                    contentMediaType, runtimeContext);
+            MessageBodyReader<T> reader =
+                providersRegistry.getMessageBodyReader(type,
+                                                       genericType,
+                                                       null,
+                                                       contentMediaType,
+                                                       runtimeContext);
             if (reader == null) {
-                throw new RuntimeException(String.format("No reader for type %s and media type %s", String
-                        .valueOf(type), contentType));
+                throw new RuntimeException(String.format("No reader for type %s and media type %s",
+                                                         String.valueOf(type),
+                                                         contentType));
             }
             T entity = reader.readFrom(type, genericType, null, contentMediaType, getHeaders(), is);
             return entity;

@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServlet;
 
 import org.apache.wink.server.internal.RequestProcessor;
 
-
 /**
  * Base class for RestServlet and AdminServlet
  */
@@ -46,8 +45,7 @@ public abstract class AbstractRestServlet extends HttpServlet {
 
     protected void storeRequestProcessorOnServletContext(RequestProcessor requestProcessor) {
         requestProcessor.storeRequestProcessorOnServletContext(getServletContext(),
-            requestProcessorAttribute);
+                                                               requestProcessorAttribute);
     }
-
 
 }

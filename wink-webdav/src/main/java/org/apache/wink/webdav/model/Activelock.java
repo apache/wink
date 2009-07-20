@@ -24,7 +24,6 @@
 // Generated on: 2008.12.04 at 02:20:17 PM IST 
 //
 
-
 package org.apache.wink.webdav.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -33,48 +32,36 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-
-
 /**
- * The <code>activelock</code> XML element per the WebDAV specification [RFC 4918]
- *
+ * The <code>activelock</code> XML element per the WebDAV specification [RFC
+ * 4918]
+ * 
  * <pre>
  *    Name:       activelock
  *    Namespace:  DAV:
  *    Purpose:    Describes a lock on a resource.
- *
  *    &lt;!ELEMENT activelock (lockscope, locktype, depth, owner?, timeout?, locktoken?) &lt;
  * </pre>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "lockscope",
-    "locktype",
-    "depth",
-    "owner",
-    "timeout",
-    "locktoken"
-})
+@XmlType(name = "", propOrder = {"lockscope", "locktype", "depth", "owner", "timeout", "locktoken"})
 @XmlRootElement(name = "activelock")
 public class Activelock {
 
     @XmlElement(required = true)
     protected Lockscope lockscope;
     @XmlElement(required = true)
-    protected Locktype locktype;
+    protected Locktype  locktype;
     @XmlElement(required = true)
-    protected String depth;
-    protected Owner owner;
-    protected String timeout;
+    protected String    depth;
+    protected Owner     owner;
+    protected String    timeout;
     protected Locktoken locktoken;
 
     /**
      * Gets the value of the lockscope property.
      * 
-     * @return
-     *     possible object is
-     *     {@link Lockscope }
-     *     
+     * @return possible object is {@link Lockscope }
      */
     public Lockscope getLockscope() {
         return lockscope;
@@ -83,10 +70,7 @@ public class Activelock {
     /**
      * Sets the value of the lockscope property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link Lockscope }
-     *     
+     * @param value allowed object is {@link Lockscope }
      */
     public void setLockscope(Lockscope value) {
         this.lockscope = value;
@@ -95,10 +79,7 @@ public class Activelock {
     /**
      * Gets the value of the locktype property.
      * 
-     * @return
-     *     possible object is
-     *     {@link Locktype }
-     *     
+     * @return possible object is {@link Locktype }
      */
     public Locktype getLocktype() {
         return locktype;
@@ -107,10 +88,7 @@ public class Activelock {
     /**
      * Sets the value of the locktype property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link Locktype }
-     *     
+     * @param value allowed object is {@link Locktype }
      */
     public void setLocktype(Locktype value) {
         this.locktype = value;
@@ -119,10 +97,7 @@ public class Activelock {
     /**
      * Gets the value of the depth property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return possible object is {@link String }
      */
     public String getDepth() {
         return depth;
@@ -131,10 +106,7 @@ public class Activelock {
     /**
      * Sets the value of the depth property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * @param value allowed object is {@link String }
      */
     public void setDepth(String value) {
         this.depth = value;
@@ -143,10 +115,7 @@ public class Activelock {
     /**
      * Gets the value of the owner property.
      * 
-     * @return
-     *     possible object is
-     *     {@link Owner }
-     *     
+     * @return possible object is {@link Owner }
      */
     public Owner getOwner() {
         return owner;
@@ -155,10 +124,7 @@ public class Activelock {
     /**
      * Sets the value of the owner property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link Owner }
-     *     
+     * @param value allowed object is {@link Owner }
      */
     public void setOwner(Owner value) {
         this.owner = value;
@@ -167,10 +133,7 @@ public class Activelock {
     /**
      * Gets the value of the timeout property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return possible object is {@link String }
      */
     public String getTimeout() {
         return timeout;
@@ -179,10 +142,7 @@ public class Activelock {
     /**
      * Sets the value of the timeout property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * @param value allowed object is {@link String }
      */
     public void setTimeout(String value) {
         this.timeout = value;
@@ -191,10 +151,7 @@ public class Activelock {
     /**
      * Gets the value of the locktoken property.
      * 
-     * @return
-     *     possible object is
-     *     {@link Locktoken }
-     *     
+     * @return possible object is {@link Locktoken }
      */
     public Locktoken getLocktoken() {
         return locktoken;
@@ -203,10 +160,7 @@ public class Activelock {
     /**
      * Sets the value of the locktoken property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link Locktoken }
-     *     
+     * @param value allowed object is {@link Locktoken }
      */
     public void setLocktoken(Locktoken value) {
         this.locktoken = value;

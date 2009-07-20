@@ -29,21 +29,22 @@ import org.slf4j.LoggerFactory;
 import org.apache.wink.server.handlers.AbstractHandler;
 import org.apache.wink.server.handlers.MessageContext;
 
-
 public class PopulateErrorResponseHandler extends AbstractHandler {
 
     private static final RuntimeDelegate RUNTIME_DELEGATE = RuntimeDelegate.getInstance();
-    private static final Logger logger = LoggerFactory.getLogger(PopulateErrorResponseHandler.class);
+    private static final Logger          logger           =
+                                                              LoggerFactory
+                                                                  .getLogger(PopulateErrorResponseHandler.class);
 
     @SuppressWarnings("unchecked")
     public void handleResponse(MessageContext context) throws Throwable {
         Object result = context.getResponseEntity();
         if (result instanceof WebApplicationException) {
-            handleWebApplicationException(context, (WebApplicationException) result);
+            handleWebApplicationException(context, (WebApplicationException)result);
         } else {
-            Throwable exception = (Throwable) result;
-            ExceptionMapper<Throwable> provider = (ExceptionMapper<Throwable>) findProvider(
-                    context, exception);
+            Throwable exception = (Throwable)result;
+            ExceptionMapper<Throwable> provider =
+                (ExceptionMapper<Throwable>)findProvider(context, exception);
             if (provider != null) {
                 context.setResponseEntity(executeProvider(exception, provider));
             } else {
@@ -62,17 +63,17 @@ public class PopulateErrorResponseHandler extends AbstractHandler {
     }
 
     private ExceptionMapper<? extends Throwable> findProvider(MessageContext msgContext,
-        Throwable result) {
+                                                              Throwable result) {
         return msgContext.getProviders().getExceptionMapper(result.getClass());
     }
 
     @SuppressWarnings("unchecked")
     private void handleWebApplicationException(MessageContext msgContext,
-        WebApplicationException exception) {
+                                               WebApplicationException exception) {
         ExceptionMapper<WebApplicationException> provider = null;
         if (exception.getResponse().getEntity() == null) {
-            provider = (ExceptionMapper<WebApplicationException>) findProvider(msgContext,
-                exception);
+            provider =
+                (ExceptionMapper<WebApplicationException>)findProvider(msgContext, exception);
         }
         if (provider != null) {
             msgContext.setResponseEntity(provider.toResponse(exception));

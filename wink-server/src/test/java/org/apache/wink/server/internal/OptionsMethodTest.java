@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal;
 
 import java.util.Arrays;
@@ -42,37 +42,39 @@ import org.junit.Assert;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
+public class OptionsMethodTest extends MockServletInvocationTest {
 
-public class OptionsMethodTest extends
-    MockServletInvocationTest {
-
-    private static final String[] METHODS = { "HEAD", "GET", "PUT", "DELETE", "POST", "OPTIONS" };
+    private static final String[] METHODS = {"HEAD", "GET", "PUT", "DELETE", "POST", "OPTIONS"};
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] { OptionsResource.class, CustomOptionsResource.class };
+        return new Class[] {OptionsResource.class, CustomOptionsResource.class};
     }
-    
+
     @Path(OptionsResource.PATH)
     public static class OptionsResource {
 
         public static final String PATH = "/test";
 
         @GET
-        @Produces({MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
-        public void get() {}
+        @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
+        public void get() {
+        }
 
         @PUT
-        @Consumes({MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
-        public void put() {}
+        @Consumes( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
+        public void put() {
+        }
 
         @DELETE
-        public void delete() {}
+        public void delete() {
+        }
 
         @POST
-        @Consumes({MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
-        @Produces({MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
-        public void post() {}
+        @Consumes( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
+        @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
+        public void post() {
+        }
     }
 
     @Path(CustomOptionsResource.PATH)
@@ -84,13 +86,13 @@ public class OptionsMethodTest extends
 
         @OPTIONS
         public Response options() {
-            Response response = RuntimeDelegate.getInstance().createResponseBuilder().status(204).header(
-                CUSTOM_HEADER, "value").build();
+            Response response =
+                RuntimeDelegate.getInstance().createResponseBuilder().status(204)
+                    .header(CUSTOM_HEADER, "value").build();
 
             return response;
         }
     }
-
 
     public void testDefaultOptionsMethod() throws Exception {
         checkOptions(OptionsResource.PATH, METHODS, false);
@@ -105,7 +107,8 @@ public class OptionsMethodTest extends
         // request
         MockHttpServletRequest request = new MockHttpServletRequest() {
             public String getPathTranslated() {
-                return null; // prevent Spring to resolve the file on the file system which fails
+                return null; // prevent Spring to resolve the file on the file
+                             // system which fails
             }
         };
         request.setMethod("OPTIONS");
@@ -120,7 +123,7 @@ public class OptionsMethodTest extends
             Assert.assertNotNull(response.getHeader(CustomOptionsResource.CUSTOM_HEADER));
         } else {
             // check allow
-            String allowStr = (String) response.getHeader(HttpHeadersEx.ALLOW);
+            String allowStr = (String)response.getHeader(HttpHeadersEx.ALLOW);
             List<String> allows = Arrays.asList(allowStr.split("\\s*,\\s*"));
             Assert.assertEquals(methods.length, allows.size());
             for (String method : methods) {

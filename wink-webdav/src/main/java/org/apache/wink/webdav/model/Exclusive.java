@@ -32,7 +32,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>exclusive</code> XML element per the WebDAV specification [RFC 4918]
+ * The <code>exclusive</code> XML element per the WebDAV specification [RFC
+ * 4918]
  * 
  * <pre>
  *    Name:       exclusive

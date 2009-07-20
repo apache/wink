@@ -29,26 +29,24 @@ import javax.ws.rs.ext.Provider;
 import org.apache.wink.example.qadefect.legacy.DefectBean;
 import org.apache.wink.server.internal.providers.entity.html.HtmlDescriptor;
 
-
 @Provider
 @Produces(MediaType.TEXT_HTML)
 public class DefectBeanHtmlProvider extends AbstractDescriptorWriter<DefectBean, HtmlDescriptor> {
 
-    public static final String CUSTOMIZED_JSP_PATH = "/HtmlCustomizedRepresentation/customizedHtmlEntry.jsp";
+    public static final String CUSTOMIZED_JSP_PATH =
+                                                       "/HtmlCustomizedRepresentation/customizedHtmlEntry.jsp";
     public static final String CUSTOMIZED_JSP_ATTR = "DefectAssetAttr";
 
-    
-    
     @Override
     public HtmlDescriptor getDescriptor(DefectBean bean) {
         return new HtmlDescriptor(bean, CUSTOMIZED_JSP_PATH, CUSTOMIZED_JSP_ATTR);
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
         return type == DefectBean.class;
     }
-
-  
 
 }

@@ -48,7 +48,7 @@ public class MessageBodyWriterIsWritableGenericEntitySetString implements Messag
     public boolean isWriteable(Class<?> arg0, Type arg1, Annotation[] arg2, MediaType arg3) {
         if (arg0.isAssignableFrom(HashSet.class)) {
             if (arg1 instanceof ParameterizedType) {
-                ParameterizedType pt = (ParameterizedType) arg1;
+                ParameterizedType pt = (ParameterizedType)arg1;
                 Type[] args = pt.getActualTypeArguments();
                 if (args.length == 1 && args[0].equals(String.class)) {
                     if (pt.getRawType().equals(Set.class)) {
@@ -61,11 +61,15 @@ public class MessageBodyWriterIsWritableGenericEntitySetString implements Messag
     }
 
     @SuppressWarnings("unchecked")
-    public void writeTo(Object arg0, Class<?> arg1, Type arg2, Annotation[] arg3, MediaType arg4,
-        MultivaluedMap<String, Object> arg5, OutputStream arg6) throws IOException,
-        WebApplicationException {
+    public void writeTo(Object arg0,
+                        Class<?> arg1,
+                        Type arg2,
+                        Annotation[] arg3,
+                        MediaType arg4,
+                        MultivaluedMap<String, Object> arg5,
+                        OutputStream arg6) throws IOException, WebApplicationException {
         Writer writer = new OutputStreamWriter(arg6);
-        Set<String> s = (Set<String>) arg0;
+        Set<String> s = (Set<String>)arg0;
         writer.write("set<string>:");
         List<String> list = new ArrayList<String>(s);
         Collections.sort(list);

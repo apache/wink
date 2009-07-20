@@ -17,10 +17,9 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
@@ -39,7 +38,6 @@ import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 /**
  * Test parameter conversion.
  * 
@@ -49,7 +47,7 @@ public class ParameterConversionTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[]{PathResource.class, QueryResource.class};
+        return new Class[] {PathResource.class, QueryResource.class};
     }
 
     @Path("/p/{v}")
@@ -136,25 +134,32 @@ public class ParameterConversionTest extends MockServletInvocationTest {
 
         @GET
         @Produces("q/byte")
-        public void smallByte(@QueryParam("v") byte v) { // not very meaningful combination
+        public void smallByte(@QueryParam("v") byte v) { // not very meaningful
+                                                         // combination
             assertEquals("variable v", 42, v);
         }
-        
+
         @GET
         @Produces("q/byteMissing")
-        public void smallByteMissing(@QueryParam("v") byte v) { // not very meaningful combination
+        public void smallByteMissing(@QueryParam("v") byte v) { // not very
+                                                                // meaningful
+                                                                // combination
             assertEquals("variable v", 0, v);
         }
 
         @GET
         @Produces("q/bigByteArray")
-        public void bigByte(@QueryParam("v") List<Byte> v) { // not very meaningful combination
+        public void bigByte(@QueryParam("v") List<Byte> v) { // not very
+                                                             // meaningful
+                                                             // combination
             assertTrue(Arrays.equals((Object[])expectedValues, v.toArray()));
         }
 
         @GET
         @Produces("q/byteArray")
-        public void smallByte(@QueryParam("v") byte[] v) { // not very meaningful combination
+        public void smallByte(@QueryParam("v") byte[] v) { // not very
+                                                           // meaningful
+                                                           // combination
             assertTrue(Arrays.equals((byte[])expectedValues, v));
         }
 
@@ -237,7 +242,8 @@ public class ParameterConversionTest extends MockServletInvocationTest {
     public void testBooleanArrayQuery() throws Exception {
         Boolean[] ia = {true, true, false, true};
         QueryResource.expectedValues = ia;
-        assertInvocation(constructQueryArrayRequest(new String[]{"true", "true", "false", "true"}, "q/bigBooleanArray"));
+        assertInvocation(constructQueryArrayRequest(new String[] {"true", "true", "false", "true"},
+                                                    "q/bigBooleanArray"));
     }
 
     public void testBooleanQuery() throws Exception {
@@ -256,7 +262,8 @@ public class ParameterConversionTest extends MockServletInvocationTest {
     public void testBoolArrayQuery() throws Exception {
         boolean[] ia = {true, false, true, true};
         QueryResource.expectedValues = ia;
-        assertInvocation(constructQueryArrayRequest(new String[]{"true", "false", "true", "true"}, "q/booleanArray"));
+        assertInvocation(constructQueryArrayRequest(new String[] {"true", "false", "true", "true"},
+                                                    "q/booleanArray"));
     }
 
     // Integer
@@ -265,9 +272,12 @@ public class ParameterConversionTest extends MockServletInvocationTest {
     }
 
     public void testIntergerArrayQuery() throws Exception {
-        Integer[] ia = {new Integer("1"), new Integer("2"), new Integer("3"), new Integer("4"), new Integer("5")};
+        Integer[] ia =
+            {new Integer("1"), new Integer("2"), new Integer("3"), new Integer("4"),
+                new Integer("5")};
         QueryResource.expectedValues = ia;
-        assertInvocation(constructQueryArrayRequest(new String[]{"1", "2", "3", "4", "5"}, "q/IntegerArray"));
+        assertInvocation(constructQueryArrayRequest(new String[] {"1", "2", "3", "4", "5"},
+                                                    "q/IntegerArray"));
     }
 
     // int
@@ -284,7 +294,8 @@ public class ParameterConversionTest extends MockServletInvocationTest {
     public void testIntArrayQuery() throws Exception {
         int[] ia = {1, 2, 3, 4, 5};
         QueryResource.expectedValues = ia;
-        assertInvocation(constructQueryArrayRequest(new String[]{"1", "2", "3", "4", "5"}, "q/intArray"));
+        assertInvocation(constructQueryArrayRequest(new String[] {"1", "2", "3", "4", "5"},
+                                                    "q/intArray"));
     }
 
     public void testBPI() throws Exception {
@@ -292,11 +303,11 @@ public class ParameterConversionTest extends MockServletInvocationTest {
         assertInvocation(constructPathRequest("42", "p/bigByte"));
     }
 
-
     public void testByteArrayQuery() throws Exception {
-        QueryResource.expectedValues = new Byte[]{new Byte("1"), new Byte("2"), new Byte("3"), new Byte("4"),
-                new Byte("5")};
-        assertInvocation(constructQueryArrayRequest(new String[]{"1", "2", "3", "4", "5"}, "q/bigByteArray"));
+        QueryResource.expectedValues =
+            new Byte[] {new Byte("1"), new Byte("2"), new Byte("3"), new Byte("4"), new Byte("5")};
+        assertInvocation(constructQueryArrayRequest(new String[] {"1", "2", "3", "4", "5"},
+                                                    "q/bigByteArray"));
     }
 
     // byte
@@ -305,8 +316,9 @@ public class ParameterConversionTest extends MockServletInvocationTest {
     }
 
     public void testByteiArrayQuery() throws Exception {
-        QueryResource.expectedValues = new byte[]{1, 2, 3, 4, 5};
-        assertInvocation(constructQueryArrayRequest(new String[]{"1", "2", "3", "4", "5"}, "q/byteArray"));
+        QueryResource.expectedValues = new byte[] {1, 2, 3, 4, 5};
+        assertInvocation(constructQueryArrayRequest(new String[] {"1", "2", "3", "4", "5"},
+                                                    "q/byteArray"));
     }
 
     public void testMissingBQ() throws Exception {
@@ -314,12 +326,12 @@ public class ParameterConversionTest extends MockServletInvocationTest {
         assertInvocation((constructQueryRequest(null, "q/bigShort")));
     }
 
-
-
     public void testShortArrayQuery() throws Exception {
-        Short[] ia = {new Short("1"), new Short("2"), new Short("3"), new Short("4"), new Short("5")};
+        Short[] ia =
+            {new Short("1"), new Short("2"), new Short("3"), new Short("4"), new Short("5")};
         QueryResource.expectedValues = ia;
-        assertInvocation(constructQueryArrayRequest(new String[]{"1", "2", "3", "4", "5"}, "q/bigShortArray"));
+        assertInvocation(constructQueryArrayRequest(new String[] {"1", "2", "3", "4", "5"},
+                                                    "q/bigShortArray"));
     }
 
     // short
@@ -330,7 +342,8 @@ public class ParameterConversionTest extends MockServletInvocationTest {
     public void testShortiArrayQuery() throws Exception {
         short[] ia = {1, 2, 3, 4, 5};
         QueryResource.expectedValues = ia;
-        assertInvocation(constructQueryArrayRequest(new String[]{"1", "2", "3", "4", "5"}, "q/shortArray"));
+        assertInvocation(constructQueryArrayRequest(new String[] {"1", "2", "3", "4", "5"},
+                                                    "q/shortArray"));
     }
 
     public void testLP() throws Exception {
@@ -339,11 +352,12 @@ public class ParameterConversionTest extends MockServletInvocationTest {
         assertInvocation(constructQueryRequest("1.0", "q/bigDouble"));
     }
 
-
     public void testDoubleArrayQuery() throws Exception {
-        Double[] ia = {new Double("1"), new Double("2"), new Double("3"), new Double("4"), new Double("5")};
+        Double[] ia =
+            {new Double("1"), new Double("2"), new Double("3"), new Double("4"), new Double("5")};
         QueryResource.expectedValues = ia;
-        assertInvocation(constructQueryArrayRequest(new String[]{"1", "2", "3", "4", "5"}, "q/bigDoubleArray"));
+        assertInvocation(constructQueryArrayRequest(new String[] {"1", "2", "3", "4", "5"},
+                                                    "q/bigDoubleArray"));
     }
 
     // float
@@ -354,13 +368,15 @@ public class ParameterConversionTest extends MockServletInvocationTest {
     // --- utils ---
 
     private MockHttpServletRequest constructPathRequest(String varValue, String method) {
-        return MockRequestConstructor.constructMockRequest("GET", "/p/" + UriEncoder.encodeString(varValue), method);
+        return MockRequestConstructor.constructMockRequest("GET", "/p/" + UriEncoder
+            .encodeString(varValue), method);
     }
 
     private void assertInvocation(MockHttpServletRequest servletRequest) throws Exception {
         MockHttpServletResponse mockHttpServletResponse = invoke(servletRequest);
         try {
-            assertEquals("http status", HttpStatus.NO_CONTENT.getCode(), mockHttpServletResponse.getStatus());
+            assertEquals("http status", HttpStatus.NO_CONTENT.getCode(), mockHttpServletResponse
+                .getStatus());
         } catch (AssertionError ae) {
             System.err.println(mockHttpServletResponse.getContentAsString());
             throw ae;
@@ -368,15 +384,17 @@ public class ParameterConversionTest extends MockServletInvocationTest {
     }
 
     private MockHttpServletRequest constructQueryRequest(String varValue, String method) {
-//        MockHttpServletRequest servletRequest = MockRequestConstructor.constructMockRequest("GET", "/q", method);
-//        if (varValue != null) {
-//            servletRequest.setQueryString("v=" + varValue);
-//        }
+        // MockHttpServletRequest servletRequest =
+        // MockRequestConstructor.constructMockRequest("GET", "/q", method);
+        // if (varValue != null) {
+        // servletRequest.setQueryString("v=" + varValue);
+        // }
         return constructQueryArrayRequest(new String[] {varValue}, method);
     }
 
     private MockHttpServletRequest constructQueryArrayRequest(String[] varValue, String method) {
-        MockHttpServletRequest servletRequest = MockRequestConstructor.constructMockRequest("GET", "/q", method);
+        MockHttpServletRequest servletRequest =
+            MockRequestConstructor.constructMockRequest("GET", "/q", method);
         if (varValue != null) {
             StringBuilder builder = new StringBuilder();
             String delim = "";

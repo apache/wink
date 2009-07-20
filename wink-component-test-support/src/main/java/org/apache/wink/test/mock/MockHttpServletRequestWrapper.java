@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.test.mock;
 
@@ -28,7 +27,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 public class MockHttpServletRequestWrapper extends MockHttpServletRequest {
 
     private ServletInputStream inputStream = null;
-    
+
     @Override
     public ServletInputStream getInputStream() {
         if (inputStream != null) {
@@ -46,12 +45,11 @@ public class MockHttpServletRequestWrapper extends MockHttpServletRequest {
         addHeader("Content-Type", contentType);
     }
 
-    
     @Override
     public void setContent(byte[] content) {
         super.setContent(content);
         if (content != null) {
             addHeader("Content-Length", String.valueOf(content.length));
         }
-    }    
+    }
 }

@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.webdav.server;
 
 import javax.ws.rs.core.Context;
@@ -26,14 +26,14 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.wink.common.http.OPTIONS;
 
-
 /**
  * Base Resource for WebDAV-enabled resources.
  */
 public abstract class WebDAVResource {
 
     /**
-     * Provides a default response with two additional headers for WebDAV and MS compatibility.
+     * Provides a default response with two additional headers for WebDAV and MS
+     * compatibility.
      * 
      * @return
      */

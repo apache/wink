@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.client.handlers;
 
@@ -26,16 +25,16 @@ import java.io.OutputStream;
 
 import org.apache.wink.client.ClientRequest;
 
-
 /**
  * Interface for adapting the output stream
  */
 public interface OutputStreamAdapter {
 
     /**
-     * This method is called in order to wrap the request output stream with another output stream
-     * to allow the manipulation of the request entity stream. This method is called before writing
-     * the request headers to allow the adapter to manipulate the request.
+     * This method is called in order to wrap the request output stream with
+     * another output stream to allow the manipulation of the request entity
+     * stream. This method is called before writing the request headers to allow
+     * the adapter to manipulate the request.
      * <p>
      * For example:
      * 
@@ -46,10 +45,8 @@ public interface OutputStreamAdapter {
      * }
      * </pre>
      * 
-     * @param os
-     *            the current request output stream
-     * @param request
-     *            the request
+     * @param os the current request output stream
+     * @param request the request
      * @return the adapted request output stream
      * @throws IOException
      */

@@ -30,7 +30,7 @@ public class AddressBookDatabase {
 
     private static Map<String, Address> addressMap;
 
-    private static AddressBookDatabase instance;
+    private static AddressBookDatabase  instance;
 
     private AddressBookDatabase() {
         addressMap = new HashMap<String, Address>();

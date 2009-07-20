@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.client;
 
@@ -42,5 +41,5 @@ public class ClientRuntimeException extends RuntimeException {
     public ClientRuntimeException(Throwable cause) {
         super(cause);
     }
-    
+
 }

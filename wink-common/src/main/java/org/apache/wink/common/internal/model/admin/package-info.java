@@ -26,3 +26,4 @@
 
 @javax.xml.bind.annotation.XmlSchema(namespace = "http://apache.org/wink/common/internal/model/admin", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package org.apache.wink.common.internal.model.admin;
+

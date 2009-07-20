@@ -66,7 +66,7 @@ public class EncodedTest extends MockServletInvocationTest {
         @GET
         @Produces(MediaType.TEXT_PLAIN)
         public String get(@PathParam("action") String action,
-            @Encoded @QueryParam("bulu") String encodedParam) {
+                          @Encoded @QueryParam("bulu") String encodedParam) {
             if (action.equals("encoded")) {
                 return encoded;
             }
@@ -96,36 +96,38 @@ public class EncodedTest extends MockServletInvocationTest {
     }
 
     public void testAll() throws Exception {
-        MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
-            "/a/notencoded", MediaType.TEXT_PLAIN);
+        MockHttpServletRequest mockRequest =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/a/notencoded",
+                                                        MediaType.TEXT_PLAIN);
         mockRequest.setQueryString("hulu=" + ENCODED);
         MockHttpServletResponse mockResponse = invoke(mockRequest);
         assertEquals(200, mockResponse.getStatus());
         assertEquals(NOT_ENCODED, mockResponse.getContentAsString());
 
-        mockRequest = MockRequestConstructor.constructMockRequest("GET", "/a/encoded",
-            MediaType.TEXT_PLAIN);
+        mockRequest =
+            MockRequestConstructor.constructMockRequest("GET", "/a/encoded", MediaType.TEXT_PLAIN);
         mockRequest.setQueryString("bulu=" + ENCODED);
         mockResponse = invoke(mockRequest);
         assertEquals(200, mockResponse.getStatus());
         assertEquals(ENCODED, mockResponse.getContentAsString());
 
-        mockRequest = MockRequestConstructor.constructMockRequest("GET", "/a/bulubulu",
-            MediaType.TEXT_PLAIN);
+        mockRequest =
+            MockRequestConstructor.constructMockRequest("GET", "/a/bulubulu", MediaType.TEXT_PLAIN);
         mockRequest.setQueryString("bulu=" + ENCODED);
         mockResponse = invoke(mockRequest);
         assertEquals(200, mockResponse.getStatus());
         assertEquals(ENCODED, mockResponse.getContentAsString());
 
-        mockRequest = MockRequestConstructor.constructMockRequest("GET", "/a/bulubulu",
-            MediaType.TEXT_HTML);
+        mockRequest =
+            MockRequestConstructor.constructMockRequest("GET", "/a/bulubulu", MediaType.TEXT_HTML);
         mockRequest.setQueryString("kulu=" + ENCODED);
         mockResponse = invoke(mockRequest);
         assertEquals(200, mockResponse.getStatus());
         assertEquals(ENCODED, mockResponse.getContentAsString());
-        
-        mockRequest = MockRequestConstructor.constructMockRequest("GET", "/encoded",
-            MediaType.TEXT_HTML);
+
+        mockRequest =
+            MockRequestConstructor.constructMockRequest("GET", "/encoded", MediaType.TEXT_HTML);
         mockRequest.setQueryString("kulu=" + ENCODED);
         mockResponse = invoke(mockRequest);
         assertEquals(200, mockResponse.getStatus());

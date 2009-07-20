@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.qadefect.legacy;
 
 import java.util.ArrayList;
@@ -36,17 +36,9 @@ import javax.xml.bind.annotation.XmlType;
  * Defect bean.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "DefectType", propOrder = {
-    "id",
-    "name",
-    "description",
-    "created",
-    "author",
-    "status",
-    "severity",
-    "assignedTo"
-})
-@XmlRootElement(name="defect")
+@XmlType(name = "DefectType", propOrder = {"id", "name", "description", "created", "author",
+                                           "status", "severity", "assignedTo"})
+@XmlRootElement(name = "defect")
 public class DefectBean {
     @XmlElement(required = true)
     private String         id;
@@ -86,9 +78,15 @@ public class DefectBean {
      * @param status
      * @param assignedTo
      */
-    public DefectBean(String id, String name, String description, Date created,
-        String author, String severity, String status, String assignedTo,
-        List<TestBean> tests) {
+    public DefectBean(String id,
+                      String name,
+                      String description,
+                      Date created,
+                      String author,
+                      String severity,
+                      String status,
+                      String assignedTo,
+                      List<TestBean> tests) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -112,8 +110,7 @@ public class DefectBean {
     /**
      * <code>assignedTo</code> setter.
      * 
-     * @param assignedTo
-     *            the <code>assignedTo</code> to set
+     * @param assignedTo the <code>assignedTo</code> to set
      */
     public void setAssignedTo(String assignedTo) {
         this.assignedTo = assignedTo;
@@ -131,8 +128,7 @@ public class DefectBean {
     /**
      * <code>author</code> setter.
      * 
-     * @param author
-     *            the <code>author</code> to set
+     * @param author the <code>author</code> to set
      */
     public void setAuthor(String author) {
         this.author = author;
@@ -150,8 +146,7 @@ public class DefectBean {
     /**
      * <code>created</code> setter.
      * 
-     * @param created
-     *            the <code>created</code> to set
+     * @param created the <code>created</code> to set
      */
     public void setCreated(Date created) {
         this.created = created;
@@ -169,8 +164,7 @@ public class DefectBean {
     /**
      * <code>description</code> setter.
      * 
-     * @param description
-     *            the <code>description</code> to set
+     * @param description the <code>description</code> to set
      */
     public void setDescription(String description) {
         this.description = description;
@@ -188,8 +182,7 @@ public class DefectBean {
     /**
      * <code>id</code> setter.
      * 
-     * @param id
-     *            the <code>id</code> to set
+     * @param id the <code>id</code> to set
      */
     public void setId(String id) {
         this.id = id;
@@ -207,8 +200,7 @@ public class DefectBean {
     /**
      * <code>name</code> setter.
      * 
-     * @param name
-     *            the <code>name</code> to set
+     * @param name the <code>name</code> to set
      */
     public void setName(String name) {
         this.name = name;
@@ -226,8 +218,7 @@ public class DefectBean {
     /**
      * <code>severity</code> setter.
      * 
-     * @param severity
-     *            the <code>severity</code> to set
+     * @param severity the <code>severity</code> to set
      */
     public void setSeverity(String severity) {
         this.severity = severity;
@@ -245,8 +236,7 @@ public class DefectBean {
     /**
      * <code>status</code> setter.
      * 
-     * @param status
-     *            the <code>status</code> to set
+     * @param status the <code>status</code> to set
      */
     public void setStatus(String status) {
         this.status = status;

@@ -30,19 +30,20 @@ import java.util.TreeMap;
 
 import javax.ws.rs.core.MultivaluedMap;
 
-public class MultivaluedMapImpl<K, V> //extends LinkedHashMap<K,List<V>> 
+public class MultivaluedMapImpl<K, V> // extends LinkedHashMap<K,List<V>>
     implements MultivaluedMap<K, V>, Cloneable {
 
-    private static final long serialVersionUID = -1942980976209902832L;
+    private static final long     serialVersionUID = -1942980976209902832L;
 
-    private final Map<K, List<V>>   map;
+    private final Map<K, List<V>> map;
 
     public MultivaluedMapImpl() {
         map = new LinkedHashMap<K, List<V>>();
     }
-    
+
     /**
      * Used to create a CaseInsensitiveMultivaluedMap
+     * 
      * @param keyComparator
      */
     MultivaluedMapImpl(Comparator<K> keyComparator) {
@@ -142,15 +143,14 @@ public class MultivaluedMapImpl<K, V> //extends LinkedHashMap<K,List<V>>
         return result.toString();
     }
 
-    public static MultivaluedMap<String, String> toMultivaluedMapString(
-        Map<String, ? extends Object> values) {
+    public static MultivaluedMap<String, String> toMultivaluedMapString(Map<String, ? extends Object> values) {
         MultivaluedMap<String, String> mValues = new MultivaluedMapImpl<String, String>();
         for (String key : values.keySet()) {
             Object value = values.get(key);
             if (value == null) {
                 mValues.add(key, null);
             } else if (value instanceof Object[]) {
-                for (Object obj : (Object[]) value) {
+                for (Object obj : (Object[])value) {
                     if (obj == null) {
                         mValues.add(key, null);
                     } else {
@@ -158,7 +158,7 @@ public class MultivaluedMapImpl<K, V> //extends LinkedHashMap<K,List<V>>
                     }
                 }
             } else if (value instanceof List<?>) {
-                for (Object obj : (List<?>) value) {
+                for (Object obj : (List<?>)value) {
                     if (obj == null) {
                         mValues.add(key, null);
                     } else {

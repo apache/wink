@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.customerror;
 
 import java.util.Collection;
@@ -37,29 +37,46 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.wink.common.annotations.Workspace;
 
-
 /**
- * Sample service for demonstrating the use of an {@link javax.ws.rs.ext.ExceptionMapper} to map a 
+ * Sample service for demonstrating the use of an
+ * {@link javax.ws.rs.ext.ExceptionMapper} to map a
  * {@link UserNotExistException} to a human readable format
  */
 @Workspace(workspaceTitle = "Demo Users Service", collectionTitle = "Users")
 @Path("users")
 public class UsersResource {
 
-    static private int maxUserID = 0;
+    static private int                    maxUserID = 0;
 
-    static private HashMap<Integer, User> users = new HashMap<Integer, User>(){
-        private static final long serialVersionUID = -1744322767380017394L;
-        {
-            put(maxUserID,   new User("John", "Smith", maxUserID, "John.Smith@mail.com"));
-            put(++maxUserID, new User("John", "Doe", maxUserID, "John.Doe@mail.com"));
-            put(++maxUserID, new User("Pogos", "Pogosyan", maxUserID, "Pogos.Pogosyan@mail.com"));
-            put(++maxUserID, new User("Hans", "Meier", maxUserID, "Hans.Meier@mail.com"));
-            put(++maxUserID, new User("Ali", "Vali", maxUserID, "Ali.Vali@mail.com"));
-            put(++maxUserID, new User("Ploni", "Almoni", maxUserID, "Ploni.Almoni@mail.com"));
-        }
-    };
-    
+    static private HashMap<Integer, User> users     = new HashMap<Integer, User>() {
+                                                        private static final long serialVersionUID =
+                                                                                                       -1744322767380017394L;
+                                                        {
+                                                            put(maxUserID,
+                                                                new User("John", "Smith",
+                                                                         maxUserID,
+                                                                         "John.Smith@mail.com"));
+                                                            put(++maxUserID,
+                                                                new User("John", "Doe", maxUserID,
+                                                                         "John.Doe@mail.com"));
+                                                            put(++maxUserID,
+                                                                new User("Pogos", "Pogosyan",
+                                                                         maxUserID,
+                                                                         "Pogos.Pogosyan@mail.com"));
+                                                            put(++maxUserID,
+                                                                new User("Hans", "Meier",
+                                                                         maxUserID,
+                                                                         "Hans.Meier@mail.com"));
+                                                            put(++maxUserID,
+                                                                new User("Ali", "Vali", maxUserID,
+                                                                         "Ali.Vali@mail.com"));
+                                                            put(++maxUserID,
+                                                                new User("Ploni", "Almoni",
+                                                                         maxUserID,
+                                                                         "Ploni.Almoni@mail.com"));
+                                                        }
+                                                    };
+
     /**
      * A collection of users
      */
@@ -83,7 +100,7 @@ public class UsersResource {
      * @return an instance of Users
      */
     @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces( {MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Users getUsers() {
         return new Users(users.values());
     }
@@ -94,8 +111,8 @@ public class UsersResource {
      * @return the created user
      */
     @POST
-    @Consumes({MediaType.APPLICATION_XML})
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes( {MediaType.APPLICATION_XML})
+    @Produces( {MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public User putUser(User user) {
         maxUserID++;
         user.setId(maxUserID);
@@ -106,17 +123,15 @@ public class UsersResource {
     /**
      * Get a user as xml or json
      * 
-     * @param id
-     *            the id of the user to get
+     * @param id the id of the user to get
      * @return the user as specified by the id
-     * 
-     * @throws UserNotExistException
-     *             if there is no user for the specified id. if thrown, this exception is mapped to
-     *             a human readable message using the {@link UserNotExistExceptionMapper}
+     * @throws UserNotExistException if there is no user for the specified id. if
+     *             thrown, this exception is mapped to a human readable message
+     *             using the {@link UserNotExistExceptionMapper}
      */
     @Path("{id}")
     @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces( {MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public User getUser(@PathParam("id") int id) throws UserNotExistException {
         User u = users.get(id);
         if (u == null) {

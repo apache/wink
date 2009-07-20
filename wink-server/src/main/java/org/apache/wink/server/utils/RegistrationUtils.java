@@ -35,10 +35,8 @@ public class RegistrationUtils {
      * methods adds new providers and resources and DOES NOT removes the already
      * registered.
      * 
-     * @param application
-     *            - application to register
-     * @param servletContext
-     *            - current servlet context
+     * @param application - application to register
+     * @param servletContext - current servlet context
      */
     public static void registerApplication(Application application, ServletContext servletContext) {
         registerApplication(application, servletContext, null);
@@ -53,15 +51,19 @@ public class RegistrationUtils {
     }
 
     public static void registerInstances(ServletContext servletContext,
-        String requestProcessorAttribute, Object... instances) {
-        registerApplication(new InnerApplication(instances), servletContext,
-            requestProcessorAttribute);
+                                         String requestProcessorAttribute,
+                                         Object... instances) {
+        registerApplication(new InnerApplication(instances),
+                            servletContext,
+                            requestProcessorAttribute);
     }
 
     public static void registerClasses(ServletContext servletContext,
-        String requestProcessorAttribute, Class<?>... classes) {
-        registerApplication(new InnerApplication(classes), servletContext,
-            requestProcessorAttribute);
+                                       String requestProcessorAttribute,
+                                       Class<?>... classes) {
+        registerApplication(new InnerApplication(classes),
+                            servletContext,
+                            requestProcessorAttribute);
     }
 
     /**
@@ -69,19 +71,17 @@ public class RegistrationUtils {
      * methods adds new providers and resources and DOES NOT removes the already
      * registered.
      * 
-     * @param application
-     *            - application to register
-     * @param servletContext
-     *            - current servlet context
-     * @param requestProcessorAttribute
-     *            - attribute on which the request processor is stored. It's
-     *            useful, when there are multiple rest servlets in the system
-     *            and each one has a request processor.
+     * @param application - application to register
+     * @param servletContext - current servlet context
+     * @param requestProcessorAttribute - attribute on which the request
+     *            processor is stored. It's useful, when there are multiple rest
+     *            servlets in the system and each one has a request processor.
      */
-    public static void registerApplication(Application application, ServletContext servletContext,
-        String requestProcessorAttribute) {
-        RequestProcessor requestProcessor = RequestProcessor.getRequestProcessor(servletContext,
-            requestProcessorAttribute);
+    public static void registerApplication(Application application,
+                                           ServletContext servletContext,
+                                           String requestProcessorAttribute) {
+        RequestProcessor requestProcessor =
+            RequestProcessor.getRequestProcessor(servletContext, requestProcessorAttribute);
         requestProcessor.getConfiguration().addApplication(application);
     }
 

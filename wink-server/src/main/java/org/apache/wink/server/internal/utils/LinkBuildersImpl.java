@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal.utils;
 
 import org.apache.wink.server.handlers.MessageContext;

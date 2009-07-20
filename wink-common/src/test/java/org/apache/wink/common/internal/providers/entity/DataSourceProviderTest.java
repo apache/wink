@@ -34,10 +34,10 @@ import javax.ws.rs.core.MediaType;
 import org.apache.wink.common.internal.providers.entity.DataSourceProvider;
 import org.junit.Test;
 
-
 public class DataSourceProviderTest {
 
-    private static String message = "If you are not part of the cure, then you are part of the problem";
+    private static String message =
+                                      "If you are not part of the cure, then you are part of the problem";
 
     @Test
     public void testMessageReader() throws IOException {
@@ -47,19 +47,26 @@ public class DataSourceProviderTest {
 
         // Entity Stream to be read with DataSourceProvider
         DataSourceProvider dsp = new DataSourceProvider();
-        DataSourceProvider.ByteArrayDataSource bads = new DataSourceProvider.ByteArrayDataSource(bais, "text/plain");
+        DataSourceProvider.ByteArrayDataSource bads =
+            new DataSourceProvider.ByteArrayDataSource(bais, "text/plain");
 
         // Check if readable - assert true
         assertTrue(dsp.isReadable(DataSource.class, null, null, null));
         assertTrue(dsp.isReadable(Object.class, null, null, null));
         // Check if readable - assert false
         assertFalse(dsp.isReadable(DataSourceProvider.ByteArrayDataSource.class, null, null, null));
-        assertFalse(" Reading to String.class is not supported", dsp.isReadable(String.class, null, null, null));
+        assertFalse(" Reading to String.class is not supported", dsp.isReadable(String.class,
+                                                                                null,
+                                                                                null,
+                                                                                null));
 
         DataSource ds = null;
         try {
             // Read Entity
-            ds = dsp.readFrom(null, null, null, MediaType.WILDCARD_TYPE, null, bads.getInputStream());
+            ds =
+                dsp
+                    .readFrom(null, null, null, MediaType.WILDCARD_TYPE, null, bads
+                        .getInputStream());
         } catch (IOException e) {
             assertFalse(" Failed to read Entity", true);
         }
@@ -82,17 +89,21 @@ public class DataSourceProviderTest {
 
         // Entity Data Source
         ByteArrayInputStream bais = new ByteArrayInputStream(message.getBytes());
-        DataSourceProvider.ByteArrayDataSource bads = new DataSourceProvider.ByteArrayDataSource(bais, "text/plain");
+        DataSourceProvider.ByteArrayDataSource bads =
+            new DataSourceProvider.ByteArrayDataSource(bais, "text/plain");
 
         // Entity Stream to be read with DataSourceProvider
         DataSourceProvider dsp = new DataSourceProvider();
 
         // Check if writable - assert true
         assertTrue(dsp.isWriteable(DataSourceProvider.ByteArrayDataSource.class, null, null, null));
-        
+
         // Check if writable - assert false
-        assertFalse(" Writting from String.class is not supported", dsp.isWriteable(String.class, null, null, null));
-        
+        assertFalse(" Writting from String.class is not supported", dsp.isWriteable(String.class,
+                                                                                    null,
+                                                                                    null,
+                                                                                    null));
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         try {

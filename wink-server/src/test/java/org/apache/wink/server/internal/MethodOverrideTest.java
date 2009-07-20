@@ -17,10 +17,8 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal;
-
-
 
 import javax.ws.rs.HttpMethod;
 
@@ -33,7 +31,6 @@ import org.apache.wink.server.internal.handlers.ServerMessageContext;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 /**
  * Unit test of EnhancedRequest
  */
@@ -43,7 +40,9 @@ public class MethodOverrideTest extends TestCase {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setMethod("POST");
         request.addHeader(HttpHeadersEx.X_HTTP_METHOD_OVERRIDE, "PUT");
-        MessageContext context = new ServerMessageContext(request, new MockHttpServletResponse(),  new DeploymentConfiguration());
+        MessageContext context =
+            new ServerMessageContext(request, new MockHttpServletResponse(),
+                                     new DeploymentConfiguration());
         assertEquals("HTTP method", HttpMethod.PUT, context.getHttpMethod());
     }
 
@@ -51,7 +50,9 @@ public class MethodOverrideTest extends TestCase {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setMethod("POST");
         request.addHeader(HttpHeadersEx.X_METHOD_OVERRIDE, "DELETE");
-        MessageContext context = new ServerMessageContext(request, new MockHttpServletResponse(),  new DeploymentConfiguration());
+        MessageContext context =
+            new ServerMessageContext(request, new MockHttpServletResponse(),
+                                     new DeploymentConfiguration());
         assertEquals("HTTP method", HttpMethod.DELETE, context.getHttpMethod());
     }
 

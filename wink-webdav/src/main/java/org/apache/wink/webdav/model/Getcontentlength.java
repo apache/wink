@@ -35,7 +35,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>getcontentlength</code> Property per the WebDAV specification [RFC 4918]
+ * The <code>getcontentlength</code> Property per the WebDAV specification [RFC
+ * 4918]
  * 
  * <pre>
  *    Name:       getcontentlength
@@ -59,7 +60,9 @@ public class Getcontentlength {
     @XmlMixed
     protected List<String> content;
 
-    public Getcontentlength() {}
+    public Getcontentlength() {
+    }
+
     public Getcontentlength(String value) {
         setValue(value);
     }
@@ -74,8 +77,7 @@ public class Getcontentlength {
     /**
      * Sets the value.
      * 
-     * @param value
-     *            the value to set
+     * @param value the value to set
      */
     public void setValue(String value) {
         List<String> content = getContent();

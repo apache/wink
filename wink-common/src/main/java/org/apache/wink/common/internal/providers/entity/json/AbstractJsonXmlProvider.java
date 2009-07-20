@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.providers.entity.json;
 
@@ -42,18 +41,21 @@ import org.xml.sax.SAXException;
 import org.json.JSONObject;
 import org.json.JSONException;
 
-
 public class AbstractJsonXmlProvider extends AbstractJAXBProvider {
-    
-    private static final Logger logger = LoggerFactory.getLogger(AbstractJsonXmlProvider.class);
-    
+
+    private static final Logger       logger =
+                                                 LoggerFactory
+                                                     .getLogger(AbstractJsonXmlProvider.class);
+
     protected static SAXParserFactory spf;
     static {
         spf = SAXParserFactory.newInstance();
         spf.setNamespaceAware(true);
         spf.setValidating(false);
-        // this feature will cause all attributes, including the ones specifying namespaces, to be
-        // given to the handler's startElement() method during the parsing of an xml
+        // this feature will cause all attributes, including the ones specifying
+        // namespaces, to be
+        // given to the handler's startElement() method during the parsing of an
+        // xml
         try {
             spf.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
         } catch (Exception e) {
@@ -65,16 +67,16 @@ public class AbstractJsonXmlProvider extends AbstractJAXBProvider {
 
     static class JsonContentHandler extends Marshaller.Listener implements ContentHandler {
 
-        private LinkedList<JSONObject> jsonObjects = new LinkedList<JSONObject>();
-        private LinkedList<Map<String,String>> namespaces = new LinkedList<Map<String,String>>();
+        private LinkedList<JSONObject>          jsonObjects = new LinkedList<JSONObject>();
+        private LinkedList<Map<String, String>> namespaces  = new LinkedList<Map<String, String>>();
 
-        private StringBuilder xmlStringToParse;
-        private boolean charactersAreXml;
+        private StringBuilder                   xmlStringToParse;
+        private boolean                         charactersAreXml;
 
         public JsonContentHandler() {
             JSONObject json = new JSONObject();
             jsonObjects.addFirst(json);
-            namespaces.addFirst(new HashMap<String,String>());
+            namespaces.addFirst(new HashMap<String, String>());
             charactersAreXml = false;
         }
 
@@ -105,13 +107,15 @@ public class AbstractJsonXmlProvider extends AbstractJAXBProvider {
         }
 
         // ========== SAX Events
-        public void startElement(String uri, String localName, String name, Attributes atts) throws SAXException {
+        public void startElement(String uri, String localName, String name, Attributes atts)
+            throws SAXException {
             try {
                 JSONObject properties = new JSONObject();
                 jsonObjects.addFirst(properties);
 
-                Map<String,String> currentNamespaces = namespaces.getFirst();
-                Map<String,String> declaredNamespaces = new HashMap<String,String>(currentNamespaces);
+                Map<String, String> currentNamespaces = namespaces.getFirst();
+                Map<String, String> declaredNamespaces =
+                    new HashMap<String, String>(currentNamespaces);
                 namespaces.addFirst(declaredNamespaces);
 
                 if (atts != null) {
@@ -130,7 +134,7 @@ public class AbstractJsonXmlProvider extends AbstractJAXBProvider {
                         }
                     }
                 }
-                
+
                 // add the xmlns properties
                 JSONObject namespaceProps = new JSONObject();
                 if (uri != null && uri.length() > 0) {
@@ -143,7 +147,7 @@ public class AbstractJsonXmlProvider extends AbstractJAXBProvider {
                 if (namespaceProps.length() > 0) {
                     properties.put("@xmlns", namespaceProps);
                 }
-                
+
             } catch (JSONException e) {
                 logger.error("failed to convert XML to JSon");
                 throw new WebApplicationException(e);
@@ -176,7 +180,9 @@ public class AbstractJsonXmlProvider extends AbstractJAXBProvider {
             if (charactersAreXml) {
                 charactersAreXml = false;
                 String xmlToParse = xmlStringToParse.toString();
-                AtomJAXBUtils.saxParse(new StringReader(xmlToParse), this, "failed to convert XML to JSon");
+                AtomJAXBUtils.saxParse(new StringReader(xmlToParse),
+                                       this,
+                                       "failed to convert XML to JSon");
             }
 
             try {

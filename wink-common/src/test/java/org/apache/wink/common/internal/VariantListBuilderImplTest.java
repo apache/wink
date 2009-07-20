@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal;
 
@@ -32,7 +31,6 @@ import javax.ws.rs.core.Variant.VariantListBuilder;
 
 import org.apache.wink.common.internal.VariantListBuilderImpl;
 
-
 import junit.framework.TestCase;
 
 public class VariantListBuilderImplTest extends TestCase {
@@ -43,10 +41,13 @@ public class VariantListBuilderImplTest extends TestCase {
 
         VariantListBuilder builder = new VariantListBuilderImpl();
         List<Variant> list = builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE).add().build();
-        assertList(new Variant[]{variant1}, list);
+        assertList(new Variant[] {variant1}, list);
 
-        list = builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE, MediaType.APPLICATION_JSON_TYPE).add().build();
-        assertList(new Variant[]{variant1, variant2}, list);
+        list =
+            builder
+                .mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE, MediaType.APPLICATION_JSON_TYPE)
+                .add().build();
+        assertList(new Variant[] {variant1, variant2}, list);
     }
 
     public void testBuildLanguages() {
@@ -55,10 +56,10 @@ public class VariantListBuilderImplTest extends TestCase {
 
         VariantListBuilder builder = new VariantListBuilderImpl();
         List<Variant> list = builder.languages(Locale.ENGLISH).add().build();
-        assertList(new Variant[]{variant1}, list);
+        assertList(new Variant[] {variant1}, list);
 
         list = builder.languages(Locale.ENGLISH, Locale.CHINESE).add().build();
-        assertList(new Variant[]{variant1, variant2}, list);
+        assertList(new Variant[] {variant1, variant2}, list);
     }
 
     public void testBuildEncodings() {
@@ -67,10 +68,10 @@ public class VariantListBuilderImplTest extends TestCase {
 
         VariantListBuilder builder = new VariantListBuilderImpl();
         List<Variant> list = builder.encodings("UTF-8").add().build();
-        assertList(new Variant[]{variant1}, list);
+        assertList(new Variant[] {variant1}, list);
 
         list = builder.encodings("UTF-8", "UTF-16").add().build();
-        assertList(new Variant[]{variant1, variant2}, list);
+        assertList(new Variant[] {variant1, variant2}, list);
     }
 
     public void testBuildMediaTypesAndLanguages() {
@@ -82,23 +83,33 @@ public class VariantListBuilderImplTest extends TestCase {
         VariantListBuilder builder = new VariantListBuilderImpl();
         List<Variant> list = null;
 
-        list = builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE).languages(Locale.ENGLISH).add().build();
-        assertList(new Variant[]{variant1}, list);
-
-        list = builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE).languages(Locale.CHINESE).add().build();
-        assertList(new Variant[]{variant2}, list);
-
-        list = builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE).languages(Locale.ENGLISH, Locale.CHINESE).add()
+        list =
+            builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE).languages(Locale.ENGLISH).add()
                 .build();
-        assertList(new Variant[]{variant1, variant2}, list);
+        assertList(new Variant[] {variant1}, list);
 
-        list = builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE, MediaType.APPLICATION_JSON_TYPE).languages(
-                Locale.ENGLISH).add().build();
-        assertList(new Variant[]{variant1, variant3}, list);
+        list =
+            builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE).languages(Locale.CHINESE).add()
+                .build();
+        assertList(new Variant[] {variant2}, list);
 
-        list = builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE, MediaType.APPLICATION_JSON_TYPE).languages(
-                Locale.ENGLISH, Locale.CHINESE).add().build();
-        assertList(new Variant[]{variant1, variant2, variant3, variant4}, list);
+        list =
+            builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE).languages(Locale.ENGLISH,
+                                                                              Locale.CHINESE).add()
+                .build();
+        assertList(new Variant[] {variant1, variant2}, list);
+
+        list =
+            builder
+                .mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE, MediaType.APPLICATION_JSON_TYPE)
+                .languages(Locale.ENGLISH).add().build();
+        assertList(new Variant[] {variant1, variant3}, list);
+
+        list =
+            builder
+                .mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE, MediaType.APPLICATION_JSON_TYPE)
+                .languages(Locale.ENGLISH, Locale.CHINESE).add().build();
+        assertList(new Variant[] {variant1, variant2, variant3, variant4}, list);
     }
 
     public void testBuildMediaTypesAndEncodings() {
@@ -110,22 +121,32 @@ public class VariantListBuilderImplTest extends TestCase {
         VariantListBuilder builder = new VariantListBuilderImpl();
         List<Variant> list = null;
 
-        list = builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE).encodings("UTF-8").add().build();
-        assertList(new Variant[]{variant1}, list);
+        list =
+            builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE).encodings("UTF-8").add()
+                .build();
+        assertList(new Variant[] {variant1}, list);
 
-        list = builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE).encodings("UTF-16").add().build();
-        assertList(new Variant[]{variant2}, list);
+        list =
+            builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE).encodings("UTF-16").add()
+                .build();
+        assertList(new Variant[] {variant2}, list);
 
-        list = builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE).encodings("UTF-8", "UTF-16").add().build();
-        assertList(new Variant[]{variant1, variant2}, list);
+        list =
+            builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE).encodings("UTF-8", "UTF-16")
+                .add().build();
+        assertList(new Variant[] {variant1, variant2}, list);
 
-        list = builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE, MediaType.APPLICATION_JSON_TYPE).encodings(
-                "UTF-8").add().build();
-        assertList(new Variant[]{variant1, variant3}, list);
+        list =
+            builder
+                .mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE, MediaType.APPLICATION_JSON_TYPE)
+                .encodings("UTF-8").add().build();
+        assertList(new Variant[] {variant1, variant3}, list);
 
-        list = builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE, MediaType.APPLICATION_JSON_TYPE).encodings(
-                "UTF-8", "UTF-16").add().build();
-        assertList(new Variant[]{variant1, variant2, variant3, variant4}, list);
+        list =
+            builder
+                .mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE, MediaType.APPLICATION_JSON_TYPE)
+                .encodings("UTF-8", "UTF-16").add().build();
+        assertList(new Variant[] {variant1, variant2, variant3, variant4}, list);
     }
 
     public void testBuildLanguagesAndEncodings() {
@@ -138,26 +159,32 @@ public class VariantListBuilderImplTest extends TestCase {
         List<Variant> list = null;
 
         list = builder.languages(Locale.ENGLISH).encodings("UTF-8").add().build();
-        assertList(new Variant[]{variant1}, list);
+        assertList(new Variant[] {variant1}, list);
 
         list = builder.languages(Locale.ENGLISH).encodings("UTF-16").add().build();
-        assertList(new Variant[]{variant2}, list);
+        assertList(new Variant[] {variant2}, list);
 
         list = builder.languages(Locale.ENGLISH).encodings("UTF-8", "UTF-16").add().build();
-        assertList(new Variant[]{variant1, variant2}, list);
+        assertList(new Variant[] {variant1, variant2}, list);
 
         list = builder.languages(Locale.ENGLISH, Locale.CHINESE).encodings("UTF-8").add().build();
-        assertList(new Variant[]{variant1, variant3}, list);
+        assertList(new Variant[] {variant1, variant3}, list);
 
-        list = builder.languages(Locale.ENGLISH, Locale.CHINESE).encodings("UTF-8", "UTF-16").add().build();
-        assertList(new Variant[]{variant1, variant2, variant3, variant4}, list);
+        list =
+            builder.languages(Locale.ENGLISH, Locale.CHINESE).encodings("UTF-8", "UTF-16").add()
+                .build();
+        assertList(new Variant[] {variant1, variant2, variant3, variant4}, list);
     }
 
     public void testBuildMediaTypesAndLanguagesAndEncodings() {
-        Variant variant1 = new Variant(MediaType.APPLICATION_ATOM_XML_TYPE, Locale.ENGLISH, "UTF-8");
-        Variant variant2 = new Variant(MediaType.APPLICATION_ATOM_XML_TYPE, Locale.ENGLISH, "UTF-16");
-        Variant variant3 = new Variant(MediaType.APPLICATION_ATOM_XML_TYPE, Locale.CHINESE, "UTF-8");
-        Variant variant4 = new Variant(MediaType.APPLICATION_ATOM_XML_TYPE, Locale.CHINESE, "UTF-16");
+        Variant variant1 =
+            new Variant(MediaType.APPLICATION_ATOM_XML_TYPE, Locale.ENGLISH, "UTF-8");
+        Variant variant2 =
+            new Variant(MediaType.APPLICATION_ATOM_XML_TYPE, Locale.ENGLISH, "UTF-16");
+        Variant variant3 =
+            new Variant(MediaType.APPLICATION_ATOM_XML_TYPE, Locale.CHINESE, "UTF-8");
+        Variant variant4 =
+            new Variant(MediaType.APPLICATION_ATOM_XML_TYPE, Locale.CHINESE, "UTF-16");
         Variant variant5 = new Variant(MediaType.APPLICATION_JSON_TYPE, Locale.ENGLISH, "UTF-8");
         Variant variant6 = new Variant(MediaType.APPLICATION_JSON_TYPE, Locale.ENGLISH, "UTF-16");
         Variant variant7 = new Variant(MediaType.APPLICATION_JSON_TYPE, Locale.CHINESE, "UTF-8");
@@ -166,36 +193,46 @@ public class VariantListBuilderImplTest extends TestCase {
         VariantListBuilder builder = new VariantListBuilderImpl();
         List<Variant> list = null;
 
-        list = builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE).languages(Locale.ENGLISH).encodings("UTF-8")
-                .add().build();
-        assertList(new Variant[]{variant1}, list);
+        list =
+            builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE).languages(Locale.ENGLISH)
+                .encodings("UTF-8").add().build();
+        assertList(new Variant[] {variant1}, list);
 
-        list = builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE).languages(Locale.ENGLISH).encodings("UTF-16")
-                .add().build();
-        assertList(new Variant[]{variant2}, list);
+        list =
+            builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE).languages(Locale.ENGLISH)
+                .encodings("UTF-16").add().build();
+        assertList(new Variant[] {variant2}, list);
 
-        list = builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE).languages(Locale.ENGLISH).encodings("UTF-8",
-                "UTF-16").add().build();
-        assertList(new Variant[]{variant1, variant2}, list);
-
-        list = builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE).languages(Locale.ENGLISH, Locale.CHINESE)
+        list =
+            builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE).languages(Locale.ENGLISH)
                 .encodings("UTF-8", "UTF-16").add().build();
-        assertList(new Variant[]{variant1, variant2, variant3, variant4}, list);
+        assertList(new Variant[] {variant1, variant2}, list);
 
-        list = builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE, MediaType.APPLICATION_JSON_TYPE).languages(
-                Locale.ENGLISH, Locale.CHINESE).encodings("UTF-8", "UTF-16").add().build();
-        assertList(new Variant[]{variant1, variant2, variant3, variant4, variant5, variant6, variant7, variant8}, list);
+        list =
+            builder.mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE).languages(Locale.ENGLISH,
+                                                                              Locale.CHINESE)
+                .encodings("UTF-8", "UTF-16").add().build();
+        assertList(new Variant[] {variant1, variant2, variant3, variant4}, list);
+
+        list =
+            builder
+                .mediaTypes(MediaType.APPLICATION_ATOM_XML_TYPE, MediaType.APPLICATION_JSON_TYPE)
+                .languages(Locale.ENGLISH, Locale.CHINESE).encodings("UTF-8", "UTF-16").add()
+                .build();
+        assertList(new Variant[] {variant1, variant2, variant3, variant4, variant5, variant6,
+            variant7, variant8}, list);
     }
-    
+
     public void testBuildAllNull() {
         VariantListBuilder builder = new VariantListBuilderImpl();
         List<Variant> list = builder.build();
         assertEquals(0, list.size());
-        
+
         try {
             builder.add();
             fail("expected IllegalArgumentException");
-        } catch (IllegalArgumentException e) {}
+        } catch (IllegalArgumentException e) {
+        }
     }
 
     private void assertList(Variant[] expected, List<Variant> actual) {

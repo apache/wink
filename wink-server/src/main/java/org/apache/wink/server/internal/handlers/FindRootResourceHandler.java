@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.handlers;
 
@@ -37,35 +36,41 @@ import org.apache.wink.server.handlers.RequestHandler;
 import org.apache.wink.server.internal.registry.ResourceInstance;
 import org.apache.wink.server.internal.registry.ResourceRegistry;
 
-
 public class FindRootResourceHandler implements RequestHandler {
-    
-    public static final String SEARCH_POLICY_CONTINUED_SEARCH_KEY = "wink.searchPolicyContinuedSearch";
-    private static final Logger logger = LoggerFactory.getLogger(FindRootResourceHandler.class);
-    
-    private boolean isContinuedSearchPolicy;
+
+    public static final String  SEARCH_POLICY_CONTINUED_SEARCH_KEY =
+                                                                       "wink.searchPolicyContinuedSearch";
+    private static final Logger logger                             =
+                                                                       LoggerFactory
+                                                                           .getLogger(FindRootResourceHandler.class);
+
+    private boolean             isContinuedSearchPolicy;
 
     public void handleRequest(MessageContext context, HandlersChain chain) throws Throwable {
         ResourceRegistry registry = context.getAttribute(ResourceRegistry.class);
-        
+
         // create a path stripped from all matrix parameters to use for matching
         List<PathSegment> segments = context.getUriInfo().getPathSegments(false);
         String strippedPath = buildPathForMatching(segments);
-        
+
         // get a list of root resources that can handle the request
         List<ResourceInstance> matchedResources = registry.getMatchingRootResources(strippedPath);
         if (matchedResources.size() == 0) {
             logger.warn("No resource found matching {}", context.getUriInfo().getPath(false));
-            SearchResult result = new SearchResult(new WebApplicationException(Response.Status.NOT_FOUND));
+            SearchResult result =
+                new SearchResult(new WebApplicationException(Response.Status.NOT_FOUND));
             context.setAttribute(SearchResult.class, result);
             return;
         }
 
-        // JAX-RS specification requires to search only the first matching resource,
-        // but the continued search behavior is to continue searching in all matching resources
+        // JAX-RS specification requires to search only the first matching
+        // resource,
+        // but the continued search behavior is to continue searching in all
+        // matching resources
         List<ResourceInstance> searchableResources = new LinkedList<ResourceInstance>();
         if (!isContinuedSearchPolicy) {
-            // strict behavior - search only in the first matched root resource, as per the JAX-RS
+            // strict behavior - search only in the first matched root resource,
+            // as per the JAX-RS
             // specification
             searchableResources.add(matchedResources.get(0));
         } else {
@@ -79,13 +84,20 @@ public class FindRootResourceHandler implements RequestHandler {
             SearchResult result = new SearchResult(resource, context.getUriInfo());
             context.setAttribute(SearchResult.class, result);
             resource.getMatcher().storeVariables(result.getData().getMatchedVariables(), false);
-            int headSegmentsCount = result.getData().addMatchedURI(resource.getMatcher().getHead(false));
-            resource.getMatcher().storeVariablesPathSegments(segments, 0, headSegmentsCount, result.getData().getMatchedVariablesPathSegments());
-                      
-            // continue that chain to find the actual resource that will handle the request.
-            // it may be the current resource or a sub-resource of the current resource. 
+            int headSegmentsCount =
+                result.getData().addMatchedURI(resource.getMatcher().getHead(false));
+            resource.getMatcher()
+                .storeVariablesPathSegments(segments,
+                                            0,
+                                            headSegmentsCount,
+                                            result.getData().getMatchedVariablesPathSegments());
+
+            // continue that chain to find the actual resource that will handle
+            // the request.
+            // it may be the current resource or a sub-resource of the current
+            // resource.
             chain.doChain(context);
-            
+
             // check the result to see if we found a match
             if (result.isFound()) {
                 break;
@@ -104,9 +116,10 @@ public class FindRootResourceHandler implements RequestHandler {
         String strippedPath = strippedPathBuilder.toString();
         return strippedPath;
     }
-    
+
     public void init(Properties props) {
-        isContinuedSearchPolicy = Boolean.valueOf(props.getProperty(SEARCH_POLICY_CONTINUED_SEARCH_KEY));
+        isContinuedSearchPolicy =
+            Boolean.valueOf(props.getProperty(SEARCH_POLICY_CONTINUED_SEARCH_KEY));
     }
 
 }

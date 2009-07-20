@@ -19,13 +19,10 @@
  *******************************************************************************/
 package org.apache.wink.common.internal.lifecycle;
 
-
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
-
 
 /**
  * <p>
@@ -38,7 +35,8 @@ import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollect
  * <ul>
  * <li>SingletonObjectFactory - for Providers</li>
  * <li>ClassMetadataPrototypeOF - for Resources</li>
- * <li>SimplePrototypeOF - for Resources (marked with DispatchedPath annotation)</li>
+ * <li>SimplePrototypeOF - for Resources (marked with DispatchedPath annotation)
+ * </li>
  * </ul>
  * and throw IllegalArgumentException otherwise.
  * 
@@ -72,8 +70,9 @@ class DefaultLifecycleManager<T> implements LifecycleManager<T> {
 
         if (ResourceMetadataCollector.isDynamicResource(cls)) {
             // default factory cannot create instance of DynamicResource
-            throw new IllegalArgumentException(String.format(
-                "Cannot create default factory for DynamicResource: %s", String.valueOf(cls)));
+            throw new IllegalArgumentException(String
+                .format("Cannot create default factory for DynamicResource: %s", String
+                    .valueOf(cls)));
         }
 
         if (ProviderMetadataCollector.isProvider(cls)) {
@@ -87,8 +86,8 @@ class DefaultLifecycleManager<T> implements LifecycleManager<T> {
         }
 
         // unknown object, should never reach this code
-        throw new IllegalArgumentException(String.format("Cannot create default factory for class: %s",
-            String.valueOf(cls)));
+        throw new IllegalArgumentException(String
+            .format("Cannot create default factory for class: %s", String.valueOf(cls)));
     }
 
 }

@@ -35,21 +35,24 @@ import org.springframework.mock.web.MockHttpServletRequest;
  */
 public abstract class HtmlMockServletInvocationTest extends MockServletInvocationTest {
 
-    protected static final String CUSTOMIZED_ENTRY_URL      = "/HtmlCustRepresentation/customizedHtmlEntry.jsp";
-    protected static final String CUSTOMIZED_COLLECTION_URL = "/HtmlCustRepresentation/customizedHtmlCollection.jsp";
+    protected static final String CUSTOMIZED_ENTRY_URL      =
+                                                                "/HtmlCustRepresentation/customizedHtmlEntry.jsp";
+    protected static final String CUSTOMIZED_COLLECTION_URL =
+                                                                "/HtmlCustRepresentation/customizedHtmlCollection.jsp";
     protected static final String GET                       = "GET";
 
     protected Class<?>[] getClasses() {
-        return new Class<?>[] { DefectsCustomizedResource.class, DefectsDefaultResource.class,
+        return new Class<?>[] {DefectsCustomizedResource.class, DefectsDefaultResource.class,
             DefectCustomizedResource.class, DefectDefaultResource.class, ExistHtmlResource.class,
-            NoHtmlResource.class };
+            NoHtmlResource.class};
     }
 
     /**
      * This method is used to create HtmlMockHttpServletRequest.
      */
-    protected MockHttpServletRequest constructMockRequest(String method, String requestURI,
-        String acceptHeader) {
+    protected MockHttpServletRequest constructMockRequest(String method,
+                                                          String requestURI,
+                                                          String acceptHeader) {
         HtmlMockHttpServletRequest mockRequest = new HtmlMockHttpServletRequest() {
 
             public String getPathTranslated() {

@@ -47,7 +47,9 @@ import org.apache.wink.common.internal.utils.FileLoader;
  */
 public class SimpleWinkApplication extends WinkApplication {
 
-    private static final Logger logger         = LoggerFactory.getLogger(SimpleWinkApplication.class);
+    private static final Logger logger         =
+                                                   LoggerFactory
+                                                       .getLogger(SimpleWinkApplication.class);
     private static final String FILE_SEPARATOR = ";";
     private final String        applicationConfigFiles;
     private Set<Class<?>>       jaxRSClasses;
@@ -72,8 +74,9 @@ public class SimpleWinkApplication extends WinkApplication {
             for (String applicationConfigFile : applicationConfigFilesArray) {
                 applicationConfigFile = applicationConfigFile.trim();
                 try {
-                    jaxRSClasses.addAll(getApplicationFileLoader(
-                        getFileStream(applicationConfigFile)).getClasses());
+                    jaxRSClasses
+                        .addAll(getApplicationFileLoader(getFileStream(applicationConfigFile))
+                            .getClasses());
                 } catch (FileNotFoundException e) {
                     logger.warn("Could not find {}. Ignoring.", applicationConfigFile);
                 }

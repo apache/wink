@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.simpledefects.resources;
 
 import java.io.IOException;
@@ -45,7 +45,6 @@ import org.apache.wink.common.annotations.Workspace;
 import org.apache.wink.example.simpledefects.legacy.DataStore;
 import org.apache.wink.example.simpledefects.legacy.DefectBean;
 
-
 /**
  * <p>
  * Handler for requests for collection of defects of QA application
@@ -56,12 +55,12 @@ import org.apache.wink.example.simpledefects.legacy.DefectBean;
 @Path(DefectsResource.DEFECTS_URL)
 @Workspace(workspaceTitle = "QA Defects", collectionTitle = "Defects")
 public class DefectsResource {
-    
-    private static final Logger logger = LoggerFactory.getLogger(DefectsResource.class);
 
-    public static final String DEFECTS_URL = "/defects";
-    public static final String DEFECT = "defect";
-    public static final String DEFECT_URL = "{"+DEFECT+"}";
+    private static final Logger logger      = LoggerFactory.getLogger(DefectsResource.class);
+
+    public static final String  DEFECTS_URL = "/defects";
+    public static final String  DEFECT      = "defect";
+    public static final String  DEFECT_URL  = "{" + DEFECT + "}";
 
     /**
      * <p>
@@ -82,7 +81,7 @@ public class DefectsResource {
      * @return response with requested resource representation
      */
     @GET
-    @Produces( { MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON })
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
     public DefectsAsset getDefects() {
         DataStore store = DataStore.getInstance();
         Collection<DefectBean> defects = store.getDefects();
@@ -91,10 +90,12 @@ public class DefectsResource {
     }
 
     @POST
-    @Consumes({MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_XML})
-    @Produces({MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Consumes( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_XML})
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON,
+        MediaType.APPLICATION_XML})
     public Response createDefect(DefectAsset asset, @Context UriInfo uriInfo) {
-        // if content was not sent => there is no meaning for the defect, throw exception.
+        // if content was not sent => there is no meaning for the defect, throw
+        // exception.
         DefectBean defect = asset.getDefect();
         if (defect == null) {
             logger.error("The content of the defect is missing");
@@ -102,8 +103,10 @@ public class DefectsResource {
         }
 
         // set unique Id in the new defect bean:
-        // - Id in the input data is ignored, actually there should be no Id there,
-        // - resource collection always decides about the unique Id of its own entries,
+        // - Id in the input data is ignored, actually there should be no Id
+        // there,
+        // - resource collection always decides about the unique Id of its own
+        // entries,
         // - in our case we use a helper method to generate a unique Id
         defect.setId(DataStore.getInstance().getDefectUniqueId());
 
@@ -114,12 +117,13 @@ public class DefectsResource {
         // return status code 201 (created) with the created defect
         URI location = uriInfo.getAbsolutePathBuilder().segment(defect.getId()).build();
         return Response.status(Response.Status.CREATED).entity(asset).location(location)
-                .tag(new EntityTag(String.valueOf(defect.hashCode()))).build();
+            .tag(new EntityTag(String.valueOf(defect.hashCode()))).build();
     }
-    
+
     @Path(DEFECT_URL)
     @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
+    @Produces( {MediaType.APPLICATION_XML, MediaType.APPLICATION_ATOM_XML,
+        MediaType.APPLICATION_JSON})
     public DefectAsset getDefect(@PathParam(DEFECT) String defectId) {
         // initialize memory store
         DataStore store = DataStore.getInstance();
@@ -135,10 +139,12 @@ public class DefectsResource {
 
     @Path(DEFECT_URL)
     @PUT
-    @Consumes({MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_XML})
-    @Produces({MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public DefectAsset updateDefect(DefectAsset asset, 
-            @Context UriInfo uriInfo, @PathParam(DEFECT) String defectId) throws IOException {
+    @Consumes( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_XML})
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON,
+        MediaType.APPLICATION_XML})
+    public DefectAsset updateDefect(DefectAsset asset,
+                                    @Context UriInfo uriInfo,
+                                    @PathParam(DEFECT) String defectId) throws IOException {
 
         // initialize the memory store
         DataStore store = DataStore.getInstance();
@@ -160,19 +166,19 @@ public class DefectsResource {
     }
 
     /**
-     * Method id handling DELETE requests. DELETE request deletes existing resource. Server side
-     * deletes resource, if it exists, and returns status code 200 (OK). Requested representation of
-     * the deleted resource is returned in the response.
+     * Method id handling DELETE requests. DELETE request deletes existing
+     * resource. Server side deletes resource, if it exists, and returns status
+     * code 200 (OK). Requested representation of the deleted resource is
+     * returned in the response.
      * 
-     * @param defectId
-     *            defect id from request URL
+     * @param defectId defect id from request URL
      * @return requested resource representation of the just deleted resource
      */
     @Path(DEFECT_URL)
     @DELETE
-    @Produces({MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public DefectAsset deleteDefect(@Context UriInfo uriInfo,
-            @PathParam(DEFECT) String defectId) {
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON,
+        MediaType.APPLICATION_XML})
+    public DefectAsset deleteDefect(@Context UriInfo uriInfo, @PathParam(DEFECT) String defectId) {
 
         // initialize the memory store
         DataStore store = DataStore.getInstance();

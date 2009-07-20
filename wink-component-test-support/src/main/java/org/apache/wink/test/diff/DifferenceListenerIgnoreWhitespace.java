@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.test.diff;
 
@@ -30,8 +29,7 @@ public class DifferenceListenerIgnoreWhitespace implements DifferenceListener {
     public int differenceFound(Difference difference) {
         Node controlNode = difference.getControlNodeDetail().getNode();
         Node testNode = difference.getTestNodeDetail().getNode();
-        if (controlNode.getNodeType() == Node.TEXT_NODE &&
-            testNode.getNodeType() == Node.TEXT_NODE) {
+        if (controlNode.getNodeType() == Node.TEXT_NODE && testNode.getNodeType() == Node.TEXT_NODE) {
             String controlText = controlNode.getNodeValue().trim();
             String testText = testNode.getNodeValue().trim();
             if (controlText.equals("") && testText.equals("")) {
@@ -43,5 +41,5 @@ public class DifferenceListenerIgnoreWhitespace implements DifferenceListener {
 
     public void skippedComparison(Node node, Node node1) {
     }
-    
+
 }

@@ -34,7 +34,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>supportedlock</code> Property per the WebDAV specification [RFC 4918]
+ * The <code>supportedlock</code> Property per the WebDAV specification [RFC
+ * 4918]
  * 
  * <pre>
  *    Name:       supportedlock
@@ -102,24 +103,20 @@ public class Supportedlock {
 
     /**
      * Gets the value of the lockentry property.
-     * 
      * <p>
-     * This accessor method returns a reference to the live list, not a snapshot. Therefore any
-     * modification you make to the returned list will be present inside the JAXB object. This is
-     * why there is not a <CODE>set</CODE> method for the lockentry property.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the lockentry property.
      * <p>
      * For example, to add a new item, do as follows:
      * 
      * <pre>
      * getLockentry().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
-     * Objects of the following type(s) are allowed in the list {@link Lockentry }
-     * 
-     * 
+     * Objects of the following type(s) are allowed in the list
+     * {@link Lockentry }
      */
     public List<Lockentry> getLockentry() {
         if (lockentry == null) {

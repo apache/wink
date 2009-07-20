@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.utils;
 
@@ -35,14 +34,12 @@ import org.apache.wink.common.model.synd.SyndLink;
 import org.apache.wink.server.internal.handlers.ServerMessageContext;
 import org.apache.wink.server.utils.SingleLinkBuilder;
 
+public class SingleLinkBuilderImpl extends AbstractLinksBuilderImpl<SingleLinkBuilder> implements
+    SingleLinkBuilder {
 
-
-
-public class SingleLinkBuilderImpl extends AbstractLinksBuilderImpl<SingleLinkBuilder> implements SingleLinkBuilder {
-
-    private String rel;
+    private String    rel;
     private MediaType type;
-    
+
     public SingleLinkBuilderImpl(ServerMessageContext context) {
         super(context);
         type = null;
@@ -53,12 +50,12 @@ public class SingleLinkBuilderImpl extends AbstractLinksBuilderImpl<SingleLinkBu
         this.type = type;
         return this;
     }
-    
+
     public SingleLinkBuilder rel(String rel) {
         this.rel = rel;
         return this;
     }
-    
+
     @Override
     public List<SyndLink> build(List<SyndLink> out) {
         if (out == null) {
@@ -71,12 +68,14 @@ public class SingleLinkBuilderImpl extends AbstractLinksBuilderImpl<SingleLinkBu
         for (String query : queryParams.keySet()) {
             builder.queryParam(query, queryParams.get(query).toArray());
         }
-        if (type != null && addAltParam && queryParams.get(RestConstants.REST_PARAM_MEDIA_TYPE) == null) {
-            builder.replaceQueryParam(RestConstants.REST_PARAM_MEDIA_TYPE, MediaTypeUtils.toEncodedString(type));
+        if (type != null && addAltParam
+            && queryParams.get(RestConstants.REST_PARAM_MEDIA_TYPE) == null) {
+            builder.replaceQueryParam(RestConstants.REST_PARAM_MEDIA_TYPE, MediaTypeUtils
+                .toEncodedString(type));
         }
         return build(out, builder);
     }
-    
+
     private List<SyndLink> build(List<SyndLink> out, UriBuilder builder) {
         if (AtomConstants.ATOM_REL_SELF.equals(rel) || AtomConstants.ATOM_REL_EDIT.equals(rel)) {
             SyndLink link = getLink(out, rel);

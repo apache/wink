@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.registry;
 
@@ -41,24 +40,22 @@ import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 public class FindResourceMethod1Test extends MockServletInvocationTest {
-    
+
     static List<Class<?>> resourceClasses = new LinkedList<Class<?>>();
-    
+
     static {
         resourceClasses = new LinkedList<Class<?>>();
         resourceClasses.add(ContinuedSearchResource.class);
         resourceClasses.add(ResourceSimpleGet.class);
         resourceClasses.add(ResourceWithSubResourceMethodSimpleGet.class);
-        resourceClasses.add(ContinuedSearchResourceLocatorBad.class);      
+        resourceClasses.add(ContinuedSearchResourceLocatorBad.class);
     }
-    
+
     @Override
     protected Class<?>[] getClasses() {
         return resourceClasses.toArray(new Class<?>[resourceClasses.size()]);
     }
-    
 
     // /// -- Resources --
 
@@ -70,7 +67,7 @@ public class FindResourceMethod1Test extends MockServletInvocationTest {
             return "ResourceFallback.get";
         }
     }
-    
+
     @Path("/simpleGet")
     public static class ResourceSimpleGet {
 
@@ -80,12 +77,12 @@ public class FindResourceMethod1Test extends MockServletInvocationTest {
             assertNotNull(matchedResources);
             assertEquals(1, matchedResources.size());
             assertEquals(ResourceSimpleGet.class, matchedResources.get(0).getClass());
-            
+
             List<String> matchedURIs = uriInfo.getMatchedURIs(false);
             assertNotNull(matchedURIs);
             assertEquals(1, matchedURIs.size());
             assertEquals("simpleGet", matchedURIs.get(0));
-            
+
             return "ResourceSimpleGet.get";
         }
     }
@@ -108,31 +105,31 @@ public class FindResourceMethod1Test extends MockServletInvocationTest {
     public static class ResourceSimplePostConsumes {
 
         @POST
-        @Consumes({"application/xml"})
+        @Consumes( {"application/xml"})
         public String postXml() {
             return "ResourceSimplePostConsumes.postXml";
         }
 
         @POST
-        @Consumes({"application/atom+xml"})
+        @Consumes( {"application/atom+xml"})
         public String postAtom() {
             return "ResourceSimplePostConsumes.postAtom";
         }
 
         @POST
-        @Consumes({"text/plain", "text/html"})
+        @Consumes( {"text/plain", "text/html"})
         public String postText() {
             return "ResourceSimplePostConsumes.postText";
         }
 
         @POST
-        @Consumes({"image/*"})
+        @Consumes( {"image/*"})
         public String postImage() {
             return "ResourceSimplePostConsumes.postImage";
         }
 
         @POST
-        @Consumes({"*/*"})
+        @Consumes( {"*/*"})
         public String postAny() {
             return "ResourceSimplePostConsumes.postAny";
         }
@@ -142,37 +139,37 @@ public class FindResourceMethod1Test extends MockServletInvocationTest {
     public static class ResourceSimpleGetProduces {
 
         @GET
-        @Produces({"application/xml"})
+        @Produces( {"application/xml"})
         public String getXml() {
             return "ResourceSimpleGetProduces.getXml";
         }
 
         @GET
-        @Produces({"application/atom+xml"})
+        @Produces( {"application/atom+xml"})
         public String getAtom() {
             return "ResourceSimpleGetProduces.getAtom";
         }
 
         @GET
-        @Produces({"text/plain", "text/html"})
+        @Produces( {"text/plain", "text/html"})
         public String getText() {
             return "ResourceSimpleGetProduces.getText";
         }
 
         @GET
-        @Produces({"image/jpeg"})
+        @Produces( {"image/jpeg"})
         public String getImageJpeg() {
             return "ResourceSimpleGetProduces.getImageJpeg";
         }
 
         @GET
-        @Produces({"image/*"})
+        @Produces( {"image/*"})
         public String getImageAny() {
             return "ResourceSimpleGetProduces.getImageAny";
         }
 
         @GET
-        @Produces({"*/*"})
+        @Produces( {"*/*"})
         public String getAny() {
             return "ResourceSimpleGetProduces.getAny";
         }
@@ -182,36 +179,36 @@ public class FindResourceMethod1Test extends MockServletInvocationTest {
     public static class ResourceSimpleConsumesAndProduces {
 
         @POST
-        @Consumes({"text/*"})
-        @Produces({"text/plain"})
+        @Consumes( {"text/*"})
+        @Produces( {"text/plain"})
         public String postConsumesTextAny() {
             return "ResourceSimpleConsumesAndProduces.postConsumesTextAny";
         }
 
         @POST
-        @Consumes({"text/plain"})
-        @Produces({"text/*"})
+        @Consumes( {"text/plain"})
+        @Produces( {"text/*"})
         public String postProducesTextAny() {
             return "ResourceSimpleConsumesAndProduces.postProducesTextAny";
         }
 
         @POST
-        @Consumes({"text/plain", "text/html"})
-        @Produces({"text/plain"})
+        @Consumes( {"text/plain", "text/html"})
+        @Produces( {"text/plain"})
         public String postConsumesTextHtml() {
             return "ResourceSimpleConsumesAndProduces.postConsumesTextHtml";
         }
 
         @POST
-        @Consumes({"text/plain"})
-        @Produces({"text/plain", "text/html"})
+        @Consumes( {"text/plain"})
+        @Produces( {"text/plain", "text/html"})
         public String postProducesTextHtml() {
             return "ResourceSimpleConsumesAndProduces.postProducesTextHtml";
         }
 
         @POST
-        @Consumes({"text/plain", "application/*", "image/*"})
-        @Produces({"application/xml", "image/jpeg"})
+        @Consumes( {"text/plain", "application/*", "image/*"})
+        @Produces( {"application/xml", "image/jpeg"})
         public String postConsumesManyProduceMany() {
             return "ResourceSimpleConsumesAndProduces.postConsumesManyProduceMany";
         }
@@ -220,14 +217,16 @@ public class FindResourceMethod1Test extends MockServletInvocationTest {
     @Path("/subResourceMethodSimpleGet")
     public static class ResourceWithSubResourceMethodSimpleGet {
         private boolean located = false;
-        public ResourceWithSubResourceMethodSimpleGet(){}
-        
+
+        public ResourceWithSubResourceMethodSimpleGet() {
+        }
+
         public ResourceWithSubResourceMethodSimpleGet(boolean located) {
             this.located = located;
         }
 
         @GET
-        @Produces({"application/atom+xml"})
+        @Produces( {"application/atom+xml"})
         public String getAtom() {
             return "ResourceSimpleGetProduces.getAtom";
         }
@@ -241,15 +240,18 @@ public class FindResourceMethod1Test extends MockServletInvocationTest {
             assertNotNull(matchedURIs);
             if (located) {
                 assertEquals(2, matchedResources.size());
-                assertEquals(ResourceWithSubResourceMethodSimpleGet.class, matchedResources.get(0).getClass());
-                assertEquals(ResourceWithSubResourceLocatorSimpleGet.class, matchedResources.get(1).getClass());
+                assertEquals(ResourceWithSubResourceMethodSimpleGet.class, matchedResources.get(0)
+                    .getClass());
+                assertEquals(ResourceWithSubResourceLocatorSimpleGet.class, matchedResources.get(1)
+                    .getClass());
                 assertEquals(3, matchedURIs.size());
                 assertEquals("subResourceLocatorSimpleGet/1/2", matchedURIs.get(0));
                 assertEquals("subResourceLocatorSimpleGet/1", matchedURIs.get(1));
                 assertEquals("subResourceLocatorSimpleGet", matchedURIs.get(2));
             } else {
                 assertEquals(1, matchedResources.size());
-                assertEquals(ResourceWithSubResourceMethodSimpleGet.class, matchedResources.get(0).getClass());
+                assertEquals(ResourceWithSubResourceMethodSimpleGet.class, matchedResources.get(0)
+                    .getClass());
                 assertEquals(2, matchedURIs.size());
                 assertEquals("subResourceMethodSimpleGet/1", matchedURIs.get(0));
                 assertEquals("subResourceMethodSimpleGet", matchedURIs.get(1));
@@ -307,18 +309,20 @@ public class FindResourceMethod1Test extends MockServletInvocationTest {
     public static class ResourceWithSubResourceLocatorSimpleGet {
 
         @Path("{id}")
-        public ResourceWithSubResourceMethodSimpleGet getAny(@PathParam("id") String id, @Context UriInfo uriInfo) {
+        public ResourceWithSubResourceMethodSimpleGet getAny(@PathParam("id") String id,
+                                                             @Context UriInfo uriInfo) {
             List<Object> matchedResources = uriInfo.getMatchedResources();
             assertNotNull(matchedResources);
             assertEquals(1, matchedResources.size());
-            assertEquals(ResourceWithSubResourceLocatorSimpleGet.class, matchedResources.get(0).getClass());
-            
+            assertEquals(ResourceWithSubResourceLocatorSimpleGet.class, matchedResources.get(0)
+                .getClass());
+
             List<String> matchedURIs = uriInfo.getMatchedURIs(false);
             assertNotNull(matchedURIs);
             assertEquals(2, matchedURIs.size());
-            assertEquals("subResourceLocatorSimpleGet/"+id, matchedURIs.get(0));
+            assertEquals("subResourceLocatorSimpleGet/" + id, matchedURIs.get(0));
             assertEquals("subResourceLocatorSimpleGet", matchedURIs.get(1));
-            
+
             return new ResourceWithSubResourceMethodSimpleGet(true);
         }
 
@@ -327,7 +331,7 @@ public class FindResourceMethod1Test extends MockServletInvocationTest {
             assertEquals("1", id);
             return new ResourceWithSubResourceMethodSimpleGet();
         }
-        
+
         @Path("ignore-consumes")
         @Consumes("text/kuku")
         public ResourceWithSubResourceMethodSimpleGet ignoreConsumes() {
@@ -339,13 +343,13 @@ public class FindResourceMethod1Test extends MockServletInvocationTest {
         public ResourceWithSubResourceMethodSimpleGet ignoreProduces() {
             return new ResourceWithSubResourceMethodSimpleGet();
         }
-        
+
         // locators cannot have an entity param
         @Path("bad-locator")
         public void badLocator(String entity) {
             fail("locator method should not have been invoked");
         }
-        
+
     }
 
     @Path("/mixed/{id}")
@@ -403,33 +407,33 @@ public class FindResourceMethod1Test extends MockServletInvocationTest {
             return null;
         }
     }
-    
-    // == resources for continued search policy testing 
+
+    // == resources for continued search policy testing
 
     @Path("/{continued}")
     public static class ContinuedSearchResource {
         @PUT
         public String put(@Context UriInfo uriInfo) {
-            MultivaluedMap<String,String> variables = uriInfo.getPathParameters();
+            MultivaluedMap<String, String> variables = uriInfo.getPathParameters();
             assertEquals("simpleGet", variables.getFirst("continued"));
             return "ContinuedSearchResource.put";
         }
-        
+
         @PUT
         @Path("{subPutId}")
         public String subPut(@Context UriInfo uriInfo) {
-            MultivaluedMap<String,String> variables = uriInfo.getPathParameters();
+            MultivaluedMap<String, String> variables = uriInfo.getPathParameters();
             assertEquals("subResourceMethodSimpleGet", variables.getFirst("continued"));
             assertEquals("1", variables.getFirst("subPutId"));
             return "ContinuedSearchResource.subPut";
         }
-        
+
         @Path("{subLocatorId}")
         public LocatedContinuedSearchResource subLocator() {
             return new LocatedContinuedSearchResource();
         }
     }
-    
+
     @Path("/continuedSearchResourceLocatorBad")
     public static class ContinuedSearchResourceLocatorBad {
         @Path("{badSubLocatorId}")
@@ -442,65 +446,77 @@ public class FindResourceMethod1Test extends MockServletInvocationTest {
         @PUT
         @Path("{locatedSubPutId}")
         public String subPut(@Context UriInfo uriInfo) {
-            MultivaluedMap<String,String> variables = uriInfo.getPathParameters();
+            MultivaluedMap<String, String> variables = uriInfo.getPathParameters();
             assertEquals("continuedSearchResourceLocatorBad", variables.getFirst("continued"));
             assertEquals("1", variables.getFirst("subLocatorId"));
             assertEquals("2", variables.getFirst("locatedSubPutId"));
             assertNull(variables.getFirst("badSubLocatorId"));
             assertNull(variables.getFirst("id"));
             return "LocatedContinuedSearchResource.subPut";
-        }        
+        }
     }
-    
+
     // /// -- Tests --
 
-
-    
     public void testContinuedSearch_1_1() throws Exception {
         MockHttpServletRequest request = null;
         MockHttpServletResponse response = null;
-        
+
         // 1. test resource method
-        // 1.1. negative test - make sure that ContinuedSearchResource is not reachable when continued search policy is off
-        request = MockRequestConstructor.constructMockRequest("PUT", "/simpleGet", "text/plain", "text/plain", null);        
+        // 1.1. negative test - make sure that ContinuedSearchResource is not
+        // reachable when continued search policy is off
+        request =
+            MockRequestConstructor.constructMockRequest("PUT",
+                                                        "/simpleGet",
+                                                        "text/plain",
+                                                        "text/plain",
+                                                        null);
         response = invoke(request);
         assertEquals(405, response.getStatus());
-        
-    }
-    
 
-    
+    }
+
     public void testContinuedSearch_2_1() throws Exception {
         MockHttpServletRequest request = null;
         MockHttpServletResponse response = null;
 
         // 2. test sub-resource method
-        // 2.1. negative test - make sure that ContinuedSearchResource is not reachable when continued search policy is off
-        request = MockRequestConstructor.constructMockRequest("PUT", "/subResourceMethodSimpleGet/1", "text/plain", "text/plain", null);        
+        // 2.1. negative test - make sure that ContinuedSearchResource is not
+        // reachable when continued search policy is off
+        request =
+            MockRequestConstructor.constructMockRequest("PUT",
+                                                        "/subResourceMethodSimpleGet/1",
+                                                        "text/plain",
+                                                        "text/plain",
+                                                        null);
         response = invoke(request);
         assertEquals(405, response.getStatus());
 
     }
 
-
-    
     public void testContinuedSearch_3_1() throws Exception {
         MockHttpServletRequest request = null;
         MockHttpServletResponse response = null;
-        
+
         // 3. test sub-resource locator
-        // 3.1. negative test - make sure that ContinuedSearchResource is not reachable when continued search policy is off
-        request = MockRequestConstructor.constructMockRequest("PUT", "/continuedSearchResourceLocatorBad/1/2", "text/plain", "text/plain", null);        
+        // 3.1. negative test - make sure that ContinuedSearchResource is not
+        // reachable when continued search policy is off
+        request =
+            MockRequestConstructor.constructMockRequest("PUT",
+                                                        "/continuedSearchResourceLocatorBad/1/2",
+                                                        "text/plain",
+                                                        "text/plain",
+                                                        null);
         response = invoke(request);
         assertEquals(405, response.getStatus());
-        
+
     }
-
-
 
     // // -- Helpers --
 
-    static void assertMethodFound(MockHttpServletResponse response, Class<?> expectedResource, String expectedMethod) throws UnsupportedEncodingException {
+    static void assertMethodFound(MockHttpServletResponse response,
+                                  Class<?> expectedResource,
+                                  String expectedMethod) throws UnsupportedEncodingException {
         assertEquals(200, response.getStatus());
         String expected = expectedResource.getSimpleName() + "." + expectedMethod;
         assertEquals(expected, response.getContentAsString());

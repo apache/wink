@@ -27,11 +27,11 @@ import javax.ws.rs.Produces;
 @Path("guestbooksubresources")
 public class GuestbookResource {
     //
-    //     @Path("commentdata/{commentid}")
-    //     @Produces(value = { "text/xml" })
-    //     public CommentData resolveComment() {
-    //     return new CommentData(aCommentId, null);
-    //     }
+    // @Path("commentdata/{commentid}")
+    // @Produces(value = { "text/xml" })
+    // public CommentData resolveComment() {
+    // return new CommentData(aCommentId, null);
+    // }
 
     @Path("commentdata/{commentid}")
     public Object resolveComment(@PathParam("commentid") String aCommentId) {

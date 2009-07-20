@@ -19,7 +19,6 @@
  *******************************************************************************/
 package org.apache.wink.server.internal.handlers;
 
-
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
@@ -27,25 +26,24 @@ import org.apache.wink.common.http.HttpStatus;
 import org.apache.wink.server.handlers.AbstractHandler;
 import org.apache.wink.server.handlers.MessageContext;
 
-
-
 public class CheckLocationHeaderHandler extends AbstractHandler {
 
     public void handleResponse(MessageContext msgContext) throws Throwable {
         int statusCode = msgContext.getResponseStatusCode();
         Object result = msgContext.getResponseEntity();
-        
+
         if (result instanceof Response && isStatusWithLocation(statusCode)) {
-            Response clientResponse = (Response) result;
+            Response clientResponse = (Response)result;
             if (!clientResponse.getMetadata().containsKey(HttpHeaders.LOCATION)) {
-                throw new IllegalStateException("Mandatory 'Location' header was not set for status code " + statusCode);
+                throw new IllegalStateException(
+                                                "Mandatory 'Location' header was not set for status code " + statusCode);
             }
         }
     }
 
     private boolean isStatusWithLocation(int statusCode) {
-        return statusCode == HttpStatus.CREATED.getCode()
-            || statusCode == HttpStatus.MOVED_PERMANENTLY.getCode()
+        return statusCode == HttpStatus.CREATED.getCode() || statusCode == HttpStatus.MOVED_PERMANENTLY
+            .getCode()
             || statusCode == HttpStatus.FOUND.getCode()
             || statusCode == HttpStatus.SEE_OTHER.getCode()
             || statusCode == HttpStatus.USE_PROXY.getCode()

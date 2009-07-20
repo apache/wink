@@ -24,7 +24,6 @@
 // Generated on: 2008.09.15 at 01:17:47 PM IDT 
 //
 
-
 package org.apache.wink.common.model.opensearch;
 
 import java.util.ArrayList;
@@ -86,38 +85,33 @@ import javax.xml.bind.annotation.XmlType;
  *           template=&quot;http://example.com/search?q={searchTerms}&amp;start={startIndex?}&quot; /&gt;
  * 
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "OpenSearchUrl")
 public class OpenSearchUrl {
 
     // MimeType
-    protected String type;
-    // OpenSearch URL template 
-    protected String template;
-    
-    //List of OpenSearch parameters
+    protected String                  type;
+    // OpenSearch URL template
+    protected String                  template;
+
+    // List of OpenSearch parameters
     @XmlTransient
     private List<OpenSearchParameter> openSearchParameters;
-    //Parameter delimiter
+    // Parameter delimiter
     @XmlTransient
-    private static final String paramDelimiter = "&";
-    //Search parameters delimiter
+    private static final String       paramDelimiter  = "&";
+    // Search parameters delimiter
     @XmlTransient
-    private static final String searchDelimiter = "?";
+    private static final String       searchDelimiter = "?";
     // Base URI
     @XmlTransient
-    private String baseUri;
+    private String                    baseUri;
 
     /**
      * Gets the value of the type property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return possible object is {@link String }
      */
     @XmlAttribute
     public String getType() {
@@ -127,10 +121,7 @@ public class OpenSearchUrl {
     /**
      * Sets the value of the type property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * @param value allowed object is {@link String }
      */
     public void setType(String value) {
         this.type = value;
@@ -139,26 +130,20 @@ public class OpenSearchUrl {
     /**
      * Gets the value of the template property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return possible object is {@link String }
      */
     @XmlAttribute
     public String getTemplate() {
-        if(template !=null) {
+        if (template != null) {
             return template;
-        }
-        else return generateOpenSearchUrlTemplate();
+        } else
+            return generateOpenSearchUrlTemplate();
     }
 
     /**
      * Sets the value of the template property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * @param value allowed object is {@link String }
      */
     public void setTemplate(String value) {
         this.template = value;
@@ -166,10 +151,8 @@ public class OpenSearchUrl {
 
     /**
      * Add OpenSearch parameter to the list of Open Search Parameters
-     *
-     * @param openSearchParameter
-     *     allowed object is {@link OpenSearchParameter}
      * 
+     * @param openSearchParameter allowed object is {@link OpenSearchParameter}
      */
     public void addOpenSearchParameter(OpenSearchParameter openSearchParameter) {
         getOpenSearchParameters().add(openSearchParameter);
@@ -177,66 +160,63 @@ public class OpenSearchUrl {
 
     /**
      * Gets the value of the openSearchParameters property.
-     * 
      * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside openSearchParameters object.
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside openSearchParameters object.
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getOpenSearchParameters().add(openSearchParameter);
+     * getOpenSearchParameters().add(openSearchParameter);
      * </pre>
-     * 
-     * 
      * <p>
      * Objects of the following type(s) are allowed in the list {@link String}
-     * 
-     * 
      */
     public List<OpenSearchParameter> getOpenSearchParameters() {
-        if(openSearchParameters == null){
+        if (openSearchParameters == null) {
             openSearchParameters = new ArrayList<OpenSearchParameter>();
         }
         return openSearchParameters;
     }
-    
+
     /**
-     * Builds OpenSearchUrl template based on base URI and the list of  Open Search openSearchParametersParameters
-     *
+     * Builds OpenSearchUrl template based on base URI and the list of Open
+     * Search openSearchParametersParameters
+     * 
      * @return String OpenSearchUrl template
      */
     public String generateOpenSearchUrlTemplate() {
-        
+
         String paramList = searchDelimiter;
-        if(openSearchParameters == null)
+        if (openSearchParameters == null)
             return "";
 
-        //Use Iterator to avoid redundant & in the end of search parameters list
+        // Use Iterator to avoid redundant & in the end of search parameters
+        // list
         Iterator<OpenSearchParameter> itr = openSearchParameters.iterator();
 
-        if(!itr.hasNext())
+        if (!itr.hasNext())
             return "";
 
         OpenSearchParameter openSearchParameter = itr.next();
         paramList = paramList + openSearchParameter.getURLParameter();
 
-        while(itr.hasNext())
-        {
+        while (itr.hasNext()) {
             paramList = paramList + paramDelimiter;
             openSearchParameter = itr.next();
             paramList = paramList + openSearchParameter.getURLParameter();
 
         }
-        
+
         template = baseUri + paramList;
-        
+
         return template;
     }
 
     /**
      * Get Search base URI
-     *
+     * 
      * @return String
      */
     public String getBaseUri() {

@@ -24,7 +24,6 @@ import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
 import org.apache.wink.common.internal.runtime.RuntimeContext;
 import org.springframework.context.ApplicationContext;
 
-
 public class SpringObjectFactory implements ObjectFactory<Object> {
 
     private final String             beanName;
@@ -33,12 +32,13 @@ public class SpringObjectFactory implements ObjectFactory<Object> {
     private final ApplicationContext applicationContext;
 
     @SuppressWarnings("unchecked")
-    public SpringObjectFactory(ApplicationContext applicationContext, String beanName,
-        ClassMetadata classMetadata) {
+    public SpringObjectFactory(ApplicationContext applicationContext,
+                               String beanName,
+                               ClassMetadata classMetadata) {
         this.beanName = beanName;
         this.applicationContext = applicationContext;
         this.classMetadata = classMetadata;
-        this.cls = (Class<Object>) classMetadata.getResourceClass();
+        this.cls = (Class<Object>)classMetadata.getResourceClass();
     }
 
     public Object getInstance(RuntimeContext context) {

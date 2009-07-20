@@ -28,7 +28,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.wink.server.utils.RegistrationUtils;
 
-
 /**
  * The servlet that is responsible to register new classes. It expects to
  * receive a parameter "class" with a class name to register. The class must be

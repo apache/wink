@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.qadefect.resources;
 
 import java.util.Date;
@@ -42,19 +42,18 @@ import org.apache.wink.server.internal.providers.entity.html.HtmlDescriptor;
 import org.apache.wink.server.utils.LinkBuilders;
 import org.apache.wink.server.utils.SingleLinkBuilder;
 
-
-
 /**
  * Defect resource (based on document resource)
  */
 @Asset
 public class DefectAsset {
 
-    public static final String CUSTOMIZED_JSP_PATH = "/HtmlCustomizedRepresentation/customizedHtmlEntry.jsp";
+    public static final String CUSTOMIZED_JSP_PATH =
+                                                       "/HtmlCustomizedRepresentation/customizedHtmlEntry.jsp";
     public static final String CUSTOMIZED_JSP_ATTR = "DefectAssetAttr";
 
-    private DefectBean defect;
-    private boolean child;
+    private DefectBean         defect;
+    private boolean            child;
 
     public DefectAsset() {
         this(null);
@@ -69,32 +68,36 @@ public class DefectAsset {
         this.child = child;
     }
 
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces( {MediaType.APPLICATION_XML})
     public DefectBean getDefect() {
         return defect;
     }
-    
-    @Produces({MediaType.APPLICATION_XML})
+
+    @Produces( {MediaType.APPLICATION_XML})
     public HtmlDescriptor getHtml() {
         return new HtmlDescriptor(defect, CUSTOMIZED_JSP_PATH, CUSTOMIZED_JSP_ATTR);
     }
 
-    @Produces({MediaType.WILDCARD, MediaType.APPLICATION_JSON})
-    public SyndEntry getSyndEntry(@Context Providers providers, @Context UriInfo uriInfo,
-            @Context LinkBuilders linkProcessor) {
+    @Produces( {MediaType.WILDCARD, MediaType.APPLICATION_JSON})
+    public SyndEntry getSyndEntry(@Context Providers providers,
+                                  @Context UriInfo uriInfo,
+                                  @Context LinkBuilders linkProcessor) {
         SyndEntry entry = new SyndEntry();
         entry.setId("urn:com:hp:qadefects:defect:" + defect.getId());
         entry.setTitle(new SyndText(defect.getName()));
         entry.setSummary(new SyndText(defect.getDescription()));
         entry.addAuthor(new SyndPerson(defect.getAuthor()));
-        entry.addCategory(new SyndCategory("urn:com:hp:qadefects:categories:severity", defect.getSeverity(), null));
-        entry.addCategory(new SyndCategory("urn:com:hp:qadefects:categories:status", defect.getStatus(), null));
+        entry.addCategory(new SyndCategory("urn:com:hp:qadefects:categories:severity", defect
+            .getSeverity(), null));
+        entry.addCategory(new SyndCategory("urn:com:hp:qadefects:categories:status", defect
+            .getStatus(), null));
         if (defect.getCreated() != null) {
             entry.setPublished(new Date(defect.getCreated().getTime()));
         }
 
         // serialize the defect xml
-        String contentString = ProviderUtils.writeToString(providers, defect, MediaType.APPLICATION_XML_TYPE);
+        String contentString =
+            ProviderUtils.writeToString(providers, defect, MediaType.APPLICATION_XML_TYPE);
         entry.setContent(new SyndContent(contentString, MediaType.APPLICATION_XML, false));
 
         // set base uri if this is a standalone entry
@@ -103,20 +106,22 @@ public class DefectAsset {
         }
 
         // generate system links
-        linkProcessor.createSystemLinksBuilder().resource(DefectsResource.class).subResource(defect.getId()).build(
-                entry.getLinks());
+        linkProcessor.createSystemLinksBuilder().resource(DefectsResource.class).subResource(defect
+            .getId()).build(entry.getLinks());
 
         // generate related links - each defect can access its tests
         SingleLinkBuilder singleLinkBuilder = linkProcessor.createSingleLinkBuilder();
 
-        singleLinkBuilder.resource(DefectTestsResource.class).pathParam(DefectsResource.DEFECT_VAR, defect.getId())
-                .rel("related").type(MediaType.APPLICATION_ATOM_XML_TYPE).build(entry.getLinks());
+        singleLinkBuilder.resource(DefectTestsResource.class).pathParam(DefectsResource.DEFECT_VAR,
+                                                                        defect.getId())
+            .rel("related").type(MediaType.APPLICATION_ATOM_XML_TYPE).build(entry.getLinks());
 
         // add attachment link
         if (defect.getPathToAttachment() != null && defect.getPathToAttachment().length() > 0) {
-            singleLinkBuilder.resource(DefectsResource.class).subResource(DefectsResource.DEFECT_ATTACHMENT_PATH)
-                    .pathParam(DefectsResource.DEFECT_VAR, defect.getId()).rel("attachment").type(
-                            MediaTypeUtils.IMAGE_JPEG_TYPE).build(entry.getLinks());
+            singleLinkBuilder.resource(DefectsResource.class)
+                .subResource(DefectsResource.DEFECT_ATTACHMENT_PATH)
+                .pathParam(DefectsResource.DEFECT_VAR, defect.getId()).rel("attachment")
+                .type(MediaTypeUtils.IMAGE_JPEG_TYPE).build(entry.getLinks());
         }
 
         return entry;
@@ -140,7 +145,11 @@ public class DefectAsset {
             return;
         }
         // deserialize the defect xml
-        defect = ProviderUtils.readFromString(providers, value, DefectBean.class, MediaType.APPLICATION_XML_TYPE);
+        defect =
+            ProviderUtils.readFromString(providers,
+                                         value,
+                                         DefectBean.class,
+                                         MediaType.APPLICATION_XML_TYPE);
     }
 
 }

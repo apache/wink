@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 import org.apache.wink.server.handlers.AbstractHandler;
 import org.apache.wink.server.handlers.MessageContext;
 
-
 public class InvokeMethodHandler extends AbstractHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(InvokeMethodHandler.class);
@@ -40,12 +39,11 @@ public class InvokeMethodHandler extends AbstractHandler {
             Object[] parameters = searchResult.getInvocationParameters();
             Object instance = searchResult.getResource().getInstance(context);
             if (logger.isDebugEnabled()) {
-                logger.debug("Invoking method {} of declaring class {} on the instance of a class {} with parameters {}", new Object[] {
-                    javaMethod.getName(),
-                    javaMethod.getDeclaringClass().getName(),
-                    instance.getClass().getName(),
-                    Arrays.toString(parameters)
-                });
+                logger
+                    .debug("Invoking method {} of declaring class {} on the instance of a class {} with parameters {}",
+                           new Object[] {javaMethod.getName(),
+                               javaMethod.getDeclaringClass().getName(),
+                               instance.getClass().getName(), Arrays.toString(parameters)});
             }
             Object result = javaMethod.invoke(instance, parameters);
             context.setResponseEntity(result);

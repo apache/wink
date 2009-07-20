@@ -39,15 +39,14 @@ import org.apache.wink.common.annotations.Workspace;
 import org.apache.wink.example.qadefect.legacy.DataStore;
 import org.apache.wink.example.qadefect.legacy.TestBean;
 
-
 @Workspace(workspaceTitle = "QA Defects", collectionTitle = "Tests")
 @Path(TestsResource.TESTS_PATH)
 public class TestsResource {
 
-    private static final Logger logger = LoggerFactory.getLogger(TestsResource.class);
+    private static final Logger logger             = LoggerFactory.getLogger(TestsResource.class);
 
-    public static final String TESTS_PATH = "tests";
-    public static final String TEST_PATH = "{test}";
+    public static final String  TESTS_PATH         = "tests";
+    public static final String  TEST_PATH          = "{test}";
 
     /**
      * <p>
@@ -57,11 +56,11 @@ public class TestsResource {
      * <code>http://[server]:[port]/qa/tests-list</code>
      */
 
-    private static final String URL_TO_REDIRECT = "/applicationJSPs/testCollection.jsp";
+    private static final String URL_TO_REDIRECT    = "/applicationJSPs/testCollection.jsp";
     private static final String SHOW_ALL_ATTR_NAME = "showAll";
 
     @GET
-    @Produces({MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
     public TestsAsset getTests(@Context UriInfo uriInfo) {
 
         // initialize the memory store
@@ -85,14 +84,16 @@ public class TestsResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Response redirectToApplication(@Context HttpServletRequest request) {
-        String locationStr = request.getContextPath() + URL_TO_REDIRECT + "?" + SHOW_ALL_ATTR_NAME + "=" + true;
+        String locationStr =
+            request.getContextPath() + URL_TO_REDIRECT + "?" + SHOW_ALL_ATTR_NAME + "=" + true;
         URI location = URI.create(locationStr);
         return Response.seeOther(location).build();
     }
 
     @Path(TEST_PATH)
     @GET
-    @Produces({MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON,
+        MediaType.APPLICATION_XML})
     public TestAsset getTest(@PathParam("test") String testId) {
 
         // initialize memory store

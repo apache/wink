@@ -42,62 +42,66 @@ import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 public class CollectionCategoriesTest extends MockServletInvocationTest {
 
     private String ATOM_CATEGORIES_DUCUMENT = "collection_categories_document.xml";
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] { CategoriesDocResource.class, CategoriesResource.class };
+        return new Class[] {CategoriesDocResource.class, CategoriesResource.class};
     }
 
-    
     @Path("/cat")
     @Workspace(workspaceTitle = "Workspace", collectionTitle = "Title")
-    public static class CategoriesDocResource implements CollectionCategories{
+    public static class CategoriesDocResource implements CollectionCategories {
 
         public List<Categories> getCategories() {
-    
+
             List<Categories> catsList = new ArrayList<Categories>();
-            CategoriesResource  categoriesResource = new CategoriesResource();
-            
-            // Defect severity categories are defined in stand-alone Categories Document
+            CategoriesResource categoriesResource = new CategoriesResource();
+
+            // Defect severity categories are defined in stand-alone Categories
+            // Document
             // created by CategoriesResource
             Categories severityCategories = new Categories();
             MultivaluedMap<String, String> variables = new MultivaluedMapImpl<String, String>();
             variables.add(CategoriesResource.CategoryParamCN, CategoriesResource.SeverityCN);
             severityCategories.setHref(categoriesResource, variables);
             catsList.add(severityCategories);
-            
+
             Categories severityCategoriesClass = new Categories();
-            MultivaluedMap<String, String> variables4Class = new MultivaluedMapImpl<String, String>();
+            MultivaluedMap<String, String> variables4Class =
+                new MultivaluedMapImpl<String, String>();
             variables4Class.add(CategoriesResource.CategoryParamCN, CategoriesResource.SeverityCN);
             severityCategoriesClass.setHref(CategoriesResource.class, variables4Class);
             catsList.add(severityCategoriesClass);
-    
+
             // Build defect status categories object for ServiceDocument
             Categories statusCategories = CategoriesResource.buildStatusCategoriesDocument();
             statusCategories.setFixed(true);
 
-            if(!statusCategories.contains("Deffered", "urn:com:hp:qadefects:categories:status")){
-                statusCategories.addCategory("urn:com:hp:qadefects:categories:status", "Deffered", "Deffered");
+            if (!statusCategories.contains("Deffered", "urn:com:hp:qadefects:categories:status")) {
+                statusCategories.addCategory("urn:com:hp:qadefects:categories:status",
+                                             "Deffered",
+                                             "Deffered");
             }
-            if(!statusCategories.contains("Approved")){
+            if (!statusCategories.contains("Approved")) {
                 statusCategories.addCategory("Approved");
             }
-    
+
             catsList.add(statusCategories);
-    
+
             return catsList;
 
-    }    
         }
+    }
 
     public void testAtomCategoriesSerialization() throws Exception {
 
-        MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
-            "/", MediaTypeUtils.ATOM_SERVICE_DOCUMENT);
+        MockHttpServletRequest mockRequest =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/",
+                                                        MediaTypeUtils.ATOM_SERVICE_DOCUMENT);
 
         MockHttpServletResponse response = invoke(mockRequest);
         String content = response.getContentAsString();
@@ -117,21 +121,24 @@ public class CollectionCategoriesTest extends MockServletInvocationTest {
             throw e;
         }
 
-        assertTrue("Expected atom feed documents to be similar" + " " + diff.toString()
-            + "\nexpected:\n" + expectedSerialization + "\nresult:\n" + content, diff.similar());
+        assertTrue("Expected atom feed documents to be similar" + " "
+            + diff.toString()
+            + "\nexpected:\n"
+            + expectedSerialization
+            + "\nresult:\n"
+            + content, diff.similar());
     }
-
-
 
     private String readCategoriesDocumentFromFile() throws IOException {
         // Read expected Entry from file
-        InputStream is = CollectionCategoriesTest.class.getResourceAsStream(ATOM_CATEGORIES_DUCUMENT);
+        InputStream is =
+            CollectionCategoriesTest.class.getResourceAsStream(ATOM_CATEGORIES_DUCUMENT);
         byte[] b = new byte[4096];
         int read = is.read(b);
         String expectedSerialization = new String(b, 0, read);
         return expectedSerialization;
     }
-    
+
     @Path("/categories/{category_name}")
     public static class CategoriesResource {
 
@@ -149,8 +156,7 @@ public class CollectionCategoriesTest extends MockServletInvocationTest {
          */
         @GET
         @Produces(MediaTypeUtils.ATOM_CATEGORIES_DOCUMENT)
-        public Categories getCategoriesDocument(
-            @PathParam(CategoryParamCN) String categoryName) {
+        public Categories getCategoriesDocument(@PathParam(CategoryParamCN) String categoryName) {
 
             Categories cats = null;
             if (categoryName.equals(SeverityCN)) {
@@ -240,5 +246,5 @@ public class CollectionCategoriesTest extends MockServletInvocationTest {
             return statusCategories;
         }
     }
-    
+
 }

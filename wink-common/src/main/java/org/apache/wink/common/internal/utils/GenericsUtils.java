@@ -52,8 +52,9 @@ public class GenericsUtils {
      * @param rawType
      * @return
      */
-    public static boolean isGenericInterfaceAssignableFrom(Class<?> cls, Class<?> assignable,
-        Class<?> rawType) {
+    public static boolean isGenericInterfaceAssignableFrom(Class<?> cls,
+                                                           Class<?> assignable,
+                                                           Class<?> rawType) {
         Type genericType = GenericsUtils.getGenericInterfaceParamType(assignable, rawType);
         return isAssignableFrom(genericType, cls);
     }
@@ -75,7 +76,7 @@ public class GenericsUtils {
     public static boolean isAssignableFrom(Type type, Class<?> cls) {
         if (cls.isArray()) {
             if (type instanceof GenericArrayType) {
-                GenericArrayType genericArray = (GenericArrayType) type;
+                GenericArrayType genericArray = (GenericArrayType)type;
                 Class<?> componentType = cls.getComponentType();
                 return isAssignableFrom(genericArray.getGenericComponentType(), componentType);
             }
@@ -109,7 +110,7 @@ public class GenericsUtils {
             Type[] interfaces = cls.getGenericInterfaces();
             for (Type type : interfaces) {
                 if (type instanceof ParameterizedType) {
-                    ParameterizedType pType = (ParameterizedType) type;
+                    ParameterizedType pType = (ParameterizedType)type;
                     if (pType.getRawType() == rawType) {
                         return pType.getActualTypeArguments()[0];
                     } else {
@@ -136,26 +137,25 @@ public class GenericsUtils {
      * is returned. If type is <code>List&lt;String&gt;</code>, then
      * <code>List.class</code> is returned.
      * 
-     * @param type
-     *            the type to return the class type for
+     * @param type the type to return the class type for
      * @return the class type of type
      */
     public static Class<?> getClassType(Type type) {
         if (type instanceof Class) {
-            return (Class<?>) type;
+            return (Class<?>)type;
         }
 
         if (type instanceof ParameterizedType) {
-            ParameterizedType parameterizedType = (ParameterizedType) type;
-            return (Class<?>) parameterizedType.getRawType();
+            ParameterizedType parameterizedType = (ParameterizedType)type;
+            return (Class<?>)parameterizedType.getRawType();
         }
 
         if (type instanceof GenericArrayType) {
-            GenericArrayType genericArray = (GenericArrayType) type;
+            GenericArrayType genericArray = (GenericArrayType)type;
             Class<?> classType = getClassType(genericArray.getGenericComponentType());
             return Array.newInstance(classType, 0).getClass();
         }
-        
+
         if (type instanceof TypeVariable<?>) {
             return getClassType(((TypeVariable<?>)type).getBounds()[0]);
         }
@@ -180,16 +180,15 @@ public class GenericsUtils {
      * In case the type has more than one parameter, only the type of the first
      * parameter is returned by this method.
      * 
-     * @param type
-     *            the type to return the class of the parameter for
+     * @param type the type to return the class of the parameter for
      * @return the class of the generic parameter of type
      */
     public static Class<?> getGenericParamType(Type type) {
         Class<?> generic = null;
         if (type instanceof ParameterizedType) {
-            ParameterizedType parameterizedType = (ParameterizedType) type;
+            ParameterizedType parameterizedType = (ParameterizedType)type;
             Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
-            generic = (Class<?>) actualTypeArguments[0];
+            generic = (Class<?>)actualTypeArguments[0];
         }
         return generic;
     }

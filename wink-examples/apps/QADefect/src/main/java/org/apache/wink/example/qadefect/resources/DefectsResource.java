@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.example.qadefect.resources;
 
@@ -56,27 +55,30 @@ import org.apache.wink.example.qadefect.legacy.DefectBean;
 import org.apache.wink.example.qadefect.utils.SearchMap;
 import org.apache.wink.server.utils.LinkBuilders;
 
-
 @Workspace(workspaceTitle = "QA Defects", collectionTitle = "Defects")
 @Path(DefectsResource.DEFECTS_PATH)
 public class DefectsResource {
 
-    private static final Logger logger = LoggerFactory.getLogger(DefectsResource.class);
+    private static final Logger logger                 =
+                                                           LoggerFactory
+                                                               .getLogger(DefectsResource.class);
 
-    public static final String DEFECTS_PATH = "defects";
-    public static final String DEFECT_VAR = "defect";
-    public static final String DEFECT_PATH = "{" + DEFECT_VAR + "}";
-    public static final String DEFECT_ATTACHMENT_PATH = DEFECT_PATH + "/attachment";
-    public static final String SEVERIIY = "severity";
-    public static final String ASSIGNED_TO = "assignedTo";
-    public static final String URN_ASSIGNED_TO = "urn:hp:defect:assignedTo";
-    public static final String URN_SEVERIIY = "urn:hp:defect:severity";
-    public static final String FTS = "q";
+    public static final String  DEFECTS_PATH           = "defects";
+    public static final String  DEFECT_VAR             = "defect";
+    public static final String  DEFECT_PATH            = "{" + DEFECT_VAR + "}";
+    public static final String  DEFECT_ATTACHMENT_PATH = DEFECT_PATH + "/attachment";
+    public static final String  SEVERIIY               = "severity";
+    public static final String  ASSIGNED_TO            = "assignedTo";
+    public static final String  URN_ASSIGNED_TO        = "urn:hp:defect:assignedTo";
+    public static final String  URN_SEVERIIY           = "urn:hp:defect:severity";
+    public static final String  FTS                    = "q";
 
     @GET
-    @Produces({MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON, MediaType.TEXT_HTML, "text/csv"})
-    public DefectsAsset getDefects(@QueryParam(FTS) String query, @QueryParam(SEVERIIY) String severity,
-            @QueryParam(ASSIGNED_TO) String assignedTo) {
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON, MediaType.TEXT_HTML,
+        "text/csv"})
+    public DefectsAsset getDefects(@QueryParam(FTS) String query,
+                                   @QueryParam(SEVERIIY) String severity,
+                                   @QueryParam(ASSIGNED_TO) String assignedTo) {
 
         DataStore store = DataStore.getInstance();
 
@@ -93,9 +95,9 @@ public class DefectsResource {
     }
 
     /**
-     * Add OpenSearch representation to this defect collection resource. OpenSearch description
-     * document describes search infrastructure interface. (see <a
-     * href="http://www.opensearch.org/">OpenSearch</a>)
+     * Add OpenSearch representation to this defect collection resource.
+     * OpenSearch description document describes search infrastructure
+     * interface. (see <a href="http://www.opensearch.org/">OpenSearch</a>)
      */
     @GET
     @Produces(MediaTypeUtils.OPENSEARCH)
@@ -113,10 +115,13 @@ public class DefectsResource {
         openSearchDescription.addOutputEncoding("UTF-8");
 
         // set OpenSearch URL parameters
-        OpenSearchParameter severityParameter = new OpenSearchParameter(SEVERIIY, URN_SEVERIIY, false);
-        OpenSearchParameter ftsParameter = new OpenSearchParameter(FTS,
-                OpenSearchParameter.OpenSearchParams.searchTerms.toString(), false);
-        OpenSearchParameter assignedToParameter = new OpenSearchParameter(ASSIGNED_TO, URN_ASSIGNED_TO, false);
+        OpenSearchParameter severityParameter =
+            new OpenSearchParameter(SEVERIIY, URN_SEVERIIY, false);
+        OpenSearchParameter ftsParameter =
+            new OpenSearchParameter(FTS, OpenSearchParameter.OpenSearchParams.searchTerms
+                .toString(), false);
+        OpenSearchParameter assignedToParameter =
+            new OpenSearchParameter(ASSIGNED_TO, URN_ASSIGNED_TO, false);
 
         // create Search URL & populate search parameters for browsers
         OpenSearchUrl openSearchUrlForBrowsers = new OpenSearchUrl();
@@ -152,9 +157,9 @@ public class DefectsResource {
 
         // add OpenSearch Images
         OpenSearchImage openSearchImage;
-        openSearchImage = OpenSearchUtils.createOpenSearchImage(MediaTypeUtils.IMAGE_JPEG, openSearchUrlBuilder
-                .toString()
-                + "splash.jpg");
+        openSearchImage =
+            OpenSearchUtils.createOpenSearchImage(MediaTypeUtils.IMAGE_JPEG, openSearchUrlBuilder
+                .toString() + "splash.jpg");
         openSearchDescription.addNewImage(openSearchImage);
 
         return openSearchDescription;
@@ -162,8 +167,11 @@ public class DefectsResource {
 
     @POST
     @Consumes("text/csv")
-    @Produces({MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response createDefects(DefectsAsset defects, @Context LinkBuilders linkProcessor, @Context UriInfo uriInfo) {
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON,
+        MediaType.APPLICATION_XML})
+    public Response createDefects(DefectsAsset defects,
+                                  @Context LinkBuilders linkProcessor,
+                                  @Context UriInfo uriInfo) {
 
         // add the defects to the defects store
         DataStore store = DataStore.getInstance();
@@ -173,18 +181,21 @@ public class DefectsResource {
             defect.setId(id);
             store.putDefect(id, defect);
         }
-        
+
         // return the created defects and set the status code to created (201)
         URI location = uriInfo.getAbsolutePathBuilder().segment(id).build();
         return Response.created(location).entity(defects).build();
     }
 
     @POST
-    @Consumes({MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_XML})
-    @Produces({MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response createDefect(DefectAsset asset, @Context UriInfo uriInfo) throws IOException, Exception {
+    @Consumes( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_XML})
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON,
+        MediaType.APPLICATION_XML})
+    public Response createDefect(DefectAsset asset, @Context UriInfo uriInfo) throws IOException,
+        Exception {
 
-        // if content was not sent => there is no meaning for the defect, throw exception.
+        // if content was not sent => there is no meaning for the defect, throw
+        // exception.
         if (asset.getDefect() == null) {
             logger.error("The content of the defect is missing");
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
@@ -204,10 +215,11 @@ public class DefectsResource {
 
     @Path(DEFECT_PATH)
     @GET
-    @Produces({MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,
-            MediaType.TEXT_HTML})
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON,
+        MediaType.APPLICATION_XML, MediaType.TEXT_HTML})
     public DefectAsset getDefect(@PathParam("defect") String defectId) {
-        // fetch the defect bean from the store, throw 404 in case it does not exist
+        // fetch the defect bean from the store, throw 404 in case it does not
+        // exist
         DataStore store = DataStore.getInstance();
         DefectBean defect = store.getDefect(defectId);
         if (defect == null) {
@@ -223,15 +235,15 @@ public class DefectsResource {
      * This method is handling GET requests for specific defects' attachment.
      * <ul>
      * <em>Examples of handled URIs:</em>
-     * <li><code>/defects/1/attachment</code> - returns defects' attachment in JPEG format.
+     * <li><code>/defects/1/attachment</code> - returns defects' attachment in
+     * JPEG format.
      * 
-     * @param defectId
-     *            defect id
+     * @param defectId defect id
      * @return resource of defects' attachment
      */
     @Path(DEFECT_ATTACHMENT_PATH)
     @GET
-    @Produces({MediaTypeUtils.IMAGE_JPEG})
+    @Produces( {MediaTypeUtils.IMAGE_JPEG})
     public InputStream getDefectAttachement(@PathParam("defect") String defectId) {
 
         DataStore store = DataStore.getInstance();
@@ -248,16 +260,19 @@ public class DefectsResource {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 
-        InputStream attachmentStream = this.getClass().getResourceAsStream("../representation/" + path);
+        InputStream attachmentStream =
+            this.getClass().getResourceAsStream("../representation/" + path);
         return attachmentStream;
     }
 
     @Path(DEFECT_PATH)
     @PUT
-    @Consumes({MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_XML})
-    @Produces({MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public DefectAsset updateDefect(DefectAsset asset, @Context LinkBuilders linkProcessor,
-            @PathParam("defect") String defectId) {
+    @Consumes( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_XML})
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON,
+        MediaType.APPLICATION_XML})
+    public DefectAsset updateDefect(DefectAsset asset,
+                                    @Context LinkBuilders linkProcessor,
+                                    @PathParam("defect") String defectId) {
 
         DataStore store = DataStore.getInstance();
         // verify Defect exist in the store, return 404 otherwise
@@ -279,7 +294,8 @@ public class DefectsResource {
 
     @Path(DEFECT_PATH)
     @DELETE
-    @Produces({MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON,
+        MediaType.APPLICATION_XML})
     public DefectAsset deleteDefect(@PathParam("defect") String defectId) {
         DataStore store = DataStore.getInstance();
         DefectBean defect = store.getDefect(defectId);

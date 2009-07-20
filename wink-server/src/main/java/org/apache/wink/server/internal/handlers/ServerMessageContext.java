@@ -52,17 +52,17 @@ import org.apache.wink.server.internal.registry.ResourceRegistry;
 import org.apache.wink.server.internal.utils.LinkBuildersImpl;
 import org.apache.wink.server.utils.LinkBuilders;
 
-
 public class ServerMessageContext extends AbstractRuntimeContext implements MessageContext {
 
-    private int responseStatusCode;
-    private Object responseEntity;
+    private int       responseStatusCode;
+    private Object    responseEntity;
     private MediaType responseMediaType;
 
-    private String httpMethod;
+    private String    httpMethod;
 
-    public ServerMessageContext(HttpServletRequest servletRequest, HttpServletResponse servletResponse,
-            DeploymentConfiguration configuration) {
+    public ServerMessageContext(HttpServletRequest servletRequest,
+                                HttpServletResponse servletResponse,
+                                DeploymentConfiguration configuration) {
         this.httpMethod = buildHttpMethod(servletRequest);
         this.responseStatusCode = -1;
 
@@ -70,10 +70,10 @@ public class ServerMessageContext extends AbstractRuntimeContext implements Mess
         setAttribute(HttpServletRequest.class, servletRequest);
 
         // note that a HttpServlet*Wrapper is needed for injection of
-        // singletons that had a @Context HttpServlet*;  see [WINK-73]
+        // singletons that had a @Context HttpServlet*; see [WINK-73]
         setAttribute(HttpServletRequestWrapper.class, new HttpServletRequestWrapper(servletRequest));
-        HttpServletResponseWrapper responseWrapper = new WrappedResponse(servletRequest, servletResponse, configuration
-                                                                         .getMediaTypeMapper());
+        HttpServletResponseWrapper responseWrapper =
+            new WrappedResponse(servletRequest, servletResponse, configuration.getMediaTypeMapper());
         setAttribute(HttpServletResponse.class, responseWrapper);
         setAttribute(HttpServletResponseWrapper.class, responseWrapper);
         setAttribute(ServletContext.class, configuration.getServletContext());
@@ -86,7 +86,8 @@ public class ServerMessageContext extends AbstractRuntimeContext implements Mess
     }
 
     private void initContexts() {
-        setAttribute(Providers.class, new ProvidersImpl(getDeploymentConfiguration().getProvidersRegistry(), this));
+        setAttribute(Providers.class, new ProvidersImpl(getDeploymentConfiguration()
+            .getProvidersRegistry(), this));
         setAttribute(HttpHeaders.class, new HttpHeadersImpl(this));
         setAttribute(UriInfo.class, new UriInfoImpl(this));
         setAttribute(SecurityContext.class, new SecurityContextImpl(this));
@@ -151,8 +152,10 @@ public class ServerMessageContext extends AbstractRuntimeContext implements Mess
 
     @Override
     public String toString() {
-        return String.format("Method: %s, Path: %s, MediaType: %s", String.valueOf(getHttpMethod()), String
-                .valueOf(getUriInfo().getPath(false)), String.valueOf(getHttpHeaders().getMediaType()));
+        return String.format("Method: %s, Path: %s, MediaType: %s",
+                             String.valueOf(getHttpMethod()),
+                             String.valueOf(getUriInfo().getPath(false)),
+                             String.valueOf(getHttpHeaders().getMediaType()));
     }
 
     // Contexts methods
@@ -173,15 +176,17 @@ public class ServerMessageContext extends AbstractRuntimeContext implements Mess
         return getAttribute(DeploymentConfiguration.class);
     }
 
-    // Wrapped response for changing the output media type according to the media type mapper
+    // Wrapped response for changing the output media type according to the
+    // media type mapper
     private class WrappedResponse extends HttpServletResponseWrapper {
 
         private final HttpServletRequest servletRequest;
-        private final MediaTypeMapper mediaTypeMapper;
-        private String userContentType = null;
+        private final MediaTypeMapper    mediaTypeMapper;
+        private String                   userContentType = null;
 
-        WrappedResponse(HttpServletRequest servletRequest, HttpServletResponse servletResponse,
-                MediaTypeMapper mediaTypeMapper) {
+        WrappedResponse(HttpServletRequest servletRequest,
+                        HttpServletResponse servletResponse,
+                        MediaTypeMapper mediaTypeMapper) {
             super(servletResponse);
             this.servletRequest = servletRequest;
             this.mediaTypeMapper = mediaTypeMapper;
@@ -222,7 +227,8 @@ public class ServerMessageContext extends AbstractRuntimeContext implements Mess
 
         private MediaType getRealResponseMimeType(String responseMimeType) {
             String userAgent = servletRequest.getHeader(HttpHeaders.USER_AGENT);
-            return mediaTypeMapper.mapOutputMediaType(MediaType.valueOf(responseMimeType), userAgent);
+            return mediaTypeMapper.mapOutputMediaType(MediaType.valueOf(responseMimeType),
+                                                      userAgent);
         }
     }
 }

@@ -23,10 +23,10 @@ package org.apache.wink.example.customerror;
  * Exception for specifying a user does not exist
  */
 public class UserNotExistException extends Exception {
-    
+
     private static final long serialVersionUID = 4830297371810157163L;
 
-    String userID = "";
+    String                    userID           = "";
 
     public UserNotExistException(String userID) {
         this.userID = userID;

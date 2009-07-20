@@ -24,8 +24,8 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 /**
- * Exception mapper for mapping a UserNotExistException that was thrown from an application into a
- * human readable message
+ * Exception mapper for mapping a UserNotExistException that was thrown from an
+ * application into a human readable message
  */
 @Provider
 public class UserNotExistExceptionMapper implements ExceptionMapper<UserNotExistException> {

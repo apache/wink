@@ -34,25 +34,32 @@ import javax.ws.rs.ext.Provider;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.model.synd.SyndEntry;
 
-
-
 @Provider
 @Produces(MediaTypeUtils.PDF)
 public class SyndEntryPdfProvider implements MessageBodyWriter<SyndEntry> {
 
-    public long getSize(SyndEntry t, Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType) {
+    public long getSize(SyndEntry t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
         return -1;
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
         return type == SyndEntry.class;
     }
 
-    public void writeTo(SyndEntry t, Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
-        throws IOException, WebApplicationException {
+    public void writeTo(SyndEntry t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
 
         entityStream.write(new String("PDF: " + t.getId()).getBytes());
     }

@@ -24,7 +24,6 @@
 // Generated on: 2008.09.15 at 12:57:27 PM IDT 
 //
 
-
 package org.apache.wink.common.model.app;
 
 import javax.xml.bind.JAXBElement;
@@ -32,40 +31,44 @@ import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.namespace.QName;
 
-
 /**
- * This object contains factory methods for each 
- * Java content interface and Java element interface 
- * generated in the org.apache.wink.common.model.app package. 
- * <p>An ObjectFactory allows you to programatically 
- * construct new instances of the Java representation 
- * for XML content. The Java representation of XML 
- * content can consist of schema derived interfaces 
- * and classes representing the binding of schema 
- * type definitions, element declarations and model 
- * groups.  Factory methods for each of these are 
- * provided in this class.
- * 
+ * This object contains factory methods for each Java content interface and Java
+ * element interface generated in the org.apache.wink.common.model.app package.
+ * <p>
+ * An ObjectFactory allows you to programatically construct new instances of the
+ * Java representation for XML content. The Java representation of XML content
+ * can consist of schema derived interfaces and classes representing the binding
+ * of schema type definitions, element declarations and model groups. Factory
+ * methods for each of these are provided in this class.
  */
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _Accept_QNAME = new QName("http://www.w3.org/2007/app", "accept");
-    private final static QName _Workspace_QNAME = new QName("http://www.w3.org/2007/app", "workspace");
-    private final static QName _Categories_QNAME = new QName("http://www.w3.org/2007/app", "categories");
-    private final static QName _Service_QNAME = new QName("http://www.w3.org/2007/app", "service");
-    private final static QName _Collection_QNAME = new QName("http://www.w3.org/2007/app", "collection");
+    private final static QName _Accept_QNAME     =
+                                                     new QName("http://www.w3.org/2007/app",
+                                                               "accept");
+    private final static QName _Workspace_QNAME  =
+                                                     new QName("http://www.w3.org/2007/app",
+                                                               "workspace");
+    private final static QName _Categories_QNAME =
+                                                     new QName("http://www.w3.org/2007/app",
+                                                               "categories");
+    private final static QName _Service_QNAME    =
+                                                     new QName("http://www.w3.org/2007/app",
+                                                               "service");
+    private final static QName _Collection_QNAME =
+                                                     new QName("http://www.w3.org/2007/app",
+                                                               "collection");
 
     /**
-     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: org.apache.wink.common.model.app
-     * 
+     * Create a new ObjectFactory that can be used to create new instances of
+     * schema derived classes for package: org.apache.wink.common.model.app
      */
     public ObjectFactory() {
     }
 
     /**
      * Create an instance of {@link AppAccept }
-     * 
      */
     public AppAccept createAppAccept() {
         return new AppAccept();
@@ -73,7 +76,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AppCollection }
-     * 
      */
     public AppCollection createAppCollection() {
         return new AppCollection();
@@ -81,7 +83,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AppWorkspace }
-     * 
      */
     public AppWorkspace createAppWorkspace() {
         return new AppWorkspace();
@@ -89,7 +90,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AppCategories }
-     * 
      */
     public AppCategories createAppCategories() {
         return new AppCategories();
@@ -97,15 +97,14 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AppService }
-     * 
      */
     public AppService createAppService() {
         return new AppService();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link AppAccept }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link AppAccept }
+     * {@code >}
      */
     @XmlElementDecl(namespace = "http://www.w3.org/2007/app", name = "accept")
     public JAXBElement<AppAccept> createAccept(AppAccept value) {
@@ -113,8 +112,8 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link AppWorkspace }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link AppWorkspace }
+     * {@code >}
      */
     @XmlElementDecl(namespace = "http://www.w3.org/2007/app", name = "workspace")
     public JAXBElement<AppWorkspace> createWorkspace(AppWorkspace value) {
@@ -122,8 +121,8 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link AppCategories }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link AppCategories }
+     * {@code >}
      */
     @XmlElementDecl(namespace = "http://www.w3.org/2007/app", name = "categories")
     public JAXBElement<AppCategories> createCategories(AppCategories value) {
@@ -131,8 +130,8 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link AppService }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link AppService }
+     * {@code >}
      */
     @XmlElementDecl(namespace = "http://www.w3.org/2007/app", name = "service")
     public JAXBElement<AppService> createService(AppService value) {
@@ -140,8 +139,8 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link AppCollection }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link AppCollection }
+     * {@code >}
      */
     @XmlElementDecl(namespace = "http://www.w3.org/2007/app", name = "collection")
     public JAXBElement<AppCollection> createCollection(AppCollection value) {

@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.qadefect.resources;
 
 import org.apache.wink.example.qadefect.QADefectsTest;
@@ -25,18 +25,18 @@ import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 /**
  *
  */
 public class ContentDispositionTest extends QADefectsTest {
 
     public void testContentDisposition() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest(
-            "GET", "/defects", "text/csv");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "/defects", "text/csv");
         MockHttpServletResponse response = invoke(request);
         assertEquals("status", 200, response.getStatus());
-        assertEquals("attachment; filename=\"representation.csv\"", response.getHeader("Content-Disposition"));
+        assertEquals("attachment; filename=\"representation.csv\"", response
+            .getHeader("Content-Disposition"));
     }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal;
 
@@ -30,25 +29,24 @@ import javax.ws.rs.core.PathSegment;
 import org.apache.wink.common.internal.uri.UriEncoder;
 import org.apache.wink.common.internal.utils.StringUtils;
 
-
 public class PathSegmentImpl implements PathSegment, Cloneable, Comparable<PathSegment> {
-    
-    private static final String MATRIX_DELIMITER = ";";
-    private String path;
-    private MultivaluedMap<String,String> matrixParams;
-    
+
+    private static final String            MATRIX_DELIMITER = ";";
+    private String                         path;
+    private MultivaluedMap<String, String> matrixParams;
+
     private PathSegmentImpl() {
         this.path = null;
         this.matrixParams = null;
     }
-    
+
     public PathSegmentImpl(String path) {
         if (path == null) {
             throw new NullPointerException("path");
         }
         constructParts(path);
     }
-    
+
     public PathSegmentImpl(String path, String matrix) {
         if (path == null) {
             throw new NullPointerException("path");
@@ -56,8 +54,8 @@ public class PathSegmentImpl implements PathSegment, Cloneable, Comparable<PathS
         this.path = path;
         constructMatrixParams(extractMatrixParams(matrix));
     }
-    
-    public PathSegmentImpl(String path, MultivaluedMap<String,String> matrixParams) {
+
+    public PathSegmentImpl(String path, MultivaluedMap<String, String> matrixParams) {
         if (path == null) {
             throw new NullPointerException("path");
         }
@@ -65,27 +63,27 @@ public class PathSegmentImpl implements PathSegment, Cloneable, Comparable<PathS
         this.matrixParams = matrixParams;
     }
 
-    public MultivaluedMap<String,String> getMatrixParameters() {
+    public MultivaluedMap<String, String> getMatrixParameters() {
         if (matrixParams == null) {
-            matrixParams = new MultivaluedMapImpl<String,String>();
+            matrixParams = new MultivaluedMapImpl<String, String>();
         }
         return matrixParams;
     }
-    
+
     public void clearMatrixParameter(String name) {
-        MultivaluedMap<String,String> matrixParameters = getMatrixParameters();
+        MultivaluedMap<String, String> matrixParameters = getMatrixParameters();
         matrixParameters.remove(name);
     }
 
     public void clearAllMatrixParameters() {
-        MultivaluedMap<String,String> matrixParameters = getMatrixParameters();
+        MultivaluedMap<String, String> matrixParameters = getMatrixParameters();
         matrixParameters.clear();
     }
-    
+
     public void setMatrixParameters(String matrix) {
         constructMatrixParams(extractMatrixParams(matrix));
     }
-    
+
     public String getPath() {
         return path;
     }
@@ -103,20 +101,20 @@ public class PathSegmentImpl implements PathSegment, Cloneable, Comparable<PathS
     private void constructMatrixParams(String[] matrixParamsArray) {
         constructMatrixParams(matrixParamsArray, 0);
     }
-    
+
     private void constructMatrixParams(String[] matrixParamsArray, int offset) {
         getMatrixParameters().clear();
         for (int i = offset; i < matrixParamsArray.length; ++i) {
             String matrixParam = matrixParamsArray[i];
             int index = matrixParam.indexOf('=');
             if (index == -1) {
-                // the matrix param is actually being removed 
+                // the matrix param is actually being removed
                 // (see http://www.w3.org/DesignIssues/MatrixURIs.html)
                 // so do not add this to the map
                 continue;
             }
             String name = matrixParam.substring(0, index);
-            String value = matrixParam.substring(index+1); 
+            String value = matrixParam.substring(index + 1);
             matrixParams.add(name, value);
         }
     }
@@ -126,7 +124,7 @@ public class PathSegmentImpl implements PathSegment, Cloneable, Comparable<PathS
         try {
             PathSegmentImpl ps = (PathSegmentImpl)super.clone();
             if (matrixParams != null) {
-                ps.matrixParams = ((MultivaluedMapImpl<String,String>)matrixParams).clone();
+                ps.matrixParams = ((MultivaluedMapImpl<String, String>)matrixParams).clone();
             }
             return ps;
         } catch (CloneNotSupportedException e) {
@@ -134,23 +132,23 @@ public class PathSegmentImpl implements PathSegment, Cloneable, Comparable<PathS
             throw new WebApplicationException(e);
         }
     }
-    
+
     public static PathSegmentImpl decode(PathSegment segment) {
         PathSegmentImpl clone = new PathSegmentImpl();
         clone.path = UriEncoder.decodeString(segment.getPath());
         clone.matrixParams = UriEncoder.decodeMultivaluedMap(segment.getMatrixParameters(), true);
         return clone;
     }
-    
+
     @Override
     public String toString() {
-        MultivaluedMap<String,String> matrixParameters = getMatrixParameters();
+        MultivaluedMap<String, String> matrixParameters = getMatrixParameters();
         String parameters = MultivaluedMapImpl.toString(matrixParameters, ";");
         String delim = (matrixParameters.isEmpty() ? "" : ";");
         String result = getPath() + delim + parameters;
         return result;
     }
-    
+
     public static String toString(List<PathSegment> segments) {
         StringBuilder builder = new StringBuilder();
         String delim = "";

@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.test.diff;
 
 import org.custommonkey.xmlunit.Diff;
@@ -25,12 +25,11 @@ import org.custommonkey.xmlunit.examples.MultiLevelElementNameAndTextQualifier;
 import org.w3c.dom.Document;
 
 /**
- * Class that overrides XmlUnit Diff class.
- * Order of elements is ignored.
- * Qualifier looks at the element's name, as well as the name of the first child element
- * and the text nested into that first child element.
- * The nesting level is 2.
- * The qualifier is {@link MultiLevelElementNameAndTextQualifier} with argument "2".
+ * Class that overrides XmlUnit Diff class. Order of elements is ignored.
+ * Qualifier looks at the element's name, as well as the name of the first child
+ * element and the text nested into that first child element. The nesting level
+ * is 2. The qualifier is {@link MultiLevelElementNameAndTextQualifier} with
+ * argument "2".
  * <p/>
  * It is implemented to be used by Stm application tests for XML comparison.
  */
@@ -38,9 +37,9 @@ public class DiffWithMultiLevelQualifier extends Diff {
 
     /**
      * Constructor of XmlUnit Diff with MultiLevelElementNameAndTextQualifier(2)
-     *
+     * 
      * @param controlDocument XML document that contains expected results
-     * @param testedDocument  XML document which is being tested
+     * @param testedDocument XML document which is being tested
      */
     public DiffWithMultiLevelQualifier(Document controlDocument, Document testedDocument) {
         super(controlDocument, testedDocument);

@@ -34,7 +34,7 @@ class SingletonObjectFactory<T> implements ObjectFactory<T> {
     @SuppressWarnings("unchecked")
     public SingletonObjectFactory(T object) {
         this.object = object;
-        this.objectClass = (Class<T>) object.getClass();
+        this.objectClass = (Class<T>)object.getClass();
     }
 
     public T getInstance(RuntimeContext context) {

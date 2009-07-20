@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.history.resources;
 
 import java.util.Date;
@@ -42,7 +42,6 @@ import org.apache.wink.server.utils.LinkBuilders;
 import org.apache.wink.server.utils.SingleLinkBuilder;
 import org.apache.wink.server.utils.SystemLinksBuilder;
 
-
 /**
  * Defect asset for producing and consuming a defect as xml or SyndEntry
  */
@@ -50,9 +49,9 @@ import org.apache.wink.server.utils.SystemLinksBuilder;
 public class DefectAsset {
 
     private DefectBean defect;
-    private boolean child;
-    private boolean history;
-    private boolean editable;
+    private boolean    child;
+    private boolean    history;
+    private boolean    editable;
 
     public DefectAsset() {
         this(null);
@@ -78,34 +77,39 @@ public class DefectAsset {
     }
 
     /**
-     * Called for producing the entity of a response with an application/xml content
+     * Called for producing the entity of a response with an application/xml
+     * content
      */
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces( {MediaType.APPLICATION_XML})
     public DefectBean getDefect() {
         return defect;
     }
 
     /**
-     * Called for producing the entity of a response that supports SyndEntry is made (such as
-     * application/atom+xml or application/json)
+     * Called for producing the entity of a response that supports SyndEntry is
+     * made (such as application/atom+xml or application/json)
      */
-    @Produces({MediaType.WILDCARD, MediaType.APPLICATION_JSON})
-    public SyndEntry getSyndEntry(@Context Providers providers, @Context UriInfo uriInfo,
-            @Context LinkBuilders linkBuilders) {
+    @Produces( {MediaType.WILDCARD, MediaType.APPLICATION_JSON})
+    public SyndEntry getSyndEntry(@Context Providers providers,
+                                  @Context UriInfo uriInfo,
+                                  @Context LinkBuilders linkBuilders) {
         SyndEntry entry = new SyndEntry();
         String id = defect.getId();
         entry.setId("urn:com:hp:qadefects:defect:" + id);
         entry.setTitle(new SyndText(defect.getName()));
         entry.setSummary(new SyndText(defect.getDescription()));
         entry.addAuthor(new SyndPerson(defect.getAuthor()));
-        entry.addCategory(new SyndCategory("urn:com:hp:qadefects:categories:severity", defect.getSeverity(), null));
-        entry.addCategory(new SyndCategory("urn:com:hp:qadefects:categories:status", defect.getStatus(), null));
+        entry.addCategory(new SyndCategory("urn:com:hp:qadefects:categories:severity", defect
+            .getSeverity(), null));
+        entry.addCategory(new SyndCategory("urn:com:hp:qadefects:categories:status", defect
+            .getStatus(), null));
         if (defect.getCreated() != null) {
             entry.setPublished(new Date(defect.getCreated().getTime()));
         }
 
         // serialize the defect xml
-        String contentString = ProviderUtils.writeToString(providers, defect, MediaType.APPLICATION_XML_TYPE);
+        String contentString =
+            ProviderUtils.writeToString(providers, defect, MediaType.APPLICATION_XML_TYPE);
         entry.setContent(new SyndContent(contentString, MediaType.APPLICATION_XML, false));
 
         // set base uri if this is a standalone entry
@@ -113,33 +117,38 @@ public class DefectAsset {
             entry.setBase(uriInfo.getAbsolutePath().toString());
         }
 
-
         // generate the edit link
         SingleLinkBuilder singleLinkBuilder = linkBuilders.createSingleLinkBuilder();
         if (editable) {
-            singleLinkBuilder.subResource(DefectsResource.DEFECT_URL).pathParam(DefectsResource.DEFECT_VAR, id).rel(
-                    AtomConstants.ATOM_REL_EDIT).build(entry.getLinks());
+            singleLinkBuilder.subResource(DefectsResource.DEFECT_URL)
+                .pathParam(DefectsResource.DEFECT_VAR, id).rel(AtomConstants.ATOM_REL_EDIT)
+                .build(entry.getLinks());
         }
 
-        // if this entry is not part of a history response, then generate the history link
+        // if this entry is not part of a history response, then generate the
+        // history link
         if (!history) {
-            singleLinkBuilder.subResource(DefectsResource.DEFECT_HISTORY_URL).pathParam(DefectsResource.DEFECT_VAR, id)
-                    .rel(AtomConstants.ATOM_REL_HISTORY).type(MediaType.APPLICATION_ATOM_XML_TYPE).build(
-                            entry.getLinks());
+            singleLinkBuilder.subResource(DefectsResource.DEFECT_HISTORY_URL)
+                .pathParam(DefectsResource.DEFECT_VAR, id).rel(AtomConstants.ATOM_REL_HISTORY)
+                .type(MediaType.APPLICATION_ATOM_XML_TYPE).build(entry.getLinks());
         }
 
         // generate system links to self and alternate.
-        // for the system links we add the revision of the defect to the defect id
-        String idAndRev = String.format("%s;%s=%s", id, DefectsResource.REVISION, defect.getRevision());
-        linkBuilders.createSystemLinksBuilder().subResource(DefectsResource.DEFECT_URL).pathParam(DefectsResource.DEFECT_VAR,
-                idAndRev).types(SystemLinksBuilder.LinkType.SELF, SystemLinksBuilder.LinkType.ALTERNATE).build(
-                entry.getLinks());
+        // for the system links we add the revision of the defect to the defect
+        // id
+        String idAndRev =
+            String.format("%s;%s=%s", id, DefectsResource.REVISION, defect.getRevision());
+        linkBuilders.createSystemLinksBuilder().subResource(DefectsResource.DEFECT_URL)
+            .pathParam(DefectsResource.DEFECT_VAR, idAndRev)
+            .types(SystemLinksBuilder.LinkType.SELF, SystemLinksBuilder.LinkType.ALTERNATE)
+            .build(entry.getLinks());
 
         return entry;
     }
 
     /**
-     * Called for consuming the entity of a request with an application/xml content
+     * Called for consuming the entity of a request with an application/xml
+     * content
      */
     @Consumes(MediaType.APPLICATION_XML)
     public void setDefect(DefectBean defect) {
@@ -147,8 +156,8 @@ public class DefectAsset {
     }
 
     /**
-     * Called for consuming the entity of a request that supports SyndEntry is made (such as
-     * application/atom+xml)
+     * Called for consuming the entity of a request that supports SyndEntry is
+     * made (such as application/atom+xml)
      */
     @Consumes
     public void setSyndEntry(SyndEntry entry, @Context Providers providers) {
@@ -163,6 +172,10 @@ public class DefectAsset {
             return;
         }
         // deserialize the defect xml
-        defect = ProviderUtils.readFromString(providers, value, DefectBean.class, MediaType.APPLICATION_XML_TYPE);
+        defect =
+            ProviderUtils.readFromString(providers,
+                                         value,
+                                         DefectBean.class,
+                                         MediaType.APPLICATION_XML_TYPE);
     }
 }

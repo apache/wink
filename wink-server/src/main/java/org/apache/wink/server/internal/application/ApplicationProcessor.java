@@ -31,11 +31,10 @@ import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollect
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
 import org.apache.wink.server.internal.registry.ResourceRegistry;
 
-
 /**
  * Processes the Application object. First singletons are processed and later
- * classes. If the provided Application extends WinkApplication, instances
- * are also processed AFTER the singletons and the classes.
+ * classes. If the provided Application extends WinkApplication, instances are
+ * also processed AFTER the singletons and the classes.
  * <p>
  * Pay Attention that classes returned by getSingletons are ignored by both
  * getClasses and getInstances. And classes returned by getClasses are ignored
@@ -46,14 +45,15 @@ import org.apache.wink.server.internal.registry.ResourceRegistry;
  */
 public class ApplicationProcessor {
 
-    private static final Logger logger = LoggerFactory.getLogger(ApplicationProcessor.class);
+    private static final Logger     logger = LoggerFactory.getLogger(ApplicationProcessor.class);
 
     private final Application       application;
     private final ResourceRegistry  resourceRegistry;
     private final ProvidersRegistry providersRegistry;
 
-    public ApplicationProcessor(Application application, ResourceRegistry resourceRegistry,
-        ProvidersRegistry providersRegistry) {
+    public ApplicationProcessor(Application application,
+                                ResourceRegistry resourceRegistry,
+                                ProvidersRegistry providersRegistry) {
         super();
         this.application = application;
         this.resourceRegistry = resourceRegistry;
@@ -76,7 +76,7 @@ public class ApplicationProcessor {
         }
 
         if (application instanceof WinkApplication) {
-            processWinkApplication((WinkApplication) application);
+            processWinkApplication((WinkApplication)application);
         }
 
         logger.debug("Processing of Application completed.");
@@ -93,11 +93,11 @@ public class ApplicationProcessor {
         for (Object obj : instances) {
             try {
                 logger.debug("Processing instance: {}", obj);
-    
+
                 Class<?> cls = obj.getClass();
-    
+
                 // the validations were moved to registry
-    
+
                 if (ResourceMetadataCollector.isDynamicResource(cls)) {
                     resourceRegistry.addResource(obj, priority);
                 } else if (ResourceMetadataCollector.isStaticResource(cls)) {
@@ -108,7 +108,9 @@ public class ApplicationProcessor {
                     logger.warn("Cannot handle {}. Ignoring.", obj);
                 }
             } catch (Exception e) {
-                logger.warn("The following exception occured during processing of instance {}. Ignoring.", obj.getClass().getCanonicalName());
+                logger
+                    .warn("The following exception occured during processing of instance {}. Ignoring.",
+                          obj.getClass().getCanonicalName());
                 e.printStackTrace();
             }
         }
@@ -119,9 +121,9 @@ public class ApplicationProcessor {
         for (Class<?> cls : classes) {
             try {
                 logger.debug("Processing class: {}", cls);
-    
+
                 // the validations were moved to registry
-    
+
                 if (ResourceMetadataCollector.isStaticResource(cls)) {
                     resourceRegistry.addResource(cls);
                 } else if (ProviderMetadataCollector.isProvider(cls)) {
@@ -130,7 +132,9 @@ public class ApplicationProcessor {
                     logger.warn("{} is not a resource or a provider. Ignored.", cls);
                 }
             } catch (Exception e) {
-                logger.warn("The following exception occured during processing of class {}. Ignoring.", cls);
+                logger
+                    .warn("The following exception occured during processing of class {}. Ignoring.",
+                          cls);
                 e.printStackTrace();
             }
         }
@@ -142,9 +146,9 @@ public class ApplicationProcessor {
         for (Object obj : singletons) {
             try {
                 logger.debug("Processing singleton: {}", obj);
-    
+
                 Class<?> cls = obj.getClass();
-    
+
                 if (ResourceMetadataCollector.isStaticResource(cls)) {
                     resourceRegistry.addResource(obj);
                 } else if (ProviderMetadataCollector.isProvider(cls)) {
@@ -153,7 +157,9 @@ public class ApplicationProcessor {
                     logger.warn("{} is not a resource or a provider. Ignoring.", obj);
                 }
             } catch (Exception e) {
-                logger.warn("The following exception occured during processing of singleton {}. Ignoring.", obj.getClass().getCanonicalName());
+                logger
+                    .warn("The following exception occured during processing of singleton {}. Ignoring.",
+                          obj.getClass().getCanonicalName());
                 e.printStackTrace();
             }
         }

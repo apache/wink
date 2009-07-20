@@ -38,8 +38,8 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
 
     private static final MediaType APPLICATION_TYPE = new MediaType("application", "*");
 
-    private boolean errorFlow = false;
-    
+    private boolean                errorFlow        = false;
+
     public void handleResponse(MessageContext context) throws Throwable {
 
         MediaType responseMediaType = null;
@@ -153,19 +153,13 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
         context.setResponseMediaType(responseMediaType);
     }
 
-
-
     public void setErrorFlow(boolean errorFlow) {
         this.errorFlow = errorFlow;
     }
 
-
-
     public boolean isErrorFlow() {
         return errorFlow;
     }
-
-
 
     private static class CandidateMediaType {
         private MediaType mediaType;

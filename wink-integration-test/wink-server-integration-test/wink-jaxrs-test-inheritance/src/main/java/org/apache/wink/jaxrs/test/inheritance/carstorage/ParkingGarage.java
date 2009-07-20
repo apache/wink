@@ -32,11 +32,11 @@ import javax.ws.rs.core.UriInfo;
 
 @Path(value = "/parkinggarage")
 public class ParkingGarage extends ParkingLot {
-	
+
     private static Map<Integer, List<String>> cars = new HashMap<Integer, List<String>>();
 
     @Context
-    protected UriInfo uriInfo;
+    protected UriInfo                         uriInfo;
 
     @GET
     @Path("/cars/{id}")
@@ -65,10 +65,10 @@ public class ParkingGarage extends ParkingLot {
         resp.getMetadata().putSingle("Invoked", "ParkingGarage.addCar");
         return resp;
     }
-    
+
     public Response removeCar(String licenseNum) {
-    	cars.remove(licenseNum);
-    	Response resp = Response.ok().build();
+        cars.remove(licenseNum);
+        Response resp = Response.ok().build();
         resp.getMetadata().putSingle("Invoked", "ParkingGarage.removeCar");
         return resp;
     }

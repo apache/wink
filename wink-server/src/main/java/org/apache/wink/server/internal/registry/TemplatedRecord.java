@@ -17,14 +17,14 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.registry;
 
 import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor;
 
 /**
- * Abstract class that is a common base class for all records that maintain a uri template processor
+ * Abstract class that is a common base class for all records that maintain a
+ * uri template processor
  */
 public abstract class TemplatedRecord implements Comparable<TemplatedRecord>, Cloneable {
 
@@ -41,7 +41,7 @@ public abstract class TemplatedRecord implements Comparable<TemplatedRecord>, Cl
     public int compareTo(TemplatedRecord o) {
         return templateProcessor.compareTo(o.templateProcessor);
     }
-    
+
     @Override
     public String toString() {
         return String.valueOf(templateProcessor);

@@ -34,7 +34,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.wink.common.http.HttpStatus;
 
-
 /**
  * The <code>propstat</code> XML element per the WebDAV specification [RFC 4918]
  * 
@@ -57,17 +56,16 @@ import org.apache.wink.common.http.HttpStatus;
 public class Propstat {
 
     @XmlElement(required = true)
-    protected Prop prop;
+    protected Prop   prop;
     @XmlElement(required = true)
     protected String status;
-    protected Error error;
+    protected Error  error;
     protected String responsedescription;
 
     /**
      * Gets the value of the prop property.
      * 
      * @return possible object is {@link Prop }
-     * 
      */
     public Prop getProp() {
         return prop;
@@ -76,9 +74,7 @@ public class Propstat {
     /**
      * Sets the value of the prop property.
      * 
-     * @param value
-     *            allowed object is {@link Prop }
-     * 
+     * @param value allowed object is {@link Prop }
      */
     public void setProp(Prop value) {
         this.prop = value;
@@ -88,12 +84,11 @@ public class Propstat {
      * Gets the value of the status property.
      * 
      * @return possible object is {@link String }
-     * 
      */
     public String getStatus() {
         return status;
     }
-    
+
     public int getStatusCode() {
         if (status == null) {
             return -1;
@@ -104,9 +99,7 @@ public class Propstat {
     /**
      * Sets the value of the status property.
      * 
-     * @param value
-     *            allowed object is {@link String }
-     * 
+     * @param value allowed object is {@link String }
      */
     public void setStatus(String value) {
         this.status = value;
@@ -116,7 +109,6 @@ public class Propstat {
      * Gets the value of the error property.
      * 
      * @return possible object is {@link Error }
-     * 
      */
     public Error getError() {
         return error;
@@ -125,9 +117,7 @@ public class Propstat {
     /**
      * Sets the value of the error property.
      * 
-     * @param value
-     *            allowed object is {@link Error }
-     * 
+     * @param value allowed object is {@link Error }
      */
     public void setError(Error value) {
         this.error = value;
@@ -137,7 +127,6 @@ public class Propstat {
      * Gets the value of the responsedescription property.
      * 
      * @return possible object is {@link String }
-     * 
      */
     public String getResponsedescription() {
         return responsedescription;
@@ -146,12 +135,10 @@ public class Propstat {
     /**
      * Sets the value of the responsedescription property.
      * 
-     * @param value
-     *            allowed object is {@link String }
-     * 
+     * @param value allowed object is {@link String }
      */
     public void setResponsedescription(String value) {
         this.responsedescription = value;
     }
-    
+
 }

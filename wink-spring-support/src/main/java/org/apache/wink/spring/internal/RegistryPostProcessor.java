@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.spring.internal;
 
 import java.util.ArrayList;
@@ -32,7 +32,6 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
-
 /**
  * Registers the registrars. First registras are added to the registrar' list,
  * and on ContextRefreshedEvent they all are registered.
@@ -46,7 +45,6 @@ public class RegistryPostProcessor implements BeanPostProcessor, ApplicationList
 
     /*
      * (non-Javadoc)
-     * 
      * @seeorg.springframework.beans.factory.config.BeanPostProcessor#
      * postProcessAfterInitialization(java.lang.Object, java.lang.String)
      */
@@ -54,7 +52,7 @@ public class RegistryPostProcessor implements BeanPostProcessor, ApplicationList
         throws BeansException {
         if (bean instanceof Registrar) {
             // save registrars to register them at the end of context loading
-            Registrar registrar = (Registrar) bean;
+            Registrar registrar = (Registrar)bean;
             registrars.add(registrar);
         }
         return bean;
@@ -62,7 +60,6 @@ public class RegistryPostProcessor implements BeanPostProcessor, ApplicationList
 
     /*
      * (non-Javadoc)
-     * 
      * @seeorg.springframework.beans.factory.config.BeanPostProcessor#
      * postProcessBeforeInitialization(java.lang.Object, java.lang.String)
      */

@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.uritemplate;
 
@@ -33,21 +32,20 @@ import org.apache.wink.common.internal.MultivaluedMapImpl;
 import org.apache.wink.common.internal.uri.UriEncoder;
 import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor.CapturingGroup;
 
-
 public class UriTemplateMatcher {
 
-    protected UriTemplateProcessor parent;
-    protected String uri;
-    protected Matcher matcher;
-    protected boolean matches;
-    private MultivaluedMap<String,String> variables;
-    private MultivaluedMap<String,Integer> variablesStartIndices;
-    private MultivaluedMap<String,List<PathSegment>> variablesPathSegments;
+    protected UriTemplateProcessor                    parent;
+    protected String                                  uri;
+    protected Matcher                                 matcher;
+    protected boolean                                 matches;
+    private MultivaluedMap<String, String>            variables;
+    private MultivaluedMap<String, Integer>           variablesStartIndices;
+    private MultivaluedMap<String, List<PathSegment>> variablesPathSegments;
 
     @Override
     public String toString() {
-        return String.format("Parent: %s; URI: %s; Matcher: %s; Matches: %b", String.valueOf(parent), uri, String
-                .valueOf(matcher), matches);
+        return String.format("Parent: %s; URI: %s; Matcher: %s; Matches: %b", String
+            .valueOf(parent), uri, String.valueOf(matcher), matches);
     }
 
     /* package */UriTemplateMatcher(UriTemplateProcessor parent) {
@@ -70,27 +68,26 @@ public class UriTemplateMatcher {
     }
 
     /**
-     * Try to match a URI and return the variable values or <tt>null</tt> if it does not match. Same
-     * as calling <code>match(uri, false)</code>
+     * Try to match a URI and return the variable values or <tt>null</tt> if it
+     * does not match. Same as calling <code>match(uri, false)</code>
      * 
-     * @param uri
-     *            the URI
+     * @param uri the URI
      * @return variable values or <tt>null</tt> if it does not match
      */
-    public MultivaluedMap<String,String> match(String uri) {
+    public MultivaluedMap<String, String> match(String uri) {
         return match(uri, false);
     }
 
     /**
-     * Try to match a URI and return the variable values or <tt>null</tt> if it does not match.
+     * Try to match a URI and return the variable values or <tt>null</tt> if it
+     * does not match.
      * 
-     * @param uri
-     *            the URI
-     * @param decode
-     *            indicates whether to decode the values before returning them
+     * @param uri the URI
+     * @param decode indicates whether to decode the values before returning
+     *            them
      * @return variable values or <tt>null</tt> if it does not match
      */
-    public MultivaluedMap<String,String> match(String uri, boolean decode) {
+    public MultivaluedMap<String, String> match(String uri, boolean decode) {
         if (!matches(uri)) {
             return null;
         }
@@ -98,11 +95,11 @@ public class UriTemplateMatcher {
     }
 
     /**
-     * Match the provided uri against the uri template of this processor. If the match was
-     * successful, then it is possible to get the variable values from the matched uri.
+     * Match the provided uri against the uri template of this processor. If the
+     * match was successful, then it is possible to get the variable values from
+     * the matched uri.
      * 
-     * @param uri
-     *            the uri to match against the processor template
+     * @param uri the uri to match against the processor template
      * @return true if the uri matches the pattern, false otherwise
      */
     public boolean matches(String uri) {
@@ -118,8 +115,8 @@ public class UriTemplateMatcher {
     }
 
     /**
-     * Returns whether the last successful match was an exact match, that is, if the matched tail
-     * part is empty.
+     * Returns whether the last successful match was an exact match, that is, if
+     * the matched tail part is empty.
      * 
      * @return true if the match was exact, false otherwise.
      */
@@ -130,9 +127,9 @@ public class UriTemplateMatcher {
     }
 
     /**
-     * Get the decoded tail (literal) part of the last uri that matched the template. This is mainly
-     * used for searching of sub-resources during request dispatching. Same as calling
-     * <code>getTail(true)</code>.
+     * Get the decoded tail (literal) part of the last uri that matched the
+     * template. This is mainly used for searching of sub-resources during
+     * request dispatching. Same as calling <code>getTail(true)</code>.
      * 
      * @return the decoded tail part of the last matched uri
      */
@@ -141,11 +138,12 @@ public class UriTemplateMatcher {
     }
 
     /**
-     * Get the tail (literal) part of the last uri that matched the template. This is mainly used
-     * for searching of sub-resources during request dispatching.
+     * Get the tail (literal) part of the last uri that matched the template.
+     * This is mainly used for searching of sub-resources during request
+     * dispatching.
      * 
-     * @param decode
-     *            indicates whether the tail should be decoded before returning
+     * @param decode indicates whether the tail should be decoded before
+     *            returning
      * @return the tail part of the last matched uri
      */
     public String getTail(boolean decode) {
@@ -162,8 +160,8 @@ public class UriTemplateMatcher {
     }
 
     /**
-     * Get the decoded head part of the last uri that matched the template. Same as calling
-     * <code>getHead(true)</code>.
+     * Get the decoded head part of the last uri that matched the template. Same
+     * as calling <code>getHead(true)</code>.
      * 
      * @return the decoded head part of the last matched uri
      */
@@ -174,8 +172,8 @@ public class UriTemplateMatcher {
     /**
      * Get the head part of the last uri that matched the template.
      * 
-     * @param decode
-     *            indicates whether the head should be decoded before returning
+     * @param decode indicates whether the head should be decoded before
+     *            returning
      * @return the head part of the last matched uri
      */
     public String getHead(boolean decode) {
@@ -188,9 +186,9 @@ public class UriTemplateMatcher {
         if (decode) {
             head = UriEncoder.decodeString(head);
         }
-        
+
         // if the template ends with a "/" and the tail is "/",
-        // then add it to the head because the tail has caught it but it 
+        // then add it to the head because the tail has caught it but it
         // should be part of the head
         String tail = getTail(false);
         if (parent.template.endsWith("/") && tail != null && tail.equals("/")) {
@@ -200,31 +198,27 @@ public class UriTemplateMatcher {
     }
 
     /**
-     * Get the decoded value of the specified template variable from the last matched uri. If there
-     * is more than one value, then the first value is returned. Same as calling
-     * <code>getVariableValue(name, true)</code>
+     * Get the decoded value of the specified template variable from the last
+     * matched uri. If there is more than one value, then the first value is
+     * returned. Same as calling <code>getVariableValue(name, true)</code>
      * 
-     * @param name
-     *            the name of the template variable to get the value for
+     * @param name the name of the template variable to get the value for
      * @return the variable value or null if it does not exist in the template
-     * @throws IllegalStateException
-     *             if the last match failed
+     * @throws IllegalStateException if the last match failed
      */
     public String getVariableValue(String name) throws IllegalStateException {
         return getVariableValue(name, true);
     }
 
     /**
-     * Get the value of the specified template variable from the last matched uri. If there is more
-     * than one value, then the first value is returned.
+     * Get the value of the specified template variable from the last matched
+     * uri. If there is more than one value, then the first value is returned.
      * 
-     * @param name
-     *            the name of the template variable to get the value for
-     * @param decode
-     *            indicates whether the value should be decoded
-     * @return the variable value or <code>null</code> if it does not exist in the template
-     * @throws IllegalStateException
-     *             if the last match failed
+     * @param name the name of the template variable to get the value for
+     * @param decode indicates whether the value should be decoded
+     * @return the variable value or <code>null</code> if it does not exist in
+     *         the template
+     * @throws IllegalStateException if the last match failed
      */
     public String getVariableValue(String name, boolean decode) throws IllegalStateException {
         List<String> list = getVariableValues(name, decode);
@@ -236,35 +230,31 @@ public class UriTemplateMatcher {
     }
 
     /**
-     * Get the decoded values of the specified template variable from the last matched uri. Same as
-     * calling <code>getVariableValues(name, true)</code>
+     * Get the decoded values of the specified template variable from the last
+     * matched uri. Same as calling <code>getVariableValues(name, true)</code>
      * 
-     * @param name
-     *            the name of the template variable to get the value for
+     * @param name the name of the template variable to get the value for
      * @return a list of variable values
-     * @throws IllegalStateException
-     *             if the last match failed
+     * @throws IllegalStateException if the last match failed
      */
     public List<String> getVariableValues(String name) throws IllegalStateException {
         return getVariableValues(name, true);
     }
 
     /**
-     * Get the values of the specified template variable from the last matched uri.
+     * Get the values of the specified template variable from the last matched
+     * uri.
      * 
-     * @param name
-     *            the name of the template variable to get the value for
-     * @param decode
-     *            indicates whether the values should be decoded
+     * @param name the name of the template variable to get the value for
+     * @param decode indicates whether the values should be decoded
      * @return a list of variable values
-     * @throws IllegalStateException
-     *             if the last match failed
+     * @throws IllegalStateException if the last match failed
      */
     public List<String> getVariableValues(String name, boolean decode) throws IllegalStateException {
         if (name == null) {
             return new ArrayList<String>();
         }
-        MultivaluedMap<String,String> variables = getVariables(decode);
+        MultivaluedMap<String, String> variables = getVariables(decode);
         List<String> values = variables.get(name);
         if (values == null) {
             return new ArrayList<String>();
@@ -273,52 +263,50 @@ public class UriTemplateMatcher {
     }
 
     /**
-     * Get a multivalued map of the template variables and their values from the last matched uri.
-     * Same as calling <code>getVariables(false)</code>
+     * Get a multivalued map of the template variables and their values from the
+     * last matched uri. Same as calling <code>getVariables(false)</code>
      * 
      * @return a map of variables and their values from the last matched uri
-     * @throws IllegalStateException
-     *             if the last match failed
+     * @throws IllegalStateException if the last match failed
      */
-    public MultivaluedMap<String,String> getVariables() throws IllegalStateException {
+    public MultivaluedMap<String, String> getVariables() throws IllegalStateException {
         return getVariables(false);
     }
 
     /**
-     * Get a multivalued map of the template variables and their values from the last matched uri.
+     * Get a multivalued map of the template variables and their values from the
+     * last matched uri.
      * 
-     * @param decode
-     *            indicates whether the values should be decoded
+     * @param decode indicates whether the values should be decoded
      * @return a map of variables and their values from the last matched uri
-     * @throws IllegalStateException
-     *             if the last match failed
+     * @throws IllegalStateException if the last match failed
      */
-    public MultivaluedMap<String,String> getVariables(boolean decode) throws IllegalStateException {
+    public MultivaluedMap<String, String> getVariables(boolean decode) throws IllegalStateException {
         return storeVariables(null, decode);
     }
 
     /**
-     * Get a multivalued map of the template variables and their values from the last matched uri
+     * Get a multivalued map of the template variables and their values from the
+     * last matched uri
      * 
-     * @param out
-     *            an output multivalued map to receive the values of variables. If null, a new
-     *            instance is created. This map is also the return value.
-     * @param decode
-     *            indicates whether the values should be decoded
-     * 
-     * @return the multivalued map of variables and their values from the last matched uri
-     * @throws IllegalStateException
-     *             if the last match failed
+     * @param out an output multivalued map to receive the values of variables.
+     *            If null, a new instance is created. This map is also the
+     *            return value.
+     * @param decode indicates whether the values should be decoded
+     * @return the multivalued map of variables and their values from the last
+     *         matched uri
+     * @throws IllegalStateException if the last match failed
      */
-    public MultivaluedMap<String,String> storeVariables(MultivaluedMap<String,String> out, boolean decode)
-            throws IllegalStateException {
+    public MultivaluedMap<String, String> storeVariables(MultivaluedMap<String, String> out,
+                                                         boolean decode)
+        throws IllegalStateException {
 
         assertMatchState();
 
         buildVariables();
 
         if (out == null) {
-            out = new MultivaluedMapImpl<String,String>();
+            out = new MultivaluedMapImpl<String, String>();
         }
 
         MultivaluedMapImpl.addAll(variables, out);
@@ -331,30 +319,32 @@ public class UriTemplateMatcher {
     }
 
     /**
-     * Store the path segments that are associated with each matched variable into the output map
+     * Store the path segments that are associated with each matched variable
+     * into the output map
      * 
-     * @param uriSegments
-     *            the full list of the original request uri segments (including any matrix
-     *            parameters)
-     * @param offset
-     *            the offset into the segments list to take the matched variable segments from
-     * @param count
-     *            the number of segments from the specified offset
-     * @param out
-     *            an output multivalued map to receive the path segments of the variables. If null,
-     *            a new instance is created. This map is also the return value.
-     * @return the multivalued map of variables path segments from the last matched uri
-     * @throws IllegalStateException
-     *             if the last match failed
+     * @param uriSegments the full list of the original request uri segments
+     *            (including any matrix parameters)
+     * @param offset the offset into the segments list to take the matched
+     *            variable segments from
+     * @param count the number of segments from the specified offset
+     * @param out an output multivalued map to receive the path segments of the
+     *            variables. If null, a new instance is created. This map is
+     *            also the return value.
+     * @return the multivalued map of variables path segments from the last
+     *         matched uri
+     * @throws IllegalStateException if the last match failed
      */
-    public MultivaluedMap<String,List<PathSegment>> storeVariablesPathSegments(List<PathSegment> segments, int offset,
-            int count, MultivaluedMap<String,List<PathSegment>> out) throws IllegalStateException {
+    public MultivaluedMap<String, List<PathSegment>> storeVariablesPathSegments(List<PathSegment> segments,
+                                                                                int offset,
+                                                                                int count,
+                                                                                MultivaluedMap<String, List<PathSegment>> out)
+        throws IllegalStateException {
         assertMatchState();
 
         buildVariablesPathSegments(segments, offset, count);
 
         if (out == null) {
-            out = new MultivaluedMapImpl<String,List<PathSegment>>();
+            out = new MultivaluedMapImpl<String, List<PathSegment>>();
         }
 
         MultivaluedMapImpl.addAll(variablesPathSegments, out);
@@ -369,15 +359,16 @@ public class UriTemplateMatcher {
         if (variables != null) {
             return;
         }
-        variables = new MultivaluedMapImpl<String,String>();
-        variablesStartIndices = new MultivaluedMapImpl<String,Integer>();
-        MultivaluedMap<String,CapturingGroup> variableGroups = parent.getVariables();
+        variables = new MultivaluedMapImpl<String, String>();
+        variablesStartIndices = new MultivaluedMapImpl<String, Integer>();
+        MultivaluedMap<String, CapturingGroup> variableGroups = parent.getVariables();
         // go over all the variables
         for (String name : variableGroups.keySet()) {
             // go over all of the template variables that have this name
             List<CapturingGroup> vars = variableGroups.get(name);
             for (CapturingGroup var : vars) {
-                // retrieve the capturing group that is associated with this variable
+                // retrieve the capturing group that is associated with this
+                // variable
                 int group = var.getCapturingGroupId();
                 // get the value that was captured during the last match and
                 // the start index of the matched string
@@ -392,12 +383,11 @@ public class UriTemplateMatcher {
     /**
      * builds the list of path segments that are associated with every variable
      * 
-     * @param segments
-     *            the list of path segments of the original uri used for the matching
-     * @param offset
-     *            the offset into the segments list to take the matched variable segments from
-     * @param count
-     *            the number of segments from the specified offset
+     * @param segments the list of path segments of the original uri used for
+     *            the matching
+     * @param offset the offset into the segments list to take the matched
+     *            variable segments from
+     * @param count the number of segments from the specified offset
      */
     private void buildVariablesPathSegments(List<PathSegment> segments, int offset, int count) {
         if (variablesPathSegments != null) {
@@ -406,10 +396,12 @@ public class UriTemplateMatcher {
 
         buildVariables();
 
-        variablesPathSegments = new MultivaluedMapImpl<String,List<PathSegment>>();
+        variablesPathSegments = new MultivaluedMapImpl<String, List<PathSegment>>();
 
-        // this method finds the path segments that every variable is part of in the following way:
-        // for every value of every variable, use the start and end indices of the matched value
+        // this method finds the path segments that every variable is part of in
+        // the following way:
+        // for every value of every variable, use the start and end indices of
+        // the matched value
         // to calculate in which segments the matched variable falls into.
 
         // go over all of the variables
@@ -425,27 +417,34 @@ public class UriTemplateMatcher {
                 int variableValueStartIndex = variablesStartIndices.get(name).get(i);
                 List<PathSegment> variableSegments = new LinkedList<PathSegment>();
                 int pathLength = 0;
-                // go over all of the segments of the request uri that was matched
+                // go over all of the segments of the request uri that was
+                // matched
                 L1: for (int segmentIndex = offset; segmentIndex < offset + count; ++segmentIndex) {
                     pathLength += segments.get(segmentIndex).getPath().length();
                     if (variableValueStartIndex < pathLength) {
                         // found the segment that the variable value starts in.
-                        // now we need to find how many segments this variable spans across.
+                        // now we need to find how many segments this variable
+                        // spans across.
                         int lastSegmentIndex = segmentIndex;
-                        int variableValueEndIndex = variableValueStartIndex + variableValue.length() - 1;
-                        // find the segment that this matched variable value ends in
+                        int variableValueEndIndex =
+                            variableValueStartIndex + variableValue.length() - 1;
+                        // find the segment that this matched variable value
+                        // ends in
                         while (variableValueEndIndex > pathLength) {
                             ++lastSegmentIndex;
                             // + 1 is to count for the '/' between the segments
                             pathLength += segments.get(lastSegmentIndex).getPath().length() + 1;
                         }
-                        // copy all the segments that the variable spans across to the output list
+                        // copy all the segments that the variable spans across
+                        // to the output list
                         for (; segmentIndex <= lastSegmentIndex; ++segmentIndex) {
                             variableSegments.add(segments.get(segmentIndex));
                         }
-                        break L1; // found all the segments of this variable value
+                        break L1; // found all the segments of this variable
+                                  // value
                     } else {
-                        pathLength += 1; // to count for the '/' between the segments
+                        pathLength += 1; // to count for the '/' between the
+                                         // segments
                     }
                 }
                 variablesPathSegments.add(name, variableSegments);
@@ -453,7 +452,8 @@ public class UriTemplateMatcher {
         }
     }
 
-    // private int getVariableStartIndex(String name) throws IllegalStateException {
+    // private int getVariableStartIndex(String name) throws
+    // IllegalStateException {
     // if (name == null) {
     // throw new NullPointerException("name");
     // }
@@ -469,7 +469,7 @@ public class UriTemplateMatcher {
     // return matcher.start(capGroup.getCapturingGroupId());
     // }
     //
-    protected MultivaluedMap<String,String> decodeValues(MultivaluedMap<String,String> values) {
+    protected MultivaluedMap<String, String> decodeValues(MultivaluedMap<String, String> values) {
         for (List<String> list : values.values()) {
             for (int i = 0; i < list.size(); ++i) {
                 list.set(i, UriEncoder.decodeString(list.get(i)));

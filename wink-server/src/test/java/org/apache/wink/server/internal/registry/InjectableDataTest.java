@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.registry;
 
@@ -49,18 +48,17 @@ import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 public class InjectableDataTest extends MockServletInvocationTest {
     private static List<Class<?>> resources = new LinkedList<Class<?>>();
-    
+
     static {
         for (Class<?> cls : InjectableDataTest.class.getClasses()) {
             if (cls.getSimpleName().endsWith("Resource")) {
                 resources.add(cls);
             }
-        }        
+        }
     }
-    
+
     @Override
     protected Class<?>[] getClasses() {
         return resources.toArray(new Class<?>[resources.size()]);
@@ -68,7 +66,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
 
     @Path("pathParam/{p}")
     public static class PathParamResource {
-        
+
         @GET
         @Path("simple")
         @Produces
@@ -89,7 +87,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
         public void getDefault(@DefaultValue("b") @PathParam("k") String p) {
             assertEquals("b", p);
         }
-        
+
         @GET
         @Path("simpleList")
         @Produces
@@ -122,7 +120,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertEquals(1, p.size());
             assertEquals("b/c", p.get(0));
         }
-       
+
         @GET
         @Path("simpleSet")
         @Produces
@@ -146,7 +144,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertEquals(1, p.size());
             assertTrue(p.contains("b/c"));
         }
-        
+
         @GET
         @Path("simpleSortedSet")
         @Produces
@@ -215,7 +213,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
             PathSegment segment = new PathSegmentImpl("c d");
             assertEquals(segment, p);
         }
-        
+
         @GET
         @Path("PathSegmentMultiEncoded/{p1:.*/.*}/end")
         @Produces
@@ -234,7 +232,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertEquals(segment1, p.get(0));
             assertEquals(segment2, p.get(1));
         }
-        
+
         @GET
         @Path("PathSegmentEncodedList/{p1:.*}")
         @Produces
@@ -256,7 +254,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertEquals(segment1, p.get(0));
             assertEquals(segment2, p.get(1));
         }
-        
+
         @GET
         @Path("PathSegmentEmptyList/{p1:.*}")
         @Produces
@@ -274,7 +272,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertTrue(p.contains(segment1));
             assertTrue(p.contains(segment2));
         }
-        
+
         @GET
         @Path("PathSegmentEncodedSet/{p1:.*}")
         @Produces
@@ -296,7 +294,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertTrue(p.contains(segment1));
             assertTrue(p.contains(segment2));
         }
-        
+
         @GET
         @Path("PathSegmentSimpleSortedSet/{p1:.*}")
         @Produces
@@ -307,7 +305,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertTrue(p.contains(segment1));
             assertTrue(p.contains(segment2));
         }
-        
+
         @GET
         @Path("PathSegmentEncodedSortedSet/{p1:.*}")
         @Produces
@@ -330,10 +328,10 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertTrue(p.contains(segment2));
         }
     }
-    
+
     @Path("queryParam")
     public static class QueryParamResource {
-        
+
         @GET
         @Path("simple")
         @Produces
@@ -345,7 +343,8 @@ public class InjectableDataTest extends MockServletInvocationTest {
         @GET
         @Path("encoded")
         @Produces
-        public void getEncoded(@Encoded @QueryParam("q") String p, @Encoded @QueryParam("m") String m) {
+        public void getEncoded(@Encoded @QueryParam("q") String p,
+                               @Encoded @QueryParam("m") String m) {
             assertEquals("a%20b+c", p);
             assertEquals("1+2", m);
         }
@@ -356,7 +355,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
         public void getDefault(@DefaultValue("b") @QueryParam("k") String p) {
             assertEquals("b", p);
         }
-        
+
         @GET
         @Path("simpleList")
         @Produces
@@ -435,10 +434,10 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertTrue(p.contains("a"));
         }
     }
-    
+
     @Path("matrixParam")
     public static class MatrixParamResource {
-        
+
         @GET
         @Path("simple")
         @Produces
@@ -459,7 +458,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
         public void getDefault(@DefaultValue("b") @MatrixParam("k") String p) {
             assertEquals("b", p);
         }
-        
+
         @GET
         @Path("none")
         @Produces
@@ -497,7 +496,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertEquals("a b", p.get(0));
             assertEquals("c", p.get(1));
         }
-        
+
         @GET
         @Path("encodedList")
         @Produces
@@ -506,7 +505,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertEquals("a%20b", p.get(0));
             assertEquals("c", p.get(1));
         }
-        
+
         @GET
         @Path("defaultList")
         @Produces
@@ -523,7 +522,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertTrue(p.contains("a b"));
             assertTrue(p.contains("c"));
         }
-        
+
         @GET
         @Path("encodedSet")
         @Produces
@@ -532,7 +531,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertTrue(p.contains("a%20b"));
             assertTrue(p.contains("c"));
         }
-        
+
         @GET
         @Path("defaultSet")
         @Produces
@@ -549,7 +548,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertTrue(p.contains("a b"));
             assertTrue(p.contains("c"));
         }
-        
+
         @GET
         @Path("encodedSortedSet")
         @Produces
@@ -558,7 +557,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertTrue(p.contains("a%20b"));
             assertTrue(p.contains("c"));
         }
-        
+
         @GET
         @Path("defaultSortedSet")
         @Produces
@@ -567,10 +566,10 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertTrue(p.contains("a"));
         }
     }
-    
+
     @Path("formParam")
     public static class FormParamResource {
-        
+
         @GET
         @Path("simple")
         @Produces
@@ -593,7 +592,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
         public void getDefault(@DefaultValue("b") @FormParam("k") String p) {
             assertEquals("b", p);
         }
-        
+
         @GET
         @Path("simpleList")
         @Produces
@@ -690,7 +689,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
 
     @Path("cookieParam")
     public static class CookieParamResource {
-        
+
         @GET
         @Path("simple")
         @Produces
@@ -704,7 +703,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
         public void getDefault(@DefaultValue("b") @CookieParam("k") String p) {
             assertEquals("b", p);
         }
-        
+
         @GET
         @Path("simpleList")
         @Produces
@@ -720,7 +719,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertEquals(1, p.size());
             assertEquals("b", p.get(0));
         }
-        
+
         @GET
         @Path("simpleSet")
         @Produces
@@ -789,14 +788,14 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertEquals(1, p.size());
             assertEquals(Cookie.valueOf("$Version=1; k=b"), p.get(0));
         }
-        
+
         @GET
         @Path("cookieEmptyList")
         @Produces
         public void getCookieEmptyList(@CookieParam("k") List<Cookie> p) {
             assertEquals(0, p.size());
         }
-        
+
         @GET
         @Path("cookieSimpleSet")
         @Produces
@@ -830,10 +829,10 @@ public class InjectableDataTest extends MockServletInvocationTest {
         }
 
     }
-    
+
     @Path("headerParam")
     public static class HeaderParamResource {
-        
+
         @GET
         @Path("simple")
         @Produces
@@ -856,7 +855,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertEquals("abc", p.get(0));
             assertEquals("def", p.get(1));
         }
-        
+
         @GET
         @Path("defaultList")
         @Produces
@@ -864,7 +863,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertEquals(1, p.size());
             assertEquals("d", p.get(0));
         }
-        
+
         @GET
         @Path("emptyList")
         @Produces
@@ -880,7 +879,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertTrue(p.contains("abc"));
             assertTrue(p.contains("def"));
         }
-        
+
         @GET
         @Path("defaultSet")
         @Produces
@@ -888,7 +887,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertEquals(1, p.size());
             assertTrue(p.contains("d"));
         }
-        
+
         @GET
         @Path("simpleSortedSet")
         @Produces
@@ -897,7 +896,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertTrue(p.contains("abc"));
             assertTrue(p.contains("def"));
         }
-        
+
         @GET
         @Path("defaultSortedSet")
         @Produces
@@ -911,13 +910,13 @@ public class InjectableDataTest extends MockServletInvocationTest {
     private void assertInvocation(String path) {
         assertInvocation(path, null, null, null, null);
     }
-    
-    private void assertInvocation(String path, MultivaluedMap<String,String> headers) {
+
+    private void assertInvocation(String path, MultivaluedMap<String, String> headers) {
         assertInvocation(path, null, null, null, headers);
     }
 
     private void assertInvocation(String path, String body, String type) {
-        MultivaluedMap<String,String> headers = new MultivaluedMapImpl<String,String>();
+        MultivaluedMap<String, String> headers = new MultivaluedMapImpl<String, String>();
         headers.add("Content-Type", type);
         assertInvocation(path, null, body, type, headers);
     }
@@ -925,10 +924,15 @@ public class InjectableDataTest extends MockServletInvocationTest {
     private void assertInvocation(String path, String queryString) {
         assertInvocation(path, queryString, null, null, null);
     }
-    
-    private void assertInvocation(String path, String queryString, String body, String type, MultivaluedMap<String,String> headers) {
+
+    private void assertInvocation(String path,
+                                  String queryString,
+                                  String body,
+                                  String type,
+                                  MultivaluedMap<String, String> headers) {
         try {
-            MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET", path, MediaType.APPLICATION_XML);
+            MockHttpServletRequest mockRequest =
+                MockRequestConstructor.constructMockRequest("GET", path, MediaType.APPLICATION_XML);
             mockRequest.setQueryString(queryString);
             if (body != null) {
                 mockRequest.setContent(body.getBytes());
@@ -946,7 +950,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
             fail("method invocation failed");
         }
     }
-    
+
     public void testPathParam() {
         assertInvocation("pathParam/a%20b+c/simple");
         assertInvocation("pathParam;m1=1/a%20b+c/simple");
@@ -963,7 +967,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
         assertInvocation("pathParam/a%20b+c/simpleSortedSet");
         assertInvocation("pathParam/a%20b+c/encodedSortedSet");
         assertInvocation("pathParam/a%20b+c/defaultSortedSet");
-        
+
         assertInvocation("pathParam/a%20b;m1=1/PathSegmentSimple");
         assertInvocation("pathParam/a%20b;m1=1/PathSegmentEncoded");
         assertInvocation("pathParam/a%20b;m1=1/PathSegmentDefault");
@@ -998,7 +1002,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
         assertInvocation("queryParam/encodedSortedSet", query);
         assertInvocation("queryParam/defaultSortedSet", query);
     }
-    
+
     public void testMatrixParam() {
         assertInvocation("matrixParam/simple;m=a%20b+c");
         assertInvocation("matrixParam/encoded;m=a%20b+c");
@@ -1018,7 +1022,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
         assertInvocation("matrixParam/encodedSortedSet;m=a%20b;m=c");
         assertInvocation("matrixParam/defaultSortedSet;m=a%20b;m=c");
     }
-    
+
     public void testFormParam() {
         String form = "q=a%20b+c&q=a+c&m=1+2";
         assertInvocation("formParam/simple", form, MediaType.APPLICATION_FORM_URLENCODED);
@@ -1038,7 +1042,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
     }
 
     public void testCookieParam() {
-        MultivaluedMap<String,String> headers = new MultivaluedMapImpl<String,String>();
+        MultivaluedMap<String, String> headers = new MultivaluedMapImpl<String, String>();
         headers.add("Cookie", "$Version=1; c=cookieVal");
         assertInvocation("cookieParam/simple", headers);
         assertInvocation("cookieParam/default", headers);
@@ -1058,9 +1062,9 @@ public class InjectableDataTest extends MockServletInvocationTest {
         assertInvocation("cookieParam/cookieSimpleSortedSet", headers);
         assertInvocation("cookieParam/cookieDefaultSortedSet", headers);
     }
-    
+
     public void testHeaderParam() {
-        MultivaluedMap<String,String> headers = new MultivaluedMapImpl<String,String>();
+        MultivaluedMap<String, String> headers = new MultivaluedMapImpl<String, String>();
         headers.add("h", "abc");
         headers.add("h", "def");
         assertInvocation("headerParam/simple", headers);

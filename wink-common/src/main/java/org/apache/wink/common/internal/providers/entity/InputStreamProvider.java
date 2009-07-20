@@ -36,37 +36,51 @@ import javax.ws.rs.ext.Provider;
 
 import org.apache.wink.common.utils.ProviderUtils;
 
-
 @Provider
-@Consumes( { MediaType.WILDCARD, MediaType.APPLICATION_OCTET_STREAM })
-@Produces( { MediaType.WILDCARD, MediaType.APPLICATION_OCTET_STREAM })
+@Consumes( {MediaType.WILDCARD, MediaType.APPLICATION_OCTET_STREAM})
+@Produces( {MediaType.WILDCARD, MediaType.APPLICATION_OCTET_STREAM})
 public class InputStreamProvider implements MessageBodyReader<InputStream>,
     MessageBodyWriter<InputStream> {
 
-    public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType) {
+    public boolean isReadable(Class<?> type,
+                              Type genericType,
+                              Annotation[] annotations,
+                              MediaType mediaType) {
         return type != null && type.isAssignableFrom(InputStream.class);
     }
 
-    public InputStream readFrom(Class<InputStream> type, Type genericType,
-        Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders,
-        InputStream entityStream) throws IOException, WebApplicationException {
+    public InputStream readFrom(Class<InputStream> type,
+                                Type genericType,
+                                Annotation[] annotations,
+                                MediaType mediaType,
+                                MultivaluedMap<String, String> httpHeaders,
+                                InputStream entityStream) throws IOException,
+        WebApplicationException {
         return entityStream;
     }
 
-    public long getSize(InputStream t, Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType) {
+    public long getSize(InputStream t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
         return -1;
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
         return type != null && InputStream.class.isAssignableFrom(type);
     }
 
-    public void writeTo(InputStream t, Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
-        throws IOException, WebApplicationException {
+    public void writeTo(InputStream t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
         ProviderUtils.copyStream(t, entityStream);
     }
 

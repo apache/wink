@@ -53,12 +53,16 @@ public class MessageBodyWriterIsWritableSet implements MessageBodyWriter<Set> {
         return false;
     }
 
-    @SuppressWarnings({ "unchecked", "cast" })
-    public void writeTo(Set arg0, Class<?> arg1, Type arg2, Annotation[] arg3, MediaType arg4,
-        MultivaluedMap<String, Object> arg5, OutputStream arg6) throws IOException,
-        WebApplicationException {
+    @SuppressWarnings( {"unchecked", "cast"})
+    public void writeTo(Set arg0,
+                        Class<?> arg1,
+                        Type arg2,
+                        Annotation[] arg3,
+                        MediaType arg4,
+                        MultivaluedMap<String, Object> arg5,
+                        OutputStream arg6) throws IOException, WebApplicationException {
         Writer writer = new OutputStreamWriter(arg6);
-        Set<?> s = (Set<?>) arg0;
+        Set<?> s = (Set<?>)arg0;
         writer.write("set:");
         List list = new ArrayList(s);
         Collections.sort(list);

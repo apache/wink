@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.utils;
 
@@ -44,7 +43,6 @@ import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 public class LinksBuilderTest extends MockServletInvocationTest {
 
     private static List<Class<?>> resourceClasses = new LinkedList<Class<?>>();
@@ -68,7 +66,7 @@ public class LinksBuilderTest extends MockServletInvocationTest {
     public static class SystemLinksResource {
 
         @GET
-        @Produces({"application/xml", "application/json"})
+        @Produces( {"application/xml", "application/json"})
         public void getXmlOrJson() {
         }
 
@@ -93,7 +91,10 @@ public class LinksBuilderTest extends MockServletInvocationTest {
             assertLink(links, "alternate", "application/xml", "systemLinks?alt=application%2Fxml");
             assertLink(links, "alternate", "application/json", "systemLinks?alt=application%2Fjson");
             assertLink(links, "alternate", "text/html", "systemLinks?alt=text%2Fhtml");
-            assertLink(links, "alternate", "application/atom+xml", "systemLinks?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "systemLinks?alt=application%2Fatom%2Bxml");
         }
     }
 
@@ -101,7 +102,7 @@ public class LinksBuilderTest extends MockServletInvocationTest {
     public static class SystemLinksWithPutResource {
 
         @GET
-        @Produces({"application/xml", "application/json"})
+        @Produces( {"application/xml", "application/json"})
         public void getXmlOrJson() {
         }
 
@@ -119,9 +120,18 @@ public class LinksBuilderTest extends MockServletInvocationTest {
             assertEquals(5, links.size());
             assertLink(links, "self", null, "systemLinksWithPut");
             assertLink(links, "edit", null, "systemLinksWithPut");
-            assertLink(links, "alternate", "application/xml", "systemLinksWithPut?alt=application%2Fxml");
-            assertLink(links, "alternate", "application/json", "systemLinksWithPut?alt=application%2Fjson");
-            assertLink(links, "alternate", "application/atom+xml", "systemLinksWithPut?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "alternate",
+                       "application/xml",
+                       "systemLinksWithPut?alt=application%2Fxml");
+            assertLink(links,
+                       "alternate",
+                       "application/json",
+                       "systemLinksWithPut?alt=application%2Fjson");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "systemLinksWithPut?alt=application%2Fatom%2Bxml");
             return "";
         }
     }
@@ -138,7 +148,10 @@ public class LinksBuilderTest extends MockServletInvocationTest {
             systemLinksBuilder.build(links);
             assertEquals(2, links.size());
             assertLink(links, "self", null, "systemLinksAltParam");
-            assertLink(links, "alternate", "application/atom+xml", "systemLinksAltParam?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "systemLinksAltParam?alt=application%2Fatom%2Bxml");
 
             links.clear();
             systemLinksBuilder.addAltParam(false).build(links);
@@ -150,7 +163,10 @@ public class LinksBuilderTest extends MockServletInvocationTest {
             systemLinksBuilder.addAltParam(true).build(links);
             assertEquals(2, links.size());
             assertLink(links, "self", null, "systemLinksAltParam");
-            assertLink(links, "alternate", "application/atom+xml", "systemLinksAltParam?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "systemLinksAltParam?alt=application%2Fatom%2Bxml");
 
             links.clear();
             systemLinksBuilder.addAltParam(false).queryParam("alt", "foo").build(links);
@@ -171,7 +187,7 @@ public class LinksBuilderTest extends MockServletInvocationTest {
     public static class SystemLinksSelectiveResource {
 
         @GET
-        @Produces({"application/xml", "application/json"})
+        @Produces( {"application/xml", "application/json"})
         public void getXmlOrJson() {
         }
 
@@ -193,9 +209,18 @@ public class LinksBuilderTest extends MockServletInvocationTest {
             List<SyndLink> links = new ArrayList<SyndLink>();
             builder.types(LinkType.ALTERNATE).build(links);
             assertEquals(3, links.size());
-            assertLink(links, "alternate", "application/xml", "systemLinksSelective?alt=application%2Fxml");
-            assertLink(links, "alternate", "application/json", "systemLinksSelective?alt=application%2Fjson");
-            assertLink(links, "alternate", "application/atom+xml", "systemLinksSelective?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "alternate",
+                       "application/xml",
+                       "systemLinksSelective?alt=application%2Fxml");
+            assertLink(links,
+                       "alternate",
+                       "application/json",
+                       "systemLinksSelective?alt=application%2Fjson");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "systemLinksSelective?alt=application%2Fatom%2Bxml");
 
             links.clear();
             builder.types(LinkType.SELF).build(links);
@@ -210,8 +235,10 @@ public class LinksBuilderTest extends MockServletInvocationTest {
             links.clear();
             builder.types(LinkType.OPENSEARCH).build(links);
             assertEquals(1, links.size());
-            assertLink(links, "search", "application/opensearchdescription+xml",
-                    "systemLinksSelective?alt=application%2Fopensearchdescription%2Bxml");
+            assertLink(links,
+                       "search",
+                       "application/opensearchdescription+xml",
+                       "systemLinksSelective?alt=application%2Fopensearchdescription%2Bxml");
 
             links.clear();
             builder.types(LinkType.SELF, LinkType.EDIT).build(links);
@@ -223,30 +250,55 @@ public class LinksBuilderTest extends MockServletInvocationTest {
             builder.types(LinkType.EDIT, LinkType.OPENSEARCH).build(links);
             assertEquals(2, links.size());
             assertLink(links, "edit", null, "systemLinksSelective");
-            assertLink(links, "search", "application/opensearchdescription+xml",
-                    "systemLinksSelective?alt=application%2Fopensearchdescription%2Bxml");
+            assertLink(links,
+                       "search",
+                       "application/opensearchdescription+xml",
+                       "systemLinksSelective?alt=application%2Fopensearchdescription%2Bxml");
 
             links.clear();
-            builder.types(LinkType.SELF, LinkType.EDIT, LinkType.OPENSEARCH, LinkType.ALTERNATE).build(links);
+            builder.types(LinkType.SELF, LinkType.EDIT, LinkType.OPENSEARCH, LinkType.ALTERNATE)
+                .build(links);
             assertEquals(6, links.size());
             assertLink(links, "self", null, "systemLinksSelective");
             assertLink(links, "edit", null, "systemLinksSelective");
-            assertLink(links, "search", "application/opensearchdescription+xml",
-                    "systemLinksSelective?alt=application%2Fopensearchdescription%2Bxml");
-            assertLink(links, "alternate", "application/xml", "systemLinksSelective?alt=application%2Fxml");
-            assertLink(links, "alternate", "application/json", "systemLinksSelective?alt=application%2Fjson");
-            assertLink(links, "alternate", "application/atom+xml", "systemLinksSelective?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "search",
+                       "application/opensearchdescription+xml",
+                       "systemLinksSelective?alt=application%2Fopensearchdescription%2Bxml");
+            assertLink(links,
+                       "alternate",
+                       "application/xml",
+                       "systemLinksSelective?alt=application%2Fxml");
+            assertLink(links,
+                       "alternate",
+                       "application/json",
+                       "systemLinksSelective?alt=application%2Fjson");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "systemLinksSelective?alt=application%2Fatom%2Bxml");
 
             links.clear();
             builder.types().build(links);
             assertEquals(6, links.size());
             assertLink(links, "self", null, "systemLinksSelective");
             assertLink(links, "edit", null, "systemLinksSelective");
-            assertLink(links, "alternate", "application/xml", "systemLinksSelective?alt=application%2Fxml");
-            assertLink(links, "alternate", "application/json", "systemLinksSelective?alt=application%2Fjson");
-            assertLink(links, "alternate", "application/atom+xml", "systemLinksSelective?alt=application%2Fatom%2Bxml");
-            assertLink(links, "search", "application/opensearchdescription+xml",
-                    "systemLinksSelective?alt=application%2Fopensearchdescription%2Bxml");
+            assertLink(links,
+                       "alternate",
+                       "application/xml",
+                       "systemLinksSelective?alt=application%2Fxml");
+            assertLink(links,
+                       "alternate",
+                       "application/json",
+                       "systemLinksSelective?alt=application%2Fjson");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "systemLinksSelective?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "search",
+                       "application/opensearchdescription+xml",
+                       "systemLinksSelective?alt=application%2Fopensearchdescription%2Bxml");
 
             return "";
         }
@@ -256,7 +308,7 @@ public class LinksBuilderTest extends MockServletInvocationTest {
     public static class SystemLinksRelativeToAnotherUriResource {
 
         @GET
-        @Produces({"application/xml"})
+        @Produces( {"application/xml"})
         public void getXml() {
         }
 
@@ -269,39 +321,56 @@ public class LinksBuilderTest extends MockServletInvocationTest {
             builder.relativeTo(URI.create("http://localhost:80/foo/bar")).build(links);
             assertEquals(3, links.size());
             assertLink(links, "self", null, "../systemLinksRelativeToAnotherUri");
-            assertLink(links, "alternate", "application/xml",
-                    "../systemLinksRelativeToAnotherUri?alt=application%2Fxml");
-            assertLink(links, "alternate", "application/atom+xml",
-                    "../systemLinksRelativeToAnotherUri?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "alternate",
+                       "application/xml",
+                       "../systemLinksRelativeToAnotherUri?alt=application%2Fxml");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "../systemLinksRelativeToAnotherUri?alt=application%2Fatom%2Bxml");
 
             links.clear();
-            builder.baseUri(URI.create("http://koko:81")).relativeTo(URI.create("http://koko:81/foo/bar")).build(links);
+            builder.baseUri(URI.create("http://koko:81")).relativeTo(URI
+                .create("http://koko:81/foo/bar")).build(links);
             assertEquals(3, links.size());
             assertLink(links, "self", null, "../systemLinksRelativeToAnotherUri");
-            assertLink(links, "alternate", "application/xml",
-                    "../systemLinksRelativeToAnotherUri?alt=application%2Fxml");
-            assertLink(links, "alternate", "application/atom+xml",
-                    "../systemLinksRelativeToAnotherUri?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "alternate",
+                       "application/xml",
+                       "../systemLinksRelativeToAnotherUri?alt=application%2Fxml");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "../systemLinksRelativeToAnotherUri?alt=application%2Fatom%2Bxml");
 
             links.clear();
-            builder.baseUri(URI.create("http://koko:82/")).relativeTo(URI.create("http://koko:82/foo/bar/zoo/")).build(
-                    links);
+            builder.baseUri(URI.create("http://koko:82/")).relativeTo(URI
+                .create("http://koko:82/foo/bar/zoo/")).build(links);
             assertEquals(3, links.size());
             assertLink(links, "self", null, "../../../systemLinksRelativeToAnotherUri");
-            assertLink(links, "alternate", "application/xml",
-                    "../../../systemLinksRelativeToAnotherUri?alt=application%2Fxml");
-            assertLink(links, "alternate", "application/atom+xml",
-                    "../../../systemLinksRelativeToAnotherUri?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "alternate",
+                       "application/xml",
+                       "../../../systemLinksRelativeToAnotherUri?alt=application%2Fxml");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "../../../systemLinksRelativeToAnotherUri?alt=application%2Fatom%2Bxml");
 
             links.clear();
-            builder.baseUri(URI.create("http://koko:82/")).relativeTo(URI.create("http://koko:82/foo/bar/zoo/")).build(
-                    links);
+            builder.baseUri(URI.create("http://koko:82/")).relativeTo(URI
+                .create("http://koko:82/foo/bar/zoo/")).build(links);
             assertEquals(3, links.size());
             assertLink(links, "self", null, "../../../systemLinksRelativeToAnotherUri");
-            assertLink(links, "alternate", "application/xml",
-                    "../../../systemLinksRelativeToAnotherUri?alt=application%2Fxml");
-            assertLink(links, "alternate", "application/atom+xml",
-                    "../../../systemLinksRelativeToAnotherUri?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "alternate",
+                       "application/xml",
+                       "../../../systemLinksRelativeToAnotherUri?alt=application%2Fxml");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "../../../systemLinksRelativeToAnotherUri?alt=application%2Fatom%2Bxml");
 
             return "";
         }
@@ -311,7 +380,7 @@ public class LinksBuilderTest extends MockServletInvocationTest {
     public static class SystemLinksWithRelativeRequestResource {
 
         @GET
-        @Produces({"application/xml"})
+        @Produces( {"application/xml"})
         public void getXml() {
         }
 
@@ -323,9 +392,14 @@ public class LinksBuilderTest extends MockServletInvocationTest {
             builders.createSystemLinksBuilder().build(links);
             assertEquals(3, links.size());
             assertLink(links, "self", null, "systemLinksWithRelativeRequest");
-            assertLink(links, "alternate", "application/xml", "systemLinksWithRelativeRequest?alt=application%2Fxml");
-            assertLink(links, "alternate", "application/atom+xml",
-                    "systemLinksWithRelativeRequest?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "alternate",
+                       "application/xml",
+                       "systemLinksWithRelativeRequest?alt=application%2Fxml");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "systemLinksWithRelativeRequest?alt=application%2Fatom%2Bxml");
             return "";
         }
     }
@@ -334,7 +408,7 @@ public class LinksBuilderTest extends MockServletInvocationTest {
     public static class SystemLinksWithAbsoluteRequestResource {
 
         @GET
-        @Produces({"application/xml"})
+        @Produces( {"application/xml"})
         public void getXml() {
         }
 
@@ -346,10 +420,14 @@ public class LinksBuilderTest extends MockServletInvocationTest {
             builders.createSystemLinksBuilder().build(links);
             assertEquals(3, links.size());
             assertLink(links, "self", null, "http://localhost:80/systemLinksWithAbsoluteRequest");
-            assertLink(links, "alternate", "application/xml",
-                    "http://localhost:80/systemLinksWithAbsoluteRequest?alt=application%2Fxml");
-            assertLink(links, "alternate", "application/atom+xml",
-                    "http://localhost:80/systemLinksWithAbsoluteRequest?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "alternate",
+                       "application/xml",
+                       "http://localhost:80/systemLinksWithAbsoluteRequest?alt=application%2Fxml");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "http://localhost:80/systemLinksWithAbsoluteRequest?alt=application%2Fatom%2Bxml");
             return "";
         }
     }
@@ -358,7 +436,7 @@ public class LinksBuilderTest extends MockServletInvocationTest {
     public static class SystemLinksWithRelativeOverrideResource {
 
         @GET
-        @Produces({"application/xml"})
+        @Produces( {"application/xml"})
         public void getXml() {
         }
 
@@ -370,9 +448,14 @@ public class LinksBuilderTest extends MockServletInvocationTest {
             builders.createSystemLinksBuilder().relativize(true).build(links);
             assertEquals(3, links.size());
             assertLink(links, "self", null, "systemLinksWithRelativeOverride");
-            assertLink(links, "alternate", "application/xml", "systemLinksWithRelativeOverride?alt=application%2Fxml");
-            assertLink(links, "alternate", "application/atom+xml",
-                    "systemLinksWithRelativeOverride?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "alternate",
+                       "application/xml",
+                       "systemLinksWithRelativeOverride?alt=application%2Fxml");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "systemLinksWithRelativeOverride?alt=application%2Fatom%2Bxml");
             return "";
         }
     }
@@ -381,7 +464,7 @@ public class LinksBuilderTest extends MockServletInvocationTest {
     public static class SystemLinksWithAbsoluteOverrideResource {
 
         @GET
-        @Produces({"application/xml"})
+        @Produces( {"application/xml"})
         public void getXml() {
         }
 
@@ -393,10 +476,14 @@ public class LinksBuilderTest extends MockServletInvocationTest {
             builders.createSystemLinksBuilder().relativize(false).build(links);
             assertEquals(3, links.size());
             assertLink(links, "self", null, "http://localhost:80/systemLinksWithAbsoluteOverride");
-            assertLink(links, "alternate", "application/xml",
-                    "http://localhost:80/systemLinksWithAbsoluteOverride?alt=application%2Fxml");
-            assertLink(links, "alternate", "application/atom+xml",
-                    "http://localhost:80/systemLinksWithAbsoluteOverride?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "alternate",
+                       "application/xml",
+                       "http://localhost:80/systemLinksWithAbsoluteOverride?alt=application%2Fxml");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "http://localhost:80/systemLinksWithAbsoluteOverride?alt=application%2Fatom%2Bxml");
             return "";
         }
     }
@@ -417,7 +504,8 @@ public class LinksBuilderTest extends MockServletInvocationTest {
             SystemLinksResource.assertLinks(links);
 
             links.clear();
-            builders.createSystemLinksBuilder().resource(this).resource(SystemLinksResource.class).build(links);
+            builders.createSystemLinksBuilder().resource(this).resource(SystemLinksResource.class)
+                .build(links);
             SystemLinksResource.assertLinks(links);
             return "";
         }
@@ -440,8 +528,8 @@ public class LinksBuilderTest extends MockServletInvocationTest {
             SystemLinksResource.assertLinks(links);
 
             links = new ArrayList<SyndLink>();
-            builders.createSystemLinksBuilder().resource(systemLinksOfAnotherObjectResource.class).resource(
-                    new SystemLinksResource()).build(links);
+            builders.createSystemLinksBuilder().resource(systemLinksOfAnotherObjectResource.class)
+                .resource(new SystemLinksResource()).build(links);
             SystemLinksResource.assertLinks(links);
             return "";
         }
@@ -458,7 +546,7 @@ public class LinksBuilderTest extends MockServletInvocationTest {
 
         @Path("{subId}")
         @GET
-        @Produces({"application/xml", "application/json"})
+        @Produces( {"application/xml", "application/json"})
         public void getXmlOrJson() {
         }
 
@@ -496,7 +584,7 @@ public class LinksBuilderTest extends MockServletInvocationTest {
 
         @Path("{subId}")
         @GET
-        @Produces({"application/xml", "application/json"})
+        @Produces( {"application/xml", "application/json"})
         public void getXmlOrJson() {
         }
 
@@ -511,7 +599,8 @@ public class LinksBuilderTest extends MockServletInvocationTest {
         public String getAtom(@Context LinkBuilders builders) {
 
             List<SyndLink> links = new ArrayList<SyndLink>();
-            builders.createSystemLinksBuilder().subResource("{subId}").pathParam("subId", "1").build(links);
+            builders.createSystemLinksBuilder().subResource("{subId}").pathParam("subId", "1")
+                .build(links);
             assertEquals(4, links.size());
             assertLink(links, "self", null, "a/1");
             assertLink(links, "alternate", "application/xml", "a/1?alt=application%2Fxml");
@@ -526,7 +615,7 @@ public class LinksBuilderTest extends MockServletInvocationTest {
 
         @Path("{subId}")
         @GET
-        @Produces({"application/xml", "application/json"})
+        @Produces( {"application/xml", "application/json"})
         public void getXmlOrJson() {
         }
 
@@ -541,7 +630,8 @@ public class LinksBuilderTest extends MockServletInvocationTest {
         @Produces("application/atom+xml")
         public String getAtom(@Context LinkBuilders builders) {
             List<SyndLink> links = new ArrayList<SyndLink>();
-            builders.createSystemLinksBuilder().subResource("{subId}").pathParam("subId", "1").build(links);
+            builders.createSystemLinksBuilder().subResource("{subId}").pathParam("subId", "1")
+                .build(links);
             assertEquals(4, links.size());
             assertLink(links, "self", null, "1");
             assertLink(links, "alternate", "application/xml", "1?alt=application%2Fxml");
@@ -560,17 +650,26 @@ public class LinksBuilderTest extends MockServletInvocationTest {
         public String getAtom(@Context LinkBuilders builders) {
 
             List<SyndLink> links = new ArrayList<SyndLink>();
-            builders.createSystemLinksBuilder().resource(systemLinksOfSubResourceResource.class).subResource("{subId}")
-                    .pathParam("id", "a").pathParam("subId", "1").build(links);
+            builders.createSystemLinksBuilder().resource(systemLinksOfSubResourceResource.class)
+                .subResource("{subId}").pathParam("id", "a").pathParam("subId", "1").build(links);
             assertEquals(5, links.size());
             assertLink(links, "self", null, "../../systemLinksOfSubResource/a/1");
-            assertLink(links, "alternate", "application/xml",
-                    "../../systemLinksOfSubResource/a/1?alt=application%2Fxml");
-            assertLink(links, "alternate", "application/json",
-                    "../../systemLinksOfSubResource/a/1?alt=application%2Fjson");
-            assertLink(links, "alternate", "text/html", "../../systemLinksOfSubResource/a/1?alt=text%2Fhtml");
-            assertLink(links, "alternate", "application/atom+xml",
-                    "../../systemLinksOfSubResource/a/1?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "alternate",
+                       "application/xml",
+                       "../../systemLinksOfSubResource/a/1?alt=application%2Fxml");
+            assertLink(links,
+                       "alternate",
+                       "application/json",
+                       "../../systemLinksOfSubResource/a/1?alt=application%2Fjson");
+            assertLink(links,
+                       "alternate",
+                       "text/html",
+                       "../../systemLinksOfSubResource/a/1?alt=text%2Fhtml");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "../../systemLinksOfSubResource/a/1?alt=application%2Fatom%2Bxml");
             return "";
         }
     }
@@ -595,11 +694,18 @@ public class LinksBuilderTest extends MockServletInvocationTest {
             List<SyndLink> links = new ArrayList<SyndLink>();
             builders.createSystemLinksBuilder().relativize(false).build(links);
             assertEquals(3, links.size());
-            assertLink(links, "self", null, "http://localhost:80/systemLinksThroughSubResourceLocator/sub1");
-            assertLink(links, "alternate", "text/html",
-                    "http://localhost:80/systemLinksThroughSubResourceLocator/sub1?alt=text%2Fhtml");
-            assertLink(links, "alternate", "application/atom+xml",
-                    "http://localhost:80/systemLinksThroughSubResourceLocator/sub1?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "self",
+                       null,
+                       "http://localhost:80/systemLinksThroughSubResourceLocator/sub1");
+            assertLink(links,
+                       "alternate",
+                       "text/html",
+                       "http://localhost:80/systemLinksThroughSubResourceLocator/sub1?alt=text%2Fhtml");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "http://localhost:80/systemLinksThroughSubResourceLocator/sub1?alt=application%2Fatom%2Bxml");
             return "";
         }
 
@@ -616,11 +722,18 @@ public class LinksBuilderTest extends MockServletInvocationTest {
             List<SyndLink> links = new ArrayList<SyndLink>();
             builders.createSystemLinksBuilder().relativize(false).build(links);
             assertEquals(3, links.size());
-            assertLink(links, "self", null, "http://localhost:80/systemLinksThroughSubResourceLocator/sub1/sub2");
-            assertLink(links, "alternate", "text/html",
-                    "http://localhost:80/systemLinksThroughSubResourceLocator/sub1/sub2?alt=text%2Fhtml");
-            assertLink(links, "alternate", "application/atom+xml",
-                    "http://localhost:80/systemLinksThroughSubResourceLocator/sub1/sub2?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "self",
+                       null,
+                       "http://localhost:80/systemLinksThroughSubResourceLocator/sub1/sub2");
+            assertLink(links,
+                       "alternate",
+                       "text/html",
+                       "http://localhost:80/systemLinksThroughSubResourceLocator/sub1/sub2?alt=text%2Fhtml");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "http://localhost:80/systemLinksThroughSubResourceLocator/sub1/sub2?alt=application%2Fatom%2Bxml");
             return "";
         }
     }
@@ -633,11 +746,14 @@ public class LinksBuilderTest extends MockServletInvocationTest {
         public String getAtom(@Context LinkBuilders builders) {
 
             List<SyndLink> links = new ArrayList<SyndLink>();
-            builders.createSystemLinksBuilder().queryParam("a", "1").queryParam("b", "2").build(links);
+            builders.createSystemLinksBuilder().queryParam("a", "1").queryParam("b", "2")
+                .build(links);
             assertEquals(2, links.size());
             assertLink(links, "self", null, "systemLinksWithQueryParams?a=1&b=2");
-            assertLink(links, "alternate", "application/atom+xml",
-                    "systemLinksWithQueryParams?a=1&b=2&alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "systemLinksWithQueryParams?a=1&b=2&alt=application%2Fatom%2Bxml");
             return "";
         }
     }
@@ -657,37 +773,65 @@ public class LinksBuilderTest extends MockServletInvocationTest {
             assertEquals(6, links.size());
             assertLink(links, "self", null, "systemLinks/ContinuedSearch");
             assertLink(links, "edit", null, "systemLinks/ContinuedSearch");
-            assertLink(links, "alternate", "application/xml", "systemLinks/ContinuedSearch?alt=application%2Fxml");
-            assertLink(links, "alternate", "application/json", "systemLinks/ContinuedSearch?alt=application%2Fjson");
-            assertLink(links, "alternate", "text/html", "systemLinks/ContinuedSearch?alt=text%2Fhtml");
-            assertLink(links, "alternate", "application/atom+xml",
-                    "systemLinks/ContinuedSearch?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "alternate",
+                       "application/xml",
+                       "systemLinks/ContinuedSearch?alt=application%2Fxml");
+            assertLink(links,
+                       "alternate",
+                       "application/json",
+                       "systemLinks/ContinuedSearch?alt=application%2Fjson");
+            assertLink(links,
+                       "alternate",
+                       "text/html",
+                       "systemLinks/ContinuedSearch?alt=text%2Fhtml");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "systemLinks/ContinuedSearch?alt=application%2Fatom%2Bxml");
 
             links = new ArrayList<SyndLink>();
             builder.allResources(false).build(links);
             assertEquals(2, links.size());
             assertLink(links, "self", null, "systemLinks/ContinuedSearch");
-            assertLink(links, "alternate", "application/atom+xml",
-                    "systemLinks/ContinuedSearch?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "systemLinks/ContinuedSearch?alt=application%2Fatom%2Bxml");
 
             links = new ArrayList<SyndLink>();
-            builder.resource(SystemLinksContinuedSearch3Resource.class).pathParam("v1", "Continued").pathParam("v2",
-                    "Search").allResources(true).build(links);
+            builder.resource(SystemLinksContinuedSearch3Resource.class)
+                .pathParam("v1", "Continued").pathParam("v2", "Search").allResources(true)
+                .build(links);
             assertEquals(6, links.size());
             assertLink(links, "self", null, "systemLinks/ContinuedSearch");
             assertLink(links, "edit", null, "systemLinks/ContinuedSearch");
-            assertLink(links, "alternate", "application/xml", "systemLinks/ContinuedSearch?alt=application%2Fxml");
-            assertLink(links, "alternate", "application/json", "systemLinks/ContinuedSearch?alt=application%2Fjson");
-            assertLink(links, "alternate", "text/html", "systemLinks/ContinuedSearch?alt=text%2Fhtml");
-            assertLink(links, "alternate", "application/atom+xml",
-                    "systemLinks/ContinuedSearch?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "alternate",
+                       "application/xml",
+                       "systemLinks/ContinuedSearch?alt=application%2Fxml");
+            assertLink(links,
+                       "alternate",
+                       "application/json",
+                       "systemLinks/ContinuedSearch?alt=application%2Fjson");
+            assertLink(links,
+                       "alternate",
+                       "text/html",
+                       "systemLinks/ContinuedSearch?alt=text%2Fhtml");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "systemLinks/ContinuedSearch?alt=application%2Fatom%2Bxml");
 
             links = new ArrayList<SyndLink>();
             builder.allResources(false).build(links);
             assertEquals(3, links.size());
             assertLink(links, "self", null, "systemLinks/ContinuedSearch");
             assertLink(links, "edit", null, "systemLinks/ContinuedSearch");
-            assertLink(links, "alternate", "text/html", "systemLinks/ContinuedSearch?alt=text%2Fhtml");
+            assertLink(links,
+                       "alternate",
+                       "text/html",
+                       "systemLinks/ContinuedSearch?alt=text%2Fhtml");
 
             return "";
         }
@@ -696,7 +840,7 @@ public class LinksBuilderTest extends MockServletInvocationTest {
     @Path("systemLinks/Continued{v}")
     public static class SystemLinksContinuedSearch2Resource {
         @GET
-        @Produces({"application/xml", "application/json"})
+        @Produces( {"application/xml", "application/json"})
         public void getXmlOrJson() {
         }
 
@@ -735,37 +879,65 @@ public class LinksBuilderTest extends MockServletInvocationTest {
             assertEquals(6, links.size());
             assertLink(links, "self", null, "systemLinks/ContinuedSearch/SubResources/1");
             assertLink(links, "edit", null, "systemLinks/ContinuedSearch/SubResources/1");
-            assertLink(links, "alternate", "application/xml", "systemLinks/ContinuedSearch/SubResources/1?alt=application%2Fxml");
-            assertLink(links, "alternate", "application/json", "systemLinks/ContinuedSearch/SubResources/1?alt=application%2Fjson");
-            assertLink(links, "alternate", "text/html", "systemLinks/ContinuedSearch/SubResources/1?alt=text%2Fhtml");
-            assertLink(links, "alternate", "application/atom+xml",
-                    "systemLinks/ContinuedSearch/SubResources/1?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "alternate",
+                       "application/xml",
+                       "systemLinks/ContinuedSearch/SubResources/1?alt=application%2Fxml");
+            assertLink(links,
+                       "alternate",
+                       "application/json",
+                       "systemLinks/ContinuedSearch/SubResources/1?alt=application%2Fjson");
+            assertLink(links,
+                       "alternate",
+                       "text/html",
+                       "systemLinks/ContinuedSearch/SubResources/1?alt=text%2Fhtml");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "systemLinks/ContinuedSearch/SubResources/1?alt=application%2Fatom%2Bxml");
 
             links = new ArrayList<SyndLink>();
             builder.allResources(false).build(links);
             assertEquals(2, links.size());
             assertLink(links, "self", null, "systemLinks/ContinuedSearch/SubResources/1");
-            assertLink(links, "alternate", "application/atom+xml",
-                    "systemLinks/ContinuedSearch/SubResources/1?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "systemLinks/ContinuedSearch/SubResources/1?alt=application%2Fatom%2Bxml");
 
             links = new ArrayList<SyndLink>();
-            builder.resource(SystemLinksContinuedSearchSubResources3Resource.class).subResource("{id}").pathParam("v1", "Continued").pathParam("v2",
-                    "Search").pathParam("id", "1").allResources(true).build(links);
+            builder.resource(SystemLinksContinuedSearchSubResources3Resource.class)
+                .subResource("{id}").pathParam("v1", "Continued").pathParam("v2", "Search")
+                .pathParam("id", "1").allResources(true).build(links);
             assertEquals(6, links.size());
             assertLink(links, "self", null, "systemLinks/ContinuedSearch/SubResources/1");
             assertLink(links, "edit", null, "systemLinks/ContinuedSearch/SubResources/1");
-            assertLink(links, "alternate", "application/xml", "systemLinks/ContinuedSearch/SubResources/1?alt=application%2Fxml");
-            assertLink(links, "alternate", "application/json", "systemLinks/ContinuedSearch/SubResources/1?alt=application%2Fjson");
-            assertLink(links, "alternate", "text/html", "systemLinks/ContinuedSearch/SubResources/1?alt=text%2Fhtml");
-            assertLink(links, "alternate", "application/atom+xml",
-                    "systemLinks/ContinuedSearch/SubResources/1?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       "alternate",
+                       "application/xml",
+                       "systemLinks/ContinuedSearch/SubResources/1?alt=application%2Fxml");
+            assertLink(links,
+                       "alternate",
+                       "application/json",
+                       "systemLinks/ContinuedSearch/SubResources/1?alt=application%2Fjson");
+            assertLink(links,
+                       "alternate",
+                       "text/html",
+                       "systemLinks/ContinuedSearch/SubResources/1?alt=text%2Fhtml");
+            assertLink(links,
+                       "alternate",
+                       "application/atom+xml",
+                       "systemLinks/ContinuedSearch/SubResources/1?alt=application%2Fatom%2Bxml");
 
             links = new ArrayList<SyndLink>();
             builder.allResources(false).build(links);
             assertEquals(3, links.size());
             assertLink(links, "self", null, "systemLinks/ContinuedSearch/SubResources/1");
             assertLink(links, "edit", null, "systemLinks/ContinuedSearch/SubResources/1");
-            assertLink(links, "alternate", "text/html", "systemLinks/ContinuedSearch/SubResources/1?alt=text%2Fhtml");
+            assertLink(links,
+                       "alternate",
+                       "text/html",
+                       "systemLinks/ContinuedSearch/SubResources/1?alt=text%2Fhtml");
 
             return "";
         }
@@ -775,7 +947,7 @@ public class LinksBuilderTest extends MockServletInvocationTest {
     public static class SystemLinksContinuedSearchSubResources2Resource {
         @Path("{id}")
         @GET
-        @Produces({"application/xml", "application/json"})
+        @Produces( {"application/xml", "application/json"})
         public void getXmlOrJson() {
         }
 
@@ -804,143 +976,187 @@ public class LinksBuilderTest extends MockServletInvocationTest {
     // -- system links tests
 
     public void testSystemLinks() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "/systemLinks",
-                MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/systemLinks",
+                                                        MediaType.APPLICATION_ATOM_XML);
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSystemLinksSelective() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "/systemLinksSelective",
-                MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/systemLinksSelective",
+                                                        MediaType.APPLICATION_ATOM_XML);
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSystemLinksAltParam() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "/systemLinksAltParam",
-                MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/systemLinksAltParam",
+                                                        MediaType.APPLICATION_ATOM_XML);
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSystemLinksWithPut() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "/systemLinksWithPut",
-                MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/systemLinksWithPut",
+                                                        MediaType.APPLICATION_ATOM_XML);
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSystemLinksRelativeToAnotherUri() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-                "/systemLinksRelativeToAnotherUri", MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/systemLinksRelativeToAnotherUri",
+                                                        MediaType.APPLICATION_ATOM_XML);
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSystemLinksWithRelativeRequest() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-                "/systemLinksWithRelativeRequest", MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/systemLinksWithRelativeRequest",
+                                                        MediaType.APPLICATION_ATOM_XML);
         request.setQueryString("relative-urls=true");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSystemLinksWithAbsoluteRequest() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-                "/systemLinksWithAbsoluteRequest", MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/systemLinksWithAbsoluteRequest",
+                                                        MediaType.APPLICATION_ATOM_XML);
         request.setQueryString("relative-urls=false");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSystemLinksWithRelativeOverride() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-                "/systemLinksWithRelativeOverride", MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/systemLinksWithRelativeOverride",
+                                                        MediaType.APPLICATION_ATOM_XML);
         request.setQueryString("relative-urls=false");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSystemLinksWithAbsoluteOverride() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-                "/systemLinksWithAbsoluteOverride", MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/systemLinksWithAbsoluteOverride",
+                                                        MediaType.APPLICATION_ATOM_XML);
         request.setQueryString("relative-urls=true");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSystemLinksOfAnotherClass() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-                "/systemLinksOfAnotherClass", MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/systemLinksOfAnotherClass",
+                                                        MediaType.APPLICATION_ATOM_XML);
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSystemLinksOfAnotherObject() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-                "/systemLinksOfAnotherObject", MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/systemLinksOfAnotherObject",
+                                                        MediaType.APPLICATION_ATOM_XML);
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSystemLinksOfSubResource() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-                "/systemLinksOfSubResource/a/1", MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/systemLinksOfSubResource/a/1",
+                                                        MediaType.APPLICATION_ATOM_XML);
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSystemLinksOfSubResourceFromResource() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-                "/systemLinksOfSubResourceFromResource/a", MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/systemLinksOfSubResourceFromResource/a",
+                                                        MediaType.APPLICATION_ATOM_XML);
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSystemLinksOfAnotherSubResource() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-                "/systemLinksOfAnotherSubResource/a/koko", MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/systemLinksOfAnotherSubResource/a/koko",
+                                                        MediaType.APPLICATION_ATOM_XML);
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSystemLinksOfAnotherResourceWithSubResource() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-                "/systemLinksOfAnotherResourceWithSubResource/a/koko", MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor
+                .constructMockRequest("GET",
+                                      "/systemLinksOfAnotherResourceWithSubResource/a/koko",
+                                      MediaType.APPLICATION_ATOM_XML);
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSystemLinksThroughSubResourceLocator() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-                "/systemLinksThroughSubResourceLocator/sub1", MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor
+                .constructMockRequest("GET",
+                                      "/systemLinksThroughSubResourceLocator/sub1",
+                                      MediaType.APPLICATION_ATOM_XML);
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/systemLinksThroughSubResourceLocator/sub1/sub2",
-                MediaType.APPLICATION_ATOM_XML);
+        request =
+            MockRequestConstructor
+                .constructMockRequest("GET",
+                                      "/systemLinksThroughSubResourceLocator/sub1/sub2",
+                                      MediaType.APPLICATION_ATOM_XML);
         response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSystemLinksWithQueryParams() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-                "/systemLinksWithQueryParams", MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/systemLinksWithQueryParams",
+                                                        MediaType.APPLICATION_ATOM_XML);
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSystemLinksWithContinuedSearch() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-                "/systemLinks/ContinuedSearch", MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/systemLinks/ContinuedSearch",
+                                                        MediaType.APPLICATION_ATOM_XML);
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSystemLinksWithContinuedSearchSubResources() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-                "/systemLinks/ContinuedSearch/SubResources/1", MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor
+                .constructMockRequest("GET",
+                                      "/systemLinks/ContinuedSearch/SubResources/1",
+                                      MediaType.APPLICATION_ATOM_XML);
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
@@ -986,20 +1202,29 @@ public class LinksBuilderTest extends MockServletInvocationTest {
 
             singleLinkBuilder.type(MediaType.APPLICATION_ATOM_XML_TYPE).build(links);
             assertEquals(1, links.size());
-            assertLink(links, null, MediaType.APPLICATION_ATOM_XML, "singleLinkAltParam?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       null,
+                       MediaType.APPLICATION_ATOM_XML,
+                       "singleLinkAltParam?alt=application%2Fatom%2Bxml");
 
             links.clear();
-            singleLinkBuilder.type(MediaType.APPLICATION_ATOM_XML_TYPE).addAltParam(false).build(links);
+            singleLinkBuilder.type(MediaType.APPLICATION_ATOM_XML_TYPE).addAltParam(false)
+                .build(links);
             assertEquals(1, links.size());
             assertLink(links, null, MediaType.APPLICATION_ATOM_XML, "singleLinkAltParam");
 
             links.clear();
-            singleLinkBuilder.type(MediaType.APPLICATION_ATOM_XML_TYPE).addAltParam(true).build(links);
+            singleLinkBuilder.type(MediaType.APPLICATION_ATOM_XML_TYPE).addAltParam(true)
+                .build(links);
             assertEquals(1, links.size());
-            assertLink(links, null, MediaType.APPLICATION_ATOM_XML, "singleLinkAltParam?alt=application%2Fatom%2Bxml");
+            assertLink(links,
+                       null,
+                       MediaType.APPLICATION_ATOM_XML,
+                       "singleLinkAltParam?alt=application%2Fatom%2Bxml");
 
             links.clear();
-            singleLinkBuilder.type(MediaType.APPLICATION_ATOM_XML_TYPE).queryParam("alt", "foo").build(links);
+            singleLinkBuilder.type(MediaType.APPLICATION_ATOM_XML_TYPE).queryParam("alt", "foo")
+                .build(links);
             assertEquals(1, links.size());
             assertLink(links, null, MediaType.APPLICATION_ATOM_XML, "singleLinkAltParam?alt=foo");
 
@@ -1034,15 +1259,22 @@ public class LinksBuilderTest extends MockServletInvocationTest {
             links.clear();
             builder.rel(null).type(MediaType.APPLICATION_JSON_TYPE).build(links);
             assertEquals(1, links.size());
-            assertLink(links, null, "application/json", "singleLinkWithRelAndType?alt=application%2Fjson");
+            assertLink(links,
+                       null,
+                       "application/json",
+                       "singleLinkWithRelAndType?alt=application%2Fjson");
 
             links.clear();
             builder.rel("stam").type(MediaType.APPLICATION_JSON_TYPE).build(links);
             assertEquals(1, links.size());
-            assertLink(links, "stam", "application/json", "singleLinkWithRelAndType?alt=application%2Fjson");
+            assertLink(links,
+                       "stam",
+                       "application/json",
+                       "singleLinkWithRelAndType?alt=application%2Fjson");
 
             links.clear();
-            builder.resource(SingleLinkResource.class).rel("stam").type(MediaType.APPLICATION_JSON_TYPE).build(links);
+            builder.resource(SingleLinkResource.class).rel("stam")
+                .type(MediaType.APPLICATION_JSON_TYPE).build(links);
             assertEquals(1, links.size());
             assertLink(links, "stam", "application/json", "singleLink?alt=application%2Fjson");
 
@@ -1056,18 +1288,20 @@ public class LinksBuilderTest extends MockServletInvocationTest {
         @Produces("application/atom+xml")
         public String getAtom(@Context LinkBuilders builders) {
             List<SyndLink> links = new ArrayList<SyndLink>();
-            builders.createSingleLinkBuilder().queryParam("a", "1").queryParam("b", "2").build(links);
+            builders.createSingleLinkBuilder().queryParam("a", "1").queryParam("b", "2")
+                .build(links);
             assertEquals(1, links.size());
             assertLink(links, null, null, "singleLinkWithQuery?a=1&b=2");
 
             links.clear();
-            builders.createSingleLinkBuilder().queryParam("a", "1").queryParam("alt", "stam/stam").build(links);
+            builders.createSingleLinkBuilder().queryParam("a", "1").queryParam("alt", "stam/stam")
+                .build(links);
             assertEquals(1, links.size());
             assertLink(links, null, null, "singleLinkWithQuery?a=1&alt=stam/stam");
 
             links.clear();
-            builders.createSingleLinkBuilder().type(MediaType.APPLICATION_JSON_TYPE).queryParam("a", "1").queryParam(
-                    "alt", "stam/stam").build(links);
+            builders.createSingleLinkBuilder().type(MediaType.APPLICATION_JSON_TYPE)
+                .queryParam("a", "1").queryParam("alt", "stam/stam").build(links);
             assertEquals(1, links.size());
             assertLink(links, null, "application/json", "singleLinkWithQuery?a=1&alt=stam/stam");
 
@@ -1082,8 +1316,8 @@ public class LinksBuilderTest extends MockServletInvocationTest {
         public String getAtom(@Context LinkBuilders builders) {
             List<SyndLink> links = new ArrayList<SyndLink>();
 
-            SingleLinkBuilder builder = builders.createSingleLinkBuilder().resource(
-                    SingleLinkWithPathParamResource.class);
+            SingleLinkBuilder builder =
+                builders.createSingleLinkBuilder().resource(SingleLinkWithPathParamResource.class);
             builder.pathParam("id", "1").build(links);
             assertEquals(1, links.size());
             assertLink(links, null, null, "1");
@@ -1109,7 +1343,8 @@ public class LinksBuilderTest extends MockServletInvocationTest {
             assertLink(links, "self", null, "singleLinkSelfAndEdit");
 
             // change the self link without clearing the exiting links
-            builders.createSingleLinkBuilder().resource(SingleLinkResource.class).rel("self").build(links);
+            builders.createSingleLinkBuilder().resource(SingleLinkResource.class).rel("self")
+                .build(links);
             assertEquals(1, links.size());
             assertLink(links, "self", null, "singleLink");
 
@@ -1119,7 +1354,8 @@ public class LinksBuilderTest extends MockServletInvocationTest {
             assertLink(links, "edit", null, "singleLinkSelfAndEdit");
 
             // change the edit link without clearing the exiting links
-            builders.createSingleLinkBuilder().resource(SingleLinkResource.class).rel("edit").build(links);
+            builders.createSingleLinkBuilder().resource(SingleLinkResource.class).rel("edit")
+                .build(links);
             assertEquals(1, links.size());
             assertLink(links, "edit", null, "singleLink");
 
@@ -1130,57 +1366,73 @@ public class LinksBuilderTest extends MockServletInvocationTest {
     // -- single link tests
 
     public void testSingleLink() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "/singleLink",
-                MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/singleLink",
+                                                        MediaType.APPLICATION_ATOM_XML);
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSingleLinkAltParam() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "/singleLinkAltParam",
-                MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/singleLinkAltParam",
+                                                        MediaType.APPLICATION_ATOM_XML);
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSingleLinkToAnotherClass() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-                "/singleLinkToAnotherClass", MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/singleLinkToAnotherClass",
+                                                        MediaType.APPLICATION_ATOM_XML);
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSingleLinkToAnotherObject() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-                "/singleLinkToAnotherObject", MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/singleLinkToAnotherObject",
+                                                        MediaType.APPLICATION_ATOM_XML);
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSingleLinkWithRelAndType() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-                "/singleLinkWithRelAndType", MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/singleLinkWithRelAndType",
+                                                        MediaType.APPLICATION_ATOM_XML);
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSingleLinkWithQuery() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "/singleLinkWithQuery",
-                MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/singleLinkWithQuery",
+                                                        MediaType.APPLICATION_ATOM_XML);
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSingleLinkWithPathParam() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-                "/singleLinkWithPathParam/1", MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/singleLinkWithPathParam/1",
+                                                        MediaType.APPLICATION_ATOM_XML);
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }
 
     public void testSingleLinkSelfAndEdit() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "/singleLinkSelfAndEdit",
-                MediaType.APPLICATION_ATOM_XML);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/singleLinkSelfAndEdit",
+                                                        MediaType.APPLICATION_ATOM_XML);
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
     }

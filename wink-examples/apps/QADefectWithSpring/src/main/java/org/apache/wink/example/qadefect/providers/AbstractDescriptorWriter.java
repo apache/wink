@@ -36,21 +36,36 @@ public abstract class AbstractDescriptorWriter<T, DESCRIPTOR> implements Message
     @Context
     private Providers providers;
 
-    public long getSize(T t, Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType) {
+    public long getSize(T t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
         return -1;
     }
 
     @SuppressWarnings("unchecked")
-    public void writeTo(T bean, Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
-        throws IOException, WebApplicationException {
+    public void writeTo(T bean,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
 
         DESCRIPTOR descriptor = getDescriptor(bean);
-        MessageBodyWriter<DESCRIPTOR> syndEntryWriter = (MessageBodyWriter<DESCRIPTOR>) providers.getMessageBodyWriter(
-            descriptor.getClass(), descriptor.getClass(), annotations, mediaType);
-        syndEntryWriter.writeTo(descriptor, descriptor.getClass(), descriptor.getClass(),
-            annotations, mediaType, httpHeaders, entityStream);
+        MessageBodyWriter<DESCRIPTOR> syndEntryWriter =
+            (MessageBodyWriter<DESCRIPTOR>)providers.getMessageBodyWriter(descriptor.getClass(),
+                                                                          descriptor.getClass(),
+                                                                          annotations,
+                                                                          mediaType);
+        syndEntryWriter.writeTo(descriptor,
+                                descriptor.getClass(),
+                                descriptor.getClass(),
+                                annotations,
+                                mediaType,
+                                httpHeaders,
+                                entityStream);
     }
 
     public abstract DESCRIPTOR getDescriptor(T instance);

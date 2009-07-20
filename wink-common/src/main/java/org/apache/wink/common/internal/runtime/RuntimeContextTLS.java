@@ -17,12 +17,10 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.runtime;
 
-
-public abstract class RuntimeContextTLS  {
+public abstract class RuntimeContextTLS {
 
     private static ThreadLocal<RuntimeContext> threadLocal = new ThreadLocal<RuntimeContext>();
 

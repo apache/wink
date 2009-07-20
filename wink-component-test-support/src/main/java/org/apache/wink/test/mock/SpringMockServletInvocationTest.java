@@ -39,8 +39,10 @@ public abstract class SpringMockServletInvocationTest extends SpringAwareTestCas
 
     protected void setUp() throws Exception {
         super.setUp();
-        
-        servlet = (HttpServlet) Class.forName("org.apache.wink.server.internal.servlet.RestServlet").newInstance();
+
+        servlet =
+            (HttpServlet)Class.forName("org.apache.wink.server.internal.servlet.RestServlet")
+                .newInstance();
         MockServletConfig servletConfig = new MockServletConfig(servletContext);
         servlet.init(servletConfig);
     }
@@ -48,11 +50,9 @@ public abstract class SpringMockServletInvocationTest extends SpringAwareTestCas
     /**
      * Passes the test to the servlet instance simulating AS behaviour.
      * 
-     * @param request
-     *            the filled request
+     * @param request the filled request
      * @return a new response as filled by the servlet
-     * @throws IOException
-     *             io error
+     * @throws IOException io error
      */
     public MockHttpServletResponse invoke(MockHttpServletRequest request) throws ServletException,
         IOException {

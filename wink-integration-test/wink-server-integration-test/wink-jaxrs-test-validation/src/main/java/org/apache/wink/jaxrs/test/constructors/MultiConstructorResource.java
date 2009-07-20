@@ -32,7 +32,7 @@ public class MultiConstructorResource {
     /*
      * determines the number of times the constructors have been called in total
      */
-    private static int constructorCallCount = 0;
+    private static int   constructorCallCount = 0;
 
     final private String whichConstructor;
 
@@ -51,7 +51,9 @@ public class MultiConstructorResource {
         whichConstructor = "matrixAndQuery" + constructorCallCount;
     }
 
-    public MultiConstructorResource(@MatrixParam("m") String matrix, @QueryParam("q") String query, @Context UriInfo uriinfo) {
+    public MultiConstructorResource(@MatrixParam("m") String matrix,
+                                    @QueryParam("q") String query,
+                                    @Context UriInfo uriinfo) {
         ++constructorCallCount;
         /*
          * this should be the called constructor

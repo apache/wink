@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.qadefect.resources;
 
 import java.util.Date;
@@ -38,8 +38,6 @@ import org.apache.wink.common.utils.ProviderUtils;
 import org.apache.wink.example.qadefect.legacy.TestBean;
 import org.apache.wink.server.utils.LinkBuilders;
 
-
-
 /**
  * Test resource
  */
@@ -47,7 +45,7 @@ import org.apache.wink.server.utils.LinkBuilders;
 public class TestAsset {
 
     private TestBean test;
-    private boolean child;
+    private boolean  child;
 
     /**
      * Constructor. Metadata and data objects are empty.
@@ -63,8 +61,7 @@ public class TestAsset {
     /**
      * Constructor. Creates resource data and metadata from test bean.
      * 
-     * @param bean
-     *            defect bean
+     * @param bean defect bean
      */
     public TestAsset(TestBean test, boolean child) {
         this.test = test;
@@ -81,9 +78,10 @@ public class TestAsset {
         this.test = test;
     }
 
-    @Produces({MediaType.WILDCARD, MediaType.APPLICATION_JSON})
-    public SyndEntry getSyndEntry(@Context Providers providers, @Context UriInfo uriInfo,
-            @Context LinkBuilders linkProcessor) {
+    @Produces( {MediaType.WILDCARD, MediaType.APPLICATION_JSON})
+    public SyndEntry getSyndEntry(@Context Providers providers,
+                                  @Context UriInfo uriInfo,
+                                  @Context LinkBuilders linkProcessor) {
         SyndEntry entry = new SyndEntry();
         entry.setId("urn:com:hp:qadefects:test:" + test.getId());
         entry.setTitle(new SyndText(test.getName()));
@@ -94,15 +92,16 @@ public class TestAsset {
         }
 
         // serialize the defect xml
-        String contentString = ProviderUtils.writeToString(providers, test, MediaType.APPLICATION_XML_TYPE);
+        String contentString =
+            ProviderUtils.writeToString(providers, test, MediaType.APPLICATION_XML_TYPE);
         entry.setContent(new SyndContent(contentString, MediaType.APPLICATION_XML, false));
 
         if (!child) {
             entry.setBase(uriInfo.getAbsolutePath().toString());
         }
 
-        linkProcessor.createSystemLinksBuilder().resource(TestsResource.class).subResource(test.getId()).build(
-                entry.getLinks());
+        linkProcessor.createSystemLinksBuilder().resource(TestsResource.class).subResource(test
+            .getId()).build(entry.getLinks());
         return entry;
     }
 
@@ -119,7 +118,11 @@ public class TestAsset {
             return;
         }
         // deserialize the defect xml
-        test = ProviderUtils.readFromString(providers, value, TestBean.class, MediaType.APPLICATION_XML_TYPE);
+        test =
+            ProviderUtils.readFromString(providers,
+                                         value,
+                                         TestBean.class,
+                                         MediaType.APPLICATION_XML_TYPE);
     }
 
 }

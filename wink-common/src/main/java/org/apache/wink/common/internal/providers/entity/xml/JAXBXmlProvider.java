@@ -45,21 +45,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.utils.ProviderUtils;
 
-
-
 @Provider
-@Consumes({MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.WILDCARD})
-@Produces({MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.WILDCARD})
-public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBodyReader<Object>, MessageBodyWriter<Object> {
+@Consumes( {MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.WILDCARD})
+@Produces( {MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.WILDCARD})
+public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBodyReader<Object>,
+    MessageBodyWriter<Object> {
 
     private static final Logger logger = LoggerFactory.getLogger(JAXBXmlProvider.class);
 
-    public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public boolean isReadable(Class<?> type,
+                              Type genericType,
+                              Annotation[] annotations,
+                              MediaType mediaType) {
         return isJAXBObject(type, genericType) && isSupportedMediaType(mediaType);
     }
 
-    public Object readFrom(Class<Object> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream)
-            throws IOException, WebApplicationException {
+    public Object readFrom(Class<Object> type,
+                           Type genericType,
+                           Annotation[] annotations,
+                           MediaType mediaType,
+                           MultivaluedMap<String, String> httpHeaders,
+                           InputStream entityStream) throws IOException, WebApplicationException {
 
         Unmarshaller unmarshaller = null;
         Object unmarshaledResource = null;
@@ -68,7 +74,8 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
             if (type.isAnnotationPresent(XmlRootElement.class))
                 unmarshaledResource = unmarshaller.unmarshal(entityStream);
             else
-                unmarshaledResource = unmarshaller.unmarshal(new StreamSource(entityStream), type).getValue();
+                unmarshaledResource =
+                    unmarshaller.unmarshal(new StreamSource(entityStream), type).getValue();
 
         } catch (JAXBException e) {
             logger.error("Failed to unmarshal {}", type.getName());
@@ -77,19 +84,32 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
         return unmarshaledResource;
     }
 
-    public long getSize(Object t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public long getSize(Object t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
         return -1;
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
         return isJAXBObject(type, genericType) && isSupportedMediaType(mediaType);
     }
 
-    public void writeTo(Object t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
-            OutputStream entityStream) throws IOException, WebApplicationException {
+    public void writeTo(Object t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
         try {
             Marshaller marshaller = getMarshaller(type, mediaType);
-            OutputStreamWriter writer = new OutputStreamWriter(entityStream, ProviderUtils.getCharset(mediaType));
+            OutputStreamWriter writer =
+                new OutputStreamWriter(entityStream, ProviderUtils.getCharset(mediaType));
             Object entityToMarshal = getEntityToMarshal(t, type);
             marshaller.marshal(entityToMarshal, writer);
             writer.flush();

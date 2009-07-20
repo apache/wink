@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common.internal.registry.metadata;
 
 import java.beans.BeanInfo;
@@ -29,7 +29,6 @@ import java.util.List;
 import javax.ws.rs.WebApplicationException;
 
 import org.apache.wink.common.internal.registry.Injectable;
-
 
 /**
  * Represents metadata of one Resource class.
@@ -43,14 +42,15 @@ public class ClassMetadata extends AbstractMetadata {
     private List<Object>         parentInstances;
     private ConstructorMetadata  constructor;
 
-    // a list of methods that handle requests directly 
+    // a list of methods that handle requests directly
     private List<MethodMetadata> resourceMethods;
     // a list of methods that are sub-resource locators
     private List<MethodMetadata> subResourceLocators;
     // a list of methods that are sub-resource methods
     private List<MethodMetadata> subResourceMethods;
-    // a map of fields that are to be injected with injectable data during a request
-    private List<Injectable> injectableFields;
+    // a map of fields that are to be injected with injectable data during a
+    // request
+    private List<Injectable>     injectableFields;
     // bean info of this class
     private final BeanInfo       beanInfo;
 

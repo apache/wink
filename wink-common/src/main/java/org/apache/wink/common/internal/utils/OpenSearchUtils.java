@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.utils;
 
@@ -27,7 +26,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.wink.common.model.opensearch.OpenSearchImage;
 
-
 public class OpenSearchUtils {
 
     private static final BigInteger ICON_SIZE = BigInteger.valueOf(16);
@@ -36,10 +34,8 @@ public class OpenSearchUtils {
     /**
      * Constructor
      * 
-     * @param mediaTypeString
-     *            MimeType
-     * @param url
-     *            Image URL
+     * @param mediaTypeString MimeType
+     * @param url Image URL
      */
     public static OpenSearchImage createOpenSearchImage(String mediaTypeString, String url) {
         if (mediaTypeString == null) {
@@ -47,14 +43,14 @@ public class OpenSearchUtils {
         }
         OpenSearchImage image = new OpenSearchImage();
         MediaType mediaType = MediaType.valueOf(mediaTypeString);
-        if (MediaTypeUtils.equalsIgnoreParameters(MediaTypeUtils.IMAGE_X_ICON, mediaType)
-            || MediaTypeUtils.equalsIgnoreParameters(MediaTypeUtils.IMAGE_VND, mediaType)) {
+        if (MediaTypeUtils.equalsIgnoreParameters(MediaTypeUtils.IMAGE_X_ICON, mediaType) || MediaTypeUtils
+            .equalsIgnoreParameters(MediaTypeUtils.IMAGE_VND, mediaType)) {
             image.setHeight(ICON_SIZE);
             image.setWidth(ICON_SIZE);
             image.setType(mediaTypeString);
             image.setValue(url);
-        } else if (MediaTypeUtils.equalsIgnoreParameters(MediaTypeUtils.IMAGE_PNG, mediaType)
-            || MediaTypeUtils.equalsIgnoreParameters(MediaTypeUtils.IMAGE_JPEG_TYPE, mediaType)) {
+        } else if (MediaTypeUtils.equalsIgnoreParameters(MediaTypeUtils.IMAGE_PNG, mediaType) || MediaTypeUtils
+            .equalsIgnoreParameters(MediaTypeUtils.IMAGE_JPEG_TYPE, mediaType)) {
             image.setHeight(IMG_SIZE);
             image.setWidth(IMG_SIZE);
             image.setType(mediaTypeString);
@@ -67,6 +63,5 @@ public class OpenSearchUtils {
         }
         return image;
     }
-
 
 }

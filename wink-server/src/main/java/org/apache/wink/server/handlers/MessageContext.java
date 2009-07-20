@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.handlers;
 
@@ -28,9 +27,9 @@ import javax.ws.rs.core.MediaType;
 import org.apache.wink.common.internal.runtime.RuntimeContext;
 import org.apache.wink.server.utils.LinkBuilders;
 
-
 /**
- * The MessageContext is used by Handlers to obtain and manipulate request specific information.
+ * The MessageContext is used by Handlers to obtain and manipulate request
+ * specific information.
  * 
  * @See {@link RequestHandler}, {@link ResponseHandler}
  */
@@ -46,8 +45,7 @@ public interface MessageContext extends RuntimeContext {
     /**
      * Set the response status code
      * 
-     * @param responseStatusCode
-     *            response status code
+     * @param responseStatusCode response status code
      */
     public void setResponseStatusCode(int responseStatusCode);
 
@@ -65,11 +63,11 @@ public interface MessageContext extends RuntimeContext {
      * <ul>
      * <li>the return value from the invoked resource method (including a
      * {@link javax.ws.rs.core.Response})</li>
-     * <li>the thrown exception in case of the error handler chain being invoked</li>
+     * <li>the thrown exception in case of the error handler chain being invoked
+     * </li>
      * </ul>
      * 
-     * @param entity
-     *            the response entity
+     * @param entity the response entity
      */
     public void setResponseEntity(Object entity);
 
@@ -83,8 +81,7 @@ public interface MessageContext extends RuntimeContext {
     /**
      * Set the response media type
      * 
-     * @param responseMediaType
-     *            response media type to set
+     * @param responseMediaType response media type to set
      */
     public void setResponseMediaType(MediaType responseMediaType);
 
@@ -98,24 +95,24 @@ public interface MessageContext extends RuntimeContext {
     /**
      * Set the http method of the request.
      * <p>
-     * Enables overriding of the actual http method that was used for the request
+     * Enables overriding of the actual http method that was used for the
+     * request
      * 
-     * @param method
-     *            the request http method to set
+     * @param method the request http method to set
      */
     public void setHttpMethod(String method);
 
     /**
      * Get the http method of the request.
      * <p>
-     * Note that this may be different than the real http method on the HttpServletRequest if one of
-     * <code>X-Method-Override</code> or <code>X-Http-Method-Override</code> request headers was
-     * used to override the actual http method.
+     * Note that this may be different than the real http method on the
+     * HttpServletRequest if one of <code>X-Method-Override</code> or
+     * <code>X-Http-Method-Override</code> request headers was used to override
+     * the actual http method.
      * 
      * @return the request http method
      */
     public String getHttpMethod();
-
 
     /**
      * Get the {@link LinkBuilders} context

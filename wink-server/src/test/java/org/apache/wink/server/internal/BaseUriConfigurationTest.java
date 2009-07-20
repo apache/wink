@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal;
 
 import javax.ws.rs.GET;
@@ -33,7 +33,6 @@ import org.apache.wink.test.mock.TestUtils;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 /**
  * Test the functionality of configured base uri.
  */
@@ -41,7 +40,7 @@ public class BaseUriConfigurationTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] { GetBaseUriResource.class };
+        return new Class[] {GetBaseUriResource.class};
     }
 
     @Path("/bas%20eUri")
@@ -61,10 +60,11 @@ public class BaseUriConfigurationTest extends MockServletInvocationTest {
         String fileName = TestUtils.packageToPath(name) + ".properties";
         return fileName;
     }
-    
+
     public void testDetection() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-            "/con%20textPath/servle%20tPath/bas%20eUri", "*/*");
+        MockHttpServletRequest request =
+            MockRequestConstructor
+                .constructMockRequest("GET", "/con%20textPath/servle%20tPath/bas%20eUri", "*/*");
         request.setSecure(false);
         request.setScheme("http");
         request.setServerName("my%20Server");
@@ -74,10 +74,14 @@ public class BaseUriConfigurationTest extends MockServletInvocationTest {
         MockHttpServletResponse response = invoke(request);
         String content = response.getContentAsString();
         assertEquals("base URI in content",
-            "http://my%20host:123/my%20service/con%20textPath/servle%20tPath/", content);
+                     "http://my%20host:123/my%20service/con%20textPath/servle%20tPath/",
+                     content);
 
-        MockHttpServletRequest secureRequest = MockRequestConstructor.constructMockRequest("GET",
-            "/secureCont%20extPath/secu%20reServletPath/bas%20eUri", "*/*");
+        MockHttpServletRequest secureRequest =
+            MockRequestConstructor
+                .constructMockRequest("GET",
+                                      "/secureCont%20extPath/secu%20reServletPath/bas%20eUri",
+                                      "*/*");
         secureRequest.setSecure(true);
         secureRequest.setScheme("https");
         secureRequest.setServerName("secureServer");
@@ -87,8 +91,8 @@ public class BaseUriConfigurationTest extends MockServletInvocationTest {
         MockHttpServletResponse secureResponse = invoke(secureRequest);
         String secureContent = secureResponse.getContentAsString();
         assertEquals("base URI in content",
-            "https://myho%20st:456/myser%20vice/secureCont%20extPath/secu%20reServletPath/",
-            secureContent);
+                     "https://myho%20st:456/myser%20vice/secureCont%20extPath/secu%20reServletPath/",
+                     secureContent);
     }
 
 }

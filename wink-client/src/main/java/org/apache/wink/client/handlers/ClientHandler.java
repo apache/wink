@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.client.handlers;
 
@@ -30,18 +29,18 @@ import org.apache.wink.client.ClientResponse;
 public interface ClientHandler {
 
     /**
-     * This method is invoked for every request invocation to allow the handler to perform custom
-     * actions during the invocation. This method may be called more that once for a single request,
-     * so handlers are must be prepared to handle such situations.
+     * This method is invoked for every request invocation to allow the handler
+     * to perform custom actions during the invocation. This method may be
+     * called more that once for a single request, so handlers are must be
+     * prepared to handle such situations.
      * 
-     * @param request
-     *            a modifiable {@link ClientRequest} containing the request details
-     * @param context
-     *            the handler context
+     * @param request a modifiable {@link ClientRequest} containing the request
+     *            details
+     * @param context the handler context
      * @return a {@link ClientResponse} instance containing the response details
-     * @throws Exception
-     *             any exception can be thrown by a handler and it will be caught by the underlying
-     *             client implementation and wrapped in a {@link ClientRuntimeException}
+     * @throws Exception any exception can be thrown by a handler and it will be
+     *             caught by the underlying client implementation and wrapped in
+     *             a {@link ClientRuntimeException}
      */
     ClientResponse handle(ClientRequest request, HandlerContext context) throws Exception;
 }

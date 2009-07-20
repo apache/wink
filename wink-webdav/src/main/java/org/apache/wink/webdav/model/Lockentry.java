@@ -33,7 +33,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>lockentry</code> XML element per the WebDAV specification [RFC 4918]
+ * The <code>lockentry</code> XML element per the WebDAV specification [RFC
+ * 4918]
  * 
  * <pre>
  *    Name:       lockentry
@@ -53,13 +54,12 @@ public class Lockentry {
     @XmlElement(required = true)
     protected Lockscope lockscope;
     @XmlElement(required = true)
-    protected Locktype locktype;
+    protected Locktype  locktype;
 
     /**
      * Gets the value of the lockscope property.
      * 
      * @return possible object is {@link Lockscope }
-     * 
      */
     public Lockscope getLockscope() {
         return lockscope;
@@ -68,9 +68,7 @@ public class Lockentry {
     /**
      * Sets the value of the lockscope property.
      * 
-     * @param value
-     *            allowed object is {@link Lockscope }
-     * 
+     * @param value allowed object is {@link Lockscope }
      */
     public void setLockscope(Lockscope value) {
         this.lockscope = value;
@@ -80,7 +78,6 @@ public class Lockentry {
      * Gets the value of the locktype property.
      * 
      * @return possible object is {@link Locktype }
-     * 
      */
     public Locktype getLocktype() {
         return locktype;
@@ -89,9 +86,7 @@ public class Lockentry {
     /**
      * Sets the value of the locktype property.
      * 
-     * @param value
-     *            allowed object is {@link Locktype }
-     * 
+     * @param value allowed object is {@link Locktype }
      */
     public void setLocktype(Locktype value) {
         this.locktype = value;

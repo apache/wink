@@ -17,13 +17,12 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.utils;
+
 import static org.junit.Assert.assertArrayEquals;
 
 import org.apache.wink.common.internal.utils.StringUtils;
-
 
 import junit.framework.TestCase;
 
@@ -31,132 +30,132 @@ public class StringUtilsTest extends TestCase {
 
     public void testFastSplit() {
         String[] result = StringUtils.fastSplit("", ",");
-        assertArrayEquals(new String[]{""}, result);
-        
+        assertArrayEquals(new String[] {""}, result);
+
         result = StringUtils.fastSplit(",", ",");
-        assertArrayEquals(new String[]{"", ""}, result);
-        
+        assertArrayEquals(new String[] {"", ""}, result);
+
         result = StringUtils.fastSplit(",", ",", false);
-        assertArrayEquals(new String[]{""}, result);
+        assertArrayEquals(new String[] {""}, result);
 
         result = StringUtils.fastSplit(null, ",");
-        assertArrayEquals(new String[]{}, result);
-        
+        assertArrayEquals(new String[] {}, result);
+
         result = StringUtils.fastSplit("a", ",");
-        assertArrayEquals(new String[]{"a"}, result);
-        
+        assertArrayEquals(new String[] {"a"}, result);
+
         result = StringUtils.fastSplit("a,b", ",");
-        assertArrayEquals(new String[]{"a", "b"}, result);
-        
+        assertArrayEquals(new String[] {"a", "b"}, result);
+
         result = StringUtils.fastSplit("a,b,c", ",");
-        assertArrayEquals(new String[]{"a", "b", "c"}, result);
-        
+        assertArrayEquals(new String[] {"a", "b", "c"}, result);
+
         result = StringUtils.fastSplit("a,b,c", ",");
-        assertArrayEquals(new String[]{"a", "b", "c"}, result);
-        
+        assertArrayEquals(new String[] {"a", "b", "c"}, result);
+
         result = StringUtils.fastSplit("a,b,", ",");
-        assertArrayEquals(new String[]{"a", "b", ""}, result);
-        
+        assertArrayEquals(new String[] {"a", "b", ""}, result);
+
         result = StringUtils.fastSplit("a,b,", ",", true);
-        assertArrayEquals(new String[]{"a", "b", ""}, result);
+        assertArrayEquals(new String[] {"a", "b", ""}, result);
 
         result = StringUtils.fastSplit("a,b,", ",", false);
-        assertArrayEquals(new String[]{"a", "b"}, result);
+        assertArrayEquals(new String[] {"a", "b"}, result);
 
         result = StringUtils.fastSplit(",a,b", ",");
-        assertArrayEquals(new String[]{"", "a", "b"}, result);
-        
+        assertArrayEquals(new String[] {"", "a", "b"}, result);
+
         result = StringUtils.fastSplit(",a,b,", ",");
-        assertArrayEquals(new String[]{"", "a", "b", ""}, result);
+        assertArrayEquals(new String[] {"", "a", "b", ""}, result);
     }
-    
+
     public void testFastSplitTemplate() {
         String[] result = StringUtils.fastSplitTemplate("", ",");
-        assertArrayEquals(new String[]{""}, result);
-        
+        assertArrayEquals(new String[] {""}, result);
+
         result = StringUtils.fastSplitTemplate(",", ",");
-        assertArrayEquals(new String[]{"", ""}, result);
-        
+        assertArrayEquals(new String[] {"", ""}, result);
+
         result = StringUtils.fastSplitTemplate(",", ",", false);
-        assertArrayEquals(new String[]{""}, result);
+        assertArrayEquals(new String[] {""}, result);
 
         result = StringUtils.fastSplitTemplate(null, ",");
-        assertArrayEquals(new String[]{}, result);
-        
+        assertArrayEquals(new String[] {}, result);
+
         result = StringUtils.fastSplitTemplate("a", ",");
-        assertArrayEquals(new String[]{"a"}, result);
-        
+        assertArrayEquals(new String[] {"a"}, result);
+
         result = StringUtils.fastSplitTemplate("a,b", ",");
-        assertArrayEquals(new String[]{"a", "b"}, result);
-        
+        assertArrayEquals(new String[] {"a", "b"}, result);
+
         result = StringUtils.fastSplitTemplate("a,b,c", ",");
-        assertArrayEquals(new String[]{"a", "b", "c"}, result);
-        
+        assertArrayEquals(new String[] {"a", "b", "c"}, result);
+
         result = StringUtils.fastSplitTemplate("a,b,c", ",");
-        assertArrayEquals(new String[]{"a", "b", "c"}, result);
-        
+        assertArrayEquals(new String[] {"a", "b", "c"}, result);
+
         result = StringUtils.fastSplitTemplate("a,b,", ",");
-        assertArrayEquals(new String[]{"a", "b", ""}, result);
-        
+        assertArrayEquals(new String[] {"a", "b", ""}, result);
+
         result = StringUtils.fastSplitTemplate("a,b,", ",", true);
-        assertArrayEquals(new String[]{"a", "b", ""}, result);
+        assertArrayEquals(new String[] {"a", "b", ""}, result);
 
         result = StringUtils.fastSplitTemplate("a,b,", ",", false);
-        assertArrayEquals(new String[]{"a", "b"}, result);
+        assertArrayEquals(new String[] {"a", "b"}, result);
 
         result = StringUtils.fastSplitTemplate(",a,b", ",");
-        assertArrayEquals(new String[]{"", "a", "b"}, result);
-        
+        assertArrayEquals(new String[] {"", "a", "b"}, result);
+
         result = StringUtils.fastSplitTemplate(",a,b,", ",");
-        assertArrayEquals(new String[]{"", "a", "b", ""}, result);
-        
+        assertArrayEquals(new String[] {"", "a", "b", ""}, result);
+
         result = StringUtils.fastSplitTemplate("a,{b,c}", ",");
-        assertArrayEquals(new String[]{"a", "{b,c}"}, result);
+        assertArrayEquals(new String[] {"a", "{b,c}"}, result);
 
         result = StringUtils.fastSplitTemplate("a,{b,c},d", ",");
-        assertArrayEquals(new String[]{"a", "{b,c}", "d"}, result);
+        assertArrayEquals(new String[] {"a", "{b,c}", "d"}, result);
 
         result = StringUtils.fastSplitTemplate("a,{b,c,d},e", ",");
-        assertArrayEquals(new String[]{"a", "{b,c,d}", "e"}, result);
+        assertArrayEquals(new String[] {"a", "{b,c,d}", "e"}, result);
 
         result = StringUtils.fastSplitTemplate("a,{b},c", ",");
-        assertArrayEquals(new String[]{"a", "{b}", "c"}, result);
-        
+        assertArrayEquals(new String[] {"a", "{b}", "c"}, result);
+
         result = StringUtils.fastSplitTemplate("a,{},b,c", ",");
-        assertArrayEquals(new String[]{"a", "{}", "b", "c"}, result);
+        assertArrayEquals(new String[] {"a", "{}", "b", "c"}, result);
 
         result = StringUtils.fastSplitTemplate("a,{b,c},", ",");
-        assertArrayEquals(new String[]{"a", "{b,c}", ""}, result);
+        assertArrayEquals(new String[] {"a", "{b,c}", ""}, result);
 
         result = StringUtils.fastSplitTemplate("a,{b,c", ",");
-        assertArrayEquals(new String[]{"a", "{b,c"}, result);
+        assertArrayEquals(new String[] {"a", "{b,c"}, result);
 
         result = StringUtils.fastSplitTemplate("a,{{b,c}", ",");
-        assertArrayEquals(new String[]{"a", "{{b,c}"}, result);
+        assertArrayEquals(new String[] {"a", "{{b,c}"}, result);
 
         result = StringUtils.fastSplitTemplate("a,{{b,c},d}", ",");
-        assertArrayEquals(new String[]{"a", "{{b,c},d}"}, result);
+        assertArrayEquals(new String[] {"a", "{{b,c},d}"}, result);
 
         result = StringUtils.fastSplitTemplate("a,{{b,c},d},e", ",");
-        assertArrayEquals(new String[]{"a", "{{b,c},d}", "e"}, result);
+        assertArrayEquals(new String[] {"a", "{{b,c},d}", "e"}, result);
 
         result = StringUtils.fastSplitTemplate("a,{b,c},{d", ",");
-        assertArrayEquals(new String[]{"a", "{b,c}", "{d"}, result);
+        assertArrayEquals(new String[] {"a", "{b,c}", "{d"}, result);
 
         result = StringUtils.fastSplitTemplate("a,{b,c},}d}", ",");
-        assertArrayEquals(new String[]{"a", "{b,c}", "}d}"}, result);
+        assertArrayEquals(new String[] {"a", "{b,c}", "}d}"}, result);
 
         result = StringUtils.fastSplitTemplate("a,{b,c},{}d{}", ",");
-        assertArrayEquals(new String[]{"a", "{b,c}", "{}d{}"}, result);
+        assertArrayEquals(new String[] {"a", "{b,c}", "{}d{}"}, result);
 
         result = StringUtils.fastSplitTemplate("a,b,c}", ",");
-        assertArrayEquals(new String[]{"a", "b", "c}"}, result);
-        
+        assertArrayEquals(new String[] {"a", "b", "c}"}, result);
+
         result = StringUtils.fastSplitTemplate("{a,b,c}", ",");
-        assertArrayEquals(new String[]{"{a,b,c}"}, result);
-        
+        assertArrayEquals(new String[] {"{a,b,c}"}, result);
+
         result = StringUtils.fastSplitTemplate("a,{b,c,,},d,{e,f,},g", ",");
-        assertArrayEquals(new String[]{"a", "{b,c,,}", "d", "{e,f,}", "g"}, result);
+        assertArrayEquals(new String[] {"a", "{b,c,,}", "d", "{e,f,}", "g"}, result);
 
     }
 }

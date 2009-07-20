@@ -46,8 +46,8 @@ import org.apache.wink.server.internal.utils.ServletFileLoader;
  * <li><b>applicationConfigLocation</b> - locations of flat application
  * configuration files. Relevant only if the no
  * <tt>javax.ws.rs.core.Application</tt> is provided.</li>
- * <li><b>deploymentConfiguration</b> - custom deployment configuration
- * class name. The deployment configuration must extend
+ * <li><b>deploymentConfiguration</b> - custom deployment configuration class
+ * name. The deployment configuration must extend
  * <tt>org.apache.wink.server.internal.DeploymentConfiguration</tt>.</li>
  * </ul>
  * <p>
@@ -60,7 +60,9 @@ public class RestServlet extends AbstractRestServlet {
 
     private static final long   serialVersionUID        = 8797036173835816706L;
 
-    private static final Logger logger                  = LoggerFactory.getLogger(RestServlet.class);
+    private static final Logger logger                  =
+                                                            LoggerFactory
+                                                                .getLogger(RestServlet.class);
     private static final String APPLICATION_INIT_PARAM  = "javax.ws.rs.Application";
     private static final String PROPERTIES_DEFAULT_FILE = "META-INF/wink-default.properties";
     private static final String PROPERTIES_INIT_PARAM   = "propertiesLocation";
@@ -73,7 +75,8 @@ public class RestServlet extends AbstractRestServlet {
         try {
             super.init();
             // try to get the request processor
-            // the request processor can be available if it was loaded by a listener 
+            // the request processor can be available if it was loaded by a
+            // listener
             // or when working with Spring
             RequestProcessor requestProcessor = getRequestProcessor();
             if (requestProcessor == null) {
@@ -94,7 +97,8 @@ public class RestServlet extends AbstractRestServlet {
 
     @Override
     protected final void service(HttpServletRequest httpServletRequest,
-        HttpServletResponse httpServletResponse) throws ServletException, IOException {
+                                 HttpServletResponse httpServletResponse) throws ServletException,
+        IOException {
         getRequestProcessor().handleRequest(httpServletRequest, httpServletResponse);
     }
 
@@ -130,7 +134,7 @@ public class RestServlet extends AbstractRestServlet {
         String initParameter = getInitParameter(DEPLYMENT_CONF_PARAM);
         if (initParameter != null) {
             Class<?> confClass = Class.forName(initParameter);
-            return (DeploymentConfiguration) confClass.newInstance();
+            return (DeploymentConfiguration)confClass.newInstance();
         }
         return new DeploymentConfiguration();
     }
@@ -141,7 +145,7 @@ public class RestServlet extends AbstractRestServlet {
         Class<? extends Application> appClass = null;
         String initParameter = getInitParameter(APPLICATION_INIT_PARAM);
         if (initParameter != null) {
-            appClass = (Class<Application>) Class.forName(initParameter);
+            appClass = (Class<Application>)Class.forName(initParameter);
             return appClass.newInstance();
         }
         String appLocationParameter = getInitParameter(APP_LOCATION_PARAM);
@@ -154,8 +158,8 @@ public class RestServlet extends AbstractRestServlet {
 
     private Properties loadProperties(String resourceName, Properties defaultProperties)
         throws IOException {
-        Properties properties = defaultProperties == null ? new Properties() : new Properties(
-            defaultProperties);
+        Properties properties =
+            defaultProperties == null ? new Properties() : new Properties(defaultProperties);
 
         InputStream is = null;
         try {

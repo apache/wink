@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.webdav;
 
 import java.io.IOException;
@@ -52,7 +52,6 @@ import org.apache.wink.webdav.model.Getcontentlength;
 import org.apache.wink.webdav.server.WebDAVResponseBuilder;
 import org.apache.wink.webdav.server.WebDAVUtils;
 
-
 /**
  * This resource handles WebDAV methods for collection of defects.
  */
@@ -62,28 +61,29 @@ public class WebDAVDefectsResource extends DefectsResource {
     private static final Logger logger = LoggerFactory.getLogger(WebDAVDefectsResource.class);
 
     @Context
-    private LinkBuilders     linkProcessor;
+    private LinkBuilders        linkProcessor;
     @Context
-    private UriInfo          uriInfo;
+    private UriInfo             uriInfo;
     @Context
-    private Providers        providers;
+    private Providers           providers;
 
     /**
      * Handles WebDAV PROPFIND method.
      */
     @WebDAVMethod.PROPFIND
-    @Consumes( { MediaType.APPLICATION_XML, MediaType.TEXT_XML })
+    @Consumes( {MediaType.APPLICATION_XML, MediaType.TEXT_XML})
     @Produces(MediaType.APPLICATION_XML)
     public Response findProperties(String body, @Context HttpHeaders headers) throws IOException {
         // create a new instance of a CollectionPropertyHandler that holds an
-        // instance of DefectPropertyHandler. The DefectPropertyHandler is used to set
+        // instance of DefectPropertyHandler. The DefectPropertyHandler is used
+        // to set
         // the properties of entries in the collection.
-        WebDAVResponseBuilder.CollectionPropertyHandler handler = new WebDAVResponseBuilder.CollectionPropertyHandler(
-            new DefectPropertyHandler());
+        WebDAVResponseBuilder.CollectionPropertyHandler handler =
+            new WebDAVResponseBuilder.CollectionPropertyHandler(new DefectPropertyHandler());
 
         // get the feed of the defects
-        SyndFeed feed = super.getDefects(null, null, null).getSyndFeed(providers, linkProcessor,
-            uriInfo);
+        SyndFeed feed =
+            super.getDefects(null, null, null).getSyndFeed(providers, linkProcessor, uriInfo);
         // use the feed to create the propfind response
         String depth = headers.getRequestHeaders().getFirst(WebDAVHeaders.DEPTH);
         return WebDAVResponseBuilder.create(uriInfo).propfind(feed, body, depth, handler);
@@ -94,13 +94,14 @@ public class WebDAVDefectsResource extends DefectsResource {
      */
     @Path(DEFECT_PATH)
     @WebDAVMethod.PROPFIND
-    @Consumes( { MediaType.APPLICATION_XML, MediaType.TEXT_XML })
+    @Consumes( {MediaType.APPLICATION_XML, MediaType.TEXT_XML})
     @Produces(MediaType.APPLICATION_XML)
     public Response findProperties(String body, @PathParam("defect") String defectId)
         throws IOException {
         SyndEntry entry = super.getDefect(defectId).getSyndEntry(providers, uriInfo, linkProcessor);
-        return WebDAVResponseBuilder.create(uriInfo).propfind(entry, body,
-            new DefectPropertyHandler());
+        return WebDAVResponseBuilder.create(uriInfo).propfind(entry,
+                                                              body,
+                                                              new DefectPropertyHandler());
     }
 
     /**
@@ -113,10 +114,10 @@ public class WebDAVDefectsResource extends DefectsResource {
      */
     @Path(DEFECT_PATH)
     @PUT
-    @Consumes( { MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_XML,
-        MediaType.APPLICATION_OCTET_STREAM })
-    @Produces( { MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON,
-        MediaType.APPLICATION_XML })
+    @Consumes( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_XML,
+        MediaType.APPLICATION_OCTET_STREAM})
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON,
+        MediaType.APPLICATION_XML})
     public DefectAsset updateDefect(String body, @PathParam("defect") String defectId)
         throws Exception {
 
@@ -126,13 +127,19 @@ public class WebDAVDefectsResource extends DefectsResource {
         DefectAsset asset = new DefectAsset();
         if (body.startsWith("<defect")) {
             // read the incoming entity as xml
-            DefectBean defect = ProviderUtils.readFromString(providers, body, DefectBean.class,
-                MediaType.APPLICATION_XML_TYPE);
+            DefectBean defect =
+                ProviderUtils.readFromString(providers,
+                                             body,
+                                             DefectBean.class,
+                                             MediaType.APPLICATION_XML_TYPE);
             asset.setDefect(defect);
         } else if (body.startsWith("<entry")) {
             // read the incoming entity as an atom entry
-            SyndEntry entry = ProviderUtils.readFromString(providers, body, SyndEntry.class,
-                MediaType.APPLICATION_ATOM_XML_TYPE);
+            SyndEntry entry =
+                ProviderUtils.readFromString(providers,
+                                             body,
+                                             SyndEntry.class,
+                                             MediaType.APPLICATION_ATOM_XML_TYPE);
             asset.setSyndEntry(entry, providers);
         } else {
             logger.error("WebDAV defect update can only handle xml or atom entry");
@@ -147,7 +154,7 @@ public class WebDAVDefectsResource extends DefectsResource {
         } catch (WebApplicationException e) {
             if (Response.Status.NOT_FOUND.getStatusCode() == e.getResponse().getStatus()) {
                 // create a new defect if it does not exist
-                asset = (DefectAsset) super.createDefect(asset, uriInfo).getEntity();
+                asset = (DefectAsset)super.createDefect(asset, uriInfo).getEntity();
                 return asset;
             } else {
                 throw e;
@@ -191,13 +198,17 @@ public class WebDAVDefectsResource extends DefectsResource {
 
         @Override
         public void setPropertyValue(WebDAVResponseBuilder builder,
-            org.apache.wink.webdav.model.Response response, Object property, SyndBase synd) {
+                                     org.apache.wink.webdav.model.Response response,
+                                     Object property,
+                                     SyndBase synd) {
             // if the property being set is getcontentlength
             if (property instanceof Getcontentlength) {
                 // serialize the synd to atom to get its length as atom
-                String body = ProviderUtils.writeToString(providers, synd,
-                    MediaType.APPLICATION_ATOM_XML_TYPE);
-                ((Getcontentlength) property).setValue(String.valueOf(body.length()));
+                String body =
+                    ProviderUtils.writeToString(providers,
+                                                synd,
+                                                MediaType.APPLICATION_ATOM_XML_TYPE);
+                ((Getcontentlength)property).setValue(String.valueOf(body.length()));
                 response.setPropertyOk(property);
                 return;
             }

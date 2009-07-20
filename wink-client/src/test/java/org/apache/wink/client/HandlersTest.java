@@ -35,40 +35,42 @@ import org.apache.wink.client.handlers.HandlerContext;
 import org.apache.wink.client.handlers.InputStreamAdapter;
 import org.apache.wink.client.handlers.OutputStreamAdapter;
 
+public class HandlersTest extends BaseTest {
 
-public class HandlersTest extends BaseTest{
-
-    private static final String DUMMY_REQUEST_VALUE = "Dummy request value";
-    private static final String DUMMY_REQUEST_HEADER = "Dummy-Request-Header";
-    private static final String DUMMY_RESPONSE_VALUE = "Dummy response value";
+    private static final String DUMMY_REQUEST_VALUE   = "Dummy request value";
+    private static final String DUMMY_REQUEST_HEADER  = "Dummy-Request-Header";
+    private static final String DUMMY_RESPONSE_VALUE  = "Dummy response value";
     private static final String DUMMY_RESPONSE_HEADER = "Dummy-Response-Header";
-    
-    
+
     public void testHandlers() {
         server.setMockResponseCode(200);
         server.setMockResponseContent(SENT_MESSAGE);
-        
+
         ClientConfig config = new ClientConfig();
         config.handlers(new DummyHandler());
         RestClient client = new RestClient(config);
         Resource resource = client.resource(serviceURL + "/testResourcePost");
-        ClientResponse response = resource.contentType("text/plain").accept("text/plain").post(SENT_MESSAGE.toLowerCase());
-        
+        ClientResponse response =
+            resource.contentType("text/plain").accept("text/plain")
+                .post(SENT_MESSAGE.toLowerCase());
+
         // Check that request filter converted request entity to upper
         assertEquals(SENT_MESSAGE.toUpperCase(), server.getRequestContentAsString());
-        
+
         // Check that response filter converted response entity back to lower
         assertEquals(SENT_MESSAGE.toLowerCase(), response.getEntity(String.class));
-        
-        // Check that handler added Http header  
-        assertTrue(server.getRequestHeaders().get(DUMMY_REQUEST_HEADER).equalsIgnoreCase(DUMMY_REQUEST_VALUE));
-        assertTrue(response.getHeaders().get(DUMMY_RESPONSE_HEADER).get(0).equalsIgnoreCase(DUMMY_RESPONSE_VALUE));
+
+        // Check that handler added Http header
+        assertTrue(server.getRequestHeaders().get(DUMMY_REQUEST_HEADER)
+            .equalsIgnoreCase(DUMMY_REQUEST_VALUE));
+        assertTrue(response.getHeaders().get(DUMMY_RESPONSE_HEADER).get(0)
+            .equalsIgnoreCase(DUMMY_RESPONSE_VALUE));
     }
-    
+
     public static class DummyHandler implements ClientHandler {
 
-
-        public ClientResponse handle(ClientRequest request, HandlerContext context) throws Exception {
+        public ClientResponse handle(ClientRequest request, HandlerContext context)
+            throws Exception {
             context.addInputStreamAdapter(new DummyAdapter());
             context.addOutputStreamAdapter(new DummyAdapter());
             request.getHeaders().add(DUMMY_REQUEST_HEADER, DUMMY_REQUEST_VALUE);
@@ -77,7 +79,7 @@ public class HandlersTest extends BaseTest{
             return response;
         }
     }
-    
+
     private static class DummyAdapter implements InputStreamAdapter, OutputStreamAdapter {
 
         public static byte toLower(byte b) {
@@ -86,14 +88,14 @@ public class HandlersTest extends BaseTest{
             }
             return b;
         }
-        
+
         public static byte toUpper(byte b) {
             if (b >= 'a' && b <= 'z') {
                 return (byte)(b - ('a' - 'A'));
             }
             return b;
         }
-        
+
         public InputStream adapt(InputStream is, ClientResponse response) {
             return new FilterInputStream(is) {
                 @Override
@@ -111,7 +113,7 @@ public class HandlersTest extends BaseTest{
                     if (read == -1) {
                         return -1;
                     }
-                    for (int i = off ;i < off + read; i++) {
+                    for (int i = off; i < off + read; i++) {
                         b[i] = toLower(b[i]);
                     }
                     return read;
@@ -121,15 +123,15 @@ public class HandlersTest extends BaseTest{
                 public int read(byte[] b) throws IOException {
                     return read(b, 0, b.length);
                 }
-                
+
             };
         }
 
         public OutputStream adapt(OutputStream os, ClientRequest request) {
-           return new FilterOutputStream(os) {
+            return new FilterOutputStream(os) {
                 @Override
                 public void write(byte[] b, int off, int len) throws IOException {
-                    for (int i = off ;i < len; i++) {
+                    for (int i = off; i < len; i++) {
                         b[i] = toUpper(b[i]);
                     }
                     super.write(b, off, len);
@@ -146,7 +148,7 @@ public class HandlersTest extends BaseTest{
                 }
             };
         }
-        
+
     }
-    
+
 }

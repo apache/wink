@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.test.diff;
 
 import java.io.IOException;
@@ -26,19 +26,19 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 /**
- * Class that overrides XmlUnit DiffWithAttributeQualifier class.
- * It is designated to ignore fields with time values, like "updated".
+ * Class that overrides XmlUnit DiffWithAttributeQualifier class. It is
+ * designated to ignore fields with time values, like "updated".
  * <p/>
  * It is implemented to be used by Stm application tests for XML comparison.
  */
 public class DiffIgnoreUpdateWithAttributeQualifier extends DiffWithAttributeQualifier {
 
     /**
-     * Constructor of XmlUnit Diff that ignores field "updated".
-     * XQuery of omitted field: /feed[1]/updated[1]/text()[1]
-     *
+     * Constructor of XmlUnit Diff that ignores field "updated". XQuery of
+     * omitted field: /feed[1]/updated[1]/text()[1]
+     * 
      * @param controlDocument XML document that contains expected results
-     * @param testedDocument  XML document which is being tested
+     * @param testedDocument XML document which is being tested
      */
     public DiffIgnoreUpdateWithAttributeQualifier(Document controlDocument, Document testedDocument) {
         super(controlDocument, testedDocument);
@@ -46,17 +46,20 @@ public class DiffIgnoreUpdateWithAttributeQualifier extends DiffWithAttributeQua
     }
 
     /**
-     * Constructor of XmlUnit Diff that ignores field "updated".
-     * XQuery of omitted field: /feed[1]/updated[1]/text()[1]
-     *
-     * @param controlDocument String containing XML document that contains expected results
-     * @param testedDocument  String containing XML document which is being tested
+     * Constructor of XmlUnit Diff that ignores field "updated". XQuery of
+     * omitted field: /feed[1]/updated[1]/text()[1]
+     * 
+     * @param controlDocument String containing XML document that contains
+     *            expected results
+     * @param testedDocument String containing XML document which is being
+     *            tested
      * @throws java.io.IOException
      * @throws org.xml.sax.SAXException
      */
-    public DiffIgnoreUpdateWithAttributeQualifier(String controlDocument, String testedDocument) throws IOException, SAXException {
+    public DiffIgnoreUpdateWithAttributeQualifier(String controlDocument, String testedDocument)
+        throws IOException, SAXException {
         super(controlDocument, testedDocument);
         this.overrideDifferenceListener(new DifferenceListenerIgnoreUpdateOrCompareTimes());
     }
-    
+
 }

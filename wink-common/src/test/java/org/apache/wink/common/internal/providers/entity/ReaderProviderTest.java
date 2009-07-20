@@ -33,10 +33,10 @@ import static org.junit.Assert.*;
 import org.apache.wink.common.internal.providers.entity.ReaderProvider;
 import org.junit.Test;
 
-
 public class ReaderProviderTest {
 
-    private static String message = "The two most common elements in the world are hydrogen and stupidity";
+    private static String message =
+                                      "The two most common elements in the world are hydrogen and stupidity";
 
     @Test
     public void testMessageReader() {
@@ -52,7 +52,10 @@ public class ReaderProviderTest {
         assertTrue(rp.isReadable(Object.class, null, null, null));
         // Check if readable - assert false
         assertFalse(rp.isReadable(StringReader.class, null, null, null));
-        assertFalse(" Reading from String.class is not supported", rp.isReadable(String.class, null, null, null));
+        assertFalse(" Reading from String.class is not supported", rp.isReadable(String.class,
+                                                                                 null,
+                                                                                 null,
+                                                                                 null));
 
         Reader reader = null;
         try {
@@ -85,7 +88,10 @@ public class ReaderProviderTest {
         // Check if writable
         assertTrue(rp.isWriteable(StringReader.class, null, null, null));
         // Check if readable - assert false
-        assertFalse(" Writting from String.class is not supported", rp.isWriteable(String.class, null, null, null));
+        assertFalse(" Writting from String.class is not supported", rp.isWriteable(String.class,
+                                                                                   null,
+                                                                                   null,
+                                                                                   null));
 
         StringReader reader = new StringReader(message);
 

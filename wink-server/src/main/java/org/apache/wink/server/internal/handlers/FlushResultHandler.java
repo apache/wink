@@ -49,10 +49,11 @@ import org.apache.wink.common.internal.MultivaluedMapImpl;
 import org.apache.wink.server.handlers.AbstractHandler;
 import org.apache.wink.server.handlers.MessageContext;
 
-
 public class FlushResultHandler extends AbstractHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(FlushResultHandler.class);
+    private static final Logger          logger          =
+                                                             LoggerFactory
+                                                                 .getLogger(FlushResultHandler.class);
     private static final RuntimeDelegate runtimeDelegate = RuntimeDelegate.getInstance();
 
     @SuppressWarnings("unchecked")
@@ -79,8 +80,9 @@ public class FlushResultHandler extends AbstractHandler {
         Object entity = context.getResponseEntity();
         boolean isOriginalEntityResponseObj = false;
 
-        // extract the entity and headers from the response (if it is a response)
-        MultivaluedMap<String,Object> httpHeaders = null;
+        // extract the entity and headers from the response (if it is a
+        // response)
+        MultivaluedMap<String, Object> httpHeaders = null;
         if (entity instanceof Response) {
             Response response = (Response)entity;
             entity = response.getEntity();
@@ -117,7 +119,7 @@ public class FlushResultHandler extends AbstractHandler {
         }
 
         if (httpHeaders == null) {
-            httpHeaders = new MultivaluedMapImpl<String,Object>();
+            httpHeaders = new MultivaluedMapImpl<String, Object>();
         }
 
         // we're done if the actual entity is null
@@ -134,30 +136,47 @@ public class FlushResultHandler extends AbstractHandler {
 
         // get the provider to write the entity
         Providers providers = context.getProviders();
-        MessageBodyWriter<Object> messageBodyWriter = (MessageBodyWriter<Object>)providers.getMessageBodyWriter(
-                rawType, genericType, declaredAnnotations, responseMediaType);
+        MessageBodyWriter<Object> messageBodyWriter =
+            (MessageBodyWriter<Object>)providers.getMessageBodyWriter(rawType,
+                                                                      genericType,
+                                                                      declaredAnnotations,
+                                                                      responseMediaType);
 
         // use the provider to write the entity
         if (messageBodyWriter != null) {
             logger.debug("Serialization using provider {}", messageBodyWriter.getClass().getName());
 
-            final MultivaluedMap<String,Object> headers = httpHeaders;
+            final MultivaluedMap<String, Object> headers = httpHeaders;
 
-            long size = messageBodyWriter.getSize(entity, rawType, genericType, declaredAnnotations, responseMediaType);
+            long size =
+                messageBodyWriter.getSize(entity,
+                                          rawType,
+                                          genericType,
+                                          declaredAnnotations,
+                                          responseMediaType);
             if (size >= 0) {
                 headers.putSingle(HttpHeaders.CONTENT_LENGTH, String.valueOf(size));
             }
 
-            FlushHeadersOutputStream outputStream = new FlushHeadersOutputStream(httpResponse, headers);
-            messageBodyWriter.writeTo(entity, rawType, genericType, declaredAnnotations, responseMediaType,
-                    httpHeaders, outputStream);
+            FlushHeadersOutputStream outputStream =
+                new FlushHeadersOutputStream(httpResponse, headers);
+            messageBodyWriter.writeTo(entity,
+                                      rawType,
+                                      genericType,
+                                      declaredAnnotations,
+                                      responseMediaType,
+                                      httpHeaders,
+                                      outputStream);
             outputStream.flushHeaders();
             return;
 
         } else {
-            logger.warn("Could not find a writer for {} and {}. Try to find JAF DataSourceProvider", entity.getClass().getName(), responseMediaType);
+            logger
+                .warn("Could not find a writer for {} and {}. Try to find JAF DataSourceProvider",
+                      entity.getClass().getName(),
+                      responseMediaType);
         }
-        
+
         DataContentHandler dataContentHandler = null;
         // Write Entity with ASF DataContentHandler
 
@@ -172,23 +191,25 @@ public class FlushResultHandler extends AbstractHandler {
             throw new WebApplicationException(500);
         }
 
-        FlushHeadersOutputStream outputStream = new FlushHeadersOutputStream(httpResponse, httpHeaders);
-        dataContentHandler.writeTo(entity,
-                                   responseMediaType.toString(),
-                                   outputStream);
+        FlushHeadersOutputStream outputStream =
+            new FlushHeadersOutputStream(httpResponse, httpHeaders);
+        dataContentHandler.writeTo(entity, responseMediaType.toString(), outputStream);
         outputStream.flushHeaders();
     }
 
     @SuppressWarnings("unchecked")
-    private static void flushHeaders(final HttpServletResponse httpResponse, final MultivaluedMap<String,Object> headers) {
-        for (Entry<String,List<Object>> entry : headers.entrySet()) {
+    private static void flushHeaders(final HttpServletResponse httpResponse,
+                                     final MultivaluedMap<String, Object> headers) {
+        for (Entry<String, List<Object>> entry : headers.entrySet()) {
             String key = entry.getKey();
             List<Object> values = entry.getValue();
             for (Object val : values) {
                 if (val != null) {
-                    HeaderDelegate<Object> headerDelegate = (HeaderDelegate<Object>)runtimeDelegate
+                    HeaderDelegate<Object> headerDelegate =
+                        (HeaderDelegate<Object>)runtimeDelegate
                             .createHeaderDelegate(val.getClass());
-                    String header = headerDelegate != null ? headerDelegate.toString(val) : val.toString();
+                    String header =
+                        headerDelegate != null ? headerDelegate.toString(val) : val.toString();
                     httpResponse.addHeader(key, header);
                 }
             }
@@ -201,13 +222,13 @@ public class FlushResultHandler extends AbstractHandler {
         // headers that a provider MAY have added to the response, before it
         // actually started writing to stream.
 
-        private boolean writeStarted;
-        private HttpServletResponse httpResponse;
-        private ServletOutputStream outputStream;
-        private MultivaluedMap<String,Object> headers;
+        private boolean                        writeStarted;
+        private HttpServletResponse            httpResponse;
+        private ServletOutputStream            outputStream;
+        private MultivaluedMap<String, Object> headers;
 
-        public FlushHeadersOutputStream(HttpServletResponse httpResponse, MultivaluedMap<String,Object> headers)
-                throws IOException {
+        public FlushHeadersOutputStream(HttpServletResponse httpResponse,
+                                        MultivaluedMap<String, Object> headers) throws IOException {
             this.writeStarted = false;
             this.httpResponse = httpResponse;
             this.outputStream = httpResponse.getOutputStream();

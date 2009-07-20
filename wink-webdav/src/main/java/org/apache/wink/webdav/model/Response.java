@@ -38,7 +38,6 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.wink.common.http.HttpStatus;
 import org.w3c.dom.Element;
 
-
 /**
  * The <code>response</code> XML element per the WebDAV specification [RFC 4918]
  * 
@@ -64,13 +63,14 @@ import org.w3c.dom.Element;
 public class Response {
 
     @XmlElement(required = true)
-    protected List<String> href;
-    protected String status;
+    protected List<String>   href;
+    protected String         status;
     protected List<Propstat> propstat;
-    protected Error error;
-    protected String responsedescription;
+    protected Error          error;
+    protected String         responsedescription;
 
-    public Response() {}
+    public Response() {
+    }
 
     public Response(String href) {
         getHref().add(href);
@@ -78,24 +78,19 @@ public class Response {
 
     /**
      * Gets the value of the href property.
-     * 
      * <p>
-     * This accessor method returns a reference to the live list, not a snapshot. Therefore any
-     * modification you make to the returned list will be present inside the JAXB object. This is
-     * why there is not a <CODE>set</CODE> method for the href property.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the href property.
      * <p>
      * For example, to add a new item, do as follows:
      * 
      * <pre>
      * getHref().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
      * Objects of the following type(s) are allowed in the list {@link String }
-     * 
-     * 
      */
     public List<String> getHref() {
         if (href == null) {
@@ -108,7 +103,6 @@ public class Response {
      * Gets the value of the status property.
      * 
      * @return possible object is {@link String }
-     * 
      */
     public String getStatus() {
         return status;
@@ -117,9 +111,7 @@ public class Response {
     /**
      * Sets the value of the status property.
      * 
-     * @param value
-     *            allowed object is {@link String }
-     * 
+     * @param value allowed object is {@link String }
      */
     public void setStatus(String value) {
         this.status = value;
@@ -127,24 +119,19 @@ public class Response {
 
     /**
      * Gets the value of the propstat property.
-     * 
      * <p>
-     * This accessor method returns a reference to the live list, not a snapshot. Therefore any
-     * modification you make to the returned list will be present inside the JAXB object. This is
-     * why there is not a <CODE>set</CODE> method for the propstat property.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the propstat property.
      * <p>
      * For example, to add a new item, do as follows:
      * 
      * <pre>
      * getPropstat().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
      * Objects of the following type(s) are allowed in the list {@link Propstat }
-     * 
-     * 
      */
     public List<Propstat> getPropstat() {
         if (propstat == null) {
@@ -154,24 +141,30 @@ public class Response {
     }
 
     /**
-     * Get a Propstat instance contained within this response that has the provided criteria.
-     * @param status the Http status code of the propstat to retrieve 
-     * @param description the description of the propstat to retrieve 
-     * @param error the error of the propstat to retrieve. Note that when searching for a matching 
-     * propstat, errors are considered the same only if both errors are null.
-     * @return the Propstat instance if a match is found, or null if no propstats matches all criteria
+     * Get a Propstat instance contained within this response that has the
+     * provided criteria.
+     * 
+     * @param status the Http status code of the propstat to retrieve
+     * @param description the description of the propstat to retrieve
+     * @param error the error of the propstat to retrieve. Note that when
+     *            searching for a matching propstat, errors are considered the
+     *            same only if both errors are null.
+     * @return the Propstat instance if a match is found, or null if no
+     *         propstats matches all criteria
      */
     public Propstat getPropstat(int status, String description, Error error) {
-        // try to find an existing propstat for given status, error and description
+        // try to find an existing propstat for given status, error and
+        // description
         for (Propstat propstat : getPropstat()) {
             Error pError = propstat.getError();
             String pDescription = propstat.getResponsedescription();
             int pStatus = HttpStatus.valueOfStatusLine(propstat.getStatus()).getCode();
 
             // compare given propstat
-            if(pStatus == status &&
-               pError == error && // ... do not compare errors - only if both are null (the same)
-               ((pDescription == description) || (pDescription.equals(description)))) {
+            if (pStatus == status && pError == error && // ... do not compare
+                                                        // errors - only if both
+                                                        // are null (the same)
+                ((pDescription == description) || (pDescription.equals(description)))) {
                 return propstat;
             }
         }
@@ -179,12 +172,15 @@ public class Response {
     }
 
     /**
-     * Get a Propstat instance contained within this response that has the provided criteria, or
-     * create a new Propstat instance with the provided information if no propstat already exists.
-     * @param status the Http status code of the propstat to retrieve 
-     * @param description the description of the propstat to retrieve 
-     * @param error the error of the propstat to retrieve. Note that when searching for a matching 
-     * propstat, errors are considered the same only if both errors are null.
+     * Get a Propstat instance contained within this response that has the
+     * provided criteria, or create a new Propstat instance with the provided
+     * information if no propstat already exists.
+     * 
+     * @param status the Http status code of the propstat to retrieve
+     * @param description the description of the propstat to retrieve
+     * @param error the error of the propstat to retrieve. Note that when
+     *            searching for a matching propstat, errors are considered the
+     *            same only if both errors are null.
      * @return
      */
     public Propstat getOrCreatePropstat(int status, String description, Error error) {
@@ -204,7 +200,6 @@ public class Response {
      * Gets the value of the error property.
      * 
      * @return possible object is {@link Error }
-     * 
      */
     public Error getError() {
         return error;
@@ -213,9 +208,7 @@ public class Response {
     /**
      * Sets the value of the error property.
      * 
-     * @param value
-     *            allowed object is {@link Error }
-     * 
+     * @param value allowed object is {@link Error }
      */
     public void setError(Error value) {
         this.error = value;
@@ -225,7 +218,6 @@ public class Response {
      * Gets the value of the responsedescription property.
      * 
      * @return possible object is {@link String }
-     * 
      */
     public String getResponsedescription() {
         return responsedescription;
@@ -234,16 +226,16 @@ public class Response {
     /**
      * Sets the value of the responsedescription property.
      * 
-     * @param value
-     *            allowed object is {@link String }
-     * 
+     * @param value allowed object is {@link String }
      */
     public void setResponsedescription(String value) {
         this.responsedescription = value;
     }
 
     /**
-     * Add the provided property to the correct propstat element with an Http status of OK.
+     * Add the provided property to the correct propstat element with an Http
+     * status of OK.
+     * 
      * @see {@link #setProperty(Object, int, String, Error)}
      */
     public void setPropertyOk(Object property) {
@@ -251,71 +243,88 @@ public class Response {
     }
 
     /**
-     * Add the provided property to the correct propstat element with an Http status of NOT FOUND.
+     * Add the provided property to the correct propstat element with an Http
+     * status of NOT FOUND.
+     * 
      * @see {@link #setProperty(Object, int, String, Error)}
      */
     public void setPropertyNotFound(Object property) {
         setProperty(property, HttpStatus.NOT_FOUND.getCode());
     }
-    
+
     /**
-     * Add the provided property to the correct propstat element with the specified Http status.
+     * Add the provided property to the correct propstat element with the
+     * specified Http status.
+     * 
      * @see {@link #setProperty(Object, int, String, Error)}
      */
     public void setProperty(Object property, int status) {
         setProperty(property, status, null, null);
     }
-    
+
     /**
-     * Sets the provided property to the correct propstat element. 
-     * The correct propstat element is selected according to the provided status, description and error
-     * parameters.
-     * 
-     * <p>The following table details the possible Java types of every property (note that the 
-     * <code>DAV</code> namespace depicts the WebDAV namespace "DAV:")
+     * Sets the provided property to the correct propstat element. The correct
+     * propstat element is selected according to the provided status,
+     * description and error parameters.
+     * <p>
+     * The following table details the possible Java types of every property
+     * (note that the <code>DAV</code> namespace depicts the WebDAV namespace
+     * "DAV:")
      * <p>
      * <table border="1">
      * <tr>
-     * <td>DAV:creationdate</td><td>org.apache.wink.webdav.model.Creationdate</td>
+     * <td>DAV:creationdate</td>
+     * <td>org.apache.wink.webdav.model.Creationdate</td>
      * </tr>
      * <tr>
-     * <td>DAV:displayname</td><td>org.apache.wink.webdav.model.Displayname</td>
+     * <td>DAV:displayname</td>
+     * <td>org.apache.wink.webdav.model.Displayname</td>
      * </tr>
      * <tr>
-     * <td>DAV:getcontentlanguage</td><td>org.apache.wink.webdav.model.Getcontentlanguage</td>
+     * <td>DAV:getcontentlanguage</td>
+     * <td>org.apache.wink.webdav.model.Getcontentlanguage</td>
      * </tr>
      * <tr>
-     * <td>DAV:getcontentlength</td><td>org.apache.wink.webdav.model.Getcontentlength</td>
+     * <td>DAV:getcontentlength</td>
+     * <td>org.apache.wink.webdav.model.Getcontentlength</td>
      * </tr>
      * <tr>
-     * <td>DAV:getcontenttype</td><td>org.apache.wink.webdav.model.Getcontenttype</td>
+     * <td>DAV:getcontenttype</td>
+     * <td>org.apache.wink.webdav.model.Getcontenttype</td>
      * </tr>
      * <tr>
-     * <td>DAV:getetag</td><td>org.apache.wink.webdav.model.Getetag</td>
+     * <td>DAV:getetag</td>
+     * <td>org.apache.wink.webdav.model.Getetag</td>
      * </tr>
      * <tr>
-     * <td>DAV:getlastmodified</td><td>org.apache.wink.webdav.model.Getlastmodified</td>
+     * <td>DAV:getlastmodified</td>
+     * <td>org.apache.wink.webdav.model.Getlastmodified</td>
      * </tr>
      * <tr>
-     * <td>DAV:lockdiscovery</td><td>org.apache.wink.webdav.model.Lockdiscovery</td>
+     * <td>DAV:lockdiscovery</td>
+     * <td>org.apache.wink.webdav.model.Lockdiscovery</td>
      * </tr>
      * <tr>
-     * <td>DAV:resourcetype</td><td>org.apache.wink.webdav.model.Resourcetype</td>
+     * <td>DAV:resourcetype</td>
+     * <td>org.apache.wink.webdav.model.Resourcetype</td>
      * </tr>
      * <tr>
-     * <td>DAV:supportedlock</td><td>org.apache.wink.webdav.model.Supportedlock</td>
+     * <td>DAV:supportedlock</td>
+     * <td>org.apache.wink.webdav.model.Supportedlock</td>
      * </tr>
      * <tr>
-     * <td>any other</td><td>org.w3c.dom.Element</td>
+     * <td>any other</td>
+     * <td>org.w3c.dom.Element</td>
      * </tr>
      * </table>
+     * <p>
+     * for example, if the property to set is
+     * <code>DAV:getcontentlanguage</code> then the property should be an
+     * instance of org.apache.wink.webdav.model.Getcontentlanguage.
+     * <p>
+     * if the property is <code>K:myprop</code> then the property should be an
+     * instance of org.w3c.dom.Element
      * 
-     * <p>for example, if the property to set is <code>DAV:getcontentlanguage</code> then the 
-     * property should be an instance of org.apache.wink.webdav.model.Getcontentlanguage.
-     * 
-     * <p>if the property is <code>K:myprop</code> then the property should be an instance of 
-     * org.w3c.dom.Element
-     *
      * @param property the property to add
      * @param status the status of the property to add
      * @param description the description of the property
@@ -350,5 +359,5 @@ public class Response {
             throw new IllegalArgumentException("property");
         }
     }
-    
+
 }

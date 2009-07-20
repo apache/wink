@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common.model.csv;
 
 import java.util.Iterator;
@@ -25,26 +25,26 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Represents a multiple table CSV. Contains multiple (separate) tables that make up a single CSV.
- * The rows of the tables may be of different lengths. An empty line is used to separate the tables 
- * when serializing or deserializing. 
+ * Represents a multiple table CSV. Contains multiple (separate) tables that
+ * make up a single CSV. The rows of the tables may be of different lengths. An
+ * empty line is used to separate the tables when serializing or deserializing.
  */
 public class MultiCsvTable implements CsvSerializer, CsvDeserializer {
 
-    private final static String[] EMPTY_ARRAY = new String[]{};
-    private List<CsvTable> tablesList;
-    private boolean needNewTable; 
+    private final static String[] EMPTY_ARRAY = new String[] {};
+    private List<CsvTable>        tablesList;
+    private boolean               needNewTable;
 
     public MultiCsvTable() {
         tablesList = new LinkedList<CsvTable>();
         needNewTable = true;
     }
-    
+
     /**
-     * Create a new CsvTable with the specified header, and add it to this multi-table csv
+     * Create a new CsvTable with the specified header, and add it to this
+     * multi-table csv
      * 
-     * @param header
-     *            the header of the new table (can be empty).
+     * @param header the header of the new table (can be empty).
      * @return the created table
      */
     public CsvTable createCsvTable(String... header) {
@@ -54,10 +54,10 @@ public class MultiCsvTable implements CsvSerializer, CsvDeserializer {
     }
 
     /**
-     * Add a table to this multi-table csv. This is a shortcut for <code>getTables().add(table)</code>
+     * Add a table to this multi-table csv. This is a shortcut for
+     * <code>getTables().add(table)</code>
      * 
-     * @param table
-     *            the table to add
+     * @param table the table to add
      */
     public void addTable(CsvTable table) {
         tablesList.add(table);
@@ -79,9 +79,9 @@ public class MultiCsvTable implements CsvSerializer, CsvDeserializer {
     /**
      * Add a row to the last table when deserializing a multi table csv.
      * <p>
-     * If no table exists, or the length of the row is 0, or the row has only one element and it is
-     * null or an empty string, then a new table is created instead of adding the row to the last
-     * table.
+     * If no table exists, or the length of the row is 0, or the row has only
+     * one element and it is null or an empty string, then a new table is
+     * created instead of adding the row to the last table.
      */
     public void addEntity(String[] row) {
         if (row == null) {

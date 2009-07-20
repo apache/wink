@@ -67,42 +67,45 @@ import org.apache.wink.server.internal.registry.ServerInjectableFactory;
 
 /**
  * <p>
- * This class implements a default deployment configuration for Wink. In
- * order to change this configuration, extend this class and override the
- * relevant methods. In general it's possible to override any methods of this
- * class, but the best practices are to override methods the "init" methods. See
- * the javadoc for each method for more details.
+ * This class implements a default deployment configuration for Wink. In order
+ * to change this configuration, extend this class and override the relevant
+ * methods. In general it's possible to override any methods of this class, but
+ * the best practices are to override methods the "init" methods. See the
+ * javadoc for each method for more details.
  */
 public class DeploymentConfiguration {
 
-    private static final Logger   logger                   = LoggerFactory.getLogger(DeploymentConfiguration.class);
-    private static final String   ALTERNATIVE_SHORTCUTS    = "META-INF/wink-alternate-shortcuts.properties";
-    private static final String   VALIDATE_LOCATION_HEADER = "wink.validateLocationHeader";
+    private static final Logger       logger                   =
+                                                                   LoggerFactory
+                                                                       .getLogger(DeploymentConfiguration.class);
+    private static final String       ALTERNATIVE_SHORTCUTS    =
+                                                                   "META-INF/wink-alternate-shortcuts.properties";
+    private static final String       VALIDATE_LOCATION_HEADER = "wink.validateLocationHeader";
 
     // handler chains
-    private RequestHandlersChain  requestHandlersChain;
-    private ResponseHandlersChain responseHandlersChain;
-    private ResponseHandlersChain errorHandlersChain;
+    private RequestHandlersChain      requestHandlersChain;
+    private ResponseHandlersChain     responseHandlersChain;
+    private ResponseHandlersChain     errorHandlersChain;
 
-    private List<RequestHandler>  requestUserHandlers;
-    private List<ResponseHandler> responseUserHandlers;
-    private List<ResponseHandler> errorUserHandlers;
+    private List<RequestHandler>      requestUserHandlers;
+    private List<ResponseHandler>     responseUserHandlers;
+    private List<ResponseHandler>     errorUserHandlers;
 
     // registries
-    private ProvidersRegistry     providersRegistry;
-    private ResourceRegistry      resourceRegistry;
-    private LifecycleManagersRegistry     ofFactoryRegistry;
+    private ProvidersRegistry         providersRegistry;
+    private ResourceRegistry          resourceRegistry;
+    private LifecycleManagersRegistry ofFactoryRegistry;
 
     // mappers
-    private MediaTypeMapper       mediaTypeMapper;
-    private Map<String, String>   alternateShortcutMap;
+    private MediaTypeMapper           mediaTypeMapper;
+    private Map<String, String>       alternateShortcutMap;
 
     // external properties
-    private Properties            properties;
+    private Properties                properties;
 
     // servlet configuration
-    private ServletConfig         servletConfig;
-    private ServletContext        servletContext;
+    private ServletConfig             servletConfig;
+    private ServletContext            servletContext;
 
     /**
      * Makes sure that the object was properly initialized. Should be invoked
@@ -258,7 +261,7 @@ public class DeploymentConfiguration {
                 lproperties.load(is);
                 alternateShortcutMap = new HashMap<String, String>();
                 for (Entry<Object, Object> entry : lproperties.entrySet()) {
-                    alternateShortcutMap.put((String) entry.getKey(), (String) entry.getValue());
+                    alternateShortcutMap.put((String)entry.getKey(), (String)entry.getValue());
                 }
             } catch (IOException e) {
                 logger.error("Failed to load alternateShortcutMap", e);
@@ -282,10 +285,12 @@ public class DeploymentConfiguration {
     protected void initMediaTypeMapper() {
         if (mediaTypeMapper == null) {
             mediaTypeMapper = new MediaTypeMapper();
-            mediaTypeMapper.addMapping("Mozilla/", MediaType.APPLICATION_ATOM_XML,
-                MediaType.TEXT_XML);
-            mediaTypeMapper.addMapping("Mozilla/", MediaTypeUtils.ATOM_SERVICE_DOCUMENT,
-                MediaType.TEXT_XML);
+            mediaTypeMapper.addMapping("Mozilla/",
+                                       MediaType.APPLICATION_ATOM_XML,
+                                       MediaType.TEXT_XML);
+            mediaTypeMapper.addMapping("Mozilla/",
+                                       MediaTypeUtils.ATOM_SERVICE_DOCUMENT,
+                                       MediaType.TEXT_XML);
             mediaTypeMapper.addMapping("Mozilla/", MediaTypeUtils.OPENSEARCH, MediaType.TEXT_XML);
         }
     }
@@ -403,7 +408,8 @@ public class DeploymentConfiguration {
         ResponseHandlersChain handlersChain = new ResponseHandlersChain();
         handlersChain.addHandler(createHandler(PopulateErrorResponseHandler.class));
         handlersChain.addHandler(createHandler(PopulateResponseStatusHandler.class));
-        PopulateResponseMediaTypeHandler populateMediaTypeHandler = createHandler(PopulateResponseMediaTypeHandler.class);
+        PopulateResponseMediaTypeHandler populateMediaTypeHandler =
+            createHandler(PopulateResponseMediaTypeHandler.class);
         populateMediaTypeHandler.setErrorFlow(true);
         handlersChain.addHandler(populateMediaTypeHandler);
         for (ResponseHandler h : errorUserHandlers) {

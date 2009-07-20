@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.model.synd;
 
@@ -25,32 +24,40 @@ public class SyndContent extends SyndSimpleContent {
 
     private String type;
     private String src;
-    
-    public SyndContent() {}
-    
+
+    public SyndContent() {
+    }
+
     /**
-     * Creates a new SyndContent with the specified value and 'text' type attribute. 
+     * Creates a new SyndContent with the specified value and 'text' type
+     * attribute.
+     * 
      * @param value the value of the text construct
      */
     public SyndContent(String value) {
         this(value, SyndTextType.text.name(), false);
     }
-    
+
     /**
-     * Creates a new SyndContent with the specified value and type attribute. 
+     * Creates a new SyndContent with the specified value and type attribute.
+     * 
      * @param value the value of the text construct
      * @param type the type attribute
      */
-    // TODO: Michael: uncomment this constructor   
-//    public SyndContent(String value, String type) {
-//        this(value, type, false);
-//    }
-    
+    // TODO: Michael: uncomment this constructor
+    // public SyndContent(String value, String type) {
+    // this(value, type, false);
+    // }
+
     /**
-     * Creates a new SyndContent with the specified value or src, and type attribute. 
-     * @param value the value of the text construct, or the value of the src attribute. 
+     * Creates a new SyndContent with the specified value or src, and type
+     * attribute.
+     * 
+     * @param value the value of the text construct, or the value of the src
+     *            attribute.
      * @param type the type attribute
-     * @param isSrc true indicates that the value parameter is the value of the src attribute
+     * @param isSrc true indicates that the value parameter is the value of the
+     *            src attribute
      */
     public SyndContent(String value, String type, boolean isSrc) {
         super(isSrc ? null : value);
@@ -67,15 +74,15 @@ public class SyndContent extends SyndSimpleContent {
     public String getType() {
         return type;
     }
-    
+
     public void setType(String type) {
         this.type = type;
     }
-    
+
     public String getSrc() {
         return src;
     }
-    
+
     public void setSrc(String src) {
         this.src = src;
     }
@@ -97,7 +104,7 @@ public class SyndContent extends SyndSimpleContent {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        SyndContent other = (SyndContent) obj;
+        SyndContent other = (SyndContent)obj;
         if (src == null) {
             if (other.src != null)
                 return false;
@@ -110,7 +117,5 @@ public class SyndContent extends SyndSimpleContent {
             return false;
         return true;
     }
-    
-
 
 }

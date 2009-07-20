@@ -212,28 +212,30 @@ public class JAXRSDataSourceTest extends TestCase {
         }
     }
 
-
     /**
      * Verify that we can send a DataSource and receive a DataSource. The 'POST'
      * method on the resource we are calling is a simple echo.
-     *
      */
     public void testPOSTDataSource() throws Exception {
         PostMethod postMethod = null;
         try {
             postMethod = new PostMethod(getBaseURI() + "/dstest");
             String input = "This is some test input";
-            RequestEntity requestEntity = new ByteArrayRequestEntity(input
-                    .getBytes(), "application/datasource");
+            RequestEntity requestEntity =
+                new ByteArrayRequestEntity(input.getBytes(), "application/datasource");
             postMethod.setRequestEntity(requestEntity);
             HttpClient client = new HttpClient();
             client.executeMethod(postMethod);
 
             // just use our provider to read the response
             DataSourceProvider provider = new DataSourceProvider();
-            DataSource returnedData = provider.readFrom(DataSource.class, null,
-                    null, new MediaType("application", "datasource"), null,
-                    postMethod.getResponseBodyAsStream());
+            DataSource returnedData =
+                provider.readFrom(DataSource.class,
+                                  null,
+                                  null,
+                                  new MediaType("application", "datasource"),
+                                  null,
+                                  postMethod.getResponseBodyAsStream());
             assertNotNull(returnedData);
             assertNotNull(returnedData.getInputStream());
             byte[] responseBytes = new byte[input.getBytes().length];

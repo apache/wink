@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal.providers.entity.html;
 
 import java.io.IOException;
@@ -31,9 +31,8 @@ import org.apache.wink.server.internal.providers.entity.html.OutputStreamHttpSer
 import org.springframework.mock.web.MockRequestDispatcher;
 import org.springframework.util.Assert;
 
-
 /**
- * This dispatcher overrides the include method. This is needed because in HTML 
+ * This dispatcher overrides the include method. This is needed because in HTML
  * the response is wrapped to OutputStreamHttpServletResponseWrapper and isn't a
  * type of MockHttpServletResponse.
  */
@@ -59,10 +58,11 @@ public class HtmlMockRequestDispatcher extends MockRequestDispatcher {
         Assert.notNull(response, "Response must not be null");
         if (!(response instanceof OutputStreamHttpServletResponseWrapper))
             throw new IllegalArgumentException(
-                    "HtmlMockRequestDispatcher requires OutputStreamHttpServletResponseWrapper");
+                                               "HtmlMockRequestDispatcher requires OutputStreamHttpServletResponseWrapper");
 
-        OutputStreamHttpServletResponseWrapper res = (OutputStreamHttpServletResponseWrapper) response;
-        
+        OutputStreamHttpServletResponseWrapper res =
+            (OutputStreamHttpServletResponseWrapper)response;
+
         try {
             res.getWriter().write(url);
         } catch (IOException e) {

@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal.providers.entity.html;
 
 import java.io.IOException;
@@ -61,22 +61,19 @@ public class HtmlProvider implements MessageBodyWriter<HtmlDescriptor> {
      * this response and change it to write through the output stream received
      * and not to the output stream of the HttpServletResponse.
      * 
-     * @param stream
-     *            the output stream to output the serialization
+     * @param stream the output stream to output the serialization
      * @param includeUrl
-     * @throws IOException
-     *             I/O problem
-     * @throws IOException
-     *             in case the included resource throws ServletException
+     * @throws IOException I/O problem
+     * @throws IOException in case the included resource throws ServletException
      */
     private void include(OutputStream stream, String includeUrl) throws IOException {
         // create the response wrapper
-        OutputStreamHttpServletResponseWrapper httpServletResponseWrapper = new OutputStreamHttpServletResponseWrapper(
-            httpServletResponse, stream);
+        OutputStreamHttpServletResponseWrapper httpServletResponseWrapper =
+            new OutputStreamHttpServletResponseWrapper(httpServletResponse, stream);
         try {
             // include the file into the response wrapper
             httpServletRequest.getRequestDispatcher(includeUrl).include(httpServletRequest,
-                httpServletResponseWrapper);
+                                                                        httpServletResponseWrapper);
         } catch (ServletException e) {
             throw new WebApplicationException(e);
         }
@@ -84,19 +81,28 @@ public class HtmlProvider implements MessageBodyWriter<HtmlDescriptor> {
         httpServletResponseWrapper.flushOutput();
     }
 
-    public long getSize(HtmlDescriptor t, Class<?> type, Type genericType,
-        Annotation[] annotations, MediaType mediaType) {
+    public long getSize(HtmlDescriptor t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
         return -1;
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
         return HtmlDescriptor.class.isAssignableFrom(type);
     }
 
-    public void writeTo(HtmlDescriptor descriptor, Class<?> type, Type genericType,
-        Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
-        OutputStream entityStream) throws IOException, WebApplicationException {
+    public void writeTo(HtmlDescriptor descriptor,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
 
         // set the resource as attribute on the request in order to allow the
         // JSP/Servlet to use this data and present it.

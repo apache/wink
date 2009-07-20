@@ -50,8 +50,12 @@ public class MessageBodyReaderMediaTypeSet implements MessageBodyReader<Set> {
         return false;
     }
 
-    public Set readFrom(Class<Set> arg0, Type arg1, Annotation[] arg2, MediaType arg3, MultivaluedMap<String, String> arg4, InputStream arg5)
-            throws IOException, WebApplicationException {
+    public Set readFrom(Class<Set> arg0,
+                        Type arg1,
+                        Annotation[] arg2,
+                        MediaType arg3,
+                        MultivaluedMap<String, String> arg4,
+                        InputStream arg5) throws IOException, WebApplicationException {
         String str = null;
         try {
             MessageBodyReader<String> strReader =

@@ -76,7 +76,7 @@ public class JAXRSExceptionsNullConditionsTest extends TestCase {
             client.executeMethod(getMethod);
             assertEquals(500, getMethod.getStatusCode());
             ServerContainerAssertions.assertExceptionBodyFromServer(500, getMethod
-                                                                    .getResponseBodyAsString());
+                .getResponseBodyAsString());
         } finally {
             getMethod.releaseConnection();
         }
@@ -96,7 +96,7 @@ public class JAXRSExceptionsNullConditionsTest extends TestCase {
             client.executeMethod(postMethod);
             assertEquals(499, postMethod.getStatusCode());
             ServerContainerAssertions.assertExceptionBodyFromServer(499, postMethod
-                                                                    .getResponseBodyAsString());
+                .getResponseBodyAsString());
         } finally {
             postMethod.releaseConnection();
         }
@@ -137,7 +137,7 @@ public class JAXRSExceptionsNullConditionsTest extends TestCase {
             client.executeMethod(deleteMethod);
             assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), deleteMethod.getStatusCode());
             ServerContainerAssertions.assertExceptionBodyFromServer(400, deleteMethod
-                                                                    .getResponseBodyAsString());
+                .getResponseBodyAsString());
         } finally {
             deleteMethod.releaseConnection();
         }
@@ -177,7 +177,7 @@ public class JAXRSExceptionsNullConditionsTest extends TestCase {
             assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), postMethod
                 .getStatusCode());
             ServerContainerAssertions.assertExceptionBodyFromServer(500, postMethod
-                                                                    .getResponseBodyAsString());
+                .getResponseBodyAsString());
         } finally {
             postMethod.releaseConnection();
         }

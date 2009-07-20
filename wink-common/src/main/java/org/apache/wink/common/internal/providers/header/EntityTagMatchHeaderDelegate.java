@@ -25,14 +25,15 @@ import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 
 import org.apache.wink.common.internal.http.EntityTagMatchHeader;
 
-
-
 public class EntityTagMatchHeaderDelegate implements HeaderDelegate<EntityTagMatchHeader> {
 
-    private final static RuntimeDelegate delegate = RuntimeDelegate.getInstance();
-    private static final HeaderDelegate<EntityTag> ENTITY_TAG_HEADER_DELEGATE = delegate.createHeaderDelegate(EntityTag.class);
-    
-    
+    private final static RuntimeDelegate           delegate                   =
+                                                                                  RuntimeDelegate
+                                                                                      .getInstance();
+    private static final HeaderDelegate<EntityTag> ENTITY_TAG_HEADER_DELEGATE =
+                                                                                  delegate
+                                                                                      .createHeaderDelegate(EntityTag.class);
+
     public EntityTagMatchHeader fromString(String value) throws IllegalArgumentException {
         String[] valueTokens = value.split(",");
         EntityTagMatchHeader ifMatchHeader = new EntityTagMatchHeader();

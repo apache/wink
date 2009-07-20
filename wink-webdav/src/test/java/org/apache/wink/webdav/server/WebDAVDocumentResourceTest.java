@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.webdav.server;
 
 import java.util.Map;
@@ -25,7 +25,6 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 
 import org.apache.wink.common.http.HttpStatus;
-import org.apache.wink.server.internal.RequestProcessor;
 import org.apache.wink.webdav.model.Allprop;
 import org.apache.wink.webdav.model.Multistatus;
 import org.apache.wink.webdav.model.Prop;
@@ -37,12 +36,11 @@ import org.junit.Assert;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 public class WebDAVDocumentResourceTest extends AbstractWebDAVResourcesTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] { WebDAVTestDocumentResource.class };
+        return new Class[] {WebDAVTestDocumentResource.class};
     }
 
     public void testAllPropertyNames() throws Exception {

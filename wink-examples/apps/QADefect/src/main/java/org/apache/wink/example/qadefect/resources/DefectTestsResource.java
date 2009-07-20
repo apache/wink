@@ -39,8 +39,6 @@ import org.apache.wink.example.qadefect.legacy.DefectBean;
 import org.apache.wink.example.qadefect.legacy.TestBean;
 import org.apache.wink.server.utils.LinkBuilders;
 
-
-
 /**
  * <p>
  * Handler for requests for collection of tests that are related to the specific
@@ -52,20 +50,21 @@ import org.apache.wink.server.utils.LinkBuilders;
 @Path("/defects/{defect}/tests")
 @Workspace(workspaceTitle = "QA Defects", collectionTitle = "Tests of Defect")
 public class DefectTestsResource {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(DefectTestsResource.class);
-	
+
     /**
      * Method is handling GET requests to retrieve tests that are related to the
      * specific defect.
      * 
-     * @param defectId  defectId path variable
-     * @return  response object
+     * @param defectId defectId path variable
+     * @return response object
      */
     @GET
-    @Produces( { MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
-    public TestsAsset getTests(@Context LinkBuilders linkProcessor, @Context UriInfo uriInfo, 
-            @PathParam("defect") String defectId) {
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
+    public TestsAsset getTests(@Context LinkBuilders linkProcessor,
+                               @Context UriInfo uriInfo,
+                               @PathParam("defect") String defectId) {
 
         // initialize memory store
         DataStore store = DataStore.getInstance();

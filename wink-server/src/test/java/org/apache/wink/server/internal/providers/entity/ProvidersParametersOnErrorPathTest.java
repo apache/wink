@@ -94,14 +94,16 @@ public class ProvidersParametersOnErrorPathTest extends MockServletInvocationTes
     }
 
     public void testAnnotationsNotNullOnGoodPath() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "/test", "*/*");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "/test", "*/*");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
         assertEquals("Hello world", response.getContentAsString());
     }
 
     public void testAnnotationsNotNullOnErrorPath() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("DELETE", "/test", "*/*");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("DELETE", "/test", "*/*");
         MockHttpServletResponse response = invoke(request);
         assertEquals(499, response.getStatus());
         assertEquals("Goodbye", response.getContentAsString());

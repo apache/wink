@@ -25,7 +25,8 @@ import java.util.Set;
 import javax.ws.rs.core.Application;
 
 /**
- * Enhances javax.ws.rs.core.Application with <tt>getPriority</tt> and <tt>getInstances</tt> methods.
+ * Enhances javax.ws.rs.core.Application with <tt>getPriority</tt> and
+ * <tt>getInstances</tt> methods.
  */
 public class WinkApplication extends Application {
 

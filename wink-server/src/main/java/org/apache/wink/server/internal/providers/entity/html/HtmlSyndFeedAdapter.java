@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal.providers.entity.html;
 
 import java.text.SimpleDateFormat;
@@ -29,7 +29,6 @@ import org.apache.wink.common.model.synd.SyndFeed;
 import org.apache.wink.common.model.synd.SyndLink;
 import org.apache.wink.common.model.synd.SyndPerson;
 import org.apache.wink.common.model.synd.SyndText;
-
 
 /**
  * This adapter is used for default Html Representation of Collection (used in
@@ -45,8 +44,7 @@ public class HtmlSyndFeedAdapter {
     /**
      * This constructor sets the resource.
      * 
-     * @param resource
-     *            the represented resource
+     * @param resource the represented resource
      */
     public HtmlSyndFeedAdapter(SyndFeed syndFeed) {
         this.syndFeed = syndFeed;

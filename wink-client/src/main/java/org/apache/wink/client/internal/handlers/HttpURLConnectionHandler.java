@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.client.internal.handlers;
 
@@ -38,7 +37,6 @@ import org.apache.wink.client.ClientResponse;
 import org.apache.wink.client.handlers.HandlerContext;
 import org.apache.wink.client.internal.ClientUtils;
 
-
 public class HttpURLConnectionHandler extends AbstractConnectionHandler {
 
     public ClientResponse handle(ClientRequest request, HandlerContext context) throws Exception {
@@ -51,7 +49,8 @@ public class HttpURLConnectionHandler extends AbstractConnectionHandler {
         }
     }
 
-    private HttpURLConnection processRequest(ClientRequest request, HandlerContext context) throws IOException {
+    private HttpURLConnection processRequest(ClientRequest request, HandlerContext context)
+        throws IOException {
         HttpURLConnection connection = openConnection(request);
         NonCloseableOutputStream ncos = new NonCloseableOutputStream();
         OutputStream os = ncos;
@@ -74,8 +73,9 @@ public class HttpURLConnectionHandler extends AbstractConnectionHandler {
 
         // setup proxy
         if (config.getProxyHost() != null) {
-            Proxy proxy = new Proxy(Proxy.Type.HTTP,
-                    new InetSocketAddress(config.getProxyHost(), config.getProxyPort()));
+            Proxy proxy =
+                new Proxy(Proxy.Type.HTTP, new InetSocketAddress(config.getProxyHost(), config
+                    .getProxyPort()));
             connection = (HttpURLConnection)url.openConnection(proxy);
         } else {
             connection = (HttpURLConnection)url.openConnection();
@@ -92,7 +92,7 @@ public class HttpURLConnectionHandler extends AbstractConnectionHandler {
     }
 
     private void processRequestHeaders(ClientRequest request, HttpURLConnection connection) {
-        MultivaluedMap<String,String> headers = request.getHeaders();
+        MultivaluedMap<String, String> headers = request.getHeaders();
         for (String header : headers.keySet()) {
             List<String> values = headers.get(header);
             for (String value : values) {
@@ -103,8 +103,9 @@ public class HttpURLConnectionHandler extends AbstractConnectionHandler {
         }
     }
 
-    private ClientResponse processResponse(ClientRequest request, HandlerContext context, HttpURLConnection connection)
-            throws IOException {
+    private ClientResponse processResponse(ClientRequest request,
+                                           HandlerContext context,
+                                           HttpURLConnection connection) throws IOException {
         ClientResponse response = createResponse(request, connection);
         InputStream is = null;
         if (ClientUtils.isErrorCode(response.getStatusCode())) {
@@ -117,7 +118,8 @@ public class HttpURLConnectionHandler extends AbstractConnectionHandler {
         return response;
     }
 
-    private ClientResponse createResponse(ClientRequest request, HttpURLConnection connection) throws IOException {
+    private ClientResponse createResponse(ClientRequest request, HttpURLConnection connection)
+        throws IOException {
         ClientResponse response = new ClientResponseImpl();
         response.setStatusCode(connection.getResponseCode());
         response.setMessage(connection.getResponseMessage());

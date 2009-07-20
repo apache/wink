@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.providers.entity.json;
 
@@ -36,14 +35,15 @@ import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.model.atom.AtomFeed;
 import org.apache.wink.common.model.synd.SyndFeed;
 
-
-
 @Provider
-@Produces({MediaType.APPLICATION_JSON, MediaTypeUtils.JAVASCRIPT})
+@Produces( {MediaType.APPLICATION_JSON, MediaTypeUtils.JAVASCRIPT})
 public class JsonSyndFeedProvider extends JsonJAXBProvider {
 
     @Override
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
         if (type != SyndFeed.class) {
             return false;
         }
@@ -51,12 +51,21 @@ public class JsonSyndFeedProvider extends JsonJAXBProvider {
     }
 
     @Override
-    public void writeTo(Object t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
-            MultivaluedMap<String,Object> httpHeaders, OutputStream entityStream) throws IOException,
-            WebApplicationException {
+    public void writeTo(Object t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
         AtomFeed feed = new AtomFeed((SyndFeed)t);
-        super.writeTo(feed, AtomFeed.class, AtomFeed.class, annotations, mediaType, httpHeaders, entityStream);
+        super.writeTo(feed,
+                      AtomFeed.class,
+                      AtomFeed.class,
+                      annotations,
+                      mediaType,
+                      httpHeaders,
+                      entityStream);
     }
 
-    
 }

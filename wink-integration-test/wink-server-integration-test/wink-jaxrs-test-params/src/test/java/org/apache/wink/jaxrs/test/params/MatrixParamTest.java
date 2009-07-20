@@ -106,7 +106,8 @@ public class MatrixParamTest extends TestCase {
     }
 
     /**
-     * Tests both the simple constructor and method matrix parameter are processed.
+     * Tests both the simple constructor and method matrix parameter are
+     * processed.
      */
     public void testSimpleMatrixParam() {
         assertEquals("getSimpleMatrixParam:Hello;good",
@@ -219,10 +220,11 @@ public class MatrixParamTest extends TestCase {
     }
 
     /*
-     * TODO: More tests. Need to add urlencoding tests Need to add "weird" parameter tests (i.e. not
-     * standard inputs) Need to add precedence tests Need to add where both constructor and major
-     * get are in the same URL Need to add invalid tests. Need to add mixed tests and error tests
-     * for special parameters (i.e. not strings) Need to test cases where more/less inputs are given
-     * than expected
+     * TODO: More tests. Need to add urlencoding tests Need to add "weird"
+     * parameter tests (i.e. not standard inputs) Need to add precedence tests
+     * Need to add where both constructor and major get are in the same URL Need
+     * to add invalid tests. Need to add mixed tests and error tests for special
+     * parameters (i.e. not strings) Need to test cases where more/less inputs
+     * are given than expected
      */
 }

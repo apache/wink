@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.webdav.server;
 
 import java.io.IOException;
@@ -27,7 +27,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.wink.webdav.WebDAVMethod;
-
 
 /**
  * Base resource for WebDAV-enabled Lockable resources.
@@ -40,8 +39,7 @@ public abstract class WebDAVLockableResource extends WebDAVResource {
      * read-only file when a lock is not received.
      * 
      * @return response
-     * @throws IOException
-     *             when an I/O error occurs
+     * @throws IOException when an I/O error occurs
      */
     @WebDAVMethod.LOCK
     @Produces(MediaType.APPLICATION_XML)

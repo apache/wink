@@ -28,30 +28,34 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 
-
 public class ContentDispositionHeader implements Cloneable {
 
     private String                                                fileName;
     private String                                                defaultExtension;
     private boolean                                               attachment;
 
-    private static final Map<MediaType, ContentDispositionHeader> mediaType2ContentDisposition = contructMediaType2ContentDisposition();
+    private static final Map<MediaType, ContentDispositionHeader> mediaType2ContentDisposition =
+                                                                                                   contructMediaType2ContentDisposition();
 
     private static Map<MediaType, ContentDispositionHeader> contructMediaType2ContentDisposition() {
-        Map<MediaType, ContentDispositionHeader> result = new HashMap<MediaType, ContentDispositionHeader>();
+        Map<MediaType, ContentDispositionHeader> result =
+            new HashMap<MediaType, ContentDispositionHeader>();
         putContentDispositionRecord(result, MediaTypeUtils.CSV, true, "csv");
         putContentDispositionRecord(result, MediaTypeUtils.PDF_TYPE, false, "pdf");
         return Collections.unmodifiableMap(result);
     }
 
     private static void putContentDispositionRecord(Map<MediaType, ContentDispositionHeader> map,
-        MediaType mediaType, boolean attachment, String extension) {
+                                                    MediaType mediaType,
+                                                    boolean attachment,
+                                                    String extension) {
         map.put(mediaType, new ContentDispositionHeader(attachment, extension));
     }
 
     public static ContentDispositionHeader createContentDispositionHeader(MediaType mediaType) {
         try {
-            ContentDispositionHeader contentDispositionHeader = mediaType2ContentDisposition.get(mediaType);
+            ContentDispositionHeader contentDispositionHeader =
+                mediaType2ContentDisposition.get(mediaType);
             if (contentDispositionHeader != null) {
                 return contentDispositionHeader.clone();
             }
@@ -96,6 +100,6 @@ public class ContentDispositionHeader implements Cloneable {
 
     @Override
     protected ContentDispositionHeader clone() throws CloneNotSupportedException {
-        return (ContentDispositionHeader) super.clone();
+        return (ContentDispositionHeader)super.clone();
     }
 }

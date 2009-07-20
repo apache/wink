@@ -19,12 +19,12 @@
  *******************************************************************************/
 package org.apache.wink.common.internal.lifecycle;
 
-
 import org.apache.wink.common.annotations.Scope;
 import org.apache.wink.common.annotations.Scope.ScopeType;
 
 /**
- * Implements a LifecycleManager that creates objects based on the Scope annotation.
+ * Implements a LifecycleManager that creates objects based on the Scope
+ * annotation.
  * 
  * @param <T>
  * @see Scope
@@ -38,7 +38,7 @@ public class ScopeLifecycleManager<T> implements LifecycleManager<T> {
         }
 
         @SuppressWarnings("unchecked")
-        final Class<T> cls = (Class<T>) object.getClass();
+        final Class<T> cls = (Class<T>)object.getClass();
         Scope scope = cls.getAnnotation(Scope.class);
 
         if (scope != null) {
@@ -70,6 +70,5 @@ public class ScopeLifecycleManager<T> implements LifecycleManager<T> {
         // has no Scope annotation, do nothing
         return null;
     }
-
 
 }

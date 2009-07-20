@@ -64,44 +64,64 @@ public class ServerInjectableFactory extends InjectableFactory {
     }
 
     @Override
-    public Injectable createCookieParam(String value, Class<?> classType, Type genericType,
-        Annotation[] annotations, Member member) {
+    public Injectable createCookieParam(String value,
+                                        Class<?> classType,
+                                        Type genericType,
+                                        Annotation[] annotations,
+                                        Member member) {
         return new CookieParamBinding(value, classType, genericType, annotations, member);
     }
 
     @Override
-    public Injectable createEntityParam(Class<?> classType, Type genericType,
-        Annotation[] annotations, Member member) {
+    public Injectable createEntityParam(Class<?> classType,
+                                        Type genericType,
+                                        Annotation[] annotations,
+                                        Member member) {
         return new EntityParam(classType, genericType, annotations, member);
     }
 
     @Override
-    public Injectable createFormParam(String value, Class<?> classType, Type genericType,
-        Annotation[] annotations, Member member) {
+    public Injectable createFormParam(String value,
+                                      Class<?> classType,
+                                      Type genericType,
+                                      Annotation[] annotations,
+                                      Member member) {
         return new FormParamBinding(value, classType, genericType, annotations, member);
     }
 
     @Override
-    public Injectable createHeaderParam(String value, Class<?> classType, Type genericType,
-        Annotation[] annotations, Member member) {
+    public Injectable createHeaderParam(String value,
+                                        Class<?> classType,
+                                        Type genericType,
+                                        Annotation[] annotations,
+                                        Member member) {
         return new HeaderParamBinding(value, classType, genericType, annotations, member);
     }
 
     @Override
-    public Injectable createMatrixParam(String value, Class<?> classType, Type genericType,
-        Annotation[] annotations, Member member) {
+    public Injectable createMatrixParam(String value,
+                                        Class<?> classType,
+                                        Type genericType,
+                                        Annotation[] annotations,
+                                        Member member) {
         return new MatrixParamBinding(value, classType, genericType, annotations, member);
     }
 
     @Override
-    public Injectable createPathParam(String value, Class<?> classType, Type genericType,
-        Annotation[] annotations, Member member) {
+    public Injectable createPathParam(String value,
+                                      Class<?> classType,
+                                      Type genericType,
+                                      Annotation[] annotations,
+                                      Member member) {
         return new PathParamBinding(value, classType, genericType, annotations, member);
     }
 
     @Override
-    public Injectable createQueryParam(String value, Class<?> classType, Type genericType,
-        Annotation[] annotations, Member member) {
+    public Injectable createQueryParam(String value,
+                                       Class<?> classType,
+                                       Type genericType,
+                                       Annotation[] annotations,
+                                       Member member) {
         return new QueryParamBinding(value, classType, genericType, annotations, member);
     }
 
@@ -120,7 +140,8 @@ public class ServerInjectableFactory extends InjectableFactory {
             if (type != HttpServletRequest.class && type != HttpServletResponse.class) {
                 contextAccessor = new ContextAccessor();
             } else {
-                // due to strict checking of HttpServletRequest and HttpServletResponse
+                // due to strict checking of HttpServletRequest and
+                // HttpServletResponse
                 // injections, a special injector must be used
                 contextAccessor = new ServletContextAccessor();
             }
@@ -157,13 +178,20 @@ public class ServerInjectableFactory extends InjectableFactory {
                 if (mediaType == null) {
                     mediaType = MediaType.APPLICATION_OCTET_STREAM_TYPE;
                 }
-                MessageBodyReader mbr = providers.getMessageBodyReader(paramType, getGenericType(),
-                    getAnnotations(), mediaType);
+                MessageBodyReader mbr =
+                    providers.getMessageBodyReader(paramType,
+                                                   getGenericType(),
+                                                   getAnnotations(),
+                                                   mediaType);
 
                 if (mbr != null) {
-                    Object read = mbr.readFrom(paramType, getGenericType(), getAnnotations(),
-                        mediaType, runtimeContext.getHttpHeaders().getRequestHeaders(),
-                        runtimeContext.getInputStream());
+                    Object read =
+                        mbr.readFrom(paramType,
+                                     getGenericType(),
+                                     getAnnotations(),
+                                     mediaType,
+                                     runtimeContext.getHttpHeaders().getRequestHeaders(),
+                                     runtimeContext.getInputStream());
                     return read;
                 }
             }
@@ -177,8 +205,11 @@ public class ServerInjectableFactory extends InjectableFactory {
      */
     public static class MatrixParamBinding extends BoundInjectable {
 
-        public MatrixParamBinding(String variableName, Class<?> type, Type genericType,
-            Annotation[] annotations, Member member) {
+        public MatrixParamBinding(String variableName,
+                                  Class<?> type,
+                                  Type genericType,
+                                  Annotation[] annotations,
+                                  Member member) {
             super(ParamType.MATRIX, variableName, type, genericType, annotations, member);
         }
 
@@ -188,8 +219,8 @@ public class ServerInjectableFactory extends InjectableFactory {
                 return null;
             }
             List<String> allValues = new ArrayList<String>();
-            List<PathSegment> segments = runtimeContext.getAttribute(SearchResult.class).getData().getMatchedURIs().get(
-                0);
+            List<PathSegment> segments =
+                runtimeContext.getAttribute(SearchResult.class).getData().getMatchedURIs().get(0);
             // get the matrix parameter only from the last segment
             PathSegment segment = segments.get(segments.size() - 1);
             MultivaluedMap<String, String> matrixParameters = segment.getMatrixParameters();
@@ -219,8 +250,11 @@ public class ServerInjectableFactory extends InjectableFactory {
      */
     public static class QueryParamBinding extends BoundInjectable {
 
-        public QueryParamBinding(String variableName, Class<?> type, Type genericType,
-            Annotation[] annotations, Member member) {
+        public QueryParamBinding(String variableName,
+                                 Class<?> type,
+                                 Type genericType,
+                                 Annotation[] annotations,
+                                 Member member) {
             super(ParamType.QUERY, variableName, type, genericType, annotations, member);
         }
 
@@ -263,13 +297,15 @@ public class ServerInjectableFactory extends InjectableFactory {
      */
     public static class FormParamBinding extends BoundInjectable {
 
-        static final String                                FORM_PARAMATERS             = "wink.formParameters";
+        static final String                                FORM_PARAMATERS             =
+                                                                                           "wink.formParameters";
         public final static MultivaluedMap<String, String> dummyMultivaluedMap         = null;
         private static Type                                MULTIVALUED_MAP_STRING_TYPE = null;
 
         static {
             try {
-                MULTIVALUED_MAP_STRING_TYPE = FormParamBinding.class.getField("dummyMultivaluedMap").getGenericType();
+                MULTIVALUED_MAP_STRING_TYPE =
+                    FormParamBinding.class.getField("dummyMultivaluedMap").getGenericType();
             } catch (SecurityException e) {
                 throw new WebApplicationException(e);
             } catch (NoSuchFieldException e) {
@@ -277,8 +313,11 @@ public class ServerInjectableFactory extends InjectableFactory {
             }
         }
 
-        public FormParamBinding(String variableName, Class<?> type, Type genericType,
-            Annotation[] annotations, Member member) {
+        public FormParamBinding(String variableName,
+                                Class<?> type,
+                                Type genericType,
+                                Annotation[] annotations,
+                                Member member) {
             super(ParamType.FORM, variableName, type, genericType, annotations, member);
         }
 
@@ -292,19 +331,23 @@ public class ServerInjectableFactory extends InjectableFactory {
             // request must be application/x-www-form-urlencoded
             MediaType mediaType = runtimeContext.getHttpHeaders().getMediaType();
             if (!MediaTypeUtils.equalsIgnoreParameters(mediaType,
-                MediaType.APPLICATION_FORM_URLENCODED_TYPE)) {
+                                                       MediaType.APPLICATION_FORM_URLENCODED_TYPE)) {
                 return null;
             }
 
-            // see if we already have the form parameters, which will happen if there
+            // see if we already have the form parameters, which will happen if
+            // there
             // is more than one form parameter on the method
-            MultivaluedMap<String, String> formParameters = (MultivaluedMap<String, String>) runtimeContext.getAttributes().get(
-                FORM_PARAMATERS);
+            MultivaluedMap<String, String> formParameters =
+                (MultivaluedMap<String, String>)runtimeContext.getAttributes().get(FORM_PARAMATERS);
             if (formParameters == null) {
-                // read the request body as an entity parameter to get the form parameters
-                EntityParam entityParam = new EntityParam(MultivaluedMap.class,
-                    MULTIVALUED_MAP_STRING_TYPE, getAnnotations(), null);
-                formParameters = (MultivaluedMap<String, String>) entityParam.getValue(runtimeContext);
+                // read the request body as an entity parameter to get the form
+                // parameters
+                EntityParam entityParam =
+                    new EntityParam(MultivaluedMap.class, MULTIVALUED_MAP_STRING_TYPE,
+                                    getAnnotations(), null);
+                formParameters =
+                    (MultivaluedMap<String, String>)entityParam.getValue(runtimeContext);
                 runtimeContext.getAttributes().put(FORM_PARAMATERS, formParameters);
             }
 
@@ -343,8 +386,11 @@ public class ServerInjectableFactory extends InjectableFactory {
      */
     public static class PathParamBinding extends BoundInjectable {
 
-        public PathParamBinding(String variableName, Class<?> type, Type genericType,
-            Annotation[] annotations, Member member) {
+        public PathParamBinding(String variableName,
+                                Class<?> type,
+                                Type genericType,
+                                Annotation[] annotations,
+                                Member member) {
             super(ParamType.PATH, variableName, type, genericType, annotations, member);
         }
 
@@ -354,8 +400,9 @@ public class ServerInjectableFactory extends InjectableFactory {
                 return null;
             }
 
-            MultivaluedMap<String, List<PathSegment>> pathSegmentsMap = runtimeContext.getAttribute(
-                SearchResult.class).getData().getMatchedVariablesPathSegments();
+            MultivaluedMap<String, List<PathSegment>> pathSegmentsMap =
+                runtimeContext.getAttribute(SearchResult.class).getData()
+                    .getMatchedVariablesPathSegments();
             List<PathSegment> segments = pathSegmentsMap.getFirst(getName());
             if (segments != null && segments.size() > 0) {
                 // special handling for PathSegment
@@ -383,7 +430,8 @@ public class ServerInjectableFactory extends InjectableFactory {
                 }
             }
 
-            // for all other types and for cases where the default value should be used
+            // for all other types and for cases where the default value should
+            // be used
             UriInfo uriInfo = runtimeContext.getUriInfo();
             MultivaluedMap<String, String> variables = uriInfo.getPathParameters(false);
             List<String> values = variables.get(getName());
@@ -394,9 +442,11 @@ public class ServerInjectableFactory extends InjectableFactory {
             // use default value
             if (values.size() == 0 && hasDefaultValue()) {
                 String defaultValue = getDefaultValue();
-                // if the injected type is a PathSegment or some collection of PathSegment then
+                // if the injected type is a PathSegment or some collection of
+                // PathSegment then
                 // split the default value
-                // into separate segments, otherwise, pass the default value as-is.
+                // into separate segments, otherwise, pass the default value
+                // as-is.
                 if (isTypeOf(PathSegment.class) || isTypeCollectionOf(PathSegment.class)) {
                     String[] segmentsArray = StringUtils.fastSplit(defaultValue, "/", true);
                     values.addAll(Arrays.asList(segmentsArray));
@@ -421,8 +471,11 @@ public class ServerInjectableFactory extends InjectableFactory {
      */
     public static class HeaderParamBinding extends BoundInjectable {
 
-        public HeaderParamBinding(String variableName, Class<?> type, Type genericType,
-            Annotation[] annotations, Member member) {
+        public HeaderParamBinding(String variableName,
+                                  Class<?> type,
+                                  Type genericType,
+                                  Annotation[] annotations,
+                                  Member member) {
             super(ParamType.HEADER, variableName, type, genericType, annotations, member);
         }
 
@@ -456,8 +509,11 @@ public class ServerInjectableFactory extends InjectableFactory {
      */
     public static class CookieParamBinding extends BoundInjectable {
 
-        public CookieParamBinding(String variableName, Class<?> type, Type genericType,
-            Annotation[] annotations, Member member) {
+        public CookieParamBinding(String variableName,
+                                  Class<?> type,
+                                  Type genericType,
+                                  Annotation[] annotations,
+                                  Member member) {
             super(ParamType.COOKIE, variableName, type, genericType, annotations, member);
         }
 

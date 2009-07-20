@@ -74,23 +74,23 @@ public class HtmlRepresentationServiceDocumentTest extends HtmlMockServletInvoca
      * The method invokes the Resource for Service Document in HTML and checks
      * the response.
      * 
-     * @param relPath
-     *            The path to invoke
+     * @param relPath The path to invoke
      * @throws IOException
      */
     public void executeTestServiceDocumentHtml(String relPath) throws Exception {
         try {
-            MockHttpServletResponse response = invoke(MockRequestConstructor.constructMockRequest(
-                "GET", relPath, MediaType.TEXT_HTML));
+            MockHttpServletResponse response =
+                invoke(MockRequestConstructor.constructMockRequest("GET",
+                                                                   relPath,
+                                                                   MediaType.TEXT_HTML));
             assertEquals("HTTP status", 200, response.getStatus());
             // check that the content contains at least one link with HTML
             String content = response.getContentAsString();
-            assertTrue("link includes HTML",
-                content.indexOf(UriEncoder.encodeString(MediaType.TEXT_HTML)) > 0);
+            assertTrue("link includes HTML", content.indexOf(UriEncoder
+                .encodeString(MediaType.TEXT_HTML)) > 0);
 
         } catch (RestException e) {
-            assertEquals(
-                "exception message", "The file requested cannot be retrieved.", e.getMessage()); //$NON-NLS-1$
+            assertEquals("exception message", "The file requested cannot be retrieved.", e.getMessage()); //$NON-NLS-1$
         }
     }
 

@@ -91,7 +91,7 @@ public class WebContainerContextInjectionResource {
         servletContext.getRequestDispatcher("/servlets-test.jsp").include(httpServletRequest,
                                                                           httpServletResponse);
         httpServletRequest.removeAttribute("wink");
-        
+
         // need to flush buffer so the response is committed
         httpServletResponse.flushBuffer();
     }

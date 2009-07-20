@@ -31,9 +31,9 @@ import javax.ws.rs.Path;
 @Path("/sequence")
 public class SequenceResource {
 
-    private int hits = 0;
+    private int        hits                = 0;
 
-    private static int staticHitCount = 0;
+    private static int staticHitCount      = 0;
 
     private static int constructorHitCount = 0;
 

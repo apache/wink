@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.history.legacy;
 
 import java.util.ArrayList;
@@ -28,16 +28,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 /**
- * Implementation of a demo memory store of legacy beans. Singleton class. <p/>
+ * Implementation of a demo memory store of legacy beans. Singleton class.
+ * <p/>
  * The class is thread-safe. All method see (or change) at the moment when they
  * are invoked, later changes don't affect the returned collections, values...
  */
 public class DataStore {
 
     private static DataStore defectStore = createSingletonInstance();
-
 
     /**
      * Constructor of mock defect store. It is initialized with test data.
@@ -47,81 +46,85 @@ public class DataStore {
     private static DataStore createSingletonInstance() {
         DataStore store = new DataStore();
 
-        DefectBean defectBean1 = new DefectBean(
-            "1",
-            "Cannot perform payment",
-            "In Payment Services page, error message appears when trying to perform payment with valid credit card.",
-            new Date(50505050), "tester1", "1-critical", "New", "developer1", 0);
-        DefectBean defectBean2 = new DefectBean(
-            "2",
-            "Cancel button is missing",
-            "In Payment Services Confirmation page, the Cancel button is missing.",
-            new Date(50505051), "tester2", "4-minor", "New", "developer2", 0);
-        DefectBean defectBean3 = new DefectBean(
-            "3",
-            "Login failure",
-            "When trying to login with the user 'Admin', I'm getting an error 'The user is locked'.",
-            new Date(50505052), "tester3", "1-critical", "Assigned",
-            "developer3", 0);
+        DefectBean defectBean1 =
+            new DefectBean(
+                           "1",
+                           "Cannot perform payment",
+                           "In Payment Services page, error message appears when trying to perform payment with valid credit card.",
+                           new Date(50505050), "tester1", "1-critical", "New", "developer1", 0);
+        DefectBean defectBean2 =
+            new DefectBean("2", "Cancel button is missing",
+                           "In Payment Services Confirmation page, the Cancel button is missing.",
+                           new Date(50505051), "tester2", "4-minor", "New", "developer2", 0);
+        DefectBean defectBean3 =
+            new DefectBean(
+                           "3",
+                           "Login failure",
+                           "When trying to login with the user 'Admin', I'm getting an error 'The user is locked'.",
+                           new Date(50505052), "tester3", "1-critical", "Assigned", "developer3", 0);
 
-        DefectBean defectBean4 = new DefectBean(
-            "4",
-            "Missing expiration field",
-            "In Payment Services page, the expiration field of credit card is missing.",
-            new Date(50505052), "tester2", "2-high", "Assigned", "developer3",
-            0);
+        DefectBean defectBean4 =
+            new DefectBean(
+                           "4",
+                           "Missing expiration field",
+                           "In Payment Services page, the expiration field of credit card is missing.",
+                           new Date(50505052), "tester2", "2-high", "Assigned", "developer3", 0);
 
-        DefectBean defectBean5 = new DefectBean(
-            "1",
-            "Missing asterisk for mandatory fields",
-            "In Payment Services page, there is no indication for mandatory fields.",
-            new Date(50505052), "tester2", "4-minor", "Assigned", "developer3",
-            0);
+        DefectBean defectBean5 =
+            new DefectBean(
+                           "1",
+                           "Missing asterisk for mandatory fields",
+                           "In Payment Services page, there is no indication for mandatory fields.",
+                           new Date(50505052), "tester2", "4-minor", "Assigned", "developer3", 0);
 
-        DefectBean defectBean6 = new DefectBean(
-            "2",
-            "User is not locked",
-            "When trying to login with the same user three times with wrong password, the user doesn't get locked.",
-            new Date(50505052), "tester3", "2-high", "Fixed", "developer2", 0);
+        DefectBean defectBean6 =
+            new DefectBean(
+                           "2",
+                           "User is not locked",
+                           "When trying to login with the same user three times with wrong password, the user doesn't get locked.",
+                           new Date(50505052), "tester3", "2-high", "Fixed", "developer2", 0);
 
-        DefectBean defectBean7 = new DefectBean("3", "Logout button",
-            "The pages are missing the button 'logout'.", new Date(50505052),
-            "tester1", "2-high", "New", "developer1", 0);
+        DefectBean defectBean7 =
+            new DefectBean("3", "Logout button", "The pages are missing the button 'logout'.",
+                           new Date(50505052), "tester1", "2-high", "New", "developer1", 0);
 
-        DefectBean defectBean8 = new DefectBean("4", "Error messages",
-            "Error messages are not displayed in red color",
-            new Date(50505052), "tester1", "4-minor", "Fixed", "developer1", 0);
+        DefectBean defectBean8 =
+            new DefectBean("4", "Error messages", "Error messages are not displayed in red color",
+                           new Date(50505052), "tester1", "4-minor", "Fixed", "developer1", 0);
 
-        DefectBean defectBean9 = new DefectBean(
-            "5",
-            "Submit button is disabled in Edit Profile page",
-            "When trying to submit changes in Edit Profile page, the Submit button is disabled.",
-            new Date(50505052), "tester3", "2-high", "New", "developer1", 0);
+        DefectBean defectBean9 =
+            new DefectBean(
+                           "5",
+                           "Submit button is disabled in Edit Profile page",
+                           "When trying to submit changes in Edit Profile page, the Submit button is disabled.",
+                           new Date(50505052), "tester3", "2-high", "New", "developer1", 0);
 
-        DefectBean defectBean10 = new DefectBean("1",
-            "Id field is disabled in Edit Profile page",
-            "Cannot change the Id in Edit Profile page, it is disabled.",
-            new Date(50505052), "tester1", "2-high", "New", "developer1", 0);
+        DefectBean defectBean10 =
+            new DefectBean("1", "Id field is disabled in Edit Profile page",
+                           "Cannot change the Id in Edit Profile page, it is disabled.",
+                           new Date(50505052), "tester1", "2-high", "New", "developer1", 0);
 
-        DefectBean defectBean11 = new DefectBean("2",
-            "Cannot login to the system",
-            "Cannot login to the system with the user 'David'.", new Date(
-                50505052), "tester3", "1-critical", "Rejected", "developer1", 0);
+        DefectBean defectBean11 =
+            new DefectBean("2", "Cannot login to the system",
+                           "Cannot login to the system with the user 'David'.", new Date(50505052),
+                           "tester3", "1-critical", "Rejected", "developer1", 0);
 
-        DefectBean defectBean12 = new DefectBean("3", "Checkbox is disabled",
-            "Checkbox is disabled in Edit Profile page", new Date(50505052),
-            "tester3", "2-high", "Rejected", "developer1", 0);
+        DefectBean defectBean12 =
+            new DefectBean("3", "Checkbox is disabled",
+                           "Checkbox is disabled in Edit Profile page", new Date(50505052),
+                           "tester3", "2-high", "Rejected", "developer1", 0);
 
-        DefectBean defectBean13 = new DefectBean("6", "Missing message text",
-            "Missing message text in Edit Profile page", new Date(50505052),
-            "tester3", "4-minor", "Rejected", "developer1", 0);
+        DefectBean defectBean13 =
+            new DefectBean("6", "Missing message text",
+                           "Missing message text in Edit Profile page", new Date(50505052),
+                           "tester3", "4-minor", "Rejected", "developer1", 0);
 
-        DefectBean defectBean14 = new DefectBean(
-            "7",
-            "Wrong translation for the word 'user'",
-            "When moving to French language the translation of 'user' word is incorrect",
-            new Date(50505052), "tester3", "2-high", "Rejected", "developer1",
-            0);
+        DefectBean defectBean14 =
+            new DefectBean(
+                           "7",
+                           "Wrong translation for the word 'user'",
+                           "When moving to French language the translation of 'user' word is incorrect",
+                           new Date(50505052), "tester3", "2-high", "Rejected", "developer1", 0);
 
         store.putDefect(defectBean1.getId(), defectBean1);
         store.putDefect(defectBean2.getId(), defectBean2);
@@ -207,10 +210,8 @@ public class DataStore {
      * revision will be updated. The method does not validate that the update is
      * allowed.
      * 
-     * @param key
-     *            defect key.
-     * @param defect
-     *            defect bean.
+     * @param key defect key.
+     * @param defect defect bean.
      */
     public void putDefect(String key, DefectBean defect) {
         synchronized (defects) {
@@ -236,8 +237,7 @@ public class DataStore {
      * Returns defect of requested defect id. The undeleted defect with the last
      * revision will be returned.
      * 
-     * @param key
-     *            requested defect key (defect id).
+     * @param key requested defect key (defect id).
      * @return requested defect, or <tt>null</tt> if Defect with such key does
      *         not exist.
      */
@@ -253,8 +253,9 @@ public class DataStore {
     }
 
     /**
-     * returns true if the defect with the given id was deleted
-     * if not found, returns false 
+     * returns true if the defect with the given id was deleted if not found,
+     * returns false
+     * 
      * @param key
      * @return
      */
@@ -269,7 +270,6 @@ public class DataStore {
         }
     }
 
-    
     /**
      * Returns defect of requested defect id and revision. The defect is
      * returned even if it was deleted
@@ -308,8 +308,7 @@ public class DataStore {
     /**
      * deleted defect. The delete is actually adding new revision.
      * 
-     * @param key
-     *            requested defect key (defect id).
+     * @param key requested defect key (defect id).
      * @return previous defect bean associated with specified key, or
      *         <tt>null<tt> if there was no mapping for key.
      */

@@ -17,13 +17,12 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.client.handlers;
 
 /**
- * Interface for specifying that a handler is the connection handler and is the last handler on the
- * handler chain
+ * Interface for specifying that a handler is the connection handler and is the
+ * last handler on the handler chain
  */
 public interface ConnectionHandler extends ClientHandler {
 

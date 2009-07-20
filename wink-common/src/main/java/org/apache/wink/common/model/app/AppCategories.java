@@ -24,7 +24,6 @@
 // Generated on: 2008.09.15 at 09:38:06 AM IDT 
 //
 
-
 package org.apache.wink.common.model.app;
 
 import java.io.IOException;
@@ -50,7 +49,6 @@ import org.apache.wink.common.internal.utils.JAXBUtils;
 import org.apache.wink.common.model.JAXBNamespacePrefixMapper;
 import org.apache.wink.common.model.atom.AtomCategory;
 import org.apache.wink.common.model.atom.AtomJAXBUtils;
-
 
 /**
  * The "app:categories" Element Per RFC5023
@@ -107,27 +105,25 @@ import org.apache.wink.common.model.atom.AtomJAXBUtils;
  *    categories element MUST be empty and MUST NOT have the &quot;fixed&quot; or
  *    &quot;scheme&quot; attributes.
  * </pre>
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "appCategories", propOrder = {
-    "category"
-})
+@XmlType(name = "appCategories", propOrder = {"category"})
 public class AppCategories implements NamespacePrefixMapperProvider {
 
     @XmlElement(namespace = "http://www.w3.org/2005/Atom")
-    protected List<AtomCategory> category;
+    protected List<AtomCategory>     category;
     @XmlAttribute
-    protected AppYesNo fixed;
+    protected AppYesNo               fixed;
     @XmlAttribute
-    protected String scheme;
+    protected String                 scheme;
     @XmlAttribute
-    protected String href;
+    protected String                 href;
 
     @XmlTransient
-    boolean isFixedSet = false;
-    
-    private static final String ERROR_MESSAGE = "cannot mix inline and out-of-line categories attributes";
+    boolean                          isFixedSet    = false;
+
+    private static final String      ERROR_MESSAGE =
+                                                       "cannot mix inline and out-of-line categories attributes";
 
     // ============================
     @XmlTransient
@@ -144,13 +140,14 @@ public class AppCategories implements NamespacePrefixMapperProvider {
     public static Marshaller getMarshaller() {
         return JAXBUtils.createMarshaller(context);
     }
-    
+
     public static Unmarshaller getUnmarshaller() {
         return JAXBUtils.createUnmarshaller(context);
     }
 
     /**
      * Convenience method for creating an AppCategories from xml
+     * 
      * @param reader input reader
      * @return AppCategories instance from the input
      */
@@ -163,33 +160,30 @@ public class AppCategories implements NamespacePrefixMapperProvider {
     }
 
     public JAXBNamespacePrefixMapper getNamespacePrefixMapper() {
-        JAXBNamespacePrefixMapper mapper = new JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_APP);
+        JAXBNamespacePrefixMapper mapper =
+            new JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_APP);
         mapper.omitNamespace(RestConstants.NAMESPACE_OPENSEARCH);
         return mapper;
     }
+
     // ============================
 
     /**
      * Gets the value of the category property.
-     * 
      * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the category property.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the category property.
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getCategory().add(newItem);
+     * getCategory().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AtomCategory }
-     * 
-     * 
      */
     public List<AtomCategory> getCategory() {
         if (!isInline()) {
@@ -208,10 +202,7 @@ public class AppCategories implements NamespacePrefixMapperProvider {
     /**
      * Gets the value of the fixed property.
      * 
-     * @return
-     *     possible object is
-     *     {@link AppYesNo }
-     *     
+     * @return possible object is {@link AppYesNo }
      */
     public AppYesNo getFixed() {
         if (fixed == null) {
@@ -224,10 +215,7 @@ public class AppCategories implements NamespacePrefixMapperProvider {
     /**
      * Sets the value of the fixed property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link AppYesNo }
-     *     
+     * @param value allowed object is {@link AppYesNo }
      */
     public void setFixed(AppYesNo value) {
         isFixedSet = true;
@@ -238,14 +226,11 @@ public class AppCategories implements NamespacePrefixMapperProvider {
     public boolean isFixedSet() {
         return isFixedSet;
     }
-    
+
     /**
      * Gets the value of the scheme property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return possible object is {@link String }
      */
     public String getScheme() {
         return scheme;
@@ -254,23 +239,17 @@ public class AppCategories implements NamespacePrefixMapperProvider {
     /**
      * Sets the value of the scheme property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * @param value allowed object is {@link String }
      */
     public void setScheme(String value) {
         this.scheme = value;
         checkValidity();
     }
-    
+
     /**
      * Gets the value of the href property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return possible object is {@link String }
      */
     public String getHref() {
         return href;
@@ -279,23 +258,19 @@ public class AppCategories implements NamespacePrefixMapperProvider {
     /**
      * Sets the value of the href property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * @param value allowed object is {@link String }
      */
-    public void setHref(String value) {            
+    public void setHref(String value) {
         this.href = value;
         checkValidity();
     }
-    
+
     public boolean isInline() {
         return getHref() == null;
     }
-    
+
     public void checkValidity() {
-        if ((getScheme() != null || getCategoryNoCheck().size() > 0 || isFixedSet()) &&
-            getHref() != null) {
+        if ((getScheme() != null || getCategoryNoCheck().size() > 0 || isFixedSet()) && getHref() != null) {
             throw new RestException(ERROR_MESSAGE);
         }
     }

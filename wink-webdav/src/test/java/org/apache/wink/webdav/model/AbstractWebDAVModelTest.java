@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.webdav.model;
 
 import java.io.InputStream;
@@ -25,9 +25,7 @@ import java.io.InputStreamReader;
 
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 
-
-public abstract class AbstractWebDAVModelTest extends
-    MockServletInvocationTest {
+public abstract class AbstractWebDAVModelTest extends MockServletInvocationTest {
 
     protected static String loadStreamToString(InputStream stream) throws Exception {
 
@@ -35,7 +33,7 @@ public abstract class AbstractWebDAVModelTest extends
         InputStreamReader reader = new InputStreamReader(stream);
         int b;
         while ((b = reader.read()) >= 0) {
-            builder.append((char) b);
+            builder.append((char)b);
         }
         return builder.toString();
     }

@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.utils;
 
@@ -44,47 +43,48 @@ import org.apache.wink.server.internal.registry.ResourceRecord;
 import org.apache.wink.server.internal.registry.SubResourceInstance;
 import org.apache.wink.server.utils.SystemLinksBuilder;
 
+public class SystemLinksBuilderImpl extends AbstractLinksBuilderImpl<SystemLinksBuilder> implements
+    SystemLinksBuilder {
 
-
-
-public class SystemLinksBuilderImpl extends AbstractLinksBuilderImpl<SystemLinksBuilder> implements SystemLinksBuilder {
-    
     private LinkType[] types;
-    private boolean allResources;
-    
+    private boolean    allResources;
+
     public SystemLinksBuilderImpl(ServerMessageContext context) {
         super(context);
         types = null;
         allResources = isContinuedSearchMode();
     }
-    
+
     protected boolean isContinuedSearchMode() {
-        return Boolean.valueOf(context.getProperties().getProperty(FindRootResourceHandler.SEARCH_POLICY_CONTINUED_SEARCH_KEY, "false"));
+        return Boolean.valueOf(context.getProperties()
+            .getProperty(FindRootResourceHandler.SEARCH_POLICY_CONTINUED_SEARCH_KEY, "false"));
     }
-    
-    public SystemLinksBuilder types(LinkType ... types) {
+
+    public SystemLinksBuilder types(LinkType... types) {
         this.types = types;
         return this;
     }
-    
+
     public SystemLinksBuilder allResources(boolean all) {
         allResources = all;
         return this;
     }
-    
+
     @Override
     public List<SyndLink> build(List<SyndLink> out) {
-        
+
         Set<SyndLink> set = new HashSet<SyndLink>();
-        
-        // if the search mode is "Continued Search" we need to generate links for all 
+
+        // if the search mode is "Continued Search" we need to generate links
+        // for all
         // of the matching root resources and not just for the current one
         if (allResources) {
             // get the path to use for obtaining the matching root resources
             URI uri = UriBuilder.fromPath(resourcePath).buildFromEncodedMap(pathParams);
             String path = uri.toString();
             List<ResourceInstance> rootResources = registry.getMatchingRootResources(path);
-            // go over all the root matching resources and generate links for them
+            // go over all the root matching resources and generate links for
+            // them
             for (ResourceInstance rootResource : rootResources) {
                 UriBuilder uriBuilder = initUriBuilder(path);
                 ResourceRecord record = rootResource.getRecord();
@@ -95,21 +95,22 @@ public class SystemLinksBuilderImpl extends AbstractLinksBuilderImpl<SystemLinks
             UriBuilder uriBuilder = initUriBuilder();
             build(set, uriBuilder, record);
         }
-        
+
         if (out == null) {
             out = new LinkedList<SyndLink>();
         }
-        
+
         out.addAll(set);
-        
+
         return out;
     }
-    
+
     private Set<SyndLink> build(Set<SyndLink> set, UriBuilder selfUriBuilder, ResourceRecord record) {
         List<MethodMetadata> methods = null;
         if (subResourcePath != null && subResourcePath.length() > 0) {
             // 1) find all the sub-resources that match the sub-resource path
-            List<SubResourceInstance> subResources = record.getMatchingSubResourceMethods(subResourcePath);
+            List<SubResourceInstance> subResources =
+                record.getMatchingSubResourceMethods(subResourcePath);
             methods = new LinkedList<MethodMetadata>();
             for (SubResourceInstance sub : subResources) {
                 methods.add(sub.getMetadata());
@@ -121,8 +122,10 @@ public class SystemLinksBuilderImpl extends AbstractLinksBuilderImpl<SystemLinks
         }
         return build(set, selfUriBuilder, methods);
     }
-    
-    private Set<SyndLink> build(Set<SyndLink> set, UriBuilder selfUriBuilder, List<MethodMetadata> methods) {
+
+    private Set<SyndLink> build(Set<SyndLink> set,
+                                UriBuilder selfUriBuilder,
+                                List<MethodMetadata> methods) {
         // add all query parameters to the self uri
         for (String query : queryParams.keySet()) {
             selfUriBuilder.queryParam(query, queryParams.get(query).toArray());
@@ -134,19 +137,21 @@ public class SystemLinksBuilderImpl extends AbstractLinksBuilderImpl<SystemLinks
         // self link; should not be created if wasn't requested.
         // self link; not replace it if some already exists
         URI selfUri = selfUriBuilder.buildFromEncodedMap(pathParams);
-        if (systemLinksToGenerate.contains(LinkType.SELF)
-            && getLink(set, AtomConstants.ATOM_REL_SELF) == null) {
+        if (systemLinksToGenerate.contains(LinkType.SELF) && getLink(set,
+                                                                     AtomConstants.ATOM_REL_SELF) == null) {
             set.add(createLink(AtomConstants.ATOM_REL_SELF, null, selfUri));
         }
 
         // edit link; should not be created if wasn't requested.
-        // edit link if the Resource has an update operation; does not replace it if it already
+        // edit link if the Resource has an update operation; does not replace
+        // it if it already
         // exists
-        if (systemLinksToGenerate.contains(LinkType.EDIT)
-            && getLink(set, AtomConstants.ATOM_REL_EDIT) == null) {
+        if (systemLinksToGenerate.contains(LinkType.EDIT) && getLink(set,
+                                                                     AtomConstants.ATOM_REL_EDIT) == null) {
             for (MethodMetadata methodRecord : methods) {
                 String httpMethod = methodRecord.getHttpMethod();
-                if (httpMethod.equalsIgnoreCase(HttpMethod.PUT) || httpMethod.equalsIgnoreCase(HttpMethod.DELETE)) {
+                if (httpMethod.equalsIgnoreCase(HttpMethod.PUT) || httpMethod
+                    .equalsIgnoreCase(HttpMethod.DELETE)) {
                     set.add(createLink(AtomConstants.ATOM_REL_EDIT, null, selfUri));
                     break;
                 }
@@ -157,12 +162,14 @@ public class SystemLinksBuilderImpl extends AbstractLinksBuilderImpl<SystemLinks
         Set<MediaType> producedTypesForGet = getProducedTypesForGet(methods);
         for (MediaType mediaType : producedTypesForGet) {
             if (addAltParam && queryParams.get(RestConstants.REST_PARAM_MEDIA_TYPE) == null) {
-                selfUriBuilder.replaceQueryParam(RestConstants.REST_PARAM_MEDIA_TYPE, MediaTypeUtils.toEncodedString(mediaType));
+                selfUriBuilder.replaceQueryParam(RestConstants.REST_PARAM_MEDIA_TYPE,
+                                                 MediaTypeUtils.toEncodedString(mediaType));
             }
             URI href = selfUriBuilder.buildFromEncodedMap(pathParams);
             if (MediaTypeUtils.equalsIgnoreParameters(mediaType, MediaTypeUtils.OPENSEARCH_TYPE)) {
                 if (systemLinksToGenerate.contains(LinkType.OPENSEARCH)) {
-                    // open search link; should not be created if wasn't requested.
+                    // open search link; should not be created if wasn't
+                    // requested.
                     set.add(createLink(AtomConstants.ATOM_REL_SEARCH, mediaType, href));
                 }
             } else if (systemLinksToGenerate.contains(LinkType.ALTERNATE)) {
@@ -183,7 +190,7 @@ public class SystemLinksBuilderImpl extends AbstractLinksBuilderImpl<SystemLinks
         }
         return getResponses;
     }
-    
+
     private Set<LinkType> generateSystemLinksSet() {
         Set<LinkType> systemLinksSet = new HashSet<LinkType>();
         if (types == null || types.length == 0) {

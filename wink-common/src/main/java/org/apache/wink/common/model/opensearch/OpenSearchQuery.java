@@ -24,7 +24,6 @@
 // Generated on: 2008.09.15 at 01:17:47 PM IDT 
 //
 
-
 package org.apache.wink.common.model.opensearch;
 
 import java.math.BigInteger;
@@ -178,52 +177,47 @@ import javax.xml.namespace.QName;
  *         searchTerms=&quot;feline&quot; /&gt;
  * 
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "OpenSearchQuery", propOrder = {
-})
+@XmlType(name = "OpenSearchQuery", propOrder = {})
 public class OpenSearchQuery {
 
     @XmlAttribute(required = true)
-    protected String role;
+    protected String           role;
     @XmlAttribute
-    protected String searchTerms;
+    protected String           searchTerms;
     @XmlAttribute
-    protected String title;
-    @XmlAttribute
-    @XmlSchemaType(name = "nonNegativeInteger")
-    protected BigInteger totalResults;
+    protected String           title;
     @XmlAttribute
     @XmlSchemaType(name = "nonNegativeInteger")
-    protected BigInteger count;
+    protected BigInteger       totalResults;
     @XmlAttribute
     @XmlSchemaType(name = "nonNegativeInteger")
-    protected BigInteger startPage;
+    protected BigInteger       count;
     @XmlAttribute
     @XmlSchemaType(name = "nonNegativeInteger")
-    protected BigInteger startIndex;
+    protected BigInteger       startPage;
     @XmlAttribute
-    protected String language;
+    @XmlSchemaType(name = "nonNegativeInteger")
+    protected BigInteger       startIndex;
     @XmlAttribute
-    protected String inputEncoding;
+    protected String           language;
     @XmlAttribute
-    protected String outputEncoding;
+    protected String           inputEncoding;
+    @XmlAttribute
+    protected String           outputEncoding;
     @XmlAnyAttribute
     private Map<QName, String> otherAttributes = new HashMap<QName, String>();
-    
+
     @XmlTransient
-    public static enum QueryRole {request, example, related, correction, subset, superset}
-       
+    public static enum QueryRole {
+        request, example, related, correction, subset, superset
+    }
 
     /**
      * Gets the value of the role property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return possible object is {@link String }
      */
     public String getRole() {
         if (role == null) {
@@ -236,10 +230,7 @@ public class OpenSearchQuery {
     /**
      * Sets the value of the role property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * @param value allowed object is {@link String }
      */
     public void setRole(String value) {
         this.role = value;
@@ -248,10 +239,7 @@ public class OpenSearchQuery {
     /**
      * Gets the value of the searchTerms property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return possible object is {@link String }
      */
     public String getSearchTerms() {
         return searchTerms;
@@ -260,10 +248,7 @@ public class OpenSearchQuery {
     /**
      * Sets the value of the searchTerms property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * @param value allowed object is {@link String }
      */
     public void setSearchTerms(String value) {
         this.searchTerms = value;
@@ -272,10 +257,7 @@ public class OpenSearchQuery {
     /**
      * Gets the value of the title property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return possible object is {@link String }
      */
     public String getTitle() {
         return title;
@@ -284,10 +266,7 @@ public class OpenSearchQuery {
     /**
      * Sets the value of the title property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * @param value allowed object is {@link String }
      */
     public void setTitle(String value) {
         this.title = value;
@@ -296,10 +275,7 @@ public class OpenSearchQuery {
     /**
      * Gets the value of the totalResults property.
      * 
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *     
+     * @return possible object is {@link BigInteger }
      */
     public BigInteger getTotalResults() {
         return totalResults;
@@ -308,10 +284,7 @@ public class OpenSearchQuery {
     /**
      * Sets the value of the totalResults property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *     
+     * @param value allowed object is {@link BigInteger }
      */
     public void setTotalResults(BigInteger value) {
         this.totalResults = value;
@@ -320,10 +293,7 @@ public class OpenSearchQuery {
     /**
      * Gets the value of the count property.
      * 
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *     
+     * @return possible object is {@link BigInteger }
      */
     public BigInteger getCount() {
         return count;
@@ -332,10 +302,7 @@ public class OpenSearchQuery {
     /**
      * Sets the value of the count property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *     
+     * @param value allowed object is {@link BigInteger }
      */
     public void setCount(BigInteger value) {
         this.count = value;
@@ -344,10 +311,7 @@ public class OpenSearchQuery {
     /**
      * Gets the value of the startPage property.
      * 
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *     
+     * @return possible object is {@link BigInteger }
      */
     public BigInteger getStartPage() {
         return startPage;
@@ -356,10 +320,7 @@ public class OpenSearchQuery {
     /**
      * Sets the value of the startPage property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *     
+     * @param value allowed object is {@link BigInteger }
      */
     public void setStartPage(BigInteger value) {
         this.startPage = value;
@@ -368,10 +329,7 @@ public class OpenSearchQuery {
     /**
      * Gets the value of the startIndex property.
      * 
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *     
+     * @return possible object is {@link BigInteger }
      */
     public BigInteger getStartIndex() {
         return startIndex;
@@ -380,10 +338,7 @@ public class OpenSearchQuery {
     /**
      * Sets the value of the startIndex property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *     
+     * @param value allowed object is {@link BigInteger }
      */
     public void setStartIndex(BigInteger value) {
         this.startIndex = value;
@@ -392,10 +347,7 @@ public class OpenSearchQuery {
     /**
      * Gets the value of the language property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return possible object is {@link String }
      */
     public String getLanguage() {
         return language;
@@ -404,10 +356,7 @@ public class OpenSearchQuery {
     /**
      * Sets the value of the language property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * @param value allowed object is {@link String }
      */
     public void setLanguage(String value) {
         this.language = value;
@@ -416,10 +365,7 @@ public class OpenSearchQuery {
     /**
      * Gets the value of the inputEncoding property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return possible object is {@link String }
      */
     public String getInputEncoding() {
         return inputEncoding;
@@ -428,10 +374,7 @@ public class OpenSearchQuery {
     /**
      * Sets the value of the inputEncoding property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * @param value allowed object is {@link String }
      */
     public void setInputEncoding(String value) {
         this.inputEncoding = value;
@@ -440,10 +383,7 @@ public class OpenSearchQuery {
     /**
      * Gets the value of the outputEncoding property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return possible object is {@link String }
      */
     public String getOutputEncoding() {
         return outputEncoding;
@@ -452,28 +392,22 @@ public class OpenSearchQuery {
     /**
      * Sets the value of the outputEncoding property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * @param value allowed object is {@link String }
      */
     public void setOutputEncoding(String value) {
         this.outputEncoding = value;
     }
 
     /**
-     * Gets a map that contains attributes that aren't bound to any typed property on this class.
-     * 
+     * Gets a map that contains attributes that aren't bound to any typed
+     * property on this class.
      * <p>
-     * the map is keyed by the name of the attribute and 
-     * the value is the string value of the attribute.
+     * the map is keyed by the name of the attribute and the value is the string
+     * value of the attribute. the map returned by this method is live, and you
+     * can add new attribute by updating the map directly. Because of this
+     * design, there's no setter.
      * 
-     * the map returned by this method is live, and you can add new attribute
-     * by updating the map directly. Because of this design, there's no setter.
-     * 
-     * 
-     * @return
-     *     always non-null
+     * @return always non-null
      */
     public Map<QName, String> getOtherAttributes() {
         return otherAttributes;

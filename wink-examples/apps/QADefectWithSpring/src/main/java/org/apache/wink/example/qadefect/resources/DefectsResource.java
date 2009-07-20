@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.qadefect.resources;
 
 import java.io.IOException;
@@ -67,12 +67,11 @@ import org.apache.wink.example.qadefect.store.DataStore;
 import org.apache.wink.example.qadefect.utils.SearchMap;
 import org.apache.wink.server.utils.LinkBuilders;
 
-
-
 @Workspace(workspaceTitle = "QA Defects", collectionTitle = "Defects")
 public class DefectsResource extends AbstractDynamicResource implements CollectionCategories {
 
-    public static final String  CUSTOMIZED_JSP_PATH = "/HtmlCustomizedRepresentation/customizedHtmlEntry.jsp";
+    public static final String  CUSTOMIZED_JSP_PATH =
+                                                        "/HtmlCustomizedRepresentation/customizedHtmlEntry.jsp";
     public static final String  CUSTOMIZED_JSP_ATTR = "DefectAssetAttr";
     public static final String  URL                 = "/defects";
     public static final String  DEFECT_PARAM        = "defect";
@@ -95,10 +94,10 @@ public class DefectsResource extends AbstractDynamicResource implements Collecti
     private final DataStore     store               = DataStore.getInstance();
 
     @GET
-    @Produces( { MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON, MediaType.TEXT_HTML })
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON, MediaType.TEXT_HTML})
     public SyndFeed getCollection(@QueryParam(value = FTS) String query,
-        @QueryParam(value = SEVERIIY) String severity,
-        @QueryParam(value = ASSIGNED_TO) String assignedTo) {
+                                  @QueryParam(value = SEVERIIY) String severity,
+                                  @QueryParam(value = ASSIGNED_TO) String assignedTo) {
 
         // fill search parameters
         // the parameters may be absent, the SearchMap will do the filtering
@@ -117,7 +116,8 @@ public class DefectsResource extends AbstractDynamicResource implements Collecti
     }
 
     private SyndFeed createSyndFeed(Collection<DefectBean> collectionBean) {
-        // create a defect collection resource and set its metadata (resource has no data)
+        // create a defect collection resource and set its metadata (resource
+        // has no data)
 
         String baseUri = uriInfo.getAbsolutePath().toString();
         SyndFeed syndFeed = new SyndFeed();
@@ -152,8 +152,8 @@ public class DefectsResource extends AbstractDynamicResource implements Collecti
      */
     @Path(DEFECT_URL)
     @GET
-    @Produces( { MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON,
-        MediaType.APPLICATION_XML, MediaType.TEXT_HTML, MediaTypeUtils.PDF })
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON,
+        MediaType.APPLICATION_XML, MediaType.TEXT_HTML, MediaTypeUtils.PDF})
     public Object getDefectDocument(@PathParam(DEFECT_PARAM) String defectId) {
 
         // create data object (populated with store data)
@@ -167,11 +167,11 @@ public class DefectsResource extends AbstractDynamicResource implements Collecti
 
     @Path(DEFECT_URL)
     @PUT
-    @Consumes( { MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_XML })
-    @Produces( { MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON,
-        MediaType.APPLICATION_XML })
+    @Consumes( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_XML})
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON,
+        MediaType.APPLICATION_XML})
     public DefectBean updateDocument(@PathParam(DEFECT_PARAM) String defectId,
-        DefectBean updatedBean) throws IOException {
+                                     DefectBean updatedBean) throws IOException {
 
         // obtain data object from the memory store
         DefectBean bean = store.getDefect(defectId);
@@ -192,8 +192,8 @@ public class DefectsResource extends AbstractDynamicResource implements Collecti
      */
     @Path(DEFECT_URL)
     @DELETE
-    @Produces( { MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON,
-        MediaType.APPLICATION_XML, MediaType.TEXT_HTML })
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON,
+        MediaType.APPLICATION_XML, MediaType.TEXT_HTML})
     public DefectBean deleteDocument(@PathParam(DEFECT_PARAM) String defectId) {
 
         // obtain data object from memory store
@@ -215,14 +215,14 @@ public class DefectsResource extends AbstractDynamicResource implements Collecti
      * 
      * @return response with status code and resource representation of created
      *         resource
-     * @throws IOException
-     *             problems with reading HTTP request content (the message body)
+     * @throws IOException problems with reading HTTP request content (the
+     *             message body)
      * @throws URISyntaxException
      */
     @POST
-    @Consumes( { MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_XML })
-    @Produces( { MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON,
-        MediaType.APPLICATION_XML })
+    @Consumes( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_XML})
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON,
+        MediaType.APPLICATION_XML})
     public Response createDocument(DefectBean bean) throws IOException, URISyntaxException {
 
         bean.setId(store.getDefectUniqueId());
@@ -243,7 +243,7 @@ public class DefectsResource extends AbstractDynamicResource implements Collecti
      * @return response with OpenSearch resource representation
      */
     @GET
-    @Produces(value = { MediaTypeUtils.OPENSEARCH })
+    @Produces(value = {MediaTypeUtils.OPENSEARCH})
     public OpenSearchDescription getOpenSearch() {
         return getOpenSearchDescription(uriInfo.getBaseUri().toString());
     }
@@ -253,8 +253,7 @@ public class DefectsResource extends AbstractDynamicResource implements Collecti
      * OpenSearch description document describes search infrastructure
      * interface. (see <a href="http://www.opensearch.org/">OpenSearch</a>)
      * 
-     * @param baseUri
-     *            baseUri to use as the base for all links
+     * @param baseUri baseUri to use as the base for all links
      */
     private OpenSearchDescription getOpenSearchDescription(String baseUri) {
         OpenSearchDescription openSearchDescription = new OpenSearchDescription();
@@ -269,12 +268,13 @@ public class DefectsResource extends AbstractDynamicResource implements Collecti
         openSearchDescription.addOutputEncoding("UTF-8");
 
         // set OpenSearch URL parameters
-        OpenSearchParameter severityParameter = new OpenSearchParameter(SEVERIIY, URN_SEVERIIY,
-            false);
-        OpenSearchParameter ftsParameter = new OpenSearchParameter(FTS,
-            OpenSearchParameter.OpenSearchParams.searchTerms.toString(), false);
-        OpenSearchParameter assignedToParameter = new OpenSearchParameter(ASSIGNED_TO,
-            URN_ASSIGNED_TO, false);
+        OpenSearchParameter severityParameter =
+            new OpenSearchParameter(SEVERIIY, URN_SEVERIIY, false);
+        OpenSearchParameter ftsParameter =
+            new OpenSearchParameter(FTS, OpenSearchParameter.OpenSearchParams.searchTerms
+                .toString(), false);
+        OpenSearchParameter assignedToParameter =
+            new OpenSearchParameter(ASSIGNED_TO, URN_ASSIGNED_TO, false);
 
         // create Search URL & populate search parameters for browsers
         OpenSearchUrl openSearchUrlForBrowsers = new OpenSearchUrl();
@@ -310,8 +310,9 @@ public class DefectsResource extends AbstractDynamicResource implements Collecti
 
         // add OpenSearch Images
         OpenSearchImage openSearchImage;
-        openSearchImage = OpenSearchUtils.createOpenSearchImage(MediaTypeUtils.IMAGE_JPEG,
-            openSearchUrlBuilder.toString() + "splash.jpg");
+        openSearchImage =
+            OpenSearchUtils.createOpenSearchImage(MediaTypeUtils.IMAGE_JPEG, openSearchUrlBuilder
+                .toString() + "splash.jpg");
         openSearchDescription.addNewImage(openSearchImage);
 
         return openSearchDescription;
@@ -336,7 +337,8 @@ public class DefectsResource extends AbstractDynamicResource implements Collecti
 
         List<Categories> catsList = new ArrayList<Categories>();
 
-        // Defect severity categories are defined in stand-alone Categories Document
+        // Defect severity categories are defined in stand-alone Categories
+        // Document
         // created by CategoriesResource
         Categories severityCategories = new Categories();
         MultivaluedMap<String, String> variables = new MultivaluedMapImpl<String, String>();

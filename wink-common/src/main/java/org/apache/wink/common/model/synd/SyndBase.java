@@ -80,9 +80,10 @@ public abstract class SyndBase extends SyndCommonAttributes {
     public void setId(String id) {
         this.id = id;
     }
-    
+
     /**
-     * Add a link to the list of links. This is a shortcut for <code>getLinks().add(link)</code>.
+     * Add a link to the list of links. This is a shortcut for
+     * <code>getLinks().add(link)</code>.
      */
     public void addLink(SyndLink link) {
         getLinks().add(link);
@@ -94,7 +95,7 @@ public abstract class SyndBase extends SyndCommonAttributes {
         }
         return links;
     }
-    
+
     public SyndLink getLink(String rel) {
         for (SyndLink link : getLinks()) {
             if (link.getRel().equalsIgnoreCase(rel)) {
@@ -105,7 +106,8 @@ public abstract class SyndBase extends SyndCommonAttributes {
     }
 
     /**
-     * Add an author to the list of authors. This is a shortcut for <code>getAuthors().add(author)</code>.
+     * Add an author to the list of authors. This is a shortcut for
+     * <code>getAuthors().add(author)</code>.
      */
     public void addAuthor(SyndPerson author) {
         getAuthors().add(author);
@@ -119,7 +121,8 @@ public abstract class SyndBase extends SyndCommonAttributes {
     }
 
     /**
-     * Add a category to the list of categories. This is a shortcut for <code>getCategories().add(category)</code>.
+     * Add a category to the list of categories. This is a shortcut for
+     * <code>getCategories().add(category)</code>.
      */
     public void addCategory(SyndCategory category) {
         getCategories().add(category);
@@ -139,7 +142,7 @@ public abstract class SyndBase extends SyndCommonAttributes {
     public void setTitle(SyndText title) {
         this.title = title;
     }
-    
+
     public Date getUpdated() {
         return updated;
     }
@@ -169,7 +172,7 @@ public abstract class SyndBase extends SyndCommonAttributes {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        SyndBase other = (SyndBase) obj;
+        SyndBase other = (SyndBase)obj;
         if (authors == null) {
             if (other.authors != null)
                 return false;

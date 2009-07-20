@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.webdav.server;
 
 import java.io.IOException;
@@ -43,20 +43,21 @@ import org.apache.wink.webdav.WebDAVMethod;
 import org.apache.wink.webdav.server.WebDAVLockableResource;
 import org.apache.wink.webdav.server.WebDAVResponseBuilder;
 
-
 @Path("/feed/{entry}")
 public class WebDAVDocumentResource extends WebDAVLockableResource {
 
-    public static int ENTRY_NUMBER = 3;
+    public static int                    ENTRY_NUMBER = 3;
 
-    public static Map<String, SyndEntry> entries = new HashMap<String, SyndEntry>(ENTRY_NUMBER);
+    public static Map<String, SyndEntry> entries      =
+                                                          new HashMap<String, SyndEntry>(
+                                                                                         ENTRY_NUMBER);
 
     static {
 
         for (int i = 0; i < ENTRY_NUMBER; i++) {
-            String id = ""+(i+1);
+            String id = "" + (i + 1);
             String path = "/feed/" + (i + 1);
-            SyndEntry entry = new SyndEntry(new SyndText("title"+(i+1)), id);
+            SyndEntry entry = new SyndEntry(new SyndText("title" + (i + 1)), id);
             entry.setUpdated(new Date(0));
             entry.setPublished(new Date(0));
             entry.addLink(new SyndLink(AtomConstants.ATOM_REL_EDIT, null, path));
@@ -65,9 +66,11 @@ public class WebDAVDocumentResource extends WebDAVLockableResource {
     }
 
     @WebDAVMethod.PROPFIND
-    @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
+    @Consumes( {MediaType.APPLICATION_XML, MediaType.TEXT_XML})
     @Produces(MediaType.APPLICATION_XML)
-    public Response findProperties(@Context UriInfo uriInfo, @PathParam("entry")String id, String body) throws IOException {
+    public Response findProperties(@Context UriInfo uriInfo,
+                                   @PathParam("entry") String id,
+                                   String body) throws IOException {
 
         SyndEntry entry = entries.get(id);
         if (entry != null) {
@@ -76,5 +79,5 @@ public class WebDAVDocumentResource extends WebDAVLockableResource {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
     }
-    
+
 }

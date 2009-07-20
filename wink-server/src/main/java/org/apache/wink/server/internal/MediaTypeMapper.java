@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal;
 
 import java.util.ArrayList;
@@ -29,7 +29,6 @@ import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
-
 
 /**
  * Allows to map response media types to other media types based on user agent.
@@ -53,8 +52,9 @@ public final class MediaTypeMapper {
         private MediaType responseType;
         private MediaType replacementType;
 
-        public AgentStartsWith(String userAgentStartsWith, String responseType,
-            String replacementType) {
+        public AgentStartsWith(String userAgentStartsWith,
+                               String responseType,
+                               String replacementType) {
             if (userAgentStartsWith == null)
                 throw new NullPointerException();
             this.userAgentStartsWith = userAgentStartsWith;
@@ -63,8 +63,8 @@ public final class MediaTypeMapper {
         }
 
         public boolean match(String userAgent, MediaType responseMediaType) {
-            return userAgent.startsWith(userAgentStartsWith)
-                && MediaTypeUtils.equalsIgnoreParameters(responseMediaType, responseType);
+            return userAgent.startsWith(userAgentStartsWith) && MediaTypeUtils
+                .equalsIgnoreParameters(responseMediaType, responseType);
         }
 
         public MediaType getReplacement() {
@@ -95,10 +95,8 @@ public final class MediaTypeMapper {
      * Maps the real content type to value that should be written to
      * Content-Type header.
      * 
-     * @param responseMediaType
-     *            media type of the response
-     * @param userAgent
-     *            User-Agent header; null is allowed
+     * @param responseMediaType media type of the response
+     * @param userAgent User-Agent header; null is allowed
      * @return responseMediaType parameter or some non-null value
      */
     public MediaType mapOutputMediaType(MediaType responseMediaType, String userAgent) {

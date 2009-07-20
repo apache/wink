@@ -62,7 +62,7 @@ public class LifecycleManagerUtils {
     }
 
     private static <T> ClassMetadata collectClassMetadata(final Class<T> cls,
-            boolean validateConstructor) {
+                                                          boolean validateConstructor) {
         ClassMetadata classMetadata = null;
         if (ProviderMetadataCollector.isProvider(cls)) {
             classMetadata = ProviderMetadataCollector.collectMetadata(cls);
@@ -74,8 +74,8 @@ public class LifecycleManagerUtils {
 
         // validate that there is a valid constructor if needed
         if (validateConstructor && classMetadata.getConstructor().getConstructor() == null) {
-            throw new IllegalStateException("No valid constructor found for "
-                    + cls.getCanonicalName());
+            throw new IllegalStateException("No valid constructor found for " + cls
+                .getCanonicalName());
         }
         return classMetadata;
     }

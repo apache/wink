@@ -24,40 +24,34 @@
 // Generated on: 2009.05.24 at 01:47:17 PM IDT 
 //
 
-
 package org.apache.wink.common.internal.model.admin;
 
 import javax.xml.bind.annotation.XmlRegistry;
 
-
 /**
- * This object contains factory methods for each 
- * Java content interface and Java element interface 
- * generated in the org.apache.wink.common.internal.model.admin.resource package. 
- * <p>An ObjectFactory allows you to programatically 
- * construct new instances of the Java representation 
- * for XML content. The Java representation of XML 
- * content can consist of schema derived interfaces 
- * and classes representing the binding of schema 
- * type definitions, element declarations and model 
- * groups.  Factory methods for each of these are 
- * provided in this class.
- * 
+ * This object contains factory methods for each Java content interface and Java
+ * element interface generated in the
+ * org.apache.wink.common.internal.model.admin.resource package.
+ * <p>
+ * An ObjectFactory allows you to programatically construct new instances of the
+ * Java representation for XML content. The Java representation of XML content
+ * can consist of schema derived interfaces and classes representing the binding
+ * of schema type definitions, element declarations and model groups. Factory
+ * methods for each of these are provided in this class.
  */
 @XmlRegistry
 public class ObjectFactory {
 
-
     /**
-     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: org.apache.wink.common.internal.model.admin.resource
-     * 
+     * Create a new ObjectFactory that can be used to create new instances of
+     * schema derived classes for package:
+     * org.apache.wink.common.internal.model.admin.resource
      */
     public ObjectFactory() {
     }
 
     /**
      * Create an instance of {@link SubResource }
-     * 
      */
     public SubResource createSubResource() {
         return new SubResource();
@@ -65,7 +59,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ProducedMediaTypes }
-     * 
      */
     public ProducedMediaTypes createProducedMediaTypes() {
         return new ProducedMediaTypes();
@@ -73,7 +66,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link SubResources }
-     * 
      */
     public SubResources createSubResources() {
         return new SubResources();
@@ -81,7 +73,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Methods.Method }
-     * 
      */
     public Methods.Method createMethodsMethod() {
         return new Methods.Method();
@@ -89,7 +80,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Registry }
-     * 
      */
     public Registry createRegistry() {
         return new Registry();
@@ -97,7 +87,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AcceptMediaTypes }
-     * 
      */
     public AcceptMediaTypes createAcceptMediaTypes() {
         return new AcceptMediaTypes();
@@ -105,7 +94,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Methods }
-     * 
      */
     public Methods createMethods() {
         return new Methods();
@@ -113,7 +101,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Parameter }
-     * 
      */
     public Parameter createParameter() {
         return new Parameter();
@@ -121,7 +108,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Resource }
-     * 
      */
     public Resource createResource() {
         return new Resource();
@@ -129,7 +115,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Resources }
-     * 
      */
     public Resources createResources() {
         return new Resources();
@@ -137,7 +122,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MatrixParameters }
-     * 
      */
     public MatrixParameters createMatrixParameters() {
         return new MatrixParameters();
@@ -145,7 +129,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link QueryParameters }
-     * 
      */
     public QueryParameters createQueryParameters() {
         return new QueryParameters();

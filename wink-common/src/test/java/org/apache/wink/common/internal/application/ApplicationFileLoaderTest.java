@@ -32,13 +32,16 @@ public class ApplicationFileLoaderTest extends TestCase {
     public void testDefault() throws FileNotFoundException {
         ApplicationFileLoader applicationFileLoader = new ApplicationFileLoader();
         Set<Class<?>> classes = applicationFileLoader.getClasses();
-        assertTrue(classes.contains(org.apache.wink.common.internal.providers.entity.FileProvider.class));
-        assertTrue(classes.contains(org.apache.wink.common.internal.providers.entity.StringProvider.class));
         assertTrue(classes
-                .contains(org.apache.wink.common.internal.providers.entity.SourceProvider.StreamSourceProvider.class));
+            .contains(org.apache.wink.common.internal.providers.entity.FileProvider.class));
         assertTrue(classes
-                .contains(org.apache.wink.common.internal.providers.entity.SourceProvider.SAXSourceProvider.class));
-        assertTrue(classes.contains(org.apache.wink.common.internal.providers.entity.ByteArrayProvider.class));
+            .contains(org.apache.wink.common.internal.providers.entity.StringProvider.class));
+        assertTrue(classes
+            .contains(org.apache.wink.common.internal.providers.entity.SourceProvider.StreamSourceProvider.class));
+        assertTrue(classes
+            .contains(org.apache.wink.common.internal.providers.entity.SourceProvider.SAXSourceProvider.class));
+        assertTrue(classes
+            .contains(org.apache.wink.common.internal.providers.entity.ByteArrayProvider.class));
     }
 
     public void testFileNotFound() {
@@ -51,13 +54,15 @@ public class ApplicationFileLoaderTest extends TestCase {
     }
 
     public void testCustomFile() throws FileNotFoundException {
-        ApplicationFileLoader applicationFileLoader = new ApplicationFileLoader(
-                "org//apache//wink//common//internal//application//custom.app");
+        ApplicationFileLoader applicationFileLoader =
+            new ApplicationFileLoader(
+                                      "org//apache//wink//common//internal//application//custom.app");
 
         Iterator<Class<?>> iterator = applicationFileLoader.getClasses().iterator();
-        assertEquals(org.apache.wink.common.internal.providers.entity.FileProvider.class, iterator.next());
-        assertEquals(org.apache.wink.common.internal.providers.entity.SourceProvider.DOMSourceProvider.class, iterator
-                .next());
+        assertEquals(org.apache.wink.common.internal.providers.entity.FileProvider.class, iterator
+            .next());
+        assertEquals(org.apache.wink.common.internal.providers.entity.SourceProvider.DOMSourceProvider.class,
+                     iterator.next());
         assertFalse(iterator.hasNext());
 
     }

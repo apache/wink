@@ -47,40 +47,53 @@ import org.apache.wink.common.internal.registry.ProvidersRegistry;
 
 import junit.framework.TestCase;
 
-
-
 public class ProvidersMessageBodyTest extends TestCase {
 
     @Provider
-    @Produces( { MediaType.WILDCARD, MediaType.TEXT_PLAIN })
+    @Produces( {MediaType.WILDCARD, MediaType.TEXT_PLAIN})
     @Scope(ScopeType.PROTOTYPE)
     public static class IntegerMessageBodyProvider implements MessageBodyReader<Integer>,
         MessageBodyWriter<Integer> {
 
-        public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations,
-            MediaType mediaType) {
+        public boolean isReadable(Class<?> type,
+                                  Type genericType,
+                                  Annotation[] annotations,
+                                  MediaType mediaType) {
             return true;
         }
 
-        public Integer readFrom(Class<Integer> type, Type genericType, Annotation[] annotations,
-            MediaType mediaType, MultivaluedMap<String, String> httpHeaders,
-            InputStream entityStream) throws IOException, WebApplicationException {
+        public Integer readFrom(Class<Integer> type,
+                                Type genericType,
+                                Annotation[] annotations,
+                                MediaType mediaType,
+                                MultivaluedMap<String, String> httpHeaders,
+                                InputStream entityStream) throws IOException,
+            WebApplicationException {
             return null;
         }
 
-        public long getSize(Integer t, Class<?> type, Type genericType, Annotation[] annotations,
-            MediaType mediaType) {
+        public long getSize(Integer t,
+                            Class<?> type,
+                            Type genericType,
+                            Annotation[] annotations,
+                            MediaType mediaType) {
             return 0;
         }
 
-        public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations,
-            MediaType mediaType) {
+        public boolean isWriteable(Class<?> type,
+                                   Type genericType,
+                                   Annotation[] annotations,
+                                   MediaType mediaType) {
             return true;
         }
 
-        public void writeTo(Integer t, Class<?> type, Type genericType, Annotation[] annotations,
-            MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
-            OutputStream entityStream) throws IOException, WebApplicationException {
+        public void writeTo(Integer t,
+                            Class<?> type,
+                            Type genericType,
+                            Annotation[] annotations,
+                            MediaType mediaType,
+                            MultivaluedMap<String, Object> httpHeaders,
+                            OutputStream entityStream) throws IOException, WebApplicationException {
         }
 
     }
@@ -90,8 +103,8 @@ public class ProvidersMessageBodyTest extends TestCase {
     }
 
     private ProvidersRegistry createProvidersRegistryImpl() {
-        ProvidersRegistry providers = new ProvidersRegistry(new LifecycleManagersRegistry(),
-            new ApplicationValidator());
+        ProvidersRegistry providers =
+            new ProvidersRegistry(new LifecycleManagersRegistry(), new ApplicationValidator());
         return providers;
     }
 
@@ -112,22 +125,33 @@ public class ProvidersMessageBodyTest extends TestCase {
         providers.addProvider(fileProvider);
         providers.addProvider(objectMessageBodyProvider);
 
-        assertEquals(byteArrayProvider, providers.getMessageBodyReader(byte[].class, null, null,
-            MediaType.APPLICATION_JSON_TYPE, null));
-        assertEquals(stringProvider, providers.getMessageBodyReader(String.class, null, null,
-            MediaType.WILDCARD_TYPE, null));
-        assertEquals(fileProvider, providers.getMessageBodyReader(File.class, null, null,
-            MediaType.APPLICATION_SVG_XML_TYPE, null));
+        assertEquals(byteArrayProvider, providers
+            .getMessageBodyReader(byte[].class, null, null, MediaType.APPLICATION_JSON_TYPE, null));
+        assertEquals(stringProvider, providers.getMessageBodyReader(String.class,
+                                                                    null,
+                                                                    null,
+                                                                    MediaType.WILDCARD_TYPE,
+                                                                    null));
+        assertEquals(fileProvider, providers
+            .getMessageBodyReader(File.class, null, null, MediaType.APPLICATION_SVG_XML_TYPE, null));
 
-        assertEquals(byteArrayProvider, providers.getMessageBodyWriter(byte[].class, null, null,
-            MediaType.APPLICATION_ATOM_XML_TYPE, null));
-        assertEquals(stringProvider, providers.getMessageBodyWriter(String.class, null, null,
-            MediaType.WILDCARD_TYPE, null));
-        assertEquals(fileProvider, providers.getMessageBodyWriter(File.class, null, null,
-            MediaType.APPLICATION_SVG_XML_TYPE, null));
+        assertEquals(byteArrayProvider, providers
+            .getMessageBodyWriter(byte[].class,
+                                  null,
+                                  null,
+                                  MediaType.APPLICATION_ATOM_XML_TYPE,
+                                  null));
+        assertEquals(stringProvider, providers.getMessageBodyWriter(String.class,
+                                                                    null,
+                                                                    null,
+                                                                    MediaType.WILDCARD_TYPE,
+                                                                    null));
+        assertEquals(fileProvider, providers
+            .getMessageBodyWriter(File.class, null, null, MediaType.APPLICATION_SVG_XML_TYPE, null));
 
-        assertEquals(IntegerMessageBodyProvider.class, providers.getMessageBodyWriter(
-            Integer.class, null, null, MediaType.WILDCARD_TYPE, null).getClass());
+        assertEquals(IntegerMessageBodyProvider.class, providers
+            .getMessageBodyWriter(Integer.class, null, null, MediaType.WILDCARD_TYPE, null)
+            .getClass());
     }
 
     public void testMessageBodyWritersMediaTypes() {
@@ -147,12 +171,15 @@ public class ProvidersMessageBodyTest extends TestCase {
         providers.addProvider(fileProvider);
         providers.addProvider(objectMessageBodyProvider);
 
-        Set<MediaType> integerWriterMediaType = providers.getMessageBodyWriterMediaTypes(Integer.class);
+        Set<MediaType> integerWriterMediaType =
+            providers.getMessageBodyWriterMediaTypes(Integer.class);
         assertTrue(integerWriterMediaType.contains(MediaType.WILDCARD_TYPE));
         assertTrue(integerWriterMediaType.contains(MediaType.TEXT_PLAIN_TYPE));
-        Set<MediaType> stringWriterMediaTypes = providers.getMessageBodyWriterMediaTypes(String.class);
+        Set<MediaType> stringWriterMediaTypes =
+            providers.getMessageBodyWriterMediaTypes(String.class);
         assertTrue(stringWriterMediaTypes.contains(MediaType.WILDCARD_TYPE));
-        Set<MediaType> ioWriterMediaTypes = providers.getMessageBodyWriterMediaTypes(InputStream.class);
+        Set<MediaType> ioWriterMediaTypes =
+            providers.getMessageBodyWriterMediaTypes(InputStream.class);
         assertTrue(ioWriterMediaTypes.contains(MediaType.WILDCARD_TYPE));
         assertTrue(ioWriterMediaTypes.contains(MediaType.APPLICATION_OCTET_STREAM_TYPE));
     }

@@ -26,22 +26,21 @@ import javax.ws.rs.core.Response;
 import org.apache.wink.server.handlers.AbstractHandler;
 import org.apache.wink.server.handlers.MessageContext;
 
-
 public class PopulateResponseStatusHandler extends AbstractHandler {
 
     public void handleResponse(MessageContext context) throws Throwable {
         Object entity = context.getResponseEntity();
 
         int status = -1;
-        
+
         if (entity instanceof Response) {
             Response response = (Response)entity;
             status = response.getStatus();
             entity = response.getEntity();
-        } 
+        }
 
         if (entity instanceof GenericEntity) {
-            GenericEntity<?> genericEntity = (GenericEntity<?>) entity;
+            GenericEntity<?> genericEntity = (GenericEntity<?>)entity;
             entity = genericEntity.getEntity();
         }
 
@@ -49,9 +48,9 @@ public class PopulateResponseStatusHandler extends AbstractHandler {
             status = HttpServletResponse.SC_OK;
             if (entity == null) {
                 status = HttpServletResponse.SC_NO_CONTENT;
-            } 
+            }
         }
-        
+
         context.setResponseStatusCode(status);
     }
 

@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.model.synd;
 
@@ -29,16 +28,22 @@ public class SyndLink extends SyndCommonAttributes {
     private String rel;
     private String type;
     private String href;
-    
-    public SyndLink() {}
-    
+
+    public SyndLink() {
+    }
+
     public SyndLink(String rel, String type, String href) {
         this.rel = rel;
         this.type = type;
         this.href = href;
     }
-    
-    public SyndLink(String rel, String type, String href, String hreflang, String title, String length) {
+
+    public SyndLink(String rel,
+                    String type,
+                    String href,
+                    String hreflang,
+                    String title,
+                    String length) {
         this(rel, type, href);
         this.hreflang = hreflang;
         this.title = title;
@@ -58,36 +63,47 @@ public class SyndLink extends SyndCommonAttributes {
     public String getLength() {
         return length;
     }
+
     public void setLength(String length) {
         this.length = length;
     }
+
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
+
     public String getHreflang() {
         return hreflang;
     }
+
     public void setHreflang(String hreflang) {
         this.hreflang = hreflang;
     }
+
     public String getRel() {
         return rel;
     }
+
     public void setRel(String rel) {
         this.rel = rel;
     }
+
     public String getType() {
         return type;
     }
+
     public void setType(String type) {
         this.type = type;
     }
+
     public String getHref() {
         return href;
     }
+
     public void setHref(String href) {
         this.href = href;
     }
@@ -113,7 +129,7 @@ public class SyndLink extends SyndCommonAttributes {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        SyndLink other = (SyndLink) obj;
+        SyndLink other = (SyndLink)obj;
         if (href == null) {
             if (other.href != null)
                 return false;
@@ -146,8 +162,5 @@ public class SyndLink extends SyndCommonAttributes {
             return false;
         return true;
     }
-    
 
-
-    
 }

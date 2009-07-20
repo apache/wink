@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.simpledefects.resources;
 
 import java.util.Date;
@@ -39,7 +39,6 @@ import org.apache.wink.common.utils.ProviderUtils;
 import org.apache.wink.example.simpledefects.legacy.DefectBean;
 import org.apache.wink.server.utils.LinkBuilders;
 
-
 /**
  * Defect resource (based on document resource)
  */
@@ -47,12 +46,12 @@ import org.apache.wink.server.utils.LinkBuilders;
 public class DefectAsset {
 
     private DefectBean defect;
-    private boolean child;
-    
+    private boolean    child;
+
     public DefectAsset() {
         this(null);
     }
-    
+
     public DefectAsset(DefectBean defect) {
         this(defect, false);
     }
@@ -61,35 +60,39 @@ public class DefectAsset {
         this.defect = defect;
         this.child = child;
     }
-    
-    @Produces({MediaType.APPLICATION_XML})
+
+    @Produces( {MediaType.APPLICATION_XML})
     public DefectBean getDefect() {
         return defect;
     }
 
-    @Produces({MediaType.WILDCARD, MediaType.APPLICATION_JSON})
-    public SyndEntry getSyndEntry(@Context Providers providers, @Context UriInfo uriInfo,
-            @Context LinkBuilders linkBuilders) {
+    @Produces( {MediaType.WILDCARD, MediaType.APPLICATION_JSON})
+    public SyndEntry getSyndEntry(@Context Providers providers,
+                                  @Context UriInfo uriInfo,
+                                  @Context LinkBuilders linkBuilders) {
         SyndEntry entry = new SyndEntry();
         entry.setId("urn:com:hp:qadefects:defect:" + defect.getId());
         entry.setTitle(new SyndText(defect.getName()));
         entry.setSummary(new SyndText(defect.getDescription()));
         entry.addAuthor(new SyndPerson(defect.getAuthor()));
-        entry.addCategory(new SyndCategory("urn:com:hp:qadefects:categories:severity", defect.getSeverity(), null));
-        entry.addCategory(new SyndCategory("urn:com:hp:qadefects:categories:status", defect.getStatus(), null));
+        entry.addCategory(new SyndCategory("urn:com:hp:qadefects:categories:severity", defect
+            .getSeverity(), null));
+        entry.addCategory(new SyndCategory("urn:com:hp:qadefects:categories:status", defect
+            .getStatus(), null));
         if (defect.getCreated() != null) {
             entry.setPublished(new Date(defect.getCreated().getTime()));
         }
 
         // serialize the defect xml
-        String contentString = ProviderUtils.writeToString(providers, defect, MediaType.APPLICATION_XML_TYPE);
+        String contentString =
+            ProviderUtils.writeToString(providers, defect, MediaType.APPLICATION_XML_TYPE);
         entry.setContent(new SyndContent(contentString, MediaType.APPLICATION_XML, false));
 
         // set base uri if this is a standalone entry
         if (!child) {
             entry.setBase(uriInfo.getAbsolutePath().toString());
         }
-        
+
         // generate system links
         linkBuilders.createSystemLinksBuilder().subResource(defect.getId()).build(entry.getLinks());
         return entry;
@@ -113,7 +116,11 @@ public class DefectAsset {
             return;
         }
         // deserialize the defect xml
-        defect = ProviderUtils.readFromString(providers, value, DefectBean.class, MediaType.APPLICATION_XML_TYPE);
+        defect =
+            ProviderUtils.readFromString(providers,
+                                         value,
+                                         DefectBean.class,
+                                         MediaType.APPLICATION_XML_TYPE);
     }
 
 }

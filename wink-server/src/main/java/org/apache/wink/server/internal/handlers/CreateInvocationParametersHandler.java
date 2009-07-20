@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.handlers;
 
@@ -30,17 +29,16 @@ import org.apache.wink.server.handlers.HandlersChain;
 import org.apache.wink.server.handlers.MessageContext;
 import org.apache.wink.server.handlers.RequestHandler;
 
-
 public class CreateInvocationParametersHandler implements RequestHandler {
 
     public void handleRequest(MessageContext context, HandlersChain chain) throws Throwable {
         SearchResult result = context.getAttribute(SearchResult.class);
-        
+
         // create and save the invocation parameters for the found method
         List<Injectable> formal = result.getMethod().getMetadata().getFormalParameters();
         Object[] parameters = InjectableFactory.getInstance().instantiate(formal, context);
         result.setInvocationParameters(parameters);
-        
+
         chain.doChain(context);
     }
 

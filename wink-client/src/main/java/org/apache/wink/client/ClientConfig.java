@@ -18,7 +18,6 @@
  *
  *******************************************************************************/
 
-
 package org.apache.wink.client;
 
 import java.util.Collections;
@@ -34,22 +33,22 @@ import org.apache.wink.client.handlers.ConnectionHandler;
 import org.apache.wink.client.internal.handlers.HttpURLConnectionHandler;
 import org.apache.wink.common.WinkApplication;
 
-
 /**
- * Provides client configuration. The ClientConfig is implemented using the builder pattern so
- * method calls can be easily aggregated. Custom Providers are defined by calling the
- * {@link #applications(Application...)} method. Custom client handlers are defined by calling the
+ * Provides client configuration. The ClientConfig is implemented using the
+ * builder pattern so method calls can be easily aggregated. Custom Providers
+ * are defined by calling the {@link #applications(Application...)} method.
+ * Custom client handlers are defined by calling the
  * {@link #handlers(ClientHandler...)} method.
  */
 public class ClientConfig implements Cloneable {
-    private String proxyHost;
-    private int proxyPort;
-    private int connectTimeout;
-    private int readTimeout;
-    private boolean followRedirects;
+    private String                    proxyHost;
+    private int                       proxyPort;
+    private int                       connectTimeout;
+    private int                       readTimeout;
+    private boolean                   followRedirects;
     private LinkedList<ClientHandler> handlers;
-    private LinkedList<Application> applications;
-    private boolean modifiable;
+    private LinkedList<Application>   applications;
+    private boolean                   modifiable;
 
     /**
      * Construct a new ClientConfig with the following default settings:
@@ -85,28 +84,46 @@ public class ClientConfig implements Cloneable {
                 set.add(org.apache.wink.common.internal.providers.entity.StringProvider.class);
                 set.add(org.apache.wink.common.internal.providers.entity.ReaderProvider.class);
                 set.add(org.apache.wink.common.internal.providers.entity.DataSourceProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.FormMultivaluedMapProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.SourceProvider.StreamSourceProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.SourceProvider.SAXSourceProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.SourceProvider.DOMSourceProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.StreamingOutputProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.xml.JAXBElementXmlProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.xml.JAXBXmlProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.atom.AtomFeedProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.atom.AtomFeedSyndFeedProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.atom.AtomFeedJAXBElementProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.atom.AtomEntryProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.atom.AtomEntrySyndEntryProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.atom.AtomEntryJAXBElementProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.app.AppServiceProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.app.AppCategoriesProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.app.CategoriesProvider.class);
                 set
-                        .add(org.apache.wink.common.internal.providers.entity.opensearch.OpenSearchDescriptionProvider.class);
+                    .add(org.apache.wink.common.internal.providers.entity.FormMultivaluedMapProvider.class);
+                set
+                    .add(org.apache.wink.common.internal.providers.entity.SourceProvider.StreamSourceProvider.class);
+                set
+                    .add(org.apache.wink.common.internal.providers.entity.SourceProvider.SAXSourceProvider.class);
+                set
+                    .add(org.apache.wink.common.internal.providers.entity.SourceProvider.DOMSourceProvider.class);
+                set
+                    .add(org.apache.wink.common.internal.providers.entity.StreamingOutputProvider.class);
+                set
+                    .add(org.apache.wink.common.internal.providers.entity.xml.JAXBElementXmlProvider.class);
+                set.add(org.apache.wink.common.internal.providers.entity.xml.JAXBXmlProvider.class);
+                set
+                    .add(org.apache.wink.common.internal.providers.entity.atom.AtomFeedProvider.class);
+                set
+                    .add(org.apache.wink.common.internal.providers.entity.atom.AtomFeedSyndFeedProvider.class);
+                set
+                    .add(org.apache.wink.common.internal.providers.entity.atom.AtomFeedJAXBElementProvider.class);
+                set
+                    .add(org.apache.wink.common.internal.providers.entity.atom.AtomEntryProvider.class);
+                set
+                    .add(org.apache.wink.common.internal.providers.entity.atom.AtomEntrySyndEntryProvider.class);
+                set
+                    .add(org.apache.wink.common.internal.providers.entity.atom.AtomEntryJAXBElementProvider.class);
+                set
+                    .add(org.apache.wink.common.internal.providers.entity.app.AppServiceProvider.class);
+                set
+                    .add(org.apache.wink.common.internal.providers.entity.app.AppCategoriesProvider.class);
+                set
+                    .add(org.apache.wink.common.internal.providers.entity.app.CategoriesProvider.class);
+                set
+                    .add(org.apache.wink.common.internal.providers.entity.opensearch.OpenSearchDescriptionProvider.class);
                 set.add(org.apache.wink.common.internal.providers.entity.json.JsonProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.json.JsonJAXBProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.json.JsonSyndEntryProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.json.JsonSyndFeedProvider.class);
+                set
+                    .add(org.apache.wink.common.internal.providers.entity.json.JsonJAXBProvider.class);
+                set
+                    .add(org.apache.wink.common.internal.providers.entity.json.JsonSyndEntryProvider.class);
+                set
+                    .add(org.apache.wink.common.internal.providers.entity.json.JsonSyndFeedProvider.class);
                 return set;
             }
 
@@ -119,7 +136,7 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Get the proxy host
-     *
+     * 
      * @return the proxy host
      */
     public final String getProxyHost() {
@@ -128,9 +145,8 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Set the proxy host
-     *
-     * @param proxyHost
-     *            proxy host
+     * 
+     * @param proxyHost proxy host
      * @return this client configuration
      * @throws ClientConfigException
      */
@@ -144,7 +160,7 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Get the proxy port
-     *
+     * 
      * @return the proxy port
      */
     public final int getProxyPort() {
@@ -153,9 +169,8 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Set the proxy port
-     *
-     * @param proxyPort
-     *            proxy port
+     * 
+     * @param proxyPort proxy port
      * @return this client configuration
      * @throws ClientConfigException
      */
@@ -172,7 +187,7 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Get the connect timeout in milliseconds
-     *
+     * 
      * @return the connect timeout in milliseconds
      */
     public final int getConnectTimeout() {
@@ -181,9 +196,8 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Set the connect timeout in milliseconds
-     *
-     * @param connectTimeout
-     *            the connect timeout in milliseconds
+     * 
+     * @param connectTimeout the connect timeout in milliseconds
      * @return this client configuration
      * @throws ClientConfigException
      */
@@ -197,7 +211,7 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Get the read timeout in milliseconds
-     *
+     * 
      * @return the read timeout in milliseconds
      */
     public final int getReadTimeout() {
@@ -206,9 +220,8 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Set the read timeout in milliseconds
-     *
-     * @param readTimeout
-     *            the read timeout in milliseconds
+     * 
+     * @param readTimeout the read timeout in milliseconds
      * @return this client configuration
      * @throws ClientConfigException
      */
@@ -222,8 +235,9 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Returns whether to client will automatically follow redirects
-     *
-     * @return true if client will automatically follow redirects; false otherwise
+     * 
+     * @return true if client will automatically follow redirects; false
+     *         otherwise
      */
     public final boolean isFollowRedirects() {
         return followRedirects;
@@ -231,9 +245,9 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Set whether to client will automatically follow redirects
-     *
-     * @param followRedirects
-     *            whether to client will automatically follow redirects
+     * 
+     * @param followRedirects whether to client will automatically follow
+     *            redirects
      * @return this client configuration
      * @throws ClientConfigException
      */
@@ -247,7 +261,7 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Get an unmodifiable list of the client handlers
-     *
+     * 
      * @return an unmodifiable list of the client handlers
      */
     public final List<ClientHandler> getHandlers() {
@@ -256,9 +270,8 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Add client handlers
-     *
-     * @param handlers
-     *            the handlers to add
+     * 
+     * @param handlers the handlers to add
      * @return this client configuration
      * @throws ClientConfigException
      */
@@ -279,12 +292,13 @@ public class ClientConfig implements Cloneable {
     }
 
     /**
-     * Returns the client handler that acts as the connection handler. This handler is always the
-     * last handler on the chain and is automatically added to the end of the defined list of
-     * handlers.
+     * Returns the client handler that acts as the connection handler. This
+     * handler is always the last handler on the chain and is automatically
+     * added to the end of the defined list of handlers.
      * <p>
-     * This method should be overridden in order to provide an alternate connection handler.
-     *
+     * This method should be overridden in order to provide an alternate
+     * connection handler.
+     * 
      * @return the connection handler
      */
     protected ConnectionHandler getConnectionHandler() {
@@ -293,7 +307,7 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Get an unmodifiable list of the applications
-     *
+     * 
      * @return
      */
     public final List<Application> getApplications() {
@@ -302,9 +316,8 @@ public class ClientConfig implements Cloneable {
 
     /**
      * Add applications
-     *
-     * @param applications
-     *            the applications to add
+     * 
+     * @param applications the applications to add
      * @return this client configuration
      * @throws ClientConfigException
      */

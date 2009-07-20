@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.model.synd;
 
@@ -43,7 +42,7 @@ public class SyndFeed extends SyndBase {
     public SyndFeed(String title, String id) {
         this(title, id, null);
     }
-    
+
     public SyndFeed(SyndText title, String id) {
         this(title, id, null);
     }
@@ -51,7 +50,7 @@ public class SyndFeed extends SyndBase {
     public SyndFeed(String title, String id, Date updated) {
         this(new SyndText(title), id, updated);
     }
-    
+
     public SyndFeed(SyndText title, String id, Date updated) {
         super(id, title, updated);
     }
@@ -142,12 +141,13 @@ public class SyndFeed extends SyndBase {
     }
 
     /**
-     * Add an entry to the list of entries. This is a shortcut for <code>getEntries().add(entry)</code>.
+     * Add an entry to the list of entries. This is a shortcut for
+     * <code>getEntries().add(entry)</code>.
      */
     public void addEntry(SyndEntry entry) {
         getEntries().add(entry);
     }
-    
+
     public List<SyndEntry> getEntries() {
         if (entries == null) {
             entries = new ArrayList<SyndEntry>();
@@ -162,12 +162,12 @@ public class SyndFeed extends SyndBase {
         result = prime * result + ((entries == null) ? 0 : entries.hashCode());
         result = prime * result + ((generator == null) ? 0 : generator.hashCode());
         result = prime * result + ((icon == null) ? 0 : icon.hashCode());
-        result = prime * result + (int) (itemsPerPage ^ (itemsPerPage >>> 32));
+        result = prime * result + (int)(itemsPerPage ^ (itemsPerPage >>> 32));
         result = prime * result + ((logo == null) ? 0 : logo.hashCode());
         result = prime * result + ((rights == null) ? 0 : rights.hashCode());
-        result = prime * result + (int) (startIndex ^ (startIndex >>> 32));
+        result = prime * result + (int)(startIndex ^ (startIndex >>> 32));
         result = prime * result + ((subtitle == null) ? 0 : subtitle.hashCode());
-        result = prime * result + (int) (totalResults ^ (totalResults >>> 32));
+        result = prime * result + (int)(totalResults ^ (totalResults >>> 32));
         return result;
     }
 
@@ -179,7 +179,7 @@ public class SyndFeed extends SyndBase {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        SyndFeed other = (SyndFeed) obj;
+        SyndFeed other = (SyndFeed)obj;
         if (entries == null) {
             if (other.entries != null)
                 return false;

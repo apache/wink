@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal.providers.entity.html;
 
 import java.io.IOException;
@@ -34,7 +34,6 @@ import org.apache.wink.common.model.synd.SyndPerson;
 import org.apache.wink.common.model.synd.SyndText;
 import org.apache.wink.common.model.synd.SyndTextType;
 
-
 /**
  * This adapter is used for default Html Representation of Entry (used from
  * defaultHtmlEntry.jsp and from defaultHtmlCollection.jsp). This adapter saves
@@ -49,10 +48,7 @@ public class HtmlSyndEntryAdapter {
     /**
      * This constructor sets the metadata.
      * 
-     * @param metadata
-     *            the represented resource's metadata
-     * 
-     * 
+     * @param metadata the represented resource's metadata
      */
     public HtmlSyndEntryAdapter(SyndEntry metadata) {
         this.syndEntry = metadata;
@@ -175,8 +171,8 @@ public class HtmlSyndEntryAdapter {
             // TODO: get content using type?
             String value = String.valueOf(content.getValue());
             value = value != null ? value : "";
-            if (type != null
-                && (SyndTextType.xhtml.name().equals(type) || AtomJAXBUtils.isTypeXml(type))) {
+            if (type != null && (SyndTextType.xhtml.name().equals(type) || AtomJAXBUtils
+                .isTypeXml(type))) {
                 return StringEscapeUtils.escapeXml(value);
             }
             return value;
@@ -184,7 +180,6 @@ public class HtmlSyndEntryAdapter {
 
         return "";
     }
-
 
     /**
      * Get indication of the content type

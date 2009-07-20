@@ -24,7 +24,6 @@
 // Generated on: 2008.09.17 at 09:44:59 AM IDT  
 //
 
-
 package org.apache.wink.common.model.opensearch;
 
 import java.math.BigInteger;
@@ -33,53 +32,103 @@ import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.namespace.QName;
 
-
 /**
- * This object contains factory methods for each 
- * Java content interface and Java element interface 
- * generated in the org.apache.wink.common.model.opensearch package. 
- * <p>An ObjectFactory allows you to programatically 
- * construct new instances of the Java representation 
- * for XML content. The Java representation of XML 
- * content can consist of schema derived interfaces 
- * and classes representing the binding of schema 
- * type definitions, element declarations and model 
- * groups.  Factory methods for each of these are 
- * provided in this class.
- * 
+ * This object contains factory methods for each Java content interface and Java
+ * element interface generated in the org.apache.wink.common.model.opensearch
+ * package.
+ * <p>
+ * An ObjectFactory allows you to programatically construct new instances of the
+ * Java representation for XML content. The Java representation of XML content
+ * can consist of schema derived interfaces and classes representing the binding
+ * of schema type definitions, element declarations and model groups. Factory
+ * methods for each of these are provided in this class.
  */
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _Image_QNAME = new QName("http://a9.com/-/spec/opensearch/1.1/", "Image");
-    private final static QName _ItemsPerPage_QNAME = new QName("http://a9.com/-/spec/opensearch/1.1/", "itemsPerPage");
-    private final static QName _ShortName_QNAME = new QName("http://a9.com/-/spec/opensearch/1.1/", "ShortName");
-    private final static QName _TotalResults_QNAME = new QName("http://a9.com/-/spec/opensearch/1.1/", "totalResults");
-    private final static QName _Query_QNAME = new QName("http://a9.com/-/spec/opensearch/1.1/", "Query");
-    private final static QName _Developer_QNAME = new QName("http://a9.com/-/spec/opensearch/1.1/", "Developer");
-    private final static QName _OpenSearchDescription_QNAME = new QName("http://a9.com/-/spec/opensearch/1.1/", "OpenSearchDescription");
-    private final static QName _Contact_QNAME = new QName("http://a9.com/-/spec/opensearch/1.1/", "Contact");
-    private final static QName _Attribution_QNAME = new QName("http://a9.com/-/spec/opensearch/1.1/", "Attribution");
-    private final static QName _SyndicationRight_QNAME = new QName("http://a9.com/-/spec/opensearch/1.1/", "SyndicationRight");
-    private final static QName _Tags_QNAME = new QName("http://a9.com/-/spec/opensearch/1.1/", "Tags");
-    private final static QName _Language_QNAME = new QName("http://a9.com/-/spec/opensearch/1.1/", "Language");
-    private final static QName _OutputEncoding_QNAME = new QName("http://a9.com/-/spec/opensearch/1.1/", "OutputEncoding");
-    private final static QName _InputEncoding_QNAME = new QName("http://a9.com/-/spec/opensearch/1.1/", "InputEncoding");
-    private final static QName _Url_QNAME = new QName("http://a9.com/-/spec/opensearch/1.1/", "Url");
-    private final static QName _StartIndex_QNAME = new QName("http://a9.com/-/spec/opensearch/1.1/", "startIndex");
-    private final static QName _LongName_QNAME = new QName("http://a9.com/-/spec/opensearch/1.1/", "LongName");
-    private final static QName _Description_QNAME = new QName("http://a9.com/-/spec/opensearch/1.1/", "Description");
+    private final static QName _Image_QNAME                 =
+                                                                new QName(
+                                                                          "http://a9.com/-/spec/opensearch/1.1/",
+                                                                          "Image");
+    private final static QName _ItemsPerPage_QNAME          =
+                                                                new QName(
+                                                                          "http://a9.com/-/spec/opensearch/1.1/",
+                                                                          "itemsPerPage");
+    private final static QName _ShortName_QNAME             =
+                                                                new QName(
+                                                                          "http://a9.com/-/spec/opensearch/1.1/",
+                                                                          "ShortName");
+    private final static QName _TotalResults_QNAME          =
+                                                                new QName(
+                                                                          "http://a9.com/-/spec/opensearch/1.1/",
+                                                                          "totalResults");
+    private final static QName _Query_QNAME                 =
+                                                                new QName(
+                                                                          "http://a9.com/-/spec/opensearch/1.1/",
+                                                                          "Query");
+    private final static QName _Developer_QNAME             =
+                                                                new QName(
+                                                                          "http://a9.com/-/spec/opensearch/1.1/",
+                                                                          "Developer");
+    private final static QName _OpenSearchDescription_QNAME =
+                                                                new QName(
+                                                                          "http://a9.com/-/spec/opensearch/1.1/",
+                                                                          "OpenSearchDescription");
+    private final static QName _Contact_QNAME               =
+                                                                new QName(
+                                                                          "http://a9.com/-/spec/opensearch/1.1/",
+                                                                          "Contact");
+    private final static QName _Attribution_QNAME           =
+                                                                new QName(
+                                                                          "http://a9.com/-/spec/opensearch/1.1/",
+                                                                          "Attribution");
+    private final static QName _SyndicationRight_QNAME      =
+                                                                new QName(
+                                                                          "http://a9.com/-/spec/opensearch/1.1/",
+                                                                          "SyndicationRight");
+    private final static QName _Tags_QNAME                  =
+                                                                new QName(
+                                                                          "http://a9.com/-/spec/opensearch/1.1/",
+                                                                          "Tags");
+    private final static QName _Language_QNAME              =
+                                                                new QName(
+                                                                          "http://a9.com/-/spec/opensearch/1.1/",
+                                                                          "Language");
+    private final static QName _OutputEncoding_QNAME        =
+                                                                new QName(
+                                                                          "http://a9.com/-/spec/opensearch/1.1/",
+                                                                          "OutputEncoding");
+    private final static QName _InputEncoding_QNAME         =
+                                                                new QName(
+                                                                          "http://a9.com/-/spec/opensearch/1.1/",
+                                                                          "InputEncoding");
+    private final static QName _Url_QNAME                   =
+                                                                new QName(
+                                                                          "http://a9.com/-/spec/opensearch/1.1/",
+                                                                          "Url");
+    private final static QName _StartIndex_QNAME            =
+                                                                new QName(
+                                                                          "http://a9.com/-/spec/opensearch/1.1/",
+                                                                          "startIndex");
+    private final static QName _LongName_QNAME              =
+                                                                new QName(
+                                                                          "http://a9.com/-/spec/opensearch/1.1/",
+                                                                          "LongName");
+    private final static QName _Description_QNAME           =
+                                                                new QName(
+                                                                          "http://a9.com/-/spec/opensearch/1.1/",
+                                                                          "Description");
 
     /**
-     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: org.apache.wink.common.model.opensearch
-     * 
+     * Create a new ObjectFactory that can be used to create new instances of
+     * schema derived classes for package:
+     * org.apache.wink.common.model.opensearch
      */
     public ObjectFactory() {
     }
 
     /**
      * Create an instance of {@link OpenSearchUrl }
-     * 
      */
     public OpenSearchUrl createOpenSearchUrl() {
         return new OpenSearchUrl();
@@ -87,7 +136,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link OpenSearchImage }
-     * 
      */
     public OpenSearchImage createOpenSearchImage() {
         return new OpenSearchImage();
@@ -95,7 +143,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link OpenSearchDescription }
-     * 
      */
     public OpenSearchDescription createOpenSearchDescription() {
         return new OpenSearchDescription();
@@ -103,15 +150,14 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link OpenSearchQuery }
-     * 
      */
     public OpenSearchQuery createOpenSearchQuery() {
         return new OpenSearchQuery();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link OpenSearchImage }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link OpenSearchImage }
+     * {@code >}
      */
     @XmlElementDecl(namespace = "http://a9.com/-/spec/opensearch/1.1/", name = "Image")
     public JAXBElement<OpenSearchImage> createImage(OpenSearchImage value) {
@@ -119,8 +165,8 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link BigInteger }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link BigInteger }
+     * {@code >}
      */
     @XmlElementDecl(namespace = "http://a9.com/-/spec/opensearch/1.1/", name = "itemsPerPage")
     public JAXBElement<BigInteger> createItemsPerPage(BigInteger value) {
@@ -128,8 +174,7 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
      */
     @XmlElementDecl(namespace = "http://a9.com/-/spec/opensearch/1.1/", name = "ShortName")
     public JAXBElement<String> createShortName(String value) {
@@ -137,8 +182,8 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link BigInteger }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link BigInteger }
+     * {@code >}
      */
     @XmlElementDecl(namespace = "http://a9.com/-/spec/opensearch/1.1/", name = "totalResults")
     public JAXBElement<BigInteger> createTotalResults(BigInteger value) {
@@ -146,8 +191,8 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link OpenSearchQuery }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link OpenSearchQuery }
+     * {@code >}
      */
     @XmlElementDecl(namespace = "http://a9.com/-/spec/opensearch/1.1/", name = "Query")
     public JAXBElement<OpenSearchQuery> createQuery(OpenSearchQuery value) {
@@ -155,8 +200,7 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
      */
     @XmlElementDecl(namespace = "http://a9.com/-/spec/opensearch/1.1/", name = "Developer")
     public JAXBElement<String> createDeveloper(String value) {
@@ -164,17 +208,17 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link OpenSearchDescription }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}
+     * {@link OpenSearchDescription }{@code >}
      */
     @XmlElementDecl(namespace = "http://a9.com/-/spec/opensearch/1.1/", name = "OpenSearchDescription")
     public JAXBElement<OpenSearchDescription> createOpenSearchDescription(OpenSearchDescription value) {
-        return new JAXBElement<OpenSearchDescription>(_OpenSearchDescription_QNAME, OpenSearchDescription.class, null, value);
+        return new JAXBElement<OpenSearchDescription>(_OpenSearchDescription_QNAME,
+                                                      OpenSearchDescription.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
      */
     @XmlElementDecl(namespace = "http://a9.com/-/spec/opensearch/1.1/", name = "Contact")
     public JAXBElement<String> createContact(String value) {
@@ -182,8 +226,7 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
      */
     @XmlElementDecl(namespace = "http://a9.com/-/spec/opensearch/1.1/", name = "Attribution")
     public JAXBElement<String> createAttribution(String value) {
@@ -191,8 +234,7 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
      */
     @XmlElementDecl(namespace = "http://a9.com/-/spec/opensearch/1.1/", name = "SyndicationRight", defaultValue = "open")
     public JAXBElement<String> createSyndicationRight(String value) {
@@ -200,8 +242,7 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
      */
     @XmlElementDecl(namespace = "http://a9.com/-/spec/opensearch/1.1/", name = "Tags")
     public JAXBElement<String> createTags(String value) {
@@ -209,8 +250,7 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
      */
     @XmlElementDecl(namespace = "http://a9.com/-/spec/opensearch/1.1/", name = "Language")
     public JAXBElement<String> createLanguage(String value) {
@@ -218,8 +258,7 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
      */
     @XmlElementDecl(namespace = "http://a9.com/-/spec/opensearch/1.1/", name = "OutputEncoding", defaultValue = "UTF-8")
     public JAXBElement<String> createOutputEncoding(String value) {
@@ -227,8 +266,7 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
      */
     @XmlElementDecl(namespace = "http://a9.com/-/spec/opensearch/1.1/", name = "InputEncoding", defaultValue = "UTF-8")
     public JAXBElement<String> createInputEncoding(String value) {
@@ -236,8 +274,8 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link OpenSearchUrl }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link OpenSearchUrl }
+     * {@code >}
      */
     @XmlElementDecl(namespace = "http://a9.com/-/spec/opensearch/1.1/", name = "Url")
     public JAXBElement<OpenSearchUrl> createUrl(OpenSearchUrl value) {
@@ -245,8 +283,8 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link BigInteger }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link BigInteger }
+     * {@code >}
      */
     @XmlElementDecl(namespace = "http://a9.com/-/spec/opensearch/1.1/", name = "startIndex")
     public JAXBElement<BigInteger> createStartIndex(BigInteger value) {
@@ -254,8 +292,7 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
      */
     @XmlElementDecl(namespace = "http://a9.com/-/spec/opensearch/1.1/", name = "LongName")
     public JAXBElement<String> createLongName(String value) {
@@ -263,8 +300,7 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
      */
     @XmlElementDecl(namespace = "http://a9.com/-/spec/opensearch/1.1/", name = "Description")
     public JAXBElement<String> createDescription(String value) {

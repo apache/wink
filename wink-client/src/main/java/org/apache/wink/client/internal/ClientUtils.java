@@ -17,16 +17,14 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.client.internal;
 
 public class ClientUtils {
-    
+
     public static boolean isErrorCode(int statusCode) {
         int family = statusCode / 100;
         return family == 4 || family == 5;
     }
-
 
 }

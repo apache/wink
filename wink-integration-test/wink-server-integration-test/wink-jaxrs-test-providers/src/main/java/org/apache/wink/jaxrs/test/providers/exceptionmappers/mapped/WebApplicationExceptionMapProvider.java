@@ -35,9 +35,9 @@ public class WebApplicationExceptionMapProvider implements ExceptionMapper<WebAp
 
     public Response toResponse(WebApplicationException arg0) {
         int oldStatus = arg0.getResponse().getStatus();
-        Response.ResponseBuilder builder = Response.fromResponse(
-                arg0.getResponse()).header("ExceptionPage",
-                uri.getAbsolutePath().toASCIIString());
+        Response.ResponseBuilder builder =
+            Response.fromResponse(arg0.getResponse()).header("ExceptionPage",
+                                                             uri.getAbsolutePath().toASCIIString());
 
         if (oldStatus == 499) {
             builder.status(497);

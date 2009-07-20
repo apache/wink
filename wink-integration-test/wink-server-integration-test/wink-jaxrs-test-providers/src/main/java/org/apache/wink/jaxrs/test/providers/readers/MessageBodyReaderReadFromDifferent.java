@@ -32,21 +32,24 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-@Consumes( { "custom/long", "custom/int", "custom/byte", "custom/short" })
+@Consumes( {"custom/long", "custom/int", "custom/byte", "custom/short"})
 public class MessageBodyReaderReadFromDifferent implements MessageBodyReader<Number> {
 
     public boolean isReadable(Class<?> arg0, Type arg1, Annotation[] arg2, MediaType arg3) {
-        if (Integer.class.isAssignableFrom(arg0)
-                || Long.class.isAssignableFrom(arg0)
-                || Byte.class.isAssignableFrom(arg0)
-                || Short.class.isAssignableFrom(arg0)) {
+        if (Integer.class.isAssignableFrom(arg0) || Long.class.isAssignableFrom(arg0)
+            || Byte.class.isAssignableFrom(arg0)
+            || Short.class.isAssignableFrom(arg0)) {
             return true;
         }
         return false;
     }
 
-    public Number readFrom(Class<Number> arg0, Type arg1, Annotation[] arg2, MediaType arg3, MultivaluedMap<String, String> arg4, InputStream arg5)
-            throws IOException, WebApplicationException {
+    public Number readFrom(Class<Number> arg0,
+                           Type arg1,
+                           Annotation[] arg2,
+                           MediaType arg3,
+                           MultivaluedMap<String, String> arg4,
+                           InputStream arg5) throws IOException, WebApplicationException {
         if (arg0.isAssignableFrom(Long.class)) {
             return Long.valueOf(Long.MAX_VALUE);
         }

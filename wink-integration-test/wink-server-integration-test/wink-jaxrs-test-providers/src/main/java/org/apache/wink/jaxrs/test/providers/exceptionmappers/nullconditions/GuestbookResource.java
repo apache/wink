@@ -40,31 +40,28 @@ public class GuestbookResource {
     @GET
     @Path("webappexceptionwithcause")
     public String exceptionWithCause() {
-        throw new WebApplicationException(new GuestbookException(
-                "Threw checked exception"));
+        throw new WebApplicationException(new GuestbookException("Threw checked exception"));
     }
 
     @POST
     @Path("webappexceptionwithcauseandstatus")
     public String exceptionWithCauseAndStatus() {
-        throw new WebApplicationException(new GuestbookException(
-                "Threw checked exception"), 499);
+        throw new WebApplicationException(new GuestbookException("Threw checked exception"), 499);
     }
 
     @PUT
     @Path("webappexceptionwithcauseandresponse")
     public String exceptionWithCauseAndResponse() {
-        Response resp = Response.status(Status.NOT_ACCEPTABLE).entity(
-                "Entity inside response").build();
-        throw new WebApplicationException(new GuestbookException(
-                "Threw checked exception"), resp);
+        Response resp =
+            Response.status(Status.NOT_ACCEPTABLE).entity("Entity inside response").build();
+        throw new WebApplicationException(new GuestbookException("Threw checked exception"), resp);
     }
 
     @DELETE
     @Path("webappexceptionwithcauseandresponsestatus")
     public String exceptionWithCauseAndResponseStatus() {
-        throw new WebApplicationException(new GuestbookException(
-                "Threw checked exception"), Response.Status.BAD_REQUEST);
+        throw new WebApplicationException(new GuestbookException("Threw checked exception"),
+                                          Response.Status.BAD_REQUEST);
     }
 
     @GET
@@ -75,8 +72,7 @@ public class GuestbookResource {
 
     @POST
     @Path("exceptionmapperthrowsexception")
-    public String exceptionMapperThrowsException()
-            throws GuestbookThrowException {
+    public String exceptionMapperThrowsException() throws GuestbookThrowException {
         throw new GuestbookThrowException("Re-throw an exception");
     }
 

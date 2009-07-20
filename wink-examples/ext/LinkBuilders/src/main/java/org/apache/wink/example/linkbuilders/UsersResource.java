@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.linkbuilders;
 
 import java.net.URISyntaxException;
@@ -41,7 +41,6 @@ import org.apache.wink.common.model.synd.SyndPerson;
 import org.apache.wink.common.model.synd.SyndText;
 import org.apache.wink.server.utils.LinkBuilders;
 
-
 /**
  * Sample service for demonstrating the use of LinkBuilders concept
  */
@@ -49,53 +48,68 @@ import org.apache.wink.server.utils.LinkBuilders;
 @Path("users")
 public class UsersResource {
 
-    private static final String USER_ID   = "userId";
-    private static final String USER_INFO = "{" + USER_ID + "}" ;
+    private static final String           USER_ID   = "userId";
+    private static final String           USER_INFO = "{" + USER_ID + "}";
 
-    static private int maxUserID = 0;
+    static private int                    maxUserID = 0;
 
-    static private HashMap<Integer, User> users = new HashMap<Integer, User>() {
-        private static final long serialVersionUID = -2823817865466342159L;
-        {
-            put(maxUserID, new User("John", "Smith", maxUserID, "John.Smith@mail.com"));
-            put(++maxUserID, new User("John", "Doe", maxUserID, "John.Doe@mail.com"));
-            put(++maxUserID, new User("Pogos", "Pogosyan", maxUserID, "Pogos.Pogosyan@mail.com"));
-            put(++maxUserID, new User("Hans", "Meier", maxUserID, "Hans.Meier@mail.com"));
-            put(++maxUserID, new User("Ali", "Vali", maxUserID, "Ali.Vali@mail.com"));
-            put(++maxUserID, new User("Ploni", "Almoni", maxUserID, "Ploni.Almoni@mail.com"));
-        }
-    };
+    static private HashMap<Integer, User> users     = new HashMap<Integer, User>() {
+                                                        private static final long serialVersionUID =
+                                                                                                       -2823817865466342159L;
+                                                        {
+                                                            put(maxUserID,
+                                                                new User("John", "Smith",
+                                                                         maxUserID,
+                                                                         "John.Smith@mail.com"));
+                                                            put(++maxUserID,
+                                                                new User("John", "Doe", maxUserID,
+                                                                         "John.Doe@mail.com"));
+                                                            put(++maxUserID,
+                                                                new User("Pogos", "Pogosyan",
+                                                                         maxUserID,
+                                                                         "Pogos.Pogosyan@mail.com"));
+                                                            put(++maxUserID,
+                                                                new User("Hans", "Meier",
+                                                                         maxUserID,
+                                                                         "Hans.Meier@mail.com"));
+                                                            put(++maxUserID,
+                                                                new User("Ali", "Vali", maxUserID,
+                                                                         "Ali.Vali@mail.com"));
+                                                            put(++maxUserID,
+                                                                new User("Ploni", "Almoni",
+                                                                         maxUserID,
+                                                                         "Ploni.Almoni@mail.com"));
+                                                        }
+                                                    };
 
     /**
      * Get a list of all the existing users. The method returns SyndFeed as a
      * response. That is, Client will be able to request a users collection
      * information as an XML or JSON
      * 
-     * @param linkBuilders
-     *            reference to LinkBuilders instance
+     * @param linkBuilders reference to LinkBuilders instance
      * @return an instance of SyndFeed
      */
     @GET
-    @Produces( { MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON })
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
     public SyndFeed getUsers(@Context LinkBuilders linkBuilders) {
 
         // Build SyndFeed that holds users collection.
-        // Generate a system links for collection and for each collection member by using LinkBuilders 
+        // Generate a system links for collection and for each collection member
+        // by using LinkBuilders
         SyndFeed usersSyndFeed = createUsersSyndFeed(users.values(), linkBuilders);
 
         return usersSyndFeed;
     }
 
     /**
-     * This method builds SyndFeed that contains a collection of all users
-     * It generate a system links for the collection and for each collection members. 
+     * This method builds SyndFeed that contains a collection of all users It
+     * generate a system links for the collection and for each collection
+     * members.
      * 
-     * @param users
-     *            collection
-     * @param linkBuilders
-     *            reference to LinkBuilders instance
-     * @return SyndFeed
-     *              syndication feed
+     * @param users collection
+     * @param linkBuilders reference to LinkBuilders instance
+     * @return SyndFeed syndication feed
      */
     private SyndFeed createUsersSyndFeed(Collection<User> users, LinkBuilders linkBuilders) {
         SyndFeed usersSyndFeed = new SyndFeed();
@@ -104,47 +118,49 @@ public class UsersResource {
         usersSyndFeed.addAuthor(new SyndPerson("admin"));
         usersSyndFeed.setUpdated(new Date());
 
-
         // 1. Generate collection system links: "edit", "alternate"
-        linkBuilders.createSystemLinksBuilder().     // Create SystemLinksBuilder
-                build(usersSyndFeed.getLinks());     // Build all system links
-        
-        // 2. Add "custom" collection link with type "search". Make it always be absolute
-        linkBuilders.createSingleLinkBuilder().         // Create instance of SingleLinkBuilder
-            queryParam("q", "username").                // Set link query parameter
-            rel("search").                              // Set link relation type
-            relativize(false).                          // Create absolute URI
-            build(usersSyndFeed.getLinks());            // Build link
-        
+        linkBuilders.createSystemLinksBuilder(). // Create SystemLinksBuilder
+            build(usersSyndFeed.getLinks()); // Build all system links
+
+        // 2. Add "custom" collection link with type "search". Make it always be
+        // absolute
+        linkBuilders.createSingleLinkBuilder(). // Create instance of
+                                                // SingleLinkBuilder
+            queryParam("q", "username"). // Set link query parameter
+            rel("search"). // Set link relation type
+            relativize(false). // Create absolute URI
+            build(usersSyndFeed.getLinks()); // Build link
+
         // 3. Populate and set the collection members
         for (User user : users) {
             SyndEntry userSyndEntry = createUserSyndEntry(user);
 
-            // generate collection member (single user) system links: "edit", "alternate"
+            // generate collection member (single user) system links: "edit",
+            // "alternate"
             // all link must be relative to users collection URI "users"
-            linkBuilders.createSystemLinksBuilder().subResource(userSyndEntry.getId()).build(userSyndEntry.getLinks());
+            linkBuilders.createSystemLinksBuilder().subResource(userSyndEntry.getId())
+                .build(userSyndEntry.getLinks());
 
             usersSyndFeed.addEntry(userSyndEntry);
         }
         return usersSyndFeed;
     }
-    
+
     /**
      * Get a single user by user id. The method returns SyndEntry as a response.
      * That is, Client will be able to request a user information as an XML or
      * JSON
      * 
-     * @param userId
-     *            an id of a user that is to be retrieved 
-     * @param linkBuilders
-     *            reference to LinkBuilders instance
+     * @param userId an id of a user that is to be retrieved
+     * @param linkBuilders reference to LinkBuilders instance
      * @return an instance of SyndEntry
      * @throws URISyntaxException
      */
     @Path(USER_INFO)
     @GET
-    @Produces( { MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON })
-    public SyndEntry getUserInfo(@PathParam(USER_ID) Integer userId, @Context LinkBuilders linkBuilders) throws URISyntaxException {
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
+    public SyndEntry getUserInfo(@PathParam(USER_ID) Integer userId,
+                                 @Context LinkBuilders linkBuilders) throws URISyntaxException {
 
         // 1. Build SyndEntry that holds a single user information
         User user = users.get(userId);
@@ -157,7 +173,7 @@ public class UsersResource {
 
         // 3. Generate all user supported system links: "edit", "alternate" etc.
         linkBuilders.createSystemLinksBuilder(). // Create SystemLinksBuilder
-                build(userSyndEntry.getLinks()); // Build all system links
+            build(userSyndEntry.getLinks()); // Build all system links
 
         return userSyndEntry;
     }

@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common.http;
 
 /**
@@ -29,32 +29,32 @@ public final class HttpHeadersEx {
         // no instances
     }
 
-    public static final String ALLOW = "Allow";
+    public static final String ALLOW                  = "Allow";
 
-//    public static final String ACCEPT = "Accept";
-//    public static final String ACCEPT_LANGUAGE = "Accept-Language";
-//    public static final String ACCEPT_ENCODING = "Accept-Encoding";
-    public static final String ACCEPT_RANGES = "Accept-Ranges";
-    public static final String CONTENT_DISPOSITION = "Content-Disposition";
-//    public static final String CONTENT_LANG = "Content-Language";
-//    public static final String CONTENT_TYPE = "Content-Type";
-//    public static final String ETAG = "ETag";
-//    public static final String EXPIRES = "Expires";
-//    public static final String IF_MATCH = "If-Match";
-//    public static final String IF_NONE_MATCH = "If-None-Match";
-//    public static final String IF_MODIFIED_SINCE = "If-Modified-Since";
-//    public static final String IF_UNMODIFIED_SINCE = "If-Unmodified-Since";
-//    public static final String LAST_MODIFIED = "Last-Modified";
-//    public static final String LOCATION = "Location";
-//    public static final String USER_AGENT = "User-Agent";
-//    public static final String VARY = "Vary";
+    // public static final String ACCEPT = "Accept";
+    // public static final String ACCEPT_LANGUAGE = "Accept-Language";
+    // public static final String ACCEPT_ENCODING = "Accept-Encoding";
+    public static final String ACCEPT_RANGES          = "Accept-Ranges";
+    public static final String CONTENT_DISPOSITION    = "Content-Disposition";
+    // public static final String CONTENT_LANG = "Content-Language";
+    // public static final String CONTENT_TYPE = "Content-Type";
+    // public static final String ETAG = "ETag";
+    // public static final String EXPIRES = "Expires";
+    // public static final String IF_MATCH = "If-Match";
+    // public static final String IF_NONE_MATCH = "If-None-Match";
+    // public static final String IF_MODIFIED_SINCE = "If-Modified-Since";
+    // public static final String IF_UNMODIFIED_SINCE = "If-Unmodified-Since";
+    // public static final String LAST_MODIFIED = "Last-Modified";
+    // public static final String LOCATION = "Location";
+    // public static final String USER_AGENT = "User-Agent";
+    // public static final String VARY = "Vary";
 
     // --- non-standards ---
 
     /**
      * Non RFC 2616 - Atom Publishing Protocol
      */
-    public static final String SLUG = "Slug";
+    public static final String SLUG                   = "Slug";
 
     /**
      * Non RFC 2616 - Google Doc convention
@@ -62,8 +62,8 @@ public final class HttpHeadersEx {
     public static final String X_HTTP_METHOD_OVERRIDE = "X-HTTP-Method-Override";
 
     /**
-     * Non RFC 2616 - Some client implementing Google Doc  
+     * Non RFC 2616 - Some client implementing Google Doc
      */
-    public static final String X_METHOD_OVERRIDE = "X-Method-Override";
+    public static final String X_METHOD_OVERRIDE      = "X-Method-Override";
 
 }

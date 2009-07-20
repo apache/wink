@@ -31,7 +31,6 @@ public class ScopableOFFactoryTest extends TestCase {
     public static class Dummy {
     }
 
-
     public void testNull() {
         ScopeLifecycleManager<Object> scopableOFFactory = new ScopeLifecycleManager<Object>();
         assertNull(scopableOFFactory.createObjectFactory(null));
@@ -42,6 +41,5 @@ public class ScopableOFFactoryTest extends TestCase {
         assertNull(scopableOFFactory.createObjectFactory(Dummy.class));
         assertNull(scopableOFFactory.createObjectFactory(new Dummy()));
     }
-
 
 }

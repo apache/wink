@@ -37,7 +37,7 @@ public class QueryTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] { QueryResource.class };
+        return new Class[] {QueryResource.class};
     }
 
     @Path("/query")
@@ -45,8 +45,9 @@ public class QueryTest extends MockServletInvocationTest {
 
         @GET
         @Produces
-        public String getQuery2(@QueryParam("q") String q, @QueryParam("b") String b,
-            @QueryParam("c") String c) {
+        public String getQuery2(@QueryParam("q") String q,
+                                @QueryParam("b") String b,
+                                @QueryParam("c") String c) {
             if (q == null && b == null && c == null) {
                 return "normal";
             }
@@ -65,30 +66,30 @@ public class QueryTest extends MockServletInvocationTest {
     }
 
     public void testNoQuery() throws Exception {
-        MockHttpServletResponse resp = invoke(MockRequestConstructor.constructMockRequest("GET",
-            "/query", "*/*"));
+        MockHttpServletResponse resp =
+            invoke(MockRequestConstructor.constructMockRequest("GET", "/query", "*/*"));
         assertEquals("result", "normal", resp.getContentAsString());
     }
 
     public void testQueryWithOneParam() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-            "/query", "*/*");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "/query", "*/*");
         request.setQueryString("q=A");
         MockHttpServletResponse resp = invoke(request);
         assertEquals("result", "query1:A", resp.getContentAsString());
     }
 
     public void testQueryWithNoParam() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-            "/query", "*/*");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "/query", "*/*");
         request.setQueryString("q=A&b=B");
         MockHttpServletResponse resp = invoke(request);
         assertEquals("result", "query2:q=A,b=B", resp.getContentAsString());
     }
 
     public void testQueryOptional() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-            "/query", "*/*");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "/query", "*/*");
         request.setQueryString("c=C");
         MockHttpServletResponse resp = invoke(request);
         assertEquals("result", "queryOptional:C", resp.getContentAsString());

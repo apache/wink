@@ -25,7 +25,6 @@ import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 
 import org.apache.wink.common.internal.utils.HttpDateParser;
 
-
 /**
  * Date HeaderDelegate, responsible to Serialize and De-serialize Date headers. <br>
  */

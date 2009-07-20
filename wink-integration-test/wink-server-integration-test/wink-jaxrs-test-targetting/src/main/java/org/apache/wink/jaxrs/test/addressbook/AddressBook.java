@@ -37,13 +37,15 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 @Path(value = "/unittests/addresses")
 public class AddressBook {
 
-    public static AddressBookDatabase db = AddressBookDatabase.getInstance();
+    public static AddressBookDatabase db             = AddressBookDatabase.getInstance();
 
     private @Context
-    HttpServletRequest request;
+    HttpServletRequest                request;
 
-    public static Address defaultAddress = new Address("defaultAddress",
-            "12345", "1 Mopac Loop", "Austin", "TX", "US");
+    public static Address             defaultAddress =
+                                                         new Address("defaultAddress", "12345",
+                                                                     "1 Mopac Loop", "Austin",
+                                                                     "TX", "US");
 
     public AddressBook() {
         db.storeAddress(defaultAddress.getEntryName(), defaultAddress);
@@ -56,7 +58,7 @@ public class AddressBook {
     }
 
     @GET
-    @Produces(value = { "text/xml" })
+    @Produces(value = {"text/xml"})
     public Response getAddresses() {
         Response resp = null;
         if (request.getMethod().equalsIgnoreCase("HEAD")) {
@@ -77,14 +79,18 @@ public class AddressBook {
     }
 
     @POST
-    public void createAddress(@QueryParam(value = "entryName") String entryName, @QueryParam(value = "zipCode") String zipCode, @QueryParam(value = "streetAddress") String streetAddress, @QueryParam(value = "city") String city, @QueryParam(value = "state") String state, @QueryParam(value = "country") String country) {
-        Address address = new Address(entryName, zipCode, streetAddress, city,
-                state, country);
+    public void createAddress(@QueryParam(value = "entryName") String entryName,
+                              @QueryParam(value = "zipCode") String zipCode,
+                              @QueryParam(value = "streetAddress") String streetAddress,
+                              @QueryParam(value = "city") String city,
+                              @QueryParam(value = "state") String state,
+                              @QueryParam(value = "country") String country) {
+        Address address = new Address(entryName, zipCode, streetAddress, city, state, country);
         db.storeAddress(entryName, address);
     }
 
     @POST
-    @Consumes(value = { "text/xml" })
+    @Consumes(value = {"text/xml"})
     @Path(value = "/fromBody")
     public void createAddressFromBody(String input) {
         String[] inputs = input.split("&");
@@ -94,17 +100,20 @@ public class AddressBook {
         String city = inputs[3];
         String state = inputs[4];
         String country = inputs[5];
-        Address address = new Address(entryName, zipCode, streetAddress, city,
-                state, country);
+        Address address = new Address(entryName, zipCode, streetAddress, city, state, country);
         db.storeAddress(entryName, address);
     }
 
     @PUT
-    public void updateAddress(@QueryParam(value = "entryName") String entryName, @QueryParam(value = "zipCode") String zipCode, @QueryParam(value = "streetAddress") String streetAddress, @QueryParam(value = "city") String city, @QueryParam(value = "state") String state, @QueryParam(value = "country") String country) {
+    public void updateAddress(@QueryParam(value = "entryName") String entryName,
+                              @QueryParam(value = "zipCode") String zipCode,
+                              @QueryParam(value = "streetAddress") String streetAddress,
+                              @QueryParam(value = "city") String city,
+                              @QueryParam(value = "state") String state,
+                              @QueryParam(value = "country") String country) {
         Address address = db.getAddress(entryName);
         if (address == null) {
-            address = new Address(entryName, zipCode, streetAddress, city,
-                    state, country);
+            address = new Address(entryName, zipCode, streetAddress, city, state, country);
             db.storeAddress(entryName, address);
         } else {
             address.setCity(city);
@@ -114,7 +123,7 @@ public class AddressBook {
             address.setZipCode(zipCode);
         }
     }
-    
+
     @GET
     @Path(value = "/invalidNonPublic")
     void invalidNonPublic() {

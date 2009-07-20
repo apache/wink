@@ -43,35 +43,30 @@ public class JAXRSSourceTest extends TestCase {
 
     /**
      * Tests posting to a Source entity parameter with text/xml
-     *
+     * 
      * @throws HttpException
      * @throws IOException
      */
-    public void testPostSourceWithTextXMLMediaType() throws HttpException,
-            IOException {
+    public void testPostSourceWithTextXMLMediaType() throws HttpException, IOException {
         HttpClient client = new HttpClient();
 
-        PostMethod postMethod = new PostMethod(getBaseURI()
-                + "/providers/standard/source");
+        PostMethod postMethod = new PostMethod(getBaseURI() + "/providers/standard/source");
         postMethod
-                .setRequestEntity(new StringRequestEntity(
-                        "<message><user>user1</user><password>user1pwd</password></message>",
-                        "text/xml", "UTF-8"));
+            .setRequestEntity(new StringRequestEntity(
+                                                      "<message><user>user1</user><password>user1pwd</password></message>",
+                                                      "text/xml", "UTF-8"));
         postMethod.addRequestHeader("Accept", "text/xml");
         try {
             client.executeMethod(postMethod);
 
             assertEquals(200, postMethod.getStatusCode());
             String str = postMethod.getResponseBodyAsString();
-            assertEquals(
-                    "<?xml version=\"1.0\" encoding=\"UTF-8\"?><message><user>user1</user><password>user1pwd</password></message>",
-                    str);
-            assertEquals("text/xml", postMethod.getResponseHeader(
-                    "Content-Type").getValue());
-            Header contentLengthHeader = postMethod
-                    .getResponseHeader("Content-Length");
-            assertNull(contentLengthHeader == null ? "null"
-                    : contentLengthHeader.getValue(), contentLengthHeader);
+            assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><message><user>user1</user><password>user1pwd</password></message>",
+                         str);
+            assertEquals("text/xml", postMethod.getResponseHeader("Content-Type").getValue());
+            Header contentLengthHeader = postMethod.getResponseHeader("Content-Length");
+            assertNull(contentLengthHeader == null ? "null" : contentLengthHeader.getValue(),
+                       contentLengthHeader);
         } finally {
             postMethod.releaseConnection();
         }
@@ -80,35 +75,30 @@ public class JAXRSSourceTest extends TestCase {
     /**
      * Tests posting to a Source entity parameter with application/xml as the
      * media type.
-     *
+     * 
      * @throws HttpException
      * @throws IOException
      */
-    public void testPostSourceWithApplicationXMLMediaType()
-            throws HttpException, IOException {
+    public void testPostSourceWithApplicationXMLMediaType() throws HttpException, IOException {
         HttpClient client = new HttpClient();
 
-        PostMethod postMethod = new PostMethod(getBaseURI()
-                + "/providers/standard/source");
+        PostMethod postMethod = new PostMethod(getBaseURI() + "/providers/standard/source");
         postMethod
-                .setRequestEntity(new StringRequestEntity(
-                        "<message><user>user1</user><password>user1pwd</password></message>",
-                        "application/xml", "UTF-8"));
+            .setRequestEntity(new StringRequestEntity(
+                                                      "<message><user>user1</user><password>user1pwd</password></message>",
+                                                      "application/xml", "UTF-8"));
         postMethod.addRequestHeader("Accept", "application/xml");
         try {
             client.executeMethod(postMethod);
 
             assertEquals(200, postMethod.getStatusCode());
             String str = postMethod.getResponseBodyAsString();
-            assertEquals(
-                    "<?xml version=\"1.0\" encoding=\"UTF-8\"?><message><user>user1</user><password>user1pwd</password></message>",
-                    str);
-            assertEquals("application/xml", postMethod.getResponseHeader(
-                    "Content-Type").getValue());
-            Header contentLengthHeader = postMethod
-                    .getResponseHeader("Content-Length");
-            assertNull(contentLengthHeader == null ? "null"
-                    : contentLengthHeader.getValue(), contentLengthHeader);
+            assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><message><user>user1</user><password>user1pwd</password></message>",
+                         str);
+            assertEquals("application/xml", postMethod.getResponseHeader("Content-Type").getValue());
+            Header contentLengthHeader = postMethod.getResponseHeader("Content-Length");
+            assertNull(contentLengthHeader == null ? "null" : contentLengthHeader.getValue(),
+                       contentLengthHeader);
         } finally {
             postMethod.releaseConnection();
         }
@@ -121,20 +111,18 @@ public class JAXRSSourceTest extends TestCase {
     /**
      * Tests posting to a Source entity parameter and returning Source entity
      * response with an unacceptable response media type.
-     *
+     * 
      * @throws HttpException
      * @throws IOException
      */
-    public void testPostSourceWithNonExpectedAcceptType() throws HttpException,
-            IOException {
+    public void testPostSourceWithNonExpectedAcceptType() throws HttpException, IOException {
         HttpClient client = new HttpClient();
 
-        PostMethod postMethod = new PostMethod(getBaseURI()
-                + "/providers/standard/source");
+        PostMethod postMethod = new PostMethod(getBaseURI() + "/providers/standard/source");
         postMethod
-                .setRequestEntity(new StringRequestEntity(
-                        "<message><user>user1</user><password>user1pwd</password></message>",
-                        "application/xml", "UTF-8"));
+            .setRequestEntity(new StringRequestEntity(
+                                                      "<message><user>user1</user><password>user1pwd</password></message>",
+                                                      "application/xml", "UTF-8"));
         postMethod.addRequestHeader("Accept", "not/expected");
         try {
             client.executeMethod(postMethod);
@@ -148,20 +136,18 @@ public class JAXRSSourceTest extends TestCase {
     /**
      * Tests posting to a Source entity parameter and returning Source entity
      * response with an unacceptable request content-type.
-     *
+     * 
      * @throws HttpException
      * @throws IOException
      */
-    public void testPostSourceWithNonExpectedRequestContentType()
-            throws HttpException, IOException {
+    public void testPostSourceWithNonExpectedRequestContentType() throws HttpException, IOException {
         HttpClient client = new HttpClient();
 
-        PostMethod postMethod = new PostMethod(getBaseURI()
-                + "/providers/standard/source");
+        PostMethod postMethod = new PostMethod(getBaseURI() + "/providers/standard/source");
         postMethod
-                .setRequestEntity(new StringRequestEntity(
-                        "<message><user>user1</user><password>user1pwd</password></message>",
-                        "text/plain", "UTF-8"));
+            .setRequestEntity(new StringRequestEntity(
+                                                      "<message><user>user1</user><password>user1pwd</password></message>",
+                                                      "text/plain", "UTF-8"));
         postMethod.addRequestHeader("Accept", "application/xml");
         try {
             client.executeMethod(postMethod);
@@ -174,19 +160,18 @@ public class JAXRSSourceTest extends TestCase {
 
     /**
      * Tests putting and then getting a source.
-     *
+     * 
      * @throws HttpException
      * @throws IOException
      */
     public void testPutSource() throws HttpException, IOException {
         HttpClient client = new HttpClient();
 
-        PutMethod putMethod = new PutMethod(getBaseURI()
-                + "/providers/standard/source");
+        PutMethod putMethod = new PutMethod(getBaseURI() + "/providers/standard/source");
         putMethod
-                .setRequestEntity(new StringRequestEntity(
-                        "<?xml version=\"1.0\" encoding=\"UTF-8\"?><message><user>user1</user><password>user1pwd</password></message>",
-                        "application/xml", "UTF-8"));
+            .setRequestEntity(new StringRequestEntity(
+                                                      "<?xml version=\"1.0\" encoding=\"UTF-8\"?><message><user>user1</user><password>user1pwd</password></message>",
+                                                      "application/xml", "UTF-8"));
         try {
             client.executeMethod(putMethod);
             assertEquals(204, putMethod.getStatusCode());
@@ -194,26 +179,23 @@ public class JAXRSSourceTest extends TestCase {
             putMethod.releaseConnection();
         }
 
-        GetMethod getMethod = new GetMethod(getBaseURI()
-                + "/providers/standard/source");
+        GetMethod getMethod = new GetMethod(getBaseURI() + "/providers/standard/source");
         try {
             client.executeMethod(getMethod);
 
             String str = getMethod.getResponseBodyAsString();
             assertEquals(str, 200, getMethod.getStatusCode());
 
-            assertEquals(
-                    "<?xml version=\"1.0\" encoding=\"UTF-8\"?><message><user>user1</user><password>user1pwd</password></message>",
-                    str);
+            assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><message><user>user1</user><password>user1pwd</password></message>",
+                         str);
 
             String contentType =
                 (getMethod.getResponseHeader("Content-Type") == null) ? null : getMethod
                     .getResponseHeader("Content-Type").getValue();
             assertNotNull(contentType, contentType);
-            Header contentLengthHeader = getMethod
-                    .getResponseHeader("Content-Length");
-            assertNull(contentLengthHeader == null ? "null"
-                    : contentLengthHeader.getValue(), contentLengthHeader);
+            Header contentLengthHeader = getMethod.getResponseHeader("Content-Length");
+            assertNull(contentLengthHeader == null ? "null" : contentLengthHeader.getValue(),
+                       contentLengthHeader);
         } finally {
             getMethod.releaseConnection();
         }
@@ -223,21 +205,20 @@ public class JAXRSSourceTest extends TestCase {
      * Tests a resource method invoked with a SAXSource as a parameter. This
      * should fail with a 415 since the reader has no way to necessarily wrap it
      * to the type.
-     *
+     * 
      * @throws HttpException
      * @throws IOException
      */
-    public void testSourceSubclassImplementation() throws HttpException,
-            IOException {
+    public void testSourceSubclassImplementation() throws HttpException, IOException {
         HttpClient client = new HttpClient();
 
-        PostMethod postMethod = new PostMethod(getBaseURI()
-                + "/providers/standard/source/subclasses/shouldfail");
+        PostMethod postMethod =
+            new PostMethod(getBaseURI() + "/providers/standard/source/subclasses/shouldfail");
         byte[] barr = new byte[1000];
         Random r = new Random();
         r.nextBytes(barr);
-        postMethod.setRequestEntity(new InputStreamRequestEntity(
-                new ByteArrayInputStream(barr), "application/xml"));
+        postMethod.setRequestEntity(new InputStreamRequestEntity(new ByteArrayInputStream(barr),
+                                                                 "application/xml"));
         try {
             client.executeMethod(postMethod);
             assertEquals(415, postMethod.getStatusCode());

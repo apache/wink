@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.model.synd;
 
@@ -25,12 +24,13 @@ public class SyndText extends SyndSimpleContent {
 
     private SyndTextType type;
 
-    public SyndText() {}
-    
+    public SyndText() {
+    }
+
     public SyndText(String text) {
         this(text, SyndTextType.text);
     }
-    
+
     public SyndText(String text, SyndTextType type) {
         super(text);
         this.type = type;
@@ -65,14 +65,13 @@ public class SyndText extends SyndSimpleContent {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        SyndText other = (SyndText) obj;
+        SyndText other = (SyndText)obj;
         if (type == null) {
             if (other.type != null)
                 return false;
         } else if (!type.equals(other.type))
             return false;
         return true;
-    } 
-
+    }
 
 }

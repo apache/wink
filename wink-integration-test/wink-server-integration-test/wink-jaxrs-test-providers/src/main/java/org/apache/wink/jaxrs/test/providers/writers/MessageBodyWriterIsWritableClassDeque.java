@@ -46,11 +46,15 @@ public class MessageBodyWriterIsWritableClassDeque implements MessageBodyWriter<
         return false;
     }
 
-    public void writeTo(Object arg0, Class<?> arg1, Type arg2, Annotation[] arg3, MediaType arg4,
-        MultivaluedMap<String, Object> arg5, OutputStream arg6) throws IOException,
-        WebApplicationException {
+    public void writeTo(Object arg0,
+                        Class<?> arg1,
+                        Type arg2,
+                        Annotation[] arg3,
+                        MediaType arg4,
+                        MultivaluedMap<String, Object> arg5,
+                        OutputStream arg6) throws IOException, WebApplicationException {
         Writer writer = new OutputStreamWriter(arg6);
-        Deque d = (Deque) arg0;
+        Deque d = (Deque)arg0;
         writer.write("deque:");
         for (Object o : d) {
             writer.write(o.toString());

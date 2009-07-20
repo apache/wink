@@ -44,7 +44,6 @@ import org.apache.wink.common.model.synd.SyndCategory;
 import org.apache.wink.common.model.synd.SyndEntry;
 import org.apache.wink.common.model.synd.SyndFeed;
 
-
 @Provider
 @Produces("text/csv")
 public class CsvSyndFeedSerializerProvider implements MessageBodyWriter<SyndFeed> {
@@ -52,40 +51,58 @@ public class CsvSyndFeedSerializerProvider implements MessageBodyWriter<SyndFeed
     private final static String[] EMPTY_ARRAY = new String[0];
 
     @Context
-    private Providers       providers;
+    private Providers             providers;
 
-    public long getSize(SyndFeed t, Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType) {
+    public long getSize(SyndFeed t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
         return -1;
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
         return SyndFeed.class.isAssignableFrom(type);
     }
 
-    public void writeTo(SyndFeed t, Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
-        throws IOException, WebApplicationException {
+    public void writeTo(SyndFeed t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
 
-        MessageBodyWriter<SyndFeedSerializer> messageBodyWriter = providers.getMessageBodyWriter(
-            SyndFeedSerializer.class, genericType, annotations, mediaType);
-        messageBodyWriter.writeTo(new SyndFeedSerializer(t), type, genericType, annotations,
-            mediaType, httpHeaders, entityStream);
+        MessageBodyWriter<SyndFeedSerializer> messageBodyWriter =
+            providers.getMessageBodyWriter(SyndFeedSerializer.class,
+                                           genericType,
+                                           annotations,
+                                           mediaType);
+        messageBodyWriter.writeTo(new SyndFeedSerializer(t),
+                                  type,
+                                  genericType,
+                                  annotations,
+                                  mediaType,
+                                  httpHeaders,
+                                  entityStream);
     }
 
     private class SyndFeedSerializer implements Iterator<String[]>, CsvSerializer {
 
-        private TreeSet<String>     categoriesNames;   // sorted set of categories
+        private TreeSet<String>     categoriesNames;   // sorted set of
+                                                        // categories
         private Iterator<SyndEntry> iterator;          // iterator of entries
         private List<String>        header;            // table's header
-        private boolean             headerSent = false; // indicates if the header was sent
+        private boolean             headerSent = false; // indicates if the
+                                                        // header was sent
 
         /**
          * c'tor
          * 
-         * @param collection
-         *            - Atom collection
+         * @param collection - Atom collection
          */
         public SyndFeedSerializer(SyndFeed syndFeed) {
 
@@ -103,7 +120,8 @@ public class CsvSyndFeedSerializerProvider implements MessageBodyWriter<SyndFeed
             }
             header = new ArrayList<String>();
 
-            // pay attention that the order of header must math the order of elements (see next() method below)
+            // pay attention that the order of header must math the order of
+            // elements (see next() method below)
             header.add("id");
             header.add("title");
             header.add("content");
@@ -140,13 +158,13 @@ public class CsvSyndFeedSerializerProvider implements MessageBodyWriter<SyndFeed
             String id = entry.getId();
             String lang = entry.getLang();
 
-            String authors = entry.getAuthors() != null && !entry.getAuthors().isEmpty() ? entry.getAuthors().get(
-                0).getName()
-                : "";
+            String authors =
+                entry.getAuthors() != null && !entry.getAuthors().isEmpty() ? entry.getAuthors()
+                    .get(0).getName() : "";
             String title = entry.getTitle() != null ? entry.getTitle().getValue() : "";
             String content = entry.getContent() != null ? entry.getContent().getValue() : "";
-            String published = entry.getPublished() != null ? String.valueOf(entry.getPublished())
-                : "";
+            String published =
+                entry.getPublished() != null ? String.valueOf(entry.getPublished()) : "";
             String updated = entry.getUpdated() != null ? String.valueOf(entry.getUpdated()) : "";
             String summary = entry.getSummary() != null ? entry.getSummary().getValue() : "";
 
@@ -162,7 +180,8 @@ public class CsvSyndFeedSerializerProvider implements MessageBodyWriter<SyndFeed
             String[] row = new String[header.size()];
             int index = 0;
 
-            // pay attention that the order of elements in row must math the order of header (see constructor above)
+            // pay attention that the order of elements in row must math the
+            // order of header (see constructor above)
             row[index++] = id;
             row[index++] = title;
             row[index++] = content;

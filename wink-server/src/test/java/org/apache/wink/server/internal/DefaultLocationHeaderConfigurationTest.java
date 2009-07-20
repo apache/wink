@@ -63,13 +63,16 @@ public class DefaultLocationHeaderConfigurationTest extends MockServletInvocatio
         @GET
         @Produces(MediaType.TEXT_XML)
         public Response getWithLocation(@Context UriInfo uriInfo) {
-            return Response.status(Status.CREATED).location(URI.create(HTTP_HOST_PORT_LOCATION)).build();
+            return Response.status(Status.CREATED).location(URI.create(HTTP_HOST_PORT_LOCATION))
+                .build();
         }
     }
 
     public void testLocationHeaderMissing() throws Exception {
         MockHttpServletRequest request =
-            MockRequestConstructor.constructMockRequest("GET", "/locationHeader/missing", "text/plain");
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/locationHeader/missing",
+                                                        "text/plain");
         request.setSecure(false);
         request.setServerPort(9090);
         MockHttpServletResponse response = invoke(request);

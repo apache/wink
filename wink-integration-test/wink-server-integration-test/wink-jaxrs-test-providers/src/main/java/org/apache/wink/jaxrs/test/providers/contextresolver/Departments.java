@@ -42,8 +42,7 @@ public class Departments {
     @GET
     @Produces(value = "text/xml")
     public DepartmentListWrapper getDepartments() {
-        Iterator<Department> dptIter = DepartmentDatabase.getDepartments()
-                .iterator();
+        Iterator<Department> dptIter = DepartmentDatabase.getDepartments().iterator();
         DepartmentListWrapper wrapper = new DepartmentListWrapper();
         List<Department> dptList = wrapper.getDepartmentList();
         while (dptIter.hasNext()) {
@@ -54,8 +53,10 @@ public class Departments {
 
     @GET
     @Path(value = "/{departmentId}")
-    @Produces(value = { "text/xml" })
-    public Response getDepartment(@PathParam(value = "departmentId") String departmentId, @QueryParam(value = "type") String type, @Context Request req) {
+    @Produces(value = {"text/xml"})
+    public Response getDepartment(@PathParam(value = "departmentId") String departmentId,
+                                  @QueryParam(value = "type") String type,
+                                  @Context Request req) {
         Department dept = DepartmentDatabase.getDepartment(departmentId);
         return Response.ok(dept).build();
     }

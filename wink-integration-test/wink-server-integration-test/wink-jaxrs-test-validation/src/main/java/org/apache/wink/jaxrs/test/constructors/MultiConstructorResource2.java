@@ -33,27 +33,31 @@ public class MultiConstructorResource2 {
     /**
      * counts the number of times the constructor has been called
      */
-    private static int constructorCallCount = 0;
+    private static int   constructorCallCount = 0;
 
     final private String whichConstructor;
 
-    public MultiConstructorResource2(@HeaderParam("header1") String header1, @CookieParam("cookie1") String cookie1) {
+    public MultiConstructorResource2(@HeaderParam("header1") String header1,
+                                     @CookieParam("cookie1") String cookie1) {
         ++constructorCallCount;
         whichConstructor = "headerAndCookieAndPath" + constructorCallCount;
     }
 
-    public MultiConstructorResource2(@HeaderParam("header1") int header1, @PathParam("cookie1") String cookie1) {
+    public MultiConstructorResource2(@HeaderParam("header1") int header1,
+                                     @PathParam("cookie1") String cookie1) {
         ++constructorCallCount;
         whichConstructor = "headerAndCookieAndPath" + constructorCallCount;
     }
 
-    public MultiConstructorResource2(@Context UriInfo uriInfo, @HeaderParam("header1") String header1, @CookieParam("cookie1") String cookie1, @PathParam("path") String path1) {
+    public MultiConstructorResource2(@Context UriInfo uriInfo,
+                                     @HeaderParam("header1") String header1,
+                                     @CookieParam("cookie1") String cookie1,
+                                     @PathParam("path") String path1) {
         /*
          * this should be the called constructor
          */
         ++constructorCallCount;
-        whichConstructor = "contextAndHeaderAndCookieAndPath"
-                + constructorCallCount;
+        whichConstructor = "contextAndHeaderAndCookieAndPath" + constructorCallCount;
     }
 
     @GET

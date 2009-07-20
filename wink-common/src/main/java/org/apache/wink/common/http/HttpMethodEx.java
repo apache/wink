@@ -19,7 +19,6 @@
  *******************************************************************************/
 package org.apache.wink.common.http;
 
-
 public class HttpMethodEx {
 
     public static final String OPTIONS = "OPTIONS";

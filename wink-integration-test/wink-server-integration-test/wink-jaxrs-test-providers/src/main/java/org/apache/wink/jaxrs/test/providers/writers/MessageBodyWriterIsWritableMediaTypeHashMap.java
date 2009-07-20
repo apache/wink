@@ -47,12 +47,16 @@ public class MessageBodyWriterIsWritableMediaTypeHashMap implements MessageBodyW
         return false;
     }
 
-    public void writeTo(Object arg0, Class<?> arg1, Type arg2, Annotation[] arg3, MediaType arg4,
-        MultivaluedMap<String, Object> arg5, OutputStream arg6) throws IOException,
-        WebApplicationException {
+    public void writeTo(Object arg0,
+                        Class<?> arg1,
+                        Type arg2,
+                        Annotation[] arg3,
+                        MediaType arg4,
+                        MultivaluedMap<String, Object> arg5,
+                        OutputStream arg6) throws IOException, WebApplicationException {
         Writer writer = new OutputStreamWriter(arg6);
         writer.write("mediatype:");
-        Map map = (Map) arg0;
+        Map map = (Map)arg0;
         for (Object k : map.keySet()) {
             writer.write(k.toString() + "=" + map.get(k));
         }

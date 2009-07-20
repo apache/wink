@@ -23,14 +23,18 @@ import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 
 import org.apache.wink.common.internal.http.ContentDispositionHeader;
 
-
 /**
- * Partial implementation of Content-Disposition header.
- * See <a href="http://www.ietf.org/rfc/rfc2183.txt">RFC 2183</a>
+ * Partial implementation of Content-Disposition header. See <a
+ * href="http://www.ietf.org/rfc/rfc2183.txt">RFC 2183</a>
  */
 public class ContentDispositionHeaderDelegate implements HeaderDelegate<ContentDispositionHeader> {
 
-    private static final String INLINE_DISPOSITION_TYPE     = "inline";    // disposition type values are case insensitive
+    private static final String INLINE_DISPOSITION_TYPE     = "inline";    // disposition
+                                                                            // type
+                                                                            // values
+                                                                            // are
+                                                                            // case
+                                                                            // insensitive
     private static final String ATTACHMENT_DISPOSITION_TYPE = "attachment";
 
     public ContentDispositionHeader fromString(String value) throws IllegalArgumentException {

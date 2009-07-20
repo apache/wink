@@ -30,7 +30,8 @@ public final class RestConstants {
     }
 
     // --- namespaces ---
-    public static final String NAMESPACE_XML                    = "http://www.w3.org/XML/1998/namespace";
+    public static final String NAMESPACE_XML                    =
+                                                                    "http://www.w3.org/XML/1998/namespace";
 
     public static final String NAMESPACE_XHTML                  = "http://www.w3.org/1999/xhtml";
     public static final String XHTML_PREFIX                     = "xhtml";
@@ -42,7 +43,8 @@ public final class RestConstants {
     public static final String APP_PREFIX                       = "app";
 
     // OpenSearch
-    public static final String NAMESPACE_OPENSEARCH             = "http://a9.com/-/spec/opensearch/1.1/";
+    public static final String NAMESPACE_OPENSEARCH             =
+                                                                    "http://a9.com/-/spec/opensearch/1.1/";
     public static final String OPENSEARCH_PREFIX                = "opensearch";
 
     // --- charset ---

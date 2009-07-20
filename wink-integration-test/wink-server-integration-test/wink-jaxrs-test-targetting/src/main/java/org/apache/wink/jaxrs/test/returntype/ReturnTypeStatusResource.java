@@ -55,16 +55,14 @@ public class ReturnTypeStatusResource {
     public Response getResponseStatus(@QueryParam("code") String code) {
         Status s = Status.valueOf(code);
         ResponseBuilder respBuilder = Response.status(s);
-        respBuilder.entity("Requested status: " + s.getStatusCode() + " "
-                + s.name());
+        respBuilder.entity("Requested status: " + s.getStatusCode() + " " + s.name());
         return respBuilder.build();
     }
 
     @Path("/CustomResponseStatusNotSet")
     @GET
     public Response getCustomResponseStatusNotSet() {
-        final MultivaluedMap<String, Object> map = Response.ok().build()
-                .getMetadata();
+        final MultivaluedMap<String, Object> map = Response.ok().build().getMetadata();
         map.clear();
         return new Response() {
             @Override
@@ -87,8 +85,7 @@ public class ReturnTypeStatusResource {
     @Path("/CustomNullResponseStatusNotSet")
     @GET
     public Response getCustomNullResponseStatusNotSet() {
-        final MultivaluedMap<String, Object> map = Response.ok().build()
-                .getMetadata();
+        final MultivaluedMap<String, Object> map = Response.ok().build().getMetadata();
         map.clear();
         return new Response() {
             @Override

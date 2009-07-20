@@ -20,17 +20,20 @@
 package org.apache.wink.common.model;
 
 /**
- * Holds the following XML Formatting Options: 
- *      <ul>
- *      <li>omitXmlDeclaration - indicates if xml declaration should be omitted. Default value true - omitted.</li> 
- *      <li>indenting - indicates if xml should be indented. Default value true - indented.</li>
- *      </ul>
- * Can be used by XML representations to give a control over the formation of XML output.       
+ * Holds the following XML Formatting Options:
+ * <ul>
+ * <li>omitXmlDeclaration - indicates if xml declaration should be omitted.
+ * Default value true - omitted.</li>
+ * <li>indenting - indicates if xml should be indented. Default value true -
+ * indented.</li>
+ * </ul>
+ * Can be used by XML representations to give a control over the formation of
+ * XML output.
  */
 public class XmlFormattingOptions implements Cloneable {
 
-    private boolean omitXmlDeclaration;
-    private boolean indenting;
+    private boolean                     omitXmlDeclaration;
+    private boolean                     indenting;
 
     private static XmlFormattingOptions defaultXmlFormattingOptions = new XmlFormattingOptions();
 
@@ -69,7 +72,7 @@ public class XmlFormattingOptions implements Cloneable {
 
     private XmlFormattingOptions safeClone() {
         try {
-            return (XmlFormattingOptions) this.clone();
+            return (XmlFormattingOptions)this.clone();
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e); // this can not happen
         }

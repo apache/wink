@@ -17,18 +17,18 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.model.synd;
 
 public class SyndCategory extends SyndCommonAttributes {
-    
+
     private String term;
     private String scheme;
     private String label;
-    
-    public SyndCategory() {}
-    
+
+    public SyndCategory() {
+    }
+
     public SyndCategory(String term) {
         setTerm(term);
     }
@@ -45,22 +45,27 @@ public class SyndCategory extends SyndCommonAttributes {
         this.scheme = other.scheme;
         this.label = other.label;
     }
-     
+
     public String getTerm() {
         return term;
     }
+
     public void setTerm(String term) {
         this.term = term;
     }
+
     public String getScheme() {
         return scheme;
     }
+
     public void setScheme(String scheme) {
         this.scheme = scheme;
     }
+
     public String getLabel() {
         return label;
     }
+
     public void setLabel(String label) {
         this.label = label;
     }
@@ -83,7 +88,7 @@ public class SyndCategory extends SyndCommonAttributes {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        SyndCategory other = (SyndCategory) obj;
+        SyndCategory other = (SyndCategory)obj;
         if (label == null) {
             if (other.label != null)
                 return false;
@@ -101,7 +106,5 @@ public class SyndCategory extends SyndCommonAttributes {
             return false;
         return true;
     }
-
-
 
 }

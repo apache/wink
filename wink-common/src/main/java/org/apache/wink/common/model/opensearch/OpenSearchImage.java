@@ -79,24 +79,22 @@ import javax.xml.bind.annotation.XmlValue;
  *  
  *  &lt;Image height=&quot;64&quot; width=&quot;64&quot; type=&quot;image/png&quot;&gt;http://example.com/websearch.png&lt;/Image&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "OpenSearchImage", propOrder = { "value" })
+@XmlType(name = "OpenSearchImage", propOrder = {"value"})
 public class OpenSearchImage {
 
     @XmlValue
     @XmlSchemaType(name = "anyURI")
-    protected String                value;
+    protected String     value;
     @XmlAttribute
     @XmlSchemaType(name = "positiveInteger")
-    protected BigInteger            height;
+    protected BigInteger height;
     @XmlAttribute
     @XmlSchemaType(name = "positiveInteger")
-    protected BigInteger            width;
+    protected BigInteger width;
     @XmlAttribute
-    protected String                type;
+    protected String     type;
 
     /**
      * Default Constructor
@@ -108,7 +106,6 @@ public class OpenSearchImage {
      * Gets the value of the value property.
      * 
      * @return possible object is {@link String }
-     * 
      */
     public String getValue() {
         return value;
@@ -117,9 +114,7 @@ public class OpenSearchImage {
     /**
      * Sets the value of the value property.
      * 
-     * @param value
-     *            allowed object is {@link String }
-     * 
+     * @param value allowed object is {@link String }
      */
     public void setValue(String value) {
         this.value = value;
@@ -129,7 +124,6 @@ public class OpenSearchImage {
      * Gets the value of the height property.
      * 
      * @return possible object is {@link BigInteger }
-     * 
      */
     public BigInteger getHeight() {
         return height;
@@ -138,9 +132,7 @@ public class OpenSearchImage {
     /**
      * Sets the value of the height property.
      * 
-     * @param value
-     *            allowed object is {@link BigInteger }
-     * 
+     * @param value allowed object is {@link BigInteger }
      */
     public void setHeight(BigInteger value) {
         this.height = value;
@@ -150,7 +142,6 @@ public class OpenSearchImage {
      * Gets the value of the width property.
      * 
      * @return possible object is {@link BigInteger }
-     * 
      */
     public BigInteger getWidth() {
         return width;
@@ -159,9 +150,7 @@ public class OpenSearchImage {
     /**
      * Sets the value of the width property.
      * 
-     * @param value
-     *            allowed object is {@link BigInteger }
-     * 
+     * @param value allowed object is {@link BigInteger }
      */
     public void setWidth(BigInteger value) {
         this.width = value;
@@ -171,7 +160,6 @@ public class OpenSearchImage {
      * Gets the value of the type property.
      * 
      * @return possible object is {@link String }
-     * 
      */
     public String getType() {
         return type;
@@ -180,9 +168,7 @@ public class OpenSearchImage {
     /**
      * Sets the value of the type property.
      * 
-     * @param value
-     *            allowed object is {@link String }
-     * 
+     * @param value allowed object is {@link String }
      */
     public void setType(String value) {
         this.type = value;

@@ -46,8 +46,12 @@ public class MessageBodyReaderClassDeque implements MessageBodyReader<Object> {
         return false;
     }
 
-    public Object readFrom(Class<Object> arg0, Type arg1, Annotation[] arg2, MediaType arg3, MultivaluedMap<String, String> arg4, InputStream arg5)
-            throws IOException, WebApplicationException {
+    public Object readFrom(Class<Object> arg0,
+                           Type arg1,
+                           Annotation[] arg2,
+                           MediaType arg3,
+                           MultivaluedMap<String, String> arg4,
+                           InputStream arg5) throws IOException, WebApplicationException {
         String str = null;
         try {
             MessageBodyReader<String> strReader =

@@ -31,7 +31,6 @@ import org.apache.wink.common.DynamicResource;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
 
-
 /**
  * Used to validate classes and objects returned by the Application.
  */
@@ -43,7 +42,9 @@ public class ApplicationValidator {
      */
     private final Set<Class<?>> singletonClasses = new LinkedHashSet<Class<?>>();
 
-    private static final Logger logger = LoggerFactory.getLogger(ApplicationValidator.class);
+    private static final Logger logger           =
+                                                     LoggerFactory
+                                                         .getLogger(ApplicationValidator.class);
 
     /**
      * Returns true if the resource is valid resource and false otherwise.
@@ -55,8 +56,8 @@ public class ApplicationValidator {
      * @return true if the resource is valid resource and false otherwise.
      */
     public boolean isValidResource(Class<?> cls) {
-        return isValidClass(cls)
-            && ((ResourceMetadataCollector.isStaticResource(cls) && classUnique(cls)) || ResourceMetadataCollector.isDynamicResource(cls));
+        return isValidClass(cls) && ((ResourceMetadataCollector.isStaticResource(cls) && classUnique(cls)) || ResourceMetadataCollector
+            .isDynamicResource(cls));
     }
 
     /**
@@ -106,12 +107,9 @@ public class ApplicationValidator {
         boolean valid = counter <= 1;
 
         if (!valid) {
-            logger.warn("The class {} may only have one of the following declarations: {}, {}, {}", new Object[] {
-                cls,
-                Path.class.getName(),
-                DynamicResource.class.getName(),
-                Provider.class.getName()
-            });
+            logger.warn("The class {} may only have one of the following declarations: {}, {}, {}",
+                        new Object[] {cls, Path.class.getName(), DynamicResource.class.getName(),
+                            Provider.class.getName()});
         }
 
         return valid;

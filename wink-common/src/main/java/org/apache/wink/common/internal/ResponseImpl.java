@@ -64,8 +64,8 @@ public class ResponseImpl extends Response {
 
     public static class ResponseBuilderImpl extends ResponseBuilder {
 
-        private Object                         entity;
-        private int                            status;
+        private Object                               entity;
+        private int                                  status;
         private final MultivaluedMap<String, Object> metadata;
 
         public ResponseBuilderImpl() {
@@ -75,8 +75,9 @@ public class ResponseImpl extends Response {
 
         }
 
-        private ResponseBuilderImpl(int status, Object entity,
-            MultivaluedMap<String, Object> metadata) {
+        private ResponseBuilderImpl(int status,
+                                    Object entity,
+                                    MultivaluedMap<String, Object> metadata) {
             super();
             this.status = status;
             this.entity = entity;
@@ -181,7 +182,7 @@ public class ResponseImpl extends Response {
         public ResponseBuilder type(String type) {
             return singleHeader(HttpHeaders.CONTENT_TYPE, type);
         }
-        
+
         public ResponseBuilder encoding(String encoding) {
             return singleHeader(HttpHeaders.CONTENT_ENCODING, encoding);
         }
@@ -206,11 +207,11 @@ public class ResponseImpl extends Response {
                 header(HttpHeaders.VARY, null);
                 return this;
             }
-            
+
             if (variants.isEmpty()) {
                 return this;
             }
-            
+
             boolean encoding = false;
             boolean lang = false;
             boolean mediatype = false;
@@ -230,7 +231,7 @@ public class ResponseImpl extends Response {
             return this;
         }
 
-        ///////////////////// helper methods ////////////////////////
+        // /////////////////// helper methods ////////////////////////
         private ResponseBuilder singleHeader(String key, Object value) {
             if (value == null) {
                 metadata.remove(key);

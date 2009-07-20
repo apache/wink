@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.registry;
 
@@ -31,8 +30,6 @@ import org.apache.wink.common.internal.registry.metadata.MethodMetadata;
 import org.apache.wink.common.internal.uritemplate.UriTemplateMatcher;
 import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor;
 
-
-
 /**
  * Record class to hold all the information of a resource. This includes the
  * metadata of the resource class and the {@link ObjectFactory} of the resource
@@ -44,7 +41,9 @@ public class ResourceRecord extends TemplatedRecord {
     private List<SubResourceRecord> subResources;
     private double                  priority;
 
-    public ResourceRecord(ClassMetadata metadata, ObjectFactory<?> objectFactory, UriTemplateProcessor processor) {
+    public ResourceRecord(ClassMetadata metadata,
+                          ObjectFactory<?> objectFactory,
+                          UriTemplateProcessor processor) {
         super(processor);
         this.metadata = metadata;
         this.objectFactory = objectFactory;
@@ -52,12 +51,12 @@ public class ResourceRecord extends TemplatedRecord {
         this.priority = -1;
         build();
     }
-    
+
     public double getPriority() {
         return priority;
     }
 
-    /*package*/ void setPriority(double priority) {
+    /* package */void setPriority(double priority) {
         this.priority = priority;
     }
 
@@ -127,14 +126,13 @@ public class ResourceRecord extends TemplatedRecord {
      * Get a sorted list (in descending order) of all the sub-resources (methods
      * and locators) that match the given uri
      * 
-     * @param uri
-     *            the uri to match
+     * @param uri the uri to match
      * @return a sorted list (in descending order) of matching sub-resources
      */
     public List<SubResourceInstance> getMatchingSubResources(String uri) {
         return getMatchingSubResources(uri, true, true);
     }
-    
+
     public List<SubResourceInstance> getMatchingSubResourceMethods(String uri) {
         return getMatchingSubResources(uri, true, false);
     }
@@ -143,7 +141,9 @@ public class ResourceRecord extends TemplatedRecord {
         return getMatchingSubResources(uri, false, true);
     }
 
-    public List<SubResourceInstance> getMatchingSubResources(String uri, boolean method, boolean locator) {
+    public List<SubResourceInstance> getMatchingSubResources(String uri,
+                                                             boolean method,
+                                                             boolean locator) {
         List<SubResourceInstance> list = new LinkedList<SubResourceInstance>();
         // add records according to the request uri
         for (SubResourceRecord record : subResources) {
@@ -160,17 +160,17 @@ public class ResourceRecord extends TemplatedRecord {
         }
         return list;
     }
-    
+
     @Override
     public String toString() {
-        return String.format("Path: %s; ClassMetadata: %s", super.toString(),
-            String.valueOf(metadata));
+        return String.format("Path: %s; ClassMetadata: %s", super.toString(), String
+            .valueOf(metadata));
     }
-    
+
     @Override
     public int compareTo(TemplatedRecord other) {
         if (other != null && other instanceof ResourceRecord) {
-            double ret = priority - ((ResourceRecord)other).priority; 
+            double ret = priority - ((ResourceRecord)other).priority;
             if (ret < 0) {
                 return -1;
             }
@@ -180,6 +180,5 @@ public class ResourceRecord extends TemplatedRecord {
         }
         return super.compareTo(other);
     }
-
 
 }

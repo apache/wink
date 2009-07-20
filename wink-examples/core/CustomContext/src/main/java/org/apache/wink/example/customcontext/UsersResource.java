@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.customcontext;
 
 import java.util.Collection;
@@ -41,8 +41,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.wink.common.annotations.Workspace;
 import org.apache.wink.example.customcontext.SecurityManager.CustomerPermission;
 
-
-
 /**
  * Sample service for demonstrating the use of an
  * {@link javax.ws.rs.ext.ContextResolver} to make a {@link CustomerPermission}
@@ -52,83 +50,98 @@ import org.apache.wink.example.customcontext.SecurityManager.CustomerPermission;
 @Path("users")
 public class UsersResource {
 
-    static private int maxUserID = 0;
+    static private int                    maxUserID = 0;
 
-    static private HashMap<Integer, User> users = new HashMap<Integer, User>(){
-        private static final long serialVersionUID = -6827816420684848221L;
-        {
-            put(maxUserID,   new User("John", "Smith", maxUserID, "John.Smith@mail.com"));
-            put(++maxUserID, new User("John", "Doe", maxUserID, "John.Doe@mail.com"));
-            put(++maxUserID, new User("Pogos", "Pogosyan", maxUserID, "Pogos.Pogosyan@mail.com"));
-            put(++maxUserID, new User("Hans", "Meier", maxUserID, "Hans.Meier@mail.com"));
-            put(++maxUserID, new User("Ali", "Vali", maxUserID, "Ali.Vali@mail.com"));
-            put(++maxUserID, new User("Ploni", "Almoni", maxUserID, "Ploni.Almoni@mail.com"));
-        }
-    };
-    
+    static private HashMap<Integer, User> users     = new HashMap<Integer, User>() {
+                                                        private static final long serialVersionUID =
+                                                                                                       -6827816420684848221L;
+                                                        {
+                                                            put(maxUserID,
+                                                                new User("John", "Smith",
+                                                                         maxUserID,
+                                                                         "John.Smith@mail.com"));
+                                                            put(++maxUserID,
+                                                                new User("John", "Doe", maxUserID,
+                                                                         "John.Doe@mail.com"));
+                                                            put(++maxUserID,
+                                                                new User("Pogos", "Pogosyan",
+                                                                         maxUserID,
+                                                                         "Pogos.Pogosyan@mail.com"));
+                                                            put(++maxUserID,
+                                                                new User("Hans", "Meier",
+                                                                         maxUserID,
+                                                                         "Hans.Meier@mail.com"));
+                                                            put(++maxUserID,
+                                                                new User("Ali", "Vali", maxUserID,
+                                                                         "Ali.Vali@mail.com"));
+                                                            put(++maxUserID,
+                                                                new User("Ploni", "Almoni",
+                                                                         maxUserID,
+                                                                         "Ploni.Almoni@mail.com"));
+                                                        }
+                                                    };
 
     /**
      * Create a new user by receiving it as xml, and returning it as xml or json
-     * Only authorized customers can create new user resource. In case customer is
-     * unauthorized, new WebApplicationException is thrown.
+     * Only authorized customers can create new user resource. In case customer
+     * is unauthorized, new WebApplicationException is thrown.
      * 
      * @return the created user
      */
     @POST
-    @Consumes( { MediaType.APPLICATION_XML })
-    @Produces( { MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Consumes( {MediaType.APPLICATION_XML})
+    @Produces( {MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public User putUser(User user, @Context CustomerPermission customerPermission) {
-        
+
         if (!customerPermission.isWriteAllowed()) {
-            String errorMessage = "Not authorized access for customer [" + customerPermission.customerId + "].";
+            String errorMessage =
+                "Not authorized access for customer [" + customerPermission.customerId + "].";
             errorMessage = errorMessage + " This customer is not allowed to create new user\n";
-            errorMessage = errorMessage + "To create new user submit your request with [admin] customer id e.g. http://host:port/users?custId=admin";
-            throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED).entity(errorMessage).build());
+            errorMessage =
+                errorMessage + "To create new user submit your request with [admin] customer id e.g. http://host:port/users?custId=admin";
+            throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)
+                .entity(errorMessage).build());
         }
         maxUserID++;
         user.setId(maxUserID);
         users.put(user.getId(), user);
         return user;
     }
-    
+
     /**
      * Get a list of all the existing users as xml or as json
      * 
      * @return an instance of Users
      */
     @GET
-    @Produces( { MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Produces( {MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Users getUsers() {
         return new Users(users.values());
     }
 
-
     /**
      * Get a user as xml or json
      * 
-     * @param id
-     *            the id of the user to get
+     * @param id the id of the user to get
      * @return the user as specified by the id
-     * 
-     * @throws UserNotExistException
-     *             if there is no user for the specified id. if thrown, this
-     *             exception is mapped to a human readable message using the
-     *             {@link UserNotExistExceptionMapper}
+     * @throws UserNotExistException if there is no user for the specified id. if
+     *             thrown, this exception is mapped to a human readable message
+     *             using the {@link UserNotExistExceptionMapper}
      */
     @Path("{id}")
     @GET
-    @Produces( { MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Produces( {MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public User getUser(@PathParam("id") int id) {
         User u = users.get(id);
         if (u == null) {
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity(" User does not exist").build());
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+                .entity(" User does not exist").build());
         }
         return u;
     }
-    
-    
-    /************** JAXB USER OBJECT MODEL**********************/
-    
+
+    /************** JAXB USER OBJECT MODEL **********************/
+
     /**
      * A collection of users
      */
@@ -137,23 +150,22 @@ public class UsersResource {
     public static class Users {
         @XmlElementRef
         Collection<User> users;
-        
+
         public Users() {
         }
-        
+
         public Users(Collection<User> users) {
             this.users = users;
         }
     }
-    
-    
+
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlRootElement(name = "user")
     public static class User {
-        
+
         private String firstName;
         private String lastName;
-        private int id;
+        private int    id;
         private String email;
 
         public User() {
@@ -200,4 +212,3 @@ public class UsersResource {
 
     }
 }
-

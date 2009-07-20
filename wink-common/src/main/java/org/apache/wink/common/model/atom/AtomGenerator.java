@@ -24,7 +24,6 @@
 // Generated on: 2008.09.08 at 11:57:55 AM IDT 
 //
 
-
 package org.apache.wink.common.model.atom;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -33,7 +32,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.wink.common.model.synd.SyndGenerator;
-
 
 /**
  * The "atom:generator" element Per RFC4287
@@ -65,17 +63,16 @@ import org.apache.wink.common.model.synd.SyndGenerator;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "atomGenerator")
-public class AtomGenerator
-    extends AtomCommonAttributesSimpleContent
-{
+public class AtomGenerator extends AtomCommonAttributesSimpleContent {
 
     @XmlAttribute
     protected String uri;
     @XmlAttribute
     protected String version;
-    
-    public AtomGenerator() {}
-    
+
+    public AtomGenerator() {
+    }
+
     public AtomGenerator(SyndGenerator value) {
         super(value);
         if (value == null) {
@@ -98,10 +95,7 @@ public class AtomGenerator
     /**
      * Gets the value of uri.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return possible object is {@link String }
      */
     public String getUri() {
         return uri;
@@ -110,10 +104,7 @@ public class AtomGenerator
     /**
      * Sets the value of uri.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * @param value allowed object is {@link String }
      */
     public void setUri(String value) {
         this.uri = value;
@@ -122,10 +113,7 @@ public class AtomGenerator
     /**
      * Gets the value of version.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return possible object is {@link String }
      */
     public String getVersion() {
         return version;
@@ -134,10 +122,7 @@ public class AtomGenerator
     /**
      * Sets the value of version.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * @param value allowed object is {@link String }
      */
     public void setVersion(String value) {
         this.version = value;

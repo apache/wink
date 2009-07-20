@@ -25,7 +25,7 @@ import javax.ws.rs.PathParam;
 
 public interface InterfaceA {
 
-	@GET
-	@Path("/interface_method1/{p}")
-	public String method1(@PathParam("p") String path);
+    @GET
+    @Path("/interface_method1/{p}")
+    public String method1(@PathParam("p") String path);
 }

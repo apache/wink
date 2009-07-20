@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.asset;
 
 import java.util.HashMap;
@@ -31,7 +31,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.wink.common.annotations.Workspace;
 
-
 /**
  * Sample service for demonstrating the use of Asset concept
  */
@@ -39,19 +38,36 @@ import org.apache.wink.common.annotations.Workspace;
 @Path("users")
 public class UsersResource {
 
-    static private int maxUserID = 0;
+    static private int                    maxUserID = 0;
 
-    static private HashMap<Integer,User> users = new HashMap<Integer,User>() {
-        private static final long serialVersionUID = -2823817865466342159L;
-        {
-            put(maxUserID, new User("John", "Smith", maxUserID, "John.Smith@mail.com"));
-            put(++maxUserID, new User("John", "Doe", maxUserID, "John.Doe@mail.com"));
-            put(++maxUserID, new User("Pogos", "Pogosyan", maxUserID, "Pogos.Pogosyan@mail.com"));
-            put(++maxUserID, new User("Hans", "Meier", maxUserID, "Hans.Meier@mail.com"));
-            put(++maxUserID, new User("Ali", "Vali", maxUserID, "Ali.Vali@mail.com"));
-            put(++maxUserID, new User("Ploni", "Almoni", maxUserID, "Ploni.Almoni@mail.com"));
-        }
-    };
+    static private HashMap<Integer, User> users     = new HashMap<Integer, User>() {
+                                                        private static final long serialVersionUID =
+                                                                                                       -2823817865466342159L;
+                                                        {
+                                                            put(maxUserID,
+                                                                new User("John", "Smith",
+                                                                         maxUserID,
+                                                                         "John.Smith@mail.com"));
+                                                            put(++maxUserID,
+                                                                new User("John", "Doe", maxUserID,
+                                                                         "John.Doe@mail.com"));
+                                                            put(++maxUserID,
+                                                                new User("Pogos", "Pogosyan",
+                                                                         maxUserID,
+                                                                         "Pogos.Pogosyan@mail.com"));
+                                                            put(++maxUserID,
+                                                                new User("Hans", "Meier",
+                                                                         maxUserID,
+                                                                         "Hans.Meier@mail.com"));
+                                                            put(++maxUserID,
+                                                                new User("Ali", "Vali", maxUserID,
+                                                                         "Ali.Vali@mail.com"));
+                                                            put(++maxUserID,
+                                                                new User("Ploni", "Almoni",
+                                                                         maxUserID,
+                                                                         "Ploni.Almoni@mail.com"));
+                                                        }
+                                                    };
 
     /**
      * Get a list of all the existing users as xml or as json
@@ -59,7 +75,8 @@ public class UsersResource {
      * @return an instance of Users
      */
     @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
+    @Produces( {MediaType.APPLICATION_XML, MediaType.APPLICATION_ATOM_XML,
+        MediaType.APPLICATION_JSON})
     public UsersAsset getUsers() {
         return new UsersAsset(users.values());
     }
@@ -70,8 +87,8 @@ public class UsersResource {
      * @return the created user
      */
     @POST
-    @Consumes({MediaType.APPLICATION_XML})
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes( {MediaType.APPLICATION_XML})
+    @Produces( {MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public User putUser(User user) {
         maxUserID++;
         user.setId(maxUserID);

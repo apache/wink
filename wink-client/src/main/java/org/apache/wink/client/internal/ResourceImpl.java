@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.client.internal;
 
@@ -49,24 +48,23 @@ import org.apache.wink.common.internal.CaseInsensitiveMultivaluedMap;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.common.internal.utils.HeaderUtils;
 
-
 public class ResourceImpl implements Resource {
 
-    private static final String USER_AGENT = "Wink Client v0.1";
+    private static final String            USER_AGENT = "Wink Client v0.1";
 
-    private ProvidersRegistry providersRegistry;
-    private ClientConfig config;
+    private ProvidersRegistry              providersRegistry;
+    private ClientConfig                   config;
 
-    private MultivaluedMap<String,String> headers;
-    private Map<String,Object> attributes;
-    private UriBuilder uriBuilder;
+    private MultivaluedMap<String, String> headers;
+    private Map<String, Object>            attributes;
+    private UriBuilder                     uriBuilder;
 
     public ResourceImpl(URI uri, ClientConfig config, ProvidersRegistry providersRegistry) {
         this.config = config;
         this.providersRegistry = providersRegistry;
         this.uriBuilder = UriBuilder.fromUri(uri);
         this.headers = new CaseInsensitiveMultivaluedMap<String>();
-        this.attributes = new HashMap<String,Object>();
+        this.attributes = new HashMap<String, Object>();
     }
 
     public Resource accept(String... values) {
@@ -130,13 +128,13 @@ public class ResourceImpl implements Resource {
         return this;
     }
 
-    public Resource queryParams(MultivaluedMap<String,String> params) {
+    public Resource queryParams(MultivaluedMap<String, String> params) {
         for (String query : params.keySet()) {
             queryParam(query, params.get(query).toArray());
         }
         return this;
     }
-    
+
     public Resource attribute(String key, Object value) {
         attributes.put(key, value);
         return this;
@@ -179,10 +177,11 @@ public class ResourceImpl implements Resource {
         }
         return response.getEntity(responseEntity);
     }
-    
+
     @SuppressWarnings("unchecked")
     public <T> T invoke(String method, EntityType<T> responseEntity, Object requestEntity) {
-        ClientResponse response = invoke(method, responseEntity.getRawClass(), responseEntity.getType(), requestEntity);
+        ClientResponse response =
+            invoke(method, responseEntity.getRawClass(), responseEntity.getType(), requestEntity);
         if (responseEntity == null) {
             return null;
         }
@@ -191,9 +190,13 @@ public class ResourceImpl implements Resource {
         }
         return response.getEntity(responseEntity);
     }
-    
-    private ClientResponse invoke(String method, Class<?> responseEntity, Type responseEntityType, Object requestEntity) {
-        ClientRequest request = createClientRequest(method, responseEntity, responseEntityType, requestEntity);
+
+    private ClientResponse invoke(String method,
+                                  Class<?> responseEntity,
+                                  Type responseEntityType,
+                                  Object requestEntity) {
+        ClientRequest request =
+            createClientRequest(method, responseEntity, responseEntityType, requestEntity);
         HandlerContext context = createHandlerContext();
         try {
             ClientResponse response = context.doChain(request);
@@ -210,7 +213,10 @@ public class ResourceImpl implements Resource {
         }
     }
 
-    private <T> ClientRequest createClientRequest(String method, Class<T> responseEntity, Type responseEntityType, Object requestEntity) {
+    private <T> ClientRequest createClientRequest(String method,
+                                                  Class<T> responseEntity,
+                                                  Type responseEntityType,
+                                                  Object requestEntity) {
         ClientRequest request = new ClientRequestImpl();
         request.setEntity(requestEntity);
         request.setURI(uriBuilder.build());
@@ -222,11 +228,12 @@ public class ResourceImpl implements Resource {
         if (headers.getFirst(HttpHeaders.USER_AGENT) == null) {
             request.getHeaders().add(HttpHeaders.USER_AGENT, USER_AGENT);
         }
-        
+
         request.getAttributes().putAll(attributes);
         request.setAttribute(ProvidersRegistry.class, providersRegistry);
         request.setAttribute(ClientConfig.class, config);
-        request.getAttributes().put(ClientRequestImpl.RESPONSE_ENTITY_GENERIC_TYPE, responseEntityType);
+        request.getAttributes().put(ClientRequestImpl.RESPONSE_ENTITY_GENERIC_TYPE,
+                                    responseEntityType);
         request.getAttributes().put(ClientRequestImpl.RESPONSE_ENTITY_CLASS_TYPE, responseEntity);
         return request;
     }

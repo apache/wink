@@ -36,11 +36,10 @@ import org.apache.wink.server.handlers.MessageContext;
 import org.apache.wink.server.handlers.RequestHandler;
 import org.apache.wink.server.handlers.ResponseHandler;
 
-
-
 public class HeadMethodHandler implements RequestHandler, ResponseHandler {
-	
-	private static final String ORIGINAL_RESPONSE_ATT_NAME = HeadMethodHandler.class.getName()+"_original_response"; 
+
+    private static final String ORIGINAL_RESPONSE_ATT_NAME =
+                                                               HeadMethodHandler.class.getName() + "_original_response";
 
     public void handleRequest(MessageContext context, HandlersChain chain) throws Throwable {
 
@@ -48,12 +47,13 @@ public class HeadMethodHandler implements RequestHandler, ResponseHandler {
         chain.doChain(context);
 
         // check the search result.
-        // if the request is HEAD and no method was found, try to find a GET method
+        // if the request is HEAD and no method was found, try to find a GET
+        // method
         // and discard the entity
         SearchResult searchResult = context.getAttribute(SearchResult.class);
-        if (searchResult.isError()
-                && searchResult.getError().getResponse().getStatus() == HttpStatus.METHOD_NOT_ALLOWED.getCode()
-                && context.getHttpMethod().equalsIgnoreCase(HttpMethod.HEAD)) {
+        if (searchResult.isError() && searchResult.getError().getResponse().getStatus() == HttpStatus.METHOD_NOT_ALLOWED
+            .getCode()
+            && context.getHttpMethod().equalsIgnoreCase(HttpMethod.HEAD)) {
             context.setHttpMethod(HttpMethod.GET);
             HttpServletResponse originalResponse = context.getAttribute(HttpServletResponse.class);
             NoBodyResponse noBodyResponse = new NoBodyResponse(originalResponse);
@@ -64,9 +64,10 @@ public class HeadMethodHandler implements RequestHandler, ResponseHandler {
     }
 
     public void handleResponse(MessageContext context, HandlersChain chain) throws Throwable {
-        HttpServletResponse originalResponse = (HttpServletResponse)context.getAttributes().remove(ORIGINAL_RESPONSE_ATT_NAME);
+        HttpServletResponse originalResponse =
+            (HttpServletResponse)context.getAttributes().remove(ORIGINAL_RESPONSE_ATT_NAME);
         if (originalResponse != null) {
-        	HttpServletResponse response = context.getAttribute(HttpServletResponse.class);
+            HttpServletResponse response = context.getAttribute(HttpServletResponse.class);
             response.flushBuffer();
             response.setContentLength(((NoBodyResponse)response).getContentLenghtValue());
             // set the original response on the context
@@ -77,7 +78,7 @@ public class HeadMethodHandler implements RequestHandler, ResponseHandler {
 
     private static final class NoBodyResponse extends HttpServletResponseWrapper {
 
-        private PrintWriter writer = null;
+        private PrintWriter    writer         = null;
         private CountingStream countingStream = null;
 
         NoBodyResponse(HttpServletResponse servletResponse) {
@@ -97,9 +98,11 @@ public class HeadMethodHandler implements RequestHandler, ResponseHandler {
 
         public PrintWriter getWriter() throws IOException {
             if (writer == null) {
-                String charsetName = getCharacterEncoding() != null ? getCharacterEncoding()
+                String charsetName =
+                    getCharacterEncoding() != null ? getCharacterEncoding()
                         : RestConstants.CHARACTER_ENCODING_UTF_8;
-                OutputStreamWriter osWriter = new OutputStreamWriter(getOutputStream(), charsetName);
+                OutputStreamWriter osWriter =
+                    new OutputStreamWriter(getOutputStream(), charsetName);
                 writer = new PrintWriter(osWriter);
             }
             return writer;

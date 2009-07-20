@@ -28,15 +28,14 @@ import org.apache.wink.common.annotations.Scope;
 import org.apache.wink.common.annotations.Scope.ScopeType;
 import org.apache.wink.example.customcontext.SecurityManager.CustomerPermission;
 
-
-
 @Provider
 @Scope(ScopeType.PROTOTYPE)
 public class SecurityContextResolver implements ContextResolver<CustomerPermission> {
 
-    private static final SecurityManager sm = new SecurityManager();
-    private static final String CUSTOMER_ID = "custId";
-    @Context UriInfo uriInfo;
+    private static final SecurityManager sm          = new SecurityManager();
+    private static final String          CUSTOMER_ID = "custId";
+    @Context
+    UriInfo                              uriInfo;
 
     public CustomerPermission getContext(Class<?> type) {
         String user = uriInfo.getQueryParameters().getFirst(CUSTOMER_ID);

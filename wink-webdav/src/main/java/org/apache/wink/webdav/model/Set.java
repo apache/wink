@@ -63,7 +63,6 @@ public class Set {
      * Gets the value of the prop property.
      * 
      * @return possible object is {@link Prop }
-     * 
      */
     public Prop getProp() {
         return prop;
@@ -72,9 +71,7 @@ public class Set {
     /**
      * Sets the value of the prop property.
      * 
-     * @param value
-     *            allowed object is {@link Prop }
-     * 
+     * @param value allowed object is {@link Prop }
      */
     public void setProp(Prop value) {
         this.prop = value;

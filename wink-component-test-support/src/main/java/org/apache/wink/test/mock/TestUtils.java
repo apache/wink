@@ -35,7 +35,6 @@ import org.apache.wink.test.diff.DiffIgnoreUpdateWithAttributeQualifier;
 import org.custommonkey.xmlunit.Diff;
 import org.w3c.dom.Document;
 
-
 public class TestUtils {
 
     public static String packageToPath(String packageName) {
@@ -52,14 +51,13 @@ public class TestUtils {
      * appends package to the name and returns it as stream.
      * 
      * @param name
-     * @param cls
-     *            TODO
+     * @param cls TODO
      * @return
      */
     public static InputStream getResourceOfSamePackage(String name, Class<?> cls) {
         String packagePath = packageToPath(cls.getPackage().getName());
-        return SpringMockServletInvocationTest.class.getClassLoader().getResourceAsStream(
-            packagePath + File.separator + name);
+        return SpringMockServletInvocationTest.class.getClassLoader()
+            .getResourceAsStream(packagePath + File.separator + name);
     }
 
     public static byte[] getResourceOfSamePackageAsBytes(String name, Class<?> cls)
@@ -77,8 +75,7 @@ public class TestUtils {
      * current class.
      * 
      * @param fileName
-     * @param cls
-     *            TODO
+     * @param cls TODO
      * @return
      * @throws Exception
      */
@@ -91,7 +88,8 @@ public class TestUtils {
     }
 
     public static String diffIgnoreUpdateWithAttributeQualifier(String expectedFileName,
-        byte[] actual, Class<?> cls) throws Exception {
+                                                                byte[] actual,
+                                                                Class<?> cls) throws Exception {
         Document xmlExpected = getXML(expectedFileName, cls);
         Document xmlActual = getXML(actual);
         Diff diff = new DiffIgnoreUpdateWithAttributeQualifier(xmlExpected, xmlActual);

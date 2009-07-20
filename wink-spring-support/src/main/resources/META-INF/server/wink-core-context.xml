@@ -94,7 +94,8 @@
 		</property>
 	</bean>
 
-	<!-- Builds the request processor and stores it on the servlet context-->
+	<!-- Builds the request processor and stores it on the servlet context
+-->
 	<bean id="winkInternalRequestProcessorBuilder" class="org.apache.wink.spring.internal.RequestProcessorBuilder">
 		<property name="deploymentConfiguration">
 			<ref local="winkInternalDeploymentConfiguration" />

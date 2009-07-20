@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.registry;
 
@@ -43,26 +42,24 @@ import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 public class FindResourceMethodTest extends MockServletInvocationTest {
-    
+
     static List<Class<?>> resourceClasses = new LinkedList<Class<?>>();
-    
+
     static {
         List<Class<?>> allResources = new LinkedList<Class<?>>();
         for (Class<?> cls : FindResourceMethodTest.class.getClasses()) {
             if (cls.getSimpleName().startsWith("Resource")) {
                 allResources.add(cls);
             }
-        }        
+        }
         resourceClasses = new LinkedList<Class<?>>(allResources);
     }
-    
+
     @Override
     protected Class<?>[] getClasses() {
         return resourceClasses.toArray(new Class<?>[resourceClasses.size()]);
     }
-    
 
     // /// -- Resources --
 
@@ -75,16 +72,16 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
             assertNotNull(matchedResources);
             assertEquals(1, matchedResources.size());
             assertEquals(ResourceSimpleGet.class, matchedResources.get(0).getClass());
-            
+
             List<String> matchedURIs = uriInfo.getMatchedURIs(false);
             assertNotNull(matchedURIs);
             assertEquals(1, matchedURIs.size());
             assertEquals("simpleGet", matchedURIs.get(0));
-            
+
             return "ResourceSimpleGet.get";
         }
     }
-    
+
     @Path("/simpleGetAndPost")
     public static class ResourceSimpleGetAndPost {
 
@@ -103,31 +100,31 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
     public static class ResourceSimplePostConsumes {
 
         @POST
-        @Consumes({"application/xml"})
+        @Consumes( {"application/xml"})
         public String postXml() {
             return "ResourceSimplePostConsumes.postXml";
         }
 
         @POST
-        @Consumes({"application/atom+xml"})
+        @Consumes( {"application/atom+xml"})
         public String postAtom() {
             return "ResourceSimplePostConsumes.postAtom";
         }
 
         @POST
-        @Consumes({"text/plain", "text/html"})
+        @Consumes( {"text/plain", "text/html"})
         public String postText() {
             return "ResourceSimplePostConsumes.postText";
         }
 
         @POST
-        @Consumes({"image/*"})
+        @Consumes( {"image/*"})
         public String postImage() {
             return "ResourceSimplePostConsumes.postImage";
         }
 
         @POST
-        @Consumes({"*/*"})
+        @Consumes( {"*/*"})
         public String postAny() {
             return "ResourceSimplePostConsumes.postAny";
         }
@@ -137,37 +134,37 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
     public static class ResourceSimpleGetProduces {
 
         @GET
-        @Produces({"application/xml"})
+        @Produces( {"application/xml"})
         public String getXml() {
             return "ResourceSimpleGetProduces.getXml";
         }
 
         @GET
-        @Produces({"application/atom+xml"})
+        @Produces( {"application/atom+xml"})
         public String getAtom() {
             return "ResourceSimpleGetProduces.getAtom";
         }
 
         @GET
-        @Produces({"text/plain", "text/html"})
+        @Produces( {"text/plain", "text/html"})
         public String getText() {
             return "ResourceSimpleGetProduces.getText";
         }
 
         @GET
-        @Produces({"image/jpeg"})
+        @Produces( {"image/jpeg"})
         public String getImageJpeg() {
             return "ResourceSimpleGetProduces.getImageJpeg";
         }
 
         @GET
-        @Produces({"image/*"})
+        @Produces( {"image/*"})
         public String getImageAny() {
             return "ResourceSimpleGetProduces.getImageAny";
         }
 
         @GET
-        @Produces({"*/*"})
+        @Produces( {"*/*"})
         public String getAny() {
             return "ResourceSimpleGetProduces.getAny";
         }
@@ -177,36 +174,36 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
     public static class ResourceSimpleConsumesAndProduces {
 
         @POST
-        @Consumes({"text/*"})
-        @Produces({"text/plain"})
+        @Consumes( {"text/*"})
+        @Produces( {"text/plain"})
         public String postConsumesTextAny() {
             return "ResourceSimpleConsumesAndProduces.postConsumesTextAny";
         }
 
         @POST
-        @Consumes({"text/plain"})
-        @Produces({"text/*"})
+        @Consumes( {"text/plain"})
+        @Produces( {"text/*"})
         public String postProducesTextAny() {
             return "ResourceSimpleConsumesAndProduces.postProducesTextAny";
         }
 
         @POST
-        @Consumes({"text/plain", "text/html"})
-        @Produces({"text/plain"})
+        @Consumes( {"text/plain", "text/html"})
+        @Produces( {"text/plain"})
         public String postConsumesTextHtml() {
             return "ResourceSimpleConsumesAndProduces.postConsumesTextHtml";
         }
 
         @POST
-        @Consumes({"text/plain"})
-        @Produces({"text/plain", "text/html"})
+        @Consumes( {"text/plain"})
+        @Produces( {"text/plain", "text/html"})
         public String postProducesTextHtml() {
             return "ResourceSimpleConsumesAndProduces.postProducesTextHtml";
         }
 
         @POST
-        @Consumes({"text/plain", "application/*", "image/*"})
-        @Produces({"application/xml", "image/jpeg"})
+        @Consumes( {"text/plain", "application/*", "image/*"})
+        @Produces( {"application/xml", "image/jpeg"})
         public String postConsumesManyProduceMany() {
             return "ResourceSimpleConsumesAndProduces.postConsumesManyProduceMany";
         }
@@ -215,14 +212,16 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
     @Path("/subResourceMethodSimpleGet")
     public static class ResourceWithSubResourceMethodSimpleGet {
         private boolean located = false;
-        public ResourceWithSubResourceMethodSimpleGet(){}
-        
+
+        public ResourceWithSubResourceMethodSimpleGet() {
+        }
+
         public ResourceWithSubResourceMethodSimpleGet(boolean located) {
             this.located = located;
         }
 
         @GET
-        @Produces({"application/atom+xml"})
+        @Produces( {"application/atom+xml"})
         public String getAtom() {
             return "ResourceSimpleGetProduces.getAtom";
         }
@@ -236,15 +235,18 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
             assertNotNull(matchedURIs);
             if (located) {
                 assertEquals(2, matchedResources.size());
-                assertEquals(ResourceWithSubResourceMethodSimpleGet.class, matchedResources.get(0).getClass());
-                assertEquals(ResourceWithSubResourceLocatorSimpleGet.class, matchedResources.get(1).getClass());
+                assertEquals(ResourceWithSubResourceMethodSimpleGet.class, matchedResources.get(0)
+                    .getClass());
+                assertEquals(ResourceWithSubResourceLocatorSimpleGet.class, matchedResources.get(1)
+                    .getClass());
                 assertEquals(3, matchedURIs.size());
                 assertEquals("subResourceLocatorSimpleGet/1/2", matchedURIs.get(0));
                 assertEquals("subResourceLocatorSimpleGet/1", matchedURIs.get(1));
                 assertEquals("subResourceLocatorSimpleGet", matchedURIs.get(2));
             } else {
                 assertEquals(1, matchedResources.size());
-                assertEquals(ResourceWithSubResourceMethodSimpleGet.class, matchedResources.get(0).getClass());
+                assertEquals(ResourceWithSubResourceMethodSimpleGet.class, matchedResources.get(0)
+                    .getClass());
                 assertEquals(2, matchedURIs.size());
                 assertEquals("subResourceMethodSimpleGet/1", matchedURIs.get(0));
                 assertEquals("subResourceMethodSimpleGet", matchedURIs.get(1));
@@ -302,18 +304,20 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
     public static class ResourceWithSubResourceLocatorSimpleGet {
 
         @Path("{id}")
-        public ResourceWithSubResourceMethodSimpleGet getAny(@PathParam("id") String id, @Context UriInfo uriInfo) {
+        public ResourceWithSubResourceMethodSimpleGet getAny(@PathParam("id") String id,
+                                                             @Context UriInfo uriInfo) {
             List<Object> matchedResources = uriInfo.getMatchedResources();
             assertNotNull(matchedResources);
             assertEquals(1, matchedResources.size());
-            assertEquals(ResourceWithSubResourceLocatorSimpleGet.class, matchedResources.get(0).getClass());
-            
+            assertEquals(ResourceWithSubResourceLocatorSimpleGet.class, matchedResources.get(0)
+                .getClass());
+
             List<String> matchedURIs = uriInfo.getMatchedURIs(false);
             assertNotNull(matchedURIs);
             assertEquals(2, matchedURIs.size());
-            assertEquals("subResourceLocatorSimpleGet/"+id, matchedURIs.get(0));
+            assertEquals("subResourceLocatorSimpleGet/" + id, matchedURIs.get(0));
             assertEquals("subResourceLocatorSimpleGet", matchedURIs.get(1));
-            
+
             return new ResourceWithSubResourceMethodSimpleGet(true);
         }
 
@@ -322,7 +326,7 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
             assertEquals("1", id);
             return new ResourceWithSubResourceMethodSimpleGet();
         }
-        
+
         @Path("ignore-consumes")
         @Consumes("text/kuku")
         public ResourceWithSubResourceMethodSimpleGet ignoreConsumes() {
@@ -334,23 +338,24 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
         public ResourceWithSubResourceMethodSimpleGet ignoreProduces() {
             return new ResourceWithSubResourceMethodSimpleGet();
         }
-        
+
         @Path("sub-resource-with-no-constructor")
         @Produces("text/plain")
         public SubResourceNoDefaultConstructor subResourceWithNoConstructor() {
             return new SubResourceNoDefaultConstructor(1, "2");
         }
-        
+
         // locators cannot have an entity param
         @Path("bad-locator")
         public void badLocator(String entity) {
             fail("locator method should not have been invoked");
         }
     }
-    
+
     public static class SubResourceNoDefaultConstructor {
-        public SubResourceNoDefaultConstructor(Integer i, String s) {}
-        
+        public SubResourceNoDefaultConstructor(Integer i, String s) {
+        }
+
         @GET
         @Path("{id}")
         public String getAny(@PathParam("id") String id) {
@@ -413,7 +418,7 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
             return null;
         }
     }
-    
+
     @Path("/exceptionThrowing/{code}")
     public static class ResourceExceptionThrowing {
 
@@ -424,7 +429,7 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
             throw new WebApplicationException(code);
         }
     }
-    
+
     @Path("/multipleHttpMethods")
     public static class ResourceMultipleHttpMethods {
         @PUT
@@ -433,7 +438,7 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
             return "ResourceMultipleHttpMethods.get";
         }
     }
-    
+
     @Path("/noHttpMethod")
     public static class ResourceNoHttpMethod {
         @Produces("text/plain")
@@ -443,172 +448,330 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
         }
     }
 
-    
     // /// -- Tests --
 
     public void testFindResourceSimple() throws Exception {
         MockHttpServletRequest request = null;
         MockHttpServletResponse response = null;
-        
+
         request = MockRequestConstructor.constructMockRequest("GET", "/simpleGet", "text/plain");
         response = invoke(request);
         assertMethodFound(response, ResourceSimpleGet.class, "get");
- 
+
         //
         request = MockRequestConstructor.constructMockRequest("POST", "/simpleGetAndPost", "*/*");
         response = invoke(request);
         assertMethodFound(response, ResourceSimpleGetAndPost.class, "post");
 
         //
-        request = MockRequestConstructor.constructMockRequest("POST", "/simplePostConsumes", "*/*", "application/xml", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/simplePostConsumes",
+                                                        "*/*",
+                                                        "application/xml",
+                                                        null);
         response = invoke(request);
         assertMethodFound(response, ResourceSimplePostConsumes.class, "postXml");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/simplePostConsumes", "text/plain", "application/xml", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/simplePostConsumes",
+                                                        "text/plain",
+                                                        "application/xml",
+                                                        null);
         response = invoke(request);
         assertMethodFound(response, ResourceSimplePostConsumes.class, "postXml");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/simplePostConsumes", "*/*", "application/atom+xml", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/simplePostConsumes",
+                                                        "*/*",
+                                                        "application/atom+xml",
+                                                        null);
         response = invoke(request);
         assertMethodFound(response, ResourceSimplePostConsumes.class, "postAtom");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/simplePostConsumes", "*/*", "text/plain", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/simplePostConsumes",
+                                                        "*/*",
+                                                        "text/plain",
+                                                        null);
         response = invoke(request);
         assertMethodFound(response, ResourceSimplePostConsumes.class, "postText");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/simplePostConsumes", "*/*", "text/html", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/simplePostConsumes",
+                                                        "*/*",
+                                                        "text/html",
+                                                        null);
         response = invoke(request);
         assertMethodFound(response, ResourceSimplePostConsumes.class, "postText");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/simplePostConsumes", "*/*", "image/jpeg", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/simplePostConsumes",
+                                                        "*/*",
+                                                        "image/jpeg",
+                                                        null);
         response = invoke(request);
         assertMethodFound(response, ResourceSimplePostConsumes.class, "postImage");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/simplePostConsumes", "*/*", "image/gif",  null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/simplePostConsumes",
+                                                        "*/*",
+                                                        "image/gif",
+                                                        null);
         response = invoke(request);
         assertMethodFound(response, ResourceSimplePostConsumes.class, "postImage");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/simplePostConsumes", "*/*", "mytype/mysubtype", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/simplePostConsumes",
+                                                        "*/*",
+                                                        "mytype/mysubtype",
+                                                        null);
         response = invoke(request);
         assertMethodFound(response, ResourceSimplePostConsumes.class, "postAny");
 
         //
-        request = MockRequestConstructor.constructMockRequest("GET", "/simpleGetProduces", "application/xml");
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/simpleGetProduces",
+                                                        "application/xml");
         response = invoke(request);
         assertMethodFound(response, ResourceSimpleGetProduces.class, "getXml");
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/simpleGetProduces", "application/atom+xml");
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/simpleGetProduces",
+                                                        "application/atom+xml");
         response = invoke(request);
         assertMethodFound(response, ResourceSimpleGetProduces.class, "getAtom");
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/simpleGetProduces", "text/plain");
+        request =
+            MockRequestConstructor.constructMockRequest("GET", "/simpleGetProduces", "text/plain");
         response = invoke(request);
         assertMethodFound(response, ResourceSimpleGetProduces.class, "getText");
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/simpleGetProduces", "text/html");
+        request =
+            MockRequestConstructor.constructMockRequest("GET", "/simpleGetProduces", "text/html");
         response = invoke(request);
         assertMethodFound(response, ResourceSimpleGetProduces.class, "getText");
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/simpleGetProduces", "image/jpeg");
+        request =
+            MockRequestConstructor.constructMockRequest("GET", "/simpleGetProduces", "image/jpeg");
         response = invoke(request);
         assertMethodFound(response, ResourceSimpleGetProduces.class, "getImageJpeg");
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/simpleGetProduces", "image/gif");
+        request =
+            MockRequestConstructor.constructMockRequest("GET", "/simpleGetProduces", "image/gif");
         response = invoke(request);
         assertMethodFound(response, ResourceSimpleGetProduces.class, "getImageAny");
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/simpleGetProduces", "image/gif;q=0.6,image/jpeg;q=0.5");
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/simpleGetProduces",
+                                                        "image/gif;q=0.6,image/jpeg;q=0.5");
         response = invoke(request);
         assertMethodFound(response, ResourceSimpleGetProduces.class, "getImageAny");
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/simpleGetProduces", "text/plain;q=0.4,image/jpeg;q=0.5");
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/simpleGetProduces",
+                                                        "text/plain;q=0.4,image/jpeg;q=0.5");
         response = invoke(request);
         assertMethodFound(response, ResourceSimpleGetProduces.class, "getImageJpeg");
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/simpleGetProduces", "mytype/mysubtype");
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/simpleGetProduces",
+                                                        "mytype/mysubtype");
         response = invoke(request);
         assertMethodFound(response, ResourceSimpleGetProduces.class, "getAny");
 
         //
-        request = MockRequestConstructor.constructMockRequest("POST", "/simpleConsumesAndProduces", "text/plain", "text/plain", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/simpleConsumesAndProduces",
+                                                        "text/plain",
+                                                        "text/plain",
+                                                        null);
         response = invoke(request);
         assertMethodFound(response, ResourceSimpleConsumesAndProduces.class, "postConsumesTextHtml");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/simpleConsumesAndProduces", "text/plain", "text/xhtml", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/simpleConsumesAndProduces",
+                                                        "text/plain",
+                                                        "text/xhtml",
+                                                        null);
         response = invoke(request);
         assertMethodFound(response, ResourceSimpleConsumesAndProduces.class, "postConsumesTextAny");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/simpleConsumesAndProduces", "text/xhtml", "text/plain", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/simpleConsumesAndProduces",
+                                                        "text/xhtml",
+                                                        "text/plain",
+                                                        null);
         response = invoke(request);
         assertMethodFound(response, ResourceSimpleConsumesAndProduces.class, "postProducesTextAny");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/simpleConsumesAndProduces", "text/plain", "text/html", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/simpleConsumesAndProduces",
+                                                        "text/plain",
+                                                        "text/html",
+                                                        null);
         response = invoke(request);
         assertMethodFound(response, ResourceSimpleConsumesAndProduces.class, "postConsumesTextHtml");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/simpleConsumesAndProduces", "application/xml", "text/plain", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/simpleConsumesAndProduces",
+                                                        "application/xml",
+                                                        "text/plain",
+                                                        null);
         response = invoke(request);
-        assertMethodFound(response, ResourceSimpleConsumesAndProduces.class, "postConsumesManyProduceMany");
+        assertMethodFound(response,
+                          ResourceSimpleConsumesAndProduces.class,
+                          "postConsumesManyProduceMany");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/simpleConsumesAndProduces", "application/xml", "application/atom+xml", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/simpleConsumesAndProduces",
+                                                        "application/xml",
+                                                        "application/atom+xml",
+                                                        null);
         response = invoke(request);
-        assertMethodFound(response, ResourceSimpleConsumesAndProduces.class, "postConsumesManyProduceMany");
+        assertMethodFound(response,
+                          ResourceSimpleConsumesAndProduces.class,
+                          "postConsumesManyProduceMany");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/simpleConsumesAndProduces", "application/xml", "image/gif", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/simpleConsumesAndProduces",
+                                                        "application/xml",
+                                                        "image/gif",
+                                                        null);
         response = invoke(request);
-        assertMethodFound(response, ResourceSimpleConsumesAndProduces.class, "postConsumesManyProduceMany");
+        assertMethodFound(response,
+                          ResourceSimpleConsumesAndProduces.class,
+                          "postConsumesManyProduceMany");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/simpleConsumesAndProduces", "image/jpeg", "text/plain", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/simpleConsumesAndProduces",
+                                                        "image/jpeg",
+                                                        "text/plain",
+                                                        null);
         response = invoke(request);
-        assertMethodFound(response, ResourceSimpleConsumesAndProduces.class, "postConsumesManyProduceMany");
+        assertMethodFound(response,
+                          ResourceSimpleConsumesAndProduces.class,
+                          "postConsumesManyProduceMany");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/simpleConsumesAndProduces", "image/jpeg", "application/atom+xml", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/simpleConsumesAndProduces",
+                                                        "image/jpeg",
+                                                        "application/atom+xml",
+                                                        null);
         response = invoke(request);
-        assertMethodFound(response, ResourceSimpleConsumesAndProduces.class, "postConsumesManyProduceMany");
+        assertMethodFound(response,
+                          ResourceSimpleConsumesAndProduces.class,
+                          "postConsumesManyProduceMany");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/simpleConsumesAndProduces", "image/jpeg", "image/gif", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/simpleConsumesAndProduces",
+                                                        "image/jpeg",
+                                                        "image/gif",
+                                                        null);
         response = invoke(request);
-        assertMethodFound(response, ResourceSimpleConsumesAndProduces.class, "postConsumesManyProduceMany");
+        assertMethodFound(response,
+                          ResourceSimpleConsumesAndProduces.class,
+                          "postConsumesManyProduceMany");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/simpleConsumesAndProduces", "image/*,text/html", "text/plain", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/simpleConsumesAndProduces",
+                                                        "image/*,text/html",
+                                                        "text/plain",
+                                                        null);
         response = invoke(request);
         assertMethodFound(response, ResourceSimpleConsumesAndProduces.class, "postProducesTextHtml");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/simpleConsumesAndProduces", 
-                "text/plain;q=0.405,image/*;q=0.406", "text/plain", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/simpleConsumesAndProduces",
+                                                        "text/plain;q=0.405,image/*;q=0.406",
+                                                        "text/plain",
+                                                        null);
         response = invoke(request);
-        assertMethodFound(response, ResourceSimpleConsumesAndProduces.class, "postConsumesManyProduceMany");
+        assertMethodFound(response,
+                          ResourceSimpleConsumesAndProduces.class,
+                          "postConsumesManyProduceMany");
     }
 
     public void testFindResourceWithSubResourceMethodSimpleGet() throws Exception {
         MockHttpServletRequest request = null;
         MockHttpServletResponse response = null;
-        
-        request = MockRequestConstructor.constructMockRequest("GET", "/subResourceMethodSimpleGet/1", "text/plain");
+
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/subResourceMethodSimpleGet/1",
+                                                        "text/plain");
         response = invoke(request);
         assertMethodFound(response, ResourceWithSubResourceMethodSimpleGet.class, "getTextPlain");
-        
-        request = MockRequestConstructor.constructMockRequest("GET", "/subResourceMethodSimpleGet/1", "text/html");
+
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/subResourceMethodSimpleGet/1",
+                                                        "text/html");
         response = invoke(request);
         assertMethodFound(response, ResourceWithSubResourceMethodSimpleGet.class, "getTextHtml");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/subResourceMethodSimpleGet/1", "text/html", "text/xhtml", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/subResourceMethodSimpleGet/1",
+                                                        "text/html",
+                                                        "text/xhtml",
+                                                        null);
         response = invoke(request);
         assertMethodFound(response, ResourceWithSubResourceMethodSimpleGet.class, "postTextAny");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/subResourceMethodSimpleGet/1", "text/html", "image/jpeg", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/subResourceMethodSimpleGet/1",
+                                                        "text/html",
+                                                        "image/jpeg",
+                                                        null);
         response = invoke(request);
         assertMethodFound(response, ResourceWithSubResourceMethodSimpleGet.class, "postImageAny");
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/subResourceMethodSimpleGet/1", "application/xml", "image/jpeg", null);
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/subResourceMethodSimpleGet/1",
+                                                        "application/xml",
+                                                        "image/jpeg",
+                                                        null);
         response = invoke(request);
         assertMethodFound(response, ResourceWithSubResourceMethodSimpleGet.class, "getAny");
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/subResourceMethodSimpleGet/1/4", "text/xhtml");
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/subResourceMethodSimpleGet/1/4",
+                                                        "text/xhtml");
         response = invoke(request);
         assertMethodFound(response, ResourceWithSubResourceMethodSimpleGet.class, "getSubId4");
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/subResourceMethodSimpleGet/1/5", "text/xhtml");
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/subResourceMethodSimpleGet/1/5",
+                                                        "text/xhtml");
         response = invoke(request);
         assertMethodFound(response, ResourceWithSubResourceMethodSimpleGet.class, "getSubIdAny");
     }
@@ -617,51 +780,97 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
         MockHttpServletRequest request = null;
         MockHttpServletResponse response = null;
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/subResourceLocatorSimpleGet/1/2", "text/plain");
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/subResourceLocatorSimpleGet/1/2",
+                                                        "text/plain");
         response = invoke(request);
         assertMethodFound(response, ResourceWithSubResourceMethodSimpleGet.class, "getTextPlain");
-        
-        request = MockRequestConstructor.constructMockRequest("GET", "/subResourceLocatorSimpleGet/1/2", "text/html");
+
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/subResourceLocatorSimpleGet/1/2",
+                                                        "text/html");
         response = invoke(request);
         assertMethodFound(response, ResourceWithSubResourceMethodSimpleGet.class, "getTextHtml");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/subResourceLocatorSimpleGet/1/2", "text/html", "text/xhtml", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/subResourceLocatorSimpleGet/1/2",
+                                                        "text/html",
+                                                        "text/xhtml",
+                                                        null);
         response = invoke(request);
         assertMethodFound(response, ResourceWithSubResourceMethodSimpleGet.class, "postTextAny");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/subResourceLocatorSimpleGet/1/2", "text/html", "image/jpeg", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/subResourceLocatorSimpleGet/1/2",
+                                                        "text/html",
+                                                        "image/jpeg",
+                                                        null);
         response = invoke(request);
         assertMethodFound(response, ResourceWithSubResourceMethodSimpleGet.class, "postImageAny");
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/subResourceLocatorSimpleGet/1/2", "application/xml", "image/jpeg", null);
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/subResourceLocatorSimpleGet/1/2",
+                                                        "application/xml",
+                                                        "image/jpeg",
+                                                        null);
         response = invoke(request);
         assertMethodFound(response, ResourceWithSubResourceMethodSimpleGet.class, "getAny");
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/subResourceLocatorSimpleGet/1", "application/atom+xml");
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/subResourceLocatorSimpleGet/1",
+                                                        "application/atom+xml");
         response = invoke(request);
         assertMethodFound(response, ResourceSimpleGetProduces.class, "getAtom");
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/subResourceLocatorSimpleGet/1/4/2/4", "text/xhtml");
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/subResourceLocatorSimpleGet/1/4/2/4",
+                                                        "text/xhtml");
         response = invoke(request);
         assertMethodFound(response, ResourceWithSubResourceMethodSimpleGet.class, "getSubId4");
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/subResourceLocatorSimpleGet/1/5/5", "text/xhtml");
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/subResourceLocatorSimpleGet/1/5/5",
+                                                        "text/xhtml");
         response = invoke(request);
         assertMethodFound(response, ResourceWithSubResourceMethodSimpleGet.class, "getSubIdAny");
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/subResourceLocatorSimpleGet/ignore-consumes/2", "text/plain");
+        request =
+            MockRequestConstructor
+                .constructMockRequest("GET",
+                                      "/subResourceLocatorSimpleGet/ignore-consumes/2",
+                                      "text/plain");
         response = invoke(request);
         assertMethodFound(response, ResourceWithSubResourceMethodSimpleGet.class, "getTextPlain");
-        
-        request = MockRequestConstructor.constructMockRequest("GET", "/subResourceLocatorSimpleGet/ignore-produces/2", "text/plain");
+
+        request =
+            MockRequestConstructor
+                .constructMockRequest("GET",
+                                      "/subResourceLocatorSimpleGet/ignore-produces/2",
+                                      "text/plain");
         response = invoke(request);
         assertMethodFound(response, ResourceWithSubResourceMethodSimpleGet.class, "getTextPlain");
-    
-        request = MockRequestConstructor.constructMockRequest("GET", "/subResourceLocatorSimpleGet/sub-resource-with-no-constructor/2", "text/plain");
+
+        request =
+            MockRequestConstructor
+                .constructMockRequest("GET",
+                                      "/subResourceLocatorSimpleGet/sub-resource-with-no-constructor/2",
+                                      "text/plain");
         response = invoke(request);
         assertMethodFound(response, SubResourceNoDefaultConstructor.class, "getAny");
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/subResourceLocatorSimpleGet/bad-locator/2", "text/plain");
+        request =
+            MockRequestConstructor
+                .constructMockRequest("GET",
+                                      "/subResourceLocatorSimpleGet/bad-locator/2",
+                                      "text/plain");
         response = invoke(request);
         assertMethodFound(response, ResourceWithSubResourceMethodSimpleGet.class, "getTextPlain");
 
@@ -675,7 +884,12 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
         response = invoke(request);
         assertMethodFound(response, ResourceMixed.class, "getXml");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/mixed/1", "*/*", "application/xml", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/mixed/1",
+                                                        "*/*",
+                                                        "application/xml",
+                                                        null);
         response = invoke(request);
         assertMethodFound(response, ResourceMixed.class, "postXml");
 
@@ -683,11 +897,21 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
         response = invoke(request);
         assertMethodFound(response, ResourceMixed.class, "getTextPlain");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/mixed/1/2", "text/html", "text/plain", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/mixed/1/2",
+                                                        "text/html",
+                                                        "text/plain",
+                                                        null);
         response = invoke(request);
         assertMethodFound(response, ResourceMixed.class, "postTextAny");
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/mixed/1/2", "text/html", "text/xhtml", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/mixed/1/2",
+                                                        "text/html",
+                                                        "text/xhtml",
+                                                        null);
         response = invoke(request);
         assertMethodFound(response, ResourceMixed.class, "postTextAny");
 
@@ -695,7 +919,8 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
         response = invoke(request);
         assertMethodFound(response, ResourceMixed.class, "getTextPlain");
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/mixed/locate", "application/xml");
+        request =
+            MockRequestConstructor.constructMockRequest("GET", "/mixed/locate", "application/xml");
         response = invoke(request);
         assertMethodFound(response, ResourceMixed.class, "getXml");
     }
@@ -704,43 +929,72 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
         MockHttpServletRequest request = null;
         MockHttpServletResponse response = null;
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/not/exist/path", "application/xml");
+        request =
+            MockRequestConstructor
+                .constructMockRequest("GET", "/not/exist/path", "application/xml");
         response = invoke(request);
         assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/simpleGet/1", "application/xml");
+        request =
+            MockRequestConstructor.constructMockRequest("GET", "/simpleGet/1", "application/xml");
         response = invoke(request);
         assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/subResourceMethodSimpleGet/not-exist/1/2", "text/plain");
+        request =
+            MockRequestConstructor
+                .constructMockRequest("GET",
+                                      "/subResourceMethodSimpleGet/not-exist/1/2",
+                                      "text/plain");
         response = invoke(request);
         assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
 
-        request = MockRequestConstructor.constructMockRequest("DELETE", "/mixed/1", "application/xml");
+        request =
+            MockRequestConstructor.constructMockRequest("DELETE", "/mixed/1", "application/xml");
         response = invoke(request);
         assertEquals(HttpStatus.METHOD_NOT_ALLOWED.getCode(), response.getStatus());
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/mixed/1", "*/*", "application/atom+xml", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/mixed/1",
+                                                        "*/*",
+                                                        "application/atom+xml",
+                                                        null);
         response = invoke(request);
         assertEquals(Response.Status.UNSUPPORTED_MEDIA_TYPE.getStatusCode(), response.getStatus());
 
-        request = MockRequestConstructor.constructMockRequest("POST", "/mixed/1", "image/bmp,image/tiff", "image/gif", null);
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/mixed/1",
+                                                        "image/bmp,image/tiff",
+                                                        "image/gif",
+                                                        null);
         response = invoke(request);
         assertEquals(Response.Status.NOT_ACCEPTABLE.getStatusCode(), response.getStatus());
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/mixed/1/locateNull", "application/xml");
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/mixed/1/locateNull",
+                                                        "application/xml");
         response = invoke(request);
         assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/exceptionThrowing/400", "text/plain");
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/exceptionThrowing/400",
+                                                        "text/plain");
         response = invoke(request);
         assertEquals(400, response.getStatus());
-        
-        request = MockRequestConstructor.constructMockRequest("GET", "/exceptionThrowing/500", "text/plain");
+
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/exceptionThrowing/500",
+                                                        "text/plain");
         response = invoke(request);
         assertEquals(500, response.getStatus());
 
-        request = MockRequestConstructor.constructMockRequest("GET", "/multipleHttpMethods", "text/plain");
+        request =
+            MockRequestConstructor
+                .constructMockRequest("GET", "/multipleHttpMethods", "text/plain");
         response = invoke(request);
         assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
 
@@ -748,10 +1002,12 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
         response = invoke(request);
         assertEquals(HttpStatus.METHOD_NOT_ALLOWED.getCode(), response.getStatus());
     }
-    
+
     // // -- Helpers --
 
-    static void assertMethodFound(MockHttpServletResponse response, Class<?> expectedResource, String expectedMethod) throws UnsupportedEncodingException {
+    static void assertMethodFound(MockHttpServletResponse response,
+                                  Class<?> expectedResource,
+                                  String expectedMethod) throws UnsupportedEncodingException {
         assertEquals(200, response.getStatus());
         String expected = expectedResource.getSimpleName() + "." + expectedMethod;
         assertEquals(expected, response.getContentAsString());

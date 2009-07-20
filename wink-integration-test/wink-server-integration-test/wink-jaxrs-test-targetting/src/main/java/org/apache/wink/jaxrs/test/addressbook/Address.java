@@ -21,7 +21,6 @@ package org.apache.wink.jaxrs.test.addressbook;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
@@ -39,7 +38,12 @@ public class Address {
 
     private String country;
 
-    public Address(String entryName, String zipCode, String streetAddress, String city, String state, String country) {
+    public Address(String entryName,
+                   String zipCode,
+                   String streetAddress,
+                   String city,
+                   String state,
+                   String country) {
         this.entryName = entryName;
         this.zipCode = zipCode;
         this.streetAddress = streetAddress;
@@ -49,7 +53,7 @@ public class Address {
     }
 
     @GET
-    @Produces(value = { "text/xml" })
+    @Produces(value = {"text/xml"})
     public String get() {
         return toString();
     }
@@ -58,7 +62,6 @@ public class Address {
     public void removeAddress(@PathParam(value = "entryName") String entryName) {
         AddressBook.db.removeAddress(entryName);
     }
-
 
     public String getEntryName() {
         return entryName;

@@ -17,38 +17,40 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.client;
 
 /**
- * An exception that indicates that an http error code was returned from the server
+ * An exception that indicates that an http error code was returned from the
+ * server
  */
 public class ClientWebException extends ClientRuntimeException {
     private static final long serialVersionUID = 1912209875993846395L;
-    
-    private ClientRequest request;
-    private ClientResponse response;
-    
+
+    private ClientRequest     request;
+    private ClientResponse    response;
+
     public ClientWebException(ClientRequest request, ClientResponse response) {
         this.request = request;
         this.response = response;
     }
-    
+
     /**
      * Get the {@link ClientRequest} of the invocation
+     * 
      * @return {@link ClientRequest} of the invocation
      */
     public ClientRequest getRequest() {
         return request;
     }
-    
+
     /**
      * Get the {@link ClientResponse} of the invocation
+     * 
      * @return {@link ClientResponse} of the invocation
      */
     public ClientResponse getResponse() {
         return response;
     }
-    
+
 }

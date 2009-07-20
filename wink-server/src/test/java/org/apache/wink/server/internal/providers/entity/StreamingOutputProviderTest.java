@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.providers.entity;
 
@@ -34,16 +33,16 @@ import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 public class StreamingOutputProviderTest extends MockServletInvocationTest {
 
-    private static final String MESSAGE = "this is a test message";
+    private static final String MESSAGE       = "this is a test message";
     private static final byte[] MESSAGE_BYTES = MESSAGE.getBytes();
+
     @Override
     protected Class<?>[] getClasses() {
         return new Class<?>[] {Resource.class};
     }
-    
+
     @Path("resource")
     public static class Resource {
         @GET
@@ -57,7 +56,8 @@ public class StreamingOutputProviderTest extends MockServletInvocationTest {
     }
 
     public void testStreamingOutputProvider() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "/resource", "text/plain");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "/resource", "text/plain");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
         assertEquals(MESSAGE, response.getContentAsString());

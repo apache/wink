@@ -34,7 +34,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.wink.common.model.synd.SyndLink;
 
-
 /**
  * The "atom:link" elementPer RFC4287
  * 
@@ -142,9 +141,10 @@ public class AtomLink extends AtomCommonAttributes {
     @XmlAttribute(required = true)
     @XmlSchemaType(name = "anyURI")
     protected String href;
-    
-    public AtomLink() {}
-    
+
+    public AtomLink() {
+    }
+
     public AtomLink(SyndLink value) {
         super(value);
         if (value == null) {
@@ -157,7 +157,7 @@ public class AtomLink extends AtomCommonAttributes {
         setTitle(value.getTitle());
         setType(value.getType());
     }
-    
+
     public SyndLink toSynd(SyndLink value) {
         if (value == null) {
             return value;
@@ -168,7 +168,7 @@ public class AtomLink extends AtomCommonAttributes {
         value.setLength(getLength());
         value.setRel(getRel());
         value.setTitle(getTitle());
-        value. setType(getType());
+        value.setType(getType());
         return value;
     }
 

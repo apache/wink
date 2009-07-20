@@ -26,9 +26,9 @@ public class Comment {
 
     private Integer id;
 
-    private String message;
+    private String  message;
 
-    private String author;
+    private String  author;
 
     public Integer getId() {
         return id;

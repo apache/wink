@@ -41,8 +41,8 @@ public class UriBuilderImplTest extends TestCase {
         builder.matrixParam("c", "3");
         builder.fragment("fragment");
         URI uri = builder.build();
-        assertEquals("http://localhost:8080/some/path/matrix1;a=1;b=2/matrix2;c=3#fragment",
-            uri.toString());
+        assertEquals("http://localhost:8080/some/path/matrix1;a=1;b=2/matrix2;c=3#fragment", uri
+            .toString());
     }
 
     public void testScheme() {
@@ -246,7 +246,7 @@ public class UriBuilderImplTest extends TestCase {
 
     public void testBuildMethods() {
         UriBuilder builder = new UriBuilderImpl();
-        String[] segments = new String[] { "some", "{v1}", "path{v2}", "{v3}", "a+b{v4}" };
+        String[] segments = new String[] {"some", "{v1}", "path{v2}", "{v3}", "a+b{v4}"};
         builder.host("localhost").port(8080).segment(segments).fragment("{v5}");
 
         // build
@@ -303,11 +303,11 @@ public class UriBuilderImplTest extends TestCase {
 
     public void testFromUri() {
 
-        String[] urisArray = {
-        "ftp://ftp.is.co.za/rfc/rfc1808.txt", "http://www.ietf.org/rfc/rfc2396.txt",
-            "ldap://[2001:db8::7]/c=GB?objectClass?one", "mailto:John.Doe@example.com",
-            "news:comp.infosystems.www.servers.unix", "tel:+1-816-555-1212",
-            "telnet://192.0.2.16:80/", "urn:oasis:names:specification:docbook:dtd:xml:4.1.2" };
+        String[] urisArray =
+            {"ftp://ftp.is.co.za/rfc/rfc1808.txt", "http://www.ietf.org/rfc/rfc2396.txt",
+                "ldap://[2001:db8::7]/c=GB?objectClass?one", "mailto:John.Doe@example.com",
+                "news:comp.infosystems.www.servers.unix", "tel:+1-816-555-1212",
+                "telnet://192.0.2.16:80/", "urn:oasis:names:specification:docbook:dtd:xml:4.1.2"};
 
         for (String uris : urisArray) {
             URI uri = UriBuilder.fromUri(uris).build();

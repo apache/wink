@@ -36,7 +36,6 @@ import javax.ws.rs.ext.Provider;
 
 import org.apache.wink.common.utils.ProviderUtils;
 
-
 @Provider
 @Consumes
 @Produces
@@ -44,29 +43,46 @@ public class ByteArrayProvider implements MessageBodyReader<byte[]>, MessageBody
 
     /******************* Reader *******************************/
 
-    public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public boolean isReadable(Class<?> type,
+                              Type genericType,
+                              Annotation[] annotations,
+                              MediaType mediaType) {
         return type != null && type.equals(byte[].class);
     }
 
-    public byte[] readFrom(Class<byte[]> type, Type genericType, Annotation[] annotations, MediaType mediaType,
-        MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException,
-        WebApplicationException {
+    public byte[] readFrom(Class<byte[]> type,
+                           Type genericType,
+                           Annotation[] annotations,
+                           MediaType mediaType,
+                           MultivaluedMap<String, String> httpHeaders,
+                           InputStream entityStream) throws IOException, WebApplicationException {
         return ProviderUtils.readFromStreamAsBytes(entityStream);
     }
 
     /********************** Writer **************************************/
 
-    public long getSize(byte[] t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public long getSize(byte[] t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
         return t.length;
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
         return type != null && type.equals(byte[].class);
     }
 
-    public void writeTo(byte[] t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
-        MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException,
-        WebApplicationException {
+    public void writeTo(byte[] t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
         entityStream.write(t);
     }
 

@@ -35,7 +35,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>getcontentlanguage</code> Property per the WebDAV specification [RFC 4918]
+ * The <code>getcontentlanguage</code> Property per the WebDAV specification
+ * [RFC 4918]
  * 
  * <pre>
  *    Name:       getcontentlanguage
@@ -60,7 +61,9 @@ public class Getcontentlanguage {
     @XmlMixed
     protected List<String> content;
 
-    public Getcontentlanguage() {}
+    public Getcontentlanguage() {
+    }
+
     public Getcontentlanguage(String value) {
         setValue(value);
     }
@@ -75,8 +78,7 @@ public class Getcontentlanguage {
     /**
      * Sets the value.
      * 
-     * @param value
-     *            the value to set
+     * @param value the value to set
      */
     public void setValue(String value) {
         List<String> content = getContent();

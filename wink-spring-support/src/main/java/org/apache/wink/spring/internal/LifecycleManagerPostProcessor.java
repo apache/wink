@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.spring.internal;
 
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
@@ -30,38 +30,50 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
-
 /**
  * Each time a new bean is created, it's checked if it's Resource, Provider or
- * Dynamic Resource. If this is the case, it's registered in SpringLifecycleManager.
- * This bean applies only during the context loading and doesn't effects the
- * beans created in runtime.
+ * Dynamic Resource. If this is the case, it's registered in
+ * SpringLifecycleManager. This bean applies only during the context loading and
+ * doesn't effects the beans created in runtime.
  */
 public class LifecycleManagerPostProcessor implements BeanPostProcessor, ApplicationContextAware,
     ApplicationListener {
 
-    private ApplicationContext applicationContext;
+    private ApplicationContext        applicationContext;
     private SpringLifecycleManager<?> springOFFactory;
-    private boolean            loadingOfContextCompleted = false;
+    private boolean                   loadingOfContextCompleted = false;
 
     public Object postProcessAfterInitialization(final Object bean, final String beanName)
         throws BeansException {
 
         if (!loadingOfContextCompleted && applicationContext.containsBean(beanName)) {
-            // during the context loading, process providers and resources beans in order to set their scope
+            // during the context loading, process providers and resources beans
+            // in order to set their scope
 
             @SuppressWarnings("unchecked")
-            final Class<Object> cls = (Class<Object>) bean.getClass();
+            final Class<Object> cls = (Class<Object>)bean.getClass();
 
             if (ResourceMetadataCollector.isStaticResource(cls)) {
-                springOFFactory.addResourceOrProvider(bean, beanName, new SpringObjectFactory(
-                    applicationContext, beanName, ResourceMetadataCollector.collectMetadata(cls)));
+                springOFFactory
+                    .addResourceOrProvider(bean,
+                                           beanName,
+                                           new SpringObjectFactory(applicationContext, beanName,
+                                                                   ResourceMetadataCollector
+                                                                       .collectMetadata(cls)));
             } else if (ProviderMetadataCollector.isProvider(cls)) {
-                springOFFactory.addResourceOrProvider(bean, beanName, new SpringObjectFactory(
-                    applicationContext, beanName, ProviderMetadataCollector.collectMetadata(cls)));
+                springOFFactory
+                    .addResourceOrProvider(bean,
+                                           beanName,
+                                           new SpringObjectFactory(applicationContext, beanName,
+                                                                   ProviderMetadataCollector
+                                                                       .collectMetadata(cls)));
             } else if (ResourceMetadataCollector.isDynamicResource(cls)) {
-                springOFFactory.addDynamicResource(bean, beanName, new SpringObjectFactory(
-                    applicationContext, beanName, ResourceMetadataCollector.collectMetadata(cls)));
+                springOFFactory
+                    .addDynamicResource(bean,
+                                        beanName,
+                                        new SpringObjectFactory(applicationContext, beanName,
+                                                                ResourceMetadataCollector
+                                                                    .collectMetadata(cls)));
             }
         }
 

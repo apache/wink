@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.application;
 
@@ -27,23 +26,22 @@ import java.io.InputStream;
 import org.apache.wink.common.internal.application.ApplicationFileLoader;
 import org.apache.wink.server.internal.utils.ServletFileLoader;
 
-
 public class ServletApplicationFileLoader extends ApplicationFileLoader {
-    
+
     private static final String SERVER_CORE_APPLICATION = "META-INF/server/wink-providers";
 
     public ServletApplicationFileLoader() throws FileNotFoundException {
         super();
         loadClasses(ServletFileLoader.loadFileAsStream(SERVER_CORE_APPLICATION));
     }
-    
+
     public ServletApplicationFileLoader(String appConfigFile) throws FileNotFoundException {
         super(appConfigFile);
     }
 
-    public ServletApplicationFileLoader(InputStream appConfigFileStream) throws FileNotFoundException {
+    public ServletApplicationFileLoader(InputStream appConfigFileStream)
+        throws FileNotFoundException {
         super(appConfigFileStream);
     }
-
 
 }

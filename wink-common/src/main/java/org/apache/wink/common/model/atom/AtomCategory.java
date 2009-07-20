@@ -24,7 +24,6 @@
 // Generated on: 2008.05.27 at 11:24:25 AM IDT 
 //
 
-
 package org.apache.wink.common.model.atom;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -33,7 +32,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.wink.common.model.synd.SyndCategory;
-
 
 /**
  * The "atom:category" element Per RFC4287
@@ -74,9 +72,7 @@ import org.apache.wink.common.model.synd.SyndCategory;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "atomCategory")
-public class AtomCategory
-    extends AtomCommonAttributes
-{
+public class AtomCategory extends AtomCommonAttributes {
 
     @XmlAttribute(required = true)
     protected String term;
@@ -84,9 +80,10 @@ public class AtomCategory
     protected String scheme;
     @XmlAttribute
     protected String label;
-    
-    public AtomCategory() {}
-    
+
+    public AtomCategory() {
+    }
+
     public AtomCategory(SyndCategory value) {
         super(value);
         if (value == null) {
@@ -96,7 +93,7 @@ public class AtomCategory
         setScheme(value.getScheme());
         setTerm(value.getTerm());
     }
-    
+
     public SyndCategory toSynd(SyndCategory value) {
         if (value == null) {
             return value;

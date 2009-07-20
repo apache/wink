@@ -19,22 +19,21 @@
  *******************************************************************************/
 package org.apache.wink.client;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
 import junit.framework.TestCase;
 
-public abstract class BaseTest extends TestCase{
+public abstract class BaseTest extends TestCase {
 
-    public static String SERVICE_URL = "http://localhost:{0}/some/service";
-    public static String RECEIVED_MESSAGE = "received message";
-    public static String SENT_MESSAGE = "sent message";
+    public static String  SERVICE_URL      = "http://localhost:{0}/some/service";
+    public static String  RECEIVED_MESSAGE = "received message";
+    public static String  SENT_MESSAGE     = "sent message";
 
     // private static int SERVER_PORT = 3456;
-    public String serviceURL;
-    public MockHttpServer server = null;
-    public int serverPort;
+    public String         serviceURL;
+    public MockHttpServer server           = null;
+    public int            serverPort;
 
     @Override
     protected void setUp() throws Exception {
@@ -48,7 +47,7 @@ public abstract class BaseTest extends TestCase{
             server.stopServer();
         }
     }
-   
+
     private MockHttpServer startMockHttpServer() {
         MockHttpServer server = new MockHttpServer(34567);
         serverPort = server.getServerPort();
@@ -63,6 +62,4 @@ public abstract class BaseTest extends TestCase{
         return map;
     }
 
-
- 
 }

@@ -27,20 +27,20 @@ import javax.ws.rs.PathParam;
 @Path("fruit")
 @Encoded
 public class Fruit {
-	
-	@GET
-	public String getFruitName(@PathParam("p") String suffix) {
-		return Fruit.class.getName()+";"+suffix;
-	}
 
-	@Path("{p}")
-	public Fruit getFruit(@PathParam("p") String fruit) {
-		if("fruit%20suffix".equals(fruit))
-			return this;
-		if("apple%20suffix".equals(fruit))
-			return new Apple();
-		if("orange%20suffix".equals(fruit))
-			return new Orange();
-		return null;
-	}
+    @GET
+    public String getFruitName(@PathParam("p") String suffix) {
+        return Fruit.class.getName() + ";" + suffix;
+    }
+
+    @Path("{p}")
+    public Fruit getFruit(@PathParam("p") String fruit) {
+        if ("fruit%20suffix".equals(fruit))
+            return this;
+        if ("apple%20suffix".equals(fruit))
+            return new Apple();
+        if ("orange%20suffix".equals(fruit))
+            return new Orange();
+        return null;
+    }
 }

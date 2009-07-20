@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server;
 
@@ -35,13 +34,13 @@ import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 public class JAXRSContextTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] { ContextUriInfoResource.class, ContextHttpHeadersResource.class,
-            ContextRequestResource.class, ContextSecurityResource.class, ContextProvidersResource.class };
+        return new Class[] {ContextUriInfoResource.class, ContextHttpHeadersResource.class,
+            ContextRequestResource.class, ContextSecurityResource.class,
+            ContextProvidersResource.class};
     }
 
     @Path("/context/uriInfo")
@@ -96,16 +95,16 @@ public class JAXRSContextTest extends MockServletInvocationTest {
 
     public void testUriInfoContext() throws Exception {
         // TODO test all context fields
-        MockHttpServletResponse resp = invoke(MockRequestConstructor.constructMockRequest("GET",
-            "/context/uriInfo", "*/*"));
+        MockHttpServletResponse resp =
+            invoke(MockRequestConstructor.constructMockRequest("GET", "/context/uriInfo", "*/*"));
         String result = resp.getContentAsString();
         assertEquals("result", "context/uriInfo", result);
     }
 
     public void testHttpHeadersContext() throws Exception {
         // TODO test all context fields
-        MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
-            "/context/httpHeaders", "*/*");
+        MockHttpServletRequest mockRequest =
+            MockRequestConstructor.constructMockRequest("GET", "/context/httpHeaders", "*/*");
         mockRequest.addHeader("Test", "Header Value");
         MockHttpServletResponse resp = invoke(mockRequest);
         String result = resp.getContentAsString();
@@ -114,24 +113,24 @@ public class JAXRSContextTest extends MockServletInvocationTest {
 
     public void testRequestContext() throws Exception {
         // TODO test all context fields
-        MockHttpServletResponse resp = invoke(MockRequestConstructor.constructMockRequest("GET",
-            "/context/request", "*/*"));
+        MockHttpServletResponse resp =
+            invoke(MockRequestConstructor.constructMockRequest("GET", "/context/request", "*/*"));
         String result = resp.getContentAsString();
         assertEquals("result", "GET", result);
     }
 
     public void testSecurityContext() throws Exception {
         // TODO test all context fields
-        MockHttpServletResponse resp = invoke(MockRequestConstructor.constructMockRequest("GET",
-            "/context/security", "*/*"));
+        MockHttpServletResponse resp =
+            invoke(MockRequestConstructor.constructMockRequest("GET", "/context/security", "*/*"));
         String result = resp.getContentAsString();
         assertEquals("result", "true", result);
     }
 
     public void testProvidersContext() throws Exception {
         // TODO test all context fields
-        MockHttpServletResponse resp = invoke(MockRequestConstructor.constructMockRequest("GET",
-            "/context/providers", "*/*"));
+        MockHttpServletResponse resp =
+            invoke(MockRequestConstructor.constructMockRequest("GET", "/context/providers", "*/*"));
         String result = resp.getContentAsString();
         assertEquals("result", "true", result);
     }

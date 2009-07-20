@@ -112,8 +112,14 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
     private Set<String> getVariableNamesList() {
         String constructedPath = constructPathString();
         String constructedQuery = constructQueryString();
-        String uriStr = UriHelper.contructUri(scheme, userInfo, host, port, constructedPath,
-            constructedQuery, fragment);
+        String uriStr =
+            UriHelper.contructUri(scheme,
+                                  userInfo,
+                                  host,
+                                  port,
+                                  constructedPath,
+                                  constructedQuery,
+                                  fragment);
         JaxRsUriTemplateProcessor uriTemplate = new JaxRsUriTemplateProcessor(uriStr);
         return uriTemplate.getVariableNames();
     }
@@ -138,8 +144,9 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         if (scheme == null) {
             return;
         }
-        JaxRsUriTemplateProcessor.expand(scheme, MultivaluedMapImpl.toMultivaluedMapString(values),
-            out);
+        JaxRsUriTemplateProcessor.expand(scheme,
+                                         MultivaluedMapImpl.toMultivaluedMapString(values),
+                                         out);
         out.append(':');
     }
 
@@ -149,15 +156,16 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         }
         out.append("//");
         if (userInfo != null) {
-            String eUserInfo = JaxRsUriTemplateProcessor.expand(userInfo,
-                MultivaluedMapImpl.toMultivaluedMapString(values));
+            String eUserInfo =
+                JaxRsUriTemplateProcessor.expand(userInfo, MultivaluedMapImpl
+                    .toMultivaluedMapString(values));
             eUserInfo = UriEncoder.encodeUserInfo(eUserInfo, true);
             out.append(eUserInfo);
             out.append('@');
         }
         if (host != null) {
-            JaxRsUriTemplateProcessor.expand(host,
-                MultivaluedMapImpl.toMultivaluedMapString(values), out);
+            JaxRsUriTemplateProcessor.expand(host, MultivaluedMapImpl
+                .toMultivaluedMapString(values), out);
         }
         if (port != -1) {
             out.append(':');
@@ -174,15 +182,17 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         for (PathSegment segment : segments) {
             // segment
             String segmentPath = segment.getPath();
-            String eSegmentPath = JaxRsUriTemplateProcessor.expand(segmentPath,
-                MultivaluedMapImpl.toMultivaluedMapString(values));
+            String eSegmentPath =
+                JaxRsUriTemplateProcessor.expand(segmentPath, MultivaluedMapImpl
+                    .toMultivaluedMapString(values));
             eSegmentPath = UriEncoder.encodePathSegment(eSegmentPath, true);
 
-            // we output the path separator if: 
-            // 1. if we already have some uri built and the last character is not the path separator
-            // 2. if the uri is still empty and this is not the first path segment
-            if ((out.length() > 0 && out.charAt(out.length() - 1) != '/')
-                || (out.length() == 0 && !first)) {
+            // we output the path separator if:
+            // 1. if we already have some uri built and the last character is
+            // not the path separator
+            // 2. if the uri is still empty and this is not the first path
+            // segment
+            if ((out.length() > 0 && out.charAt(out.length() - 1) != '/') || (out.length() == 0 && !first)) {
                 out.append('/');
             }
             first = false;
@@ -194,14 +204,16 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
             MultivaluedMap<String, String> matrixParameters = segment.getMatrixParameters();
             for (String matrix : matrixParameters.keySet()) {
                 // matrix parameter
-                String eMatrix = JaxRsUriTemplateProcessor.expand(matrix,
-                    MultivaluedMapImpl.toMultivaluedMapString(values));
+                String eMatrix =
+                    JaxRsUriTemplateProcessor.expand(matrix, MultivaluedMapImpl
+                        .toMultivaluedMapString(values));
                 eMatrix = UriEncoder.encodeMatrix(eMatrix, true);
 
                 // matrix values
                 for (String matrixValue : matrixParameters.get(matrix)) {
-                    String eValue = JaxRsUriTemplateProcessor.expand(matrixValue,
-                        MultivaluedMapImpl.toMultivaluedMapString(values));
+                    String eValue =
+                        JaxRsUriTemplateProcessor.expand(matrixValue, MultivaluedMapImpl
+                            .toMultivaluedMapString(values));
                     eValue = UriEncoder.encodeMatrix(eValue, true);
                     out.append(';');
                     out.append(eMatrix);
@@ -219,14 +231,16 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         char delim = '?';
         for (String queryParam : query.keySet()) {
             // query param name
-            String eQueryParam = JaxRsUriTemplateProcessor.expand(queryParam,
-                MultivaluedMapImpl.toMultivaluedMapString(values));
+            String eQueryParam =
+                JaxRsUriTemplateProcessor.expand(queryParam, MultivaluedMapImpl
+                    .toMultivaluedMapString(values));
             eQueryParam = UriEncoder.encodeQueryParam(eQueryParam, true);
 
             // query param values
             for (String queryValue : query.get(queryParam)) {
-                String eQueryValue = JaxRsUriTemplateProcessor.expand(queryValue,
-                    MultivaluedMapImpl.toMultivaluedMapString(values));
+                String eQueryValue =
+                    JaxRsUriTemplateProcessor.expand(queryValue, MultivaluedMapImpl
+                        .toMultivaluedMapString(values));
                 eQueryValue = UriEncoder.encodeQueryParam(eQueryValue, true);
                 out.append(delim);
                 out.append(eQueryParam);
@@ -244,8 +258,9 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         if (fragment == null) {
             return;
         }
-        String eFragment = JaxRsUriTemplateProcessor.expand(fragment,
-            MultivaluedMapImpl.toMultivaluedMapString(values));
+        String eFragment =
+            JaxRsUriTemplateProcessor.expand(fragment, MultivaluedMapImpl
+                .toMultivaluedMapString(values));
         eFragment = UriEncoder.encodeFragment(eFragment, true);
         out.append('#');
         out.append(eFragment);
@@ -264,7 +279,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
 
     private URI build(boolean escapePercent, Object... values) throws IllegalArgumentException,
         UriBuilderException {
-        
+
         if (schemeSpecificPart != null) {
             try {
                 // uri templates will be automatically encoded
@@ -273,7 +288,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                 throw new IllegalArgumentException("schemeSpecificPart is invalid", e);
             }
         }
-        
+
         Set<String> names = getVariableNamesList();
         if (names.size() > values.length) {
             throw new IllegalArgumentException("missing variable values");
@@ -363,7 +378,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         if (query == null) {
             return;
         }
-        this.query = ((MultivaluedMapImpl<String, String>) query).clone();
+        this.query = ((MultivaluedMapImpl<String, String>)query).clone();
     }
 
     private void segments(List<PathSegment> pathSegments) {
@@ -372,7 +387,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         }
         this.segments = new ArrayList<PathSegment>();
         for (PathSegment segment : pathSegments) {
-            this.segments.add(((PathSegmentImpl) segment).clone());
+            this.segments.add(((PathSegmentImpl)segment).clone());
         }
     }
 
@@ -408,7 +423,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         PathSegmentImpl lastSegment = null;
         int lastSegmentIndex = pathSegments.size() - 1;
         if (lastSegmentIndex >= 0) {
-            lastSegment = (PathSegmentImpl) pathSegments.get(lastSegmentIndex);
+            lastSegment = (PathSegmentImpl)pathSegments.get(lastSegmentIndex);
         } else {
             lastSegment = new PathSegmentImpl("");
             pathSegments.add(lastSegment);
@@ -438,7 +453,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         if (resource == null) {
             throw new IllegalArgumentException("resource is null");
         }
-        Path pathAnnotation = ((Class<?>) resource).getAnnotation(Path.class);
+        Path pathAnnotation = ((Class<?>)resource).getAnnotation(Path.class);
         if (pathAnnotation == null) {
             throw new IllegalArgumentException("resource is not annotated with Path");
         }
@@ -479,7 +494,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                 if (pathAnnotation != null) {
                     if (foundMethod != null) {
                         throw new IllegalArgumentException(
-                            "more than one method with Path annotation exists");
+                                                           "more than one method with Path annotation exists");
                     }
                     foundMethod = m;
                 }
@@ -604,7 +619,8 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         }
 
         if (!ssp.startsWith("/")) {
-            //An opaque URI is an absolute URI whose scheme-specific part does not begin with a slash character ('/'). 
+            // An opaque URI is an absolute URI whose scheme-specific part does
+            // not begin with a slash character ('/').
             // Opaque URIs are not subject to further parsing.
             schemeSpecificPart = ssp;
             return this;

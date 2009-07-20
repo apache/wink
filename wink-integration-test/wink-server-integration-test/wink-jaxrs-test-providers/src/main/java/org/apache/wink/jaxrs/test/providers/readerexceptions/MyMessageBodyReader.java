@@ -47,14 +47,17 @@ public class MyMessageBodyReader implements MessageBodyReader<Object> {
         return arg0.equals(String.class);
     }
 
-    public Object readFrom(Class<Object> arg0, Type arg1, Annotation[] arg2, MediaType arg3,
-        MultivaluedMap<String, String> arg4, InputStream arg5) throws IOException,
-        WebApplicationException {
+    public Object readFrom(Class<Object> arg0,
+                           Type arg1,
+                           Annotation[] arg2,
+                           MediaType arg3,
+                           MultivaluedMap<String, String> arg4,
+                           InputStream arg5) throws IOException, WebApplicationException {
         if (arg3.isCompatible(new MediaType("readfrom", "thrownull"))) {
             throw new NullPointerException();
         } else if (arg3.isCompatible(new MediaType("readfrom", "throwwebapplicationexception"))) {
-            throw new WebApplicationException(Response.status(498).entity("can not read type in readfrom")
-                .build());
+            throw new WebApplicationException(Response.status(498)
+                .entity("can not read type in readfrom").build());
         } else if (arg3.isCompatible(new MediaType("readfrom", "throwioexception"))) {
             throw new IOException();
         } else if (arg3.isCompatible(new MediaType("readfrom", "throwruntime"))) {

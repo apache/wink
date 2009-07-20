@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.runtime;
 
@@ -33,7 +32,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 
 public interface RuntimeContext {
-    
+
     /**
      * Get the {@link Providers} context
      * 
@@ -88,20 +87,26 @@ public interface RuntimeContext {
      * 
      * @return a live map of attributes
      */
-    public Map<String,Object> getAttributes();
+    public Map<String, Object> getAttributes();
 
     /**
-     * Convenience method for setting an attribute whose key that is the fully qualified name of a class
+     * Convenience method for setting an attribute whose key that is the fully
+     * qualified name of a class
+     * 
      * @param <T> attribute type
-     * @param type the class of the key whose fully qualified name is used as the key
+     * @param type the class of the key whose fully qualified name is used as
+     *            the key
      * @param object the object to set
      */
     public <T> void setAttribute(Class<T> type, T object);
 
     /**
-     * Convenience method for getting an attribute whose key that is the fully qualified name of a class
+     * Convenience method for getting an attribute whose key that is the fully
+     * qualified name of a class
+     * 
      * @param <T> attribute type
-     * @param type he class of the key whose fully qualified name is used as the key
+     * @param type he class of the key whose fully qualified name is used as the
+     *            key
      * @return the attribute or null
      */
     public <T> T getAttribute(Class<T> type);

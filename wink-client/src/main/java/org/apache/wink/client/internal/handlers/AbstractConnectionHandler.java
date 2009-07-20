@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.client.internal.handlers;
 
@@ -43,19 +42,22 @@ import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.common.internal.runtime.RuntimeContext;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 
-
 public abstract class AbstractConnectionHandler implements ConnectionHandler {
 
-    protected OutputStream adaptOutputStream(OutputStream os, ClientRequest request,
-            List<OutputStreamAdapter> outputStreamAdapters) throws IOException {
+    protected OutputStream adaptOutputStream(OutputStream os,
+                                             ClientRequest request,
+                                             List<OutputStreamAdapter> outputStreamAdapters)
+        throws IOException {
         for (OutputStreamAdapter adapter : outputStreamAdapters) {
             os = adapter.adapt(os, request);
         }
         return os;
     }
 
-    protected InputStream adaptInputStream(InputStream is, ClientResponse response,
-            List<InputStreamAdapter> inputStreamAdapters) throws IOException {
+    protected InputStream adaptInputStream(InputStream is,
+                                           ClientResponse response,
+                                           List<InputStreamAdapter> inputStreamAdapters)
+        throws IOException {
         for (InputStreamAdapter adapter : inputStreamAdapters) {
             is = adapter.adapt(is, response);
         }
@@ -63,7 +65,8 @@ public abstract class AbstractConnectionHandler implements ConnectionHandler {
     }
 
     @SuppressWarnings("unchecked")
-    protected void writeEntity(ClientRequest request, OutputStream os) throws WebApplicationException, IOException {
+    protected void writeEntity(ClientRequest request, OutputStream os)
+        throws WebApplicationException, IOException {
         Object entity = request.getEntity();
         if (entity == null) {
             return;
@@ -84,13 +87,24 @@ public abstract class AbstractConnectionHandler implements ConnectionHandler {
             }
             String contentType = request.getHeaders().getFirst(HttpHeaders.CONTENT_TYPE);
             MediaType contentMediaType = MediaType.valueOf(contentType);
-            MessageBodyWriter writer = providersRegistry.getMessageBodyWriter(type, genericType, null, contentMediaType,
-                    runtimeContext);
+            MessageBodyWriter writer =
+                providersRegistry.getMessageBodyWriter(type,
+                                                       genericType,
+                                                       null,
+                                                       contentMediaType,
+                                                       runtimeContext);
             if (writer == null) {
-                throw new RuntimeException(String.format("No writer for type %s and media type %s", String
-                        .valueOf(type), contentType));
+                throw new RuntimeException(String.format("No writer for type %s and media type %s",
+                                                         String.valueOf(type),
+                                                         contentType));
             }
-            writer.writeTo(entity, type, genericType, null, contentMediaType, request.getHeaders(), os);
+            writer.writeTo(entity,
+                           type,
+                           genericType,
+                           null,
+                           contentMediaType,
+                           request.getHeaders(),
+                           os);
             os.flush();
             os.close();
         } finally {

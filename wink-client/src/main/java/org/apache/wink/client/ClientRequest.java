@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.client;
 
@@ -25,11 +24,11 @@ import java.net.URI;
 
 import org.apache.wink.client.internal.BaseRequestResponse;
 
-
 /**
- * Represents a request issued by invoking any one of the invocation methods on a {@link Resource}.
- * An instance of a ClientRequest is created at the beginning of an invocation and passed to all the
- * client handlers defined on the client that was used for the invocation.
+ * Represents a request issued by invoking any one of the invocation methods on
+ * a {@link Resource}. An instance of a ClientRequest is created at the
+ * beginning of an invocation and passed to all the client handlers defined on
+ * the client that was used for the invocation.
  */
 public interface ClientRequest extends BaseRequestResponse {
     /**
@@ -42,8 +41,7 @@ public interface ClientRequest extends BaseRequestResponse {
     /**
      * Set the http method
      * 
-     * @param method
-     *            http method to set
+     * @param method http method to set
      */
     void setMethod(String method);
 
@@ -55,9 +53,9 @@ public interface ClientRequest extends BaseRequestResponse {
     Object getEntity();
 
     /**
-     * Set the request entity to send with the request. The entity may be any object that has a
-     * corresponding Provider that can handle it with the content type specified in the Content-Type
-     * header.
+     * Set the request entity to send with the request. The entity may be any
+     * object that has a corresponding Provider that can handle it with the
+     * content type specified in the Content-Type header.
      * 
      * @return the request entity instance
      */
@@ -73,8 +71,7 @@ public interface ClientRequest extends BaseRequestResponse {
     /**
      * Set the uri of the request
      * 
-     * @param uri
-     *            uri to set
+     * @param uri uri to set
      */
     void setURI(URI uri);
 }

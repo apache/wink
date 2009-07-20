@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.client;
 
@@ -41,7 +40,6 @@ import javax.ws.rs.ext.Provider;
 
 import org.apache.wink.common.utils.ProviderUtils;
 
-
 public class ApacheClientTest extends BaseTest {
 
     public static class TestGenerics<T> {
@@ -58,38 +56,57 @@ public class ApacheClientTest extends BaseTest {
             this.t = t;
         }
     }
-    
-    @Provider
-    public static class TestGenericsProvider implements MessageBodyWriter<TestGenerics<String>>, MessageBodyReader<TestGenerics<String>> {
 
-        public long getSize(TestGenerics<String> t, Class<?> type, Type genericType, Annotation[] annotations,
-                MediaType mediaType) {
+    @Provider
+    public static class TestGenericsProvider implements MessageBodyWriter<TestGenerics<String>>,
+        MessageBodyReader<TestGenerics<String>> {
+
+        public long getSize(TestGenerics<String> t,
+                            Class<?> type,
+                            Type genericType,
+                            Annotation[] annotations,
+                            MediaType mediaType) {
             return t.getT().length();
         }
 
-        public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        public boolean isWriteable(Class<?> type,
+                                   Type genericType,
+                                   Annotation[] annotations,
+                                   MediaType mediaType) {
             return isTestGenericsString(type, genericType);
         }
 
         private boolean isTestGenericsString(Class<?> type, Type genericType) {
-            return type.equals(TestGenerics.class) && genericType instanceof ParameterizedType && 
-                ((ParameterizedType)genericType).getActualTypeArguments()[0].equals(String.class);
+            return type.equals(TestGenerics.class) && genericType instanceof ParameterizedType
+                && ((ParameterizedType)genericType).getActualTypeArguments()[0]
+                    .equals(String.class);
         }
 
-        public void writeTo(TestGenerics<String> t, Class<?> type, Type genericType, Annotation[] annotations,
-                MediaType mediaType, MultivaluedMap<String,Object> httpHeaders, OutputStream entityStream)
-                throws IOException, WebApplicationException {
+        public void writeTo(TestGenerics<String> t,
+                            Class<?> type,
+                            Type genericType,
+                            Annotation[] annotations,
+                            MediaType mediaType,
+                            MultivaluedMap<String, Object> httpHeaders,
+                            OutputStream entityStream) throws IOException, WebApplicationException {
             String string = t.getT();
             ProviderUtils.writeToStream(string, entityStream, mediaType);
         }
 
-        public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        public boolean isReadable(Class<?> type,
+                                  Type genericType,
+                                  Annotation[] annotations,
+                                  MediaType mediaType) {
             return isTestGenericsString(type, genericType);
         }
 
-        public TestGenerics<String> readFrom(Class<TestGenerics<String>> type, Type genericType,
-                Annotation[] annotations, MediaType mediaType, MultivaluedMap<String,String> httpHeaders,
-                InputStream entityStream) throws IOException, WebApplicationException {
+        public TestGenerics<String> readFrom(Class<TestGenerics<String>> type,
+                                             Type genericType,
+                                             Annotation[] annotations,
+                                             MediaType mediaType,
+                                             MultivaluedMap<String, String> httpHeaders,
+                                             InputStream entityStream) throws IOException,
+            WebApplicationException {
             TestGenerics<String> tg = new TestGenerics<String>();
             String string = ProviderUtils.readFromStreamAsString(entityStream, mediaType);
             tg.setT(string);
@@ -120,9 +137,10 @@ public class ApacheClientTest extends BaseTest {
         // do get with response
         ClientResponse clientResponse = resource.get();
         assertEquals(RECEIVED_MESSAGE, clientResponse.getEntity(String.class));
-        
+
         // test generic entity
-        TestGenerics<String> tg = resource.get(new EntityType<TestGenerics<String>>(){});
+        TestGenerics<String> tg = resource.get(new EntityType<TestGenerics<String>>() {
+        });
         assertEquals(RECEIVED_MESSAGE, tg.getT());
     }
 
@@ -130,7 +148,8 @@ public class ApacheClientTest extends BaseTest {
         server.setMockResponseCode(200);
         RestClient client = getRestClient();
         Resource resource = client.resource(serviceURL + "/testResourcePut");
-        String response = resource.contentType("text/plain").accept("text/plain").put(String.class, SENT_MESSAGE);
+        String response =
+            resource.contentType("text/plain").accept("text/plain").put(String.class, SENT_MESSAGE);
         assertEquals(RECEIVED_MESSAGE, response);
         assertEquals(SENT_MESSAGE, server.getRequestContentAsString());
 
@@ -139,7 +158,8 @@ public class ApacheClientTest extends BaseTest {
         assertEquals(RECEIVED_MESSAGE, clientResponse.getEntity(String.class));
 
         // test generic entity
-        TestGenerics<String> tg = resource.put(new EntityType<TestGenerics<String>>(){}, SENT_MESSAGE);
+        TestGenerics<String> tg = resource.put(new EntityType<TestGenerics<String>>() {
+        }, SENT_MESSAGE);
         assertEquals(RECEIVED_MESSAGE, tg.getT());
 
     }
@@ -148,7 +168,9 @@ public class ApacheClientTest extends BaseTest {
         server.setMockResponseCode(200);
         RestClient client = getRestClient();
         Resource resource = client.resource(serviceURL + "/testResourcePost");
-        String response = resource.contentType("text/plain").accept("text/plain").post(String.class, SENT_MESSAGE);
+        String response =
+            resource.contentType("text/plain").accept("text/plain")
+                .post(String.class, SENT_MESSAGE);
         assertEquals(RECEIVED_MESSAGE, response);
         assertEquals(SENT_MESSAGE, server.getRequestContentAsString());
 
@@ -157,9 +179,10 @@ public class ApacheClientTest extends BaseTest {
         assertEquals(RECEIVED_MESSAGE, clientResponse.getEntity(String.class));
 
         // test generic entity
-        TestGenerics<String> tg = resource.post(new EntityType<TestGenerics<String>>(){}, SENT_MESSAGE);
+        TestGenerics<String> tg = resource.post(new EntityType<TestGenerics<String>>() {
+        }, SENT_MESSAGE);
         assertEquals(RECEIVED_MESSAGE, tg.getT());
-}
+    }
 
     public void testResourceDelete() {
         server.setMockResponseCode(200);
@@ -173,7 +196,8 @@ public class ApacheClientTest extends BaseTest {
         assertEquals(RECEIVED_MESSAGE, clientResponse.getEntity(String.class));
 
         // test generic entity
-        TestGenerics<String> tg = resource.delete(new EntityType<TestGenerics<String>>(){});
+        TestGenerics<String> tg = resource.delete(new EntityType<TestGenerics<String>>() {
+        });
         assertEquals(RECEIVED_MESSAGE, tg.getT());
     }
 
@@ -184,9 +208,10 @@ public class ApacheClientTest extends BaseTest {
 
         String string = resource.invoke("GET", String.class, null);
         assertEquals(RECEIVED_MESSAGE, string);
-        
+
         // test generic entity
-        TestGenerics<String> tg = resource.invoke("GET", new EntityType<TestGenerics<String>>(){}, null);
+        TestGenerics<String> tg = resource.invoke("GET", new EntityType<TestGenerics<String>>() {
+        }, null);
         assertEquals(RECEIVED_MESSAGE, tg.getT());
     }
 
@@ -224,8 +249,9 @@ public class ApacheClientTest extends BaseTest {
         server.startServer();
         try {
             RestClient client = getRestClient();
-            Resource resource = client.resource(MessageFormat.format(SERVICE_URL, String
-                    .valueOf(server.getServerPort())));
+            Resource resource =
+                client.resource(MessageFormat.format(SERVICE_URL, String.valueOf(server
+                    .getServerPort())));
             String response = resource.accept(MediaType.TEXT_PLAIN_TYPE).get(String.class);
             assertEquals("REQUEST", response);
 

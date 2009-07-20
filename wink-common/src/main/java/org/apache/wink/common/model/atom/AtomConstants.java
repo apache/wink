@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common.model.atom;
 
 /**
@@ -25,26 +25,27 @@ package org.apache.wink.common.model.atom;
  */
 public final class AtomConstants {
 
-    private AtomConstants() { }    // no instances
+    private AtomConstants() {
+    } // no instances
 
-    public static final String ATOM_REL_SELF = "self";
-    public static final String ATOM_REL_ALT = "alternate";
-    public static final String ATOM_REL_RELATED = "related";
-    public static final String ATOM_REL_ENCLOSURE = "enclosure";
-    public static final String ATOM_REL_VIA = "via";
-    public static final String ATOM_REL_EDIT = "edit";
+    public static final String ATOM_REL_SELF       = "self";
+    public static final String ATOM_REL_ALT        = "alternate";
+    public static final String ATOM_REL_RELATED    = "related";
+    public static final String ATOM_REL_ENCLOSURE  = "enclosure";
+    public static final String ATOM_REL_VIA        = "via";
+    public static final String ATOM_REL_EDIT       = "edit";
     public static final String ATOM_REL_EDIT_MEDIA = "edit-media";
-    public static final String ATOM_REL_SEARCH = "search";
-    public static final String ATOM_REL_HISTORY = "history";
+    public static final String ATOM_REL_SEARCH     = "search";
+    public static final String ATOM_REL_HISTORY    = "history";
 
     // type
-    public static final String ATOM_XHTML = "xhtml";
-    public static final String ATOM_HTML = "html";
-    public static final String ATOM_TXT = "text";
+    public static final String ATOM_XHTML          = "xhtml";
+    public static final String ATOM_HTML           = "html";
+    public static final String ATOM_TXT            = "text";
 
     // paging
-    public static final String ATOM_REL_FIRST = "first";
-    public static final String ATOM_REL_LAST = "last";
-    public static final String ATOM_REL_PREVIOUS = "previous";
-    public static final String ATOM_REL_NEXT = "next";
+    public static final String ATOM_REL_FIRST      = "first";
+    public static final String ATOM_REL_LAST       = "last";
+    public static final String ATOM_REL_PREVIOUS   = "previous";
+    public static final String ATOM_REL_NEXT       = "next";
 }

@@ -30,7 +30,6 @@ import org.apache.wink.test.mock.SpringMockServletInvocationTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 public class RegistrarTest extends SpringMockServletInvocationTest {
 
     private static final int    RESOURCE_INVOCATIONS = 100;
@@ -76,8 +75,10 @@ public class RegistrarTest extends SpringMockServletInvocationTest {
 
     public void testRegistration() throws Exception {
 
-        MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET", "/"
-            + RESOURCE_PATH, MediaType.WILDCARD_TYPE);
+        MockHttpServletRequest mockRequest =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/" + RESOURCE_PATH,
+                                                        MediaType.WILDCARD_TYPE);
         for (int i = 0; i < RESOURCE_INVOCATIONS; ++i) {
             MockHttpServletResponse mockResponse = invoke(mockRequest);
             assertEquals(HttpServletResponse.SC_OK, mockResponse.getStatus());
@@ -85,8 +86,8 @@ public class RegistrarTest extends SpringMockServletInvocationTest {
         }
         assertEquals(RESOURCE_INVOCATIONS, resource_counter);
 
-        mockRequest = MockRequestConstructor.constructMockRequest("GET", "/" + PATH,
-            MediaType.WILDCARD_TYPE);
+        mockRequest =
+            MockRequestConstructor.constructMockRequest("GET", "/" + PATH, MediaType.WILDCARD_TYPE);
         MockHttpServletResponse mockResponse = invoke(mockRequest);
         assertEquals(HttpServletResponse.SC_OK, mockResponse.getStatus());
         assertEquals(HELLO_2, mockResponse.getContentAsString());

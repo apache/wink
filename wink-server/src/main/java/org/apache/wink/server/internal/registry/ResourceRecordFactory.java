@@ -39,31 +39,32 @@ import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor;
 
 public class ResourceRecordFactory {
 
-    private static final Logger logger = LoggerFactory.getLogger(ResourceRecordFactory.class);
+    private static final Logger                 logger =
+                                                           LoggerFactory
+                                                               .getLogger(ResourceRecordFactory.class);
 
-    private final LifecycleManagersRegistry lifecycleManagerRegistry;
-    private final Map<Class<?>,ResourceRecord> cacheByClass;
+    private final LifecycleManagersRegistry     lifecycleManagerRegistry;
+    private final Map<Class<?>, ResourceRecord> cacheByClass;
 
-    private Lock readersLock;
-    private Lock writersLock;
+    private Lock                                readersLock;
+    private Lock                                writersLock;
 
     public ResourceRecordFactory(LifecycleManagersRegistry lifecycleManagerRegistry) {
         if (lifecycleManagerRegistry == null) {
             throw new NullPointerException("lifecycleManagerRegistry");
         }
         this.lifecycleManagerRegistry = lifecycleManagerRegistry;
-        this.cacheByClass = new HashMap<Class<?>,ResourceRecord>();
+        this.cacheByClass = new HashMap<Class<?>, ResourceRecord>();
         ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
         readersLock = readWriteLock.readLock();
         writersLock = readWriteLock.writeLock();
     }
 
     /**
-     * Gets a resource record from a cache of records for the specified resource class. If there is
-     * no record in the cache, then a new record is created
+     * Gets a resource record from a cache of records for the specified resource
+     * class. If there is no record in the cache, then a new record is created
      * 
-     * @param cls
-     *            the resource class to get the record for
+     * @param cls the resource class to get the record for
      * @return ResourceRecord for the resource class
      */
     public ResourceRecord getResourceRecord(Class<?> cls) {
@@ -86,11 +87,11 @@ public class ResourceRecordFactory {
     }
 
     /**
-     * Gets a root resource record from a cache of records for the specified resource instance. This
-     * is a shortcut for {@code getResourceRecord(instance, true)}
+     * Gets a root resource record from a cache of records for the specified
+     * resource instance. This is a shortcut for {@code
+     * getResourceRecord(instance, true)}
      * 
-     * @param instance
-     *            the resource instance to get the record for
+     * @param instance the resource instance to get the record for
      * @return ResourceRecord for the resource instance
      */
     public ResourceRecord getResourceRecord(Object instance) {
@@ -98,14 +99,13 @@ public class ResourceRecordFactory {
     }
 
     /**
-     * Gets a resource record from a cache of records for the specified resource instance. If there
-     * is no record in the cache, or if the instance is a dynamic resource, then a new record is
-     * created
+     * Gets a resource record from a cache of records for the specified resource
+     * instance. If there is no record in the cache, or if the instance is a
+     * dynamic resource, then a new record is created
      * 
-     * @param instance
-     *            the resource instance to get the record for
-     * @param isRootResource
-     *            specifies whether the instance is a root resource (true) or sub-resource (false)
+     * @param instance the resource instance to get the record for
+     * @param isRootResource specifies whether the instance is a root resource
+     *            (true) or sub-resource (false)
      * @return ResourceRecord for the resource instance
      */
     public ResourceRecord getResourceRecord(Object instance, boolean isRootResource) {
@@ -137,12 +137,13 @@ public class ResourceRecordFactory {
                         readersLock.lock();
                     }
                 } else {
-                    throw new IllegalArgumentException(String.format(
-                            "Root resource %s instance is an invalid resource", instance.getClass()
-                                    .getCanonicalName()));
+                    throw new IllegalArgumentException(String
+                        .format("Root resource %s instance is an invalid resource", instance
+                            .getClass().getCanonicalName()));
                 }
             } else {
-                // if this is a sub-resource, don't use cache, and don't use the life-cycle manager
+                // if this is a sub-resource, don't use cache, and don't use the
+                // life-cycle manager
                 ObjectFactory<?> of = new InstanceObjectFactory<Object>(instance);
                 readersLock.unlock();
                 try {
@@ -158,7 +159,7 @@ public class ResourceRecordFactory {
     }
 
     private ResourceRecord createStaticResourceRecord(Class<? extends Object> cls,
-            ObjectFactory<?> of) {
+                                                      ObjectFactory<?> of) {
         ClassMetadata metadata = createMetadata(cls);
         UriTemplateProcessor processor = createUriTemplateProcessor(metadata);
         ResourceRecord record = new ResourceRecord(metadata, of, processor);
@@ -227,20 +228,21 @@ public class ResourceRecordFactory {
     }
 
     /**
-     * Fixed the metadata to reflect the information stored on the instance of the dynamic resource.
+     * Fixed the metadata to reflect the information stored on the instance of
+     * the dynamic resource.
      * 
      * @param classMetadata
      * @param instance
      * @return
      */
     private ClassMetadata fixInstanceMetadata(ClassMetadata classMetadata,
-            DynamicResource dynamicResource) {
+                                              DynamicResource dynamicResource) {
         String[] dispatchedPath = dynamicResource.getDispatchedPath();
         if (dispatchedPath != null) {
             classMetadata.addPaths(Arrays.asList(dispatchedPath));
             if (logger.isDebugEnabled()) {
                 logger.debug("Adding dispatched path from instance: {}", Arrays
-                        .toString(dispatchedPath));
+                    .toString(dispatchedPath));
             }
         }
 

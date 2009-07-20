@@ -39,7 +39,8 @@ public class CookieHeaderDelegateTest {
         }
 
         Cookie expectedNewCookie = new Cookie("MyCookie", "MyCookieValue", ".", "mydomain", 1);
-        String cookieToParse = "$Version=1; MyCookie=MyCookieValue; $Path=.; $Domain=mydomain, SecondCookie=Value";
+        String cookieToParse =
+            "$Version=1; MyCookie=MyCookieValue; $Path=.; $Domain=mydomain, SecondCookie=Value";
 
         // Test Parse Cookie
         Cookie parsedNewCookie = cookieHeaderDelegate.fromString(cookieToParse);
@@ -49,7 +50,6 @@ public class CookieHeaderDelegateTest {
         cookieToParse = "$Version=1; MyCookie=\"\"; $Path=.; $Domain=mydomain;";
         parsedNewCookie = cookieHeaderDelegate.fromString(cookieToParse);
         assertEquals(expectedNewCookie, parsedNewCookie);
-
 
         // Negative test - Invalid cookie
         try {
@@ -85,12 +85,13 @@ public class CookieHeaderDelegateTest {
             fail("Cookie header delegate is not regestered in RuntimeDelegateImpl");
         }
 
-        String expectedCookieSerialization = "$Version=1;MyCookie=MyCookieValue;$Domain=mydomain;$Path=.";
+        String expectedCookieSerialization =
+            "$Version=1;MyCookie=MyCookieValue;$Domain=mydomain;$Path=.";
         Cookie cookieToSerialize = new Cookie("MyCookie", "MyCookieValue", ".", "mydomain", 1);
         String serializedCookie = cookieToSerialize.toString();
 
         assertEquals(expectedCookieSerialization, serializedCookie);
-        
+
         // Negative test - Cookie in null
         try {
             cookieHeaderDelegate.toString(null);
@@ -98,7 +99,6 @@ public class CookieHeaderDelegateTest {
         } catch (IllegalArgumentException e) {
             // success
         }
-        
 
     }
 

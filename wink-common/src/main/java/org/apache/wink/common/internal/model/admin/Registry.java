@@ -24,7 +24,6 @@
 // Generated on: 2009.05.24 at 01:47:17 PM IDT 
 //
 
-
 package org.apache.wink.common.internal.model.admin;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -32,30 +31,27 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for anonymous complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * Java class for anonymous complex type.
+ * <p>
+ * The following schema fragment specifies the expected content contained within
+ * this class.
  * 
  * <pre>
- * &lt;complexType>
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element ref="{http://apache.org/wink/common/internal/model/admin}resources" minOccurs="0"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base=&quot;{http://www.w3.org/2001/XMLSchema}anyType&quot;&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element ref=&quot;{http://apache.org/wink/common/internal/model/admin}resources&quot; minOccurs=&quot;0&quot;/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "resources"
-})
+@XmlType(name = "", propOrder = {"resources"})
 @XmlRootElement(name = "registry")
 public class Registry {
 
@@ -64,10 +60,7 @@ public class Registry {
     /**
      * Gets the value of the resources property.
      * 
-     * @return
-     *     possible object is
-     *     {@link Resources }
-     *     
+     * @return possible object is {@link Resources }
      */
     public Resources getResources() {
         return resources;
@@ -76,10 +69,7 @@ public class Registry {
     /**
      * Sets the value of the resources property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link Resources }
-     *     
+     * @param value allowed object is {@link Resources }
      */
     public void setResources(Resources value) {
         this.resources = value;

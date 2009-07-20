@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.example.jaxb.context;
 
@@ -28,13 +27,12 @@ import javax.xml.bind.JAXBException;
 
 import org.apache.wink.example.jaxb.Address;
 
-
 /**
  * Context provider for providing the JAXBContext for the Address JAXB object
  */
 @Provider
 public class AddressContextResolver implements ContextResolver<JAXBContext> {
-    
+
     private static JAXBContext context;
     static {
         try {
@@ -43,6 +41,7 @@ public class AddressContextResolver implements ContextResolver<JAXBContext> {
             throw new RuntimeException(e);
         }
     }
+
     public JAXBContext getContext(Class<?> type) {
         if (Address.class.equals(type)) {
             return context;

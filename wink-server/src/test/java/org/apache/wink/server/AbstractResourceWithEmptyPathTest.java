@@ -41,10 +41,10 @@ public class AbstractResourceWithEmptyPathTest extends MockServletInvocationTest
         @Override
         public Set<Object> getInstances() {
             AbstractTestCollectionResource emptyPath = new AbstractTestCollectionResource();
-            emptyPath.setDispatchedPath(new String[] { "/a" });
+            emptyPath.setDispatchedPath(new String[] {"/a"});
 
             AbstractTestCollectionResource2 emptyParent = new AbstractTestCollectionResource2();
-            emptyParent.setDispatchedPath(new String[] { "/emptyParent" });
+            emptyParent.setDispatchedPath(new String[] {"/emptyParent"});
             emptyParent.setParents(new Object[0]);
             Set<Object> set = new HashSet<Object>();
             set.add(emptyPath);
@@ -65,7 +65,7 @@ public class AbstractResourceWithEmptyPathTest extends MockServletInvocationTest
     public static class AbstractTestCollectionResource extends AbstractDynamicResource {
 
         @GET
-        @Produces( { MediaType.APPLICATION_ATOM_XML })
+        @Produces( {MediaType.APPLICATION_ATOM_XML})
         public String getServiceCollection() {
             return EXPECTED_SERVICE_COLLECTION_1;
         }
@@ -74,23 +74,27 @@ public class AbstractResourceWithEmptyPathTest extends MockServletInvocationTest
     public static class AbstractTestCollectionResource2 extends AbstractDynamicResource {
 
         @GET
-        @Produces( { MediaType.APPLICATION_ATOM_XML })
+        @Produces( {MediaType.APPLICATION_ATOM_XML})
         public String getServiceCollection() {
             return EXPECTED_SERVICE_COLLECTION_2;
         }
     }
 
     public void testBeanWithEmptyPath() throws Exception {
-        MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
-            "/a", MediaType.APPLICATION_ATOM_XML_TYPE);
+        MockHttpServletRequest mockRequest =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/a",
+                                                        MediaType.APPLICATION_ATOM_XML_TYPE);
         MockHttpServletResponse response = invoke(mockRequest);
         String responseContent = response.getContentAsString();
         assertEquals(EXPECTED_SERVICE_COLLECTION_1, responseContent);
     }
 
     public void testBeanWithEmptyParent() throws Exception {
-        MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
-            "/emptyParent", MediaType.APPLICATION_ATOM_XML_TYPE);
+        MockHttpServletRequest mockRequest =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/emptyParent",
+                                                        MediaType.APPLICATION_ATOM_XML_TYPE);
         MockHttpServletResponse response = invoke(mockRequest);
         String responseContent = response.getContentAsString();
         assertEquals(EXPECTED_SERVICE_COLLECTION_2, responseContent);

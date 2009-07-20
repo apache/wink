@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.helloworld;
 
 import java.io.FileNotFoundException;
@@ -32,9 +32,8 @@ import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 /**
- * Test of response from HelloWorld Resource. 
+ * Test of response from HelloWorld Resource.
  */
 public class HelloWorldTest extends MockServletInvocationTest {
 
@@ -48,11 +47,11 @@ public class HelloWorldTest extends MockServletInvocationTest {
             throw new RuntimeException(e);
         }
     }
-    
+
     public void testHelloWorld() throws Exception {
         // prepare a mock request and an empty mock response
-        MockHttpServletRequest request = constructMockRequest("GET", "/world",
-            MediaTypeUtils.ATOM_ENTRY);
+        MockHttpServletRequest request =
+            constructMockRequest("GET", "/world", MediaTypeUtils.ATOM_ENTRY);
         MockHttpServletResponse response = invoke(request);
 
         // check resulting mock response
@@ -64,11 +63,13 @@ public class HelloWorldTest extends MockServletInvocationTest {
 
     // test helper
     private MockHttpServletRequest constructMockRequest(String method,
-        String requestURI, String acceptHeader) {
+                                                        String requestURI,
+                                                        String acceptHeader) {
         MockHttpServletRequest mockRequest = new MockHttpServletRequest() {
 
             public String getPathTranslated() {
-                return null; // prevent Spring to resolve the file on the filesystem which fails
+                return null; // prevent Spring to resolve the file on the
+                             // filesystem which fails
             }
 
         };

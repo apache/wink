@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common.internal.providers.entity.app;
 
 import java.io.IOException;
@@ -41,49 +41,56 @@ import org.apache.wink.common.model.app.AppCategories;
 import org.apache.wink.common.model.app.AppYesNo;
 import org.apache.wink.common.model.atom.AtomCategory;
 
-
 /**
  * Representation of Atom Category Document. Category Document is a document
- * that describes the categories allowed in a Collection.
- * This provider is used when collection resource exposes its categories 
- * by implementing CollectionCategories interface 
+ * that describes the categories allowed in a Collection. This provider is used
+ * when collection resource exposes its categories by implementing
+ * CollectionCategories interface
  */
 @Provider
 @Produces(MediaTypeUtils.ATOM_CATEGORIES_DOCUMENT)
 public class CategoriesProvider implements MessageBodyWriter<Categories> {
-    
+
     @Context
-    Providers providers;
-    
+    Providers                        providers;
+
     // AppCategories serializer
     MessageBodyWriter<AppCategories> appCatProvider;
 
-    public long getSize(Categories t, Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType) {
+    public long getSize(Categories t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
         return -1;
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType) {
-        
-        if(type != Categories.class){
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
+
+        if (type != Categories.class) {
             return false;
         }
 
         appCatProvider = providers.getMessageBodyWriter(AppCategories.class, null, null, mediaType);
-        
-        if(appCatProvider == null || type != Categories.class){
+
+        if (appCatProvider == null || type != Categories.class) {
             return false;
         }
-        
+
         return true;
-        
-        
+
     }
 
-    public void writeTo(Categories categories, Class<?> type, Type genericType,
-        Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
-        OutputStream entityStream) throws IOException, WebApplicationException {
+    public void writeTo(Categories categories,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
         AppCategories catDoc = buildAppCatDoc(categories);
         appCatProvider.writeTo(catDoc, null, null, null, mediaType, httpHeaders, entityStream);
     }

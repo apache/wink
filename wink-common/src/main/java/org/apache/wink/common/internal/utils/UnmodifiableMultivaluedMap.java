@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.utils;
 
@@ -28,12 +27,13 @@ import java.util.Set;
 
 import javax.ws.rs.core.MultivaluedMap;
 
-public class UnmodifiableMultivaluedMap<K,V> implements MultivaluedMap<K,V>{
+public class UnmodifiableMultivaluedMap<K, V> implements MultivaluedMap<K, V> {
 
-    private static final long serialVersionUID = 4124255761741548657L;
-    
-    private MultivaluedMap<K,V> map;
-    public UnmodifiableMultivaluedMap(MultivaluedMap<K,V> map) {
+    private static final long    serialVersionUID = 4124255761741548657L;
+
+    private MultivaluedMap<K, V> map;
+
+    public UnmodifiableMultivaluedMap(MultivaluedMap<K, V> map) {
         this.map = map;
     }
 
@@ -45,7 +45,7 @@ public class UnmodifiableMultivaluedMap<K,V> implements MultivaluedMap<K,V>{
         return map.containsValue(value);
     }
 
-    public Set<java.util.Map.Entry<K,List<V>>> entrySet() {
+    public Set<java.util.Map.Entry<K, List<V>>> entrySet() {
         return map.entrySet();
     }
 
@@ -97,7 +97,7 @@ public class UnmodifiableMultivaluedMap<K,V> implements MultivaluedMap<K,V>{
         throw new UnsupportedOperationException();
     }
 
-    public void putAll(Map<? extends K,? extends List<V>> m) {
+    public void putAll(Map<? extends K, ? extends List<V>> m) {
         throw new UnsupportedOperationException();
     }
 

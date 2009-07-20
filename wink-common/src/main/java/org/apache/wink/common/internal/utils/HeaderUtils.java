@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.utils;
 
@@ -28,14 +27,12 @@ import javax.ws.rs.HttpMethod;
 
 import org.apache.wink.common.http.HttpMethodEx;
 
-
 public class HeaderUtils {
 
     public static Locale languageToLocale(String language) {
         String[] languageSplit = language.split("-", 3);
-        return new Locale(languageSplit[0].trim(),
-                          languageSplit.length > 1 ? languageSplit[1].trim() : "",
-                          languageSplit.length > 2 ? languageSplit[2].trim() : "");
+        return new Locale(languageSplit[0].trim(), languageSplit.length > 1 ? languageSplit[1]
+            .trim() : "", languageSplit.length > 2 ? languageSplit[2].trim() : "");
     }
 
     public static String localeToLanguage(Locale locale) {
@@ -56,22 +53,22 @@ public class HeaderUtils {
 
     public static String buildOptionsHeader(Set<String> httpMethods) {
         // if the method is GET -> add also HEAD
-           if (httpMethods.contains(HttpMethod.GET)) {
-               httpMethods.add(HttpMethod.HEAD);
-           }
-           // add OPTIONS method
-           httpMethods.add(HttpMethodEx.OPTIONS);
+        if (httpMethods.contains(HttpMethod.GET)) {
+            httpMethods.add(HttpMethod.HEAD);
+        }
+        // add OPTIONS method
+        httpMethods.add(HttpMethodEx.OPTIONS);
 
-           // build 'Allow' header for the response
-           StringBuilder builder = new StringBuilder(30);
-           String delimit = "";
-           for (String httpMethod : httpMethods) {
+        // build 'Allow' header for the response
+        StringBuilder builder = new StringBuilder(30);
+        String delimit = "";
+        for (String httpMethod : httpMethods) {
 
-               builder.append(delimit);
-               builder.append(httpMethod);
-               delimit = ", ";
-           }
-           return builder.toString();
-       }
+            builder.append(delimit);
+            builder.append(httpMethod);
+            delimit = ", ";
+        }
+        return builder.toString();
+    }
 
 }

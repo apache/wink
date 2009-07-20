@@ -48,94 +48,123 @@ public class HistoryTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] { DefectsResource.class };
+        return new Class[] {DefectsResource.class};
     }
 
     @Override
     protected String getPropertiesFile() {
-        return TestUtils.packageToPath(getClass().getPackage().getName())
-            + "\\history.properties";
+        return TestUtils.packageToPath(getClass().getPackage().getName()) + "\\history.properties";
     }
 
     public void testAll() throws Exception {
 
         // check the collection
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-            "/defects", MediaType.APPLICATION_ATOM_XML_TYPE);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/defects",
+                                                        MediaType.APPLICATION_ATOM_XML_TYPE);
         MockHttpServletResponse response = invoke(request);
         assertEquals("status", 200, response.getStatus());
         String diff = diffFeed("initial_atom.xml", response.getContentAsString());
         assertNull(diff);
 
         // get specific defect
-        request = MockRequestConstructor.constructMockRequest("GET", "/defects/1",
-            MediaType.APPLICATION_ATOM_XML_TYPE);
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/defects/1",
+                                                        MediaType.APPLICATION_ATOM_XML_TYPE);
         response = invoke(request);
         assertEquals("status", 200, response.getStatus());
-        diff = TestUtils.diffIgnoreUpdateWithAttributeQualifier(
-            "initial_defect1_atom.xml", response.getContentAsString().getBytes(), getClass());
+        diff =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier("initial_defect1_atom.xml", response
+                .getContentAsString().getBytes(), getClass());
         assertNull(diff);
 
         // get revision of specific defect
-        request = MockRequestConstructor.constructMockRequest("GET", "/defects/1;rev=1",
-            MediaType.APPLICATION_ATOM_XML_TYPE);
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/defects/1;rev=1",
+                                                        MediaType.APPLICATION_ATOM_XML_TYPE);
         response = invoke(request);
         assertEquals("status", 200, response.getStatus());
-        diff = TestUtils.diffIgnoreUpdateWithAttributeQualifier(
-            "defect1_1_atom.xml", response.getContentAsString().getBytes(), getClass());
+        diff =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier("defect1_1_atom.xml", response
+                .getContentAsString().getBytes(), getClass());
         assertNull(diff);
 
         // get history of specific defect
-        request = MockRequestConstructor.constructMockRequest("GET", "/defects/1/history",
-            MediaType.APPLICATION_ATOM_XML_TYPE);
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/defects/1/history",
+                                                        MediaType.APPLICATION_ATOM_XML_TYPE);
         response = invoke(request);
         assertEquals("status", 200, response.getStatus());
         diff = diffFeed("defect1_history_atom.xml", response.getContentAsString());
         assertNull(diff);
 
         // try to delete the specific revision, it should fail
-        request = MockRequestConstructor.constructMockRequest("DELETE", "/defects/1;rev=1",
-            MediaType.APPLICATION_ATOM_XML_TYPE);
+        request =
+            MockRequestConstructor.constructMockRequest("DELETE",
+                                                        "/defects/1;rev=1",
+                                                        MediaType.APPLICATION_ATOM_XML_TYPE);
         response = invoke(request);
         assertEquals("status", HttpServletResponse.SC_METHOD_NOT_ALLOWED, response.getStatus());
 
         // try to delete defect, the response should be equal to initial
-        request = MockRequestConstructor.constructMockRequest("DELETE", "/defects/1",
-            MediaType.APPLICATION_ATOM_XML_TYPE);
+        request =
+            MockRequestConstructor.constructMockRequest("DELETE",
+                                                        "/defects/1",
+                                                        MediaType.APPLICATION_ATOM_XML_TYPE);
         response = invoke(request);
         assertEquals("status", 200, response.getStatus());
-        diff = TestUtils.diffIgnoreUpdateWithAttributeQualifier(
-            "initial_defect1_atom.xml", response.getContentAsString().getBytes(), getClass());
+        diff =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier("initial_defect1_atom.xml", response
+                .getContentAsString().getBytes(), getClass());
         assertNull(diff);
 
         // try to get the defect again, should return 404
-        request = MockRequestConstructor.constructMockRequest("GET", "/defects/1",
-            MediaType.APPLICATION_ATOM_XML_TYPE);
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/defects/1",
+                                                        MediaType.APPLICATION_ATOM_XML_TYPE);
         response = invoke(request);
         assertEquals("status", 404, response.getStatus());
 
         // try to update the defect, should return 404
-        request = MockRequestConstructor.constructMockRequest("PUT", "/defects/1",
-            MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_ATOM_XML,
-            TestUtils.getResourceOfSamePackageAsBytes("defect1_1_atom.xml",
-                getClass()));
+        request =
+            MockRequestConstructor
+                .constructMockRequest("PUT",
+                                      "/defects/1",
+                                      MediaType.APPLICATION_ATOM_XML,
+                                      MediaType.APPLICATION_ATOM_XML,
+                                      TestUtils
+                                          .getResourceOfSamePackageAsBytes("defect1_1_atom.xml",
+                                                                           getClass()));
         response = invoke(request);
         assertEquals("status", 404, response.getStatus());
 
         // get revision of specific defect after delete
         // the result should not have an edit link
-        request = MockRequestConstructor.constructMockRequest("GET", "/defects/1;rev=1",
-            MediaType.APPLICATION_ATOM_XML_TYPE);
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/defects/1;rev=1",
+                                                        MediaType.APPLICATION_ATOM_XML_TYPE);
         response = invoke(request);
         assertEquals("status", 200, response.getStatus());
-        diff = TestUtils.diffIgnoreUpdateWithAttributeQualifier(
-            "defect1_1_afterdelete_atom.xml", response.getContentAsString().getBytes(), getClass());
+        diff =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier("defect1_1_afterdelete_atom.xml",
+                                                             response.getContentAsString()
+                                                                 .getBytes(),
+                                                             getClass());
         assertNull(diff);
 
         // get a history of the specific defect after delete
-        // the result should not have edit links and should contain a new "deleted" revision
-        request = MockRequestConstructor.constructMockRequest("GET", "/defects/1/history",
-            MediaType.APPLICATION_ATOM_XML_TYPE);
+        // the result should not have edit links and should contain a new
+        // "deleted" revision
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/defects/1/history",
+                                                        MediaType.APPLICATION_ATOM_XML_TYPE);
         response = invoke(request);
         assertEquals("status", 200, response.getStatus());
         diff = diffFeed("defect1_history_afterdelete_atom.xml", response.getContentAsString());
@@ -143,39 +172,58 @@ public class HistoryTest extends MockServletInvocationTest {
 
         // undelete
         // should return created
-        request = MockRequestConstructor.constructMockRequest("POST", "/defects",
-            MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_ATOM_XML,
-            TestUtils.getResourceOfSamePackageAsBytes("defect1_1_atom.xml",
-                getClass()));
+        request =
+            MockRequestConstructor
+                .constructMockRequest("POST",
+                                      "/defects",
+                                      MediaType.APPLICATION_ATOM_XML,
+                                      MediaType.APPLICATION_ATOM_XML,
+                                      TestUtils
+                                          .getResourceOfSamePackageAsBytes("defect1_1_atom.xml",
+                                                                           getClass()));
         response = invoke(request);
         assertEquals("status", 201, response.getStatus());
-        diff = TestUtils.diffIgnoreUpdateWithAttributeQualifier(
-            "defect1_4_atom.xml", response.getContentAsString().getBytes(), getClass());
+        diff =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier("defect1_4_atom.xml", response
+                .getContentAsString().getBytes(), getClass());
         assertNull(diff);
 
         // undelete
         // should fail, since the defect was already undeleted
-        request = MockRequestConstructor.constructMockRequest("POST", "/defects",
-            MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_ATOM_XML,
-            TestUtils.getResourceOfSamePackageAsBytes("defect1_1_atom.xml",
-                getClass()));
+        request =
+            MockRequestConstructor
+                .constructMockRequest("POST",
+                                      "/defects",
+                                      MediaType.APPLICATION_ATOM_XML,
+                                      MediaType.APPLICATION_ATOM_XML,
+                                      TestUtils
+                                          .getResourceOfSamePackageAsBytes("defect1_1_atom.xml",
+                                                                           getClass()));
         response = invoke(request);
         assertEquals("status", 409, response.getStatus());
 
         // update undeleted defect
-        request = MockRequestConstructor.constructMockRequest("PUT", "/defects/1",
-            MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_ATOM_XML,
-            TestUtils.getResourceOfSamePackageAsBytes("defect1_1_atom.xml",
-                getClass()));
+        request =
+            MockRequestConstructor
+                .constructMockRequest("PUT",
+                                      "/defects/1",
+                                      MediaType.APPLICATION_ATOM_XML,
+                                      MediaType.APPLICATION_ATOM_XML,
+                                      TestUtils
+                                          .getResourceOfSamePackageAsBytes("defect1_1_atom.xml",
+                                                                           getClass()));
         response = invoke(request);
         assertEquals("status", 200, response.getStatus());
-        diff = TestUtils.diffIgnoreUpdateWithAttributeQualifier(
-            "defect1_5_atom.xml", response.getContentAsString().getBytes(), getClass());
+        diff =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier("defect1_5_atom.xml", response
+                .getContentAsString().getBytes(), getClass());
         assertNull(diff);
 
-        //last final time check the history
-        request = MockRequestConstructor.constructMockRequest("GET", "/defects/1/history",
-            MediaType.APPLICATION_ATOM_XML_TYPE);
+        // last final time check the history
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/defects/1/history",
+                                                        MediaType.APPLICATION_ATOM_XML_TYPE);
         response = invoke(request);
         assertEquals("status", 200, response.getStatus());
         diff = diffFeed("defect1_history_final_atom.xml", response.getContentAsString());
@@ -183,8 +231,7 @@ public class HistoryTest extends MockServletInvocationTest {
     }
 
     private String diffFeed(String expectedFileName, String actual) throws Exception {
-        InputStream expected = TestUtils.getResourceOfSamePackage(
-            expectedFileName, getClass());
+        InputStream expected = TestUtils.getResourceOfSamePackage(expectedFileName, getClass());
 
         // sort feeds
         AtomFeed expectedFeed = AtomFeed.unmarshal(new InputStreamReader(expected));
@@ -195,20 +242,18 @@ public class HistoryTest extends MockServletInvocationTest {
         ByteArrayOutputStream actualOS = new ByteArrayOutputStream();
         ByteArrayOutputStream expectedOS = new ByteArrayOutputStream();
         AtomFeed.marshal(expectedFeed, expectedOS);
-        AtomFeed.marshal(actualFeed,  actualOS);
+        AtomFeed.marshal(actualFeed, actualOS);
 
         Document expectedXml = TestUtils.getXML(expectedOS.toByteArray());
         Document actualXml = TestUtils.getXML(actualOS.toByteArray());
 
-        DiffIgnoreUpdateWithAttributeQualifier diff = new DiffIgnoreUpdateWithAttributeQualifier(
-            expectedXml, actualXml);
+        DiffIgnoreUpdateWithAttributeQualifier diff =
+            new DiffIgnoreUpdateWithAttributeQualifier(expectedXml, actualXml);
         if (diff.similar()) {
             return null;
         }
-        System.err.println("Expected:\r\n"
-            + TestUtils.printPrettyXML(expectedXml));
-        System.err.println("Actual:\r\n"
-            + TestUtils.printPrettyXML(actualXml));
+        System.err.println("Expected:\r\n" + TestUtils.printPrettyXML(expectedXml));
+        System.err.println("Actual:\r\n" + TestUtils.printPrettyXML(actualXml));
         return diff.toString();
     }
 

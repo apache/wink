@@ -46,29 +46,37 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.utils.ProviderUtils;
 
-
-
 @Provider
-@Consumes( { MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.WILDCARD })
-@Produces( { MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.WILDCARD })
-public class JAXBElementXmlProvider extends AbstractJAXBProvider implements MessageBodyReader<JAXBElement<?>>, MessageBodyWriter<JAXBElement<?>> {
+@Consumes( {MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.WILDCARD})
+@Produces( {MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.WILDCARD})
+public class JAXBElementXmlProvider extends AbstractJAXBProvider implements
+    MessageBodyReader<JAXBElement<?>>, MessageBodyWriter<JAXBElement<?>> {
 
     private static final Logger logger = LoggerFactory.getLogger(JAXBElementXmlProvider.class);
 
-    public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public boolean isReadable(Class<?> type,
+                              Type genericType,
+                              Annotation[] annotations,
+                              MediaType mediaType) {
         return isJAXBElement(type, genericType) && isSupportedMediaType(mediaType);
     }
 
-    public JAXBElement<?> readFrom(Class<JAXBElement<?>> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders,
-            InputStream entityStream) throws IOException, WebApplicationException {
-        ParameterizedType parameterizedType = (ParameterizedType) genericType;
-        Class<?> classToFill = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+    public JAXBElement<?> readFrom(Class<JAXBElement<?>> type,
+                                   Type genericType,
+                                   Annotation[] annotations,
+                                   MediaType mediaType,
+                                   MultivaluedMap<String, String> httpHeaders,
+                                   InputStream entityStream) throws IOException,
+        WebApplicationException {
+        ParameterizedType parameterizedType = (ParameterizedType)genericType;
+        Class<?> classToFill = (Class<?>)parameterizedType.getActualTypeArguments()[0];
         JAXBElement<?> unmarshaledResource = null;
         Unmarshaller unmarshaller = null;
 
         try {
             unmarshaller = getUnmarshaller(classToFill, mediaType);
-            unmarshaledResource = unmarshaller.unmarshal(new StreamSource(entityStream), classToFill);
+            unmarshaledResource =
+                unmarshaller.unmarshal(new StreamSource(entityStream), classToFill);
         } catch (JAXBException e) {
             logger.error("Failed to unmarshal {}", type.getName());
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
@@ -76,19 +84,32 @@ public class JAXBElementXmlProvider extends AbstractJAXBProvider implements Mess
         return unmarshaledResource;
     }
 
-    public long getSize(JAXBElement<?> t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public long getSize(JAXBElement<?> t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
         return -1;
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
         return isJAXBElement(type, genericType) && isSupportedMediaType(mediaType);
     }
 
-    public void writeTo(JAXBElement<?> t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
-            OutputStream entityStream) throws IOException, WebApplicationException {
+    public void writeTo(JAXBElement<?> t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
         try {
             Marshaller marshaller = getMarshaller(t.getDeclaredType(), mediaType);
-            OutputStreamWriter writer = new OutputStreamWriter(entityStream, ProviderUtils.getCharset(mediaType));
+            OutputStreamWriter writer =
+                new OutputStreamWriter(entityStream, ProviderUtils.getCharset(mediaType));
             marshaller.marshal(t, writer);
             writer.flush();
         } catch (JAXBException e) {

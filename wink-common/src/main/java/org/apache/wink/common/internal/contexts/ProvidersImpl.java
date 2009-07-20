@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common.internal.contexts;
 
 import java.lang.annotation.Annotation;
@@ -33,14 +33,13 @@ import javax.ws.rs.ext.Providers;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.common.internal.runtime.RuntimeContext;
 
-
 /**
  *
  */
 public class ProvidersImpl implements Providers {
 
     private final ProvidersRegistry providersRegistry;
-    private final RuntimeContext runtimeContext;
+    private final RuntimeContext    runtimeContext;
 
     public ProvidersImpl(ProvidersRegistry providersRegistry, RuntimeContext runtimeContext) {
         this.providersRegistry = providersRegistry;
@@ -55,14 +54,26 @@ public class ProvidersImpl implements Providers {
         return providersRegistry.getExceptionMapper(type, runtimeContext);
     }
 
-    public <T> MessageBodyReader<T> getMessageBodyReader(Class<T> type, Type genericType, Annotation[] annotations,
-            MediaType mediaType) {
-        return providersRegistry.getMessageBodyReader(type, genericType, annotations, mediaType, runtimeContext);
+    public <T> MessageBodyReader<T> getMessageBodyReader(Class<T> type,
+                                                         Type genericType,
+                                                         Annotation[] annotations,
+                                                         MediaType mediaType) {
+        return providersRegistry.getMessageBodyReader(type,
+                                                      genericType,
+                                                      annotations,
+                                                      mediaType,
+                                                      runtimeContext);
     }
 
-    public <T> MessageBodyWriter<T> getMessageBodyWriter(Class<T> type, Type genericType, Annotation[] annotations,
-            MediaType mediaType) {
-        return providersRegistry.getMessageBodyWriter(type, genericType, annotations, mediaType, runtimeContext);
+    public <T> MessageBodyWriter<T> getMessageBodyWriter(Class<T> type,
+                                                         Type genericType,
+                                                         Annotation[] annotations,
+                                                         MediaType mediaType) {
+        return providersRegistry.getMessageBodyWriter(type,
+                                                      genericType,
+                                                      annotations,
+                                                      mediaType,
+                                                      runtimeContext);
     }
 
 }

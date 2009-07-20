@@ -26,19 +26,19 @@ import java.util.Set;
 
 import org.apache.wink.common.RestConstants;
 
-
 public class JAXBNamespacePrefixMapper {
 
-    private String defaultNameSpace;
-    private Map<String,String> namespace2PrefixMap;
-    private Set<String> omittedNamespaces;
+    private String              defaultNameSpace;
+    private Map<String, String> namespace2PrefixMap;
+    private Set<String>         omittedNamespaces;
 
     public JAXBNamespacePrefixMapper() {
         omittedNamespaces = new HashSet<String>();
-        namespace2PrefixMap = new HashMap<String,String>();
+        namespace2PrefixMap = new HashMap<String, String>();
         namespace2PrefixMap.put(RestConstants.NAMESPACE_ATOM, RestConstants.ATOM_PREFIX);
         namespace2PrefixMap.put(RestConstants.NAMESPACE_APP, RestConstants.APP_PREFIX);
-        namespace2PrefixMap.put(RestConstants.NAMESPACE_OPENSEARCH, RestConstants.OPENSEARCH_PREFIX);
+        namespace2PrefixMap
+            .put(RestConstants.NAMESPACE_OPENSEARCH, RestConstants.OPENSEARCH_PREFIX);
         namespace2PrefixMap.put(RestConstants.NAMESPACE_XHTML, RestConstants.XHTML_PREFIX);
     }
 
@@ -47,12 +47,14 @@ public class JAXBNamespacePrefixMapper {
     }
 
     /**
-     * construct a namespace-to-prefix mapper with the specified default namespace,
-     * and with the given additional namespace-to-prefix mappings 
+     * construct a namespace-to-prefix mapper with the specified default
+     * namespace, and with the given additional namespace-to-prefix mappings
+     * 
      * @param defaultNameSpace the default namespace which has no prefix
      * @param additionalNamespaces additional mappings
      */
-    public JAXBNamespacePrefixMapper(String defaultNameSpace, Map<String,String> additionalNamespaces) {
+    public JAXBNamespacePrefixMapper(String defaultNameSpace,
+                                     Map<String, String> additionalNamespaces) {
         this();
         this.defaultNameSpace = defaultNameSpace;
         if (additionalNamespaces != null) {
@@ -67,7 +69,7 @@ public class JAXBNamespacePrefixMapper {
     public void setDefaultNameSpace(String defaultNameSpace) {
         this.defaultNameSpace = defaultNameSpace;
     }
-    
+
     public void omitNamespace(String namespaceUri) {
         omittedNamespaces.add(namespaceUri);
     }
@@ -75,10 +77,11 @@ public class JAXBNamespacePrefixMapper {
     public boolean isNamespaceOmitted(String namespaceUri) {
         return omittedNamespaces.contains(namespaceUri);
     }
-    
+
     public String getPreferredPrefix(String namespaceUri, String suggestion, boolean requirePrefix) {
 
-        // If defaultNameSpace equals to input namespaceUri, then return empty string,
+        // If defaultNameSpace equals to input namespaceUri, then return empty
+        // string,
         // meaning - don't generate any namespace prefix
         if (defaultNameSpace != null && namespaceUri.equals(defaultNameSpace)) {
             return "";

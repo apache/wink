@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.qadefect.resources;
 
 import java.net.URI;
@@ -48,7 +48,6 @@ import org.apache.wink.example.qadefect.providers.TestBeanProvider;
 import org.apache.wink.example.qadefect.store.DataStore;
 import org.apache.wink.server.utils.LinkBuilders;
 
-
 public class TestsResource extends AbstractDynamicResource {
 
     public static final String URL_TO_REDIRECT   = "/applicationJSPs/testCollection.jsp";
@@ -61,8 +60,8 @@ public class TestsResource extends AbstractDynamicResource {
     private UriInfo            uriInfo;
 
     @Context
-    private LinkBuilders      linkBuilders;
-    
+    private LinkBuilders       linkBuilders;
+
     @Context
     private HttpServletRequest httpServletRequest;
 
@@ -76,7 +75,7 @@ public class TestsResource extends AbstractDynamicResource {
      * @return
      */
     @GET
-    @Produces( { MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON })
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
     public Response getTestsCollection(@PathParam(DefectsResource.DEFECT_PARAM) String defectId) {
 
         // create data object (populated with store data)
@@ -122,12 +121,16 @@ public class TestsResource extends AbstractDynamicResource {
 
             if (defectId != null) {
                 // these are tests assigned to a defect
-                linkBuilders.createSystemLinksBuilder().pathParam(DefectsResource.DEFECT_PARAM, defectId).build(syndEntry.getLinks());   
+                linkBuilders.createSystemLinksBuilder().pathParam(DefectsResource.DEFECT_PARAM,
+                                                                  defectId).build(syndEntry
+                    .getLinks());
             } else {
                 // the whole tests collection
                 String tesId = syndEntry.getId().substring(syndEntry.getId().lastIndexOf(':') + 1);
-                linkBuilders.createSystemLinksBuilder().subResource(TEST_URL).pathParam(TEST_PARAM, tesId).build(syndEntry.getLinks());   
-             }
+                linkBuilders.createSystemLinksBuilder().subResource(TEST_URL).pathParam(TEST_PARAM,
+                                                                                        tesId)
+                    .build(syndEntry.getLinks());
+            }
         }
 
         // generate self and alternative representation links in collection
@@ -144,8 +147,9 @@ public class TestsResource extends AbstractDynamicResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Response redirectToApplication(@Context HttpServletRequest request,
-        @PathParam(DefectsResource.DEFECT_PARAM) String defectId) {
-        return Response.status(Status.SEE_OTHER).location(getHtmlLocation(request, defectId)).build();
+                                          @PathParam(DefectsResource.DEFECT_PARAM) String defectId) {
+        return Response.status(Status.SEE_OTHER).location(getHtmlLocation(request, defectId))
+            .build();
 
     }
 
@@ -157,8 +161,8 @@ public class TestsResource extends AbstractDynamicResource {
      */
     @Path(TEST_URL)
     @GET
-    @Produces( { MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON,
-        MediaType.APPLICATION_XML, MediaType.TEXT_HTML })
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON,
+        MediaType.APPLICATION_XML, MediaType.TEXT_HTML})
     public TestBean getDocument(@PathParam(TEST_PARAM) String testId) {
 
         // create data object (populated with store data)
@@ -175,7 +179,6 @@ public class TestsResource extends AbstractDynamicResource {
      * Build the URL to redirect.
      * 
      * @param defectId
-     * 
      * @return URL to redirect
      */
     private URI getHtmlLocation(HttpServletRequest request, String defectId) {

@@ -17,23 +17,22 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.utils;
 
 import javax.ws.rs.core.MediaType;
 
 /**
- * A builder for generating a single link to a resource. The link is created absolute or relative to
- * the base uri according to the configuration or request settings.
+ * A builder for generating a single link to a resource. The link is created
+ * absolute or relative to the base uri according to the configuration or
+ * request settings.
  */
 public interface SingleLinkBuilder extends BaseLinksBuilder<SingleLinkBuilder> {
 
     /**
      * Set the type attribute of the link
      * 
-     * @param type
-     *            media type attribute of the link to generate
+     * @param type media type attribute of the link to generate
      * @return this links builder
      */
     public SingleLinkBuilder type(MediaType type);
@@ -41,8 +40,7 @@ public interface SingleLinkBuilder extends BaseLinksBuilder<SingleLinkBuilder> {
     /**
      * Set the rel attribute of the link
      * 
-     * @param rel
-     *            the rel attribute of the link
+     * @param rel the rel attribute of the link
      * @return this links builder
      */
     public SingleLinkBuilder rel(String rel);

@@ -243,13 +243,16 @@ public class UriInfoImplTest extends MockServletInvocationTest {
             MockRequestConstructor.constructMockRequest("GET", "/foo", "text/plain");
         invoke(servletRequest);
 
-        servletRequest = MockRequestConstructor.constructMockRequest("GET", "/foo/bar", "text/plain");
+        servletRequest =
+            MockRequestConstructor.constructMockRequest("GET", "/foo/bar", "text/plain");
         invoke(servletRequest);
 
-        servletRequest = MockRequestConstructor.constructMockRequest("GET", "/foo/bar1", "text/plain");
+        servletRequest =
+            MockRequestConstructor.constructMockRequest("GET", "/foo/bar1", "text/plain");
         invoke(servletRequest);
 
-        servletRequest = MockRequestConstructor.constructMockRequest("GET", "/foo/bar/level3", "text/plain");
+        servletRequest =
+            MockRequestConstructor.constructMockRequest("GET", "/foo/bar/level3", "text/plain");
         invoke(servletRequest);
 
     }
@@ -269,16 +272,19 @@ public class UriInfoImplTest extends MockServletInvocationTest {
             MockRequestConstructor.constructMockRequest("GET", "/foo/../foo", "text/plain");
         invoke(servletRequest);
 
-        servletRequest = MockRequestConstructor.constructMockRequest("GET", "/foo/../foo/bar", "text/plain");
-        invoke(servletRequest);
-
-        servletRequest = MockRequestConstructor.constructMockRequest("GET", "/foo/bar1/../bar1", "text/plain");
+        servletRequest =
+            MockRequestConstructor.constructMockRequest("GET", "/foo/../foo/bar", "text/plain");
         invoke(servletRequest);
 
         servletRequest =
-            MockRequestConstructor.constructMockRequest("GET",
-                                                        "/foo/../foo/bar/../bar/level3/../level3/nonsense/..",
-                                                        "text/plain");
+            MockRequestConstructor.constructMockRequest("GET", "/foo/bar1/../bar1", "text/plain");
+        invoke(servletRequest);
+
+        servletRequest =
+            MockRequestConstructor
+                .constructMockRequest("GET",
+                                      "/foo/../foo/bar/../bar/level3/../level3/nonsense/..",
+                                      "text/plain");
         invoke(servletRequest);
     }
 

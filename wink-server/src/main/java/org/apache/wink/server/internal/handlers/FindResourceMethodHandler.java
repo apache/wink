@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.handlers;
 
@@ -43,8 +42,6 @@ import org.apache.wink.server.internal.registry.ResourceRegistry;
 import org.apache.wink.server.internal.registry.SubResourceInstance;
 import org.apache.wink.server.internal.registry.SubResourceMethodRecord;
 import org.apache.wink.server.internal.registry.SubResourceRecord;
-
-
 
 public class FindResourceMethodHandler implements RequestHandler {
 
@@ -76,17 +73,20 @@ public class FindResourceMethodHandler implements RequestHandler {
         List<SubResourceInstance> searchableSubResources = getSearchableSubResources(subResources);
 
         // save the current data in case we need to role back the information if
-        // the search fails and we will need to continue to the next sub-resource
+        // the search fails and we will need to continue to the next
+        // sub-resource
         // (for continued search mode only)
         AccumulatedData originalData = result.getData();
-        
+
         // iterate through all sub-resources until a match is found.
-        // JAX-RS compliance requires to look only at the first sub-resource - this will be the case
-        // unless the search policy is specifically set to "continued search"        
+        // JAX-RS compliance requires to look only at the first sub-resource -
+        // this will be the case
+        // unless the search policy is specifically set to "continued search"
         for (SubResourceInstance subResourceInstance : searchableSubResources) {
             SubResourceRecord subResourceRecord = subResourceInstance.getRecord();
 
-            // set a clone of the accumulated data before continuing to the next sub-resource
+            // set a clone of the accumulated data before continuing to the next
+            // sub-resource
             result.setData(originalData.clone());
 
             // handle the sub-resource
@@ -106,16 +106,19 @@ public class FindResourceMethodHandler implements RequestHandler {
     }
 
     private void handleResourceMethod(MessageContext context, HandlersChain chain) throws Throwable {
-        // if the resource is an exact match to the uri, then this is the handling resource,
+        // if the resource is an exact match to the uri, then this is the
+        // handling resource,
         // and we need to find the dispatch method.
-        // if no method is found then a RequestMatchingException exception is thrown
+        // if no method is found then a RequestMatchingException exception is
+        // thrown
         ResourceRegistry registry = context.getAttribute(ResourceRegistry.class);
         SearchResult result = context.getAttribute(SearchResult.class);
         ResourceInstance resource = result.getResource();
 
         MethodRecord method = null;
         try {
-            // if no method is found then a RequestMatchingException exception is thrown
+            // if no method is found then a RequestMatchingException exception
+            // is thrown
             method = registry.findMethod(resource, context);
         } catch (WebApplicationException e) {
             // couldn't find a method
@@ -129,7 +132,9 @@ public class FindResourceMethodHandler implements RequestHandler {
     }
 
     private void handleSubResourceMethod(SubResourceInstance subResourceInstance,
-            List<SubResourceInstance> subResources, MessageContext context, HandlersChain chain) throws Throwable {
+                                         List<SubResourceInstance> subResources,
+                                         MessageContext context,
+                                         HandlersChain chain) throws Throwable {
         ResourceRegistry registry = context.getAttribute(ResourceRegistry.class);
         SearchResult result = context.getAttribute(SearchResult.class);
         ResourceInstance resource = result.getResource();
@@ -139,39 +144,43 @@ public class FindResourceMethodHandler implements RequestHandler {
         // dispatch to one of the sub-resource methods.
         SubResourceInstance method = null;
         try {
-            // if no method is found then a RequestMatchingException exception is thrown
+            // if no method is found then a RequestMatchingException exception
+            // is thrown
             method = registry.findSubResourceMethod(pattern, subResources, resource, context);
         } catch (WebApplicationException e) {
             // couldn't find a method
             result.setError(e);
             return;
         }
-        
+
         saveFoundMethod(result, matcher, method, context);
-        
+
         // continue the chain to invoke the method
         chain.doChain(context);
     }
 
     private void handleSubResourceLocator(SubResourceInstance subResourceInstance,
-            List<SubResourceInstance> subResources, MessageContext context, HandlersChain chain) throws Throwable {
+                                          List<SubResourceInstance> subResources,
+                                          MessageContext context,
+                                          HandlersChain chain) throws Throwable {
         ResourceRegistry registry = context.getAttribute(ResourceRegistry.class);
         SearchResult result = context.getAttribute(SearchResult.class);
         UriTemplateMatcher matcher = subResourceInstance.getMatcher();
 
-//        // dispatch to the sub-resource locator.
-//        result.setFound(true);
-//        result.setMethod(subResourceInstance);
-//        // save the matched template variables for UriInfo
-//        matcher.storeVariables(result.getData().getMatchedVariables(), false);
-//        // save the matched uri for UriInfo
-//        result.getData().addMatchedUri(matcher.getHead(false));
+        // // dispatch to the sub-resource locator.
+        // result.setFound(true);
+        // result.setMethod(subResourceInstance);
+        // // save the matched template variables for UriInfo
+        // matcher.storeVariables(result.getData().getMatchedVariables(),
+        // false);
+        // // save the matched uri for UriInfo
+        // result.getData().addMatchedUri(matcher.getHead(false));
         saveFoundMethod(result, matcher, subResourceInstance, context);
 
         // continue the chain to invoke the locator
         chain.doChain(context);
 
-        // the object returned from the locator is a sub-resource so we must 
+        // the object returned from the locator is a sub-resource so we must
         // continue the search in it
         Object subResource = context.getResponseEntity();
         if (subResource == null) {
@@ -189,10 +198,12 @@ public class FindResourceMethodHandler implements RequestHandler {
     }
 
     private List<SubResourceInstance> getSearchableSubResources(List<SubResourceInstance> subResources) {
-        // JAX-RS specification requires that if the first matching sub-resource is a method,
+        // JAX-RS specification requires that if the first matching sub-resource
+        // is a method,
         // then we must dispatch to one of the sub-resource methods, otherwise
         // we should invoke the sub-resource locator.
-        // but the continued search behavior is to continue searching in all matching
+        // but the continued search behavior is to continue searching in all
+        // matching
         // sub-resources
         List<SubResourceInstance> searchableSubResources = new LinkedList<SubResourceInstance>();
         if (!isContinuedSearchPolicy) {
@@ -204,38 +215,50 @@ public class FindResourceMethodHandler implements RequestHandler {
         }
         return searchableSubResources;
     }
-    
-    private void saveFoundMethod(SearchResult result, UriTemplateMatcher matcher,
-            SubResourceInstance method, MessageContext context) {
-        
+
+    private void saveFoundMethod(SearchResult result,
+                                 UriTemplateMatcher matcher,
+                                 SubResourceInstance method,
+                                 MessageContext context) {
+
         result.setFound(true);
         result.setMethod(method);
-        
+
         // save the matched template variables for UriInfo
         matcher.storeVariables(result.getData().getMatchedVariables(), false);
-        
+
         // save the path segments of the matched path variables.
-        // the matched "head" is added to the "matched uri's" list to reflect the
-        // most recent match. the difference in the number of segments between the uri of the 
-        // previous match and the uri of the current match reflects the number of segments that
-        // the head of the current match contains. 
-        // this is done in this way (instead of just converting the "head" into path segments) 
-        // because we want to save the path segments with the matrix parameters, and the "head" matched
-        // part was matched without the matrix parameters, but the "matched uri's" list saves the 
+        // the matched "head" is added to the "matched uri's" list to reflect
+        // the
+        // most recent match. the difference in the number of segments between
+        // the uri of the
+        // previous match and the uri of the current match reflects the number
+        // of segments that
+        // the head of the current match contains.
+        // this is done in this way (instead of just converting the "head" into
+        // path segments)
+        // because we want to save the path segments with the matrix parameters,
+        // and the "head" matched
+        // part was matched without the matrix parameters, but the
+        // "matched uri's" list saves the
         // path segments with the matrix parameters.
-        
-        // 1. get the number of segments that were matched up until the current match. this will be used as
-        //    the offset into the full path segments list
+
+        // 1. get the number of segments that were matched up until the current
+        // match. this will be used as
+        // the offset into the full path segments list
         int offset = result.getData().getMatchedURIs().getFirst().size();
-        // 2. save the current matched uri - it is added as the first uri in the list of matched uri's
+        // 2. save the current matched uri - it is added as the first uri in the
+        // list of matched uri's
         int headSegmentsCount = result.getData().addMatchedURI(matcher.getHead(false));
         List<PathSegment> segments = context.getUriInfo().getPathSegments(false);
         // 3. save the path segments of the matched variables
-        matcher.storeVariablesPathSegments(segments, offset, headSegmentsCount, result.getData().getMatchedVariablesPathSegments());
+        matcher.storeVariablesPathSegments(segments, offset, headSegmentsCount, result.getData()
+            .getMatchedVariablesPathSegments());
     }
 
     public void init(Properties props) {
-        String property = props.getProperty(FindRootResourceHandler.SEARCH_POLICY_CONTINUED_SEARCH_KEY);
+        String property =
+            props.getProperty(FindRootResourceHandler.SEARCH_POLICY_CONTINUED_SEARCH_KEY);
         isContinuedSearchPolicy = Boolean.valueOf(property);
     }
 

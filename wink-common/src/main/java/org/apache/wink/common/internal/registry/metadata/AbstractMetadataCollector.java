@@ -117,18 +117,24 @@ public abstract class AbstractMetadataCollector {
             // gather all formal parameters
             formalParameters.clear();
 
-            // TODO: Notice that due to the bug http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6332964 in Java 1.5, this method will throw 
+            // TODO: Notice that due to the bug
+            // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6332964 in
+            // Java 1.5, this method will throw
             // and exception for inner non-static classes
             // need to catch an exception and print warning message
             // In addition need to check that it works in Java 1.6
             Annotation[][] parameterAnnotations = constructor.getParameterAnnotations();
             Type[] paramTypes = constructor.getGenericParameterTypes();
-            //            boolean isValidConstructor = true;
+            // boolean isValidConstructor = true;
             // gather all formal parameters as list of injectable data
             for (int pos = 0, limit = paramTypes.length; pos < limit; pos++) {
-                Injectable fp = InjectableFactory.getInstance().create(paramTypes[pos],
-                    parameterAnnotations[pos], constructor,
-                    getMetadata().isEncoded() || constructorMetadata.isEncoded(), null);
+                Injectable fp =
+                    InjectableFactory.getInstance()
+                        .create(paramTypes[pos],
+                                parameterAnnotations[pos],
+                                constructor,
+                                getMetadata().isEncoded() || constructorMetadata.isEncoded(),
+                                null);
 
                 if (!isConstructorParameterValid(fp)) {
                     continue L1;
@@ -138,16 +144,17 @@ public abstract class AbstractMetadataCollector {
 
             // if this is the first valid constructor found or
             // if found another valid constructor with more parameters
-            if ((constructorMetadata.getConstructor() == null)
-                || (constructorMetadata.getFormalParameters().size() < paramTypes.length)) {
+            if ((constructorMetadata.getConstructor() == null) || (constructorMetadata
+                .getFormalParameters().size() < paramTypes.length)) {
                 constructorMetadata.setConstructor(constructor);
                 constructorMetadata.getFormalParameters().clear();
                 constructorMetadata.getFormalParameters().addAll(formalParameters);
             } else if (constructorMetadata.getFormalParameters().size() == paramTypes.length) {
-                // TODO: log warning about finding another valid constructor with the same number
+                // TODO: log warning about finding another valid constructor
+                // with the same number
                 // of parameters
             } else {
-                // this is a constructor will less parameters, nothing to do 
+                // this is a constructor will less parameters, nothing to do
             }
         }
 

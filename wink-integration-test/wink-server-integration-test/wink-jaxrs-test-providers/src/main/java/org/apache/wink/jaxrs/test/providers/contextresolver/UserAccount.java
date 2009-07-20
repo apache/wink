@@ -48,8 +48,8 @@ public class UserAccount {
     @Produces(value = "text/xml")
     public JAXBElement<User> getUser(@PathParam(value = "userName") String userName) {
         User user = users.get(userName);
-        return new JAXBElement<User>(new QName("http://jaxb.context.tests",
-                "user"), User.class, user);
+        return new JAXBElement<User>(new QName("http://jaxb.context.tests", "user"), User.class,
+                                     user);
     }
 
 }

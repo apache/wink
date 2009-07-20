@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.helloworld;
 
 import java.util.Date;
@@ -30,38 +30,38 @@ import javax.ws.rs.core.MediaType;
 import org.apache.wink.common.model.synd.SyndEntry;
 import org.apache.wink.common.model.synd.SyndText;
 
-
-
 /**
  * Simple example - Hello World!
  * <p/>
- * The SDK dispatches HTTP requests for URI <code>http://[host]:[port]/hello/world</code>,
- * where <code>hello</code> is the context root, to this class. A simple Atom entry
- * is returned in HTTP response.
+ * The SDK dispatches HTTP requests for URI
+ * <code>http://[host]:[port]/hello/world</code>, where <code>hello</code> is
+ * the context root, to this class. A simple Atom entry is returned in HTTP
+ * response.
  * <p/>
- * The service document is available at URI <code>http://[host]:[port]/hello</code>
- * but it is empty because this simple demo doesn't contain any collection of resources.
+ * The service document is available at URI
+ * <code>http://[host]:[port]/hello</code> but it is empty because this simple
+ * demo doesn't contain any collection of resources.
  * <p/>
- * This resource must be registered within a JAX-RS application, this example uses the 
- * default usage of application /WEB-INF/application
+ * This resource must be registered within a JAX-RS application, this example
+ * uses the default usage of application /WEB-INF/application
  */
 @Path("/world")
 public class HelloWorld {
     public static final String ID = "helloworld:1";
 
     /**
-     * This method is called by the SDK for HTTP GET method requests where the Accept header
-     * allows the Atom media type application/atom+xml.
-     * A SyndEntry is created with basic information.
-     * Serialization of the SyndEntry to Atom entry is performed by the SDK
-     * automatically. The default status code of 200 (OK) is returned in the response.
-     *
+     * This method is called by the SDK for HTTP GET method requests where the
+     * Accept header allows the Atom media type application/atom+xml. A
+     * SyndEntry is created with basic information. Serialization of the
+     * SyndEntry to Atom entry is performed by the SDK automatically. The
+     * default status code of 200 (OK) is returned in the response.
+     * 
      * @return SyndEntry of the requested resource
      */
     @GET
     @Produces(MediaType.APPLICATION_ATOM_XML)
     public SyndEntry getGreeting() {
-        // create and return a syndication entry with a "Hello World!" title, 
+        // create and return a syndication entry with a "Hello World!" title,
         // some ID and the current time.
         SyndEntry synd = new SyndEntry(new SyndText("Hello World!"), ID, new Date());
         return synd;

@@ -85,8 +85,7 @@ public class PathSegmentTest extends TestCase {
         try {
             httpclient.executeMethod(httpMethod);
             assertEquals(200, httpMethod.getStatusCode());
-            assertEquals("somepath-somepath-[abc]-val", httpMethod
-                .getResponseBodyAsString());
+            assertEquals("somepath-somepath-[abc]-val", httpMethod.getResponseBodyAsString());
         } finally {
             httpMethod.releaseConnection();
         }
@@ -95,8 +94,7 @@ public class PathSegmentTest extends TestCase {
         try {
             httpclient.executeMethod(httpMethod);
             assertEquals(200, httpMethod.getStatusCode());
-            assertEquals("somepath-somepath-[abc, 123]-val", httpMethod
-                .getResponseBodyAsString());
+            assertEquals("somepath-somepath-[abc, 123]-val", httpMethod.getResponseBodyAsString());
         } finally {
             httpMethod.releaseConnection();
         }

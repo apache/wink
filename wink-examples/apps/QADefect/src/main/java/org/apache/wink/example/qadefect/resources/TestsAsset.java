@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.qadefect.resources;
 
 import java.util.Collection;
@@ -37,8 +37,6 @@ import org.apache.wink.common.model.synd.SyndPerson;
 import org.apache.wink.common.model.synd.SyndText;
 import org.apache.wink.example.qadefect.legacy.TestBean;
 import org.apache.wink.server.utils.LinkBuilders;
-
-
 
 /**
  * Tests Resource
@@ -60,8 +58,7 @@ public class TestsAsset {
     /**
      * Constructor. Creates resource metadata from test bean collection.
      * 
-     * @param collection
-     *            test bean collection
+     * @param collection test bean collection
      */
     public TestsAsset(Collection<TestBean> data) {
         this();
@@ -73,8 +70,9 @@ public class TestsAsset {
     }
 
     @Produces
-    public SyndFeed getSyndFeed(@Context Providers providers, @Context LinkBuilders linkProcessor,
-            @Context UriInfo uriInfo) {
+    public SyndFeed getSyndFeed(@Context Providers providers,
+                                @Context LinkBuilders linkProcessor,
+                                @Context UriInfo uriInfo) {
         SyndFeed synd = new SyndFeed();
         synd.setId("urn:com:hp:qadefects:tests");
         synd.setTitle(new SyndText("Tests"));

@@ -17,16 +17,16 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.qadefect.utils;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Extends the HashMap and used by the search functionality.
- * The idea is to keep meaningful search parameters in the map, but to ignore all the rest.
- * Only parameters with not null key and value are meaningful.  
+ * Extends the HashMap and used by the search functionality. The idea is to keep
+ * meaningful search parameters in the map, but to ignore all the rest. Only
+ * parameters with not null key and value are meaningful.
  */
 public class SearchMap extends HashMap<String, String> {
 
@@ -39,10 +39,9 @@ public class SearchMap extends HashMap<String, String> {
         }
         return null;
     }
-    
+
     @Override
-    public void putAll(
-    Map<? extends String, ? extends String> m) {
+    public void putAll(Map<? extends String, ? extends String> m) {
         throw new UnsupportedOperationException();
     }
 

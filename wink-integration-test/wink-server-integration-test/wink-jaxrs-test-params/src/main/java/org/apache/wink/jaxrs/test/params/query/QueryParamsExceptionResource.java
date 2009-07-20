@@ -27,7 +27,7 @@ import javax.ws.rs.core.Response;
 
 @Path("/params/queryparam/exception")
 public class QueryParamsExceptionResource {
-    
+
     public QueryParamsExceptionResource() {
         /* do nothing */
     }
@@ -61,8 +61,10 @@ public class QueryParamsExceptionResource {
     // @GET
     // @Path("constructor")
     // public Response getStringConstructorHeaderParam(
-    // @HeaderParam("CustomStringHeader") HeaderStringConstructor customStringHeader) {
-    // return Response.ok().header("RespCustomStringHeader", customStringHeader.getHeader())
+    // @HeaderParam("CustomStringHeader") HeaderStringConstructor
+    // customStringHeader) {
+    // return Response.ok().header("RespCustomStringHeader",
+    // customStringHeader.getHeader())
     // .build();
     // }
 
@@ -94,14 +96,16 @@ public class QueryParamsExceptionResource {
     // @Path("valueof")
     // public Response getValueOfHeaderParam(
     // @QueryParam("CustomValueOfQuery") QueryValueOf customValueOfQuery) {
-    // return Response.ok().header("RespCustomValueOfQuery", customValueOfQuery.getParamValue())
+    // return Response.ok().header("RespCustomValueOfQuery",
+    // customValueOfQuery.getParamValue())
     // .build();
     // }
     //
     // @GET
     // @Path("listvalueof")
     // public Response getValueOfHeaderParam(
-    // @HeaderParam("CustomListValueOfHeader") List<QueryValueOf> customValueOfHeader) {
+    // @HeaderParam("CustomListValueOfHeader") List<QueryValueOf>
+    // customValueOfHeader) {
     // if (customValueOfHeader.size() != 1) {
     // throw new IllegalArgumentException();
     // }
@@ -112,18 +116,21 @@ public class QueryParamsExceptionResource {
     // @GET
     // @Path("setvalueof")
     // public Response getValueOfHeaderParam(
-    // @HeaderParam("CustomSetValueOfHeader") Set<QueryValueOf> customValueOfHeader) {
+    // @HeaderParam("CustomSetValueOfHeader") Set<QueryValueOf>
+    // customValueOfHeader) {
     // if (customValueOfHeader.size() != 1) {
     // throw new IllegalArgumentException();
     // }
     // return Response.ok().header("RespCustomSetValueOfHeader",
-    // new ArrayList<QueryValueOf>(customValueOfHeader).get(0).getHeader()).build();
+    // new
+    // ArrayList<QueryValueOf>(customValueOfHeader).get(0).getHeader()).build();
     // }
     //
     // @GET
     // @Path("sortedsetvalueof")
     // public Response getValueOfHeaderParam(
-    // @HeaderParam("CustomSortedSetValueOfHeader") SortedSet<QueryValueOf> customValueOfHeader) {
+    // @HeaderParam("CustomSortedSetValueOfHeader") SortedSet<QueryValueOf>
+    // customValueOfHeader) {
     // if (customValueOfHeader.size() != 1) {
     // throw new IllegalArgumentException();
     // }

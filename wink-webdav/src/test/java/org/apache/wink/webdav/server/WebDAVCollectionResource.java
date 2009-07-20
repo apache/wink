@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.webdav.server;
 
 import java.io.IOException;
@@ -42,16 +42,15 @@ import org.apache.wink.webdav.WebDAVMethod;
 import org.apache.wink.webdav.server.WebDAVResource;
 import org.apache.wink.webdav.server.WebDAVResponseBuilder;
 
-
 @Workspace(workspaceTitle = "Test Service", collectionTitle = WebDAVCollectionResource.TITLE)
 @Path(WebDAVCollectionResource.PATH)
 public class WebDAVCollectionResource extends WebDAVResource {
 
-    public static final String PATH = "/feed";
+    public static final String PATH  = "/feed";
 
     public static final String TITLE = "Test feed";
 
-    public static SyndFeed feed;
+    public static SyndFeed     feed;
 
     static {
         feed = new SyndFeed(new SyndText(WebDAVCollectionResource.TITLE), null);
@@ -61,9 +60,14 @@ public class WebDAVCollectionResource extends WebDAVResource {
     }
 
     @WebDAVMethod.PROPFIND
-    @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
+    @Consumes( {MediaType.APPLICATION_XML, MediaType.TEXT_XML})
     @Produces(MediaType.APPLICATION_XML)
-    public Response findProperties(@Context UriInfo uriInfo, @Context HttpHeaders headers, String body) throws IOException {
-        return WebDAVResponseBuilder.create(uriInfo).propfind(feed, body, headers.getRequestHeaders().getFirst(WebDAVHeaders.DEPTH));
+    public Response findProperties(@Context UriInfo uriInfo,
+                                   @Context HttpHeaders headers,
+                                   String body) throws IOException {
+        return WebDAVResponseBuilder.create(uriInfo).propfind(feed,
+                                                              body,
+                                                              headers.getRequestHeaders()
+                                                                  .getFirst(WebDAVHeaders.DEPTH));
     }
 }

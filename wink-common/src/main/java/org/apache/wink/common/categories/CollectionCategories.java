@@ -17,14 +17,15 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common.categories;
 
 import java.util.List;
 
 /**
- * A contract implemented by a Collection resource to provide a set of supported categories represented in Atom Service Document. 
+ * A contract implemented by a Collection resource to provide a set of supported
+ * categories represented in Atom Service Document.
  */
 public interface CollectionCategories {
-	public List<Categories> getCategories();
+    public List<Categories> getCategories();
 }

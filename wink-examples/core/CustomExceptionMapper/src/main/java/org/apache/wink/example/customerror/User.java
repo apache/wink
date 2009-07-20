@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "user")
 public class User {
-    
+
     private String firstName;
     private String lastName;
-    private int id;
+    private int    id;
     private String email;
 
     public User() {

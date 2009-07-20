@@ -24,7 +24,6 @@
 // Generated on: 2008.05.27 at 11:24:25 AM IDT 
 //
 
-
 package org.apache.wink.common.model.atom;
 
 import java.util.ArrayList;
@@ -38,7 +37,6 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.wink.common.model.synd.SyndPerson;
 import org.w3c.dom.Element;
 
-
 /**
  * The Person construct Per RFC4287
  * 
@@ -49,70 +47,69 @@ import org.w3c.dom.Element;
  *  atomPersonConstruct =
  *     atomCommonAttributes,
  *     (element atom:name { text }
- *      & element atom:uri { atomUri }?
- *      & element atom:email { atomEmailAddress }?
- *      & extensionElement*)
+ *      &amp; element atom:uri { atomUri }?
+ *      &amp; element atom:email { atomEmailAddress }?
+ *      &amp; extensionElement*)
  *      
  * This specification assigns no significance to the order of appearance of the child elements in a
  * Person construct. Person constructs allow extension Metadata elements (see Section 6.4). 3.2.1
- * The "atom:name" Element
+ * The &quot;atom:name&quot; Element
  * 
- * The "atom:name" element's content conveys a human-readable name for the person. The content of
- * atom:name is Language-Sensitive. Person constructs MUST contain exactly one "atom:name" element.
- * 3.2.2 The "atom:uri" Element
+ * The &quot;atom:name&quot; element's content conveys a human-readable name for the person. The content of
+ * atom:name is Language-Sensitive. Person constructs MUST contain exactly one &quot;atom:name&quot; element.
+ * 3.2.2 The &quot;atom:uri&quot; Element
  * 
- * The "atom:uri" element's content conveys an IRI associated with the person. Person constructs MAY
+ * The &quot;atom:uri&quot; element's content conveys an IRI associated with the person. Person constructs MAY
  * contain an atom:uri element, but MUST NOT contain more than one. The content of atom:uri in a
- * Person construct MUST be an IRI reference [RFC3987]. 3.2.3 The "atom:email" Element
+ * Person construct MUST be an IRI reference [RFC3987]. 3.2.3 The &quot;atom:email&quot; Element
  * 
- * The "atom:email" element's content conveys an e-mail address associated with the person. Person
+ * The &quot;atom:email&quot; element's content conveys an e-mail address associated with the person. Person
  * constructs MAY contain an atom:email element, but MUST NOT contain more than one. 
- * Its content MUST conform to the "addr-spec" production in [RFC2822].
+ * Its content MUST conform to the &quot;addr-spec&quot; production in [RFC2822].
  * </pre>
- * 
  * <ul>
- * <li> The "atom:name" Element
- * <pre>
- * The "atom:name" element's content conveys a human-readable name for the person. 
- * The content of atom:name is Language-Sensitive. 
- * Person constructs MUST contain exactly one "atom:name" element.
- * </pre>
- * </li>
+ * <li>The "atom:name" Element
  * 
- * <li> The "atom:uri" Element
  * <pre>
- * The "atom:uri" element's content conveys an IRI associated with the person. 
+ * The &quot;atom:name&quot; element's content conveys a human-readable name for the person. 
+ * The content of atom:name is Language-Sensitive. 
+ * Person constructs MUST contain exactly one &quot;atom:name&quot; element.
+ * </pre>
+ * 
+ * </li>
+ * <li>The "atom:uri" Element
+ * 
+ * <pre>
+ * The &quot;atom:uri&quot; element's content conveys an IRI associated with the person. 
  * Person constructs MAY contain an atom:uri element, but MUST NOT contain more than one. 
  * The content of atom:uri in a Person construct MUST be an IRI reference [RFC3987].
  * </pre>
- * </li>
  * 
- * <li> The "atom:email" Element
+ * </li>
+ * <li>The "atom:email" Element
+ * 
  * <pre>
- * The "atom:email" element's content conveys an e-mail address associated with the person. 
+ * The &quot;atom:email&quot; element's content conveys an e-mail address associated with the person. 
  * Person constructs MAY contain an atom:email element, but MUST NOT contain more than one. 
- * Its content MUST conform to the "addr-spec" production in [RFC2822].
+ * Its content MUST conform to the &quot;addr-spec&quot; production in [RFC2822].
  * </pre>
+ * 
  * </li>
  * </ul>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "atomPerson", propOrder = {
-    "email",
-    "any",
-    "name",
-    "uri"
-})
+@XmlType(name = "atomPerson", propOrder = {"email", "any", "name", "uri"})
 public class AtomPerson {
 
-    protected String email;
+    protected String        email;
     @XmlAnyElement
     protected List<Element> any;
-    protected String name;
-    protected String uri;
-    
-    public AtomPerson() {}
-    
+    protected String        name;
+    protected String        uri;
+
+    public AtomPerson() {
+    }
+
     public AtomPerson(SyndPerson value) {
         if (value == null) {
             return;
@@ -148,25 +145,19 @@ public class AtomPerson {
 
     /**
      * Gets extension elements
-     * 
      * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the any.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the any.
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getAny().add(newItem);
+     * getAny().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Element }
-     * 
-     * 
+     * Objects of the following type(s) are allowed in the list {@link Element }
      */
     public List<Element> getAny() {
         if (any == null) {

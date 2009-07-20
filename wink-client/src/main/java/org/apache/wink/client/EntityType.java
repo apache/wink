@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.client;
 
@@ -26,31 +25,33 @@ import java.lang.reflect.Type;
 
 import org.apache.wink.common.internal.utils.GenericsUtils;
 
-
 /**
- * The EntityType is used to specify the class type and the generic type of responses.
+ * The EntityType is used to specify the class type and the generic type of
+ * responses.
  * <p>
- * Typically, an anonymous EntityType instance is created in order to specify the response type,
- * like so:
+ * Typically, an anonymous EntityType instance is created in order to specify
+ * the response type, like so:
  * 
  * <pre>
- *      Resource resource = client.resource(uri);
- *      List&lt;String&gt; list = resource.get(new EntityType&lt;List&lt;String&gt;&gt;(){});
+ * Resource resource = client.resource(uri);
+ *                                           List&lt;String&gt; list =
+ *                                                                 resource
+ *                                                                     .get(new EntityType&lt;List&lt;String&gt;&gt;() {
+ *                                                                     });
  * </pre>
  * 
- * @param <T>
- *            the entity type
+ * @param <T> the entity type
  */
 public class EntityType<T> {
 
-    private Type type;
+    private Type     type;
 
     private Class<T> cls;
 
     /**
-     * Construct a new entity type. The constructor is protected to force extension of this class,
-     * in order to enable the extraction of the generic type and the class type from the superclass.
-     * 
+     * Construct a new entity type. The constructor is protected to force
+     * extension of this class, in order to enable the extraction of the generic
+     * type and the class type from the superclass.
      */
     @SuppressWarnings("unchecked")
     protected EntityType() {

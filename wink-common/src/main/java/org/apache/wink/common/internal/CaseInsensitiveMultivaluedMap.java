@@ -30,22 +30,25 @@ import javax.ws.rs.core.MultivaluedMap;
 
 public class CaseInsensitiveMultivaluedMap<V> implements MultivaluedMap<String, V> {
 
-    private final MultivaluedMap<String, V> map = new MultivaluedMapImpl<String, V>(
-                                                    new Comparator<String>() {
+    private final MultivaluedMap<String, V> map =
+                                                    new MultivaluedMapImpl<String, V>(
+                                                                                      new Comparator<String>() {
 
-                                                        public int compare(String o1, String o2) {
-                                                            if (o1 == o2) {
-                                                                return 0;
-                                                            }
-                                                            if (o1 == null) {
-                                                                return -1;
-                                                            }
-                                                            if (o2 == null) {
-                                                                return 1;
-                                                            }
-                                                            return o1.compareToIgnoreCase(o2);
-                                                        }
-                                                    });
+                                                                                          public int compare(String o1,
+                                                                                                             String o2) {
+                                                                                              if (o1 == o2) {
+                                                                                                  return 0;
+                                                                                              }
+                                                                                              if (o1 == null) {
+                                                                                                  return -1;
+                                                                                              }
+                                                                                              if (o2 == null) {
+                                                                                                  return 1;
+                                                                                              }
+                                                                                              return o1
+                                                                                                  .compareToIgnoreCase(o2);
+                                                                                          }
+                                                                                      });
 
     public void add(String key, V value) {
         map.add(key, value);

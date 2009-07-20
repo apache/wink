@@ -17,25 +17,24 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.registry;
-
 
 import org.apache.wink.common.internal.lifecycle.ObjectFactory;
 import org.apache.wink.common.internal.runtime.RuntimeContext;
 import org.apache.wink.common.internal.uritemplate.UriTemplateMatcher;
 
 /**
- * Represents a concrete resource instance and is used during the search of a resource method to be
- * invoked. It holds the resource record of a resource, the uri template matcher that was used to
- * match the resource, and possibly the actual instance of the resource
+ * Represents a concrete resource instance and is used during the search of a
+ * resource method to be invoked. It holds the resource record of a resource,
+ * the uri template matcher that was used to match the resource, and possibly
+ * the actual instance of the resource
  */
 public class ResourceInstance {
 
-    private ResourceRecord record;
+    private ResourceRecord     record;
     private UriTemplateMatcher matcher;
-    private Object instance;
+    private Object             instance;
 
     public ResourceInstance(ResourceRecord record, UriTemplateMatcher matcher) {
         this(null, record, matcher);
@@ -66,9 +65,10 @@ public class ResourceInstance {
     }
 
     /**
-     * Get the concrete instance. If this ResourceInstance was initialized with an object instance,
-     * then it is returned. Otherwise, the {@link ObjectFactory} associated with the resource record
-     * is invoked to create a concrete instance
+     * Get the concrete instance. If this ResourceInstance was initialized with
+     * an object instance, then it is returned. Otherwise, the
+     * {@link ObjectFactory} associated with the resource record is invoked to
+     * create a concrete instance
      * 
      * @param context the request context
      * @return the resource concrete instance
@@ -82,16 +82,20 @@ public class ResourceInstance {
     }
 
     /**
-     * Returns whether the matcher used to match this resource was an exact match 
+     * Returns whether the matcher used to match this resource was an exact
+     * match
+     * 
      * @return true if exact match, false otherwise
      */
     public boolean isExactMatch() {
         return matcher.isExactMatch();
     }
-    
+
     @Override
     public String toString() {
-        return String.format("ResourceRecord: %s; UriTemplateMatcher: %s", String.valueOf(record), String.valueOf(matcher));
+        return String.format("ResourceRecord: %s; UriTemplateMatcher: %s",
+                             String.valueOf(record),
+                             String.valueOf(matcher));
     }
 
     public Class<?> getResourceClass() {

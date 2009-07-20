@@ -17,34 +17,35 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.utils;
 
 /**
- * Provides access to {@link SystemLinksBuilder} and to {@link SingleLinkBuilder}
+ * Provides access to {@link SystemLinksBuilder} and to
+ * {@link SingleLinkBuilder}
  * <p>
- * This interface can be injected to a resource method using the {@link javax.ws.rs.core.Context}
- * annotation
+ * This interface can be injected to a resource method using the
+ * {@link javax.ws.rs.core.Context} annotation
  */
 public interface LinkBuilders {
 
     /**
-     * Get a new instance of a {@link SingleLinkBuilder}. The state of the builder is initialized to
-     * reflect the active resource. If a sub-resource was invoked, the state of the builder is set
-     * accordingly.
+     * Get a new instance of a {@link SingleLinkBuilder}. The state of the
+     * builder is initialized to reflect the active resource. If a sub-resource
+     * was invoked, the state of the builder is set accordingly.
      * 
-     * @return a new instance of {@link SingleLinkBuilder} with a state reflecting the current
-     *         active resource and sub-resource
+     * @return a new instance of {@link SingleLinkBuilder} with a state
+     *         reflecting the current active resource and sub-resource
      */
     public SingleLinkBuilder createSingleLinkBuilder();
 
     /**
-     * Get a new instance of a {@link SystemLinksBuilder}. The state of the builder is initialized
-     * to reflect the active resource. If a sub-resource was invoked, the state of the builder is
-     * set accordingly.
+     * Get a new instance of a {@link SystemLinksBuilder}. The state of the
+     * builder is initialized to reflect the active resource. If a sub-resource
+     * was invoked, the state of the builder is set accordingly.
      * 
-     * @return a new instance of {@link SystemLinksBuilder} with a state reflecting the current
-     *         active resource and sub-resource
+     * @return a new instance of {@link SystemLinksBuilder} with a state
+     *         reflecting the current active resource and sub-resource
      */
     public SystemLinksBuilder createSystemLinksBuilder();
 

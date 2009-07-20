@@ -24,7 +24,6 @@
 // Generated on: 2009.05.24 at 01:47:17 PM IDT 
 //
 
-
 package org.apache.wink.common.internal.model.admin;
 
 import java.math.BigDecimal;
@@ -34,64 +33,53 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for anonymous complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * Java class for anonymous complex type.
+ * <p>
+ * The following schema fragment specifies the expected content contained within
+ * this class.
  * 
  * <pre>
- * &lt;complexType>
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="uri" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="class-name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="priority" type="{http://www.w3.org/2001/XMLSchema}decimal" minOccurs="0"/>
- *         &lt;element name="workspace" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="collection" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element ref="{http://apache.org/wink/common/internal/model/admin}methods"/>
- *         &lt;element ref="{http://apache.org/wink/common/internal/model/admin}sub-resources"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base=&quot;{http://www.w3.org/2001/XMLSchema}anyType&quot;&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name=&quot;uri&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot;/&gt;
+ *         &lt;element name=&quot;class-name&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; minOccurs=&quot;0&quot;/&gt;
+ *         &lt;element name=&quot;priority&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}decimal&quot; minOccurs=&quot;0&quot;/&gt;
+ *         &lt;element name=&quot;workspace&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; minOccurs=&quot;0&quot;/&gt;
+ *         &lt;element name=&quot;collection&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; minOccurs=&quot;0&quot;/&gt;
+ *         &lt;element ref=&quot;{http://apache.org/wink/common/internal/model/admin}methods&quot;/&gt;
+ *         &lt;element ref=&quot;{http://apache.org/wink/common/internal/model/admin}sub-resources&quot;/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "uri",
-    "className",
-    "priority",
-    "workspace",
-    "collection",
-    "methods",
-    "subResources"
-})
+@XmlType(name = "", propOrder = {"uri", "className", "priority", "workspace", "collection",
+                                 "methods", "subResources"})
 @XmlRootElement(name = "resource")
 public class Resource {
 
     @XmlElement(required = true)
-    protected String uri;
+    protected String       uri;
     @XmlElement(name = "class-name")
-    protected String className;
-    protected BigDecimal priority;
-    protected String workspace;
-    protected String collection;
+    protected String       className;
+    protected BigDecimal   priority;
+    protected String       workspace;
+    protected String       collection;
     @XmlElement(required = true)
-    protected Methods methods;
+    protected Methods      methods;
     @XmlElement(name = "sub-resources", required = true)
     protected SubResources subResources;
 
     /**
      * Gets the value of the uri property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return possible object is {@link String }
      */
     public String getUri() {
         return uri;
@@ -100,10 +88,7 @@ public class Resource {
     /**
      * Sets the value of the uri property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * @param value allowed object is {@link String }
      */
     public void setUri(String value) {
         this.uri = value;
@@ -112,10 +97,7 @@ public class Resource {
     /**
      * Gets the value of the className property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return possible object is {@link String }
      */
     public String getClassName() {
         return className;
@@ -124,10 +106,7 @@ public class Resource {
     /**
      * Sets the value of the className property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * @param value allowed object is {@link String }
      */
     public void setClassName(String value) {
         this.className = value;
@@ -136,10 +115,7 @@ public class Resource {
     /**
      * Gets the value of the priority property.
      * 
-     * @return
-     *     possible object is
-     *     {@link BigDecimal }
-     *     
+     * @return possible object is {@link BigDecimal }
      */
     public BigDecimal getPriority() {
         return priority;
@@ -148,10 +124,7 @@ public class Resource {
     /**
      * Sets the value of the priority property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link BigDecimal }
-     *     
+     * @param value allowed object is {@link BigDecimal }
      */
     public void setPriority(BigDecimal value) {
         this.priority = value;
@@ -160,10 +133,7 @@ public class Resource {
     /**
      * Gets the value of the workspace property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return possible object is {@link String }
      */
     public String getWorkspace() {
         return workspace;
@@ -172,10 +142,7 @@ public class Resource {
     /**
      * Sets the value of the workspace property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * @param value allowed object is {@link String }
      */
     public void setWorkspace(String value) {
         this.workspace = value;
@@ -184,10 +151,7 @@ public class Resource {
     /**
      * Gets the value of the collection property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return possible object is {@link String }
      */
     public String getCollection() {
         return collection;
@@ -196,10 +160,7 @@ public class Resource {
     /**
      * Sets the value of the collection property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * @param value allowed object is {@link String }
      */
     public void setCollection(String value) {
         this.collection = value;
@@ -208,10 +169,7 @@ public class Resource {
     /**
      * Gets the value of the methods property.
      * 
-     * @return
-     *     possible object is
-     *     {@link Methods }
-     *     
+     * @return possible object is {@link Methods }
      */
     public Methods getMethods() {
         return methods;
@@ -220,10 +178,7 @@ public class Resource {
     /**
      * Sets the value of the methods property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link Methods }
-     *     
+     * @param value allowed object is {@link Methods }
      */
     public void setMethods(Methods value) {
         this.methods = value;
@@ -232,10 +187,7 @@ public class Resource {
     /**
      * Gets the value of the subResources property.
      * 
-     * @return
-     *     possible object is
-     *     {@link SubResources }
-     *     
+     * @return possible object is {@link SubResources }
      */
     public SubResources getSubResources() {
         return subResources;
@@ -244,10 +196,7 @@ public class Resource {
     /**
      * Sets the value of the subResources property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link SubResources }
-     *     
+     * @param value allowed object is {@link SubResources }
      */
     public void setSubResources(SubResources value) {
         this.subResources = value;

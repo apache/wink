@@ -43,43 +43,40 @@ import org.apache.wink.common.internal.utils.UriHelper;
 import org.apache.wink.server.internal.registry.ResourceRecord;
 import org.apache.wink.server.internal.registry.ResourceRegistry;
 
-
 public class ServiceDocumentCollectionData {
-    
-    private String workspace;
 
-    private String title;
+    private String                            workspace;
 
-    private String uri;
+    private String                            title;
 
-    private Collection<MediaType> accepts;
+    private String                            uri;
+
+    private Collection<MediaType>             accepts;
 
     // List of Categories. Each Categories object contains list of CategoryBeans
-    private List<Categories> categories;
+    private List<Categories>                  categories;
 
     // saves the produced media types in which the collection can be retrieved
-    private Set<MediaType> produces;
+    private Set<MediaType>                    produces;
 
     private static final CollectionComparator COLLECTION_COMPARATOR = new CollectionComparator();
 
     /**
      * Creates new service document collection.
      * 
-     * @param workspace
-     *            the collection workspace title
-     * @param title
-     *            the collection title
-     * @param uri
-     *            the collection URI
-     * @param accepts
-     *            the collection accepting media types
-     * @param categoriesUris
-     *            the collection categories URIs
-     * @param produces
-     *            the collection produced media types
+     * @param workspace the collection workspace title
+     * @param title the collection title
+     * @param uri the collection URI
+     * @param accepts the collection accepting media types
+     * @param categoriesUris the collection categories URIs
+     * @param produces the collection produced media types
      */
-    public ServiceDocumentCollectionData(String workspace, String title, String uri, Collection<MediaType> accepts,
-            List<Categories> categories, Set<MediaType> produces) {
+    public ServiceDocumentCollectionData(String workspace,
+                                         String title,
+                                         String uri,
+                                         Collection<MediaType> accepts,
+                                         List<Categories> categories,
+                                         Set<MediaType> produces) {
 
         this.workspace = workspace;
         this.title = title;
@@ -101,8 +98,7 @@ public class ServiceDocumentCollectionData {
     /**
      * Sets the collection workspace title.
      * 
-     * @param workspace
-     *            the collection workspace title
+     * @param workspace the collection workspace title
      */
     public void setWorkspace(String workspace) {
         this.workspace = workspace;
@@ -120,8 +116,7 @@ public class ServiceDocumentCollectionData {
     /**
      * Sets the collection title.
      * 
-     * @param title
-     *            the collection title
+     * @param title the collection title
      */
     public void setTitle(String title) {
         this.title = title;
@@ -139,8 +134,7 @@ public class ServiceDocumentCollectionData {
     /**
      * Sets the collection URI.
      * 
-     * @param uri
-     *            the collection URI
+     * @param uri the collection URI
      */
     public void setUri(String uri) {
         this.uri = uri;
@@ -158,8 +152,7 @@ public class ServiceDocumentCollectionData {
     /**
      * Sets the collection accepting media types.
      * 
-     * @param accepts
-     *            the collection accepting media types
+     * @param accepts the collection accepting media types
      */
     public void setAccepts(Collection<MediaType> accepts) {
         this.accepts = accepts;
@@ -177,16 +170,15 @@ public class ServiceDocumentCollectionData {
     /**
      * Sets the list of categories
      * 
-     * @param categories
-     *            the list of categories
+     * @param categories the list of categories
      */
     public void setCategories(List<Categories> categories) {
         this.categories = categories;
     }
 
     /**
-     * Gets the produced media types of the collection (the media types in which the collection can
-     * be retrieved).
+     * Gets the produced media types of the collection (the media types in which
+     * the collection can be retrieved).
      * 
      * @return Set<MediaType> the produced media types of the collection
      */
@@ -195,19 +187,20 @@ public class ServiceDocumentCollectionData {
     }
 
     /**
-     * Sets the produced media types for the collection (the media types in which the collection can
-     * be retrieved).
+     * Sets the produced media types for the collection (the media types in
+     * which the collection can be retrieved).
      * 
-     * @param produces
-     *            set of produced media types for the collection
+     * @param produces set of produced media types for the collection
      */
     public void setProduces(Set<MediaType> produces) {
         this.produces = produces;
     }
 
     public static List<ServiceDocumentCollectionData> buildServiceDocumentCollectionList(UriInfo uriInfo) {
-        ResourceRegistry resourceRegistry = RuntimeContextTLS.getRuntimeContext().getAttribute(ResourceRegistry.class);
-        List<ServiceDocumentCollectionData> collections = new ArrayList<ServiceDocumentCollectionData>();
+        ResourceRegistry resourceRegistry =
+            RuntimeContextTLS.getRuntimeContext().getAttribute(ResourceRegistry.class);
+        List<ServiceDocumentCollectionData> collections =
+            new ArrayList<ServiceDocumentCollectionData>();
         for (ResourceRecord record : resourceRegistry.getRecords()) {
             ClassMetadata metadata = record.getMetadata();
 
@@ -215,14 +208,16 @@ public class ServiceDocumentCollectionData {
             if (metadata.getWorkspaceName() != null) {
 
                 // Get Categories that are supported by this collection resource
-                List<Categories> collectionCategories = getCollectionCategories(record, resourceRegistry,
-                        uriInfo);
+                List<Categories> collectionCategories =
+                    getCollectionCategories(record, resourceRegistry, uriInfo);
 
                 UriTemplateProcessor template = record.getTemplateProcessor();
                 Set<MediaType> consumes = getCollectionConsumes(metadata);
                 Set<MediaType> produces = getCollectionProduces(metadata);
-                ServiceDocumentCollectionData sd = new ServiceDocumentCollectionData(metadata.getWorkspaceName(), metadata
-                        .getCollectionTitle(), template.toString(), consumes, collectionCategories, produces);
+                ServiceDocumentCollectionData sd =
+                    new ServiceDocumentCollectionData(metadata.getWorkspaceName(), metadata
+                        .getCollectionTitle(), template.toString(), consumes, collectionCategories,
+                                                      produces);
                 collections.add(sd);
             }
         }
@@ -264,23 +259,25 @@ public class ServiceDocumentCollectionData {
     /**
      * Get a list of Collection Categories
      * 
-     * @param record
-     *            ResourceRecord
+     * @param record ResourceRecord
      * @return List Collection Categories
      */
     private static List<Categories> getCollectionCategories(ResourceRecord record,
-            ResourceRegistry resourceRegistry, UriInfo uriInfo) {
+                                                            ResourceRegistry resourceRegistry,
+                                                            UriInfo uriInfo) {
 
         List<Categories> collectionCategories = null;
 
-        // Check if Resource exposes Categories (implements CollectionCategories)
+        // Check if Resource exposes Categories (implements
+        // CollectionCategories)
         if (CollectionCategories.class.isAssignableFrom(record.getMetadata().getResourceClass())) {
             Object instance = record.getObjectFactory().getInstance(null);
             collectionCategories = ((CollectionCategories)instance).getCategories();
         }
 
         if (collectionCategories != null) {
-            // Resolve Href of all OutOfline Categories provided by another Resource
+            // Resolve Href of all OutOfline Categories provided by another
+            // Resource
             resolveOutOfLineCategoriesListHref(collectionCategories, resourceRegistry, uriInfo);
         }
 
@@ -291,7 +288,8 @@ public class ServiceDocumentCollectionData {
      * Resolve All Outofline Categories href
      */
     private static void resolveOutOfLineCategoriesListHref(List<Categories> collectionCategories,
-            ResourceRegistry resourceRegistry, UriInfo uriInfo) {
+                                                           ResourceRegistry resourceRegistry,
+                                                           UriInfo uriInfo) {
 
         for (Categories categories : collectionCategories) {
             if (categories.isOutOfLine()) {
@@ -303,8 +301,9 @@ public class ServiceDocumentCollectionData {
     /**
      * Resolve Outofline Categories href
      */
-    private static void resolveOutOfLineCategoriesHref(Categories categories, ResourceRegistry resourceRegistry,
-            UriInfo uriInfo) {
+    private static void resolveOutOfLineCategoriesHref(Categories categories,
+                                                       ResourceRegistry resourceRegistry,
+                                                       UriInfo uriInfo) {
         String categoriesDocUri = null;
 
         if (categories.getHref() != null) {
@@ -320,10 +319,11 @@ public class ServiceDocumentCollectionData {
 
         // Update Categories href with resolved value
         if (categoriesDocUri != null) {
-            categoriesDocUri = UriHelper.appendPathToBaseUri(uriInfo.getBaseUri().toString(),
-                    categoriesDocUri);
-            categoriesDocUri = UriHelper
-                    .appendAltToPath(categoriesDocUri, MediaTypeUtils.ATOM_CATEGORIES_DOCUMENT_TYPE);
+            categoriesDocUri =
+                UriHelper.appendPathToBaseUri(uriInfo.getBaseUri().toString(), categoriesDocUri);
+            categoriesDocUri =
+                UriHelper.appendAltToPath(categoriesDocUri,
+                                          MediaTypeUtils.ATOM_CATEGORIES_DOCUMENT_TYPE);
             categories.setHref(categoriesDocUri);
         }
     }
@@ -331,24 +331,24 @@ public class ServiceDocumentCollectionData {
     /**
      * Get Categories Document base URI
      * 
-     * @param <Categories>
-     *            List of <CategoryBean>
-     * @param <ResourceRecord>
-     *            Resource record
+     * @param <Categories> List of <CategoryBean>
+     * @param <ResourceRecord> Resource record
      * @return String Categories Document base URI
      */
     private static String getCategoriesDocBaseUri(Categories cats, ResourceRecord record) {
         String categoriesDocBaseUri = null;
-        MultivaluedMap<String,String> templateParams = cats.getTemplateParameters();
+        MultivaluedMap<String, String> templateParams = cats.getTemplateParameters();
         UriTemplateProcessor template = record.getTemplateProcessor();
         categoriesDocBaseUri = template.expand(templateParams);
         return categoriesDocBaseUri;
     }
 
     /**
-     * Order by workspace, then by title. Workspace value must be always non-null.
+     * Order by workspace, then by title. Workspace value must be always
+     * non-null.
      */
-    private static final class CollectionComparator implements Comparator<ServiceDocumentCollectionData> {
+    private static final class CollectionComparator implements
+        Comparator<ServiceDocumentCollectionData> {
 
         public int compare(ServiceDocumentCollectionData o1, ServiceDocumentCollectionData o2) {
             int workspaceCompare = o1.getWorkspace().compareTo(o2.getWorkspace());

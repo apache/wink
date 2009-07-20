@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.client.handlers;
 
@@ -26,16 +25,16 @@ import java.io.InputStream;
 
 import org.apache.wink.client.ClientResponse;
 
-
 /**
  * Interface for adapting the input stream
  */
 public interface InputStreamAdapter {
 
     /**
-     * This method is called in order to wrap the response input stream with another input stream to
-     * allow the manipulation of the response entity stream. This method is called after reading the
-     * response status code and response headers, and before returning to the ClientResponse to the
+     * This method is called in order to wrap the response input stream with
+     * another input stream to allow the manipulation of the response entity
+     * stream. This method is called after reading the response status code and
+     * response headers, and before returning to the ClientResponse to the
      * handlers on the chain.
      * <p>
      * For example:
@@ -50,10 +49,8 @@ public interface InputStreamAdapter {
      * }
      * </pre>
      * 
-     * @param is
-     *            the current response input stream
-     * @param response
-     *            the response
+     * @param is the current response input stream
+     * @param response the response
      * @return the adapted response input stream
      * @throws IOException
      */

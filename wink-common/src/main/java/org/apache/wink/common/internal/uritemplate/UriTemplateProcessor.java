@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.uritemplate;
 
@@ -36,37 +35,39 @@ import org.apache.wink.common.internal.MultivaluedMapImpl;
 import org.apache.wink.common.internal.uri.UriEncoder;
 import org.apache.wink.common.internal.utils.UriHelper;
 
-
 /**
- * Abstract URI template processor for compiling, matching and expanding URI templates
+ * Abstract URI template processor for compiling, matching and expanding URI
+ * templates
  */
 public abstract class UriTemplateProcessor implements Comparable<UriTemplateProcessor>, Cloneable {
 
-    protected static final String TEMPLATE_TAIL_NAME = "wink.TemplateTail";
-    protected static final String TEMPLATE_HEAD_NAME = "wink.TemplateHead";
-    protected static final String TEMPLATE_TAIL_PATTERN = "(/.*)?";
+    protected static final String                    TEMPLATE_TAIL_NAME    = "wink.TemplateTail";
+    protected static final String                    TEMPLATE_HEAD_NAME    = "wink.TemplateHead";
+    protected static final String                    TEMPLATE_TAIL_PATTERN = "(/.*)?";
 
-    protected String template;
-    protected Pattern pattern;
-    protected MultivaluedMap<String,CapturingGroup> variables;
-    protected List<TemplateElement> expanders;
-    protected int numOfLiteralCharacters;
+    protected String                                 template;
+    protected Pattern                                pattern;
+    protected MultivaluedMap<String, CapturingGroup> variables;
+    protected List<TemplateElement>                  expanders;
+    protected int                                    numOfLiteralCharacters;
 
-    // this is used to hold the string that matches the complete original template as a single
+    // this is used to hold the string that matches the complete original
+    // template as a single
     // capturing group
-    protected CapturingGroup head;
+    protected CapturingGroup                         head;
 
     // this is used to hold the tail of the matched strings,
-    // that is, the trailing part of the matched uri that does not fall into the original
+    // that is, the trailing part of the matched uri that does not fall into the
+    // original
     // the uri template
-    protected CapturingGroup tail;
+    protected CapturingGroup                         tail;
 
     protected UriTemplateProcessor() {
         template = null;
         pattern = null;
         tail = null;
         head = null;
-        variables = new MultivaluedMapImpl<String,CapturingGroup>();
+        variables = new MultivaluedMapImpl<String, CapturingGroup>();
         expanders = new ArrayList<TemplateElement>();
         numOfLiteralCharacters = 0;
     }
@@ -90,9 +91,9 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
     }
 
     /**
-     * Get the regular expression pattern that this processor uses to match and expand uri's. The
-     * regular expression is the result of compiling the uri template that is associated with this
-     * processor.
+     * Get the regular expression pattern that this processor uses to match and
+     * expand uri's. The regular expression is the result of compiling the uri
+     * template that is associated with this processor.
      * 
      * @return the regular expression that this processor compiled
      */
@@ -105,18 +106,19 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
         return pattern;
     }
 
-    /* package */MultivaluedMap<String,CapturingGroup> getVariables() {
+    /* package */MultivaluedMap<String, CapturingGroup> getVariables() {
         return variables;
     }
 
     /**
-     * Get a set of the variable names that exist in this processor's template. The order of the
-     * variables in the set is the same as it appears in the template.
+     * Get a set of the variable names that exist in this processor's template.
+     * The order of the variables in the set is the same as it appears in the
+     * template.
      * 
-     * @return a set of variable names as they appear in the template, and in the order in which
-     *         they appear
-     * @throws IllegalStateException
-     *             if the pattern was not compiled successfully
+     * @return a set of variable names as they appear in the template, and in
+     *         the order in which they appear
+     * @throws IllegalStateException if the pattern was not compiled
+     *             successfully
      */
     public Set<String> getVariableNames() throws IllegalStateException {
         assertPatternState();
@@ -125,8 +127,8 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
     }
 
     /**
-     * Get a new instance of a {@link UriTemplateMatcher} that can be used to perform matching and
-     * matched variables values retrieval
+     * Get a new instance of a {@link UriTemplateMatcher} that can be used to
+     * perform matching and matched variables values retrieval
      * 
      * @return a new instance of UriTemplateMatcher
      */
@@ -136,66 +138,63 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
     }
 
     /**
-     * Set the template of this processor to the specified template. Only after calling this method
-     * can the {@link #matcher()} method be called.
+     * Set the template of this processor to the specified template. Only after
+     * calling this method can the {@link #matcher()} method be called.
      * 
-     * @param template
-     *            the template to compile and set
+     * @param template the template to compile and set
      */
     public abstract void compile(String template);
 
     /**
-     * Expands the template into a URI. Same as calling <code>expand(values, true)</code>
+     * Expands the template into a URI. Same as calling
+     * <code>expand(values, true)</code>
      * 
-     * @param variables
-     *            map from variable names to variable values
+     * @param variables map from variable names to variable values
      * @return the URI instance
      */
-    public String expand(Map<String,? extends Object> values) {
+    public String expand(Map<String, ? extends Object> values) {
         return expand(values, true);
     }
 
     /**
      * Expands the template into a URI.
      * <p>
-     * If the value is an array or a <code>List&lt;? extends Object&gt;</code>, then all objects are
-     * converted to strings using the toString() method, otherwise the value itself is converted to
-     * string using the toString() method.
+     * If the value is an array or a <code>List&lt;? extends Object&gt;</code>,
+     * then all objects are converted to strings using the toString() method,
+     * otherwise the value itself is converted to string using the toString()
+     * method.
      * 
-     * @param variables
-     *            map from variable names to variable values
-     * @param encode
-     *            indicates whether to encode the values before expansion
+     * @param variables map from variable names to variable values
+     * @param encode indicates whether to encode the values before expansion
      * @return the expanded URI string
      */
-    public String expand(Map<String,? extends Object> values, boolean encode) {
-        MultivaluedMap<String,String> mValues = MultivaluedMapImpl.toMultivaluedMapString(values);
+    public String expand(Map<String, ? extends Object> values, boolean encode) {
+        MultivaluedMap<String, String> mValues = MultivaluedMapImpl.toMultivaluedMapString(values);
         return expand(mValues, encode);
     }
 
     /**
-     * Expands the template into a URI. Same as calling <code>expand(values, true)</code>
+     * Expands the template into a URI. Same as calling
+     * <code>expand(values, true)</code>
      * 
-     * @param variables
-     *            map from variable names to variable values
+     * @param variables map from variable names to variable values
      * @return the URI instance
      */
-    public String expand(MultivaluedMap<String,String> values) {
+    public String expand(MultivaluedMap<String, String> values) {
         return expand(values, true);
     }
 
     /**
-     * Expand the template of this processor using the provided values. Regular expressions of
-     * variables in the template are ignored. All variables defined in the template must have a
-     * value.
+     * Expand the template of this processor using the provided values. Regular
+     * expressions of variables in the template are ignored. All variables
+     * defined in the template must have a value.
      * 
-     * @param values
-     *            a map with the values of the variables
+     * @param values a map with the values of the variables
      * @return an expanded uri using the supplied variable values
      */
-    public String expand(MultivaluedMap<String,String> values, boolean encode) {
+    public String expand(MultivaluedMap<String, String> values, boolean encode) {
         if (values == null) {
-            values = new MultivaluedMapImpl<String,String>();
+            values = new MultivaluedMapImpl<String, String>();
         }
         assertPatternState();
 
@@ -210,7 +209,8 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof UriTemplateProcessor && template.equals(((UriTemplateProcessor)obj).template);
+        return obj instanceof UriTemplateProcessor && template
+            .equals(((UriTemplateProcessor)obj).template);
     }
 
     @Override
@@ -252,11 +252,10 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
     }
 
     /**
-     * Normalizes the URI to a standard form. This includes for example handling null, removing
-     * slashes, unnecessary segments, ...
+     * Normalizes the URI to a standard form. This includes for example handling
+     * null, removing slashes, unnecessary segments, ...
      * 
-     * @param uri
-     *            the input template; <code>null</code> is allowed
+     * @param uri the input template; <code>null</code> is allowed
      * @return the transformed version of the URI
      */
     public static String normalizeUri(String uri) {
@@ -276,8 +275,7 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
     /**
      * Factory method for normalized uri-templates.
      * 
-     * @param uriTemplate
-     *            uri-template specification
+     * @param uriTemplate uri-template specification
      * @return instance representing (normalized) uri-template
      * @see UriTemplateProcessor#normalizeUri(String)
      */
@@ -304,37 +302,37 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
     }
 
     /**
-     * Represents a basic element of a template. A template consists of literals and variables.
+     * Represents a basic element of a template. A template consists of literals
+     * and variables.
      */
     protected static interface TemplateElement {
 
         /**
-         * Called during the compilation of a template to build a regular expression pattern
-         * corresponding to this element
+         * Called during the compilation of a template to build a regular
+         * expression pattern corresponding to this element
          * 
-         * @param builder
-         *            the output StringBuilder
+         * @param builder the output StringBuilder
          */
         public void build(StringBuilder builder);
 
         /**
-         * Called during the expansion of a template to expand this template into the output
-         * StringBuilder.
+         * Called during the expansion of a template to expand this template
+         * into the output StringBuilder.
          * 
-         * @param values
-         *            a multivalued map of values to use for the expansion
-         * @param encode
-         *            indicates whether to uri-encode the value before writing it to the output
-         * @param builder
-         *            the output StringBuilder
+         * @param values a multivalued map of values to use for the expansion
+         * @param encode indicates whether to uri-encode the value before
+         *            writing it to the output
+         * @param builder the output StringBuilder
          */
-        public void expand(MultivaluedMap<String,String> values, boolean encode, StringBuilder builder);
+        public void expand(MultivaluedMap<String, String> values,
+                           boolean encode,
+                           StringBuilder builder);
     }
 
     /**
-     * Represents a literal element of the template. A literal is a sequence of characters in the
-     * template without any variables in it. For instance "/foo/" is a literal in the template
-     * "/foo/{var}".
+     * Represents a literal element of the template. A literal is a sequence of
+     * characters in the template without any variables in it. For instance
+     * "/foo/" is a literal in the template "/foo/{var}".
      */
     protected static class Literal implements TemplateElement {
         private String literal;
@@ -351,11 +349,14 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
         private static void assertValid(String literal) {
             // assert that the literal does not contain curly brackets
             if (literal.indexOf('{') != -1 || literal.indexOf('}') != -1) {
-                throw new IllegalArgumentException("Syntax error: '" + literal + "' contains invalid template form");
+                throw new IllegalArgumentException("Syntax error: '" + literal
+                    + "' contains invalid template form");
             }
         }
 
-        public void expand(MultivaluedMap<String,String> values, boolean encode, StringBuilder builder) {
+        public void expand(MultivaluedMap<String, String> values,
+                           boolean encode,
+                           StringBuilder builder) {
             String literal = this.literal;
             if (!encode) {
                 literal = UriEncoder.decodeString(literal);
@@ -365,16 +366,18 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
     }
 
     /**
-     * Represents a single capturing group in the pattern created from a template uri.
+     * Represents a single capturing group in the pattern created from a
+     * template uri.
      */
     protected abstract static class CapturingGroup implements TemplateElement {
-        protected static final String REGEX0 = "[^/]*?";
-        protected static final String REGEX1 = "[^/]+?";
+        protected static final String REGEX0           = "[^/]*?";
+        protected static final String REGEX1           = "[^/]+?";
 
-        protected int capturingGroupId = -1;
+        protected int                 capturingGroupId = -1;
 
         /**
-         * Get the pattern capturing group id that is associated with this variable
+         * Get the pattern capturing group id that is associated with this
+         * variable
          * 
          * @return capturing group id
          */
@@ -383,29 +386,30 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
         }
 
         /**
-         * Set the pattern capturing group id that is associated with this variable
+         * Set the pattern capturing group id that is associated with this
+         * variable
          * 
-         * @param capturingGroupId
-         *            capturing group id
+         * @param capturingGroupId capturing group id
          */
         public void setCapturingGroupId(int capturingGroupId) {
             this.capturingGroupId = capturingGroupId;
         }
 
         /**
-         * Called during the retrieval of the value(s) of this template variable from a matched uri
+         * Called during the retrieval of the value(s) of this template variable
+         * from a matched uri
          * 
-         * @param matched
-         *            the string that was a match to the pattern of this variable
-         * @param values
-         *            the output multivalued map to put the values into
-         * @param startIndex
-         *            the start index of the matched string in the input uri
-         * @param indices
-         *            the output multivalued map to put the index into
+         * @param matched the string that was a match to the pattern of this
+         *            variable
+         * @param values the output multivalued map to put the values into
+         * @param startIndex the start index of the matched string in the input
+         *            uri
+         * @param indices the output multivalued map to put the index into
          */
-        public abstract void onMatch(String matched, MultivaluedMap<String,String> values, int startIndex,
-                MultivaluedMap<String,Integer> indices);
+        public abstract void onMatch(String matched,
+                                     MultivaluedMap<String, String> values,
+                                     int startIndex,
+                                     MultivaluedMap<String, Integer> indices);
 
     }
 
@@ -445,8 +449,10 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
         }
 
         public void build(StringBuilder builder) {
-            // we don't want any regex supplied by the user to contain any capturing groups
-            // that can interfere with the capturing groups of the regex that we are building,
+            // we don't want any regex supplied by the user to contain any
+            // capturing groups
+            // that can interfere with the capturing groups of the regex that we
+            // are building,
             // so we convert all the capturing groups into non-capturing groups
             regex = convertAllGroupsToNonCapturing(regex);
             builder.append("(");
@@ -455,20 +461,25 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
         }
 
         @Override
-        public void onMatch(String matched, MultivaluedMap<String,String> values, int startIndex,
-                MultivaluedMap<String,Integer> indices) {
+        public void onMatch(String matched,
+                            MultivaluedMap<String, String> values,
+                            int startIndex,
+                            MultivaluedMap<String, Integer> indices) {
             values.add(name, matched);
             indices.add(name, startIndex);
         }
 
-        public void expand(MultivaluedMap<String,String> values, boolean encode, StringBuilder builder) {
+        public void expand(MultivaluedMap<String, String> values,
+                           boolean encode,
+                           StringBuilder builder) {
             String value = values.getFirst(name);
             if (value == null) {
                 value = defaultValue;
             }
 
             if (value == null) {
-                throw new IllegalArgumentException("variable '" + name + "' was not supplied a value");
+                throw new IllegalArgumentException("variable '" + name
+                    + "' was not supplied a value");
             }
 
             if (encode) {
@@ -478,8 +489,9 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
         }
 
         /*
-         * converts all the capturing groups in the provided regex into non-capturing groups. e.g.:
-         * 1. "a(b)*c" is converted to "a(?:b)*c" 2. "(a+)(?:b+)" is converted to "(?:a+)(?:b+)"
+         * converts all the capturing groups in the provided regex into
+         * non-capturing groups. e.g.: 1. "a(b)*c" is converted to "a(?:b)*c" 2.
+         * "(a+)(?:b+)" is converted to "(?:a+)(?:b+)"
          */
         private String convertAllGroupsToNonCapturing(String regex) {
             StringBuffer sb = new StringBuffer();
@@ -502,29 +514,29 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
         /**
          * Start of compilation event
          * 
-         * @param template
-         *            the uri template that is being compiled
+         * @param template the uri template that is being compiled
          */
         public void startCompile(String template);
 
         /**
-         * Literal part event. The literal part is all the characters from the the previous variable
-         * (or the start of the uri template if there was no variable), up to the next variable
-         * found (or the end of the uri template if none exist).
+         * Literal part event. The literal part is all the characters from the
+         * the previous variable (or the start of the uri template if there was
+         * no variable), up to the next variable found (or the end of the uri
+         * template if none exist).
          * <p>
-         * E.g. if the template is "{var1}/foo/{var2}/goo" then there will be two literal events
-         * fired, one for "/foo/" and one for "/goo".
+         * E.g. if the template is "{var1}/foo/{var2}/goo" then there will be
+         * two literal events fired, one for "/foo/" and one for "/goo".
          * 
-         * @param literal
-         *            the literal part
+         * @param literal the literal part
          */
         public void literal(String literal);
 
         /**
-         * End of compilation event. Indicates that the template contains no more variables.
+         * End of compilation event. Indicates that the template contains no
+         * more variables.
          * 
-         * @param literal
-         *            the last literal part of the template after the last variable that was found
+         * @param literal the last literal part of the template after the last
+         *            variable that was found
          */
         public void endCompile(String literal);
     }
@@ -535,10 +547,11 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
     protected static abstract class AbstractPatternBuilder implements BaseCompilationHandler {
         // the processor whose uri template is being compiled and set
         protected UriTemplateProcessor processor;
-        // holds the regex template string that will be compiled at the end of the compilation
-        protected StringBuilder patternBuilder;
+        // holds the regex template string that will be compiled at the end of
+        // the compilation
+        protected StringBuilder        patternBuilder;
         // counter to track the regex pattern capturing group id
-        protected int capturingGroupId;
+        protected int                  capturingGroupId;
 
         protected AbstractPatternBuilder(UriTemplateProcessor processor) {
             this.processor = processor;
@@ -598,7 +611,8 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
             patternBuilder.append(')');
         }
 
-        // add the tail part of the template pattern as defined by the JAX-RS spec
+        // add the tail part of the template pattern as defined by the JAX-RS
+        // spec
         protected void createTail() {
             processor.tail = createVariable(TEMPLATE_TAIL_NAME, TEMPLATE_TAIL_PATTERN, null);
         }
@@ -606,12 +620,9 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
         /**
          * Create a new template variable
          * 
-         * @param name
-         *            name of the variable
-         * @param regex
-         *            the regular expression of the variable
-         * @param defaultValue
-         *            the default value of the variable
+         * @param name name of the variable
+         * @param regex the regular expression of the variable
+         * @param defaultValue the default value of the variable
          * @return
          */
         protected CapturingGroup createVariable(String name, String regex, String defaultValue) {
@@ -629,17 +640,17 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
      * Abstract base class for concrete template expanders
      */
     protected abstract static class AbstractTemplateExpander implements BaseCompilationHandler {
-        protected MultivaluedMap<String,String> values;
-        protected StringBuilder out;
+        protected MultivaluedMap<String, String> values;
+        protected StringBuilder                  out;
 
-        public AbstractTemplateExpander(MultivaluedMap<String,String> values, StringBuilder out) {
+        public AbstractTemplateExpander(MultivaluedMap<String, String> values, StringBuilder out) {
             this.values = values;
             this.out = out;
         }
 
         public void startCompile(String template) {
             if (values == null) {
-                values = new MultivaluedMapImpl<String,String>();
+                values = new MultivaluedMapImpl<String, String>();
             }
         }
 

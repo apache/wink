@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common.internal.providers.entity;
 
 import java.io.ByteArrayInputStream;
@@ -53,7 +53,6 @@ import org.apache.wink.common.model.synd.SyndPerson;
 
 import junit.framework.TestCase;
 
-
 /**
  * 
  */
@@ -67,32 +66,38 @@ public class CsvProvidersTest extends TestCase {
      * @throws Exception
      */
     public void testTo() throws Exception {
-        //        CollectionResource<String> resource = new CollectionResource<String>();
+        // CollectionResource<String> resource = new
+        // CollectionResource<String>();
         CsvSerializer csvSerializer = new CsvSerializer() {
 
-            List<String[]> csvText = new ArrayList<String[]>(
-                                       Arrays.asList(
-                                           new String[] { "Id", "Name", "Description",
-                                               "Assigned To", "Severity", "Status" },
-                                           new String[] {
-                                               "2",
-                                               "Infinite Loop",
-                                               "\"When making target which depends on it self, the application freezes in an infinite loop\"",
-                                               "developer2", "2-high", "New" },
-                                           new String[] {
-                                               "3",
-                                               "RSS feed component throws exception",
-                                               "When I open the policy manager home page"
-                                                   + lineSeparator
-                                                   + " (after I create business policy and perform some validations) I see the error.",
-                                               "developer3", "4-minor", "New" },
-                                           new String[] {
-                                               "1",
-                                               "Localization problem",
-                                               "While running the application,"
-                                                   + lineSeparator
-                                                   + "an exception that localization key is not found was thrown.",
-                                               "developer,1", "2-high", "New" }));
+            List<String[]> csvText =
+                                       new ArrayList<String[]>(
+                                                               Arrays
+                                                                   .asList(new String[] {"Id",
+                                                                               "Name",
+                                                                               "Description",
+                                                                               "Assigned To",
+                                                                               "Severity", "Status"},
+                                                                           new String[] {
+                                                                               "2",
+                                                                               "Infinite Loop",
+                                                                               "\"When making target which depends on it self, the application freezes in an infinite loop\"",
+                                                                               "developer2",
+                                                                               "2-high", "New"},
+                                                                           new String[] {
+                                                                               "3",
+                                                                               "RSS feed component throws exception",
+                                                                               "When I open the policy manager home page" + lineSeparator
+                                                                                   + " (after I create business policy and perform some validations) I see the error.",
+                                                                               "developer3",
+                                                                               "4-minor", "New"},
+                                                                           new String[] {
+                                                                               "1",
+                                                                               "Localization problem",
+                                                                               "While running the application," + lineSeparator
+                                                                                   + "an exception that localization key is not found was thrown.",
+                                                                               "developer,1",
+                                                                               "2-high", "New"}));
 
             public Iterator<String[]> getEntities() {
                 return csvText.iterator();
@@ -101,26 +106,31 @@ public class CsvProvidersTest extends TestCase {
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         MultivaluedMapImpl<String, Object> httpHeaders = new MultivaluedMapImpl<String, Object>();
-        new CsvSerializerProvider().writeTo(csvSerializer, csvSerializer.getClass(), null, null,
-            MediaTypeUtils.CSV, httpHeaders, os);
+        new CsvSerializerProvider().writeTo(csvSerializer,
+                                            csvSerializer.getClass(),
+                                            null,
+                                            null,
+                                            MediaTypeUtils.CSV,
+                                            httpHeaders,
+                                            os);
 
         String result = new String(os.toByteArray(), "UTF-8");
 
-        String expected = "Id,Name,Description,Assigned To,Severity,Status"
-            + lineSeparator
-            + "2,Infinite Loop,\"\"\"When making target which depends on it self, the application freezes in an infinite loop\"\"\",developer2,2-high,New"
-            + lineSeparator
-            + "3,RSS feed component throws exception,\"When I open the policy manager home page"
-            + lineSeparator
-            + " (after I create business policy and perform some validations) I see the error.\",developer3,4-minor,New"
-            + lineSeparator
-            + "1,Localization problem,\"While running the application,"
-            + lineSeparator
-            + "an exception that localization key is not found was thrown.\",\"developer,1\",2-high,New"
-            + lineSeparator;
+        String expected =
+            "Id,Name,Description,Assigned To,Severity,Status" + lineSeparator
+                + "2,Infinite Loop,\"\"\"When making target which depends on it self, the application freezes in an infinite loop\"\"\",developer2,2-high,New"
+                + lineSeparator
+                + "3,RSS feed component throws exception,\"When I open the policy manager home page"
+                + lineSeparator
+                + " (after I create business policy and perform some validations) I see the error.\",developer3,4-minor,New"
+                + lineSeparator
+                + "1,Localization problem,\"While running the application,"
+                + lineSeparator
+                + "an exception that localization key is not found was thrown.\",\"developer,1\",2-high,New"
+                + lineSeparator;
         assertEquals(expected, result);
-        assertEquals("attachment; filename=\"representation.csv\"",
-            httpHeaders.getFirst(CsvSerializerProvider.CONTENT_DISPOSITION_HEADER));
+        assertEquals("attachment; filename=\"representation.csv\"", httpHeaders
+            .getFirst(CsvSerializerProvider.CONTENT_DISPOSITION_HEADER));
     }
 
     public static class InnerCsvDeserializer implements CsvDeserializer {
@@ -141,39 +151,47 @@ public class CsvProvidersTest extends TestCase {
      */
     public void testFrom() throws Exception {
 
-        String source = "Id,Name,Description,Assigned To,Severity,Status"
-            + lineSeparator
-            + "2,Infinite Loop,\"\"\"When making target which depends on it self, the application freezes in an infinite loop\"\"\",developer2,2-high,New"
-            + lineSeparator
-            + "3,RSS feed component throws exception,When I open the policy manager home page (after I create business policy and perform some validations) I see the error.,developer3,4-minor,New"
-            + lineSeparator
-            + "1,Localization problem,\"While running the application,"
-            + lineSeparator
-            + "an exception that localization key is not found was thrown.\",\"developer,1\",2-high,New"
-            + lineSeparator;
+        String source =
+            "Id,Name,Description,Assigned To,Severity,Status" + lineSeparator
+                + "2,Infinite Loop,\"\"\"When making target which depends on it self, the application freezes in an infinite loop\"\"\",developer2,2-high,New"
+                + lineSeparator
+                + "3,RSS feed component throws exception,When I open the policy manager home page (after I create business policy and perform some validations) I see the error.,developer3,4-minor,New"
+                + lineSeparator
+                + "1,Localization problem,\"While running the application,"
+                + lineSeparator
+                + "an exception that localization key is not found was thrown.\",\"developer,1\",2-high,New"
+                + lineSeparator;
 
-        List<String[]> expected = new ArrayList<String[]>(
-            Arrays.asList(
-                new String[] { "Id", "Name", "Description", "Assigned To", "Severity", "Status" },
-                new String[] {
-                    "2",
-                    "Infinite Loop",
-                    "\"When making target which depends on it self, the application freezes in an infinite loop\"",
-                    "developer2", "2-high", "New" },
-                new String[] {
-                    "3",
-                    "RSS feed component throws exception",
-                    "When I open the policy manager home page (after I create business policy and perform some validations) I see the error.",
-                    "developer3", "4-minor", "New" }, new String[] {
-                    "1",
-                    "Localization problem",
-                    "While running the application," + lineSeparator
-                        + "an exception that localization key is not found was thrown.",
-                    "developer,1", "2-high", "New" }));
+        List<String[]> expected =
+            new ArrayList<String[]>(
+                                    Arrays
+                                        .asList(new String[] {"Id", "Name", "Description",
+                                                    "Assigned To", "Severity", "Status"},
+                                                new String[] {
+                                                    "2",
+                                                    "Infinite Loop",
+                                                    "\"When making target which depends on it self, the application freezes in an infinite loop\"",
+                                                    "developer2", "2-high", "New"},
+                                                new String[] {
+                                                    "3",
+                                                    "RSS feed component throws exception",
+                                                    "When I open the policy manager home page (after I create business policy and perform some validations) I see the error.",
+                                                    "developer3", "4-minor", "New"},
+                                                new String[] {
+                                                    "1",
+                                                    "Localization problem",
+                                                    "While running the application," + lineSeparator
+                                                        + "an exception that localization key is not found was thrown.",
+                                                    "developer,1", "2-high", "New"}));
 
-        InnerCsvDeserializer csvDeserializer = new CsvDeserializerProvider<InnerCsvDeserializer>().readFrom(
-            InnerCsvDeserializer.class, null, null, MediaTypeUtils.CSV,
-            new MultivaluedMapImpl<String, String>(), new ByteArrayInputStream(source.getBytes()));
+        InnerCsvDeserializer csvDeserializer =
+            new CsvDeserializerProvider<InnerCsvDeserializer>()
+                .readFrom(InnerCsvDeserializer.class,
+                          null,
+                          null,
+                          MediaTypeUtils.CSV,
+                          new MultivaluedMapImpl<String, String>(),
+                          new ByteArrayInputStream(source.getBytes()));
 
         for (int i = 0; i < expected.size(); ++i) {
             assertTrue(Arrays.deepEquals(expected.get(i), csvDeserializer.result.get(i)));
@@ -211,13 +229,14 @@ public class CsvProvidersTest extends TestCase {
         syndFeed.getEntries().add(entry2);
 
         // make providers to return CsvSerializerProvider
-        CsvSyndFeedSerializerProvider syndFeedSerializerProvider = new CsvSyndFeedSerializerProvider();
+        CsvSyndFeedSerializerProvider syndFeedSerializerProvider =
+            new CsvSyndFeedSerializerProvider();
         Field field = CsvSyndFeedSerializerProvider.class.getDeclaredField("providers");
         field.setAccessible(true);
         field.set(syndFeedSerializerProvider, new Providers() {
 
             public <T> ContextResolver<T> getContextResolver(Class<T> contextType,
-                MediaType mediaType) {
+                                                             MediaType mediaType) {
                 return null;
             }
 
@@ -225,31 +244,41 @@ public class CsvProvidersTest extends TestCase {
                 return null;
             }
 
-            public <T> MessageBodyReader<T> getMessageBodyReader(Class<T> type, Type genericType,
-                Annotation[] annotations, MediaType mediaType) {
+            public <T> MessageBodyReader<T> getMessageBodyReader(Class<T> type,
+                                                                 Type genericType,
+                                                                 Annotation[] annotations,
+                                                                 MediaType mediaType) {
                 return null;
             }
 
             @SuppressWarnings("unchecked")
-            public <T> MessageBodyWriter<T> getMessageBodyWriter(Class<T> type, Type genericType,
-                Annotation[] annotations, MediaType mediaType) {
-                return (MessageBodyWriter<T>) new CsvSerializerProvider();
+            public <T> MessageBodyWriter<T> getMessageBodyWriter(Class<T> type,
+                                                                 Type genericType,
+                                                                 Annotation[] annotations,
+                                                                 MediaType mediaType) {
+                return (MessageBodyWriter<T>)new CsvSerializerProvider();
             }
         });
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         MultivaluedMapImpl<String, Object> httpHeaders = new MultivaluedMapImpl<String, Object>();
-        syndFeedSerializerProvider.writeTo(syndFeed, syndFeed.getClass(), null, null,
-            MediaTypeUtils.CSV, httpHeaders,
-            os);
+        syndFeedSerializerProvider.writeTo(syndFeed,
+                                           syndFeed.getClass(),
+                                           null,
+                                           null,
+                                           MediaTypeUtils.CSV,
+                                           httpHeaders,
+                                           os);
 
         String result = new String(os.toByteArray());
 
         String expected =
-            
-            "id,title,content,authors,published,summary,updated,base,lang,author,control,severity" + lineSeparator +
-            "12345,,content,Moshe Moshe,,,,base1,en,Moshe Moshe,,high"  + lineSeparator +
-            "54321,,no content,Yosi Yosi,,,,base2,iw,Yosi Yosi,No Control,low"   + lineSeparator;
+
+            "id,title,content,authors,published,summary,updated,base,lang,author,control,severity" + lineSeparator
+                + "12345,,content,Moshe Moshe,,,,base1,en,Moshe Moshe,,high"
+                + lineSeparator
+                + "54321,,no content,Yosi Yosi,,,,base2,iw,Yosi Yosi,No Control,low"
+                + lineSeparator;
 
         assertEquals(expected, result);
     }

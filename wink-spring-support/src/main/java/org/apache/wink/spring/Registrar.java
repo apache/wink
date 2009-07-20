@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.spring;
 
 import java.util.Set;
@@ -26,7 +26,6 @@ import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.server.internal.application.ApplicationProcessor;
 import org.apache.wink.server.internal.registry.ResourceRegistry;
-
 
 public class Registrar extends WinkApplication {
 

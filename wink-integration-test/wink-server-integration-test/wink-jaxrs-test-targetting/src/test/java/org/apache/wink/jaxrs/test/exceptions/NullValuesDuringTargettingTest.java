@@ -55,7 +55,7 @@ public class NullValuesDuringTargettingTest extends TestCase {
             assertEquals(415, postMethod.getStatusCode());
             String responseBody = postMethod.getResponseBodyAsString();
             ServerContainerAssertions.assertExceptionBodyFromServer(415, responseBody);
-            if(responseBody == null || "".equals(responseBody)) {
+            if (responseBody == null || "".equals(responseBody)) {
                 assertNull(postMethod.getResponseHeader("Content-Type"));
             }
         } finally {
@@ -81,7 +81,7 @@ public class NullValuesDuringTargettingTest extends TestCase {
             assertEquals(415, postMethod.getStatusCode());
             String responseBody = postMethod.getResponseBodyAsString();
             ServerContainerAssertions.assertExceptionBodyFromServer(415, responseBody);
-            if(responseBody == null || "".equals(responseBody)) {
+            if (responseBody == null || "".equals(responseBody)) {
                 assertNull(postMethod.getResponseHeader("Content-Type"));
             }
         } finally {
@@ -268,7 +268,8 @@ public class NullValuesDuringTargettingTest extends TestCase {
             client.executeMethod(postMethod);
             assertEquals(200, postMethod.getStatusCode());
             assertEquals("calledWithProduces", postMethod.getResponseBodyAsString());
-            assertEquals("custom/type;q=0.8", postMethod.getResponseHeader("Content-Type").getValue());
+            assertEquals("custom/type;q=0.8", postMethod.getResponseHeader("Content-Type")
+                .getValue());
         } finally {
             postMethod.releaseConnection();
         }
@@ -290,7 +291,8 @@ public class NullValuesDuringTargettingTest extends TestCase {
             client.executeMethod(postMethod);
             assertEquals(200, postMethod.getStatusCode());
             assertEquals("calledWithoutProduces", postMethod.getResponseBodyAsString());
-            assertEquals("custom/type2;q=0.8", postMethod.getResponseHeader("Content-Type").getValue());
+            assertEquals("custom/type2;q=0.8", postMethod.getResponseHeader("Content-Type")
+                .getValue());
         } finally {
             postMethod.releaseConnection();
         }

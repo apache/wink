@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.webdav.server;
 
 import java.util.Map;
@@ -35,13 +35,12 @@ import org.apache.wink.webdav.model.Response;
 import org.apache.wink.webdav.server.WebDAVRootResource;
 import org.junit.Assert;
 
-
 public class WebDAVRootResourceTest extends AbstractWebDAVResourcesTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class<?>[] { WebDAVTestCollectionResource.class,
-            WebDAVTestDocumentResource.class, WebDAVRootResource.class };
+        return new Class<?>[] {WebDAVTestCollectionResource.class,
+            WebDAVTestDocumentResource.class, WebDAVRootResource.class};
     }
 
     public void testAllPropertyNames() throws Exception {

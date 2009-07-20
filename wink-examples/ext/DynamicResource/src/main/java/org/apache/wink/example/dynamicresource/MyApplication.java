@@ -24,16 +24,15 @@ import java.util.Set;
 
 import org.apache.wink.common.WinkApplication;
 
-
 public class MyApplication extends WinkApplication {
-    
+
     @Override
     public Set<Object> getInstances() {
         HashSet<Object> hs = new HashSet<Object>();
         BookmarksResource br = new BookmarksResource();
         br.setWorkspaceTitle("Demo Bookmarks Service");
         br.setCollectionTitle("My Bookmarks");
-        br.setDispatchedPath(new String[]{"/bookmarks"});
+        br.setDispatchedPath(new String[] {"/bookmarks"});
         hs.add(br);
         return hs;
     }

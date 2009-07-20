@@ -45,51 +45,77 @@ import org.apache.wink.example.qadefect.legacy.TestBean;
 import org.apache.wink.example.qadefect.resources.TestsResource;
 import org.apache.wink.server.utils.LinkBuilders;
 
-
 @Provider
-@Produces({MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON, MediaType.WILDCARD})
-@Consumes({MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON, MediaType.WILDCARD})
+@Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON, MediaType.WILDCARD})
+@Consumes( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON, MediaType.WILDCARD})
 public class TestBeanProvider implements MessageBodyWriter<TestBean> {
 
     @Context
-    private Providers providers;
+    private Providers    providers;
     @Context
     private LinkBuilders linkBuilders;
     @Context
-    private UriInfo uriInfo;
+    private UriInfo      uriInfo;
 
-    public long getSize(TestBean t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public long getSize(TestBean t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
         return -1;
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
         return type == TestBean.class;
     }
 
-    public void writeTo(TestBean bean, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
-            MultivaluedMap<String,Object> httpHeaders, OutputStream entityStream) throws IOException,
-            WebApplicationException {
+    public void writeTo(TestBean bean,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        MessageBodyWriter<TestBean> writer = providers.getMessageBodyWriter(TestBean.class, DefectBean.class,
-                annotations, MediaType.APPLICATION_XML_TYPE);
-        writer.writeTo(bean, bean.getClass(), bean.getClass(), annotations, MediaType.APPLICATION_XML_TYPE,
-                httpHeaders, os);
+        MessageBodyWriter<TestBean> writer =
+            providers.getMessageBodyWriter(TestBean.class,
+                                           DefectBean.class,
+                                           annotations,
+                                           MediaType.APPLICATION_XML_TYPE);
+        writer.writeTo(bean,
+                       bean.getClass(),
+                       bean.getClass(),
+                       annotations,
+                       MediaType.APPLICATION_XML_TYPE,
+                       httpHeaders,
+                       os);
 
         SyndEntry syndEntry = createSyndEntry(bean);
-        syndEntry.setContent(new SyndContent(os.toString("UTF-8"), MediaType.APPLICATION_XML, false));
+        syndEntry
+            .setContent(new SyndContent(os.toString("UTF-8"), MediaType.APPLICATION_XML, false));
 
         Object testsResource = uriInfo.getMatchedResources().get(0);
 
         String testId = syndEntry.getId().substring(syndEntry.getId().lastIndexOf(':') + 1);
         // add self and alternate representation links to document metadata
-        linkBuilders.createSystemLinksBuilder().resource(testsResource).subResource(TestsResource.TEST_URL).pathParam(
-                TestsResource.TEST_PARAM, testId).build(syndEntry.getLinks());
+        linkBuilders.createSystemLinksBuilder().resource(testsResource)
+            .subResource(TestsResource.TEST_URL).pathParam(TestsResource.TEST_PARAM, testId)
+            .build(syndEntry.getLinks());
 
-        MessageBodyWriter<SyndEntry> syndEntryWriter = providers.getMessageBodyWriter(SyndEntry.class, SyndEntry.class,
-                annotations, mediaType);
-        syndEntryWriter.writeTo(syndEntry, syndEntry.getClass(), syndEntry.getClass(), annotations, mediaType,
-                httpHeaders, entityStream);
+        MessageBodyWriter<SyndEntry> syndEntryWriter =
+            providers
+                .getMessageBodyWriter(SyndEntry.class, SyndEntry.class, annotations, mediaType);
+        syndEntryWriter.writeTo(syndEntry,
+                                syndEntry.getClass(),
+                                syndEntry.getClass(),
+                                annotations,
+                                mediaType,
+                                httpHeaders,
+                                entityStream);
     }
 
     public static SyndEntry createSyndEntry(TestBean bean) {

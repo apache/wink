@@ -36,14 +36,13 @@ import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 public class AppCategoriesDocumentProviderTest extends MockServletInvocationTest {
 
     private String ATOM_CATEGORIES_DUCUMENT = "atom_categories_document.xml";
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] { CategoriesResource.class };
+        return new Class[] {CategoriesResource.class};
     }
 
     @Path("/")
@@ -58,8 +57,10 @@ public class AppCategoriesDocumentProviderTest extends MockServletInvocationTest
 
     public void testAtomCategoriesSerialization() throws Exception {
 
-        MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
-            "/", MediaTypeUtils.ATOM_CATEGORIES_DOCUMENT);
+        MockHttpServletRequest mockRequest =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/",
+                                                        MediaTypeUtils.ATOM_CATEGORIES_DOCUMENT);
 
         MockHttpServletResponse response = invoke(mockRequest);
         String content = response.getContentAsString();
@@ -79,8 +80,12 @@ public class AppCategoriesDocumentProviderTest extends MockServletInvocationTest
             throw e;
         }
 
-        assertTrue("Expected atom feed documents to be similar" + " " + diff.toString()
-            + "\nexpected:\n" + expectedSerialization + "\nresult:\n" + content, diff.similar());
+        assertTrue("Expected atom feed documents to be similar" + " "
+            + diff.toString()
+            + "\nexpected:\n"
+            + expectedSerialization
+            + "\nresult:\n"
+            + content, diff.similar());
     }
 
     private static AppCategories buildCategories() {
@@ -101,7 +106,8 @@ public class AppCategoriesDocumentProviderTest extends MockServletInvocationTest
 
     private String readCategoriesDocumentFromFile() throws IOException {
         // Read expected Entry from file
-        InputStream is = CategoriesDocumentProviderTest.class.getResourceAsStream(ATOM_CATEGORIES_DUCUMENT);
+        InputStream is =
+            CategoriesDocumentProviderTest.class.getResourceAsStream(ATOM_CATEGORIES_DUCUMENT);
         byte[] b = new byte[4096];
         int read = is.read(b);
         String expectedSerialization = new String(b, 0, read);

@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common.internal.providers.header;
 
 import javax.ws.rs.ext.RuntimeDelegate;
@@ -26,7 +26,6 @@ import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 import org.apache.wink.common.internal.http.ContentDispositionHeader;
 
 import junit.framework.TestCase;
-
 
 /**
  * Unit test of ContentDispositionHelper
@@ -37,8 +36,8 @@ public class ContentDispositionHeaderDelegateTest extends TestCase {
         ContentDispositionHeader contentDispositionHeader = new ContentDispositionHeader();
         contentDispositionHeader.setAttachment(true);
         contentDispositionHeader.setFileName("fileName.xml");
-        HeaderDelegate<ContentDispositionHeader> headerDelegate = RuntimeDelegate.getInstance().createHeaderDelegate(
-            ContentDispositionHeader.class);
+        HeaderDelegate<ContentDispositionHeader> headerDelegate =
+            RuntimeDelegate.getInstance().createHeaderDelegate(ContentDispositionHeader.class);
         String header = headerDelegate.toString(contentDispositionHeader);
 
         assertEquals("header value", "attachment; filename=\"fileName.xml\"", header);
@@ -48,8 +47,8 @@ public class ContentDispositionHeaderDelegateTest extends TestCase {
         ContentDispositionHeader contentDispositionHeader = new ContentDispositionHeader();
         contentDispositionHeader.setAttachment(false);
         contentDispositionHeader.setFileName("fileName.xml");
-        HeaderDelegate<ContentDispositionHeader> headerDelegate = RuntimeDelegate.getInstance().createHeaderDelegate(
-            ContentDispositionHeader.class);
+        HeaderDelegate<ContentDispositionHeader> headerDelegate =
+            RuntimeDelegate.getInstance().createHeaderDelegate(ContentDispositionHeader.class);
         String header = headerDelegate.toString(contentDispositionHeader);
 
         assertEquals("header value", "inline; filename=\"fileName.xml\"", header);
@@ -58,23 +57,25 @@ public class ContentDispositionHeaderDelegateTest extends TestCase {
     public void testDispositionInlineNoFilename() {
         ContentDispositionHeader contentDispositionHeader = new ContentDispositionHeader();
         contentDispositionHeader.setAttachment(false);
-        HeaderDelegate<ContentDispositionHeader> headerDelegate = RuntimeDelegate.getInstance().createHeaderDelegate(
-            ContentDispositionHeader.class);
+        HeaderDelegate<ContentDispositionHeader> headerDelegate =
+            RuntimeDelegate.getInstance().createHeaderDelegate(ContentDispositionHeader.class);
         String header = headerDelegate.toString(contentDispositionHeader);
         assertEquals("header value", "inline", header);
     }
 
-    //    public void testNegativeContentTypeNotKnown() {
-    //        Response response = RuntimeDelegate.getInstance().createResponseBuilder().build();
-    //        final String unknownContentType = "unknown/unknown";
-    //        try {
-    //            ContentDispositionHelper.setContentDisposition(response, unknownContentType,
-    //                "contentName");
-    //            fail("IllegalArgumentException expected");
-    //        } catch (IllegalArgumentException iae) {
-    //            assertTrue("caused by unknown media type",
-    //                iae.getMessage().contains(unknownContentType));
-    //        }
-    //    }
+    // public void testNegativeContentTypeNotKnown() {
+    // Response response =
+    // RuntimeDelegate.getInstance().createResponseBuilder().build();
+    // final String unknownContentType = "unknown/unknown";
+    // try {
+    // ContentDispositionHelper.setContentDisposition(response,
+    // unknownContentType,
+    // "contentName");
+    // fail("IllegalArgumentException expected");
+    // } catch (IllegalArgumentException iae) {
+    // assertTrue("caused by unknown media type",
+    // iae.getMessage().contains(unknownContentType));
+    // }
+    // }
 
 }

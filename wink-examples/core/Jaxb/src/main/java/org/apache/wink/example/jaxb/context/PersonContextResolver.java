@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.example.jaxb.context;
 
@@ -28,13 +27,12 @@ import javax.xml.bind.JAXBException;
 
 import org.apache.wink.example.jaxb.Person;
 
-
 /**
  * Context provider for providing the JAXBContext for the Person JAXB object
  */
 @Provider
 public class PersonContextResolver implements ContextResolver<JAXBContext> {
-    
+
     private static JAXBContext context;
     static {
         try {
@@ -43,6 +41,7 @@ public class PersonContextResolver implements ContextResolver<JAXBContext> {
             throw new RuntimeException(e);
         }
     }
+
     public JAXBContext getContext(Class<?> type) {
         if (Person.class.equals(type)) {
             return context;

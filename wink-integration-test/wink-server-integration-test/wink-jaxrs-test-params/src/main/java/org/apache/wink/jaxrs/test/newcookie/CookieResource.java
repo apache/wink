@@ -41,7 +41,7 @@ public class CookieResource {
     @Context
     private UriInfo uri;
 
-    private String value3;
+    private String  value3;
 
     // @CookieParam("name2")
     // private String value2;
@@ -58,8 +58,14 @@ public class CookieResource {
         if (cookies != null) {
             for (String s : cookies.keySet()) {
                 Cookie c = cookies.get(s);
-                ret += c.getName() + "," + c.getValue() + "," + c.getPath()
-                        + "," + c.getDomain() + "\r";
+                ret +=
+                    c.getName() + ","
+                        + c.getValue()
+                        + ","
+                        + c.getPath()
+                        + ","
+                        + c.getDomain()
+                        + "\r";
             }
         }
         return Response.ok(ret).build();
@@ -95,15 +101,12 @@ public class CookieResource {
     @Produces("text/plain")
     public Response setCookies() {
         ResponseBuilder rb = Response.ok();
-        rb.cookie(new NewCookie("name", "value", uri.getBaseUri().getPath()
-                + uri.getPath(), uri.getBaseUri().getHost(), "comment", 10,
-                false));
-        rb.cookie(new NewCookie("name2", "value2", uri.getBaseUri().getPath()
-                + uri.getPath(), uri.getBaseUri().getHost(), "comment2", 10,
-                false));
-        rb.cookie(new NewCookie("name3", "value3", uri.getBaseUri().getPath()
-                + uri.getPath(), uri.getBaseUri().getHost(), "comment2", 10,
-                false));
+        rb.cookie(new NewCookie("name", "value", uri.getBaseUri().getPath() + uri.getPath(), uri
+            .getBaseUri().getHost(), "comment", 10, false));
+        rb.cookie(new NewCookie("name2", "value2", uri.getBaseUri().getPath() + uri.getPath(), uri
+            .getBaseUri().getHost(), "comment2", 10, false));
+        rb.cookie(new NewCookie("name3", "value3", uri.getBaseUri().getPath() + uri.getPath(), uri
+            .getBaseUri().getHost(), "comment2", 10, false));
         return rb.build();
     }
 

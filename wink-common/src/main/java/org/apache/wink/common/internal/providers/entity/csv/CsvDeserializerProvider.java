@@ -37,19 +37,23 @@ import javax.ws.rs.ext.Provider;
 import org.apache.wink.common.model.csv.CsvDeserializer;
 import org.apache.wink.common.utils.ProviderUtils;
 
-
 @Provider
 @Consumes("text/csv")
 public class CsvDeserializerProvider<T extends CsvDeserializer> implements MessageBodyReader<T> {
 
-    public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType) {
+    public boolean isReadable(Class<?> type,
+                              Type genericType,
+                              Annotation[] annotations,
+                              MediaType mediaType) {
         return CsvDeserializer.class.isAssignableFrom(type);
     }
 
-    public T readFrom(Class<T> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream)
-        throws IOException, WebApplicationException {
+    public T readFrom(Class<T> type,
+                      Type genericType,
+                      Annotation[] annotations,
+                      MediaType mediaType,
+                      MultivaluedMap<String, String> httpHeaders,
+                      InputStream entityStream) throws IOException, WebApplicationException {
         T descriptor;
         try {
             descriptor = type.getConstructor().newInstance();
@@ -59,8 +63,9 @@ public class CsvDeserializerProvider<T extends CsvDeserializer> implements Messa
         return fillDiscriptor(descriptor, mediaType, entityStream);
     }
 
-    public static <T extends CsvDeserializer> T fillDiscriptor(T descriptor, MediaType mediaType,
-        InputStream entityStream) {
+    public static <T extends CsvDeserializer> T fillDiscriptor(T descriptor,
+                                                               MediaType mediaType,
+                                                               InputStream entityStream) {
         Charset charset = Charset.forName(ProviderUtils.getCharset(mediaType));
         Reader reader = new InputStreamReader(entityStream, charset);
         CsvReader csvReader = new CsvReader(reader);

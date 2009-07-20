@@ -46,11 +46,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-
-
-
 /**
- * The <code>multistatus</code> XML element per the WebDAV specification [RFC 4918]
+ * The <code>multistatus</code> XML element per the WebDAV specification [RFC
+ * 4918]
  * 
  * <pre>
  *    Name:       multistatus
@@ -72,28 +70,23 @@ public class Multistatus {
 
     @XmlElement(required = true)
     protected List<Response> response;
-    protected String responsedescription;
+    protected String         responsedescription;
 
     /**
      * Gets the value of the response property.
-     * 
      * <p>
-     * This accessor method returns a reference to the live list, not a snapshot. Therefore any
-     * modification you make to the returned list will be present inside the JAXB object. This is
-     * why there is not a <CODE>set</CODE> method for the response property.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the response property.
      * <p>
      * For example, to add a new item, do as follows:
      * 
      * <pre>
      * getResponse().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
      * Objects of the following type(s) are allowed in the list {@link Response }
-     * 
-     * 
      */
     public List<Response> getResponse() {
         if (response == null) {
@@ -101,13 +94,14 @@ public class Multistatus {
         }
         return this.response;
     }
-    
+
     /**
      * Get a map of responses where the key is the response href
+     * 
      * @return a map of responses
      */
-    public Map<String,Response> getResponsesAsMapByHref() {
-        Map<String,Response> map = new HashMap<String,Response>();
+    public Map<String, Response> getResponsesAsMapByHref() {
+        Map<String, Response> map = new HashMap<String, Response>();
         for (Response response : getResponse()) {
             for (String responseHref : response.getHref()) {
                 map.put(responseHref, response);
@@ -115,16 +109,17 @@ public class Multistatus {
         }
         return map;
     }
-    
+
     /**
      * Get a the first response available that matches the provided href
+     * 
      * @param href the href of the response to get
      * @return thr first response that has the provided href
      */
     public Response getResponseByHref(String href) {
         for (Response response : getResponse()) {
             for (String responseHref : response.getHref()) {
-                if (responseHref.equals(href)) 
+                if (responseHref.equals(href))
                     return response;
             }
         }
@@ -135,7 +130,6 @@ public class Multistatus {
      * Gets the value of the responsedescription property.
      * 
      * @return possible object is {@link String }
-     * 
      */
     public String getResponsedescription() {
         return responsedescription;
@@ -144,16 +138,15 @@ public class Multistatus {
     /**
      * Sets the value of the responsedescription property.
      * 
-     * @param value
-     *            allowed object is {@link String }
-     * 
+     * @param value allowed object is {@link String }
      */
     public void setResponsedescription(String value) {
         this.responsedescription = value;
     }
-    
+
     /**
      * Unmarshal a Multistatus object from the provided input stream
+     * 
      * @param is the input stream
      * @return an instance of a Multistatus object
      * @throws IOException
@@ -164,6 +157,7 @@ public class Multistatus {
 
     /**
      * Marshal a Multistatus object to the provided output stream
+     * 
      * @param instance the Multistatus instance to marshal
      * @param os the output stream
      * @throws IOException
@@ -174,18 +168,21 @@ public class Multistatus {
 
     /**
      * Unmarshal a Multistatus object from the provided reader
+     * 
      * @param reader the input reader
      * @return an instance of a Multistatus object
      * @throws IOException
      */
     public static Multistatus unmarshal(Reader reader) throws IOException {
         Unmarshaller unmarshaller = WebDAVModelHelper.createUnmarshaller();
-        Multistatus instance = WebDAVModelHelper.unmarshal(unmarshaller, reader, Multistatus.class, "multistatus");
+        Multistatus instance =
+            WebDAVModelHelper.unmarshal(unmarshaller, reader, Multistatus.class, "multistatus");
         return instance;
     }
-    
+
     /**
      * Marshal a Multistatus object to the provided writer
+     * 
      * @param instance the Multistatus instance to marshal
      * @param writer the output writer
      * @throws IOException

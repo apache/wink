@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.utils;
 
@@ -34,9 +33,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class FileLoader {
-    
-    protected FileLoader(){}
-    
+
+    protected FileLoader() {
+    }
+
     private static final Logger logger = LoggerFactory.getLogger(FileLoader.class);
 
     /**
@@ -130,7 +130,7 @@ public class FileLoader {
             logger.error("Failed to find file using classloaders");
             throw new FileNotFoundException(filename);
         }
-        
+
         return url;
     }
 

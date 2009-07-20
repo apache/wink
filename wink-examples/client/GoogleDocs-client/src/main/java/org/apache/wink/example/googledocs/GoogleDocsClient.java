@@ -40,11 +40,11 @@ import org.apache.wink.common.model.synd.SyndFeed;
 import org.apache.wink.common.model.synd.SyndLink;
 import org.apache.wink.common.model.synd.SyndPerson;
 
-
 public class GoogleDocsClient {
 
     private final static String lineSeparator = System.getProperty("line.separator");
-    private final String        URL           = "http://docs.google.com/feeds/documents/private/full/";
+    private final String        URL           =
+                                                  "http://docs.google.com/feeds/documents/private/full/";
 
     private RestClient          restClient;
     private CLIHelper           cliHelper;
@@ -101,7 +101,8 @@ public class GoogleDocsClient {
             }
         } catch (ClientWebException e) {
             // error during client invocation
-            // usually it happens when status code starting with 400 or 500 is returned
+            // usually it happens when status code starting with 400 or 500 is
+            // returned
             ClientResponse response = e.getResponse();
             System.out.println("Status: " + response.getStatusCode());
             System.out.println("Message: " + response.getMessage());
@@ -129,8 +130,7 @@ public class GoogleDocsClient {
     /**
      * delete file
      * 
-     * @param id
-     *            - id as it appears in edit link
+     * @param id - id as it appears in edit link
      */
     public void delete(String id) {
         Resource resource = restClient.resource(URL + id);
@@ -143,20 +143,19 @@ public class GoogleDocsClient {
     /**
      * Upload a file
      * 
-     * @param filename
-     *            - full filename to upload
+     * @param filename - full filename to upload
      * @return location of the uploaded file
-     * @throws FileNotFoundException
-     *             - file was not found
-     * @throws ClientWebException
-     *             - error occurred during the upload
+     * @throws FileNotFoundException - file was not found
+     * @throws ClientWebException - error occurred during the upload
      */
     public String uploadFile(String filename) throws FileNotFoundException, ClientWebException {
         Resource listOfDocumentsResource = restClient.resource(URL);
 
         File file = new File(filename);
-        ClientResponse clientResponse = listOfDocumentsResource.header("Slug", file.getName()).contentType(
-            mapContentType(filename)).post(ClientResponse.class, new FileInputStream(file));
+        ClientResponse clientResponse =
+            listOfDocumentsResource.header("Slug", file.getName())
+                .contentType(mapContentType(filename)).post(ClientResponse.class,
+                                                            new FileInputStream(file));
         if (clientResponse.getStatusCode() == Status.CREATED.getStatusCode()) {
             return clientResponse.getHeaders().getFirst(HttpHeaders.LOCATION);
         }

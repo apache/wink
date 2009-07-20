@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.model.synd;
 
@@ -35,7 +34,7 @@ public class SyndEntry extends SyndBase {
     public SyndEntry(String title, String id) {
         this(title, id, null);
     }
-    
+
     public SyndEntry(SyndText title, String id) {
         this(title, id, null);
     }
@@ -43,7 +42,7 @@ public class SyndEntry extends SyndBase {
     public SyndEntry(String title, String id, Date updated) {
         this(new SyndText(title), id, updated);
     }
-        
+
     public SyndEntry(SyndText title, String id, Date updated) {
         super(id, title, updated);
     }
@@ -97,7 +96,7 @@ public class SyndEntry extends SyndBase {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        SyndEntry other = (SyndEntry) obj;
+        SyndEntry other = (SyndEntry)obj;
         if (content == null) {
             if (other.content != null)
                 return false;

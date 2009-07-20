@@ -58,7 +58,9 @@ public class Getetag {
     @XmlMixed
     protected List<String> content;
 
-    public Getetag() {}
+    public Getetag() {
+    }
+
     public Getetag(String value) {
         setValue(value);
     }
@@ -73,8 +75,7 @@ public class Getetag {
     /**
      * Sets the value.
      * 
-     * @param value
-     *            the value to set
+     * @param value the value to set
      */
     public void setValue(String value) {
         List<String> content = getContent();

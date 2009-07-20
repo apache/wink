@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.locking.legacy;
 
 import java.util.Date;
@@ -33,17 +33,9 @@ import javax.xml.bind.annotation.XmlType;
  * Defect bean.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "DefectType", propOrder = {
-    "id",
-    "name",
-    "description",
-    "created",
-    "author",
-    "status",
-    "severity",
-    "assignedTo"
-})
-@XmlRootElement(name="defect")
+@XmlType(name = "DefectType", propOrder = {"id", "name", "description", "created", "author",
+                                           "status", "severity", "assignedTo"})
+@XmlRootElement(name = "defect")
 public class DefectBean {
     @XmlElement(required = true)
     private String id;
@@ -81,8 +73,14 @@ public class DefectBean {
      * @param status
      * @param assignedTo
      */
-    public DefectBean(String id, String name, String description, Date created,
-        String author, String severity, String status, String assignedTo) {
+    public DefectBean(String id,
+                      String name,
+                      String description,
+                      Date created,
+                      String author,
+                      String severity,
+                      String status,
+                      String assignedTo) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -105,8 +103,7 @@ public class DefectBean {
     /**
      * <code>assignedTo</code> setter.
      * 
-     * @param assignedTo
-     *            the <code>assignedTo</code> to set
+     * @param assignedTo the <code>assignedTo</code> to set
      */
     public void setAssignedTo(String assignedTo) {
         this.assignedTo = assignedTo;
@@ -124,8 +121,7 @@ public class DefectBean {
     /**
      * <code>author</code> setter.
      * 
-     * @param author
-     *            the <code>author</code> to set
+     * @param author the <code>author</code> to set
      */
     public void setAuthor(String author) {
         this.author = author;
@@ -143,8 +139,7 @@ public class DefectBean {
     /**
      * <code>created</code> setter.
      * 
-     * @param created
-     *            the <code>created</code> to set
+     * @param created the <code>created</code> to set
      */
     public void setCreated(Date created) {
         this.created = created;
@@ -162,8 +157,7 @@ public class DefectBean {
     /**
      * <code>description</code> setter.
      * 
-     * @param description
-     *            the <code>description</code> to set
+     * @param description the <code>description</code> to set
      */
     public void setDescription(String description) {
         this.description = description;
@@ -181,8 +175,7 @@ public class DefectBean {
     /**
      * <code>id</code> setter.
      * 
-     * @param id
-     *            the <code>id</code> to set
+     * @param id the <code>id</code> to set
      */
     public void setId(String id) {
         this.id = id;
@@ -200,8 +193,7 @@ public class DefectBean {
     /**
      * <code>name</code> setter.
      * 
-     * @param name
-     *            the <code>name</code> to set
+     * @param name the <code>name</code> to set
      */
     public void setName(String name) {
         this.name = name;
@@ -219,8 +211,7 @@ public class DefectBean {
     /**
      * <code>severity</code> setter.
      * 
-     * @param severity
-     *            the <code>severity</code> to set
+     * @param severity the <code>severity</code> to set
      */
     public void setSeverity(String severity) {
         this.severity = severity;
@@ -238,8 +229,7 @@ public class DefectBean {
     /**
      * <code>status</code> setter.
      * 
-     * @param status
-     *            the <code>status</code> to set
+     * @param status the <code>status</code> to set
      */
     public void setStatus(String status) {
         this.status = status;
@@ -253,16 +243,13 @@ public class DefectBean {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result
-            + ((assignedTo == null) ? 0 : assignedTo.hashCode());
+        result = prime * result + ((assignedTo == null) ? 0 : assignedTo.hashCode());
         result = prime * result + ((author == null) ? 0 : author.hashCode());
         result = prime * result + ((created == null) ? 0 : created.hashCode());
-        result = prime * result
-            + ((description == null) ? 0 : description.hashCode());
+        result = prime * result + ((description == null) ? 0 : description.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result
-            + ((severity == null) ? 0 : severity.hashCode());
+        result = prime * result + ((severity == null) ? 0 : severity.hashCode());
         result = prime * result + ((status == null) ? 0 : status.hashCode());
         return result;
     }
@@ -279,7 +266,7 @@ public class DefectBean {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        final DefectBean other = (DefectBean) obj;
+        final DefectBean other = (DefectBean)obj;
         if (assignedTo == null) {
             if (other.assignedTo != null)
                 return false;

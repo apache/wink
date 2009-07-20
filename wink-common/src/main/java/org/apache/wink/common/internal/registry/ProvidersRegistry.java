@@ -393,7 +393,7 @@ public class ProvidersRegistry {
         private final Map<MediaType, Set<ObjectFactory<T>>> data =
                                                                      new LinkedHashMap<MediaType, Set<ObjectFactory<T>>>();
         private final Class<?>                              rawType;
-        
+
         public MediaTypeMap(Class<?> rawType) {
             super();
             this.rawType = rawType;
@@ -450,40 +450,42 @@ public class ProvidersRegistry {
                 }
             }
 
-            // sorts according to the following algorithm: n / m  >  n / *  >  * / * in descending order 
+            // sorts according to the following algorithm: n / m > n / * > * / *
+            // in descending order
             // see https://issues.apache.org/jira/browse/WINK-82
-            Collections.sort(compatibleList, Collections.reverseOrder(new Comparator<Entry<MediaType, Set<ObjectFactory<T>>>>() {
+            Collections.sort(compatibleList, Collections
+                .reverseOrder(new Comparator<Entry<MediaType, Set<ObjectFactory<T>>>>() {
 
-                public int compare(Entry<MediaType, Set<ObjectFactory<T>>> o1,
-                                   Entry<MediaType, Set<ObjectFactory<T>>> o2) {
-                    MediaType m1 = o1.getKey();
-                    MediaType m2 = o2.getKey();
-                    int compareTypes = compareTypes(m1.getType(), m2.getType());
-                    if (compareTypes == 0) {
-                        return compareTypes(m1.getSubtype(), m2.getSubtype());
-                    }
-                    return compareTypes;
-                }
-                
-                private int compareTypes(String type1, String type2) {
-                    if (type1.equals(MediaType.MEDIA_TYPE_WILDCARD)) {
-                        if (type2.equals(MediaType.MEDIA_TYPE_WILDCARD)) {
-                            // both types are wildcards
-                            return 0;
+                    public int compare(Entry<MediaType, Set<ObjectFactory<T>>> o1,
+                                       Entry<MediaType, Set<ObjectFactory<T>>> o2) {
+                        MediaType m1 = o1.getKey();
+                        MediaType m2 = o2.getKey();
+                        int compareTypes = compareTypes(m1.getType(), m2.getType());
+                        if (compareTypes == 0) {
+                            return compareTypes(m1.getSubtype(), m2.getSubtype());
                         }
-                        // only type2 is concrete
-                        // type2 > type1
-                        return -1;
+                        return compareTypes;
                     }
-                    if (type2.equals(MediaType.MEDIA_TYPE_WILDCARD)) {
-                        // only type1 is concrete
-                        return 1;
+
+                    private int compareTypes(String type1, String type2) {
+                        if (type1.equals(MediaType.MEDIA_TYPE_WILDCARD)) {
+                            if (type2.equals(MediaType.MEDIA_TYPE_WILDCARD)) {
+                                // both types are wildcards
+                                return 0;
+                            }
+                            // only type2 is concrete
+                            // type2 > type1
+                            return -1;
+                        }
+                        if (type2.equals(MediaType.MEDIA_TYPE_WILDCARD)) {
+                            // only type1 is concrete
+                            return 1;
+                        }
+                        // both types are concrete
+                        return 0;
                     }
-                    // both types are concrete
-                    return 0;
-                }
-            }));
-            
+                }));
+
             for (Entry<MediaType, Set<ObjectFactory<T>>> entry : compatibleList) {
                 limitByType(list, entry.getValue(), cls);
             }

@@ -28,56 +28,61 @@ import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 
 public class CacheControlHeaderDelegate implements HeaderDelegate<CacheControl> {
 
-    private static final String S_MAXAGE = "s-maxage";
-    private static final String MAX_AGE = "max-age";
+    private static final String S_MAXAGE         = "s-maxage";
+    private static final String MAX_AGE          = "max-age";
     private static final String PROXY_REVALIDATE = "proxy-revalidate";
-    private static final String MUST_REVALIDATE = "must-revalidate";
-    private static final String NO_TRANSFORM = "no-transform";
-    private static final String NO_STORE = "no-store";
-    private static final String NO_CACHE = "no-cache";
-    private static final String PRIVATE = "private";
+    private static final String MUST_REVALIDATE  = "must-revalidate";
+    private static final String NO_TRANSFORM     = "no-transform";
+    private static final String NO_STORE         = "no-store";
+    private static final String NO_CACHE         = "no-cache";
+    private static final String PRIVATE          = "private";
 
     public CacheControl fromString(String value) throws IllegalArgumentException {
-        throw new UnsupportedOperationException("JAX-RS CacheControl type is designed to support only cache-response-directives");
+        throw new UnsupportedOperationException(
+                                                "JAX-RS CacheControl type is designed to support only cache-response-directives");
     }
 
     public String toString(CacheControl header) {
         if (header == null)
             throw new IllegalArgumentException("CacheControl header is null");
-        
+
         StringBuffer cacheControlHeader = new StringBuffer();
 
-        if (header.isPrivate())
-        {
-            appendDirectiveWithValues(cacheControlHeader, PRIVATE, generateDirectiveValuesList(header.getPrivateFields()));
+        if (header.isPrivate()) {
+            appendDirectiveWithValues(cacheControlHeader,
+                                      PRIVATE,
+                                      generateDirectiveValuesList(header.getPrivateFields()));
         }
-        if (header.isNoCache()){
-            appendDirectiveWithValues(cacheControlHeader, NO_CACHE, generateDirectiveValuesList(header.getNoCacheFields()));
+        if (header.isNoCache()) {
+            appendDirectiveWithValues(cacheControlHeader,
+                                      NO_CACHE,
+                                      generateDirectiveValuesList(header.getNoCacheFields()));
         }
-        if (header.isNoStore()){
+        if (header.isNoStore()) {
             appendDirective(cacheControlHeader, NO_STORE);
         }
-        if (header.isNoTransform()){
+        if (header.isNoTransform()) {
             appendDirective(cacheControlHeader, NO_TRANSFORM);
         }
-        if (header.isMustRevalidate()){
+        if (header.isMustRevalidate()) {
             appendDirective(cacheControlHeader, MUST_REVALIDATE);
         }
-        if (header.isProxyRevalidate()){
+        if (header.isProxyRevalidate()) {
             appendDirective(cacheControlHeader, PROXY_REVALIDATE);
         }
-        if (header.getMaxAge() != -1){
+        if (header.getMaxAge() != -1) {
             appendDirective(cacheControlHeader, MAX_AGE, header.getMaxAge());
         }
-        if (header.getSMaxAge() != -1){
+        if (header.getSMaxAge() != -1) {
             appendDirective(cacheControlHeader, S_MAXAGE, header.getSMaxAge());
         }
-        
+
         // Add extension cache control directives
         Set<Entry<String, String>> entrySet = header.getCacheExtension().entrySet();
         if (entrySet != null && entrySet.size() > 0) {
             for (Entry<String, String> entry : entrySet) {
-                appendExtentionDirective(cacheControlHeader, entry.getKey(), quoteValue(entry.getValue()));
+                appendExtentionDirective(cacheControlHeader, entry.getKey(), quoteValue(entry
+                    .getValue()));
             }
         }
 
@@ -85,20 +90,22 @@ public class CacheControlHeaderDelegate implements HeaderDelegate<CacheControl> 
     }
 
     private void appendDirective(StringBuffer cacheControlHeader, String directive) {
-        if (cacheControlHeader.length() > 0){
+        if (cacheControlHeader.length() > 0) {
             cacheControlHeader.append(", ");
         }
         cacheControlHeader.append(directive);
-        
+
     }
-    
+
     /**
      * Generate a list of directive values, separated by ","
-     * @param values - list of directive values 
-     * @return String - string that holds concatenation of directive values separated by ", " delimiter
+     * 
+     * @param values - list of directive values
+     * @return String - string that holds concatenation of directive values
+     *         separated by ", " delimiter
      */
     private String generateDirectiveValuesList(List<String> values) {
-       StringBuffer stringBuffer = new StringBuffer();
+        StringBuffer stringBuffer = new StringBuffer();
         for (String value : values) {
             if (stringBuffer.length() > 0)
                 stringBuffer.append(", ");
@@ -107,50 +114,56 @@ public class CacheControlHeaderDelegate implements HeaderDelegate<CacheControl> 
         return stringBuffer.toString();
 
     }
-    
+
     /**
-     * 
      * @param cacheControlHeader
      * @param directive
      * @param directiveValue
      */
-    private void appendDirectiveWithValues(StringBuffer cacheControlHeader, String directive, String directiveValue) {
-        appendDirective(cacheControlHeader,directive);
+    private void appendDirectiveWithValues(StringBuffer cacheControlHeader,
+                                           String directive,
+                                           String directiveValue) {
+        appendDirective(cacheControlHeader, directive);
         if (directiveValue != null && directiveValue.length() > 0) {
             cacheControlHeader.append("=\"");
             cacheControlHeader.append(directiveValue);
             cacheControlHeader.append("\"");
         }
     }
-    
+
     /**
      * Appends directive to a Cache Control Header
+     * 
      * @param cacheControlHeader - String buffer that holds Cache Control Header
      * @param directive - directive to append
      * @param value - directive's value
      */
-    private void appendExtentionDirective(StringBuffer cacheControlHeader, String directive, String value) {
+    private void appendExtentionDirective(StringBuffer cacheControlHeader,
+                                          String directive,
+                                          String value) {
         appendDirective(cacheControlHeader, directive);
         if (value != null && value.length() > 0) {
             cacheControlHeader.append("=");
             cacheControlHeader.append(value);
         }
     }
-    
+
     /**
      * Appends directive to a Cache Control Header
+     * 
      * @param cacheControlHeader - String buffer that holds Cache Control Header
      * @param directive - directive to append
      * @param value - directive's value
      */
     private void appendDirective(StringBuffer cacheControlHeader, String directive, int value) {
-        appendDirective(cacheControlHeader,directive);
+        appendDirective(cacheControlHeader, directive);
         cacheControlHeader.append("=");
         cacheControlHeader.append(value);
     }
 
     /**
-     * Quotes extension cache control directive value if it contains space    
+     * Quotes extension cache control directive value if it contains space
+     * 
      * @param value - directives value
      * @return - directive value, quoted if contains space
      */

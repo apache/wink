@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common.internal.providers.entity.csv;
 
 import java.io.IOException;
@@ -68,11 +68,12 @@ public final class CsvReader {
             l: while (processThisCharacter || (read = reader.read()) != -1) {
                 processThisCharacter = false;
 
-                char character = (char) read;
+                char character = (char)read;
                 switch (character) {
                     case '"':
                         if (!hadQuote) {
-                            // first quote when processing cell, set hadQuote indicator and continue
+                            // first quote when processing cell, set hadQuote
+                            // indicator and continue
                             hadQuote = true;
                             continue l;
                         } else {
@@ -83,10 +84,11 @@ public final class CsvReader {
                                 endOfFile = true;
                                 break l;
                             }
-                            character = (char) read;
+                            character = (char)read;
                             switch (character) {
                                 case '"':
-                                    // middle of the cell, add one quote instead of two
+                                    // middle of the cell, add one quote instead
+                                    // of two
                                     stringBuilder.append(character);
                                     continue l;
                                 default:
@@ -102,13 +104,13 @@ public final class CsvReader {
                             stringBuilder.append(character);
                             continue l;
                         } else {
-                            // check the next character 
+                            // check the next character
                             read = reader.read();
                             if (read == -1) {
                                 endOfFile = true;
                                 break l;
                             }
-                            character = (char) read;
+                            character = (char)read;
                             switch (character) {
                                 case '\n':
                                     // end of line

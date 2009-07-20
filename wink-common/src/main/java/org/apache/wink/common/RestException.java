@@ -17,11 +17,11 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common;
 
 /**
- * REST general  exception.
+ * REST general exception.
  */
 public class RestException extends RuntimeException {
 

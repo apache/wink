@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.client.internal.handlers;
 
@@ -32,24 +31,23 @@ import org.apache.wink.client.handlers.HandlerContext;
 import org.apache.wink.client.handlers.InputStreamAdapter;
 import org.apache.wink.client.handlers.OutputStreamAdapter;
 
-
 public class HandlerContextImpl implements HandlerContext {
 
-    private ListIterator<ClientHandler> chain; 
+    private ListIterator<ClientHandler>     chain;
     private LinkedList<OutputStreamAdapter> osAdapters;
-    private LinkedList<InputStreamAdapter> isAdapters;
-    
+    private LinkedList<InputStreamAdapter>  isAdapters;
+
     public HandlerContextImpl(List<ClientHandler> handlers) {
         this.chain = handlers.listIterator();
         osAdapters = new LinkedList<OutputStreamAdapter>();
         isAdapters = new LinkedList<InputStreamAdapter>();
     }
-    
+
     public ClientResponse doChain(ClientRequest request) throws Exception {
         if (!chain.hasNext()) {
             return null;
         }
-        
+
         try {
             return chain.next().handle(request, this);
         } finally {
@@ -64,14 +62,13 @@ public class HandlerContextImpl implements HandlerContext {
     public void addInputStreamAdapter(InputStreamAdapter adapter) {
         isAdapters.addFirst(adapter);
     }
-    
-    public List<OutputStreamAdapter> getOutputStreamAdapters(){
+
+    public List<OutputStreamAdapter> getOutputStreamAdapters() {
         return osAdapters;
     }
-    
+
     public List<InputStreamAdapter> getInputStreamAdapters() {
         return isAdapters;
     }
-
 
 }

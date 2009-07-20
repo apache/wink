@@ -67,7 +67,8 @@ public class ByteContentEncodedGZIPReader implements MessageBodyReader<byte[]> {
                            Annotation[] annotations,
                            MediaType mediaType,
                            MultivaluedMap<String, String> httpHeaders,
-                           final InputStream entityStream) throws IOException, WebApplicationException {
+                           final InputStream entityStream) throws IOException,
+        WebApplicationException {
         MessageBodyReader<byte[]> strReader =
             providers.getMessageBodyReader(byte[].class,
                                            byte[].class,

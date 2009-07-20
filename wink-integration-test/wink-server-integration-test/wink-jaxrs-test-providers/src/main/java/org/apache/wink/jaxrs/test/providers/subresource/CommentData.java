@@ -49,8 +49,8 @@ public class CommentData {
             return Response.status(Status.NOT_FOUND).build();
         }
 
-        Comment existingComment = GuestbookDatabase.getGuestbook().getComment(
-                Integer.valueOf(commentId));
+        Comment existingComment =
+            GuestbookDatabase.getGuestbook().getComment(Integer.valueOf(commentId));
         if (existingComment == null) {
             return Response.status(Status.NOT_FOUND).build();
         }
@@ -68,21 +68,19 @@ public class CommentData {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
-        if (comment.getId() == null || comment.getMessage() == null
-                || comment.getAuthor() == null) {
+        if (comment.getId() == null || comment.getMessage() == null || comment.getAuthor() == null) {
             CommentError commentError = new CommentError();
-            commentError
-                    .setErrorMessage("Please include a comment ID, a message, and your name.");
-            Response resp = Response.status(Response.Status.BAD_REQUEST)
-                    .entity(commentError).type("application/xml").build();
+            commentError.setErrorMessage("Please include a comment ID, a message, and your name.");
+            Response resp =
+                Response.status(Response.Status.BAD_REQUEST).entity(commentError)
+                    .type("application/xml").build();
             throw new WebApplicationException(resp);
         }
 
         GuestbookDatabase.getGuestbook().storeComment(comment);
         try {
-            return Response.created(
-                    new URI(uriInfo.getAbsolutePath() + "/" + comment.getId()))
-                    .entity(comment).build();
+            return Response.created(new URI(uriInfo.getAbsolutePath() + "/" + comment.getId()))
+                .entity(comment).build();
         } catch (URISyntaxException e) {
             e.printStackTrace();
             throw new WebApplicationException(e);
@@ -91,16 +89,14 @@ public class CommentData {
 
     @PUT
     public Response updateComment(Comment comment) throws GuestbookException {
-        if (comment.getId() == null
-                || !Integer.valueOf(commentId).equals(comment.getId())) {
+        if (comment.getId() == null || !Integer.valueOf(commentId).equals(comment.getId())) {
             throw new GuestbookException("Unexpected ID.");
         }
 
-        Comment existingComment = GuestbookDatabase.getGuestbook().getComment(
-                Integer.valueOf(comment.getId()));
+        Comment existingComment =
+            GuestbookDatabase.getGuestbook().getComment(Integer.valueOf(comment.getId()));
         if (existingComment == null) {
-            throw new GuestbookException(
-                    "Cannot find existing comment to update.");
+            throw new GuestbookException("Cannot find existing comment to update.");
         }
         GuestbookDatabase.getGuestbook().storeComment(comment);
         return Response.ok(comment).build();
@@ -108,7 +104,6 @@ public class CommentData {
 
     @DELETE
     public void deleteComment() {
-        GuestbookDatabase.getGuestbook().deleteComment(
-                Integer.valueOf(commentId));
+        GuestbookDatabase.getGuestbook().deleteComment(Integer.valueOf(commentId));
     }
 }

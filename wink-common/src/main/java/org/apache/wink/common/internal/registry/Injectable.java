@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.registry;
 
@@ -38,40 +37,43 @@ import java.util.TreeSet;
 import org.apache.wink.common.internal.runtime.RuntimeContext;
 import org.apache.wink.common.internal.utils.GenericsUtils;
 
-
 /**
- * Represents a class that can be injected into a Resource field or method parameter during
- * the invocation of request
+ * Represents a class that can be injected into a Resource field or method
+ * parameter during the invocation of request
  */
 public abstract class Injectable {
-    
+
     public enum ParamType {
         ENTITY, CONTEXT, PATH, QUERY, MATRIX, FORM, HEADER, COOKIE;
     }
 
     private final ParamType paramType;
-    
+
     /**
      * the type of class to be injected
      */
-    private final Class<?> type;
+    private final Class<?>  type;
 
     /**
      * the generic type of the class to be injected
      */
-    private final Type genericType;
+    private final Type      genericType;
 
     /**
      * Member that will be injected (field, constructor or method)
      */
-    private final Member member;
+    private final Member    member;
 
     /**
      * annotations that are present on the parameter
      */
-    private Annotation[] annotations;
+    private Annotation[]    annotations;
 
-    protected Injectable(ParamType paramType, Class<?> type, Type genericType, Annotation[] annotations, Member member) {
+    protected Injectable(ParamType paramType,
+                         Class<?> type,
+                         Type genericType,
+                         Annotation[] annotations,
+                         Member member) {
         this.paramType = paramType;
         this.type = type;
         this.genericType = genericType;
@@ -82,7 +84,7 @@ public abstract class Injectable {
     public Class<?> getType() {
         return type;
     }
-    
+
     public ParamType getParamType() {
         return paramType;
     }
@@ -92,8 +94,8 @@ public abstract class Injectable {
     }
 
     protected boolean isTypeCollectionOf(Class<?> collectionType) {
-        return (type.equals(List.class) || type.equals(Set.class) || type.equals(SortedSet.class))
-                && collectionType.equals(GenericsUtils.getGenericParamType(genericType));
+        return (type.equals(List.class) || type.equals(Set.class) || type.equals(SortedSet.class)) && collectionType
+            .equals(GenericsUtils.getGenericParamType(genericType));
     }
 
     protected <T> Collection<T> elementAsTypeCollection(T object, Comparator<T> comparator) {
@@ -128,8 +130,8 @@ public abstract class Injectable {
     }
 
     /**
-     * Abstract method to be implemented by all types of InjectableData, and which is called during
-     * the instantiation of the injectable data
+     * Abstract method to be implemented by all types of InjectableData, and
+     * which is called during the instantiation of the injectable data
      * 
      * @param runtimeContext
      * @return

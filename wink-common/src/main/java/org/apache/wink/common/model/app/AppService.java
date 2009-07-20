@@ -24,7 +24,6 @@
 // Generated on: 2008.09.15 at 12:57:27 PM IDT 
 //
 
-
 package org.apache.wink.common.model.app;
 
 import java.io.IOException;
@@ -54,42 +53,35 @@ import org.apache.wink.common.model.atom.AtomCommonAttributes;
 import org.apache.wink.common.model.atom.AtomJAXBUtils;
 import org.w3c.dom.Element;
 
-
 /**
  * The "app:service" Element Per RFC5023
  * 
  * <pre>
- * The root of a Service Document is the "app:service" element.
+ * The root of a Service Document is the &quot;app:service&quot; element.
  * 
  * The app:service element is the container for service information associated with one or more
  * Workspaces. An app:service element MUST contain one or more app:workspace elements.
  * 
- * namespace app = "http://www.w3.org/2007/app" 
+ * namespace app = &quot;http://www.w3.org/2007/app&quot; 
  * start = appService
  * 
  * appService =
  *     element app:service {
  *        appCommonAttributes,
  *        ( appWorkspace+
- *          & extensionElement* )
+ *          &amp; extensionElement* )
  *     }
  * </pre>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlAccessorOrder(XmlAccessOrder.UNDEFINED)
-@XmlType(name = "appService", propOrder = {
-    "workspace",
-    "any"
-})
-public class AppService
-    extends AtomCommonAttributes
-    implements NamespacePrefixMapperProvider
-{
+@XmlType(name = "appService", propOrder = {"workspace", "any"})
+public class AppService extends AtomCommonAttributes implements NamespacePrefixMapperProvider {
 
     @XmlElement(required = true)
-    protected List<AppWorkspace> workspace;
+    protected List<AppWorkspace>     workspace;
     @XmlAnyElement
-    protected List<Element> any;
+    protected List<Element>          any;
 
     // ============================
     @XmlTransient
@@ -106,13 +98,14 @@ public class AppService
     public static Marshaller getMarshaller() {
         return JAXBUtils.createMarshaller(context);
     }
-    
+
     public static Unmarshaller getUnmarshaller() {
         return JAXBUtils.createUnmarshaller(context);
     }
 
     /**
      * Convenience method for creating an AppService from xml
+     * 
      * @param reader input reader
      * @return AppService instance from the input
      */
@@ -125,33 +118,30 @@ public class AppService
     }
 
     public JAXBNamespacePrefixMapper getNamespacePrefixMapper() {
-        JAXBNamespacePrefixMapper mapper = new JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_APP);
+        JAXBNamespacePrefixMapper mapper =
+            new JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_APP);
         mapper.omitNamespace(RestConstants.NAMESPACE_OPENSEARCH);
         return mapper;
     }
+
     // ============================
 
     /**
      * Gets the workspaces
-     * 
      * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the workspace property.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the workspace property.
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getWorkspace().add(newItem);
+     * getWorkspace().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AppWorkspace }
-     * 
-     * 
      */
     public List<AppWorkspace> getWorkspace() {
         if (workspace == null) {
@@ -159,12 +149,12 @@ public class AppService
         }
         return this.workspace;
     }
-    
+
     public AppWorkspace getWorkspace(String title) {
         if (title == null) {
             return null;
         }
-        
+
         List<AppWorkspace> workspaces = getWorkspace();
         for (AppWorkspace workspace : workspaces) {
             if (title.equals(workspace.getTitle().getValue())) {
@@ -176,25 +166,19 @@ public class AppService
 
     /**
      * Gets extension elements
-     * 
      * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the any property.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the any property.
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getAny().add(newItem);
+     * getAny().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Element }
-     * 
-     * 
+     * Objects of the following type(s) are allowed in the list {@link Element }
      */
     public List<Element> getAny() {
         if (any == null) {

@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.webdav.server;
 
 import java.io.IOException;
@@ -43,7 +43,6 @@ import org.apache.wink.server.internal.resources.ServiceDocumentCollectionData;
 import org.apache.wink.webdav.WebDAVHeaders;
 import org.apache.wink.webdav.WebDAVMethod;
 
-
 @Path("/")
 public class WebDAVRootResource extends HtmlServiceDocumentResource {
 
@@ -56,16 +55,21 @@ public class WebDAVRootResource extends HtmlServiceDocumentResource {
     }
 
     @WebDAVMethod.PROPFIND
-    @Consumes( { MediaType.APPLICATION_XML, MediaType.TEXT_XML })
+    @Consumes( {MediaType.APPLICATION_XML, MediaType.TEXT_XML})
     @Produces(MediaType.APPLICATION_XML)
     public Response propfind(@Context HttpHeaders headers, String body) throws IOException {
 
-        // create a RootResourceCollectionPropertyProvider that can get the sub collection
-        WebDAVResponseBuilder.CollectionPropertyHandler provider = new RootResourceCollectionPropertyProvider();
+        // create a RootResourceCollectionPropertyProvider that can get the sub
+        // collection
+        WebDAVResponseBuilder.CollectionPropertyHandler provider =
+            new RootResourceCollectionPropertyProvider();
 
         // call the propfind response builder
         return WebDAVResponseBuilder.create(uriInfo).propfind(getSyndFeed(uriInfo.getPath(false)),
-            body, headers.getRequestHeaders().getFirst(WebDAVHeaders.DEPTH), provider);
+                                                              body,
+                                                              headers.getRequestHeaders()
+                                                                  .getFirst(WebDAVHeaders.DEPTH),
+                                                              provider);
     }
 
     protected SyndFeed getSyndFeed(String path) {
@@ -81,13 +85,14 @@ public class WebDAVRootResource extends HtmlServiceDocumentResource {
         @Override
         public List<SyndFeed> getSubCollections(WebDAVResponseBuilder builder, SyndFeed feed) {
             List<SyndFeed> collectionsList = new ArrayList<SyndFeed>();
-            for (ServiceDocumentCollectionData subCollection : WebDAVRootResource.this.getCollections(uriInfo)) {
+            for (ServiceDocumentCollectionData subCollection : WebDAVRootResource.this
+                .getCollections(uriInfo)) {
                 // only collection without template URI
                 if (!isTemplateUri(subCollection.getUri())) {
                     SyndFeed subFeed = new SyndFeed();
                     subFeed.setTitle(new SyndText(subCollection.getTitle()));
-                    subFeed.addLink(new SyndLink(AtomConstants.ATOM_REL_EDIT, null,
-                        subCollection.getUri()));
+                    subFeed.addLink(new SyndLink(AtomConstants.ATOM_REL_EDIT, null, subCollection
+                        .getUri()));
                     collectionsList.add(subFeed);
                 }
             }

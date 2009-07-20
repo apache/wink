@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.uritemplate;
 
@@ -32,35 +31,63 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.apache.wink.common.internal.uri.UriEncoder;
 import org.apache.wink.common.internal.utils.StringUtils;
 
-
 /**
- * <a href="http://bitworking.org/projects/URI-Templates/">BitWorking</a> style template processor
- * for compiling, matching and expanding URI templates
+ * <a href="http://bitworking.org/projects/URI-Templates/">BitWorking</a> style
+ * template processor for compiling, matching and expanding URI templates
  */
 public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
 
     /*
-     * op = 1ALPHA arg =(reserved / unreserved / pct-encoded) varname = (ALPHA / DIGIT)(ALPHA /
-     * DIGIT / "." / "_" / "-" ) vardefault =(unreserved / pct-encoded) var = varname [ "="
-     * vardefault ] vars = var [("," var) ] operator = "-" op "|" arg "|" vars expansion = "{" ( var
-     * / operator ) "}"
+     * op = 1ALPHA arg =(reserved / unreserved / pct-encoded) varname = (ALPHA /
+     * DIGIT)(ALPHA / DIGIT / "." / "_" / "-" ) vardefault =(unreserved /
+     * pct-encoded) var = varname [ "=" vardefault ] vars = var [("," var) ]
+     * operator = "-" op "|" arg "|" vars expansion = "{" ( var / operator ) "}"
      */
-    private static final String HEX = "[0-9A-Fa-f]";
-    private static final String RESERVED = "[;/?:@&=+$,]";
-    private static final String UNRESERVED = "[\\w\\.!~*'()-]";
-    private static final String PCT_ENCONDED = "(?:%" + HEX + HEX + ")";
-    private static final String ALPHA = "[a-zA-Z]";
+    private static final String  HEX                         = "[0-9A-Fa-f]";
+    private static final String  RESERVED                    = "[;/?:@&=+$,]";
+    private static final String  UNRESERVED                  = "[\\w\\.!~*'()-]";
+    private static final String  PCT_ENCONDED                = "(?:%" + HEX + HEX + ")";
+    private static final String  ALPHA                       = "[a-zA-Z]";
 
-    private static final String BITWORKING_OP = "(" + ALPHA + "+)";
-    private static final String BITWORKING_ARG = "((?:" + RESERVED + "|" + UNRESERVED + "|" + PCT_ENCONDED + ")*)";
-    private static final String BITWORKING_VARNAME = "\\w[\\w\\.-]*";
-    private static final String BITWORKING_VARDEFAULT = "((?:" + UNRESERVED + "|" + PCT_ENCONDED + ")*)";
-    private static final String BITWORKING_VAR = "(" + BITWORKING_VARNAME + ")(?:=" + BITWORKING_VARDEFAULT + ")?";
-    private static final String BITWORKING_VARS = "(" + BITWORKING_VAR + "(?:," + BITWORKING_VAR + ")*)";
-    private static final String BITWORKING_OPERATOR = "(?:-" + BITWORKING_OP + "[|]" + BITWORKING_ARG + "[|]"
-            + BITWORKING_VARS + ")";
-    private static final String BITWORKING_EXPANSION = "\\{(?:" + BITWORKING_VAR + "|" + BITWORKING_OPERATOR + ")\\}";
-    private static final Pattern BITWORKING_VARIABLE_PATTERN = Pattern.compile(BITWORKING_EXPANSION);
+    private static final String  BITWORKING_OP               = "(" + ALPHA + "+)";
+    private static final String  BITWORKING_ARG              =
+                                                                 "((?:" + RESERVED
+                                                                     + "|"
+                                                                     + UNRESERVED
+                                                                     + "|"
+                                                                     + PCT_ENCONDED
+                                                                     + ")*)";
+    private static final String  BITWORKING_VARNAME          = "\\w[\\w\\.-]*";
+    private static final String  BITWORKING_VARDEFAULT       =
+                                                                 "((?:" + UNRESERVED
+                                                                     + "|"
+                                                                     + PCT_ENCONDED
+                                                                     + ")*)";
+    private static final String  BITWORKING_VAR              =
+                                                                 "(" + BITWORKING_VARNAME
+                                                                     + ")(?:="
+                                                                     + BITWORKING_VARDEFAULT
+                                                                     + ")?";
+    private static final String  BITWORKING_VARS             =
+                                                                 "(" + BITWORKING_VAR
+                                                                     + "(?:,"
+                                                                     + BITWORKING_VAR
+                                                                     + ")*)";
+    private static final String  BITWORKING_OPERATOR         =
+                                                                 "(?:-" + BITWORKING_OP
+                                                                     + "[|]"
+                                                                     + BITWORKING_ARG
+                                                                     + "[|]"
+                                                                     + BITWORKING_VARS
+                                                                     + ")";
+    private static final String  BITWORKING_EXPANSION        =
+                                                                 "\\{(?:" + BITWORKING_VAR
+                                                                     + "|"
+                                                                     + BITWORKING_OPERATOR
+                                                                     + ")\\}";
+    private static final Pattern BITWORKING_VARIABLE_PATTERN =
+                                                                 Pattern
+                                                                     .compile(BITWORKING_EXPANSION);
 
     /**
      * Create a processor without a template
@@ -70,11 +97,10 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
     }
 
     /**
-     * Create an processor with the provided template. The {@link #compile(String)} method is called
-     * on the provided template.
+     * Create an processor with the provided template. The
+     * {@link #compile(String)} method is called on the provided template.
      * 
-     * @param template
-     *            the template that this processor is associated with
+     * @param template the template that this processor is associated with
      */
     public BitWorkingUriTemplateProcessor(String template) {
         this();
@@ -87,13 +113,12 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
     }
 
     /**
-     * Compile the provided uri template and pass compilation events to the provided
-     * {@link BitWorkingCompilationHandler}.
+     * Compile the provided uri template and pass compilation events to the
+     * provided {@link BitWorkingCompilationHandler}.
      * 
-     * @param template
-     *            the template to compile
-     * @param handler
-     *            the CompilationHandler that will receive compilation events
+     * @param template the template to compile
+     * @param handler the CompilationHandler that will receive compilation
+     *            events
      */
     public static void compile(String template, BitWorkingCompilationHandler handler) {
         if (template == null) {
@@ -124,8 +149,10 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
             // group 3: operator name
             // group 4: operator arg
             // group 5: operator vars
-            // if a variable was matched then all the operator groups will be null
-            // if an operator was matched then all the variable groups will be null
+            // if a variable was matched then all the operator groups will be
+            // null
+            // if an operator was matched then all the variable groups will be
+            // null
 
             String variable = matcher.group(1);
             if (variable != null) {
@@ -141,7 +168,7 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
 
                 // extract the variable names of the operator
                 String[] arrayVars = StringUtils.fastSplit(vars, ",");
-                Map<String,String> varsMap = new LinkedHashMap<String,String>();
+                Map<String, String> varsMap = new LinkedHashMap<String, String>();
                 for (String var : arrayVars) {
                     String defaultValue = null;
                     int index = var.indexOf('=');
@@ -165,16 +192,15 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
     }
 
     /**
-     * Expand the provided template using the provided values. Regular expressions of variables in
-     * the template are ignored. All variables defined in the template must have a value.
+     * Expand the provided template using the provided values. Regular
+     * expressions of variables in the template are ignored. All variables
+     * defined in the template must have a value.
      * 
-     * @param template
-     *            the uri template to expand
-     * @param values
-     *            a map with the values of the variables
+     * @param template the uri template to expand
+     * @param values a map with the values of the variables
      * @return an expanded uri using the supplied variable values
      */
-    public static String expand(String template, MultivaluedMap<String,String> values) {
+    public static String expand(String template, MultivaluedMap<String, String> values) {
         if (template == null) {
             return null;
         }
@@ -184,17 +210,17 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
     }
 
     /**
-     * Expand the provided template using the provided values. Regular expressions of variables in
-     * the template are ignored. All variables defined in the template must have a value.
+     * Expand the provided template using the provided values. Regular
+     * expressions of variables in the template are ignored. All variables
+     * defined in the template must have a value.
      * 
-     * @param template
-     *            the uri template to expand
-     * @param values
-     *            a map with the values of the variables
-     * @param out
-     *            the output for the expansion
+     * @param template the uri template to expand
+     * @param values a map with the values of the variables
+     * @param out the output for the expansion
      */
-    public static void expand(String template, MultivaluedMap<String,String> values, StringBuilder out) {
+    public static void expand(String template,
+                              MultivaluedMap<String, String> values,
+                              StringBuilder out) {
         if (template == null) {
             return;
         }
@@ -205,8 +231,7 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
     /**
      * Factory method for normalized uri-templates.
      * 
-     * @param uriTemplate
-     *            uri-template specification
+     * @param uriTemplate uri-template specification
      * @return instance representing (normalized) uri-template
      * @see UriTemplateProcessor#normalizeUri(String)
      */
@@ -215,7 +240,8 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
     }
 
     /**
-     * This interface is used for receiving events during the compilation of a uri template.
+     * This interface is used for receiving events during the compilation of a
+     * uri template.
      * 
      * @see {@link BitWorkingUriTemplateProcessor#compile(String, BitWorkingCompilationHandler)}
      */
@@ -223,34 +249,31 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
         /**
          * Variable event.
          * 
-         * @param name
-         *            the name of the variable
-         * @param defaultValue
-         *            the default value of the variable, or null
+         * @param name the name of the variable
+         * @param defaultValue the default value of the variable, or null
          */
         public void variable(String name, String defaultValue);
 
         /**
          * Operator event.
          * 
-         * @param name
-         *            the name of the operator
-         * @param arg
-         *            the argument of the operator
-         * @param vars
-         *            a map of variables and their default values
+         * @param name the name of the operator
+         * @param arg the argument of the operator
+         * @param vars a map of variables and their default values
          */
-        public void operator(String name, String arg, Map<String,String> vars);
+        public void operator(String name, String arg, Map<String, String> vars);
 
     }
 
     /**
-     * This compilation handler handles the compilation events for compiling the uri template of a
-     * processor instance. It creates the regex pattern to use for matching and the variables used
-     * for matching and expansion, and then sets them on the processor instance.
+     * This compilation handler handles the compilation events for compiling the
+     * uri template of a processor instance. It creates the regex pattern to use
+     * for matching and the variables used for matching and expansion, and then
+     * sets them on the processor instance.
      */
-    private static class BitWorkingPatternBuilder extends AbstractPatternBuilder implements BitWorkingCompilationHandler {
-        
+    private static class BitWorkingPatternBuilder extends AbstractPatternBuilder implements
+        BitWorkingCompilationHandler {
+
         public BitWorkingPatternBuilder(BitWorkingUriTemplateProcessor processor) {
             super(processor);
         }
@@ -264,7 +287,7 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
             processor.expanders.add(variable);
         }
 
-        public void operator(String name, String arg, Map<String,String> vars) {
+        public void operator(String name, String arg, Map<String, String> vars) {
             // get a new operator
             BitWorkingOperator operator = BitWorkingOperator.forName(name);
             if (operator == null) {
@@ -293,9 +316,9 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
      * Represents a BitWorking operator
      */
     private abstract static class BitWorkingOperator extends CapturingGroup {
-        protected String name;
-        protected String arg;
-        protected Map<String,String> vars;
+        protected String              name;
+        protected String              arg;
+        protected Map<String, String> vars;
 
         protected BitWorkingOperator(String name) {
             super();
@@ -316,19 +339,18 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
             this.arg = arg;
         }
 
-        public Map<String,String> getVars() {
+        public Map<String, String> getVars() {
             return vars;
         }
 
-        public void setVars(Map<String,String> vars) {
+        public void setVars(Map<String, String> vars) {
             this.vars = vars;
         }
 
         /**
          * Return an instance of an operator for the specified name
          * 
-         * @param name
-         *            the name of the operator
+         * @param name the name of the operator
          * @return an instance of an operator
          */
         public static BitWorkingOperator forName(String name) {
@@ -371,11 +393,16 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
             }
 
             @Override
-            public void onMatch(String matched, MultivaluedMap<String,String> values, int startIndex, MultivaluedMap<String,Integer> indices) {
+            public void onMatch(String matched,
+                                MultivaluedMap<String, String> values,
+                                int startIndex,
+                                MultivaluedMap<String, Integer> indices) {
                 // do nothing
             }
 
-            public void expand(MultivaluedMap<String,String> values, boolean encode, StringBuilder builder) {
+            public void expand(MultivaluedMap<String, String> values,
+                               boolean encode,
+                               StringBuilder builder) {
                 for (String var : vars.keySet()) {
                     if (values.containsKey(var) && values.get(var).size() > 0) {
                         return;
@@ -400,11 +427,16 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
             }
 
             @Override
-            public void onMatch(String matched, MultivaluedMap<String,String> values, int startIndex, MultivaluedMap<String,Integer> indices) {
+            public void onMatch(String matched,
+                                MultivaluedMap<String, String> values,
+                                int startIndex,
+                                MultivaluedMap<String, Integer> indices) {
                 // do nothing
             }
 
-            public void expand(MultivaluedMap<String,String> values, boolean encode, StringBuilder builder) {
+            public void expand(MultivaluedMap<String, String> values,
+                               boolean encode,
+                               StringBuilder builder) {
                 for (String var : vars.keySet()) {
                     if (values.containsKey(var) && values.get(var).size() > 0) {
                         builder.append(arg);
@@ -424,7 +456,8 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
 
             public void build(StringBuilder builder) {
                 if (vars.size() != 1) {
-                    throw new IllegalArgumentException("The prefix operator MUST only have one variable");
+                    throw new IllegalArgumentException(
+                                                       "The prefix operator MUST only have one variable");
                 }
 
                 builder.append("((?:");
@@ -434,7 +467,10 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
             }
 
             @Override
-            public void onMatch(String matched, MultivaluedMap<String,String> values, int startIndex, MultivaluedMap<String,Integer> indices) {
+            public void onMatch(String matched,
+                                MultivaluedMap<String, String> values,
+                                int startIndex,
+                                MultivaluedMap<String, Integer> indices) {
                 String var = vars.keySet().iterator().next();
                 if (matched == null || matched.length() == 0) {
                     values.putSingle(var, null);
@@ -443,7 +479,8 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
                 }
 
                 if (!matched.startsWith(arg)) {
-                    throw new IllegalArgumentException("The matched prefix must start with '" + arg + "'");
+                    throw new IllegalArgumentException("The matched prefix must start with '" + arg
+                        + "'");
                 }
 
                 // clear the previous values
@@ -456,7 +493,9 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
                 }
             }
 
-            public void expand(MultivaluedMap<String,String> values, boolean encode, StringBuilder builder) {
+            public void expand(MultivaluedMap<String, String> values,
+                               boolean encode,
+                               StringBuilder builder) {
                 // we have only one var
                 String var = vars.keySet().iterator().next();
                 java.util.List<String> varValues = values.get(var);
@@ -482,7 +521,8 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
 
             public void build(StringBuilder builder) {
                 if (vars.size() != 1) {
-                    throw new IllegalArgumentException("The suffix operator MUST only have one variable");
+                    throw new IllegalArgumentException(
+                                                       "The suffix operator MUST only have one variable");
                 }
                 builder.append("((?:");
                 builder.append(REGEX0);
@@ -491,7 +531,10 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
             }
 
             @Override
-            public void onMatch(String matched, MultivaluedMap<String,String> values, int startIndex, MultivaluedMap<String,Integer> indices) {
+            public void onMatch(String matched,
+                                MultivaluedMap<String, String> values,
+                                int startIndex,
+                                MultivaluedMap<String, Integer> indices) {
                 String var = vars.keySet().iterator().next();
                 if (matched == null || matched.length() == 0) {
                     values.putSingle(var, null);
@@ -500,20 +543,24 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
                 }
 
                 if (!matched.endsWith(arg)) {
-                    throw new IllegalArgumentException("The matched suffix must end with '" + arg + "'");
+                    throw new IllegalArgumentException("The matched suffix must end with '" + arg
+                        + "'");
                 }
 
                 // clear the previous values
                 values.put(var, null);
                 String[] array = StringUtils.fastSplit(matched, arg);
-                // the last element in the array will always contain the empty string, so skip it
+                // the last element in the array will always contain the empty
+                // string, so skip it
                 for (int i = 0; i < array.length - 1; ++i) {
                     values.add(var, array[i]);
                     indices.add(var, startIndex);
                 }
             }
 
-            public void expand(MultivaluedMap<String,String> values, boolean encode, StringBuilder builder) {
+            public void expand(MultivaluedMap<String, String> values,
+                               boolean encode,
+                               StringBuilder builder) {
                 // we have only one var
                 String var = vars.keySet().iterator().next();
                 java.util.List<String> varValues = values.get(var);
@@ -539,7 +586,8 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
 
             public void build(StringBuilder builder) {
                 if (vars.size() != 1) {
-                    throw new IllegalArgumentException("The list operator MUST only have one variable");
+                    throw new IllegalArgumentException(
+                                                       "The list operator MUST only have one variable");
                 }
                 builder.append("(");
                 builder.append(REGEX0);
@@ -550,7 +598,10 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
             }
 
             @Override
-            public void onMatch(String matched, MultivaluedMap<String,String> values, int startIndex, MultivaluedMap<String,Integer> indices) {
+            public void onMatch(String matched,
+                                MultivaluedMap<String, String> values,
+                                int startIndex,
+                                MultivaluedMap<String, Integer> indices) {
                 String var = vars.keySet().iterator().next();
 
                 if (matched == null || matched.length() == 0) {
@@ -568,7 +619,9 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
                 }
             }
 
-            public void expand(MultivaluedMap<String,String> values, boolean encode, StringBuilder builder) {
+            public void expand(MultivaluedMap<String, String> values,
+                               boolean encode,
+                               StringBuilder builder) {
                 // we have only one var
                 String var = vars.keySet().iterator().next();
                 String delim = "";
@@ -619,9 +672,12 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
             }
 
             @Override
-            public void onMatch(String matched, MultivaluedMap<String,String> values, int startIndex, MultivaluedMap<String,Integer> indices) {
+            public void onMatch(String matched,
+                                MultivaluedMap<String, String> values,
+                                int startIndex,
+                                MultivaluedMap<String, Integer> indices) {
                 // extract all the keys and values and prepare a temporary map
-                Map<String,String> extractedValues = new HashMap<String,String>();
+                Map<String, String> extractedValues = new HashMap<String, String>();
                 if (matched != null) {
                     String[] array = StringUtils.fastSplit(matched, arg);
                     for (int i = 0; i < array.length; ++i) {
@@ -644,7 +700,9 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
                 }
             }
 
-            public void expand(MultivaluedMap<String,String> values, boolean encode, StringBuilder builder) {
+            public void expand(MultivaluedMap<String, String> values,
+                               boolean encode,
+                               StringBuilder builder) {
                 String delim = "";
                 for (String var : vars.keySet()) {
                     java.util.List<String> varValues = values.get(var);
@@ -652,7 +710,7 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
                     if (varValues != null) {
                         if (varValues.size() > 1) {
                             throw new IllegalArgumentException("variable '" + var
-                                    + "' contains more than one value for join operator");
+                                + "' contains more than one value for join operator");
                         }
                         if (varValues.size() == 1) {
                             value = varValues.get(0);
@@ -675,12 +733,13 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
     }
 
     /**
-     * This compilation handler is used for creating an expansion string by replacing all variables
-     * with their values from the provided map.
+     * This compilation handler is used for creating an expansion string by
+     * replacing all variables with their values from the provided map.
      */
-    private static class BitWorkingTemplateExpander extends AbstractTemplateExpander implements BitWorkingCompilationHandler {
-        
-        public BitWorkingTemplateExpander(MultivaluedMap<String,String> values, StringBuilder out) {
+    private static class BitWorkingTemplateExpander extends AbstractTemplateExpander implements
+        BitWorkingCompilationHandler {
+
+        public BitWorkingTemplateExpander(MultivaluedMap<String, String> values, StringBuilder out) {
             super(values, out);
         }
 
@@ -692,7 +751,7 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
             expander.expand(values, false, out);
         }
 
-        public void operator(String name, String arg, Map<String,String> vars) {
+        public void operator(String name, String arg, Map<String, String> vars) {
             if (values == null) {
                 throw new NullPointerException("variable '" + name + "' was not supplied a value");
             }

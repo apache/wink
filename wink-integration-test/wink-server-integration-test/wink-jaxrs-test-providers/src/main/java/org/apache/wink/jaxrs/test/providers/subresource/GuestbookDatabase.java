@@ -31,10 +31,11 @@ public class GuestbookDatabase {
 
     private static GuestbookDatabase guestbook = new GuestbookDatabase();
 
-    private Map<Integer, Comment> comments = Collections
-            .synchronizedMap(new HashMap<Integer, Comment>());
+    private Map<Integer, Comment>    comments  =
+                                                   Collections
+                                                       .synchronizedMap(new HashMap<Integer, Comment>());
 
-    private int counter = 0;
+    private int                      counter   = 0;
 
     private GuestbookDatabase() {
         /* private singleton constructor */
@@ -62,8 +63,7 @@ public class GuestbookDatabase {
         }
 
         if (comments.remove(id) == null) {
-            throw new NullPointerException(
-                    "The comment did not previously exist.");
+            throw new NullPointerException("The comment did not previously exist.");
         }
     }
 

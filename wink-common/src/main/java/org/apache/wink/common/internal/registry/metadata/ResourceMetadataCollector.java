@@ -78,8 +78,12 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
 
     @Override
     protected final Injectable parseAccessibleObject(AccessibleObject field, Type fieldType) {
-        Injectable injectable = InjectableFactory.getInstance().create(fieldType,
-            field.getAnnotations(), (Member) field, getMetadata().isEncoded(), null);
+        Injectable injectable =
+            InjectableFactory.getInstance().create(fieldType,
+                                                   field.getAnnotations(),
+                                                   (Member)field,
+                                                   getMetadata().isEncoded(),
+                                                   null);
         if (injectable.getParamType() == Injectable.ParamType.ENTITY) {
             // EntityParam should be ignored for fields (see JSR-311 3.2)
             return null;
@@ -151,23 +155,25 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                         getMetadata().getSubResourceMethods().add(methodMetadata);
                     } else {
                         // sub-resource locator
-                        // verify that the method does not take an entity parameter
-                        String methodName = String.format("%s.%s", declaringClass.getName(),
-                            method.getName());
+                        // verify that the method does not take an entity
+                        // parameter
+                        String methodName =
+                            String.format("%s.%s", declaringClass.getName(), method.getName());
                         for (Injectable id : methodMetadata.getFormalParameters()) {
                             if (id.getParamType() == Injectable.ParamType.ENTITY) {
-                                logger.warn(
-                                    "Sub-Resource locator {} contains an illegal entity parameter. The locator will be ignored.",
-                                    methodName);
+                                logger
+                                    .warn("Sub-Resource locator {} contains an illegal entity parameter. The locator will be ignored.",
+                                          methodName);
                                 continue F1;
                             }
                         }
-                        // log a warning if the locator has a Produces or Consumes annotation
-                        if (!methodMetadata.getConsumes().isEmpty()
-                            || !methodMetadata.getProduces().isEmpty()) {
-                            logger.warn(
-                                "Sub-Resource locator {} is annotated with Consumes/Produces. These annotations are ignored for sub-resource locators",
-                                methodName);
+                        // log a warning if the locator has a Produces or
+                        // Consumes annotation
+                        if (!methodMetadata.getConsumes().isEmpty() || !methodMetadata
+                            .getProduces().isEmpty()) {
+                            logger
+                                .warn("Sub-Resource locator {} is annotated with Consumes/Produces. These annotations are ignored for sub-resource locators",
+                                      methodName);
                         }
                         getMetadata().getSubResourceLocators().add(methodMetadata);
                     }
@@ -189,9 +195,9 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
 
         MethodMetadata metadata = new MethodMetadata(getMetadata());
         metadata.setReflectionMethod(method);
-        
+
         boolean hasAnnotation = false;
-        
+
         HttpMethod httpMethod = getHttpMethod(method);
         if (httpMethod != null) {
             hasAnnotation = true;
@@ -215,7 +221,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             hasAnnotation = true;
             metadata.addProduces(MediaType.valueOf(mediaType));
         }
-        
+
         String defaultValue = getDefaultValue(method);
         if (defaultValue != null) {
             metadata.setDefaultValue(defaultValue);
@@ -228,7 +234,8 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
         }
 
         // if the method has not annotation at all,
-        // then it may override a method in a superclass or interface that has annotations, 
+        // then it may override a method in a superclass or interface that has
+        // annotations,
         // so try looking at the overridden method annotations
         if (!hasAnnotation) {
 
@@ -258,14 +265,17 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             return null;
         }
 
-        // check if it's a valid resource method/sub-resource method/sub-resource locator,
+        // check if it's a valid resource method/sub-resource
+        // method/sub-resource locator,
         // since there is at least one JAX-RS annotation on the method
         if (metadata.getHttpMethod() == null && metadata.getPath() == null) {
-            logger.warn("The method {} in class {} is not annotated with an http method designator nor the Path annotation. " +
-                    "This method will be ignored.", method.getName(), method.getDeclaringClass().getCanonicalName());
+            logger
+                .warn("The method {} in class {} is not annotated with an http method designator nor the Path annotation. " + "This method will be ignored.",
+                      method.getName(),
+                      method.getDeclaringClass().getCanonicalName());
             return null;
         }
-        
+
         parseMethodParameters(method, metadata);
 
         return metadata;
@@ -273,8 +283,8 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
 
     private MethodMetadata createMethodMetadata(Class<?> declaringClass, Method method) {
         try {
-            Method declaredMethod = declaringClass.getDeclaredMethod(method.getName(),
-                method.getParameterTypes());
+            Method declaredMethod =
+                declaringClass.getDeclaredMethod(method.getName(), method.getParameterTypes());
             return createMethodMetadata(declaredMethod);
         } catch (SecurityException e) {
             // can't get to overriding method
@@ -287,10 +297,10 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
 
     private boolean parseClassConsumes(Class<?> cls) {
         String[] consumes = getConsumes(cls);
-        //        if (consumes.length == 0) {
-        //            getMetadata().addConsumes(MediaType.WILDCARD_TYPE);
-        //            return false;
-        //        }
+        // if (consumes.length == 0) {
+        // getMetadata().addConsumes(MediaType.WILDCARD_TYPE);
+        // return false;
+        // }
         for (String mediaType : consumes) {
             getMetadata().addConsumes(MediaType.valueOf(mediaType));
         }
@@ -299,10 +309,10 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
 
     private boolean parseClassProduces(Class<?> cls) {
         String[] consumes = getProduces(cls);
-        //        if (consumes.length == 0) {
-        //            getMetadata().addProduces(MediaType.WILDCARD_TYPE);
-        //            return false;
-        //        }
+        // if (consumes.length == 0) {
+        // getMetadata().addProduces(MediaType.WILDCARD_TYPE);
+        // return false;
+        // }
         for (String mediaType : consumes) {
             getMetadata().addProduces(MediaType.valueOf(mediaType));
         }
@@ -337,16 +347,16 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             HttpMethod httpMethodCurr = annotation.annotationType().getAnnotation(HttpMethod.class);
             if (httpMethodCurr != null) {
                 if (httpMethod != null) {
-                    throw new IllegalStateException(String.format(
-                            "Multiple http method annotations on method %s in class %s",
-                            method.getName(), method.getDeclaringClass().getCanonicalName()));
+                    throw new IllegalStateException(String
+                        .format("Multiple http method annotations on method %s in class %s", method
+                            .getName(), method.getDeclaringClass().getCanonicalName()));
                 }
                 httpMethod = httpMethodCurr;
             }
         }
         return httpMethod;
     }
-    
+
     private String getDefaultValue(Method method) {
         DefaultValue defaultValueAnn = method.getAnnotation(DefaultValue.class);
         if (defaultValueAnn != null) {
@@ -360,15 +370,18 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
         Type[] paramTypes = method.getGenericParameterTypes();
         boolean entityParamExists = false;
         for (int pos = 0, limit = paramTypes.length; pos < limit; pos++) {
-            Injectable fp = InjectableFactory.getInstance().create(paramTypes[pos],
-                parameterAnnotations[pos], method,
-                getMetadata().isEncoded() || methodMetadata.isEncoded(),
-                methodMetadata.getDefaultValue());
+            Injectable fp =
+                InjectableFactory.getInstance().create(paramTypes[pos],
+                                                       parameterAnnotations[pos],
+                                                       method,
+                                                       getMetadata().isEncoded() || methodMetadata
+                                                           .isEncoded(),
+                                                       methodMetadata.getDefaultValue());
             if (fp.getParamType() == Injectable.ParamType.ENTITY) {
                 if (entityParamExists) {
                     // we are allowed to have only one entity parameter
-                    String methodName = method.getDeclaringClass().getName() + "."
-                        + method.getName();
+                    String methodName =
+                        method.getDeclaringClass().getName() + "." + method.getName();
                     throw new IllegalStateException("Resource method " + methodName
                         + " has more than one entity parameter");
                 }
@@ -380,7 +393,8 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
 
     @Override
     protected final boolean isConstructorParameterValid(Injectable fp) {
-        // This method is declared as final, since parseConstructors(), which calls it, is invoked from the constructor
+        // This method is declared as final, since parseConstructors(), which
+        // calls it, is invoked from the constructor
         return !(fp.getParamType() == Injectable.ParamType.ENTITY);
     }
 

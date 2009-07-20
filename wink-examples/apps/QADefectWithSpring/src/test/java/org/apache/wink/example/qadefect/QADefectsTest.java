@@ -17,24 +17,23 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.qadefect;
 
 import java.util.List;
 
 import org.apache.wink.test.mock.SpringMockServletInvocationTest;
 
-
 /**
  *
  */
-public abstract class QADefectsTest extends
-    SpringMockServletInvocationTest {
+public abstract class QADefectsTest extends SpringMockServletInvocationTest {
 
     @Override
     protected List<String> getAdditionalContextNames() {
         List<String> additionalContextNames = super.getAdditionalContextNames();
-        // can load qadefectContext-server.xml due to configuration of unit tests in pom.xml
+        // can load qadefectContext-server.xml due to configuration of unit
+        // tests in pom.xml
         additionalContextNames.add("WEB-INF/qadefectContext-server.xml");
         return additionalContextNames;
     }

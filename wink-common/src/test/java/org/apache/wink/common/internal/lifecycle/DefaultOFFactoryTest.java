@@ -19,11 +19,8 @@
  *******************************************************************************/
 package org.apache.wink.common.internal.lifecycle;
 
-
 import org.apache.wink.common.DynamicResource;
 import org.apache.wink.common.internal.lifecycle.DefaultLifecycleManager;
-import org.apache.wink.common.internal.lifecycle.SingletonObjectFactory;
-
 import junit.framework.TestCase;
 
 /**
@@ -61,7 +58,7 @@ public class DefaultOFFactoryTest extends TestCase {
     @SuppressWarnings("unchecked")
     public void testDummy() {
         DefaultLifecycleManager defaultOFFactory = new DefaultLifecycleManager();
-        
+
         try {
             defaultOFFactory.createObjectFactory(new Dummy());
             fail("IllegalArgumentException should be thrown.");
@@ -73,6 +70,6 @@ public class DefaultOFFactoryTest extends TestCase {
             fail("IllegalArgumentException should be thrown.");
         } catch (IllegalArgumentException e) {
         }
-        
+
     }
 }

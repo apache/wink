@@ -38,37 +38,52 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.utils.ProviderUtils;
 
-
 @Provider
 @Consumes
 @Produces
 public class StringProvider implements MessageBodyReader<String>, MessageBodyWriter<String> {
 
-    
     private static final Logger logger = LoggerFactory.getLogger(StringProvider.class);
-    
-    public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+
+    public boolean isReadable(Class<?> type,
+                              Type genericType,
+                              Annotation[] annotations,
+                              MediaType mediaType) {
         return type.isAssignableFrom(String.class);
     }
 
-    public String readFrom(Class<String> type, Type genericType, Annotation[] annotations, MediaType mediaType,
-        MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException,
-        WebApplicationException {
+    public String readFrom(Class<String> type,
+                           Type genericType,
+                           Annotation[] annotations,
+                           MediaType mediaType,
+                           MultivaluedMap<String, String> httpHeaders,
+                           InputStream entityStream) throws IOException, WebApplicationException {
         byte[] bytes = ProviderUtils.readFromStreamAsBytes(entityStream);
         return new String(bytes, ProviderUtils.getCharset(mediaType));
     }
 
-    public long getSize(String t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public long getSize(String t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
         return t.length();
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
         return type == String.class;
     }
 
-    public void writeTo(String t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
-        MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException,
-        WebApplicationException {
+    public void writeTo(String t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
 
         logger.debug("Writing {} to stream using {}", t, getClass().getName());
 

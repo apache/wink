@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.providers.entity.atom;
 
@@ -40,33 +39,58 @@ import javax.xml.bind.JAXBElement;
 
 import org.apache.wink.common.model.atom.AtomEntry;
 
-
 @Provider
 @Consumes(MediaType.APPLICATION_ATOM_XML)
 @Produces(MediaType.APPLICATION_ATOM_XML)
 public class AtomEntryJAXBElementProvider extends AbstractAtomEntryProvider<JAXBElement<AtomEntry>>
-        implements MessageBodyReader<JAXBElement<AtomEntry>>, MessageBodyWriter<JAXBElement<AtomEntry>> {
+    implements MessageBodyReader<JAXBElement<AtomEntry>>, MessageBodyWriter<JAXBElement<AtomEntry>> {
 
-    public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public boolean isReadable(Class<?> type,
+                              Type genericType,
+                              Annotation[] annotations,
+                              MediaType mediaType) {
         return type == JAXBElement.class && isAtomEntryJAXBElement(genericType);
     }
 
-    public JAXBElement<AtomEntry> readFrom(Class<JAXBElement<AtomEntry>> type, Type genericType,
-            Annotation[] annotations, MediaType mediaType, MultivaluedMap<String,String> httpHeaders,
-            InputStream entityStream) throws IOException, WebApplicationException {
-        AtomEntry entry = readEntry(AtomEntry.class, genericType, annotations, mediaType, httpHeaders, entityStream);
+    public JAXBElement<AtomEntry> readFrom(Class<JAXBElement<AtomEntry>> type,
+                                           Type genericType,
+                                           Annotation[] annotations,
+                                           MediaType mediaType,
+                                           MultivaluedMap<String, String> httpHeaders,
+                                           InputStream entityStream) throws IOException,
+        WebApplicationException {
+        AtomEntry entry =
+            readEntry(AtomEntry.class,
+                      genericType,
+                      annotations,
+                      mediaType,
+                      httpHeaders,
+                      entityStream);
         return atomObjectFactory.createEntry(entry);
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
         return type == JAXBElement.class && isAtomEntryJAXBElement(genericType);
     }
 
-    public void writeTo(JAXBElement<AtomEntry> t, Class<?> type, Type genericType, Annotation[] annotations,
-            MediaType mediaType, MultivaluedMap<String,Object> httpHeaders, OutputStream entityStream)
-            throws IOException, WebApplicationException {
+    public void writeTo(JAXBElement<AtomEntry> t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
         AtomEntry entry = t.getValue();
-        writeEntry(entry, AtomEntry.class, genericType, annotations, mediaType, httpHeaders, entityStream);
+        writeEntry(entry,
+                   AtomEntry.class,
+                   genericType,
+                   annotations,
+                   mediaType,
+                   httpHeaders,
+                   entityStream);
     }
 
     private boolean isAtomEntryJAXBElement(Type genericType) {

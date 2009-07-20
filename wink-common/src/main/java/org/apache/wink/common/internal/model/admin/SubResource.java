@@ -24,7 +24,6 @@
 // Generated on: 2009.05.24 at 01:47:17 PM IDT 
 //
 
-
 package org.apache.wink.common.internal.model.admin;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -33,66 +32,55 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for anonymous complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * Java class for anonymous complex type.
+ * <p>
+ * The following schema fragment specifies the expected content contained within
+ * this class.
  * 
  * <pre>
- * &lt;complexType>
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="method" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="uri" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element ref="{http://apache.org/wink/common/internal/model/admin}accept-media-types" minOccurs="0"/>
- *         &lt;element ref="{http://apache.org/wink/common/internal/model/admin}produced-media-types" minOccurs="0"/>
- *         &lt;element ref="{http://apache.org/wink/common/internal/model/admin}query-parameters" minOccurs="0"/>
- *         &lt;element ref="{http://apache.org/wink/common/internal/model/admin}matrix-parameters" minOccurs="0"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base=&quot;{http://www.w3.org/2001/XMLSchema}anyType&quot;&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name=&quot;type&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot;/&gt;
+ *         &lt;element name=&quot;method&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; minOccurs=&quot;0&quot;/&gt;
+ *         &lt;element name=&quot;uri&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot;/&gt;
+ *         &lt;element ref=&quot;{http://apache.org/wink/common/internal/model/admin}accept-media-types&quot; minOccurs=&quot;0&quot;/&gt;
+ *         &lt;element ref=&quot;{http://apache.org/wink/common/internal/model/admin}produced-media-types&quot; minOccurs=&quot;0&quot;/&gt;
+ *         &lt;element ref=&quot;{http://apache.org/wink/common/internal/model/admin}query-parameters&quot; minOccurs=&quot;0&quot;/&gt;
+ *         &lt;element ref=&quot;{http://apache.org/wink/common/internal/model/admin}matrix-parameters&quot; minOccurs=&quot;0&quot;/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "type",
-    "method",
-    "uri",
-    "acceptMediaTypes",
-    "producedMediaTypes",
-    "queryParameters",
-    "matrixParameters"
-})
+@XmlType(name = "", propOrder = {"type", "method", "uri", "acceptMediaTypes", "producedMediaTypes",
+                                 "queryParameters", "matrixParameters"})
 @XmlRootElement(name = "sub-resource")
 public class SubResource {
 
     @XmlElement(required = true)
-    protected String type;
-    protected String method;
+    protected String             type;
+    protected String             method;
     @XmlElement(required = true)
-    protected String uri;
+    protected String             uri;
     @XmlElement(name = "accept-media-types")
-    protected AcceptMediaTypes acceptMediaTypes;
+    protected AcceptMediaTypes   acceptMediaTypes;
     @XmlElement(name = "produced-media-types")
     protected ProducedMediaTypes producedMediaTypes;
     @XmlElement(name = "query-parameters")
-    protected QueryParameters queryParameters;
+    protected QueryParameters    queryParameters;
     @XmlElement(name = "matrix-parameters")
-    protected MatrixParameters matrixParameters;
+    protected MatrixParameters   matrixParameters;
 
     /**
      * Gets the value of the type property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return possible object is {@link String }
      */
     public String getType() {
         return type;
@@ -101,10 +89,7 @@ public class SubResource {
     /**
      * Sets the value of the type property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * @param value allowed object is {@link String }
      */
     public void setType(String value) {
         this.type = value;
@@ -113,10 +98,7 @@ public class SubResource {
     /**
      * Gets the value of the method property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return possible object is {@link String }
      */
     public String getMethod() {
         return method;
@@ -125,10 +107,7 @@ public class SubResource {
     /**
      * Sets the value of the method property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * @param value allowed object is {@link String }
      */
     public void setMethod(String value) {
         this.method = value;
@@ -137,10 +116,7 @@ public class SubResource {
     /**
      * Gets the value of the uri property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return possible object is {@link String }
      */
     public String getUri() {
         return uri;
@@ -149,10 +125,7 @@ public class SubResource {
     /**
      * Sets the value of the uri property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * @param value allowed object is {@link String }
      */
     public void setUri(String value) {
         this.uri = value;
@@ -161,10 +134,7 @@ public class SubResource {
     /**
      * Gets the value of the acceptMediaTypes property.
      * 
-     * @return
-     *     possible object is
-     *     {@link AcceptMediaTypes }
-     *     
+     * @return possible object is {@link AcceptMediaTypes }
      */
     public AcceptMediaTypes getAcceptMediaTypes() {
         return acceptMediaTypes;
@@ -173,10 +143,7 @@ public class SubResource {
     /**
      * Sets the value of the acceptMediaTypes property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link AcceptMediaTypes }
-     *     
+     * @param value allowed object is {@link AcceptMediaTypes }
      */
     public void setAcceptMediaTypes(AcceptMediaTypes value) {
         this.acceptMediaTypes = value;
@@ -185,10 +152,7 @@ public class SubResource {
     /**
      * Gets the value of the producedMediaTypes property.
      * 
-     * @return
-     *     possible object is
-     *     {@link ProducedMediaTypes }
-     *     
+     * @return possible object is {@link ProducedMediaTypes }
      */
     public ProducedMediaTypes getProducedMediaTypes() {
         return producedMediaTypes;
@@ -197,10 +161,7 @@ public class SubResource {
     /**
      * Sets the value of the producedMediaTypes property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link ProducedMediaTypes }
-     *     
+     * @param value allowed object is {@link ProducedMediaTypes }
      */
     public void setProducedMediaTypes(ProducedMediaTypes value) {
         this.producedMediaTypes = value;
@@ -209,10 +170,7 @@ public class SubResource {
     /**
      * Gets the value of the queryParameters property.
      * 
-     * @return
-     *     possible object is
-     *     {@link QueryParameters }
-     *     
+     * @return possible object is {@link QueryParameters }
      */
     public QueryParameters getQueryParameters() {
         return queryParameters;
@@ -221,10 +179,7 @@ public class SubResource {
     /**
      * Sets the value of the queryParameters property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link QueryParameters }
-     *     
+     * @param value allowed object is {@link QueryParameters }
      */
     public void setQueryParameters(QueryParameters value) {
         this.queryParameters = value;
@@ -233,10 +188,7 @@ public class SubResource {
     /**
      * Gets the value of the matrixParameters property.
      * 
-     * @return
-     *     possible object is
-     *     {@link MatrixParameters }
-     *     
+     * @return possible object is {@link MatrixParameters }
      */
     public MatrixParameters getMatrixParameters() {
         return matrixParameters;
@@ -245,10 +197,7 @@ public class SubResource {
     /**
      * Sets the value of the matrixParameters property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link MatrixParameters }
-     *     
+     * @param value allowed object is {@link MatrixParameters }
      */
     public void setMatrixParameters(MatrixParameters value) {
         this.matrixParameters = value;

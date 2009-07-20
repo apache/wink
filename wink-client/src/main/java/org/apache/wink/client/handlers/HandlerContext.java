@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.client.handlers;
 
@@ -26,20 +25,19 @@ import java.util.List;
 import org.apache.wink.client.ClientRequest;
 import org.apache.wink.client.ClientResponse;
 
-
 /**
- * The handler context is used by handlers to call the next handler on the chain. It is also used by
- * handlers to modify the input and output streams for stream manipulations by using the
- * {@link InputStreamAdapter} and the {@link OutputStreamAdapter} classes.
+ * The handler context is used by handlers to call the next handler on the
+ * chain. It is also used by handlers to modify the input and output streams for
+ * stream manipulations by using the {@link InputStreamAdapter} and the
+ * {@link OutputStreamAdapter} classes.
  */
 public interface HandlerContext {
 
     /**
-     * Call the next handler on the chain. A handler is permitted to call this method any number of
-     * times for the same request.
+     * Call the next handler on the chain. A handler is permitted to call this
+     * method any number of times for the same request.
      * 
-     * @param request
-     *            the request context
+     * @param request the request context
      * @return the response context
      * @throws Exception
      */
@@ -48,16 +46,14 @@ public interface HandlerContext {
     /**
      * Add an {@link OutputStreamAdapter} to adapt the request output stream
      * 
-     * @param adapter
-     *            the OutputStreamAdapeter to add
+     * @param adapter the OutputStreamAdapeter to add
      */
     void addOutputStreamAdapter(OutputStreamAdapter adapter);
 
     /**
      * Add an {@link InputStreamAdapter} to adapt the response input stream
      * 
-     * @param adapter
-     *            the InputStreamAdapeter to add
+     * @param adapter the InputStreamAdapeter to add
      */
     void addInputStreamAdapter(InputStreamAdapter adapter);
 

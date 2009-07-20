@@ -52,7 +52,7 @@ public class MediaTypeHeaderDelegateTest {
         if (mtd == null) {
             fail("MediaType header delegate is not regestered in RuntimeDelegateImpl");
         }
-        
+
         MediaType mt = mtd.fromString("application/xml");
         assertEquals(mt.getType(), "application");
         assertEquals(mt.getSubtype(), "xml");

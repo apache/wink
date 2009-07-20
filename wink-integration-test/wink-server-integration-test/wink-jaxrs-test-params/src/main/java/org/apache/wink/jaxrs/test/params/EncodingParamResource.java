@@ -19,7 +19,6 @@
 
 package org.apache.wink.jaxrs.test.params;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.Encoded;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;

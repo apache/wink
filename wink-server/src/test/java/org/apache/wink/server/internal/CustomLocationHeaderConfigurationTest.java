@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal;
 
 import java.io.IOException;
@@ -39,7 +39,6 @@ import org.apache.wink.test.mock.TestUtils;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 /**
  * Test the functionality of configured base uri.
  */
@@ -49,7 +48,7 @@ public class CustomLocationHeaderConfigurationTest extends MockServletInvocation
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] { DefaultLocationConfigurationResource.class };
+        return new Class[] {DefaultLocationConfigurationResource.class};
     }
 
     @Path("/locationHeader")
@@ -66,43 +65,43 @@ public class CustomLocationHeaderConfigurationTest extends MockServletInvocation
         @GET
         @Produces(MediaType.TEXT_XML)
         public Response getWithLocation(@Context UriInfo uriInfo) {
-            return Response.status(Status.CREATED).location(URI.create(HTTP_HOST_PORT_LOCATION)).build();
+            return Response.status(Status.CREATED).location(URI.create(HTTP_HOST_PORT_LOCATION))
+                .build();
         }
     }
-    
+
     @Override
     protected String getPropertiesFile() {
         String name = getClass().getName();
         String fileName = TestUtils.packageToPath(name) + ".properties";
         return fileName;
     }
-    
-    
-    
+
     public void testLocationHeaderMissing() throws IOException {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-            "/locationHeader/missing", "text/plain");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/locationHeader/missing",
+                                                        "text/plain");
         request.setSecure(false);
         request.setServerPort(9090);
         try {
             invoke(request);
         } catch (IllegalStateException e) {
             assertTrue(true);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             fail("IllegalStateException is expected");
         }
-   }
-    
-   public void testLocationHeaderExists() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-            "/locationHeader/exist", "text/xml");
+    }
+
+    public void testLocationHeaderExists() throws Exception {
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "/locationHeader/exist", "text/xml");
         request.setSecure(false);
         request.setServerPort(9090);
         MockHttpServletResponse response = invoke(request);
         assertTrue(response.getStatus() == Status.CREATED.getStatusCode());
         assertTrue(response.getHeader(HttpHeaders.LOCATION).equals(HTTP_HOST_PORT_LOCATION));
-        
-   }
+
+    }
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.client.internal.handlers;
 
@@ -25,15 +24,14 @@ import java.net.URI;
 
 import org.apache.wink.client.ClientRequest;
 
-
 public class ClientRequestImpl extends BaseRequestResponseImpl implements ClientRequest {
-    
+
     public static final String RESPONSE_ENTITY_GENERIC_TYPE = "response.entity.generic.type";
-    public static final String RESPONSE_ENTITY_CLASS_TYPE = "response.entity.class.type";
-    
-    private Object entity;
-    private String method;
-    private URI uri;
+    public static final String RESPONSE_ENTITY_CLASS_TYPE   = "response.entity.class.type";
+
+    private Object             entity;
+    private String             method;
+    private URI                uri;
 
     public Object getEntity() {
         return entity;
@@ -58,6 +56,5 @@ public class ClientRequestImpl extends BaseRequestResponseImpl implements Client
     public void setURI(URI uri) {
         this.uri = uri;
     }
-
 
 }

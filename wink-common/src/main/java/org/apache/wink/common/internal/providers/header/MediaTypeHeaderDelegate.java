@@ -29,46 +29,44 @@ import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-
 public class MediaTypeHeaderDelegate implements HeaderDelegate<MediaType> {
 
-	private static final Logger logger = LoggerFactory.getLogger(MediaTypeHeaderDelegate.class);
-	private static final Pattern EQUALS = Pattern.compile("=");
-	private static final Pattern SEMICOLON = Pattern.compile(";");
-	private static final Pattern SLASH = Pattern.compile("/");
-						 
+    private static final Logger  logger    = LoggerFactory.getLogger(MediaTypeHeaderDelegate.class);
+    private static final Pattern EQUALS    = Pattern.compile("=");
+    private static final Pattern SEMICOLON = Pattern.compile(";");
+    private static final Pattern SLASH     = Pattern.compile("/");
+
     public MediaType fromString(String value) throws IllegalArgumentException {
         if (value == null) {
             throw new IllegalArgumentException("MediaType header is null");
         }
-        
+
         String type = "*";
         String subType = "*";
-        Map<String,String> paramsMap = null;
+        Map<String, String> paramsMap = null;
         String[] all = SEMICOLON.split(value);
 
-        try{
-	        // type and subType
-	        String main = all[0];
-	        String[] mainArray = SLASH.split(main);
-	        type=mainArray[0];
-	        subType = mainArray[1];       
-	        
-	        // parameters
-	        if(all.length>1){
-	        	paramsMap = new LinkedHashMap<String, String>();        
-		        for (int i= 1;i<all.length;i++){
-		        	String[] param = EQUALS.split(all[i]);
-		        	paramsMap.put(param[0].trim(),param[1].trim());	        	
-		        }
-	        }
-        }catch (ArrayIndexOutOfBoundsException e) {
-        	String errMsg =String.format("Wrong MediaType format for MediaType:\"%s\"", value); 
-        	logger.error(errMsg);
-        	throw new IllegalArgumentException(errMsg,e);			
-		}
-        
+        try {
+            // type and subType
+            String main = all[0];
+            String[] mainArray = SLASH.split(main);
+            type = mainArray[0];
+            subType = mainArray[1];
+
+            // parameters
+            if (all.length > 1) {
+                paramsMap = new LinkedHashMap<String, String>();
+                for (int i = 1; i < all.length; i++) {
+                    String[] param = EQUALS.split(all[i]);
+                    paramsMap.put(param[0].trim(), param[1].trim());
+                }
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            String errMsg = String.format("Wrong MediaType format for MediaType:\"%s\"", value);
+            logger.error(errMsg);
+            throw new IllegalArgumentException(errMsg, e);
+        }
+
         return new MediaType(type, subType, paramsMap);
     }
 
@@ -76,16 +74,15 @@ public class MediaTypeHeaderDelegate implements HeaderDelegate<MediaType> {
         if (value == null) {
             throw new IllegalArgumentException("MediaType header is null");
         }
-        
-    	StringBuilder result = new StringBuilder();
-    	result.append(value.getType()).append("/").append(value.getSubtype());
-    	Map<String,String> params= value.getParameters();
-    	for(String key :params.keySet()){
-    		result.append(";").append(key).append("=").append(params.get(key));    		
-    	}
-    	return result.toString();
-    	 
-    	
+
+        StringBuilder result = new StringBuilder();
+        result.append(value.getType()).append("/").append(value.getSubtype());
+        Map<String, String> params = value.getParameters();
+        for (String key : params.keySet()) {
+            result.append(";").append(key).append("=").append(params.get(key));
+        }
+        return result.toString();
+
     }
 
 }

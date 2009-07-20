@@ -31,38 +31,43 @@ import org.apache.wink.common.internal.lifecycle.ObjectFactory;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
 
-
 public class SpringLifecycleManager<T> implements LifecycleManager<T> {
 
-    private static final Logger logger = LoggerFactory.getLogger(SpringLifecycleManager.class);
+    private static final Logger                logger        =
+                                                                 LoggerFactory
+                                                                     .getLogger(SpringLifecycleManager.class);
 
     /**
      * holds Static Resources and Providers
      */
-    private Map<Class<?>, SpringObjectFactory> class2factory = new HashMap<Class<?>, SpringObjectFactory>();
+    private Map<Class<?>, SpringObjectFactory> class2factory =
+                                                                 new HashMap<Class<?>, SpringObjectFactory>();
 
     /**
      * holds Dynamic Resources
      */
-    private Map<String, SpringObjectFactory>   id2factory    = new HashMap<String, SpringObjectFactory>();
+    private Map<String, SpringObjectFactory>   id2factory    =
+                                                                 new HashMap<String, SpringObjectFactory>();
 
     @SuppressWarnings("unchecked")
     public ObjectFactory<T> createObjectFactory(T object) throws ObjectCreationException {
         Class<? extends Object> cls = object.getClass();
-        if (ResourceMetadataCollector.isStaticResource(cls) || ProviderMetadataCollector.isProvider(cls)) {
-            return (ObjectFactory<T>) class2factory.get(cls);
+        if (ResourceMetadataCollector.isStaticResource(cls) || ProviderMetadataCollector
+            .isProvider(cls)) {
+            return (ObjectFactory<T>)class2factory.get(cls);
         }
         if (ResourceMetadataCollector.isDynamicResource(cls)) {
-            DynamicResource dynResource = (DynamicResource) object;
+            DynamicResource dynResource = (DynamicResource)object;
             String beanName = dynResource.getBeanName();
-            return (ObjectFactory<T>) id2factory.get(beanName);
+            return (ObjectFactory<T>)id2factory.get(beanName);
         }
         return null;
     }
 
     public SpringObjectFactory getSpringObjectFactory(T object, String beanName) {
         Class<? extends Object> cls = object.getClass();
-        if (ResourceMetadataCollector.isStaticResource(cls) || ProviderMetadataCollector.isProvider(cls)) {
+        if (ResourceMetadataCollector.isStaticResource(cls) || ProviderMetadataCollector
+            .isProvider(cls)) {
             return class2factory.get(cls);
         }
         if (ResourceMetadataCollector.isDynamicResource(cls)) {
@@ -76,10 +81,12 @@ public class SpringLifecycleManager<T> implements LifecycleManager<T> {
         return null;
     }
 
-    public void addResourceOrProvider(Object bean, String beanName,
-        SpringObjectFactory objectFactory) {
+    public void addResourceOrProvider(Object bean,
+                                      String beanName,
+                                      SpringObjectFactory objectFactory) {
         Class<? extends Object> cls = bean.getClass();
-        if (ResourceMetadataCollector.isStaticResource(cls) || ProviderMetadataCollector.isProvider(cls)) {
+        if (ResourceMetadataCollector.isStaticResource(cls) || ProviderMetadataCollector
+            .isProvider(cls)) {
             SpringObjectFactory old = class2factory.put(cls, objectFactory);
             if (old != null) {
                 logger.warn("The {} was replaced by a newer object factory.", cls);
@@ -92,7 +99,7 @@ public class SpringLifecycleManager<T> implements LifecycleManager<T> {
     public void addDynamicResource(Object bean, String beanName, SpringObjectFactory objectFactory) {
         Class<? extends Object> cls = bean.getClass();
         if (ResourceMetadataCollector.isDynamicResource(cls)) {
-            DynamicResource dynResource = (DynamicResource) bean;
+            DynamicResource dynResource = (DynamicResource)bean;
             dynResource.setBeanName(beanName);
             SpringObjectFactory old = id2factory.put(beanName, objectFactory);
             if (old != null) {

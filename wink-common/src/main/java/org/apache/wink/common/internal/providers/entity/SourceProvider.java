@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.providers.entity;
 
@@ -52,9 +51,9 @@ import org.xml.sax.SAXException;
 
 public abstract class SourceProvider implements MessageBodyWriter<Source> {
 
-    private static TransformerFactory transformerFactory;
+    private static TransformerFactory     transformerFactory;
     private static DocumentBuilderFactory documentBuilderFactory;
-    
+
     static {
         transformerFactory = TransformerFactory.newInstance();
         documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -62,51 +61,76 @@ public abstract class SourceProvider implements MessageBodyWriter<Source> {
     }
 
     @Provider
-    @Consumes({MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.WILDCARD})
-    @Produces({MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.WILDCARD})
-    public static class StreamSourceProvider extends SourceProvider implements MessageBodyReader<Source> {
+    @Consumes( {MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.WILDCARD})
+    @Produces( {MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.WILDCARD})
+    public static class StreamSourceProvider extends SourceProvider implements
+        MessageBodyReader<Source> {
 
-        public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        public boolean isReadable(Class<?> type,
+                                  Type genericType,
+                                  Annotation[] annotations,
+                                  MediaType mediaType) {
             return (type.isAssignableFrom(StreamSource.class) && super.isReadable(mediaType));
         }
 
-        public StreamSource readFrom(Class<Source> type, Type genericType, Annotation[] annotations,
-                MediaType mediaType, MultivaluedMap<String,String> httpHeaders, InputStream entityStream)
-                throws IOException, WebApplicationException {
+        public StreamSource readFrom(Class<Source> type,
+                                     Type genericType,
+                                     Annotation[] annotations,
+                                     MediaType mediaType,
+                                     MultivaluedMap<String, String> httpHeaders,
+                                     InputStream entityStream) throws IOException,
+            WebApplicationException {
             return new StreamSource(entityStream);
         }
     }
-    
-    @Provider
-    @Consumes({MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.WILDCARD})
-    @Produces({MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.WILDCARD})
-    public static class SAXSourceProvider extends SourceProvider implements MessageBodyReader<SAXSource> {
 
-        public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    @Provider
+    @Consumes( {MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.WILDCARD})
+    @Produces( {MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.WILDCARD})
+    public static class SAXSourceProvider extends SourceProvider implements
+        MessageBodyReader<SAXSource> {
+
+        public boolean isReadable(Class<?> type,
+                                  Type genericType,
+                                  Annotation[] annotations,
+                                  MediaType mediaType) {
             return (SAXSource.class == type && super.isReadable(mediaType));
         }
 
-        public SAXSource readFrom(Class<SAXSource> type, Type genericType, Annotation[] annotations,
-                MediaType mediaType, MultivaluedMap<String,String> httpHeaders, InputStream entityStream)
-                throws IOException, WebApplicationException {
+        public SAXSource readFrom(Class<SAXSource> type,
+                                  Type genericType,
+                                  Annotation[] annotations,
+                                  MediaType mediaType,
+                                  MultivaluedMap<String, String> httpHeaders,
+                                  InputStream entityStream) throws IOException,
+            WebApplicationException {
             return new SAXSource(new InputSource(entityStream));
         }
     }
-    
-    @Provider
-    @Consumes({MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.WILDCARD})
-    @Produces({MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.WILDCARD})
-    public static class DOMSourceProvider extends SourceProvider implements MessageBodyReader<DOMSource> {
 
-        public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    @Provider
+    @Consumes( {MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.WILDCARD})
+    @Produces( {MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.WILDCARD})
+    public static class DOMSourceProvider extends SourceProvider implements
+        MessageBodyReader<DOMSource> {
+
+        public boolean isReadable(Class<?> type,
+                                  Type genericType,
+                                  Annotation[] annotations,
+                                  MediaType mediaType) {
             return (DOMSource.class == type && super.isReadable(mediaType));
         }
 
-        public DOMSource readFrom(Class<DOMSource> type, Type genericType, Annotation[] annotations,
-                MediaType mediaType, MultivaluedMap<String,String> httpHeaders, InputStream entityStream)
-                throws IOException, WebApplicationException {
+        public DOMSource readFrom(Class<DOMSource> type,
+                                  Type genericType,
+                                  Annotation[] annotations,
+                                  MediaType mediaType,
+                                  MultivaluedMap<String, String> httpHeaders,
+                                  InputStream entityStream) throws IOException,
+            WebApplicationException {
             try {
-                return new DOMSource(documentBuilderFactory.newDocumentBuilder().parse(entityStream));
+                return new DOMSource(documentBuilderFactory.newDocumentBuilder()
+                    .parse(entityStream));
             } catch (SAXException e) {
                 throw asIOExcpetion(e);
             } catch (ParserConfigurationException e) {
@@ -119,17 +143,28 @@ public abstract class SourceProvider implements MessageBodyWriter<Source> {
         return MediaTypeUtils.isXmlType(mediaType);
     }
 
-    public long getSize(Source t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public long getSize(Source t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
         return -1;
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
         return (Source.class.isAssignableFrom(type) && MediaTypeUtils.isXmlType(mediaType));
     }
 
-    public void writeTo(Source t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
-            MultivaluedMap<String,Object> httpHeaders, OutputStream entityStream) throws IOException,
-            WebApplicationException {
+    public void writeTo(Source t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
         StreamResult sr = new StreamResult(entityStream);
         Transformer transformer;
         try {

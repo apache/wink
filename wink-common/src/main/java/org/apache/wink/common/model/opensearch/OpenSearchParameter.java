@@ -17,12 +17,12 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common.model.opensearch;
 
 /**
  * Represents one search parameter in form of parameter_key={parameter}.
- * Optional parameter can be specified by  "?". For example: {parameter?}
+ * Optional parameter can be specified by "?". For example: {parameter?}
  */
 public class OpenSearchParameter {
 
@@ -31,34 +31,45 @@ public class OpenSearchParameter {
      */
     public static enum OpenSearchParams {
         /**
-         * <p>Replaced with the keyword or keywords desired by the search client.
+         * <p>
+         * Replaced with the keyword or keywords desired by the search client.
          * Restrictions: The value must be URL-encoded.
          */
         searchTerms,
 
         /**
-         * <p>Replaced with the number of search results per page desired by the search client.
+         * <p>
+         * Replaced with the number of search results per page desired by the
+         * search client.
          */
         count,
 
         /**
-         * <p>Replaced with the page number of the set of search results desired by the search client.
-         * Restrictions:  The value must be an integer.
+         * <p>
+         * Replaced with the page number of the set of search results desired by
+         * the search client. Restrictions: The value must be an integer.
          */
         startPage,
 
         /**
-         * <p>Replaced with a string that indicates that the search client desires search results in the specified language.
+         * <p>
+         * Replaced with a string that indicates that the search client desires
+         * search results in the specified language.
          */
         language,
 
         /**
-         * <p>Replaced with a string that indicates that the search client is performing the search request encoded with the specified character encoding.
+         * <p>
+         * Replaced with a string that indicates that the search client is
+         * performing the search request encoded with the specified character
+         * encoding.
          */
         inputEncoding,
 
         /**
-         * <p>Replaced with a string that indicates that the search client desires a search response encoding with the specified character encoding.
+         * <p>
+         * Replaced with a string that indicates that the search client desires
+         * a search response encoding with the specified character encoding.
          */
         outputEncoding
     }
@@ -66,18 +77,17 @@ public class OpenSearchParameter {
     /**
      * OpenSearch parameter key
      */
-    private String parameterKey;
+    private String  parameterKey;
 
     /**
      * OpenSearch parameter
      */
-    private String parameter;
+    private String  parameter;
 
     /**
      * Indicates if parameter is mandatory
      */
     private boolean mandatory;
-
 
     /**
      * Default constructor
@@ -118,8 +128,7 @@ public class OpenSearchParameter {
         this.mandatory = isMandatory;
     }
 
-    public String getURLParameter()
-    {
+    public String getURLParameter() {
         return parameterKey + "={" + parameter + (mandatory ? "" : "?") + "}";
     }
 

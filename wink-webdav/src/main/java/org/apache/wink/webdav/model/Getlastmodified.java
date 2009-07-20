@@ -38,9 +38,9 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.wink.common.internal.utils.HttpDateParser;
 
-
 /**
- * The <code>getlastmodified</code> Property per the WebDAV specification [RFC 4918]
+ * The <code>getlastmodified</code> Property per the WebDAV specification [RFC
+ * 4918]
  * 
  * <pre>
  *    Name:       getlastmodified
@@ -67,10 +67,13 @@ public class Getlastmodified {
     @XmlMixed
     protected List<String> content;
 
-    public Getlastmodified() {}
+    public Getlastmodified() {
+    }
+
     public Getlastmodified(String value) {
         setValue(value);
     }
+
     public Getlastmodified(Date value) {
         setValue(value);
     }
@@ -85,8 +88,7 @@ public class Getlastmodified {
     /**
      * Sets the value.
      * 
-     * @param value
-     *            the value to set
+     * @param value the value to set
      */
     public void setValue(String value) {
         List<String> content = getContent();
@@ -112,8 +114,7 @@ public class Getlastmodified {
     /**
      * Sets the value.
      * 
-     * @param value
-     *            the value to set
+     * @param value the value to set
      */
     public void setValue(Date value) {
         setValue(HttpDateParser.toHttpDate(value));

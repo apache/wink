@@ -19,9 +19,9 @@
 package org.apache.wink.jaxrs.test.providers.writers;
 
 /**
- * this class is a dummy class to fill in for the Queue we were originally
- * using from JDK6.
- *
+ * this class is a dummy class to fill in for the Queue we were originally using
+ * from JDK6.
+ * 
  * @param <T>
  */
 public interface Queue<T> extends Iterable<T> {

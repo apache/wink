@@ -41,9 +41,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-
-
-
 /**
  * The <code>propfind</code> XML element per the WebDAV specification [RFC 4918]
  * 
@@ -63,15 +60,14 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "propfind")
 public class Propfind {
 
-    protected Allprop allprop;
+    protected Allprop  allprop;
     protected Propname propname;
-    protected Prop prop;
+    protected Prop     prop;
 
     /**
      * Gets the value of the allprop property.
      * 
      * @return possible object is {@link Allprop }
-     * 
      */
     public Allprop getAllprop() {
         return allprop;
@@ -80,9 +76,7 @@ public class Propfind {
     /**
      * Sets the value of the allprop property.
      * 
-     * @param value
-     *            allowed object is {@link Allprop }
-     * 
+     * @param value allowed object is {@link Allprop }
      */
     public void setAllprop(Allprop value) {
         this.allprop = value;
@@ -92,7 +86,6 @@ public class Propfind {
      * Gets the value of the propname property.
      * 
      * @return possible object is {@link Propname }
-     * 
      */
     public Propname getPropname() {
         return propname;
@@ -101,9 +94,7 @@ public class Propfind {
     /**
      * Sets the value of the propname property.
      * 
-     * @param value
-     *            allowed object is {@link Propname }
-     * 
+     * @param value allowed object is {@link Propname }
      */
     public void setPropname(Propname value) {
         this.propname = value;
@@ -113,7 +104,6 @@ public class Propfind {
      * Gets the value of the prop property.
      * 
      * @return possible object is {@link Prop }
-     * 
      */
     public Prop getProp() {
         return prop;
@@ -122,14 +112,12 @@ public class Propfind {
     /**
      * Sets the value of the prop property.
      * 
-     * @param value
-     *            allowed object is {@link Prop }
-     * 
+     * @param value allowed object is {@link Prop }
      */
     public void setProp(Prop value) {
         this.prop = value;
     }
-    
+
     public boolean isAllprop() {
         return getAllprop() != null;
     }
@@ -140,6 +128,7 @@ public class Propfind {
 
     /**
      * Unmarshal a Propfind object from the provided input stream
+     * 
      * @param is the input stream
      * @return an instance of a Propfind object
      * @throws IOException
@@ -150,6 +139,7 @@ public class Propfind {
 
     /**
      * Marshal a Propfind object to the provided output stream
+     * 
      * @param instance the Propfind instance to marshal
      * @param outputStreamWriter the output stream
      * @throws IOException
@@ -160,18 +150,21 @@ public class Propfind {
 
     /**
      * Unmarshal a Propfind object from the provided reader
+     * 
      * @param reader the input reader
      * @return an instance of a Propfind object
      * @throws IOException
      */
     public static Propfind unmarshal(Reader reader) throws IOException {
         Unmarshaller unmarshaller = WebDAVModelHelper.createUnmarshaller();
-        Propfind instance = WebDAVModelHelper.unmarshal(unmarshaller, reader, Propfind.class, "propfind");
+        Propfind instance =
+            WebDAVModelHelper.unmarshal(unmarshaller, reader, Propfind.class, "propfind");
         return instance;
     }
-    
+
     /**
      * Marshal a Propfind object to the provided writer
+     * 
      * @param instance the Profind instance to marshal
      * @param writer the output writer
      * @throws IOException
@@ -180,6 +173,5 @@ public class Propfind {
         Marshaller marshaller = WebDAVModelHelper.createMarshaller();
         WebDAVModelHelper.marshal(marshaller, instance, writer, "propfind");
     }
-
 
 }

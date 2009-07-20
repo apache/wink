@@ -26,7 +26,8 @@ import java.util.LinkedList;
  */
 public class LifecycleManagersRegistry {
 
-    private LinkedList<LifecycleManager<?>> store                 = new LinkedList<LifecycleManager<?>>();
+    private LinkedList<LifecycleManager<?>> store                 =
+                                                                      new LinkedList<LifecycleManager<?>>();
     @SuppressWarnings("unchecked")
     private LifecycleManager                defaultFactoryFactory = new DefaultLifecycleManager();
 
@@ -50,8 +51,7 @@ public class LifecycleManagersRegistry {
     /**
      * Returns an ObjectFactory based on the object's instance.
      * 
-     * @param object
-     *            - object for which a ObjectFactory will be returned.
+     * @param object - object for which a ObjectFactory will be returned.
      * @return ObjectFactory
      */
     @SuppressWarnings("unchecked")
@@ -68,8 +68,7 @@ public class LifecycleManagersRegistry {
     /**
      * Returns an ObjectFactory based on the object's class.
      * 
-     * @param cls
-     *            - class for which a ObjectFactory will be returned.
+     * @param cls - class for which a ObjectFactory will be returned.
      * @return ObjectFactory
      */
     @SuppressWarnings("unchecked")

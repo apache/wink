@@ -78,7 +78,7 @@ public class JAXRSExceptionsMappedProvidersTest extends TestCase {
         assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), postMethod.getStatusCode());
         assertEquals(getBaseURI(), postMethod.getResponseHeader("ExceptionPage").getValue());
         ServerContainerAssertions.assertExceptionBodyFromServer(500, postMethod
-                                                                .getResponseBodyAsString());
+            .getResponseBodyAsString());
     }
 
     /**
@@ -98,7 +98,7 @@ public class JAXRSExceptionsMappedProvidersTest extends TestCase {
         assertEquals(497, postMethod.getStatusCode());
         assertEquals(getBaseURI(), postMethod.getResponseHeader("ExceptionPage").getValue());
         ServerContainerAssertions.assertExceptionBodyFromServer(497, postMethod
-                                                                .getResponseBodyAsString());
+            .getResponseBodyAsString());
 
     }
 
@@ -116,12 +116,13 @@ public class JAXRSExceptionsMappedProvidersTest extends TestCase {
         assertEquals(496, postMethod.getStatusCode());
         assertEquals(getBaseURI(), postMethod.getResponseHeader("ExceptionPage").getValue());
         ServerContainerAssertions.assertExceptionBodyFromServer(496, postMethod
-                                                                .getResponseBodyAsString());
+            .getResponseBodyAsString());
     }
 
     /**
      * Tests a method that throws a <code>WebApplicationException</code> with a
-     * Response with an entity (which will not get mapped via an exception mapper).
+     * Response with an entity (which will not get mapped via an exception
+     * mapper).
      * 
      * @throws Exception
      */
@@ -141,7 +142,8 @@ public class JAXRSExceptionsMappedProvidersTest extends TestCase {
 
     /**
      * Tests a method that throws a <code>WebApplicationException</code> with a
-     * Response with no entity (which will not get mapped via an exception mapper).
+     * Response with no entity (which will not get mapped via an exception
+     * mapper).
      * 
      * @throws Exception
      */
@@ -155,7 +157,8 @@ public class JAXRSExceptionsMappedProvidersTest extends TestCase {
                                                       "text/xml", null));
         client.executeMethod(postMethod);
         assertEquals(491, postMethod.getStatusCode());
-        assertEquals("Some message", postMethod.getResponseHeader("throwemptyentitywebappexception").getValue());
+        assertEquals("Some message", postMethod
+            .getResponseHeader("throwemptyentitywebappexception").getValue());
         assertEquals(getBaseURI(), postMethod.getResponseHeader("ExceptionPage").getValue());
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><commenterror><message>WebApplicationExceptionMapProvider set message</message></commenterror>",
                      postMethod.getResponseBodyAsString());

@@ -27,11 +27,12 @@ import org.apache.wink.common.internal.providers.entity.SourceProvider;
 
 import junit.framework.TestCase;
 
-
 public class SimpleWinkApplicationTest extends TestCase {
 
     public void testSimpleWinkApplication() {
-        SimpleWinkApplication simpleWinkApplication = new SimpleWinkApplication("org//apache//wink//common//internal//application//custom.app");
+        SimpleWinkApplication simpleWinkApplication =
+            new SimpleWinkApplication(
+                                      "org//apache//wink//common//internal//application//custom.app");
         Set<Class<?>> classes = simpleWinkApplication.getClasses();
         assertTrue(classes.contains(FileProvider.class));
         assertTrue(classes.contains(SourceProvider.DOMSourceProvider.class));

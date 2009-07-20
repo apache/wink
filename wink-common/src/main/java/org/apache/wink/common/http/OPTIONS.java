@@ -26,7 +26,7 @@ import java.lang.annotation.Target;
 
 import javax.ws.rs.HttpMethod;
 
-@Target({ElementType.METHOD})
+@Target( {ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @HttpMethod("OPTIONS")
 public @interface OPTIONS {

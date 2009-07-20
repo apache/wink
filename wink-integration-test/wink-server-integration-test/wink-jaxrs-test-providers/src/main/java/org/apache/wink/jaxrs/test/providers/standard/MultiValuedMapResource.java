@@ -58,8 +58,7 @@ public class MultiValuedMapResource {
     }
 
     @PUT
-    public void putMultivaluedMap(MultivaluedMap<String, String> map)
-            throws IOException {
+    public void putMultivaluedMap(MultivaluedMap<String, String> map) throws IOException {
         formData = map;
     }
 }

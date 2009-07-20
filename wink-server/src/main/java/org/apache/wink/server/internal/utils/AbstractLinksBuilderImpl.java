@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.utils;
 
@@ -43,30 +42,29 @@ import org.apache.wink.server.internal.registry.ResourceRecord;
 import org.apache.wink.server.internal.registry.ResourceRegistry;
 import org.apache.wink.server.utils.BaseLinksBuilder;
 
-
 /**
  * Base class providing common functionality for links builders.
  */
 public abstract class AbstractLinksBuilderImpl<T> implements BaseLinksBuilder<T> {
 
-    protected Map<String,String> pathParams;
-    protected MultivaluedMap<String,String> queryParams;
-    protected ResourceRecord record;
-    protected String resourcePath;
-    protected String subResourcePath;
-    protected URI baseUri;
-    protected URI relativeTo;
+    protected Map<String, String>            pathParams;
+    protected MultivaluedMap<String, String> queryParams;
+    protected ResourceRecord                 record;
+    protected String                         resourcePath;
+    protected String                         subResourcePath;
+    protected URI                            baseUri;
+    protected URI                            relativeTo;
 
-    protected MessageContext context;
-    protected ResourceRegistry registry;
-    protected boolean relativize;
-    protected boolean addAltParam;
+    protected MessageContext                 context;
+    protected ResourceRegistry               registry;
+    protected boolean                        relativize;
+    protected boolean                        addAltParam;
 
     protected AbstractLinksBuilderImpl(MessageContext context) {
         this.context = context;
         registry = context.getAttribute(ResourceRegistry.class);
-        pathParams = new HashMap<String,String>();
-        queryParams = new MultivaluedMapImpl<String,String>();
+        pathParams = new HashMap<String, String>();
+        queryParams = new MultivaluedMapImpl<String, String>();
         record = context.getAttribute(SearchResult.class).getResource().getRecord();
         initPaths();
         initRelativize();
@@ -80,48 +78,67 @@ public abstract class AbstractLinksBuilderImpl<T> implements BaseLinksBuilder<T>
         resourcePath = null;
         subResourcePath = null;
 
-        // we need to determine the path of the resource, and the path of the sub-resource method
+        // we need to determine the path of the resource, and the path of the
+        // sub-resource method
         // (if it exists)
         List<String> matchedURIs = uriInfo.getMatchedURIs(false);
         if (matchedURIs.size() == 1) {
-            // if we have only one matched URI, it's a root resource without a sub-resource method
+            // if we have only one matched URI, it's a root resource without a
+            // sub-resource method
             resourcePath = matchedURIs.get(0);
             subResourcePath = null;
         } else {
-            // we have more than one matched URI. It means we went through at least one sub-resource
+            // we have more than one matched URI. It means we went through at
+            // least one sub-resource
             // (locator or method).
-            // We compare the number of matched resources against the number of matched URI's to
-            // determine if the the invoked method is a resource method or a sub-resource method.
-            // If the number of matched URI's is the same as the number of matched resources, then
+            // We compare the number of matched resources against the number of
+            // matched URI's to
+            // determine if the the invoked method is a resource method or a
+            // sub-resource method.
+            // If the number of matched URI's is the same as the number of
+            // matched resources, then
             // we invoked a resource method.
-            // If the number of matched URI's is greater than the number of matched resources, then
+            // If the number of matched URI's is greater than the number of
+            // matched resources, then
             // we invoked a sub-resource method.
             List<Object> matchedResources = uriInfo.getMatchedResources();
             if (matchedURIs.size() == matchedResources.size()) {
-                // the number of matched URI's is the same as the number of matched resources - this
+                // the number of matched URI's is the same as the number of
+                // matched resources - this
                 // means we invoked a resource method
                 resourcePath = matchedURIs.get(0);
                 subResourcePath = null;
             } else {
-                // the number of matched URI's is greater than the number of matched resources -
+                // the number of matched URI's is greater than the number of
+                // matched resources -
                 // this means we invoked a sub-resource method
                 resourcePath = matchedURIs.get(1);
-                subResourcePath = matchedURIs.get(0).substring(resourcePath.length() + 1); // + 1 is to skip the '/'
+                subResourcePath = matchedURIs.get(0).substring(resourcePath.length() + 1); // +
+                                                                                           // 1
+                                                                                           // is
+                                                                                           // to
+                                                                                           // skip
+                                                                                           // the
+                                                                                           // '/'
             }
         }
     }
 
     private void initRelativize() {
-        relativize = Boolean.parseBoolean(context.getProperties().getProperty("wink.defaultUrisRelative", "true"));
-        String relative = context.getUriInfo().getQueryParameters(false).getFirst(
-                RestConstants.REST_PARAM_RELATIVE_URLS);
+        relativize =
+            Boolean.parseBoolean(context.getProperties().getProperty("wink.defaultUrisRelative",
+                                                                     "true"));
+        String relative =
+            context.getUriInfo().getQueryParameters(false)
+                .getFirst(RestConstants.REST_PARAM_RELATIVE_URLS);
         if (relative != null) {
             relativize = Boolean.parseBoolean(relative);
         }
     }
 
     private void initAddAltParam() {
-        addAltParam = Boolean.parseBoolean(context.getProperties().getProperty("wink.addAltParam", "true"));
+        addAltParam =
+            Boolean.parseBoolean(context.getProperties().getProperty("wink.addAltParam", "true"));
     }
 
     @SuppressWarnings("unchecked")
@@ -188,14 +205,15 @@ public abstract class AbstractLinksBuilderImpl<T> implements BaseLinksBuilder<T>
     protected UriBuilder initUriBuilder() {
         return initUriBuilder(resourcePath);
     }
-    
+
     protected UriBuilder initUriBuilder(String path) {
         UriBuilder builder = null;
         if (relativize) {
             builder = UriBuilder.fromPath(path);
         } else {
             builder = UriBuilder.fromUri(baseUri);
-            // special treatment if the path resulting from the base uri equals "/"
+            // special treatment if the path resulting from the base uri equals
+            // "/"
             if (baseUri.getPath() != null && baseUri.getPath().equals("/")) {
                 builder.replacePath(path);
             } else {

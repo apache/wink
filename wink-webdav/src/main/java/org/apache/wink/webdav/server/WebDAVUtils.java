@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.webdav.server;
 
@@ -44,38 +43,38 @@ import org.apache.wink.webdav.model.Lockinfo;
 import org.apache.wink.webdav.model.Prop;
 import org.apache.wink.webdav.model.WebDAVModelHelper;
 
-
 public class WebDAVUtils {
 
-    // 1000 years ~ infinite timeout ("Infinite" constant is not accepted by MS client)
+    // 1000 years ~ infinite timeout ("Infinite" constant is not accepted by MS
+    // client)
     private static final String LOCK_TIMEOUT = "Second-31536000000";
 
     /**
-     * Provides a default response with two additional headers for WebDAV and MS compatibility.
+     * Provides a default response with two additional headers for WebDAV and MS
+     * compatibility.
      * 
      * @return
      */
     public static Response getOptions(UriInfo info) {
-        List<ResourceInstance> matchedResourceInstances = ((UriInfoImpl)info).getMatchedResourceInstances();
-        ResourceRegistry resourceRegistry = RuntimeContextTLS.getRuntimeContext().getAttribute(ResourceRegistry.class);
+        List<ResourceInstance> matchedResourceInstances =
+            ((UriInfoImpl)info).getMatchedResourceInstances();
+        ResourceRegistry resourceRegistry =
+            RuntimeContextTLS.getRuntimeContext().getAttribute(ResourceRegistry.class);
         Set<String> options = resourceRegistry.getOptions(matchedResourceInstances.get(0));
         String allowHeader = HeaderUtils.buildOptionsHeader(options);
-        Response response = RuntimeDelegate.getInstance().createResponseBuilder()
-            .header(WebDAVHeaders.DAV, "1")
-            .header(WebDAVHeaders.MS_AUTHOR_VIA, "DAV")
-            .header(HttpHeadersEx.ALLOW, allowHeader)
-            .entity("")
-            .build();
+        Response response =
+            RuntimeDelegate.getInstance().createResponseBuilder().header(WebDAVHeaders.DAV, "1")
+                .header(WebDAVHeaders.MS_AUTHOR_VIA, "DAV")
+                .header(HttpHeadersEx.ALLOW, allowHeader).entity("").build();
         return response;
     }
 
     /**
-     * This method does not perform a real lock but returns a 'dummy' lock response for
-     * compatibility with MS Windows. It opens any resource as read-only file when a lock is not
-     * received.
+     * This method does not perform a real lock but returns a 'dummy' lock
+     * response for compatibility with MS Windows. It opens any resource as
+     * read-only file when a lock is not received.
      * 
-     * @param body
-     *            the lock request xml
+     * @param body the lock request xml
      * @return a response instance
      */
     public static Response msCompatibilityLock(String body) {
@@ -90,8 +89,11 @@ public class WebDAVUtils {
 
         // parse the request
         Unmarshaller unmarshaller = WebDAVModelHelper.createUnmarshaller();
-        Lockinfo lockinfo = WebDAVModelHelper.unmarshal(unmarshaller, new StringReader(body), Lockinfo.class,
-                "lockinfo");
+        Lockinfo lockinfo =
+            WebDAVModelHelper.unmarshal(unmarshaller,
+                                        new StringReader(body),
+                                        Lockinfo.class,
+                                        "lockinfo");
 
         // make a response
         Activelock activelock = new Activelock();
@@ -112,20 +114,21 @@ public class WebDAVUtils {
         Prop prop = new Prop();
         prop.setLockdiscovery(lockdiscovery);
 
-        Response response = RuntimeDelegate.getInstance().createResponseBuilder()
-                .entity(prop).build();
+        Response response =
+            RuntimeDelegate.getInstance().createResponseBuilder().entity(prop).build();
         return response;
     }
 
     /**
-     * This method does not perform a real unlock but returns a NO_CONTENT response for
-     * compatibility with MS Windows.
+     * This method does not perform a real unlock but returns a NO_CONTENT
+     * response for compatibility with MS Windows.
      * 
      * @return a response instance
      */
     public static Response msCompatibilityUnlock() {
-        Response response = RuntimeDelegate.getInstance().createResponseBuilder().status(
-                HttpStatus.NO_CONTENT.getCode()).build();
+        Response response =
+            RuntimeDelegate.getInstance().createResponseBuilder().status(HttpStatus.NO_CONTENT
+                .getCode()).build();
         return response;
     }
 

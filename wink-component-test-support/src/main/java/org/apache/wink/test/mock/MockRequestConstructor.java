@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.test.mock;
 
 import java.util.Map;
@@ -37,29 +37,34 @@ public final class MockRequestConstructor {
 
     /**
      * Construct a mock request to be used in tests.
-     *
+     * 
      * @param method HTTP method
      * @param requestURI request URI
      * @param mediaType requested media type
      * @return new mock request
      */
-    public static MockHttpServletRequest constructMockRequest(String method, String requestURI, MediaType mediaType) {
+    public static MockHttpServletRequest constructMockRequest(String method,
+                                                              String requestURI,
+                                                              MediaType mediaType) {
         return constructMockRequest(method, requestURI, mediaType.toString());
     }
 
     /**
      * Construct a mock request to be used in tests.
-     *
+     * 
      * @param method HTTP method
      * @param requestURI request URI
      * @param acceptHeader request Accept header
      * @return new mock request
      */
-    public static MockHttpServletRequest constructMockRequest(String method, String requestURI, String acceptHeader) {
+    public static MockHttpServletRequest constructMockRequest(String method,
+                                                              String requestURI,
+                                                              String acceptHeader) {
         MockHttpServletRequest mockRequest = new MockHttpServletRequestWrapper() {
 
             public String getPathTranslated() {
-                return null;        // prevent Spring to resolve the file on the filesystem which fails
+                return null; // prevent Spring to resolve the file on the
+                             // filesystem which fails
             }
 
         };
@@ -68,52 +73,45 @@ public final class MockRequestConstructor {
         mockRequest.addHeader("Accept", acceptHeader);
         return mockRequest;
     }
-    
+
     /**
      * Construct a mock request to be used in tests.
-     * @param method
-     *            HTTP method
-     * @param requestURI
-     *            request URI
-     * @param acceptHeader
-     *            request Accept header
-     * @param contentType
-     *            request Content Type
-     * @param content
-     *            request content
+     * 
+     * @param method HTTP method
+     * @param requestURI request URI
+     * @param acceptHeader request Accept header
+     * @param contentType request Content Type
+     * @param content request content
      * @return new mock request
      */
     public static MockHttpServletRequest constructMockRequest(String method,
-        String requestURI, String acceptHeader, String contentType,
-        byte[] content) {
-        MockHttpServletRequest mockRequest = constructMockRequest(method,
-            requestURI, acceptHeader);
+                                                              String requestURI,
+                                                              String acceptHeader,
+                                                              String contentType,
+                                                              byte[] content) {
+        MockHttpServletRequest mockRequest = constructMockRequest(method, requestURI, acceptHeader);
         mockRequest.setContentType(contentType);
         mockRequest.setContent(content);
 
         return mockRequest;
     }
-    
+
     /**
      * Construct a mock request to be used in tests.
      * 
-     * @param method
-     *            HTTP method
-     * @param requestURI
-     *            request URI
-     * @param acceptHeader
-     *            request Accept header
-     * @param parameters
-     *            request query parameters
-     * @param attributes
-     *            request attributes
+     * @param method HTTP method
+     * @param requestURI request URI
+     * @param acceptHeader request Accept header
+     * @param parameters request query parameters
+     * @param attributes request attributes
      * @return new mock request
      */
     public static MockHttpServletRequest constructMockRequest(String method,
-        String requestURI, String acceptHeader, Map<?, ?> parameters,
-        Map<String, Object> attributes) {
-        MockHttpServletRequest mockRequest = constructMockRequest(method,
-            requestURI, acceptHeader);
+                                                              String requestURI,
+                                                              String acceptHeader,
+                                                              Map<?, ?> parameters,
+                                                              Map<String, Object> attributes) {
+        MockHttpServletRequest mockRequest = constructMockRequest(method, requestURI, acceptHeader);
         if (attributes != null) {
             Set<String> attributeNames = attributes.keySet();
             Object attributeValue;

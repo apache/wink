@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server;
 
 import javax.ws.rs.Consumes;
@@ -33,16 +33,14 @@ import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 /**
  * Test invocation to resource which cannot be dispatched.
  */
-public class DispatchErrorTest extends
-    MockServletInvocationTest {
+public class DispatchErrorTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] { NotDispatchedResource.class };
+        return new Class[] {NotDispatchedResource.class};
     }
 
     @Path("/path")
@@ -59,28 +57,28 @@ public class DispatchErrorTest extends
     }
 
     public void NotFound() throws Exception {
-        MockHttpServletResponse response = invoke(MockRequestConstructor.constructMockRequest(
-            "GET", "zzz", "*/*"));
+        MockHttpServletResponse response =
+            invoke(MockRequestConstructor.constructMockRequest("GET", "zzz", "*/*"));
         assertEquals("status", HttpStatus.NOT_FOUND.getCode(), response.getStatus());
     }
 
     public void testMethodNotAllowed() throws Exception {
-        MockHttpServletResponse response = invoke(MockRequestConstructor.constructMockRequest(
-            "GET", "path", "*/*"));
+        MockHttpServletResponse response =
+            invoke(MockRequestConstructor.constructMockRequest("GET", "path", "*/*"));
         assertEquals("status", HttpStatus.METHOD_NOT_ALLOWED.getCode(), response.getStatus());
     }
 
     public void testNotAcceptable() throws Exception {
-        MockHttpServletRequest servletRequest = MockRequestConstructor.constructMockRequest("PUT",
-            "path", "text/plain");
+        MockHttpServletRequest servletRequest =
+            MockRequestConstructor.constructMockRequest("PUT", "path", "text/plain");
         servletRequest.setContentType(MediaType.TEXT_HTML);
         MockHttpServletResponse response = invoke(servletRequest);
         assertEquals("status", HttpStatus.NOT_ACCEPTABLE.getCode(), response.getStatus());
     }
 
     public void testUnsupportedMediaType() throws Exception {
-        MockHttpServletRequest servletRequest = MockRequestConstructor.constructMockRequest("PUT",
-            "path", MediaType.TEXT_XML);
+        MockHttpServletRequest servletRequest =
+            MockRequestConstructor.constructMockRequest("PUT", "path", MediaType.TEXT_XML);
         servletRequest.setContentType("text/vnd.x-test");
         MockHttpServletResponse response = invoke(servletRequest);
         assertEquals("status", HttpStatus.UNSUPPORTED_MEDIA_TYPE.getCode(), response.getStatus());

@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.webdav.model;
 
 import java.io.StringReader;
@@ -36,25 +36,24 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Element;
 
-
-
-
 public class WebDAVMultistatusTest extends AbstractWebDAVModelTest {
 
-    private static final String NS1 = "http://ns.example.com/boxschema/";
-    private static final String RESP1_HREF = "http://www.example.com/file";
-    private static final String RESP1_DESC = "There has been an access violation error.";
-    private static final QName[] RESP1_PROPS = new QName[] {new QName(NS1, "bigbox", "R"),
-                                                               new QName(NS1, "author", "R"),
-                                                               new QName(NS1, "DingALing", "R"),
-                                                               new QName(NS1, "Random", "R")};
-    private static final String RESP1_PROPS_DESC = "The user does not have access to the DingALing property.";
+    private static final String  NS1              = "http://ns.example.com/boxschema/";
+    private static final String  RESP1_HREF       = "http://www.example.com/file";
+    private static final String  RESP1_DESC       = "There has been an access violation error.";
+    private static final QName[] RESP1_PROPS      =
+                                                      new QName[] {new QName(NS1, "bigbox", "R"),
+        new QName(NS1, "author", "R"), new QName(NS1, "DingALing", "R"),
+        new QName(NS1, "Random", "R")                 };
+    private static final String  RESP1_PROPS_DESC =
+                                                      "The user does not have access to the DingALing property.";
 
-    private static final String NS2 = "http://ns.example.com/standards/z39.50/";
-    private static final String RESP2_HREF = "http://www.example.com/bar.html";
-    private static final QName[] RESP2_PROPS = new QName[] {new QName(NS2, "Copyright-Owner"),
-                                                            new QName(NS2, "Authors")};
-    private static final String RESP2_DESC = "Copyright Owner cannot be deleted or altered.";
+    private static final String  NS2              = "http://ns.example.com/standards/z39.50/";
+    private static final String  RESP2_HREF       = "http://www.example.com/bar.html";
+    private static final QName[] RESP2_PROPS      =
+                                                      new QName[] {
+        new QName(NS2, "Copyright-Owner"), new QName(NS2, "Authors")};
+    private static final String  RESP2_DESC       = "Copyright Owner cannot be deleted or altered.";
 
     @Test
     public void test1() throws Exception {
@@ -69,7 +68,7 @@ public class WebDAVMultistatusTest extends AbstractWebDAVModelTest {
         Assert.assertNotNull(response);
         List<Propstat> propstats = response.getPropstat();
         Assert.assertEquals(propstats.size(), 2);
-        
+
         Propstat propstat = propstats.get(0);
         Assert.assertEquals(propstat.getStatusCode(), 200);
         Prop prop = propstat.getProp();
@@ -81,7 +80,7 @@ public class WebDAVMultistatusTest extends AbstractWebDAVModelTest {
         Assert.assertNotNull(element);
         Assert.assertEquals(element.getLocalName(), RESP1_PROPS[1].getLocalPart());
         Assert.assertEquals(element.getNamespaceURI(), RESP1_PROPS[1].getNamespaceURI());
-        
+
         propstat = propstats.get(1);
         Assert.assertEquals(propstat.getStatusCode(), 403);
         Assert.assertEquals(propstat.getResponsedescription(), RESP1_PROPS_DESC);
@@ -95,7 +94,6 @@ public class WebDAVMultistatusTest extends AbstractWebDAVModelTest {
         Assert.assertEquals(element.getLocalName(), RESP1_PROPS[3].getLocalPart());
         Assert.assertEquals(element.getNamespaceURI(), RESP1_PROPS[3].getNamespaceURI());
 
-
         // test write
         String write = write(multistatus);
         Diff diff = new Diff(input, write);
@@ -108,13 +106,17 @@ public class WebDAVMultistatusTest extends AbstractWebDAVModelTest {
         multistatus.getResponse().add(response);
         propstat = response.getOrCreatePropstat(200, null, null);
         prop = propstat.getProp();
-        prop.setProperty(RESP1_PROPS[0], WebDAVModelHelper.createElement(NS1, "R:BoxType", "Box type A"));
-        prop.setProperty(RESP1_PROPS[1], WebDAVModelHelper.createElement(NS1, "R:Name", "J.J. Johnson"));
+        prop.setProperty(RESP1_PROPS[0], WebDAVModelHelper.createElement(NS1,
+                                                                         "R:BoxType",
+                                                                         "Box type A"));
+        prop.setProperty(RESP1_PROPS[1], WebDAVModelHelper.createElement(NS1,
+                                                                         "R:Name",
+                                                                         "J.J. Johnson"));
         propstat = response.getOrCreatePropstat(403, RESP1_PROPS_DESC, null);
         prop = propstat.getProp();
         prop.setProperty(RESP1_PROPS[2]);
         prop.setProperty(RESP1_PROPS[3]);
-        
+
         write = write(multistatus);
         diff = new Diff(input, write);
         Assert.assertTrue(diff.toString(), diff.similar());
@@ -132,7 +134,7 @@ public class WebDAVMultistatusTest extends AbstractWebDAVModelTest {
         Assert.assertNotNull(response);
         List<Propstat> propstats = response.getPropstat();
         Assert.assertEquals(propstats.size(), 2);
-        
+
         Propstat propstat = propstats.get(0);
         Assert.assertEquals(propstat.getStatusCode(), 409);
         Assert.assertNull(propstat.getError());

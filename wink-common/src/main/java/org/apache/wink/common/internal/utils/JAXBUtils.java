@@ -27,7 +27,6 @@ import javax.xml.bind.Unmarshaller;
 
 import org.apache.wink.common.model.XmlFormattingOptions;
 
-
 public class JAXBUtils {
 
     public static Marshaller createMarshaller(JAXBContext ctx, XmlFormattingOptions xfo) {

@@ -27,14 +27,14 @@ import javax.ws.rs.core.Response;
 @Path("/classc")
 public class ClassC extends AbstractClassB implements InterfaceA {
 
-	public String method1(@PathParam("p") String path) {
-		return "ClassC Method1;"+path;
-	}
-	
-	@GET
-	@Path("method2/{p}")
-	public Response method2(@PathParam("p") String path) {
-		Response res = Response.ok("ClassC Method2;"+path).build();
-		return res;
-	}
+    public String method1(@PathParam("p") String path) {
+        return "ClassC Method1;" + path;
+    }
+
+    @GET
+    @Path("method2/{p}")
+    public Response method2(@PathParam("p") String path) {
+        Response res = Response.ok("ClassC Method2;" + path).build();
+        return res;
+    }
 }

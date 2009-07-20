@@ -56,7 +56,6 @@ public class Locktype {
      * Gets the value of the write property.
      * 
      * @return possible object is {@link Write }
-     * 
      */
     public Write getWrite() {
         return write;
@@ -65,9 +64,7 @@ public class Locktype {
     /**
      * Sets the value of the write property.
      * 
-     * @param value
-     *            allowed object is {@link Write }
-     * 
+     * @param value allowed object is {@link Write }
      */
     public void setWrite(Write value) {
         this.write = value;

@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.providers.entity.json;
 
@@ -46,27 +45,37 @@ import org.apache.wink.common.utils.ProviderUtils;
 import org.json.JSONObject;
 import org.json.JSONException;
 
-
 @Provider
-@Produces({MediaType.APPLICATION_JSON, MediaTypeUtils.JAVASCRIPT})
+@Produces( {MediaType.APPLICATION_JSON, MediaTypeUtils.JAVASCRIPT})
 public class JsonProvider extends AbstractJAXBProvider implements MessageBodyWriter<JSONObject> {
 
     private static final Logger logger = LoggerFactory.getLogger(JsonProvider.class);
 
     @Context
-    private UriInfo uriInfo;
+    private UriInfo             uriInfo;
 
-    public long getSize(JSONObject t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public long getSize(JSONObject t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
         return -1;
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
         return type == JSONObject.class;
     }
 
-    public void writeTo(JSONObject t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
-            MultivaluedMap<String,Object> httpHeaders, OutputStream entityStream) throws IOException,
-            WebApplicationException {
+    public void writeTo(JSONObject t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
         String jsonString = null;
         try {
             jsonString = t.toString(2);
@@ -74,9 +83,11 @@ public class JsonProvider extends AbstractJAXBProvider implements MessageBodyWri
             logger.error("Failed to write json object");
             throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
         }
-        
-        String callbackParam = uriInfo.getQueryParameters().getFirst(RestConstants.REST_PARAM_JSON_CALLBACK);
-        OutputStreamWriter writer = new OutputStreamWriter(entityStream, ProviderUtils.getCharset(mediaType));
+
+        String callbackParam =
+            uriInfo.getQueryParameters().getFirst(RestConstants.REST_PARAM_JSON_CALLBACK);
+        OutputStreamWriter writer =
+            new OutputStreamWriter(entityStream, ProviderUtils.getCharset(mediaType));
         if (callbackParam != null) {
             writer.write(callbackParam);
             writer.write("(");

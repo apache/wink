@@ -40,27 +40,49 @@ import javax.ws.rs.ext.Provider;
 @Provider
 @Produces("*/*")
 @Consumes("*/*")
-public class DataSourceProvider implements MessageBodyReader<DataSource>, MessageBodyWriter<DataSource> {
+public class DataSourceProvider implements MessageBodyReader<DataSource>,
+    MessageBodyWriter<DataSource> {
 
-    public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public boolean isReadable(Class<?> type,
+                              Type genericType,
+                              Annotation[] annotations,
+                              MediaType mediaType) {
         return type.isAssignableFrom(DataSource.class);
     }
 
-    public DataSource readFrom(Class<DataSource> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders,
-            InputStream entityStream) throws IOException, WebApplicationException {
-        return new ByteArrayDataSource(entityStream, (mediaType == null) ? null : mediaType.toString());
+    public DataSource readFrom(Class<DataSource> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType,
+                               MultivaluedMap<String, String> httpHeaders,
+                               InputStream entityStream) throws IOException,
+        WebApplicationException {
+        return new ByteArrayDataSource(entityStream, (mediaType == null) ? null : mediaType
+            .toString());
     }
 
-    public long getSize(DataSource t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public long getSize(DataSource t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
         return -1;
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
         return DataSource.class.isAssignableFrom(type);
     }
 
-    public void writeTo(DataSource t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
-            OutputStream entityStream) throws IOException, WebApplicationException {
+    public void writeTo(DataSource t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
         InputStream inputStream = t.getInputStream();
         final byte[] data = new byte[2048];
         int read;
@@ -74,7 +96,7 @@ public class DataSourceProvider implements MessageBodyReader<DataSource>, Messag
 
         private final String contentType;
         private final byte[] buffer;
-        private final int length;
+        private final int    length;
 
         public ByteArrayDataSource(InputStream is, String contentType) throws IOException {
             DataStoreByteArrayOutputStream os = new DataStoreByteArrayOutputStream();

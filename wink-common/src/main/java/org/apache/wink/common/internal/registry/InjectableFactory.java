@@ -69,8 +69,11 @@ public class InjectableFactory {
         return result;
     }
 
-    public Injectable create(Type genericType, Annotation[] annotations, Member member,
-        boolean encoded, String defaultValue) {
+    public Injectable create(Type genericType,
+                             Annotation[] annotations,
+                             Member member,
+                             boolean encoded,
+                             String defaultValue) {
         Class<?> classType = GenericsUtils.getClassType(genericType);
 
         MatrixParam matrix = null;
@@ -85,52 +88,52 @@ public class InjectableFactory {
         int annotationsCounter = 0;
         for (int i = 0; i < annotations.length; ++i) {
             if (annotations[i].annotationType().equals(MatrixParam.class)) {
-                matrix = (MatrixParam) annotations[i];
+                matrix = (MatrixParam)annotations[i];
                 ++annotationsCounter;
             } else if (annotations[i].annotationType().equals(PathParam.class)) {
-                path = (PathParam) annotations[i];
+                path = (PathParam)annotations[i];
                 ++annotationsCounter;
             } else if (annotations[i].annotationType().equals(QueryParam.class)) {
-                query = (QueryParam) annotations[i];
+                query = (QueryParam)annotations[i];
                 ++annotationsCounter;
             } else if (annotations[i].annotationType().equals(HeaderParam.class)) {
-                header = (HeaderParam) annotations[i];
+                header = (HeaderParam)annotations[i];
                 ++annotationsCounter;
             } else if (annotations[i].annotationType().equals(CookieParam.class)) {
-                cookie = (CookieParam) annotations[i];
+                cookie = (CookieParam)annotations[i];
                 ++annotationsCounter;
             } else if (annotations[i].annotationType().equals(FormParam.class)) {
-                form = (FormParam) annotations[i];
+                form = (FormParam)annotations[i];
                 ++annotationsCounter;
             } else if (annotations[i].annotationType().equals(Context.class)) {
-                context = (Context) annotations[i];
+                context = (Context)annotations[i];
                 ++annotationsCounter;
             } else if (annotations[i].annotationType().equals(Encoded.class)) {
                 encoded = true;
             } else if (annotations[i].annotationType().equals(DefaultValue.class)) {
-                defaultValue = ((DefaultValue) annotations[i]).value();
+                defaultValue = ((DefaultValue)annotations[i]).value();
             }
         }
 
         if (annotationsCounter > 1) {
-            throw new IllegalStateException("Conflicting parameter annotations for "
-                + member.getName());
+            throw new IllegalStateException("Conflicting parameter annotations for " + member
+                .getName());
         }
 
         if (matrix != null) {
-            injectable = createMatrixParam(matrix.value(), classType, genericType, annotations,
-                member);
+            injectable =
+                createMatrixParam(matrix.value(), classType, genericType, annotations, member);
         } else if (path != null) {
             injectable = createPathParam(path.value(), classType, genericType, annotations, member);
         } else if (query != null) {
-            injectable = createQueryParam(query.value(), classType, genericType, annotations,
-                member);
+            injectable =
+                createQueryParam(query.value(), classType, genericType, annotations, member);
         } else if (header != null) {
-            injectable = createHeaderParam(header.value(), classType, genericType, annotations,
-                member);
+            injectable =
+                createHeaderParam(header.value(), classType, genericType, annotations, member);
         } else if (cookie != null) {
-            injectable = createCookieParam(cookie.value(), classType, genericType, annotations,
-                member);
+            injectable =
+                createCookieParam(cookie.value(), classType, genericType, annotations, member);
         } else if (form != null) {
             injectable = createFormParam(form.value(), classType, genericType, annotations, member);
         } else if (context != null) {
@@ -140,7 +143,7 @@ public class InjectableFactory {
         }
 
         if (injectable instanceof BoundInjectable) {
-            BoundInjectable binding = (BoundInjectable) injectable;
+            BoundInjectable binding = (BoundInjectable)injectable;
             binding.setEncoded(encoded);
             binding.setDefaultValue(defaultValue);
         }
@@ -185,38 +188,58 @@ public class InjectableFactory {
         return new ContextParam(classType, annotations, member);
     }
 
-    public Injectable createMatrixParam(String value, Class<?> classType, Type genericType,
-        Annotation[] annotations, Member member) {
+    public Injectable createMatrixParam(String value,
+                                        Class<?> classType,
+                                        Type genericType,
+                                        Annotation[] annotations,
+                                        Member member) {
         return new NullInjectable(Injectable.ParamType.MATRIX);
     }
 
-    public Injectable createPathParam(String value, Class<?> classType, Type genericType,
-        Annotation[] annotations, Member member) {
+    public Injectable createPathParam(String value,
+                                      Class<?> classType,
+                                      Type genericType,
+                                      Annotation[] annotations,
+                                      Member member) {
         return new NullInjectable(Injectable.ParamType.PATH);
     }
 
-    public Injectable createQueryParam(String value, Class<?> classType, Type genericType,
-        Annotation[] annotations, Member member) {
+    public Injectable createQueryParam(String value,
+                                       Class<?> classType,
+                                       Type genericType,
+                                       Annotation[] annotations,
+                                       Member member) {
         return new NullInjectable(Injectable.ParamType.QUERY);
     }
 
-    public Injectable createHeaderParam(String value, Class<?> classType, Type genericType,
-        Annotation[] annotations, Member member) {
+    public Injectable createHeaderParam(String value,
+                                        Class<?> classType,
+                                        Type genericType,
+                                        Annotation[] annotations,
+                                        Member member) {
         return new NullInjectable(Injectable.ParamType.HEADER);
     }
 
-    public Injectable createCookieParam(String value, Class<?> classType, Type genericType,
-        Annotation[] annotations, Member member) {
+    public Injectable createCookieParam(String value,
+                                        Class<?> classType,
+                                        Type genericType,
+                                        Annotation[] annotations,
+                                        Member member) {
         return new NullInjectable(Injectable.ParamType.COOKIE);
     }
 
-    public Injectable createFormParam(String value, Class<?> classType, Type genericType,
-        Annotation[] annotations, Member member) {
+    public Injectable createFormParam(String value,
+                                      Class<?> classType,
+                                      Type genericType,
+                                      Annotation[] annotations,
+                                      Member member) {
         return new NullInjectable(Injectable.ParamType.FORM);
     }
 
-    public Injectable createEntityParam(Class<?> classType, Type genericType,
-        Annotation[] annotations, Member member) {
+    public Injectable createEntityParam(Class<?> classType,
+                                        Type genericType,
+                                        Annotation[] annotations,
+                                        Member member) {
         return new NullInjectable(Injectable.ParamType.ENTITY);
     }
 

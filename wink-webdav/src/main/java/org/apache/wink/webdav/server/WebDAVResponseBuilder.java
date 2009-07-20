@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.webdav.server;
 
@@ -58,12 +57,11 @@ import org.apache.wink.webdav.model.WebDAVModelHelper;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-
 public class WebDAVResponseBuilder {
 
     private static final Logger logger = LoggerFactory.getLogger(WebDAVResponseBuilder.class);
 
-    private UriInfo uriInfo;
+    private UriInfo             uriInfo;
 
     private WebDAVResponseBuilder(UriInfo uriInfo) {
         this.uriInfo = uriInfo;
@@ -74,13 +72,12 @@ public class WebDAVResponseBuilder {
     }
 
     /**
-     * Process the PROPFIND request for a given entry and create a response using the default
-     * implementation of {@link PropertyHandler}
+     * Process the PROPFIND request for a given entry and create a response
+     * using the default implementation of {@link PropertyHandler}
      * 
-     * @param entry
-     *            the entry containing the data to use to create the propfind response
-     * @param propfindXml
-     *            the propfind xml request to create the response for
+     * @param entry the entry containing the data to use to create the propfind
+     *            response
+     * @param propfindXml the propfind xml request to create the response for
      * @return a response to the profind request
      * @throws IOException
      */
@@ -89,19 +86,19 @@ public class WebDAVResponseBuilder {
     }
 
     /**
-     * Process the PROPFIND request for given document resource and create a response.
+     * Process the PROPFIND request for given document resource and create a
+     * response.
      * 
-     * @param entry
-     *            the entry containing the data to use to create the propfind response
-     * @param propfindXml
-     *            the propfind xml request to create the response for
-     * @param handler
-     *            a {@link PropertyHandler} that will be used to retrieve the values of properties
-     *            for the response
+     * @param entry the entry containing the data to use to create the propfind
+     *            response
+     * @param propfindXml the propfind xml request to create the response for
+     * @param handler a {@link PropertyHandler} that will be used to retrieve
+     *            the values of properties for the response
      * @return a response to the profind request
      * @throws IOException
      */
-    public Response propfind(SyndEntry entry, String propfindXml, PropertyHandler handler) throws IOException {
+    public Response propfind(SyndEntry entry, String propfindXml, PropertyHandler handler)
+        throws IOException {
 
         // parse the request (no content means 'all properties')
         Propfind propfind = null;
@@ -119,20 +116,19 @@ public class WebDAVResponseBuilder {
         addResponseToMultistatus(multistatus, propfind, entry, handler);
 
         // HTTP response
-        Response httpResponse = Response.status(HttpStatus.MULTI_STATUS.getCode()).entity(multistatus).build();
+        Response httpResponse =
+            Response.status(HttpStatus.MULTI_STATUS.getCode()).entity(multistatus).build();
         return httpResponse;
     }
 
     /**
-     * Process the PROPFIND request for the given feed and create a response using the default
-     * implementation of {@link CollectionPropertyHandler}
+     * Process the PROPFIND request for the given feed and create a response
+     * using the default implementation of {@link CollectionPropertyHandler}
      * 
-     * @param feed
-     *            the feed containing the data to use to create the propfind response
-     * @param propfindXml
-     *            the propfind xml request to create the response for
-     * @param depthStr
-     *            the value of the Depth header
+     * @param feed the feed containing the data to use to create the propfind
+     *            response
+     * @param propfindXml the propfind xml request to create the response for
+     * @param depthStr the value of the Depth header
      * @return a response to the profind request
      * @throws IOException
      */
@@ -141,22 +137,22 @@ public class WebDAVResponseBuilder {
     }
 
     /**
-     * Process the PROPFIND request for the given collection resource and create a response.
+     * Process the PROPFIND request for the given collection resource and create
+     * a response.
      * 
-     * @param feed
-     *            the feed containing the data to use to create the propfind response
-     * @param propfindXml
-     *            the propfind xml request to create the response for
-     * @param depthStr
-     *            the value of the Depth header
-     * @param provider
-     *            a CollectionPropertyProvider that will be used to retrieve the values of
-     *            properties for the response
+     * @param feed the feed containing the data to use to create the propfind
+     *            response
+     * @param propfindXml the propfind xml request to create the response for
+     * @param depthStr the value of the Depth header
+     * @param provider a CollectionPropertyProvider that will be used to
+     *            retrieve the values of properties for the response
      * @return a response to the profind request
      * @throws IOException
      */
-    public Response propfind(SyndFeed feed, String propfindXml, String depthStr, CollectionPropertyHandler provider)
-            throws IOException {
+    public Response propfind(SyndFeed feed,
+                             String propfindXml,
+                             String depthStr,
+                             CollectionPropertyHandler provider) throws IOException {
 
         // parse the request (no content means 'all properties')
         Propfind propfind = null;
@@ -175,7 +171,8 @@ public class WebDAVResponseBuilder {
 
         // sub-collections and entries
         // get Depth header
-        int depth = 1; // the default depth should be infinity but we support only 0 or 1
+        int depth = 1; // the default depth should be infinity but we support
+                       // only 0 or 1
         // String strDepth = requestHeaders.getFirst(WebDAVHeaders.DEPTH);
         if (depthStr != null) {
             depth = Integer.parseInt(depthStr);
@@ -199,7 +196,8 @@ public class WebDAVResponseBuilder {
                     }
                 } else {
                     // entry
-                    addResponseToMultistatus(multistatus, propfind, entry, provider.getEntryPropertyHandler());
+                    addResponseToMultistatus(multistatus, propfind, entry, provider
+                        .getEntryPropertyHandler());
                 }
             }
 
@@ -213,35 +211,37 @@ public class WebDAVResponseBuilder {
         }
 
         // HTTP response
-        Response httpResponse = Response.status(HttpStatus.MULTI_STATUS.getCode()).entity(multistatus).build();
+        Response httpResponse =
+            Response.status(HttpStatus.MULTI_STATUS.getCode()).entity(multistatus).build();
         return httpResponse;
     }
 
     /**
      * Adds a WebDAV response element to the given multistatus element.
      * 
-     * @param multistatus
-     *            the multistatus response
-     * @param propfind
-     *            the propfind request
-     * @param synd
-     *            either feed or entry
-     * @param handler
-     *            the property handler to use to set property values
+     * @param multistatus the multistatus response
+     * @param propfind the propfind request
+     * @param synd either feed or entry
+     * @param handler the property handler to use to set property values
      */
-    private void addResponseToMultistatus(Multistatus multistatus, Propfind propfind, SyndBase synd,
-            PropertyHandler handler) {
+    private void addResponseToMultistatus(Multistatus multistatus,
+                                          Propfind propfind,
+                                          SyndBase synd,
+                                          PropertyHandler handler) {
 
         // create response and add it to the multistatus object
-        org.apache.wink.webdav.model.Response response = new org.apache.wink.webdav.model.Response();
+        org.apache.wink.webdav.model.Response response =
+            new org.apache.wink.webdav.model.Response();
         response.getHref().add(getResourceLink(synd));
         multistatus.getResponse().add(response);
 
         // the request is for all property names
         if (propfind.getPropname() != null) {
-            Propstat propstat = response.getOrCreatePropstat(Response.Status.OK.getStatusCode(), null, null);
+            Propstat propstat =
+                response.getOrCreatePropstat(Response.Status.OK.getStatusCode(), null, null);
             Prop prop = propstat.getProp();
-            // call the abstract method to allow the handler to fill in the property names
+            // call the abstract method to allow the handler to fill in the
+            // property names
             handler.setAllPropertyNames(this, prop, synd);
             // ensure that all property values are empty
             ensurePropertiesAreEmpty(prop);
@@ -260,14 +260,15 @@ public class WebDAVResponseBuilder {
     }
 
     /**
-     * Set property values in the provided Response instance. The properties to set are indicated in
-     * the provided Prop object.
+     * Set property values in the provided Response instance. The properties to
+     * set are indicated in the provided Prop object.
      * 
-     * @param prop
-     *            the Prop instance to fill with values
+     * @param prop the Prop instance to fill with values
      */
-    private void setPropertyValues(org.apache.wink.webdav.model.Response response, Prop sourceProp, SyndBase synd,
-            PropertyHandler provider) {
+    private void setPropertyValues(org.apache.wink.webdav.model.Response response,
+                                   Prop sourceProp,
+                                   SyndBase synd,
+                                   PropertyHandler provider) {
         if (sourceProp == null || response == null) {
             return;
         }
@@ -303,7 +304,8 @@ public class WebDAVResponseBuilder {
             provider.setPropertyValue(this, response, new Supportedlock(), synd);
         }
         for (Element element : sourceProp.getAny()) {
-            Element newElement = WebDAVModelHelper.createElement(element.getNamespaceURI(), element.getLocalName());
+            Element newElement =
+                WebDAVModelHelper.createElement(element.getNamespaceURI(), element.getLocalName());
             provider.setPropertyValue(this, response, newElement, synd);
         }
     }
@@ -356,14 +358,13 @@ public class WebDAVResponseBuilder {
     }
 
     /**
-     * Get the normalized URL of the resource by first trying the 'edit' link and then the 'self'
-     * link.
+     * Get the normalized URL of the resource by first trying the 'edit' link
+     * and then the 'self' link.
      * 
-     * @param synd
-     *            the synd to extract the link from
+     * @param synd the synd to extract the link from
      * @return the URL of the resource
-     * @throws WebApplicationException
-     *             if neither the 'edit' nor the 'self' links exist.
+     * @throws WebApplicationException if neither the 'edit' nor the 'self'
+     *             links exist.
      */
     private String getResourceLink(SyndBase synd) {
         // try 'edit' link
@@ -392,22 +393,21 @@ public class WebDAVResponseBuilder {
     }
 
     /**
-     * Used during the creation of a WebDAV multistatus response to get the properties and their
-     * values. Applications may override any of the methods as required.
+     * Used during the creation of a WebDAV multistatus response to get the
+     * properties and their values. Applications may override any of the methods
+     * as required.
      */
     public static class PropertyHandler {
 
         /**
-         * Set the Prop instance with empty (no values) properties. This method is invoked to create
-         * a response for a propfind request containing a propname element
+         * Set the Prop instance with empty (no values) properties. This method
+         * is invoked to create a response for a propfind request containing a
+         * propname element
          * 
-         * @param builder
-         *            the current WebDAVResponseBuilder which can be used to obtain context
-         *            information
-         * @param synd
-         *            instance of the synd to set the property names for
-         * @param prop
-         *            the Prop instance to fill
+         * @param builder the current WebDAVResponseBuilder which can be used to
+         *            obtain context information
+         * @param synd instance of the synd to set the property names for
+         * @param prop the Prop instance to fill
          */
         public void setAllPropertyNames(WebDAVResponseBuilder builder, Prop prop, SyndBase synd) {
             prop.setDisplayname(new Displayname());
@@ -421,23 +421,21 @@ public class WebDAVResponseBuilder {
         }
 
         /**
-         * Set the value of a provided property, and set the property on the response object with
-         * the correct status.
-         * 
+         * Set the value of a provided property, and set the property on the
+         * response object with the correct status.
          * <p>
-         * Applications should override this method with their own implementation in order to set
-         * the values of proprietary properties and to extend the default behavior.
-         * 
+         * Applications should override this method with their own
+         * implementation in order to set the values of proprietary properties
+         * and to extend the default behavior.
          * <p>
-         * see {@link Response#setProperty(Object, int, String, Error)} for a detailed description
-         * of the possible property values.
-         * 
+         * see {@link Response#setProperty(Object, int, String, Error)} for a
+         * detailed description of the possible property values.
          * <p>
          * Examples:
-         * 
          * <p>
-         * if the property is <code>DAV:getcontentlanguage</code> then the type of the property is
-         * an instance of Getcontentlanguage, and setting it's value is performed as follows:
+         * if the property is <code>DAV:getcontentlanguage</code> then the type
+         * of the property is an instance of Getcontentlanguage, and setting
+         * it's value is performed as follows:
          * 
          * <pre>
          * if (property instanceof Getcontentlanguage) {
@@ -446,8 +444,9 @@ public class WebDAVResponseBuilder {
          * }
          * </pre>
          * 
-         * if the property is <code>K:myprop</code> then the type of the property is an instance of
-         * org.w3c.dom.Element, and setting it's value is performed as follows:
+         * if the property is <code>K:myprop</code> then the type of the
+         * property is an instance of org.w3c.dom.Element, and setting it's
+         * value is performed as follows:
          * 
          * <pre>
          * if (property instanceof Element) {
@@ -456,29 +455,27 @@ public class WebDAVResponseBuilder {
          * }
          * </pre>
          * 
-         * If the requested property does not have a value, the application should call the
-         * {@link Response#setPropertyNotFound(Object)} method and pass it the property object, like
-         * so:
+         * If the requested property does not have a value, the application
+         * should call the {@link Response#setPropertyNotFound(Object)} method
+         * and pass it the property object, like so:
          * 
          * <pre>
          * response.setNotFound(property);
          * </pre>
          * 
-         * @param builder
-         *            the current WebDAVResponseBuilder which can be used to obtain context
-         *            information
-         * @param response
-         *            the {@link org.apache.wink.webdav.model.Response} instance that is to receive
-         *            the property and its value
-         * @param property
-         *            the property object. see
+         * @param builder the current WebDAVResponseBuilder which can be used to
+         *            obtain context information
+         * @param response the {@link org.apache.wink.webdav.model.Response}
+         *            instance that is to receive the property and its value
+         * @param property the property object. see
          *            {@link org.apache.wink.webdav.model.Response#setProperty(Object, int, String, Error)}
          *            for a detailed description of the possible property values
-         * @param synd
-         *            an instance of synd (either feed or entry)
+         * @param synd an instance of synd (either feed or entry)
          */
-        public void setPropertyValue(WebDAVResponseBuilder builder, org.apache.wink.webdav.model.Response response,
-                Object property, SyndBase synd) {
+        public void setPropertyValue(WebDAVResponseBuilder builder,
+                                     org.apache.wink.webdav.model.Response response,
+                                     Object property,
+                                     SyndBase synd) {
             if (property instanceof Displayname) {
                 if (synd.getTitle().getValue() != null) {
                     ((Displayname)property).setValue(synd.getTitle().getValue());
@@ -520,23 +517,24 @@ public class WebDAVResponseBuilder {
     }
 
     /**
-     * Extends the {@link PropertyHandler} to provide additional data for the creation of
-     * multistatus responses for collections (feeds).
+     * Extends the {@link PropertyHandler} to provide additional data for the
+     * creation of multistatus responses for collections (feeds).
      */
     public static class CollectionPropertyHandler extends PropertyHandler {
 
         private PropertyHandler entryPropertyHandler;
 
         /**
-         * Constructs a CollectionPropertyProvider that is also the property handler for the entries
+         * Constructs a CollectionPropertyProvider that is also the property
+         * handler for the entries
          */
         public CollectionPropertyHandler() {
             setEntryPropertyHandler(this);
         }
 
         /**
-         * Constructor accepting another {@link PropertyHandler} to provide properties for the
-         * entries in the collection.
+         * Constructor accepting another {@link PropertyHandler} to provide
+         * properties for the entries in the collection.
          * 
          * @param entryPropertyHandler
          */
@@ -545,14 +543,12 @@ public class WebDAVResponseBuilder {
         }
 
         /**
-         * Gets the list of sub-collection feeds for a given feed. The default implementation
-         * returns <code>null</code>
+         * Gets the list of sub-collection feeds for a given feed. The default
+         * implementation returns <code>null</code>
          * 
-         * @param builder
-         *            the current WebDAVResponseBuilder which can be used to obtain context
-         *            information
-         * @param feed
-         *            the feed to obtain the sub collections from
+         * @param builder the current WebDAVResponseBuilder which can be used to
+         *            obtain context information
+         * @param feed the feed to obtain the sub collections from
          * @return the sub-collections
          */
         public List<SyndFeed> getSubCollections(WebDAVResponseBuilder builder, SyndFeed feed) {
@@ -560,13 +556,13 @@ public class WebDAVResponseBuilder {
         }
 
         /**
-         * Specifies if an entry actually represents a feed. This method is called only when
-         * building the response for an entry that is part of a feed. The default implementation
-         * returns <code>false</code>
+         * Specifies if an entry actually represents a feed. This method is
+         * called only when building the response for an entry that is part of a
+         * feed. The default implementation returns <code>false</code>
          * 
-         * @param entry
-         *            the entry
-         * @return <code>true</code> if the entry is a sub-collection, otherwise <code>false</code>
+         * @param entry the entry
+         * @return <code>true</code> if the entry is a sub-collection, otherwise
+         *         <code>false</code>
          */
         public boolean isSubCollection(SyndEntry entry) {
             return false;
@@ -574,11 +570,11 @@ public class WebDAVResponseBuilder {
 
         /**
          * Get the feed that this entry represents. This method is called if the
-         * {@link #isEntrySubCollection(DocumentResource)} method returns <code>true</code> for the
-         * given entry. The default implementation returns <code>null</code>
+         * {@link #isEntrySubCollection(DocumentResource)} method returns
+         * <code>true</code> for the given entry. The default implementation
+         * returns <code>null</code>
          * 
-         * @param entry
-         *            the entry that represents a feed
+         * @param entry the entry that represents a feed
          * @return an instance of a SyndFeed
          */
         public SyndFeed getSubCollection(SyndEntry entry) {
@@ -586,19 +582,21 @@ public class WebDAVResponseBuilder {
         }
 
         /**
-         * Get the PropertyHandler that is used to set properties for the entries in the collection
+         * Get the PropertyHandler that is used to set properties for the
+         * entries in the collection
          * 
-         * @return the PropertyHandler used to set properties for the entries in the collection
+         * @return the PropertyHandler used to set properties for the entries in
+         *         the collection
          */
         public final PropertyHandler getEntryPropertyHandler() {
             return entryPropertyHandler;
         }
 
         /**
-         * Set the PropertyHandler that is used to set properties for the entries in the collection
+         * Set the PropertyHandler that is used to set properties for the
+         * entries in the collection
          * 
-         * @param entryPropertyHandler
-         *            the entry PropertyHandler
+         * @param entryPropertyHandler the entry PropertyHandler
          */
         public final void setEntryPropertyHandler(PropertyHandler entryPropertyHandler) {
             this.entryPropertyHandler = entryPropertyHandler;

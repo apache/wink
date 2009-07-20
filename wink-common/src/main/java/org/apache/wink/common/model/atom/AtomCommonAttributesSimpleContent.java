@@ -24,7 +24,6 @@
 // Generated on: 2008.09.08 at 01:26:02 PM IDT 
 //
 
-
 package org.apache.wink.common.model.atom;
 
 import java.util.HashMap;
@@ -41,8 +40,6 @@ import javax.xml.namespace.QName;
 
 import org.apache.wink.common.model.synd.SyndSimpleContent;
 
-
-
 /**
  * Common attributes Per RFC4287
  * 
@@ -54,7 +51,7 @@ import org.apache.wink.common.model.synd.SyndSimpleContent;
  * 
  * Any element defined by this specification MAY have an xml:lang attribute, whose content indicates
  * the natural language for the element and its descendents. The language context is only
- * significant for elements and attributes declared to be "Language- Sensitive" by this
+ * significant for elements and attributes declared to be &quot;Language- Sensitive&quot; by this
  * specification. Requirements regarding the content and interpretation of xml:lang are specified in
  * XML 1.0 [W3C.REC-xml-20040204], Section 2.12.
  * 
@@ -65,26 +62,23 @@ import org.apache.wink.common.model.synd.SyndSimpleContent;
  * </pre>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "atomCommonAttributesSimpleContent", propOrder = {
-    "value"
-})
-@XmlSeeAlso({
-    AtomGenerator.class
-})
+@XmlType(name = "atomCommonAttributesSimpleContent", propOrder = {"value"})
+@XmlSeeAlso( {AtomGenerator.class})
 public class AtomCommonAttributesSimpleContent {
 
     @XmlValue
-    protected String value;
+    protected String           value;
     @XmlAttribute(namespace = "http://www.w3.org/XML/1998/namespace")
     @XmlSchemaType(name = "anyURI")
-    protected String base;
+    protected String           base;
     @XmlAttribute(namespace = "http://www.w3.org/XML/1998/namespace")
-    protected String lang;
+    protected String           lang;
     @XmlAnyAttribute
     private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
-    public AtomCommonAttributesSimpleContent() {}
-    
+    public AtomCommonAttributesSimpleContent() {
+    }
+
     public AtomCommonAttributesSimpleContent(SyndSimpleContent value) {
         if (value == null) {
             return;
@@ -93,7 +87,7 @@ public class AtomCommonAttributesSimpleContent {
         setLang(value.getLang());
         setValue(value.getValue());
     }
-    
+
     protected SyndSimpleContent toSynd(SyndSimpleContent value) {
         if (value == null) {
             return value;
@@ -147,18 +141,15 @@ public class AtomCommonAttributesSimpleContent {
     }
 
     /**
-     * Gets a map that contains attributes that aren't bound to any typed on this class.
-     * 
+     * Gets a map that contains attributes that aren't bound to any typed on
+     * this class.
      * <p>
-     * the map is keyed by the name of the attribute and 
-     * the value is the string value of the attribute.
+     * the map is keyed by the name of the attribute and the value is the string
+     * value of the attribute. the map returned by this method is live, and you
+     * can add new attribute by updating the map directly. Because of this
+     * design, there's no setter.
      * 
-     * the map returned by this method is live, and you can add new attribute
-     * by updating the map directly. Because of this design, there's no setter.
-     * 
-     * 
-     * @return
-     *     always non-null
+     * @return always non-null
      */
     public Map<QName, String> getOtherAttributes() {
         return otherAttributes;

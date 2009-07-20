@@ -27,56 +27,51 @@ import static org.junit.Assert.*;
 import org.apache.wink.common.http.HttpStatus;
 import org.junit.Test;
 
-
 /**
  * @author barame
- *
  */
 public class HttpStatusTest {
 
-	/**
-	 * Test method for {@link org.apache.wink.common.http.HttpStatus#hashCode()}.
-	 */
-	@Test
-	public void testHttpStatus() {
-		assertEquals(200,HttpStatus.OK.getCode());
-		assertEquals(HttpStatus.valueOf(HttpStatus.OK.getCode()),HttpStatus.OK);
-		HttpStatus new200 = HttpStatus.OK.duplicate("test");
-		assertEquals(new200.getMessage(), "test");
-		assertEquals(new200.getCode(), HttpStatus.OK.getCode());
-		
-		
-		
-	}
+    /**
+     * Test method for {@link org.apache.wink.common.http.HttpStatus#hashCode()}
+     * .
+     */
+    @Test
+    public void testHttpStatus() {
+        assertEquals(200, HttpStatus.OK.getCode());
+        assertEquals(HttpStatus.valueOf(HttpStatus.OK.getCode()), HttpStatus.OK);
+        HttpStatus new200 = HttpStatus.OK.duplicate("test");
+        assertEquals(new200.getMessage(), "test");
+        assertEquals(new200.getCode(), HttpStatus.OK.getCode());
 
-	
+    }
 
-	/**
-	 * Test method for {@link org.apache.wink.common.http.HttpStatus#valueOf(int)}.
-	 */
-	@Test
-	public void testValueOf() {
-		assertEquals(HttpStatus.valueOf(304).getCode(),304);
-	}
+    /**
+     * Test method for
+     * {@link org.apache.wink.common.http.HttpStatus#valueOf(int)}.
+     */
+    @Test
+    public void testValueOf() {
+        assertEquals(HttpStatus.valueOf(304).getCode(), 304);
+    }
 
-	
+    /**
+     * Test method for
+     * {@link org.apache.wink.common.http.HttpStatus#getStatusLine()}.
+     */
+    @Test
+    public void testGetStatusLine() {
+        assertEquals(HttpStatus.valueOfStatusLine(HttpStatus.ACCEPTED.getStatusLine()),
+                     HttpStatus.ACCEPTED);
+    }
 
-	/**
-	 * Test method for {@link org.apache.wink.common.http.HttpStatus#getStatusLine()}.
-	 */
-	@Test
-	public void testGetStatusLine() {
-		assertEquals(HttpStatus.valueOfStatusLine(HttpStatus.ACCEPTED.getStatusLine()),HttpStatus.ACCEPTED);
-	}
-
-	/**
-	 * Test method for {@link org.apache.wink.common.http.HttpStatus#isError()}.
-	 */
-	@Test
-	public void testIsError() {
-		assertFalse(HttpStatus.ACCEPTED.isError());
-		assertTrue(HttpStatus.BAD_REQUEST.isError());
-	}
-
+    /**
+     * Test method for {@link org.apache.wink.common.http.HttpStatus#isError()}.
+     */
+    @Test
+    public void testIsError() {
+        assertFalse(HttpStatus.ACCEPTED.isError());
+        assertTrue(HttpStatus.BAD_REQUEST.isError());
+    }
 
 }

@@ -31,8 +31,6 @@ import org.apache.wink.common.internal.lifecycle.SingletonObjectFactory;
 
 import junit.framework.TestCase;
 
-
-
 public class OFFactoryTest extends TestCase {
 
     @Provider
@@ -73,36 +71,36 @@ public class OFFactoryTest extends TestCase {
         LifecycleManagersRegistry factoryRegistry = new LifecycleManagersRegistry();
 
         // by default providers are always singletons
-        assertEquals(SingletonObjectFactory.class,
-            factoryRegistry.getObjectFactory(ProviderA.class).getClass());
-        assertEquals(SingletonObjectFactory.class, factoryRegistry.getObjectFactory(
-            ProviderScopeablePrototype.class).getClass());
-        assertEquals(SingletonObjectFactory.class, factoryRegistry.getObjectFactory(
-            ProviderScopeableSingleton.class).getClass());
+        assertEquals(SingletonObjectFactory.class, factoryRegistry
+            .getObjectFactory(ProviderA.class).getClass());
+        assertEquals(SingletonObjectFactory.class, factoryRegistry
+            .getObjectFactory(ProviderScopeablePrototype.class).getClass());
+        assertEquals(SingletonObjectFactory.class, factoryRegistry
+            .getObjectFactory(ProviderScopeableSingleton.class).getClass());
 
         // by default providers are always singletons
-        assertEquals(SingletonObjectFactory.class,
-            factoryRegistry.getObjectFactory(new ProviderA()).getClass());
-        assertEquals(SingletonObjectFactory.class, factoryRegistry.getObjectFactory(
-            new ProviderScopeablePrototype()).getClass());
-        assertEquals(SingletonObjectFactory.class, factoryRegistry.getObjectFactory(
-            new ProviderScopeableSingleton()).getClass());
+        assertEquals(SingletonObjectFactory.class, factoryRegistry
+            .getObjectFactory(new ProviderA()).getClass());
+        assertEquals(SingletonObjectFactory.class, factoryRegistry
+            .getObjectFactory(new ProviderScopeablePrototype()).getClass());
+        assertEquals(SingletonObjectFactory.class, factoryRegistry
+            .getObjectFactory(new ProviderScopeableSingleton()).getClass());
 
         // by default resources are prototypes, when added as classes
-        assertEquals(PrototypeObjectFactory.class, factoryRegistry.getObjectFactory(
-            ResourceA.class).getClass());
-        assertEquals(PrototypeObjectFactory.class, factoryRegistry.getObjectFactory(
-            ResourceScopableSingleton.class).getClass());
-        assertEquals(PrototypeObjectFactory.class, factoryRegistry.getObjectFactory(
-            ResourceScopablePrototype.class).getClass());
+        assertEquals(PrototypeObjectFactory.class, factoryRegistry
+            .getObjectFactory(ResourceA.class).getClass());
+        assertEquals(PrototypeObjectFactory.class, factoryRegistry
+            .getObjectFactory(ResourceScopableSingleton.class).getClass());
+        assertEquals(PrototypeObjectFactory.class, factoryRegistry
+            .getObjectFactory(ResourceScopablePrototype.class).getClass());
 
         // by default resources are singletons, when added as instances
-        assertEquals(SingletonObjectFactory.class,
-            factoryRegistry.getObjectFactory(new ResourceA()).getClass());
-        assertEquals(SingletonObjectFactory.class, factoryRegistry.getObjectFactory(
-            new ResourceScopableSingleton()).getClass());
-        assertEquals(SingletonObjectFactory.class, factoryRegistry.getObjectFactory(
-            new ResourceScopablePrototype()).getClass());
+        assertEquals(SingletonObjectFactory.class, factoryRegistry
+            .getObjectFactory(new ResourceA()).getClass());
+        assertEquals(SingletonObjectFactory.class, factoryRegistry
+            .getObjectFactory(new ResourceScopableSingleton()).getClass());
+        assertEquals(SingletonObjectFactory.class, factoryRegistry
+            .getObjectFactory(new ResourceScopablePrototype()).getClass());
 
     }
 
@@ -112,52 +110,52 @@ public class OFFactoryTest extends TestCase {
         factoryRegistry.addFactoryFactory(new ScopeLifecycleManager());
 
         // default
-        assertEquals(SingletonObjectFactory.class,
-            factoryRegistry.getObjectFactory(ProviderA.class).getClass());
+        assertEquals(SingletonObjectFactory.class, factoryRegistry
+            .getObjectFactory(ProviderA.class).getClass());
 
         // prototype
-        assertEquals(PrototypeObjectFactory.class, factoryRegistry.getObjectFactory(
-            ProviderScopeablePrototype.class).getClass());
+        assertEquals(PrototypeObjectFactory.class, factoryRegistry
+            .getObjectFactory(ProviderScopeablePrototype.class).getClass());
 
         // singleton
-        assertEquals(SingletonObjectFactory.class, factoryRegistry.getObjectFactory(
-            ProviderScopeableSingleton.class).getClass());
+        assertEquals(SingletonObjectFactory.class, factoryRegistry
+            .getObjectFactory(ProviderScopeableSingleton.class).getClass());
 
         // default
-        assertEquals(SingletonObjectFactory.class,
-            factoryRegistry.getObjectFactory(new ProviderA()).getClass());
+        assertEquals(SingletonObjectFactory.class, factoryRegistry
+            .getObjectFactory(new ProviderA()).getClass());
 
         // prototype
-        assertEquals(PrototypeObjectFactory.class, factoryRegistry.getObjectFactory(
-            new ProviderScopeablePrototype()).getClass());
+        assertEquals(PrototypeObjectFactory.class, factoryRegistry
+            .getObjectFactory(new ProviderScopeablePrototype()).getClass());
 
         // singleton
-        assertEquals(SingletonObjectFactory.class, factoryRegistry.getObjectFactory(
-            new ProviderScopeableSingleton()).getClass());
+        assertEquals(SingletonObjectFactory.class, factoryRegistry
+            .getObjectFactory(new ProviderScopeableSingleton()).getClass());
 
         // default
-        assertEquals(PrototypeObjectFactory.class, factoryRegistry.getObjectFactory(
-            ResourceA.class).getClass());
+        assertEquals(PrototypeObjectFactory.class, factoryRegistry
+            .getObjectFactory(ResourceA.class).getClass());
 
         // singleton
-        assertEquals(SingletonObjectFactory.class, factoryRegistry.getObjectFactory(
-            ResourceScopableSingleton.class).getClass());
+        assertEquals(SingletonObjectFactory.class, factoryRegistry
+            .getObjectFactory(ResourceScopableSingleton.class).getClass());
 
         // prototype
-        assertEquals(PrototypeObjectFactory.class, factoryRegistry.getObjectFactory(
-            ResourceScopablePrototype.class).getClass());
+        assertEquals(PrototypeObjectFactory.class, factoryRegistry
+            .getObjectFactory(ResourceScopablePrototype.class).getClass());
 
         // default
-        assertEquals(SingletonObjectFactory.class,
-            factoryRegistry.getObjectFactory(new ResourceA()).getClass());
+        assertEquals(SingletonObjectFactory.class, factoryRegistry
+            .getObjectFactory(new ResourceA()).getClass());
 
         // singleton
-        assertEquals(SingletonObjectFactory.class, factoryRegistry.getObjectFactory(
-            new ResourceScopableSingleton()).getClass());
+        assertEquals(SingletonObjectFactory.class, factoryRegistry
+            .getObjectFactory(new ResourceScopableSingleton()).getClass());
 
         // prototype
-        assertEquals(PrototypeObjectFactory.class, factoryRegistry.getObjectFactory(
-            new ResourceScopablePrototype()).getClass());
+        assertEquals(PrototypeObjectFactory.class, factoryRegistry
+            .getObjectFactory(new ResourceScopablePrototype()).getClass());
 
     }
 }

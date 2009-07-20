@@ -26,11 +26,10 @@ import org.apache.wink.server.internal.RequestProcessor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.web.context.ServletContextAware;
 
-
 public class RequestProcessorBuilder implements ServletContextAware, InitializingBean {
 
-    public final static Object NULL = null;
-    
+    public final static Object      NULL = null;
+
     private DeploymentConfiguration deploymentConfiguration;
     private ServletContext          servletContext;
     private String                  requestProcessorAttribute;
@@ -38,7 +37,7 @@ public class RequestProcessorBuilder implements ServletContextAware, Initializin
     public void afterPropertiesSet() throws Exception {
         RequestProcessor requestProcessor = new RequestProcessor(getDeploymentConfiguration());
         requestProcessor.storeRequestProcessorOnServletContext(servletContext,
-            requestProcessorAttribute);
+                                                               requestProcessorAttribute);
     }
 
     public void setServletContext(ServletContext servletContext) {

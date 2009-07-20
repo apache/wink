@@ -97,24 +97,19 @@ public class Source {
 
     /**
      * Gets the value of the link property.
-     * 
      * <p>
-     * This accessor method returns a reference to the live list, not a snapshot. Therefore any
-     * modification you make to the returned list will be present inside the JAXB object. This is
-     * why there is not a <CODE>set</CODE> method for the link property.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the link property.
      * <p>
      * For example, to add a new item, do as follows:
      * 
      * <pre>
      * getLink().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
      * Objects of the following type(s) are allowed in the list {@link Link }
-     * 
-     * 
      */
     public List<Link> getLink() {
         if (link == null) {

@@ -33,10 +33,9 @@ public class DefectsBean {
     @XmlElementRef
     private Collection<DefectBean> defects;
 
-    
     public DefectsBean() {
     }
-    
+
     public DefectsBean(Collection<DefectBean> defects) {
         this.defects = defects;
     }

@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.providers.entity;
 
@@ -49,53 +48,56 @@ import org.json.JSONObject;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 public class JsonProviderTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class<?>[] { TestResource.class };
+        return new Class<?>[] {TestResource.class};
     }
 
-   
-    private static final SyndFeed SYND_FEED = new SyndFeed(new SyndText("title"), "id");
+    private static final SyndFeed  SYND_FEED          = new SyndFeed(new SyndText("title"), "id");
 
-    private static final SyndEntry SYND_ENTRY         = new SyndEntry(new SyndText("entry title"),
-    "entry:id");
-    
-    private static final String    JSON_FEED               =    "{\"feed\": {\n" + 
-                                                                "  \"@xmlns\": {\"$\": \"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\n" + 
-                                                                "  \"id\": {\n" + 
-                                                                "    \"@xmlns\": {\"$\": \"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\n" + 
-                                                                "    \"$\": \"id\"\n" + 
-                                                                "  },\n" + 
-                                                                "  \"title\": {\n" + 
-                                                                "    \"@type\": \"text\",\n" + 
-                                                                "    \"@xmlns\": {\"$\": \"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\n" + 
-                                                                "    \"$\": \"title\"\n" + 
-                                                                "  }\n" + 
-                                                                "}}";
-                                                                
-    private static final String    JSON               = "{\"entry\": {\n"
-                                                          + "  \"id\": {\"$\": \"entry:id\"},\n"
-                                                          + "  \"title\": {\n"
-                                                          + "    \"@type\": \"text\",\n"
-                                                          + "    \"$\": \"entry title\"\n"
-                                                          + "  }\n" + "}}";
+    private static final SyndEntry SYND_ENTRY         =
+                                                          new SyndEntry(
+                                                                        new SyndText("entry title"),
+                                                                        "entry:id");
 
-    private static final String    JSON_AS_ATOM_ENTRY = "{\"entry\": {\n"
-                                                          + "  \"@xmlns\": {\"$\": \"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\n"
-                                                          + "  \"id\": {\n"
-                                                          + "    \"@xmlns\": {\"$\": \"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\n"
-                                                          + "    \"$\": \"entry:id\"\n"
-                                                          + "  },\n"
-                                                          + "  \"title\": {\n"
-                                                          + "    \"@type\": \"text\",\n"
-                                                          + "    \"@xmlns\": {\"$\": \"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\n"
-                                                          + "    \"$\": \"entry title\"\n"
-                                                          + "  }\n" + "}}";
+    private static final String    JSON_FEED          =
+                                                          "{\"feed\": {\n" + "  \"@xmlns\": {\"$\": \"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\n"
+                                                              + "  \"id\": {\n"
+                                                              + "    \"@xmlns\": {\"$\": \"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\n"
+                                                              + "    \"$\": \"id\"\n"
+                                                              + "  },\n"
+                                                              + "  \"title\": {\n"
+                                                              + "    \"@type\": \"text\",\n"
+                                                              + "    \"@xmlns\": {\"$\": \"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\n"
+                                                              + "    \"$\": \"title\"\n"
+                                                              + "  }\n"
+                                                              + "}}";
 
-    private void compairJsonContent(final String expected, final String actual) throws JSONException {
+    private static final String    JSON               =
+                                                          "{\"entry\": {\n" + "  \"id\": {\"$\": \"entry:id\"},\n"
+                                                              + "  \"title\": {\n"
+                                                              + "    \"@type\": \"text\",\n"
+                                                              + "    \"$\": \"entry title\"\n"
+                                                              + "  }\n"
+                                                              + "}}";
+
+    private static final String    JSON_AS_ATOM_ENTRY =
+                                                          "{\"entry\": {\n" + "  \"@xmlns\": {\"$\": \"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\n"
+                                                              + "  \"id\": {\n"
+                                                              + "    \"@xmlns\": {\"$\": \"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\n"
+                                                              + "    \"$\": \"entry:id\"\n"
+                                                              + "  },\n"
+                                                              + "  \"title\": {\n"
+                                                              + "    \"@type\": \"text\",\n"
+                                                              + "    \"@xmlns\": {\"$\": \"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\n"
+                                                              + "    \"$\": \"entry title\"\n"
+                                                              + "  }\n"
+                                                              + "}}";
+
+    private void compairJsonContent(final String expected, final String actual)
+        throws JSONException {
         JSONObject result = JSONUtils.objectForString(actual);
         JSONObject want = JSONUtils.objectForString(expected);
         assertTrue(JSONUtils.equals(want, result));
@@ -110,7 +112,7 @@ public class JsonProviderTest extends MockServletInvocationTest {
         public JSONObject getJson() throws Exception {
             return new JSONObject(JSON);
         }
-        
+
         @GET
         @Path("jsonfeed")
         @Produces("application/json")
@@ -165,7 +167,7 @@ public class JsonProviderTest extends MockServletInvocationTest {
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "Entry", propOrder = { "id", "title" })
+    @XmlType(name = "Entry", propOrder = {"id", "title"})
     @XmlRootElement(name = "entry")
     public static class Entry {
 
@@ -176,7 +178,7 @@ public class JsonProviderTest extends MockServletInvocationTest {
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "Title", propOrder = { "type" })
+    @XmlType(name = "Title", propOrder = {"type"})
     @XmlRootElement(name = "title")
     public static class Title {
 
@@ -242,64 +244,73 @@ public class JsonProviderTest extends MockServletInvocationTest {
     }
 
     public void testGetJson() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-            "/test/json", "application/json");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "/test/json", "application/json");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
         compairJsonContent(JSON, response.getContentAsString());
     }
-    
+
     public void testGetJsonFeed() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-            "/test/jsonfeed", "application/json");
+        MockHttpServletRequest request =
+            MockRequestConstructor
+                .constructMockRequest("GET", "/test/jsonfeed", "application/json");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
         compairJsonContent(JSON_FEED, response.getContentAsString());
     }
 
     public void testGetJsonFromJAXB() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-            "/test/jaxb", "application/json");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "/test/jaxb", "application/json");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
         compairJsonContent(JSON, response.getContentAsString());
     }
 
     public void testGetJsonFromJAXBElement() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-            "/test/jaxbelement", "application/json");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/test/jaxbelement",
+                                                        "application/json");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
         compairJsonContent(JSON, response.getContentAsString());
     }
 
     public void testGetJsonFromAtom() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-            "/test/atom", "application/json");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "/test/atom", "application/json");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
         compairJsonContent(JSON_AS_ATOM_ENTRY, response.getContentAsString());
     }
 
     public void testGetJsonAsset() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-            "/test/jsonasset", "application/json");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/test/jsonasset",
+                                                        "application/json");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
         compairJsonContent(JSON, response.getContentAsString());
     }
 
     public void testGetJAXBAsset() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-            "/test/jaxbasset", "application/json");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/test/jaxbasset",
+                                                        "application/json");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
         compairJsonContent(JSON, response.getContentAsString());
     }
 
     public void testGetAtomAsset() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-            "/test/atomasset", "application/json");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/test/atomasset",
+                                                        "application/json");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
         compairJsonContent(JSON, response.getContentAsString());

@@ -32,7 +32,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>propertybehavior</code> XML element per the WebDAV specification [RFC 4918]
+ * The <code>propertybehavior</code> XML element per the WebDAV specification
+ * [RFC 4918]
  * 
  * <pre>
  *    Name:       propertybehavior 
@@ -53,14 +54,13 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "propertybehavior")
 public class Propertybehavior {
 
-    protected Omit omit;
+    protected Omit      omit;
     protected Keepalive keepalive;
 
     /**
      * Gets the value of the omit property.
      * 
      * @return possible object is {@link Omit }
-     * 
      */
     public Omit getOmit() {
         return omit;
@@ -69,9 +69,7 @@ public class Propertybehavior {
     /**
      * Sets the value of the omit property.
      * 
-     * @param value
-     *            allowed object is {@link Omit }
-     * 
+     * @param value allowed object is {@link Omit }
      */
     public void setOmit(Omit value) {
         this.omit = value;
@@ -81,7 +79,6 @@ public class Propertybehavior {
      * Gets the value of the keepalive property.
      * 
      * @return possible object is {@link Keepalive }
-     * 
      */
     public Keepalive getKeepalive() {
         return keepalive;
@@ -90,9 +87,7 @@ public class Propertybehavior {
     /**
      * Sets the value of the keepalive property.
      * 
-     * @param value
-     *            allowed object is {@link Keepalive }
-     * 
+     * @param value allowed object is {@link Keepalive }
      */
     public void setKeepalive(Keepalive value) {
         this.keepalive = value;

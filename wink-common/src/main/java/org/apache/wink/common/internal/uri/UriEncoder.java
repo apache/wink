@@ -17,10 +17,9 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common.internal.uri;
 
-import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -29,7 +28,6 @@ import java.util.List;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.wink.common.internal.MultivaluedMapImpl;
-
 
 /**
  * URI Encoding and Decoding
@@ -43,27 +41,29 @@ public final class UriEncoder {
     }
 
     /** Hexadecimal digits for escaping. */
-    private static final char[] hexDigits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E',
-            'F'};
-    
-    private static final byte[] normalizedHexDigits = new byte[128];
+    private static final char[]    hexDigits           =
+                                                           {'0', '1', '2', '3', '4', '5', '6', '7',
+        '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'             };
 
-    private static final boolean[] isHexDigit = new boolean[128];
+    private static final byte[]    normalizedHexDigits = new byte[128];
+
+    private static final boolean[] isHexDigit          = new boolean[128];
 
     /**
-     * Unreserved characters according to RFC 3986. Each character below ASCII 128 has single array
-     * item with true if it is unreserved and false if it is reserved.
+     * Unreserved characters according to RFC 3986. Each character below ASCII
+     * 128 has single array item with true if it is unreserved and false if it
+     * is reserved.
      */
-    public static final boolean[] unreservedChars = new boolean[128];
-    public static final boolean[] userInfoChars = new boolean[128];
-    public static final boolean[] segmentChars = new boolean[128];
-    public static final boolean[] matrixChars = new boolean[128];
-    public static final boolean[] pathChars = new boolean[128];
-    public static final boolean[] queryChars = new boolean[128];
-    public static final boolean[] queryParamChars = new boolean[128];
-    public static final boolean[] fragmentChars = new boolean[128];
-    public static final boolean[] uriChars = new boolean[128];
-    public static final boolean[] uriTemplateChars = new boolean[128];
+    public static final boolean[]  unreservedChars     = new boolean[128];
+    public static final boolean[]  userInfoChars       = new boolean[128];
+    public static final boolean[]  segmentChars        = new boolean[128];
+    public static final boolean[]  matrixChars         = new boolean[128];
+    public static final boolean[]  pathChars           = new boolean[128];
+    public static final boolean[]  queryChars          = new boolean[128];
+    public static final boolean[]  queryParamChars     = new boolean[128];
+    public static final boolean[]  fragmentChars       = new boolean[128];
+    public static final boolean[]  uriChars            = new boolean[128];
+    public static final boolean[]  uriTemplateChars    = new boolean[128];
 
     static {
         // unreserved - ALPHA / DIGIT / "-" / "." / "_" / "~"
@@ -76,7 +76,8 @@ public final class UriEncoder {
         unreservedChars['.'] = true;
         unreservedChars['~'] = true;
 
-        // sub delimiters - "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "="
+        // sub delimiters - "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / ","
+        // / ";" / "="
         // user info chars - *( unreserved / pct-encoded / sub-delims / ":" )
         System.arraycopy(unreservedChars, 0, userInfoChars, 0, 128);
         userInfoChars['!'] = true;
@@ -96,7 +97,8 @@ public final class UriEncoder {
         System.arraycopy(userInfoChars, 0, segmentChars, 0, 128);
         segmentChars['@'] = true;
 
-        // matrix - *(unreserved / pct-encoded / sub-delims / ":" / "@") without "=" and ";"
+        // matrix - *(unreserved / pct-encoded / sub-delims / ":" / "@") without
+        // "=" and ";"
         System.arraycopy(segmentChars, 0, matrixChars, 0, 128);
         matrixChars['='] = false;
         matrixChars[';'] = false;
@@ -105,26 +107,31 @@ public final class UriEncoder {
         System.arraycopy(segmentChars, 0, pathChars, 0, 128);
         pathChars['/'] = true;
 
-        // query - *(unreserved / pct-encoded / sub-delims / ":" / "@" / "/" / "?")
+        // query - *(unreserved / pct-encoded / sub-delims / ":" / "@" / "/" /
+        // "?")
         System.arraycopy(pathChars, 0, queryChars, 0, 128);
         queryChars['?'] = true;
 
-        // fragment - *(unreserved / pct-encoded / sub-delims / ":" / "@" / "/" / "?")
+        // fragment - *(unreserved / pct-encoded / sub-delims / ":" / "@" / "/"
+        // / "?")
         System.arraycopy(queryChars, 0, fragmentChars, 0, 128);
 
-        // query param - *(unreserved / pct-encoded / sub-delims / ":" / "@" / "/" / "?") without
+        // query param - *(unreserved / pct-encoded / sub-delims / ":" / "@" /
+        // "/" / "?") without
         // "&" and "="
         System.arraycopy(queryChars, 0, queryParamChars, 0, 128);
         queryParamChars['&'] = false;
         queryParamChars['='] = false;
 
-        // uri - *(unreserved / pct-encoded / sub-delims / ":" / "@" / "/" / "?" / "#" / "[" / "]" )
+        // uri - *(unreserved / pct-encoded / sub-delims / ":" / "@" / "/" / "?"
+        // / "#" / "[" / "]" )
         System.arraycopy(queryChars, 0, uriChars, 0, 128);
         uriChars['#'] = true;
         uriChars['['] = true;
         uriChars[']'] = true;
 
-        // uri template - *(unreserved / pct-encoded / sub-delims / ":" / "@" / "/" / "?" / "#" /
+        // uri template - *(unreserved / pct-encoded / sub-delims / ":" / "@" /
+        // "/" / "?" / "#" /
         // "[" / "]" / "{" / "}" )
         System.arraycopy(uriChars, 0, uriTemplateChars, 0, 128);
         uriTemplateChars['{'] = true;
@@ -135,7 +142,7 @@ public final class UriEncoder {
         Arrays.fill(isHexDigit, '0', '9' + 1, true);
         Arrays.fill(isHexDigit, 'a', 'f' + 1, true);
         Arrays.fill(isHexDigit, 'A', 'F' + 1, true);
-        
+
         // fill the normalizedHexDigits array
         normalizedHexDigits['0'] = '0';
         normalizedHexDigits['1'] = '1';
@@ -159,7 +166,7 @@ public final class UriEncoder {
         normalizedHexDigits['d'] = 'D';
         normalizedHexDigits['e'] = 'E';
         normalizedHexDigits['f'] = 'F';
-        
+
     }
 
     private static int decodeHexDigit(char c) {
@@ -180,8 +187,7 @@ public final class UriEncoder {
      * Encode all characters other than unreserved according to <a
      * href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>.
      * 
-     * @param string
-     *            string to encode
+     * @param string string to encode
      * @return encoded US-ASCII string
      */
     public static String encodeString(String string) {
@@ -189,13 +195,13 @@ public final class UriEncoder {
     }
 
     /**
-     * Encode user info according to <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>.
+     * Encode user info according to <a
+     * href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>.
      * 
-     * @param userInfo
-     *            the user info to encode
-     * @param relax
-     *            if true, then any sequence of chars in the input string that have the form '%XX',
-     *            where XX are two HEX digits, will not be encoded
+     * @param userInfo the user info to encode
+     * @param relax if true, then any sequence of chars in the input string that
+     *            have the form '%XX', where XX are two HEX digits, will not be
+     *            encoded
      * @return encoded user info string
      */
     public static String encodeUserInfo(String userInfo, boolean relax) {
@@ -206,11 +212,10 @@ public final class UriEncoder {
      * Encode a path segment (without matrix parameters) according to <a
      * href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>.
      * 
-     * @param segment
-     *            the segment (without matrix parameters) to encode
-     * @param relax
-     *            if true, then any sequence of chars in the input string that have the form '%XX',
-     *            where XX are two HEX digits, will not be encoded
+     * @param segment the segment (without matrix parameters) to encode
+     * @param relax if true, then any sequence of chars in the input string that
+     *            have the form '%XX', where XX are two HEX digits, will not be
+     *            encoded
      * @return encoded segment string
      */
     public static String encodePathSegment(String segment, boolean relax) {
@@ -221,11 +226,10 @@ public final class UriEncoder {
      * Encode a matrix parameter (name or value) according to <a
      * href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>.
      * 
-     * @param matrix
-     *            the matrix parameter (name or value) to encode
-     * @param relax
-     *            if true, then any sequence of chars in the input string that have the form '%XX',
-     *            where XX are two HEX digits, will not be encoded
+     * @param matrix the matrix parameter (name or value) to encode
+     * @param relax if true, then any sequence of chars in the input string that
+     *            have the form '%XX', where XX are two HEX digits, will not be
+     *            encoded
      * @return encoded matrix string
      */
     public static String encodeMatrix(String matrix, boolean relax) {
@@ -233,14 +237,13 @@ public final class UriEncoder {
     }
 
     /**
-     * Encode a complete path string according to <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC
-     * 3986</a>.
+     * Encode a complete path string according to <a
+     * href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>.
      * 
-     * @param path
-     *            the path string to encode
-     * @param relax
-     *            if true, then any sequence of chars in the input string that have the form '%XX',
-     *            where XX are two HEX digits, will not be encoded
+     * @param path the path string to encode
+     * @param relax if true, then any sequence of chars in the input string that
+     *            have the form '%XX', where XX are two HEX digits, will not be
+     *            encoded
      * @return encoded path string
      */
     public static String encodePath(String path, boolean relax) {
@@ -251,11 +254,10 @@ public final class UriEncoder {
      * Encode a query parameter (name or value) according to <a
      * href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>.
      * 
-     * @param queryParam
-     *            the query parameter string to encode
-     * @param relax
-     *            if true, then any sequence of chars in the input string that have the form '%XX',
-     *            where XX are two HEX digits, will not be encoded
+     * @param queryParam the query parameter string to encode
+     * @param relax if true, then any sequence of chars in the input string that
+     *            have the form '%XX', where XX are two HEX digits, will not be
+     *            encoded
      * @return encoded query parameter string
      */
     public static String encodeQueryParam(String queryParam, boolean relax) {
@@ -263,14 +265,13 @@ public final class UriEncoder {
     }
 
     /**
-     * Encode a complete query string according to <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC
-     * 3986</a>.
+     * Encode a complete query string according to <a
+     * href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>.
      * 
-     * @param query
-     *            the query string to encode
-     * @param relax
-     *            if true, then any sequence of chars in the input string that have the form '%XX',
-     *            where XX are two HEX digits, will not be encoded
+     * @param query the query string to encode
+     * @param relax if true, then any sequence of chars in the input string that
+     *            have the form '%XX', where XX are two HEX digits, will not be
+     *            encoded
      * @return encoded query string
      */
     public static String encodeQuery(String query, boolean relax) {
@@ -278,14 +279,13 @@ public final class UriEncoder {
     }
 
     /**
-     * Encode a fragment string according to <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC
-     * 3986</a>.
+     * Encode a fragment string according to <a
+     * href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>.
      * 
-     * @param fragment
-     *            the fragment string to encode
-     * @param relax
-     *            if true, then any sequence of chars in the input string that have the form '%XX',
-     *            where XX are two HEX digits, will not be encoded
+     * @param fragment the fragment string to encode
+     * @param relax if true, then any sequence of chars in the input string that
+     *            have the form '%XX', where XX are two HEX digits, will not be
+     *            encoded
      * @return encoded fragment string
      */
     public static String encodeFragment(String fragment, boolean relax) {
@@ -293,14 +293,13 @@ public final class UriEncoder {
     }
 
     /**
-     * Encode a uri according to <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>,
-     * escaping all reserved characters.
+     * Encode a uri according to <a
+     * href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>, escaping all
+     * reserved characters.
      * 
-     * @param uri
-     *            string to encode
-     * @param relax
-     *            if true, then any sequence of chars in the input of the form '%XX', where XX are
-     *            two HEX digits, will not be encoded.
+     * @param uri string to encode
+     * @param relax if true, then any sequence of chars in the input of the form
+     *            '%XX', where XX are two HEX digits, will not be encoded.
      * @return encoded US-ASCII string
      */
     public static String encodeUri(String uri, boolean relax) {
@@ -308,14 +307,13 @@ public final class UriEncoder {
     }
 
     /**
-     * Encode a uri template according to <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC
-     * 3986</a>, escaping all reserved characters, except for '{' and '}'.
+     * Encode a uri template according to <a
+     * href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>, escaping all
+     * reserved characters, except for '{' and '}'.
      * 
-     * @param uriTemplate
-     *            template to encode
-     * @param relax
-     *            if true, then any sequence of chars in the input of the form '%XX', where XX are
-     *            two HEX digits, will not be encoded.
+     * @param uriTemplate template to encode
+     * @param relax if true, then any sequence of chars in the input of the form
+     *            '%XX', where XX are two HEX digits, will not be encoded.
      * @return encoded US-ASCII string
      */
     public static String encodeUriTemplate(String uriTemplate, boolean relax) {
@@ -323,19 +321,19 @@ public final class UriEncoder {
     }
 
     /**
-     * Encode a string according to <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>,
-     * escaping all characters where <code>unreserved[char] == false</code>, where <code>char</code>
-     * is a single character such as 'a'.
+     * Encode a string according to <a
+     * href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>, escaping all
+     * characters where <code>unreserved[char] == false</code>, where
+     * <code>char</code> is a single character such as 'a'.
      * 
-     * @param string
-     *            string to encode
-     * @param relax
-     *            if true, then any sequence of chars in the input string that have the form '%XX',
-     *            where XX are two HEX digits, will not be encoded.
-     * @param unreserved
-     *            an array of booleans that indicates which characters are considered unreserved. a
-     *            character is considered unreserved if <code>unreserved[char] == true</code>, in
-     *            which case it will not be encoded
+     * @param string string to encode
+     * @param relax if true, then any sequence of chars in the input string that
+     *            have the form '%XX', where XX are two HEX digits, will not be
+     *            encoded.
+     * @param unreserved an array of booleans that indicates which characters
+     *            are considered unreserved. a character is considered
+     *            unreserved if <code>unreserved[char] == true</code>, in which
+     *            case it will not be encoded
      * @return encoded US-ASCII string
      */
     private static String encode(String string, boolean relax, boolean[] unreserved) {
@@ -380,10 +378,10 @@ public final class UriEncoder {
     }
 
     /**
-     * Determines if the input string contains any invalid URI characters that require encoding
+     * Determines if the input string contains any invalid URI characters that
+     * require encoding
      * 
-     * @param uri
-     *            the string to test
+     * @param uri the string to test
      * @return true if the the input string contains only valid URI characters
      */
     private static boolean needsEncoding(String s, boolean relax, boolean[] unreserved) {
@@ -404,11 +402,11 @@ public final class UriEncoder {
     }
 
     /**
-     * Decode US-ASCII uri according to <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>
-     * and replaces all occurrences of the '+' sign with spaces.
+     * Decode US-ASCII uri according to <a
+     * href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a> and replaces all
+     * occurrences of the '+' sign with spaces.
      * 
-     * @param string
-     *            query string to decode
+     * @param string query string to decode
      * @return decoded query
      */
     public static String decodeQuery(String string) {
@@ -416,25 +414,24 @@ public final class UriEncoder {
     }
 
     /**
-     * Decode US-ASCII uri according to <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>.
+     * Decode US-ASCII uri according to <a
+     * href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>.
      * 
-     * @param string
-     *            US-ASCII uri to decode
+     * @param string US-ASCII uri to decode
      * @return decoded uri
      */
     public static String decodeString(String string) {
         return decodeString(string, false, null);
     }
-    
+
     /**
-     * Decodes only the unreserved chars, according to <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>
-     * section 6.2.2.2  
+     * Decodes only the unreserved chars, according to <a
+     * href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a> section 6.2.2.2
      * 
-     * @param string
-     *            US-ASCII uri to decode
+     * @param string US-ASCII uri to decode
      * @return decoded uri
      */
-    public static String normalize(String string){
+    public static String normalize(String string) {
         return decodeString(string, false, unreservedChars);
     }
 
@@ -460,15 +457,14 @@ public final class UriEncoder {
                 if (d1 >= 0 && d2 >= 0) {
                     v = d1;
                     v = v << 4 | d2;
-                    if(decodeChars != null && !decodeChars[v]){
+                    if (decodeChars != null && !decodeChars[v]) {
                         buffer.put((byte)string.charAt(i));
                         buffer.put(normalizedHexDigits[string.charAt(i + 1)]);
                         buffer.put(normalizedHexDigits[string.charAt(i + 2)]);
-                    }
-                    else{
+                    } else {
                         buffer.put((byte)v);
                     }
-                    i+=2;
+                    i += 2;
                 } else {
                     buffer.put((byte)c);
                 }
@@ -491,13 +487,14 @@ public final class UriEncoder {
         }
         return needs;
     }
-    
-    public static MultivaluedMap<String,String> decodeMultivaluedMapValues(MultivaluedMap<String,String> map) {
+
+    public static MultivaluedMap<String, String> decodeMultivaluedMapValues(MultivaluedMap<String, String> map) {
         return decodeMultivaluedMap(map, false);
     }
-    
-    public static MultivaluedMap<String,String> decodeMultivaluedMap(MultivaluedMap<String,String> map, boolean decodeKeys) {
-        MultivaluedMap<String,String> result = new MultivaluedMapImpl<String,String>();
+
+    public static MultivaluedMap<String, String> decodeMultivaluedMap(MultivaluedMap<String, String> map,
+                                                                      boolean decodeKeys) {
+        MultivaluedMap<String, String> result = new MultivaluedMapImpl<String, String>();
         for (String key : map.keySet()) {
             List<String> list = map.get(key);
             if (decodeKeys) {
@@ -509,6 +506,5 @@ public final class UriEncoder {
         }
         return result;
     }
-
 
 }

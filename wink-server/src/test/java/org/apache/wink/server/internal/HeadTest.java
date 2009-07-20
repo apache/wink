@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal;
 
 import javax.ws.rs.GET;
@@ -30,7 +30,6 @@ import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 /**
  * Unit test for defect #40482: HEAD request on entry returns response 405
  * Method Not Allowed.
@@ -42,7 +41,7 @@ public class HeadTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] { Resource.class };
+        return new Class[] {Resource.class};
     }
 
     @Path(PATH)
@@ -57,14 +56,14 @@ public class HeadTest extends MockServletInvocationTest {
     }
 
     public void testHead() throws Exception {
-        MockHttpServletRequest getRequest = MockRequestConstructor.constructMockRequest("GET",
-            PATH, "*/*");
+        MockHttpServletRequest getRequest =
+            MockRequestConstructor.constructMockRequest("GET", PATH, "*/*");
         MockHttpServletResponse getResponse = invoke(getRequest);
         assertEquals("get OK", HttpStatus.OK.getCode(), getResponse.getStatus());
         assertEquals("get content", CONTENT, getResponse.getContentAsString());
 
-        MockHttpServletRequest headRequest = MockRequestConstructor.constructMockRequest("HEAD",
-            PATH, "*/*");
+        MockHttpServletRequest headRequest =
+            MockRequestConstructor.constructMockRequest("HEAD", PATH, "*/*");
         MockHttpServletResponse headResponse = invoke(headRequest);
         assertEquals("head OK", HttpStatus.OK.getCode(), headResponse.getStatus());
 

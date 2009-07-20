@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.test.mock;
 
 import java.io.File;
@@ -45,7 +45,8 @@ public abstract class SpringAwareTestCase extends TestCase {
         super.setUp();
         ContextLoader contextLoader = new ContextLoader();
         servletContext = new MockServletContext();
-        servletContext.addInitParameter(ContextLoader.CONFIG_LOCATION_PARAM, getApplicationContextPath());
+        servletContext.addInitParameter(ContextLoader.CONFIG_LOCATION_PARAM,
+                                        getApplicationContextPath());
         applicationContext = contextLoader.initWebApplicationContext(servletContext);
     }
 
@@ -71,11 +72,10 @@ public abstract class SpringAwareTestCase extends TestCase {
         }
 
         try {
-            String classPathName = getPackagePath() + File.separator
-                + getClass().getSimpleName() + "Context.xml";
+            String classPathName =
+                getPackagePath() + File.separator + getClass().getSimpleName() + "Context.xml";
 
-            URL resource = getClass().getClassLoader().getResource(
-                classPathName);
+            URL resource = getClass().getClassLoader().getResource(classPathName);
             if (resource != null) {
                 File file = new File(resource.toURI());
                 if (file.isFile()) {

@@ -24,7 +24,6 @@
 // Generated on: 2008.12.04 at 02:20:17 PM IST 
 //
 
-
 package org.apache.wink.webdav.model;
 
 import java.util.ArrayList;
@@ -56,10 +55,7 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "src",
-    "dst"
-})
+@XmlType(name = "", propOrder = {"src", "dst"})
 @XmlRootElement(name = "link")
 public class Link {
 
@@ -70,25 +66,19 @@ public class Link {
 
     /**
      * Gets the value of the src property.
-     * 
      * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the src property.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the src property.
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getSrc().add(newItem);
+     * getSrc().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link String }
-     * 
-     * 
+     * Objects of the following type(s) are allowed in the list {@link String }
      */
     public List<String> getSrc() {
         if (src == null) {
@@ -99,25 +89,19 @@ public class Link {
 
     /**
      * Gets the value of the dst property.
-     * 
      * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the dst property.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the dst property.
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getDst().add(newItem);
+     * getDst().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link String }
-     * 
-     * 
+     * Objects of the following type(s) are allowed in the list {@link String }
      */
     public List<String> getDst() {
         if (dst == null) {

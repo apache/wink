@@ -17,13 +17,13 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.utils;
 
 /**
- * A builder for generating the system links of a resource. The links are created absolute or
- * relative to the base uri according to the configuration or request settings.
+ * A builder for generating the system links of a resource. The links are
+ * created absolute or relative to the base uri according to the configuration
+ * or request settings.
  */
 public interface SystemLinksBuilder extends BaseLinksBuilder<SystemLinksBuilder> {
 
@@ -35,25 +35,25 @@ public interface SystemLinksBuilder extends BaseLinksBuilder<SystemLinksBuilder>
     }
 
     /**
-     * Set the types of system links to generate. If this method is not called or if no types are
-     * specified, then all the possible types will be generated.
+     * Set the types of system links to generate. If this method is not called
+     * or if no types are specified, then all the possible types will be
+     * generated.
      * 
-     * @param types
-     *            the types of system links to generate
+     * @param types the types of system links to generate
      * @return this links builder
      */
     public SystemLinksBuilder types(LinkType... types);
 
     /**
-     * Determines if this system links builder will generate links for all the root resources that
-     * are reachable when the search mode is "Continued Search" or just the current active resource.
-     * If this method is not called, then the builder will use the value defined by the
+     * Determines if this system links builder will generate links for all the
+     * root resources that are reachable when the search mode is
+     * "Continued Search" or just the current active resource. If this method is
+     * not called, then the builder will use the value defined by the
      * wink.searchPolicyContinuedSearch property.
      * 
-     * @param all
-     *            If set to <code>true</code> then this system links builder will generate links for
-     *            all the root resources that are reachable when the search mode is
-     *            "Continued Search".
+     * @param all If set to <code>true</code> then this system links builder
+     *            will generate links for all the root resources that are
+     *            reachable when the search mode is "Continued Search".
      * @return this links builder
      */
     public SystemLinksBuilder allResources(boolean all);

@@ -77,7 +77,7 @@ public class ValidationDuringTargettingTest extends TestCase {
 
             assertEquals(406, getMethod.getStatusCode());
             ServerContainerAssertions.assertExceptionBodyFromServer(406, getMethod
-                                                                    .getResponseBodyAsString());
+                .getResponseBodyAsString());
         } finally {
             getMethod.releaseConnection();
         }
@@ -122,7 +122,7 @@ public class ValidationDuringTargettingTest extends TestCase {
 
             assertEquals(415, getMethod.getStatusCode());
             ServerContainerAssertions.assertExceptionBodyFromServer(415, getMethod
-                                                                    .getResponseBodyAsString());
+                .getResponseBodyAsString());
         } finally {
             getMethod.releaseConnection();
         }

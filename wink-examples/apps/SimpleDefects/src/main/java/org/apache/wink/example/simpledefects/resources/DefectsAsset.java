@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.simpledefects.resources;
 
 import java.util.Collection;
@@ -37,8 +37,6 @@ import org.apache.wink.common.model.synd.SyndPerson;
 import org.apache.wink.common.model.synd.SyndText;
 import org.apache.wink.example.simpledefects.legacy.DefectBean;
 import org.apache.wink.server.utils.LinkBuilders;
-
-
 
 /**
  * Defects resource (based on collection resource)
@@ -60,37 +58,37 @@ public class DefectsAsset {
      * constructor will be used when we want HTML representation for the
      * resource.
      * 
-     * @param collection
-     *            defect bean collection
+     * @param collection defect bean collection
      */
     public DefectsAsset(Collection<DefectBean> defects) {
         this();
         this.defects.addAll(defects);
     }
-    
+
     public List<DefectBean> getDefects() {
         return defects;
     }
-    
+
     @Produces
-    public SyndFeed getSyndFeed(@Context Providers providers, @Context LinkBuilders linkBuilders, 
-            @Context UriInfo uriInfo) {
+    public SyndFeed getSyndFeed(@Context Providers providers,
+                                @Context LinkBuilders linkBuilders,
+                                @Context UriInfo uriInfo) {
         SyndFeed synd = new SyndFeed();
         synd.setId("urn:com:hp:qadefects:defects");
         synd.setTitle(new SyndText("Defects"));
         synd.addAuthor(new SyndPerson("admin"));
         synd.setUpdated(new Date());
-        
+
         // set the entries
         for (DefectBean defect : getDefects()) {
             DefectAsset defectAsset = new DefectAsset(defect, true);
             SyndEntry entry = defectAsset.getSyndEntry(providers, uriInfo, linkBuilders);
             synd.addEntry(entry);
         }
-        
+
         synd.setBase(uriInfo.getAbsolutePath().toString());
         linkBuilders.createSystemLinksBuilder().build(synd.getLinks());
         return synd;
     }
-    
+
 }

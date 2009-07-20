@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.locking.resources;
 
 import java.io.IOException;
@@ -51,8 +51,6 @@ import org.apache.wink.example.locking.legacy.DefectBean;
 import org.apache.wink.example.locking.legacy.DefectsBean;
 import org.apache.wink.example.locking.store.DataStore;
 
-
-
 /**
  * <p>
  * This example demonstrates usage of Preconditions to create an <a
@@ -63,13 +61,13 @@ import org.apache.wink.example.locking.store.DataStore;
 @Workspace(workspaceTitle = "QA Defects", collectionTitle = "Defects")
 public class DefectResource {
 
-    public static final String DEFECT      = "defect";
-    public static final String DEFECT_URL  = "/{" + DEFECT + "}";
+    public static final String DEFECT     = "defect";
+    public static final String DEFECT_URL = "/{" + DEFECT + "}";
 
     /**
      * memory store
      */
-    private DataStore          store       = DataStore.getInstance();
+    private DataStore          store      = DataStore.getInstance();
 
     /**
      * Returns the collection of defects.
@@ -104,7 +102,6 @@ public class DefectResource {
      * <p>
      * If IF_NONE_MATCH header present, the defect will be returned only if it
      * was modified since the previous call.
-     * 
      */
     @GET
     @Path(DEFECT_URL)
@@ -148,19 +145,22 @@ public class DefectResource {
         }
 
         // set unique Id in the new defect bean:
-        // - Id in the input data is ignored, actually there should be no Id there,
+        // - Id in the input data is ignored, actually there should be no Id
+        // there,
         bean.setId(store.getDefectUniqueId());
 
         // add defect bean to the memory store
         store.putDefect(bean.getId(), bean);
 
-        // header Location (absolute URI) must exist on the response in case of status code 201
+        // header Location (absolute URI) must exist on the response in case of
+        // status code 201
         URI location = new URI(uriInfo.getAbsolutePath() + "/" + bean.getId());
 
         // create entity tag, so the Client can use it for OCC
         EntityTag entityTag = new EntityTag(String.valueOf(bean.hashCode()));
 
-        return Response.status(Status.CREATED).entity(bean).location(location).tag(entityTag).build();
+        return Response.status(Status.CREATED).entity(bean).location(location).tag(entityTag)
+            .build();
     }
 
     /**
@@ -173,9 +173,10 @@ public class DefectResource {
     @Path(DEFECT_URL)
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
-    public Response updateDefect(@Context Request request, @PathParam(DEFECT) String defectId,
-        @HeaderParam(HttpHeaders.IF_MATCH) String ifMatchHeader, DefectBean updatedBean)
-        throws IOException {
+    public Response updateDefect(@Context Request request,
+                                 @PathParam(DEFECT) String defectId,
+                                 @HeaderParam(HttpHeaders.IF_MATCH) String ifMatchHeader,
+                                 DefectBean updatedBean) throws IOException {
 
         if (ifMatchHeader == null) {
             // IF-MATCH header wasn't sent, cannot validate the precondition
@@ -202,21 +203,24 @@ public class DefectResource {
         // update defect legacy bean to the memory store
         store.putDefect(defectId, updatedBean);
 
-        Response response = Response.ok(updatedBean).tag(
-            new EntityTag(String.valueOf(updatedBean.hashCode()))).build();
+        Response response =
+            Response.ok(updatedBean).tag(new EntityTag(String.valueOf(updatedBean.hashCode())))
+                .build();
         return response;
     }
 
     /**
      * Deletes defect.
      * <p>
-     * The defect is deleted only if If-Match is present and valid to ensure OCC.
+     * The defect is deleted only if If-Match is present and valid to ensure
+     * OCC.
      */
     @DELETE
     @Path(DEFECT_URL)
     @Produces(MediaType.APPLICATION_XML)
-    public Object deleteDocument(@Context Request request, @PathParam(DEFECT) String defectId,
-        @HeaderParam(HttpHeaders.IF_MATCH) String ifMatchHeader) {
+    public Object deleteDocument(@Context Request request,
+                                 @PathParam(DEFECT) String defectId,
+                                 @HeaderParam(HttpHeaders.IF_MATCH) String ifMatchHeader) {
 
         if (ifMatchHeader == null) {
             // IF-MATCH header wasn't sent, cannot validate the precondition

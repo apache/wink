@@ -17,19 +17,19 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.registry;
 
 import org.apache.wink.common.internal.registry.metadata.MethodMetadata;
 
 /**
- * Simple class to hold MethodMedadata that implements the MethodRecord interface
+ * Simple class to hold MethodMedadata that implements the MethodRecord
+ * interface
  */
 public class MethodMetadataRecord implements MethodRecord {
-    
+
     private MethodMetadata metadata;
-    
+
     public MethodMetadataRecord(MethodMetadata metadata) {
         this.metadata = metadata;
     }

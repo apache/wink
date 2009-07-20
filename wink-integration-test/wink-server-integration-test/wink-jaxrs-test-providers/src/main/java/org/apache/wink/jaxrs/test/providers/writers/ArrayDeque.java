@@ -25,17 +25,17 @@ import java.util.List;
 /**
  * this class is a dummy class to fill in for the ArrayDeque we were originally
  * using from JDK6.
- *
+ * 
  * @param <T>
  */
 public class ArrayDeque<T> implements Deque<T> {
 
     List<T> list = null;
-    
+
     public ArrayDeque() {
         list = new ArrayList<T>();
     }
-    
+
     public ArrayDeque(List<T> asList) {
         list = asList;
     }
@@ -43,7 +43,7 @@ public class ArrayDeque<T> implements Deque<T> {
     public Iterator<T> iterator() {
         return list.iterator();
     }
-    
+
     public void add(T item) {
         list.add(item);
     }

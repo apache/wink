@@ -37,7 +37,8 @@ public class MatrixParamResource {
     /**
      * Resource constructor.
      * 
-     * @param aConstructorParam a simple <code>@MatrixParam</code> constructor parameter
+     * @param aConstructorParam a simple <code>@MatrixParam</code> constructor
+     *            parameter
      */
     public MatrixParamResource(@MatrixParam("cstrparam") String aConstructorParam) {
         this.constructorParam = aConstructorParam;
@@ -293,7 +294,8 @@ public class MatrixParamResource {
     }
 
     /**
-     * GET method to test matrix parameter types with a public string constructor.
+     * GET method to test matrix parameter types with a public string
+     * constructor.
      * 
      * @param param parameter which has a string constructor
      * @return a transformed value

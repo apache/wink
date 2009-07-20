@@ -34,7 +34,7 @@ import java.lang.annotation.Target;
 public @interface Scope {
 
     ScopeType value();
-    
+
     public enum ScopeType {
         SINGLETON, PROTOTYPE;
     }

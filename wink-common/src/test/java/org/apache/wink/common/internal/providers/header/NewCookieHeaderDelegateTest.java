@@ -33,20 +33,25 @@ public class NewCookieHeaderDelegateTest {
     @Test
     public void testParseNewCookie() {
         RuntimeDelegate rd = RuntimeDelegate.getInstance();
-        HeaderDelegate<NewCookie> newCookieHeaderDelegate = rd.createHeaderDelegate(NewCookie.class);
+        HeaderDelegate<NewCookie> newCookieHeaderDelegate =
+            rd.createHeaderDelegate(NewCookie.class);
         if (newCookieHeaderDelegate == null) {
             fail("NewCookie header delegate is not regestered in RuntimeDelegateImpl");
         }
 
-        NewCookie expectedNewCookie = new NewCookie("MyCookie", "MyCookieValue", ".", "mydomain", 1, "Comment", 21600, true);
-        String cookieToParse = "MyCookie=MyCookieValue;Version=1; Path=.; Domain=mydomain; Comment=Comment; Max-Age=21600; Secure";
+        NewCookie expectedNewCookie =
+            new NewCookie("MyCookie", "MyCookieValue", ".", "mydomain", 1, "Comment", 21600, true);
+        String cookieToParse =
+            "MyCookie=MyCookieValue;Version=1; Path=.; Domain=mydomain; Comment=Comment; Max-Age=21600; Secure";
 
         // Test Parse NewCookie
         NewCookie parsedNewCookie = newCookieHeaderDelegate.fromString(cookieToParse);
         assertEquals(expectedNewCookie, parsedNewCookie);
 
-        expectedNewCookie = new NewCookie("MyCookie", "", ".", "mydomain", 1, "Comment", 21600, true);
-        cookieToParse = "MyCookie=\"\";Version=1; Path=.; Domain=mydomain; Comment=Comment; Max-Age=21600; Secure";
+        expectedNewCookie =
+            new NewCookie("MyCookie", "", ".", "mydomain", 1, "Comment", 21600, true);
+        cookieToParse =
+            "MyCookie=\"\";Version=1; Path=.; Domain=mydomain; Comment=Comment; Max-Age=21600; Secure";
         parsedNewCookie = newCookieHeaderDelegate.fromString(cookieToParse);
         assertEquals(expectedNewCookie, parsedNewCookie);
 
@@ -68,7 +73,8 @@ public class NewCookieHeaderDelegateTest {
 
         // Negative test - Invalid cookie
         try {
-            newCookieHeaderDelegate.fromString("MyCookieName;Version=1; Path=.; Domain=mydomain; Comment=Comment; Max-Age=21600; Secure");
+            newCookieHeaderDelegate
+                .fromString("MyCookieName;Version=1; Path=.; Domain=mydomain; Comment=Comment; Max-Age=21600; Secure");
             fail("Invalid NewCookie - IllegalArgumentException must be thrown");
         } catch (IllegalArgumentException e) {
             // success
@@ -78,16 +84,19 @@ public class NewCookieHeaderDelegateTest {
     @Test
     public void testSerializeNewCookie() {
         RuntimeDelegate rd = RuntimeDelegate.getInstance();
-        HeaderDelegate<NewCookie> newCookieHeaderDelegate = rd.createHeaderDelegate(NewCookie.class);
+        HeaderDelegate<NewCookie> newCookieHeaderDelegate =
+            rd.createHeaderDelegate(NewCookie.class);
         if (newCookieHeaderDelegate == null) {
             fail("NewCookie header delegate is not regestered in RuntimeDelegateImpl");
         }
 
-        String expectedCookieSerialization = "MyCookie=MyCookieValue;Version=1;Path=.;Domain=mydomain;Comment=Comment;Max-Age=21600;Secure";
-        NewCookie cookieToSerialize = new NewCookie("MyCookie", "MyCookieValue", ".", "mydomain", 1, "Comment", 21600, true);
+        String expectedCookieSerialization =
+            "MyCookie=MyCookieValue;Version=1;Path=.;Domain=mydomain;Comment=Comment;Max-Age=21600;Secure";
+        NewCookie cookieToSerialize =
+            new NewCookie("MyCookie", "MyCookieValue", ".", "mydomain", 1, "Comment", 21600, true);
         String serializedCookie = cookieToSerialize.toString();
         assertEquals(expectedCookieSerialization, serializedCookie);
-        
+
         // Negative test - Invalid cookie
         try {
             newCookieHeaderDelegate.toString(null);

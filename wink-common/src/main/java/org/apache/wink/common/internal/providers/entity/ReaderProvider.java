@@ -51,21 +51,36 @@ public final class ReaderProvider implements MessageBodyReader<Reader>, MessageB
         return (name == null) ? UTF8 : Charset.forName(name);
     }
 
-    public boolean isReadable(Class<?> type, Type genericType, Annotation annotations[], MediaType mediaType) {
+    public boolean isReadable(Class<?> type,
+                              Type genericType,
+                              Annotation annotations[],
+                              MediaType mediaType) {
         return type.isAssignableFrom(Reader.class);
     }
 
-    public Reader readFrom(Class<Reader> type, Type genericType, Annotation annotations[], MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream)
-            throws IOException {
+    public Reader readFrom(Class<Reader> type,
+                           Type genericType,
+                           Annotation annotations[],
+                           MediaType mediaType,
+                           MultivaluedMap<String, String> httpHeaders,
+                           InputStream entityStream) throws IOException {
         return new BufferedReader(new InputStreamReader(entityStream, getCharset(mediaType)));
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation annotations[], MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation annotations[],
+                               MediaType mediaType) {
         return Reader.class.isAssignableFrom(type);
     }
 
-    public void writeTo(Reader t, Class<?> type, Type genericType, Annotation annotations[], MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
-            OutputStream entityStream) throws IOException {
+    public void writeTo(Reader t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation annotations[],
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException {
         try {
             writeTo(t, new OutputStreamWriter(entityStream, getCharset(mediaType)));
         } finally {
@@ -73,7 +88,11 @@ public final class ReaderProvider implements MessageBodyReader<Reader>, MessageB
         }
     }
 
-    public long getSize(Reader t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public long getSize(Reader t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
         return -1;
     }
 

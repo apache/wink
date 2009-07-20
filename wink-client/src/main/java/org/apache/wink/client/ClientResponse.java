@@ -17,16 +17,16 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.client;
 
 import org.apache.wink.client.internal.BaseRequestResponse;
 
 /**
- * Represents an http response that was received after invoking any one of the invocation methods on
- * a {@link Resource}. An instance of a ClientResponse is created by the {@link ConnectionHandler}
- * at the end of the handler chain, and is returned from every handler on the chain.
+ * Represents an http response that was received after invoking any one of the
+ * invocation methods on a {@link Resource}. An instance of a ClientResponse is
+ * created by the {@link ConnectionHandler} at the end of the handler chain, and
+ * is returned from every handler on the chain.
  */
 public interface ClientResponse extends BaseRequestResponse {
 
@@ -40,8 +40,7 @@ public interface ClientResponse extends BaseRequestResponse {
     /**
      * Set the response status code
      * 
-     * @param code
-     *            status code to set
+     * @param code status code to set
      */
     public void setStatusCode(int code);
 
@@ -55,27 +54,27 @@ public interface ClientResponse extends BaseRequestResponse {
     /**
      * Set the response message
      * 
-     * @param message
-     *            response message to set
+     * @param message response message to set
      */
     public void setMessage(String message);
 
     /**
      * Get the response entity.
      * <p>
-     * If the requested type to return is InputStream, then the input stream of the response is
-     * returned, and the entity is not read using the providers. The returned input stream is the
-     * adapted input stream as created by the InputStream adapters. If the InputStream is read directly,   
-     * then it will not be possible to receive the entity as any other type other than InputStream.
+     * If the requested type to return is InputStream, then the input stream of
+     * the response is returned, and the entity is not read using the providers.
+     * The returned input stream is the adapted input stream as created by the
+     * InputStream adapters. If the InputStream is read directly, then it will
+     * not be possible to receive the entity as any other type other than
+     * InputStream.
      * <p>
-     * If the requested type to return is anything other than InputStream, then the entity is read
-     * using the appropriate provider before returning it. Subsequent calls to getEntity will return the
-     * same instance of the entity.
+     * If the requested type to return is anything other than InputStream, then
+     * the entity is read using the appropriate provider before returning it.
+     * Subsequent calls to getEntity will return the same instance of the
+     * entity.
      * 
-     * @param <T>
-     *            type of the response entity to get
-     * @param cls
-     *            class of the response entity to get
+     * @param <T> type of the response entity to get
+     * @param cls class of the response entity to get
      * @return the response entity
      */
     public <T> T getEntity(Class<T> cls);
@@ -83,25 +82,28 @@ public interface ClientResponse extends BaseRequestResponse {
     /**
      * Get the response entity.
      * <p>
-     * If the requested type to return is InputStream, then the input stream of the response is
-     * returned, and the entity is not read using the providers. The returned input stream is the
-     * adapted input stream as created by the InputStream adapters. If the InputStream is read directly,   
-     * then it will not be possible to receive the entity as any other type other than InputStream.
+     * If the requested type to return is InputStream, then the input stream of
+     * the response is returned, and the entity is not read using the providers.
+     * The returned input stream is the adapted input stream as created by the
+     * InputStream adapters. If the InputStream is read directly, then it will
+     * not be possible to receive the entity as any other type other than
+     * InputStream.
      * <p>
-     * If the requested type to return is anything other than InputStream, then the entity is read
-     * using the appropriate provider before returning it. Subsequent calls to getEntity will return the
-     * same instance of the entity.
+     * If the requested type to return is anything other than InputStream, then
+     * the entity is read using the appropriate provider before returning it.
+     * Subsequent calls to getEntity will return the same instance of the
+     * entity.
      * 
-     * @param <T>
-     *            type of the response entity to get
-     * @param entityType
-     *            an instance of {@link EntityType} specifying the type of the entity
+     * @param <T> type of the response entity to get
+     * @param entityType an instance of {@link EntityType} specifying the type
+     *            of the entity
      * @return
      */
     public <T> T getEntity(EntityType<T> entityType);
 
     /**
-     * Set the response entity 
+     * Set the response entity
+     * 
      * @param entity response entity to set
      */
     public void setEntity(Object entity);

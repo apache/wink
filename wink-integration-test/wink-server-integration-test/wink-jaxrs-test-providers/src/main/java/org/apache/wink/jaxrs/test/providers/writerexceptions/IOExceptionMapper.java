@@ -30,9 +30,8 @@ import javax.ws.rs.ext.Provider;
 public class IOExceptionMapper implements ExceptionMapper<IOException> {
 
     public Response toResponse(IOException arg0) {
-        return Response.status(455).entity(
-                "Invoked" + this.getClass().getName()).type(
-                        MediaType.TEXT_PLAIN).build();
+        return Response.status(455).entity("Invoked" + this.getClass().getName())
+            .type(MediaType.TEXT_PLAIN).build();
     }
 
 }

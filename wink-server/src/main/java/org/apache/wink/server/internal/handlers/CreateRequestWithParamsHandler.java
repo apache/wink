@@ -38,66 +38,68 @@ import org.apache.wink.server.handlers.MessageContext;
  * <tt>/defects?severity=critical</tt>
  */
 public class CreateRequestWithParamsHandler extends AbstractHandler {
-    
+
     public void handleRequest(MessageContext context) throws Throwable {
 
-        
-        //TODO: fix me (see javadoc of handler)
-        
-//        SearchResult searchResult = context.getSearchResult();
+        // TODO: fix me (see javadoc of handler)
+
+        // SearchResult searchResult = context.getSearchResult();
         // add the request parameters
-//        Map<String, String> reqParameters = searchResult.getReqParameters();
-//        if (reqParameters != null) {
-//            RequestWithParameters servletRequestWrapper = new RequestWithParameters(
-//                enhancedRequest.getBaseServletRequest(), reqParameters);
-//            enhancedRequest.setBaseServletRequest(servletRequestWrapper);
-//        }
+        // Map<String, String> reqParameters = searchResult.getReqParameters();
+        // if (reqParameters != null) {
+        // RequestWithParameters servletRequestWrapper = new
+        // RequestWithParameters(
+        // enhancedRequest.getBaseServletRequest(), reqParameters);
+        // enhancedRequest.setBaseServletRequest(servletRequestWrapper);
+        // }
     }
 
-//    private static class RequestWithParameters extends HttpServletRequestWrapper {
-//
-//        private Map<String, String[]> requestParameters;
-//
-//        private RequestWithParameters(HttpServletRequest httpServletRequest,
-//            Map<String, String> requestParameters) {
-//            super(httpServletRequest);
-//
-//            // because of legacy API
-//            @SuppressWarnings("unchecked")
-//            HashMap<String, String[]> paramHashMap = new HashMap<String, String[]>(
-//                super.getParameterMap());
-//            for (Map.Entry<String, String> requestParameter : requestParameters.entrySet()) {
-//                paramHashMap.put(requestParameter.getKey(),
-//                    new String[] { requestParameter.getValue() });
-//            }
-//            this.requestParameters = paramHashMap;
-//        }
-//
-//        @Override
-//        public String getParameter(String parameter) {
-//            String[] value = requestParameters.get(parameter);
-//            if (value != null) {
-//                return value[0];
-//            } else {
-//                return null;
-//            }
-//        }
-//
-//        @Override
-//        public Map<String, String[]> getParameterMap() {
-//            return requestParameters;
-//        }
-//
-//        @Override
-//        public Enumeration<String> getParameterNames() {
-//            return Collections.enumeration(requestParameters.keySet());
-//        }
-//
-//        @Override
-//        public String[] getParameterValues(String parameter) {
-//            return requestParameters.get(parameter);
-//        }
-//
-//    } // class RequestWithParameters
+    // private static class RequestWithParameters extends
+    // HttpServletRequestWrapper {
+    //
+    // private Map<String, String[]> requestParameters;
+    //
+    // private RequestWithParameters(HttpServletRequest httpServletRequest,
+    // Map<String, String> requestParameters) {
+    // super(httpServletRequest);
+    //
+    // // because of legacy API
+    // @SuppressWarnings("unchecked")
+    // HashMap<String, String[]> paramHashMap = new HashMap<String, String[]>(
+    // super.getParameterMap());
+    // for (Map.Entry<String, String> requestParameter :
+    // requestParameters.entrySet()) {
+    // paramHashMap.put(requestParameter.getKey(),
+    // new String[] { requestParameter.getValue() });
+    // }
+    // this.requestParameters = paramHashMap;
+    // }
+    //
+    // @Override
+    // public String getParameter(String parameter) {
+    // String[] value = requestParameters.get(parameter);
+    // if (value != null) {
+    // return value[0];
+    // } else {
+    // return null;
+    // }
+    // }
+    //
+    // @Override
+    // public Map<String, String[]> getParameterMap() {
+    // return requestParameters;
+    // }
+    //
+    // @Override
+    // public Enumeration<String> getParameterNames() {
+    // return Collections.enumeration(requestParameters.keySet());
+    // }
+    //
+    // @Override
+    // public String[] getParameterValues(String parameter) {
+    // return requestParameters.get(parameter);
+    // }
+    //
+    // } // class RequestWithParameters
 
 }

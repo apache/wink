@@ -61,24 +61,23 @@ import org.w3c.dom.Element;
 @XmlRootElement(name = "prop")
 public class Prop {
 
-    protected Creationdate creationdate;
-    protected Displayname displayname;
+    protected Creationdate       creationdate;
+    protected Displayname        displayname;
     protected Getcontentlanguage getcontentlanguage;
-    protected Getcontentlength getcontentlength;
-    protected Getcontenttype getcontenttype;
-    protected Getetag getetag;
-    protected Getlastmodified getlastmodified;
-    protected Lockdiscovery lockdiscovery;
-    protected Resourcetype resourcetype;
-    protected Supportedlock supportedlock;
+    protected Getcontentlength   getcontentlength;
+    protected Getcontenttype     getcontenttype;
+    protected Getetag            getetag;
+    protected Getlastmodified    getlastmodified;
+    protected Lockdiscovery      lockdiscovery;
+    protected Resourcetype       resourcetype;
+    protected Supportedlock      supportedlock;
     @XmlAnyElement
-    protected List<Element> any;
-    
+    protected List<Element>      any;
+
     /**
      * Gets the value of the creationdate property.
      * 
      * @return possible object is {@link Creationdate }
-     * 
      */
     public Creationdate getCreationdate() {
         return creationdate;
@@ -87,9 +86,7 @@ public class Prop {
     /**
      * Sets the value of the creationdate property.
      * 
-     * @param value
-     *            allowed object is {@link Creationdate }
-     * 
+     * @param value allowed object is {@link Creationdate }
      */
     public void setCreationdate(Creationdate value) {
         this.creationdate = value;
@@ -99,7 +96,6 @@ public class Prop {
      * Gets the value of the displayname property.
      * 
      * @return possible object is {@link Displayname }
-     * 
      */
     public Displayname getDisplayname() {
         return displayname;
@@ -108,9 +104,7 @@ public class Prop {
     /**
      * Sets the value of the displayname property.
      * 
-     * @param value
-     *            allowed object is {@link Displayname }
-     * 
+     * @param value allowed object is {@link Displayname }
      */
     public void setDisplayname(Displayname value) {
         this.displayname = value;
@@ -120,7 +114,6 @@ public class Prop {
      * Gets the value of the getcontentlanguage property.
      * 
      * @return possible object is {@link Getcontentlanguage }
-     * 
      */
     public Getcontentlanguage getGetcontentlanguage() {
         return getcontentlanguage;
@@ -129,9 +122,7 @@ public class Prop {
     /**
      * Sets the value of the getcontentlanguage property.
      * 
-     * @param value
-     *            allowed object is {@link Getcontentlanguage }
-     * 
+     * @param value allowed object is {@link Getcontentlanguage }
      */
     public void setGetcontentlanguage(Getcontentlanguage value) {
         this.getcontentlanguage = value;
@@ -141,7 +132,6 @@ public class Prop {
      * Gets the value of the getcontentlength property.
      * 
      * @return possible object is {@link Getcontentlength }
-     * 
      */
     public Getcontentlength getGetcontentlength() {
         return getcontentlength;
@@ -150,9 +140,7 @@ public class Prop {
     /**
      * Sets the value of the getcontentlength property.
      * 
-     * @param value
-     *            allowed object is {@link Getcontentlength }
-     * 
+     * @param value allowed object is {@link Getcontentlength }
      */
     public void setGetcontentlength(Getcontentlength value) {
         this.getcontentlength = value;
@@ -162,7 +150,6 @@ public class Prop {
      * Gets the value of the getcontenttype property.
      * 
      * @return possible object is {@link Getcontenttype }
-     * 
      */
     public Getcontenttype getGetcontenttype() {
         return getcontenttype;
@@ -171,9 +158,7 @@ public class Prop {
     /**
      * Sets the value of the getcontenttype property.
      * 
-     * @param value
-     *            allowed object is {@link Getcontenttype }
-     * 
+     * @param value allowed object is {@link Getcontenttype }
      */
     public void setGetcontenttype(Getcontenttype value) {
         this.getcontenttype = value;
@@ -183,7 +168,6 @@ public class Prop {
      * Gets the value of the getetag property.
      * 
      * @return possible object is {@link Getetag }
-     * 
      */
     public Getetag getGetetag() {
         return getetag;
@@ -192,9 +176,7 @@ public class Prop {
     /**
      * Sets the value of the getetag property.
      * 
-     * @param value
-     *            allowed object is {@link Getetag }
-     * 
+     * @param value allowed object is {@link Getetag }
      */
     public void setGetetag(Getetag value) {
         this.getetag = value;
@@ -204,7 +186,6 @@ public class Prop {
      * Gets the value of the getlastmodified property.
      * 
      * @return possible object is {@link Getlastmodified }
-     * 
      */
     public Getlastmodified getGetlastmodified() {
         return getlastmodified;
@@ -213,9 +194,7 @@ public class Prop {
     /**
      * Sets the value of the getlastmodified property.
      * 
-     * @param value
-     *            allowed object is {@link Getlastmodified }
-     * 
+     * @param value allowed object is {@link Getlastmodified }
      */
     public void setGetlastmodified(Getlastmodified value) {
         this.getlastmodified = value;
@@ -225,7 +204,6 @@ public class Prop {
      * Gets the value of the lockdiscovery property.
      * 
      * @return possible object is {@link Lockdiscovery }
-     * 
      */
     public Lockdiscovery getLockdiscovery() {
         return lockdiscovery;
@@ -234,9 +212,7 @@ public class Prop {
     /**
      * Sets the value of the lockdiscovery property.
      * 
-     * @param value
-     *            allowed object is {@link Lockdiscovery }
-     * 
+     * @param value allowed object is {@link Lockdiscovery }
      */
     public void setLockdiscovery(Lockdiscovery value) {
         this.lockdiscovery = value;
@@ -246,7 +222,6 @@ public class Prop {
      * Gets the value of the resourcetype property.
      * 
      * @return possible object is {@link Resourcetype }
-     * 
      */
     public Resourcetype getResourcetype() {
         return resourcetype;
@@ -255,9 +230,7 @@ public class Prop {
     /**
      * Sets the value of the resourcetype property.
      * 
-     * @param value
-     *            allowed object is {@link Resourcetype }
-     * 
+     * @param value allowed object is {@link Resourcetype }
      */
     public void setResourcetype(Resourcetype value) {
         this.resourcetype = value;
@@ -267,7 +240,6 @@ public class Prop {
      * Gets the value of the supportedlock property.
      * 
      * @return possible object is {@link Supportedlock }
-     * 
      */
     public Supportedlock getSupportedlock() {
         return supportedlock;
@@ -276,9 +248,7 @@ public class Prop {
     /**
      * Sets the value of the supportedlock property.
      * 
-     * @param value
-     *            allowed object is {@link Supportedlock }
-     * 
+     * @param value allowed object is {@link Supportedlock }
      */
     public void setSupportedlock(Supportedlock value) {
         this.supportedlock = value;
@@ -286,24 +256,19 @@ public class Prop {
 
     /**
      * Gets the value of the any property.
-     * 
      * <p>
-     * This accessor method returns a reference to the live list, not a snapshot. Therefore any
-     * modification you make to the returned list will be present inside the JAXB object. This is
-     * why there is not a <CODE>set</CODE> method for the any property.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the any property.
      * <p>
      * For example, to add a new item, do as follows:
      * 
      * <pre>
      * getAny().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
      * Objects of the following type(s) are allowed in the list {@link Element }
-     * 
-     * 
      */
     public List<Element> getAny() {
         if (any == null) {
@@ -311,21 +276,25 @@ public class Prop {
         }
         return this.any;
     }
-    
+
     /**
      * Get a proprietary property as an W3C element
+     * 
      * @param name the name of the property to get
-     * @return an Element instance representing the property, or null if no such property exists
+     * @return an Element instance representing the property, or null if no such
+     *         property exists
      */
     public Element getAnyByName(QName name) {
         return getAnyByName(name.getNamespaceURI(), name.getLocalPart());
     }
-    
+
     /**
      * Get a proprietary property as an W3C element
+     * 
      * @param namespaceURI the namespace of the property to get
      * @param name the name of the property to get
-     * @return an Element instance representing the property, or null if no such property exists
+     * @return an Element instance representing the property, or null if no such
+     *         property exists
      */
     public Element getAnyByName(String namespaceURI, String name) {
         for (Element element : getAny()) {
@@ -334,25 +303,26 @@ public class Prop {
             if (elementNamespaceURI == null) {
                 elementNamespaceURI = "";
             }
-            if (elementNamespaceURI.equals(namespaceURI) &&
-                elementName.equals(name)) {
+            if (elementNamespaceURI.equals(namespaceURI) && elementName.equals(name)) {
                 return element;
             }
         }
         return null;
     }
-    
+
     /**
      * Remove the specified proprietary property
+     * 
      * @param namespaceURI the namespace of the property to remove
      * @param name name of the property to remove
      */
     public void removeAny(String namespaceURI, String name) {
         innerRemoveAny(getAnyByName(namespaceURI, name));
     }
-    
+
     /**
      * Remove the specified proprietary property
+     * 
      * @param name name of the property to remove
      */
     public void removeAny(QName name) {
@@ -361,12 +331,13 @@ public class Prop {
 
     /**
      * Remove the specified proprietary property
+     * 
      * @param element the Element instance to remove
      */
     public void removeAny(Element element) {
         innerRemoveAny(getAnyByName(element.getNamespaceURI(), element.getLocalName()));
     }
-    
+
     private void innerRemoveAny(Element element) {
         if (element == null) {
             return;
@@ -375,9 +346,10 @@ public class Prop {
     }
 
     /**
-     * Set a proprietary property, and return the Element representing it 
+     * Set a proprietary property, and return the Element representing it
+     * 
      * @param name the name of the property
-     * @return the Element representing the property 
+     * @return the Element representing the property
      */
     public Element setProperty(QName name) {
         String fullName = WebDAVModelHelper.getFullName(name);
@@ -385,10 +357,11 @@ public class Prop {
     }
 
     /**
-     * Set a proprietary property, and return the Element representing it 
+     * Set a proprietary property, and return the Element representing it
+     * 
      * @param name the name of the property
      * @param content the text content of the property
-     * @return the Element representing the property 
+     * @return the Element representing the property
      */
     public Element setProperty(QName name, String content) {
         String fullName = WebDAVModelHelper.getFullName(name);
@@ -396,33 +369,35 @@ public class Prop {
     }
 
     /**
-     * Set a proprietary property, and return the Element representing it 
+     * Set a proprietary property, and return the Element representing it
+     * 
      * @param name the name of the property
      * @param content the text content of the property
-     * @return the Element representing the property 
+     * @return the Element representing the property
      */
     public Element setProperty(QName name, Element content) {
         String fullName = WebDAVModelHelper.getFullName(name);
         return setProperty(name.getNamespaceURI(), fullName, content);
     }
 
-
     /**
-     * Set a proprietary property, and return the Element representing it 
+     * Set a proprietary property, and return the Element representing it
+     * 
      * @param namespaceURI the namespace of the property
      * @param name the name of the property
-     * @return the Element representing the property 
+     * @return the Element representing the property
      */
     public Element setProperty(String namespaceURI, String name) {
         return setProperty(namespaceURI, name, (String)null);
     }
-    
+
     /**
-     * Set a proprietary property, and return the Element representing it 
+     * Set a proprietary property, and return the Element representing it
+     * 
      * @param namespaceURI the namespace of the property
      * @param name the name of the property
      * @param content the text content of the property
-     * @return the Element representing the property 
+     * @return the Element representing the property
      */
     public Element setProperty(String namespaceURI, String name, String content) {
         removeAny(namespaceURI, name);
@@ -432,11 +407,12 @@ public class Prop {
     }
 
     /**
-     * Set a proprietary property, and return the Element representing it 
+     * Set a proprietary property, and return the Element representing it
+     * 
      * @param namespaceURI the namespace of the property
      * @param name the name of the property
      * @param child the child element of the property element
-     * @return the Element representing the property 
+     * @return the Element representing the property
      */
     public Element setProperty(String namespaceURI, String name, Element child) {
         removeAny(namespaceURI, name);
@@ -446,14 +422,16 @@ public class Prop {
     }
 
     /**
-     * Performs a shallow copy of all elements in this Prop instance into the dest Prop instance
+     * Performs a shallow copy of all elements in this Prop instance into the
+     * dest Prop instance
+     * 
      * @param dest the Prop instance to cop this instance into
      */
     public void copyTo(Prop dest) {
         if (dest == null) {
             return;
         }
-        
+
         dest.setCreationdate(this.getCreationdate());
         dest.setDisplayname(this.getDisplayname());
         dest.setGetcontentlanguage(this.getGetcontentlanguage());
@@ -470,6 +448,5 @@ public class Prop {
         }
 
     }
-
 
 }

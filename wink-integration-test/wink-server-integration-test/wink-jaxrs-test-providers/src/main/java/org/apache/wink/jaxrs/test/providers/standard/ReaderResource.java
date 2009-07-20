@@ -37,8 +37,7 @@ public class ReaderResource {
 
     @GET
     public Response getReader() {
-        return Response.ok(new BufferedReader(new CharArrayReader(carr)))
-                .build();
+        return Response.ok(new BufferedReader(new CharArrayReader(carr))).build();
     }
 
     @POST

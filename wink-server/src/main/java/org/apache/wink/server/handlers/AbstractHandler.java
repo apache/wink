@@ -22,9 +22,10 @@ package org.apache.wink.server.handlers;
 import java.util.Properties;
 
 /**
- * Convenience class for implementing a handler that is unaware of the handlers chain. A handler may
- * extend this class and implement any or all of {@link #init(Properties)},
- * {@link #handleRequest(MessageContext)} and {@link #handleResponse(MessageContext)}
+ * Convenience class for implementing a handler that is unaware of the handlers
+ * chain. A handler may extend this class and implement any or all of
+ * {@link #init(Properties)}, {@link #handleRequest(MessageContext)} and
+ * {@link #handleResponse(MessageContext)}
  */
 public abstract class AbstractHandler implements RequestHandler, ResponseHandler {
 
@@ -47,22 +48,22 @@ public abstract class AbstractHandler implements RequestHandler, ResponseHandler
     }
 
     /**
-     * Override this method to handle the request. This method releases the responsibility of the
-     * user to continue the chain, as it is done automatically at the end of the method invocation
+     * Override this method to handle the request. This method releases the
+     * responsibility of the user to continue the chain, as it is done
+     * automatically at the end of the method invocation
      * 
-     * @param context
-     *            the current message context
+     * @param context the current message context
      * @see {@link RequestHandler#handleRequest(MessageContext, HandlersChain)}
      */
     protected void handleRequest(MessageContext context) throws Throwable {
     }
 
     /**
-     * Override this method to handle the response. This method releases the responsibility of the
-     * user to continue the chain, as it is done automatically at the end of the method invocation
+     * Override this method to handle the response. This method releases the
+     * responsibility of the user to continue the chain, as it is done
+     * automatically at the end of the method invocation
      * 
-     * @param context
-     *            the current message context
+     * @param context the current message context
      * @see {@link ResponseHandler#handleResponse(MessageContext, HandlersChain)}
      */
     protected void handleResponse(MessageContext context) throws Throwable {

@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.webdav.model;
 
 import java.io.StringReader;
@@ -34,14 +34,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Element;
 
-
 public class WebDAVPropfindTest extends AbstractWebDAVModelTest {
 
-    private static final String NS = "http://ns.example.com/boxschema/";
-    private static final QName[] PROPERTIES = new QName[] {new QName(NS, "author"),
-                                                           new QName(NS, "DingALing"),
-                                                           new QName(NS, "Random"),
-                                                           new QName(NS, "bigbox")};
+    private static final String  NS         = "http://ns.example.com/boxschema/";
+    private static final QName[] PROPERTIES =
+                                                new QName[] {new QName(NS, "author"),
+        new QName(NS, "DingALing"), new QName(NS, "Random"), new QName(NS, "bigbox")};
 
     @Test
     public void test1() throws Exception {

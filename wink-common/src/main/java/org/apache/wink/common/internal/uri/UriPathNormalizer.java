@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common.internal.uri;
 
 // taken from Wasp
@@ -32,12 +32,13 @@ public final class UriPathNormalizer {
     }
 
     /**
-     * Returns normalized <code>path</code> (or simply the <code>path</code>
-     * if it is already in normalized form).
-     * Normalized path does not contain any empty or "." segments or
-     * ".." segments preceded by other segment than "..".
-     * @param   path        path to normalize
-     * @return  normalize path
+     * Returns normalized <code>path</code> (or simply the <code>path</code> if
+     * it is already in normalized form). Normalized path does not contain any
+     * empty or "." segments or ".." segments preceded by other segment than
+     * "..".
+     * 
+     * @param path path to normalize
+     * @return normalize path
      */
     public static String normalize(String path) {
         boolean wasNormalized = true;
@@ -53,19 +54,21 @@ public final class UriPathNormalizer {
             if (slash != -1) {
                 // empty segment? (two adjacent slashes?)
                 if (slash == src) {
-                    if (src != lastChar) {   // ignore the first slash occurence (when numSegments == 0)
+                    if (src != lastChar) { // ignore the first slash occurence
+                                           // (when numSegments == 0)
                         wasNormalized = false;
                     }
                 } else {
                     numSegments++;
                 }
-            } else numSegments++;
+            } else
+                numSegments++;
             src = slash - 1;
         }
 
         // 2. split path to segments skipping empty segments
-        int [] segments = new int[numSegments];
-        char [] chars = new char[path.length()];
+        int[] segments = new int[numSegments];
+        char[] chars = new char[path.length()];
         path.getChars(0, chars.length, chars, 0);
         numSegments = 0;
         for (int src = 0; src < chars.length;) {
@@ -86,31 +89,33 @@ public final class UriPathNormalizer {
         }
         // assert (numSegments == segments.length);
 
-        // 3. scan segments and remove all "." segments and "foo",".." segment pairs
+        // 3. scan segments and remove all "." segments and "foo",".." segment
+        // pairs
         final int DELETED = -1;
         for (int segment = 0; segment < numSegments; segment++) {
             int src = segments[segment];
             if (chars[src++] == '.') {
-                if (src  == chars.length ||     // "."
-                    chars[src] == '/') {        // "./"
+                if (src == chars.length || // "."
+                chars[src] == '/') { // "./"
                     // delete the "." segment
                     segments[segment] = DELETED;
                     wasNormalized = false;
-                } else {                        // ".something"
-                    if (chars[src++] == '.' &&
-                        (src == chars.length || // ".."
-                         chars[src] == '/')) {  // "../"
+                } else { // ".something"
+                    if (chars[src++] == '.' && (src == chars.length || // ".."
+                    chars[src] == '/')) { // "../"
                         // we have the ".." segment
-                        // scan backwards for segment to delete together with ".."
-                        for (int toDelete = segment - 1; toDelete >=0; toDelete--) {
+                        // scan backwards for segment to delete together with
+                        // ".."
+                        for (int toDelete = segment - 1; toDelete >= 0; toDelete--) {
                             if (segments[toDelete] != DELETED) {
                                 if (chars[segments[toDelete]] != '.') {
                                     // delete the two segments
                                     segments[toDelete] = DELETED;
                                     segments[segment] = DELETED;
                                     wasNormalized = false;
-                                //} else {
-                                //    // Oops! We've found ".." segment - there is nothing more to delete!
+                                    // } else {
+                                    // // Oops! We've found ".." segment - there
+                                    // is nothing more to delete!
                                 }
                                 break;
                             }
@@ -121,22 +126,25 @@ public final class UriPathNormalizer {
         }
 
         // 4. join the result, if necessary
-        if (wasNormalized) {                    // already normalized? nothing to do...
+        if (wasNormalized) { // already normalized? nothing to do...
             return path;
         } else {
-            // join the resulting normalized path, retain the leading and ending slash
+            // join the resulting normalized path, retain the leading and ending
+            // slash
             int dst = (chars[0] == '/') ? 1 : 0;
 
             for (int segment = 0; segment < numSegments; segment++) {
                 int segmentStart = segments[segment];
                 if (segmentStart != DELETED) {
                     // if we remembered segment legths in step 2, we could use
-                    // System.arraycopy method now but we had to allocate one more array
+                    // System.arraycopy method now but we had to allocate one
+                    // more array
 
                     for (int src = segmentStart; src < chars.length; src++) {
                         char ch = chars[src];
                         chars[dst++] = ch;
-                        if (ch == '/') break;
+                        if (ch == '/')
+                            break;
                     }
 
                 }

@@ -57,7 +57,9 @@ public class Displayname {
     @XmlMixed
     protected List<String> content;
 
-    public Displayname() {}
+    public Displayname() {
+    }
+
     public Displayname(String value) {
         setValue(value);
     }
@@ -72,8 +74,7 @@ public class Displayname {
     /**
      * Sets the value.
      * 
-     * @param value
-     *            the value to set
+     * @param value the value to set
      */
     public void setValue(String value) {
         List<String> content = getContent();

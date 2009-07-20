@@ -52,14 +52,13 @@ public class Lockinfo {
     @XmlElement(required = true)
     protected Lockscope lockscope;
     @XmlElement(required = true)
-    protected Locktype locktype;
-    protected Owner owner;
+    protected Locktype  locktype;
+    protected Owner     owner;
 
     /**
      * Gets the value of the lockscope property.
      * 
      * @return possible object is {@link Lockscope }
-     * 
      */
     public Lockscope getLockscope() {
         return lockscope;
@@ -68,9 +67,7 @@ public class Lockinfo {
     /**
      * Sets the value of the lockscope property.
      * 
-     * @param value
-     *            allowed object is {@link Lockscope }
-     * 
+     * @param value allowed object is {@link Lockscope }
      */
     public void setLockscope(Lockscope value) {
         this.lockscope = value;
@@ -80,7 +77,6 @@ public class Lockinfo {
      * Gets the value of the locktype property.
      * 
      * @return possible object is {@link Locktype }
-     * 
      */
     public Locktype getLocktype() {
         return locktype;
@@ -89,9 +85,7 @@ public class Lockinfo {
     /**
      * Sets the value of the locktype property.
      * 
-     * @param value
-     *            allowed object is {@link Locktype }
-     * 
+     * @param value allowed object is {@link Locktype }
      */
     public void setLocktype(Locktype value) {
         this.locktype = value;
@@ -101,7 +95,6 @@ public class Lockinfo {
      * Gets the value of the owner property.
      * 
      * @return possible object is {@link Owner }
-     * 
      */
     public Owner getOwner() {
         return owner;
@@ -110,9 +103,7 @@ public class Lockinfo {
     /**
      * Sets the value of the owner property.
      * 
-     * @param value
-     *            allowed object is {@link Owner }
-     * 
+     * @param value allowed object is {@link Owner }
      */
     public void setOwner(Owner value) {
         this.owner = value;

@@ -38,8 +38,7 @@ public class HeadersResource {
     @Path(value = "/cookie")
     public Response get() {
         Response resp = Response.ok().build();
-        resp.getMetadata().putSingle("login",
-                headers.getCookies().get("login").getValue());
+        resp.getMetadata().putSingle("login", headers.getCookies().get("login").getValue());
         return resp;
     }
 
@@ -48,7 +47,8 @@ public class HeadersResource {
     public Response getLanguage() {
         Response resp = Response.ok().build();
         resp.getMetadata().putSingle("language",
-                headers.getLanguage().getLanguage() + ":" + headers.getLanguage().getCountry());
+                                     headers.getLanguage().getLanguage() + ":"
+                                         + headers.getLanguage().getCountry());
         return resp;
     }
 
@@ -56,8 +56,7 @@ public class HeadersResource {
     @Path(value = "/content")
     public Response getContent() {
         Response resp = Response.ok().build();
-        resp.getMetadata().putSingle("content",
-                headers.getMediaType().toString());
+        resp.getMetadata().putSingle("content", headers.getMediaType().toString());
         return resp;
     }
 
@@ -78,7 +77,7 @@ public class HeadersResource {
     public Response getAcceptLanguage() {
         Response resp = Response.ok().build();
         resp.getMetadata().putSingle("acceptlang",
-                headers.getAcceptableLanguages().get(0).toString());
+                                     headers.getAcceptableLanguages().get(0).toString());
         return resp;
     }
 

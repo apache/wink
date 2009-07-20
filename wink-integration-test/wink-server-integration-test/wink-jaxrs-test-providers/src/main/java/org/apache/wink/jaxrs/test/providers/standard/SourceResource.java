@@ -45,7 +45,7 @@ public class SourceResource {
     public Source postSource(Source src) {
         return src;
     }
-    
+
     public static class UnsupportedSourceSubclass implements Source {
 
         public String getSystemId() {
@@ -55,9 +55,9 @@ public class SourceResource {
 
         public void setSystemId(String systemId) {
             // TODO Auto-generated method stub
-            
+
         }
-        
+
     }
 
     @POST

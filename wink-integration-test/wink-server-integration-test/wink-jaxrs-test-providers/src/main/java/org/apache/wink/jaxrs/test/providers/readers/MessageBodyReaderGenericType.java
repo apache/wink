@@ -46,15 +46,14 @@ public class MessageBodyReaderGenericType implements MessageBodyReader<Object> {
     public boolean isReadable(Class<?> arg0, Type arg1, Annotation[] arg2, MediaType arg3) {
         if (List.class.isAssignableFrom(arg0)) {
             if (arg1 instanceof ParameterizedType) {
-                ParameterizedType pt = (ParameterizedType) arg1;
+                ParameterizedType pt = (ParameterizedType)arg1;
                 Type rawType = pt.getRawType();
-                if ((rawType instanceof Class)
-                        && (List.class.isAssignableFrom((Class) rawType))) {
+                if ((rawType instanceof Class) && (List.class.isAssignableFrom((Class)rawType))) {
                     Type[] genericTypeArguments = pt.getActualTypeArguments();
                     if (genericTypeArguments.length == 1) {
-                        Class argType = (Class) genericTypeArguments[0];
-                        if (Integer.class.isAssignableFrom(argType)
-                                || String.class.isAssignableFrom(argType)) {
+                        Class argType = (Class)genericTypeArguments[0];
+                        if (Integer.class.isAssignableFrom(argType) || String.class
+                            .isAssignableFrom(argType)) {
                             return true;
                         }
                     }
@@ -65,31 +64,40 @@ public class MessageBodyReaderGenericType implements MessageBodyReader<Object> {
         }
 
         if (arg1 instanceof Class) {
-            if (Integer.class.isAssignableFrom((Class) arg1)) {
+            if (Integer.class.isAssignableFrom((Class)arg1)) {
                 return true;
             }
         }
         return false;
     }
 
-    public Object readFrom(Class<Object> arg0, Type arg1, Annotation[] arg2, MediaType arg3, MultivaluedMap<String, String> arg4, InputStream arg5)
-            throws IOException, WebApplicationException {
+    public Object readFrom(Class<Object> arg0,
+                           Type arg1,
+                           Annotation[] arg2,
+                           MediaType arg3,
+                           MultivaluedMap<String, String> arg4,
+                           InputStream arg5) throws IOException, WebApplicationException {
         if (List.class.isAssignableFrom(arg0)) {
             if (arg1 instanceof ParameterizedType) {
-                ParameterizedType pt = (ParameterizedType) arg1;
+                ParameterizedType pt = (ParameterizedType)arg1;
                 Type rawType = pt.getRawType();
-                if ((rawType instanceof Class)
-                        && (List.class.isAssignableFrom((Class) rawType))) {
+                if ((rawType instanceof Class) && (List.class.isAssignableFrom((Class)rawType))) {
                     Type[] genericTypeArguments = pt.getActualTypeArguments();
                     if (genericTypeArguments.length == 1) {
-                        Class argType = (Class) genericTypeArguments[0];
+                        Class argType = (Class)genericTypeArguments[0];
                         if (Integer.class.isAssignableFrom(argType)) {
                             MessageBodyReader<String> strReader =
                                 providers.getMessageBodyReader(String.class,
                                                                String.class,
                                                                arg2,
                                                                MediaType.TEXT_PLAIN_TYPE);
-                            String str = strReader.readFrom(String.class, String.class, arg2, arg3, arg4, arg5);
+                            String str =
+                                strReader.readFrom(String.class,
+                                                   String.class,
+                                                   arg2,
+                                                   arg3,
+                                                   arg4,
+                                                   arg5);
                             String[] splitlines = str.split("\r\n");
                             List<Integer> ret = new ArrayList<Integer>();
                             for (String s : splitlines) {
@@ -102,7 +110,13 @@ public class MessageBodyReaderGenericType implements MessageBodyReader<Object> {
                                                                String.class,
                                                                arg2,
                                                                MediaType.TEXT_PLAIN_TYPE);
-                            String str = strReader.readFrom(String.class, String.class, arg2, arg3, arg4, arg5);
+                            String str =
+                                strReader.readFrom(String.class,
+                                                   String.class,
+                                                   arg2,
+                                                   arg3,
+                                                   arg4,
+                                                   arg5);
                             String[] splitlines = str.split("\r\n");
                             List<String> ret = new ArrayList<String>();
                             for (String s : splitlines) {
@@ -129,7 +143,7 @@ public class MessageBodyReaderGenericType implements MessageBodyReader<Object> {
         }
 
         if (arg1 instanceof Class) {
-            if (Integer.class.isAssignableFrom((Class) arg1)) {
+            if (Integer.class.isAssignableFrom((Class)arg1)) {
                 MessageBodyReader<String> strReader =
                     providers.getMessageBodyReader(String.class,
                                                    String.class,

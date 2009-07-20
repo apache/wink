@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common.internal.utils;
 
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class StringUtils {
         // this class should never be created
     }
 
-    public static String valueOf(Map<?,?> map) {
+    public static String valueOf(Map<?, ?> map) {
         if (map == null) {
             return "null";
         }
@@ -46,7 +46,7 @@ public class StringUtils {
         builder.append("{");
         builder.append(lineSeparator);
         for (Iterator<?> iterator = map.entrySet().iterator(); iterator.hasNext();) {
-            Entry<?,?> entry = (Entry<?,?>)iterator.next();
+            Entry<?, ?> entry = (Entry<?, ?>)iterator.next();
             builder.append(String.valueOf(entry.getKey()));
             builder.append("=");
             builder.append(String.valueOf(entry.getValue()));
@@ -88,13 +88,16 @@ public class StringUtils {
         return fastSplit(string, delimiter, strict, true);
     }
 
-    public static String[] fastSplit(String string, String delimiter, boolean strict, boolean template) {
+    public static String[] fastSplit(String string,
+                                     String delimiter,
+                                     boolean strict,
+                                     boolean template) {
         if (string == null) {
             return new String[0];
         }
 
         if (string.equals("")) {
-            return new String[]{""};
+            return new String[] {""};
         }
 
         List<String> tmpResults = new ArrayList<String>();

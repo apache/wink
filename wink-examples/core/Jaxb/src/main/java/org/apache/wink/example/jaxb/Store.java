@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.example.jaxb;
 
@@ -26,40 +25,40 @@ import java.util.Map;
 
 public class Store {
 
-    private Map<String,Person> persons = new HashMap<String,Person>();
-    private Map<String,Address> addresses = new HashMap<String,Address>();
-    private Map<String,Phone> phones = new HashMap<String,Phone>();
-    
+    private Map<String, Person>  persons   = new HashMap<String, Person>();
+    private Map<String, Address> addresses = new HashMap<String, Address>();
+    private Map<String, Phone>   phones    = new HashMap<String, Phone>();
+
     public Store() {
         persons.put("1", new Person("John", "Smith", "john.smith@email.com"));
         addresses.put("1", new Address("New York", "5th", "64"));
         phones.put("1", new Phone(768, 5555678));
-        
+
         persons.put("2", new Person("Jane", "Smith", "jane.smith@email.com"));
         addresses.put("2", new Address("New Orleans", "Burbon", "70"));
         phones.put("2", new Phone(513, 5554321));
     }
-    
+
     public Person getPerson(String id) {
         return persons.get(id);
     }
-    
+
     public void putPerson(String id, Person p) {
         persons.put(id, p);
     }
-    
+
     public Address getAddress(String id) {
         return addresses.get(id);
     }
-    
+
     public void putAddress(String id, Address a) {
         addresses.put(id, a);
     }
-    
+
     public Phone getPhone(String id) {
         return phones.get(id);
     }
-    
+
     public void putPhone(String id, Phone p) {
         phones.put(id, p);
     }

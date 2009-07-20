@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.client.internal;
 
@@ -25,33 +24,40 @@ import java.util.Map;
 
 import javax.ws.rs.core.MultivaluedMap;
 
-
 public interface BaseRequestResponse {
-    
+
     /**
      * Get the live map of headers
+     * 
      * @return the live map of headers
      */
-    MultivaluedMap<String,String> getHeaders();
-    
+    MultivaluedMap<String, String> getHeaders();
+
     /**
      * Get the live list of attributes
+     * 
      * @return the live list of attributes
      */
-    Map<String,Object> getAttributes();
-    
+    Map<String, Object> getAttributes();
+
     /**
-     * Convenience method to set an attribute whose key is the fully qualified name of attribute class  
+     * Convenience method to set an attribute whose key is the fully qualified
+     * name of attribute class
+     * 
      * @param <T> type of attribute
-     * @param key the class type whose fully qualified name will be used as the key
+     * @param key the class type whose fully qualified name will be used as the
+     *            key
      * @param attribute the attribute to set
      */
     <T> void setAttribute(Class<T> key, T attribute);
-    
+
     /**
-     * Convenience method to retrieve an attribute whose key is the fully qualified name of attribute class
+     * Convenience method to retrieve an attribute whose key is the fully
+     * qualified name of attribute class
+     * 
      * @param <T> type of attribute
-     * @param key the class type whose fully qualified name will be used as the key
+     * @param key the class type whose fully qualified name will be used as the
+     *            key
      * @return the attribute value, or null if it does not exist
      */
     <T> T getAttribute(Class<T> key);

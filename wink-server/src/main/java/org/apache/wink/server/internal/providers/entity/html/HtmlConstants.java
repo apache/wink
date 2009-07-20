@@ -20,10 +20,13 @@
 package org.apache.wink.server.internal.providers.entity.html;
 
 public final class HtmlConstants {
-	public static final String DEFAULT_JSP_ENTRY_PATH = "/HtmlDefaultRepresentation/defaultHtmlEntry.jsp";
-	public static final String DEFAULT_JSP_COLLECTION_PATH = "/HtmlDefaultRepresentation/defaultHtmlCollection.jsp";
-	public static final String RESOURCE_ATTRIBUTE_NAME_REQUEST = "HtmlRepresentationResource";
-	public static final String SERVICE_DOCUMENT_URL = "/HtmlDefaultRepresentation/defaultHtmlServiceDocument.jsp";
-	public static final String RESOURCES_MAP_ATTRIBUTE_NAME_REQUEST = "resourcesMap";
-	public static final String BASE_URI_ATTRIBUTE_NAME_REQUEST = "baseUri";
+    public static final String DEFAULT_JSP_ENTRY_PATH               =
+                                                                        "/HtmlDefaultRepresentation/defaultHtmlEntry.jsp";
+    public static final String DEFAULT_JSP_COLLECTION_PATH          =
+                                                                        "/HtmlDefaultRepresentation/defaultHtmlCollection.jsp";
+    public static final String RESOURCE_ATTRIBUTE_NAME_REQUEST      = "HtmlRepresentationResource";
+    public static final String SERVICE_DOCUMENT_URL                 =
+                                                                        "/HtmlDefaultRepresentation/defaultHtmlServiceDocument.jsp";
+    public static final String RESOURCES_MAP_ATTRIBUTE_NAME_REQUEST = "resourcesMap";
+    public static final String BASE_URI_ATTRIBUTE_NAME_REQUEST      = "baseUri";
 }

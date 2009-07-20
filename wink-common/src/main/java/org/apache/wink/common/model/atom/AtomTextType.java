@@ -24,24 +24,20 @@
 // Generated on: 2008.09.15 at 03:05:36 PM IDT 
 //
 
-
 package org.apache.wink.common.model.atom;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * An enum for specifying the type of a Text construct 
+ * An enum for specifying the type of a Text construct
  */
 @XmlType(name = "atomTextType")
 @XmlEnum
 public enum AtomTextType {
     @XmlEnumValue("text")
-    text, 
-    @XmlEnumValue("html")
-    html, 
-    @XmlEnumValue("xhtml")
+    text, @XmlEnumValue("html")
+    html, @XmlEnumValue("xhtml")
     xhtml;
 }

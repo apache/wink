@@ -38,14 +38,14 @@ public class ProvidersContextResolverTest extends TestCase {
     public static class NotAProvider {
     }
 
-    private static final String  STRING    = "String";
-    private static final String  STRING2    = "String2";
-    private static final String  STRING3    = "String3";
-    private static final String  STRING4    = "String4";
-    private static final String  ATOM      = "Atom";
-    private static final byte[]  BYTE      = new byte[0];
-    private static final Integer _12345    = new Integer(12345);
-    private static final MyClass MYCLASS   = new MyClass();
+    private static final String  STRING  = "String";
+    private static final String  STRING2 = "String2";
+    private static final String  STRING3 = "String3";
+    private static final String  STRING4 = "String4";
+    private static final String  ATOM    = "Atom";
+    private static final byte[]  BYTE    = new byte[0];
+    private static final Integer _12345  = new Integer(12345);
+    private static final MyClass MYCLASS = new MyClass();
 
     @Provider
     @Produces( {MediaType.TEXT_PLAIN, MediaType.WILDCARD})
@@ -55,7 +55,7 @@ public class ProvidersContextResolverTest extends TestCase {
             return STRING;
         }
     }
-    
+
     @Provider
     @Produces( {MediaType.TEXT_PLAIN})
     public static class StringContextResolver2 implements ContextResolver<String> {
@@ -64,20 +64,20 @@ public class ProvidersContextResolverTest extends TestCase {
             return STRING2;
         }
     }
-    
+
     @Provider
-    @Produces( "text/*" )
+    @Produces("text/*")
     public static class StringContextResolver3 implements ContextResolver<String> {
 
         public String getContext(Class<?> type) {
             return STRING3;
         }
     }
-    
+
     @Provider
-    @Produces( "*/*" )
+    @Produces("*/*")
     public static class StringContextResolver4 implements ContextResolver<String> {
-        
+
         public String getContext(Class<?> type) {
             return STRING4;
         }
@@ -149,7 +149,7 @@ public class ProvidersContextResolverTest extends TestCase {
         assertTrue(providers.addProvider(new IntegerContextResolver()));
         assertTrue(providers.addProvider(new ByteContextResolver()));
         assertTrue(providers.addProvider(new ListContextResolver()));
-        
+
         try {
             providers.addProvider(new NotAProvider());
             fail("expected IllegalArgumentException");
@@ -174,16 +174,15 @@ public class ProvidersContextResolverTest extends TestCase {
          * There is no context resolver that handlers Integer and /
          */
         assertEquals(_12345, providers.getContextResolver(Integer.class,
-                                                        MediaType.WILDCARD_TYPE,
-                                                        null).getContext(null));
+                                                          MediaType.WILDCARD_TYPE,
+                                                          null).getContext(null));
 
         /*
          * AtomContextResolver comes before StringContextResolver, therefore it
          * should be invoked after
          */
-        assertEquals(ATOM, providers.getContextResolver(String.class,
-                                                          MediaType.WILDCARD_TYPE,
-                                                          null).getContext(null));
+        assertEquals(ATOM, providers
+            .getContextResolver(String.class, MediaType.WILDCARD_TYPE, null).getContext(null));
 
         /*
          * AtomContextResolver returns null, if the parameter is not null,
@@ -225,39 +224,37 @@ public class ProvidersContextResolverTest extends TestCase {
         assertSame(MYCLASS, providers
             .getContextResolver(MyClass.class, new MediaType("*", "x-www-form-urlencoded"), null)
             .getContext(MyClass.class));
-        
+
         // should hit an exact match when search expands out to "text/*"
         assertSame(STRING3, providers.getContextResolver(String.class,
-                new MediaType("text",
-                              "blarg"),
-                null).getContext(String.class));
+                                                         new MediaType("text", "blarg"),
+                                                         null).getContext(String.class));
     }
-    
+
     public void testContextResolverSortingAlgorithm() {
         ProvidersRegistry providers = createProvidersRegistryImpl();
         // note: the order these are added is important to the test
         assertTrue(providers.addProvider(new StringContextResolver4()));
         assertTrue(providers.addProvider(new StringContextResolver3()));
         assertTrue(providers.addProvider(new StringContextResolver2()));
-        
-        
-        // StringContextResolver2 takes priority over the others due to the media type in @Produces
+
+        // StringContextResolver2 takes priority over the others due to the
+        // media type in @Produces
         assertSame(STRING2, providers.getContextResolver(String.class,
-                new MediaType("text",
-                              "*"),
-                null).getContext(String.class));
-        
-        // StringContextResolver2 takes priority over the others due to the media type in @Produces
+                                                         new MediaType("text", "*"),
+                                                         null).getContext(String.class));
+
+        // StringContextResolver2 takes priority over the others due to the
+        // media type in @Produces
         assertSame(STRING2, providers.getContextResolver(String.class,
-                new MediaType("*",
-                              "*"),
-                null).getContext(String.class));
-        
-        // StringContextResolver2 takes priority over the others due to the media type in @Produces
+                                                         new MediaType("*", "*"),
+                                                         null).getContext(String.class));
+
+        // StringContextResolver2 takes priority over the others due to the
+        // media type in @Produces
         assertSame(STRING2, providers.getContextResolver(String.class,
-                new MediaType("text",
-                              "plain"),
-                null).getContext(String.class));
+                                                         new MediaType("text", "plain"),
+                                                         null).getContext(String.class));
     }
 
 }

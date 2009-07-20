@@ -30,7 +30,7 @@ import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
-@SuppressWarnings( { "unchecked", "deprecation" })
+@SuppressWarnings( {"unchecked", "deprecation"})
 public class ServletContextMock implements ServletContext {
 
     private final ServletContext servletContext;

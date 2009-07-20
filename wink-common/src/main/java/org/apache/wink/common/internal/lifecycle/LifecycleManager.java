@@ -20,21 +20,17 @@
 package org.apache.wink.common.internal.lifecycle;
 
 /**
- * <h3>LifecycleManager</h3>
+ * <h3>LifecycleManager</h3> Used to create ObjectFactory
  * 
- * Used to create ObjectFactory
  * @see org.apache.wink.common.internal.factory.ObjectFactory<T>
  * @see org.apache.wink.common.internal.factory.DefaultLifecycleManager<T>
  * @see org.apache.wink.common.internal.factory.ScopeLifecycleManager<T>
- * @param <T>
- *            - type of object that ObjectFactory handles
+ * @param <T> - type of object that ObjectFactory handles
  */
 public interface LifecycleManager<T> {
 
-    ObjectFactory<T> createObjectFactory(T object)
-        throws ObjectCreationException;
+    ObjectFactory<T> createObjectFactory(T object) throws ObjectCreationException;
 
-    ObjectFactory<T> createObjectFactory(Class<T> object)
-        throws ObjectCreationException;
+    ObjectFactory<T> createObjectFactory(Class<T> object) throws ObjectCreationException;
 
 }

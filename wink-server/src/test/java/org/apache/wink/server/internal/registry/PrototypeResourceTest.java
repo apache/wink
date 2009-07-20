@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal.registry;
 
 import javax.ws.rs.GET;
@@ -31,7 +31,6 @@ import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;
 
-
 /**
  *
  */
@@ -42,7 +41,7 @@ public class PrototypeResourceTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] { TestResource.class };
+        return new Class[] {TestResource.class};
     }
 
     @Scope(ScopeType.PROTOTYPE)
@@ -54,7 +53,7 @@ public class PrototypeResourceTest extends MockServletInvocationTest {
         }
 
         @GET
-        @Produces( { MediaType.APPLICATION_ATOM_XML })
+        @Produces( {MediaType.APPLICATION_ATOM_XML})
         public String getCollection() {
             return "";
         }
@@ -62,12 +61,14 @@ public class PrototypeResourceTest extends MockServletInvocationTest {
     }
 
     public void testMultipleInvocation() throws Exception {
-        MockHttpServletRequest mockRequest = MockRequestConstructor.constructMockRequest("GET",
-            "/stam", MediaType.APPLICATION_ATOM_XML_TYPE);
+        MockHttpServletRequest mockRequest =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/stam",
+                                                        MediaType.APPLICATION_ATOM_XML_TYPE);
 
         for (int i = 0; i < ITERATIONS; ++i) {
             invoke(mockRequest);
         }
-        assertEquals(ITERATIONS , counter);
+        assertEquals(ITERATIONS, counter);
     }
 }

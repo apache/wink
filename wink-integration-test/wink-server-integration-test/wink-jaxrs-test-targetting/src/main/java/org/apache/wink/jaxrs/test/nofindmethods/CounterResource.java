@@ -27,14 +27,12 @@ public class CounterResource {
     @Path("root")
     @GET
     public String rootCounter() {
-        return Integer.valueOf(ResourceWithHTTPVerbMethodNames.counter)
-                .toString();
+        return Integer.valueOf(ResourceWithHTTPVerbMethodNames.counter).toString();
     }
 
     @Path("sublocator")
     @GET
     public String sublocatorCounter() {
-        return Integer.valueOf(SomeClassWithHTTPMethodVerbNames.counter)
-                .toString();
+        return Integer.valueOf(SomeClassWithHTTPMethodVerbNames.counter).toString();
     }
 }

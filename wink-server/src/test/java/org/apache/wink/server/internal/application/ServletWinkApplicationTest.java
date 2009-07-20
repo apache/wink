@@ -29,7 +29,6 @@ import org.apache.wink.test.mock.ServletContextMock;
 
 import junit.framework.TestCase;
 
-
 public class ServletWinkApplicationTest extends TestCase {
 
     static class ServletContextImpl extends ServletContextMock {
@@ -50,8 +49,9 @@ public class ServletWinkApplicationTest extends TestCase {
     }
 
     public void testSimpleWinkApplication() {
-        ServletWinkApplication simpleWinkApplication = new ServletWinkApplication(
-                new ServletContextImpl(), "org//apache//wink//server//internal//application//custom.app");
+        ServletWinkApplication simpleWinkApplication =
+            new ServletWinkApplication(new ServletContextImpl(),
+                                       "org//apache//wink//server//internal//application//custom.app");
         Set<Class<?>> classes = simpleWinkApplication.getClasses();
         assertTrue(classes.contains(FileProvider.class));
         assertTrue(classes.contains(SourceProvider.DOMSourceProvider.class));

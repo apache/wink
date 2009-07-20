@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.uritemplate;
 
@@ -28,28 +27,40 @@ import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.wink.common.internal.uri.UriEncoder;
 
-
 /**
- * JAX-RS style template processor for compiling, matching and expanding URI templates
+ * JAX-RS style template processor for compiling, matching and expanding URI
+ * templates
  */
 public class JaxRsUriTemplateProcessor extends UriTemplateProcessor {
 
     /*
-     * From the JAX-RS API specification: param = "{"WSP nameWSP [ ":"WSP regexWSP ] "}" name =
-     * (ALPHA / DIGIT / "_")(ALPHA / DIGIT / "." / "_" / "-" ) ; \w[\w\.-] regex =( nonbrace / "{"
-     * nonbrace "}" ) ; where nonbrace is any char other than "{" and "}"
+     * From the JAX-RS API specification: param = "{"WSP nameWSP [ ":"WSP
+     * regexWSP ] "}" name = (ALPHA / DIGIT / "_")(ALPHA / DIGIT / "." / "_" /
+     * "-" ) ; \w[\w\.-] regex =( nonbrace / "{" nonbrace "}" ) ; where nonbrace
+     * is any char other than "{" and "}"
      */
-    private static final String JAXRS_VARIABLE_PATTERN_WSP = "[ \\t]*";
-    private static final String JAXRS_VARIABLE_PATTERN_NAME = "(\\w[\\w\\.-]*)";
-    private static final String JAXRS_VARIABLE_PATTERN_NONBRACE = "[^{}]";
-    private static final String JAXRS_VARIABLE_PATTERN_REGEX = "((?:(?:" + JAXRS_VARIABLE_PATTERN_NONBRACE + ")|(?:\\{"
-            + JAXRS_VARIABLE_PATTERN_NONBRACE + "*\\}))*)";
-    private static final String JAXRS_VARIABLE_PATTERN_PARAM = "\\{" + JAXRS_VARIABLE_PATTERN_WSP
-            + JAXRS_VARIABLE_PATTERN_NAME + JAXRS_VARIABLE_PATTERN_WSP + "(?::" + JAXRS_VARIABLE_PATTERN_WSP
-            + JAXRS_VARIABLE_PATTERN_REGEX + JAXRS_VARIABLE_PATTERN_WSP + ")?\\}";
-    private static final Pattern JAXRS_VARIABLE_PATTERN = Pattern.compile(JAXRS_VARIABLE_PATTERN_PARAM);
+    private static final String  JAXRS_VARIABLE_PATTERN_WSP      = "[ \\t]*";
+    private static final String  JAXRS_VARIABLE_PATTERN_NAME     = "(\\w[\\w\\.-]*)";
+    private static final String  JAXRS_VARIABLE_PATTERN_NONBRACE = "[^{}]";
+    private static final String  JAXRS_VARIABLE_PATTERN_REGEX    =
+                                                                     "((?:(?:" + JAXRS_VARIABLE_PATTERN_NONBRACE
+                                                                         + ")|(?:\\{"
+                                                                         + JAXRS_VARIABLE_PATTERN_NONBRACE
+                                                                         + "*\\}))*)";
+    private static final String  JAXRS_VARIABLE_PATTERN_PARAM    =
+                                                                     "\\{" + JAXRS_VARIABLE_PATTERN_WSP
+                                                                         + JAXRS_VARIABLE_PATTERN_NAME
+                                                                         + JAXRS_VARIABLE_PATTERN_WSP
+                                                                         + "(?::"
+                                                                         + JAXRS_VARIABLE_PATTERN_WSP
+                                                                         + JAXRS_VARIABLE_PATTERN_REGEX
+                                                                         + JAXRS_VARIABLE_PATTERN_WSP
+                                                                         + ")?\\}";
+    private static final Pattern JAXRS_VARIABLE_PATTERN          =
+                                                                     Pattern
+                                                                         .compile(JAXRS_VARIABLE_PATTERN_PARAM);
 
-    protected int numOfNonDefaultRegexes;
+    protected int                numOfNonDefaultRegexes;
 
     /**
      * Create a processor without a template
@@ -60,11 +71,10 @@ public class JaxRsUriTemplateProcessor extends UriTemplateProcessor {
     }
 
     /**
-     * Create an processor with the provided template. The {@link #compile(String)} method is called
-     * on the provided template.
+     * Create an processor with the provided template. The
+     * {@link #compile(String)} method is called on the provided template.
      * 
-     * @param uriTemplate
-     *            the template that this processor is associated with
+     * @param uriTemplate the template that this processor is associated with
      */
     public JaxRsUriTemplateProcessor(String template) {
         this();
@@ -83,13 +93,12 @@ public class JaxRsUriTemplateProcessor extends UriTemplateProcessor {
     }
 
     /**
-     * Compile the provided uri template and pass compilation events to the provided
-     * {@link JaxRsCompilationHandler}.
+     * Compile the provided uri template and pass compilation events to the
+     * provided {@link JaxRsCompilationHandler}.
      * 
-     * @param template
-     *            the template to compile
-     * @param handler
-     *            the {@link JaxRsCompilationHandler} that will receive compilation events
+     * @param template the template to compile
+     * @param handler the {@link JaxRsCompilationHandler} that will receive
+     *            compilation events
      */
     public static void compile(String template, JaxRsCompilationHandler handler) {
         if (template == null) {
@@ -116,7 +125,8 @@ public class JaxRsUriTemplateProcessor extends UriTemplateProcessor {
 
             // capturing group 1 is the variable name
             String variable = matcher.group(1);
-            // capturing group 2 is the regular expression (will be null if it doesn't exist)
+            // capturing group 2 is the regular expression (will be null if it
+            // doesn't exist)
             String regex = matcher.group(2);
             // fire variable
             handler.variable(variable, regex);
@@ -129,16 +139,15 @@ public class JaxRsUriTemplateProcessor extends UriTemplateProcessor {
     }
 
     /**
-     * Expand the provided template using the provided values. Regular expressions of variables in
-     * the template are ignored. All variables defined in the template must have a value.
+     * Expand the provided template using the provided values. Regular
+     * expressions of variables in the template are ignored. All variables
+     * defined in the template must have a value.
      * 
-     * @param template
-     *            the uri template to expand
-     * @param values
-     *            a map with the values of the variables
+     * @param template the uri template to expand
+     * @param values a map with the values of the variables
      * @return an expanded uri using the supplied variable values
      */
-    public static String expand(String template, MultivaluedMap<String,String> values) {
+    public static String expand(String template, MultivaluedMap<String, String> values) {
         if (template == null) {
             return null;
         }
@@ -148,17 +157,17 @@ public class JaxRsUriTemplateProcessor extends UriTemplateProcessor {
     }
 
     /**
-     * Expand the provided template using the provided values. Regular expressions of variables in
-     * the template are ignored. All variables defined in the template must have a value.
+     * Expand the provided template using the provided values. Regular
+     * expressions of variables in the template are ignored. All variables
+     * defined in the template must have a value.
      * 
-     * @param uriTemplate
-     *            the uri template to expand
-     * @param values
-     *            a map with the values of the variables
-     * @param out
-     *            the output for the expansion
+     * @param uriTemplate the uri template to expand
+     * @param values a map with the values of the variables
+     * @param out the output for the expansion
      */
-    public static void expand(String template, MultivaluedMap<String,String> values, StringBuilder out) {
+    public static void expand(String template,
+                              MultivaluedMap<String, String> values,
+                              StringBuilder out) {
         if (template == null) {
             return;
         }
@@ -186,8 +195,7 @@ public class JaxRsUriTemplateProcessor extends UriTemplateProcessor {
     /**
      * Factory method for normalized uri-templates.
      * 
-     * @param uriTemplate
-     *            uri-template specification
+     * @param uriTemplate uri-template specification
      * @return instance representing (normalized) uri-template
      * @see UriTemplateProcessor#normalizeUri(String)
      */
@@ -196,7 +204,8 @@ public class JaxRsUriTemplateProcessor extends UriTemplateProcessor {
     }
 
     /**
-     * This interface is used for receiving events during the compilation of a JAX-RS uri template.
+     * This interface is used for receiving events during the compilation of a
+     * JAX-RS uri template.
      * 
      * @see {@link JaxRsUriTemplateProcessor#compile(String, JaxRsCompilationHandler)}
      */
@@ -204,27 +213,27 @@ public class JaxRsUriTemplateProcessor extends UriTemplateProcessor {
         /**
          * Variable event.
          * 
-         * @param name
-         *            the name of the variable
-         * @param regex
-         *            the regex as it appears in the template being compiled, or <code>null</code>
-         *            if no regex appeared in the template.
+         * @param name the name of the variable
+         * @param regex the regex as it appears in the template being compiled,
+         *            or <code>null</code> if no regex appeared in the template.
          */
         public void variable(String name, String regex);
 
     }
 
     /**
-     * This compilation handler handles the compilation events for compiling the uri template of a
-     * processor instance. It creates the regex pattern to use for matching and the variables used
-     * for matching and expansion, and then sets them on the processor instance.
+     * This compilation handler handles the compilation events for compiling the
+     * uri template of a processor instance. It creates the regex pattern to use
+     * for matching and the variables used for matching and expansion, and then
+     * sets them on the processor instance.
      */
-    private static class JaxRsPatternBuilder extends AbstractPatternBuilder implements JaxRsCompilationHandler {
-        
+    private static class JaxRsPatternBuilder extends AbstractPatternBuilder implements
+        JaxRsCompilationHandler {
+
         public JaxRsPatternBuilder(JaxRsUriTemplateProcessor processor) {
             super(processor);
         }
-        
+
         @Override
         public void literal(String literal) {
             super.literal(UriEncoder.encodeUriTemplate(literal, true));
@@ -245,12 +254,13 @@ public class JaxRsUriTemplateProcessor extends UriTemplateProcessor {
     }
 
     /**
-     * This compilation handler is used for creating an expansion string by replacing all variables
-     * with their values from the provided map.
+     * This compilation handler is used for creating an expansion string by
+     * replacing all variables with their values from the provided map.
      */
-    private static class JaxRsTemplateExpander extends AbstractTemplateExpander implements JaxRsCompilationHandler {
-        
-        public JaxRsTemplateExpander(MultivaluedMap<String,String> values, StringBuilder out) {
+    private static class JaxRsTemplateExpander extends AbstractTemplateExpander implements
+        JaxRsCompilationHandler {
+
+        public JaxRsTemplateExpander(MultivaluedMap<String, String> values, StringBuilder out) {
             super(values, out);
         }
 

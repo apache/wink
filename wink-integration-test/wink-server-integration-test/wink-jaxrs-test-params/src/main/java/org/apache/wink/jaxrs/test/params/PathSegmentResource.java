@@ -36,9 +36,9 @@ public class PathSegmentResource {
 
     @Path("matrix/{loc}")
     @GET
-    public String helloPath(@PathParam("loc") String path, @PathParam("loc") PathSegment pathSegment,
-                            @MatrixParam("mp") String matrix
-                            ) {
+    public String helloPath(@PathParam("loc") String path,
+                            @PathParam("loc") PathSegment pathSegment,
+                            @MatrixParam("mp") String matrix) {
         return path + "-"
             + pathSegment.getPath()
             + "-"

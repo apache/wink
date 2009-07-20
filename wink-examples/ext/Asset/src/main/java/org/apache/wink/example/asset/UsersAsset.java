@@ -36,8 +36,6 @@ import org.apache.wink.common.model.synd.SyndFeed;
 import org.apache.wink.common.model.synd.SyndPerson;
 import org.apache.wink.common.model.synd.SyndText;
 
-
-
 @Asset
 public class UsersAsset {
 
@@ -53,7 +51,7 @@ public class UsersAsset {
         return new Users(users);
     }
 
-    @Produces( { MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON })
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
     public SyndFeed getSyndFeed(@Context Providers providers, @Context UriInfo uriInfo) {
         SyndFeed synd = new SyndFeed();
         synd.setId("urn:com:hp:users");

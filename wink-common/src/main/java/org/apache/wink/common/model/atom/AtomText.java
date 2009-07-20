@@ -24,7 +24,6 @@
 // Generated on: 2008.09.15 at 04:04:57 PM IDT 
 //
 
-
 package org.apache.wink.common.model.atom;
 
 import java.util.ArrayList;
@@ -41,7 +40,6 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.wink.common.model.synd.SyndText;
 import org.apache.wink.common.model.synd.SyndTextType;
 
-
 /**
  * Text Construct Per RFC4287
  * 
@@ -51,12 +49,12 @@ import org.apache.wink.common.model.synd.SyndTextType;
  * 
  * atomPlainTextConstruct =
  *       atomCommonAttributes,
- *       attribute type { "text" | "html" }?,
+ *       attribute type { &quot;text&quot; | &quot;html&quot; }?,
  *       text
  * 
  *    atomXHTMLTextConstruct =
  *       atomCommonAttributes,
- *       attribute type { "xhtml" },
+ *       attribute type { &quot;xhtml&quot; },
  *       xhtmlDiv
  * 
  *    atomTextConstruct = atomPlainTextConstruct | atomXHTMLTextConstruct
@@ -122,29 +120,27 @@ import org.apache.wink.common.model.synd.SyndTextType;
  * </pre>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "atomText", propOrder = {
-    "any"
-})
-public class AtomText
-    extends AtomCommonAttributes
-{
+@XmlType(name = "atomText", propOrder = {"any"})
+public class AtomText extends AtomCommonAttributes {
 
     @XmlMixed
-    @XmlAnyElement(lax=true)
+    @XmlAnyElement(lax = true)
     protected List<Object> any;
     @XmlAttribute
     protected AtomTextType type;
-    
+
     @XmlTransient
-    private String savedValue = null;
-    
+    private String         savedValue = null;
+
     /**
      * Create an empty AtomText with no type and no value
      */
-    public AtomText() {}
-    
+    public AtomText() {
+    }
+
     /**
      * Create an AtomText with a type of AtomTextType.TEXT
+     * 
      * @param value the TEXT value
      */
     public AtomText(String value) {
@@ -153,6 +149,7 @@ public class AtomText
 
     /**
      * Create an AtomText with the specified value and type
+     * 
      * @param value
      * @param type
      */
@@ -171,7 +168,7 @@ public class AtomText
         }
         setValue(value.getValue());
     }
-    
+
     public SyndText toSynd(SyndText value) {
         if (value == null) {
             return value;
@@ -190,39 +187,36 @@ public class AtomText
         }
         return this.any;
     }
-    
+
     public void setValue(String value) {
         if (value == null) {
             getAny().clear();
             return;
         }
-        
+
         if (getAny().size() == 0) {
             getAny().add(value);
         } else {
             getAny().set(0, value);
         }
     }
-    
+
     public String getValue() {
         if (getAny().size() == 0) {
             return null;
         }
-        
+
         Object o = getAny().get(0);
         if (o instanceof String) {
             return (String)o;
         }
         return null;
     }
-    
+
     /**
      * Gets the value of type.
      * 
-     * @return
-     *     possible object is
-     *     {@link AtomTextType }
-     *     
+     * @return possible object is {@link AtomTextType }
      */
     public AtomTextType getType() {
         return type;
@@ -231,21 +225,18 @@ public class AtomText
     /**
      * Sets the value of type.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link AtomTextType }
-     *     
+     * @param value allowed object is {@link AtomTextType }
      */
     public void setType(AtomTextType type) {
         this.type = type;
     }
-    
-    /*package*/ void revertValue() {
+
+    /* package */void revertValue() {
         setValue(savedValue);
         savedValue = null;
     }
 
-    /*package*/ String saveValue() {
+    /* package */String saveValue() {
         this.savedValue = getValue();
         setValue(null);
         return this.savedValue;

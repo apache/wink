@@ -47,13 +47,18 @@ import org.apache.wink.server.utils.RegistrationUtils;
  */
 public class RequestProcessor {
 
-    private static final Logger logger = LoggerFactory.getLogger(RequestProcessor.class);
-    private static final String PROPERTY_ROOT_RESOURCE_NONE = "none";
-    private static final String PROPERTY_ROOT_RESOURCE_ATOM = "atom";
-    private static final String PROPERTY_ROOT_RESOURCE_ATOM_HTML = "atom+html";
-    private static final String PROPERTY_ROOT_RESOURCE_DEFAULT = PROPERTY_ROOT_RESOURCE_ATOM_HTML;
-    private static final String PROPERTY_ROOT_RESOURCE = "wink.searchPolicyContinuedSearch";
-    private static final String PROPERTY_ROOT_RESOURCE_CSS = "wink.serviceDocumentCssPath";
+    private static final Logger           logger                           =
+                                                                               LoggerFactory
+                                                                                   .getLogger(RequestProcessor.class);
+    private static final String           PROPERTY_ROOT_RESOURCE_NONE      = "none";
+    private static final String           PROPERTY_ROOT_RESOURCE_ATOM      = "atom";
+    private static final String           PROPERTY_ROOT_RESOURCE_ATOM_HTML = "atom+html";
+    private static final String           PROPERTY_ROOT_RESOURCE_DEFAULT   =
+                                                                               PROPERTY_ROOT_RESOURCE_ATOM_HTML;
+    private static final String           PROPERTY_ROOT_RESOURCE           =
+                                                                               "wink.searchPolicyContinuedSearch";
+    private static final String           PROPERTY_ROOT_RESOURCE_CSS       =
+                                                                               "wink.serviceDocumentCssPath";
 
     private final DeploymentConfiguration configuration;
 
@@ -74,9 +79,11 @@ public class RequestProcessor {
 
     private void registerRootResources() {
         Properties properties = configuration.getProperties();
-        String registerRootResource = properties.getProperty(PROPERTY_ROOT_RESOURCE, PROPERTY_ROOT_RESOURCE_DEFAULT);
+        String registerRootResource =
+            properties.getProperty(PROPERTY_ROOT_RESOURCE, PROPERTY_ROOT_RESOURCE_DEFAULT);
         if (registerRootResource.equals(PROPERTY_ROOT_RESOURCE_ATOM)) {
-            RegistrationUtils.InnerApplication application = new RegistrationUtils.InnerApplication(RootResource.class);
+            RegistrationUtils.InnerApplication application =
+                new RegistrationUtils.InnerApplication(RootResource.class);
             application.setPriority(0.1);
             configuration.addApplication(application);
         } else if (registerRootResource.equals(PROPERTY_ROOT_RESOURCE_NONE)) {
@@ -87,7 +94,8 @@ public class RequestProcessor {
             if (css != null) {
                 instance.setServiceDocumentCssPath(css);
             }
-            RegistrationUtils.InnerApplication application = new RegistrationUtils.InnerApplication(instance);
+            RegistrationUtils.InnerApplication application =
+                new RegistrationUtils.InnerApplication(instance);
             application.setPriority(0.1);
             configuration.addApplication(application);
         }
@@ -96,16 +104,15 @@ public class RequestProcessor {
     // --- request processing ---
 
     /**
-     * Dispatches the request and fills the response (even with an error message.
+     * Dispatches the request and fills the response (even with an error
+     * message.
      * 
-     * @param request
-     *            AS or mock request
-     * @param response
-     *            AS or mock response
-     * @throws IOException
-     *             I/O error
+     * @param request AS or mock request
+     * @param response AS or mock response
+     * @throws IOException I/O error
      */
-    public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+    public void handleRequest(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException {
         try {
             handleRequestWithoutFaultBarrier(request, response);
         } catch (Throwable t) {
@@ -119,8 +126,8 @@ public class RequestProcessor {
         }
     }
 
-    private void handleRequestWithoutFaultBarrier(HttpServletRequest request, HttpServletResponse response)
-            throws Throwable {
+    private void handleRequestWithoutFaultBarrier(HttpServletRequest request,
+                                                  HttpServletResponse response) throws Throwable {
 
         try {
             ServerMessageContext msgContext = createMessageContext(request, response);
@@ -154,7 +161,8 @@ public class RequestProcessor {
                 statusSep = " - ";
                 statusMessage = status.toString();
             }
-            exceptionName = String.format("%s (%d%s%s)", exceptionName, statusCode, statusSep, statusMessage);
+            exceptionName =
+                String.format("%s (%d%s%s)", exceptionName, statusCode, statusSep, statusMessage);
             if (statusCode >= 500) {
                 logger.error(String.format(messageFormat, exceptionName), t);
             } else {
@@ -165,8 +173,10 @@ public class RequestProcessor {
         }
     }
 
-    private ServerMessageContext createMessageContext(HttpServletRequest request, HttpServletResponse response) {
-        ServerMessageContext messageContext = new ServerMessageContext(request, response, configuration);
+    private ServerMessageContext createMessageContext(HttpServletRequest request,
+                                                      HttpServletResponse response) {
+        ServerMessageContext messageContext =
+            new ServerMessageContext(request, response, configuration);
         return messageContext;
     }
 
@@ -174,14 +184,16 @@ public class RequestProcessor {
         return configuration;
     }
 
-    public static RequestProcessor getRequestProcessor(ServletContext servletContext, String attributeName) {
+    public static RequestProcessor getRequestProcessor(ServletContext servletContext,
+                                                       String attributeName) {
         if (attributeName == null) {
             attributeName = RequestProcessor.class.getName();
         }
         return (RequestProcessor)servletContext.getAttribute(attributeName);
     }
 
-    public void storeRequestProcessorOnServletContext(ServletContext servletContext, String attributeName) {
+    public void storeRequestProcessorOnServletContext(ServletContext servletContext,
+                                                      String attributeName) {
         if (attributeName == null || attributeName.length() == 0) {
             attributeName = RequestProcessor.class.getName();
         }

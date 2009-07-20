@@ -35,7 +35,7 @@ import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class MessageBodyWriterIsWritablePostAnnotated  implements MessageBodyWriter<List> {
+public class MessageBodyWriterIsWritablePostAnnotated implements MessageBodyWriter<List> {
 
     public long getSize(List arg0, Class<?> arg1, Type arg2, Annotation[] arg3, MediaType arg4) {
         return -1;
@@ -51,15 +51,19 @@ public class MessageBodyWriterIsWritablePostAnnotated  implements MessageBodyWri
                 isPostAnnotated = true;
             }
         }
-        if(isMyWriterAnnotated && isPostAnnotated) {
+        if (isMyWriterAnnotated && isPostAnnotated) {
             return true;
         }
         return false;
     }
 
-    public void writeTo(List arg0, Class<?> arg1, Type arg2, Annotation[] arg3, MediaType arg4,
-        MultivaluedMap<String, Object> arg5, OutputStream arg6) throws IOException,
-        WebApplicationException {
+    public void writeTo(List arg0,
+                        Class<?> arg1,
+                        Type arg2,
+                        Annotation[] arg3,
+                        MediaType arg4,
+                        MultivaluedMap<String, Object> arg5,
+                        OutputStream arg6) throws IOException, WebApplicationException {
         Writer writer = new OutputStreamWriter(arg6);
         writer.write("postannotation:");
         for (Object o : arg0) {

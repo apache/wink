@@ -17,17 +17,17 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.model.synd;
 
 public class SyndGenerator extends SyndSimpleContent {
-    
+
     private String uri;
     private String version;
-    
-    public SyndGenerator() {}
-    
+
+    public SyndGenerator() {
+    }
+
     public SyndGenerator(String value) {
         this(value, null, null);
     }
@@ -47,15 +47,15 @@ public class SyndGenerator extends SyndSimpleContent {
     public String getUri() {
         return uri;
     }
-    
+
     public void setUri(String uri) {
         this.uri = uri;
     }
-    
+
     public String getVersion() {
         return version;
     }
-    
+
     public void setVersion(String version) {
         this.version = version;
     }
@@ -77,7 +77,7 @@ public class SyndGenerator extends SyndSimpleContent {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        SyndGenerator other = (SyndGenerator) obj;
+        SyndGenerator other = (SyndGenerator)obj;
         if (uri == null) {
             if (other.uri != null)
                 return false;
@@ -90,7 +90,5 @@ public class SyndGenerator extends SyndSimpleContent {
             return false;
         return true;
     }
-
-
 
 }

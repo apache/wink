@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common.internal.providers.entity.csv;
 
 import org.apache.wink.common.model.csv.CsvDeserializer;
@@ -26,10 +26,9 @@ import org.apache.wink.common.model.csv.CsvSerializer;
 // TODO Eli this class should be removed from the SDK (replaced with the CSV providers)
 /**
  * Defines a descriptor provider for the CsvRepresentation. The provider should
- * return two descriptors:
- * <tt>CSVDeserializationDescriptor<String[]></tt> and
- * <tt>CSVSerializationDescriptor<String[]></tt>. In case the
- * implementation decides not to implement one of these methods, it should throw
+ * return two descriptors: <tt>CSVDeserializationDescriptor<String[]></tt> and
+ * <tt>CSVSerializationDescriptor<String[]></tt>. In case the implementation
+ * decides not to implement one of these methods, it should throw
  * <tt>java.lang.UnsupportedOperationException</tt>.
  * 
  * @see org.apache.wink.common.model.csv.representation.csv.CsvDeserializer
@@ -39,10 +38,8 @@ public interface CsvDescriptorProvider {
 
     /**
      * returns the descriptor that is responsible to deserialize data from the
-     * CSV to data object
-     * 
-     * if provider decides not to implement this method, it must throw
-     * <tt>java.lang.UnsupportedOperationException</tt>
+     * CSV to data object if provider decides not to implement this method, it
+     * must throw <tt>java.lang.UnsupportedOperationException</tt>
      * 
      * @return CSVDeserializationDescriptor<String[]>
      */
@@ -50,13 +47,11 @@ public interface CsvDescriptorProvider {
 
     /**
      * returns the descriptor that is responsible to serialize from data object
-     * to the CSV
-     * 
-     * if provider decides not to implement this method, it must throw
-     * <tt>java.lang.UnsupportedOperationException</tt>
+     * to the CSV if provider decides not to implement this method, it must
+     * throw <tt>java.lang.UnsupportedOperationException</tt>
      * 
      * @return CSVSerializationDescriptor<String[]>
      */
     CsvSerializer getSerializationDescriptor();
-    
+
 }

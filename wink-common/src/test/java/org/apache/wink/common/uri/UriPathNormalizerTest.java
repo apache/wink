@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common.uri;
 
 import org.apache.wink.common.internal.uri.UriPathNormalizer;

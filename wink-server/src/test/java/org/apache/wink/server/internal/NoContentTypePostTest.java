@@ -39,7 +39,7 @@ public class NoContentTypePostTest extends MockServletInvocationTest {
 
     @Override
     protected Object[] getSingletons() {
-        return new Object[] { new PostResource() };
+        return new Object[] {new PostResource()};
     }
 
     @Path("t")
@@ -55,11 +55,11 @@ public class NoContentTypePostTest extends MockServletInvocationTest {
     }
 
     public void testPostWithoutContentType() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("POST", "t",
-            "*/*");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("POST", "t", "*/*");
         MockHttpServletResponse response = invoke(request);
-        assertEquals("status code", HttpStatus.UNSUPPORTED_MEDIA_TYPE.getCode(),
-            response.getStatus());
+        assertEquals("status code", HttpStatus.UNSUPPORTED_MEDIA_TYPE.getCode(), response
+            .getStatus());
     }
 
 }

@@ -29,12 +29,12 @@ import javax.ws.rs.core.Request;
 public class ResourceWithFieldsExt {
 
     @Context
-    private Request     request;
+    private Request  request;
 
-    private String      queryVariable;
+    private String   queryVariable;
 
     @QueryParam("q")
-    protected String    query = "initial";
+    protected String query = "initial";
 
     @QueryParam("s")
     public void setQueryVariable(String queryVariable) {

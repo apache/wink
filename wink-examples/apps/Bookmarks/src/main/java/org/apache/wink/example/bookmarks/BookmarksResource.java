@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.bookmarks;
 
 import java.net.URI;
@@ -46,12 +46,11 @@ import org.apache.wink.common.model.synd.SyndFeed;
 import org.apache.wink.common.model.synd.SyndText;
 import org.apache.wink.server.utils.LinkBuilders;
 
-
 @Workspace(workspaceTitle = "Demo Bookmarks Service", collectionTitle = "My Bookmarks")
 @Path("bookmarks")
 public class BookmarksResource {
 
-    private static final String BOOKMARK = "bookmark";
+    private static final String BOOKMARK          = "bookmark";
     private static final String SUB_RESOURCE_PATH = "{" + BOOKMARK + "}";
 
     /**
@@ -63,11 +62,11 @@ public class BookmarksResource {
      * entries.
      * 
      * @param linksBuilders
-     * @param uriInfo 
+     * @param uriInfo
      * @return syndFeed
      */
     @GET
-    @Produces( { MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON })
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
     public SyndFeed getBookmarks(@Context LinkBuilders linksBuilders, @Context UriInfo uriInfo) {
         SyndFeed feed = new SyndFeed();
         feed.setId("urn:collection:bookmarks");
@@ -87,15 +86,16 @@ public class BookmarksResource {
             SyndEntry entry = createEntry(key, bookmarks.get(key), uriInfo);
 
             // Generate system links to sub-resource
-            linksBuilders.createSystemLinksBuilder().subResource(SUB_RESOURCE_PATH).pathParam(BOOKMARK, key).build(entry.getLinks());
+            linksBuilders.createSystemLinksBuilder().subResource(SUB_RESOURCE_PATH)
+                .pathParam(BOOKMARK, key).build(entry.getLinks());
 
             // Add entry to Feed
             feed.addEntry(entry);
         }
-        
+
         // Generate system links for the resource;
         linksBuilders.createSystemLinksBuilder().build(feed.getLinks());
-        
+
         return feed;
     }
 
@@ -114,9 +114,11 @@ public class BookmarksResource {
      * @return Response
      */
     @POST
-    @Consumes( { MediaType.TEXT_PLAIN })
-    @Produces( { MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON })
-    public Response createBookmark(String bookmark, @Context UriInfo uriInfo, @Context LinkBuilders linksBuilders) {
+    @Consumes( {MediaType.TEXT_PLAIN})
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
+    public Response createBookmark(String bookmark,
+                                   @Context UriInfo uriInfo,
+                                   @Context LinkBuilders linksBuilders) {
         if (bookmark == null || bookmark.length() == 0) {
             return Response.status(HttpStatus.BAD_REQUEST.getCode()).build();
         }
@@ -134,7 +136,7 @@ public class BookmarksResource {
         return Response.created(location).entity(entry).build();
     }
 
-   /**
+    /**
      * This method is invoked when the HTTP GET method is issued by the client.
      * This occurs only when the requested representation (Http Accept header)
      * is Atom (application/atom+xml) or Json (application/json). In the case
@@ -144,14 +146,15 @@ public class BookmarksResource {
      * 
      * @param linksBuilders
      * @param uriInfo
-     * @param bookmarkId
-     *            the bookmark id to get as it appears on the request uri
+     * @param bookmarkId the bookmark id to get as it appears on the request uri
      * @return SyndEntry with the information about the bookmark
      */
     @Path(SUB_RESOURCE_PATH)
     @GET
-    @Produces( { MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON })
-    public SyndEntry getBookmark(@Context LinkBuilders linksBuilders, @Context UriInfo uriInfo, @PathParam(BOOKMARK) String bookmarkId) {
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
+    public SyndEntry getBookmark(@Context LinkBuilders linksBuilders,
+                                 @Context UriInfo uriInfo,
+                                 @PathParam(BOOKMARK) String bookmarkId) {
         // check whether the bookmark exists in the memory store
         String bookmark = BookmarkStore.getInstance().getBookmark(bookmarkId);
         if (bookmark == null) {
@@ -176,17 +179,19 @@ public class BookmarksResource {
      * will update the requested bookmark in the BookmarkStore with new content
      * taken from the request message body.
      * 
-     * @param bookmarkId
-     *            the bookmark id to update as it appears on the request uri
+     * @param bookmarkId the bookmark id to update as it appears on the request
+     *            uri
      * @return SyndEntry with the information about the updated bookmark
-     * @throws Exception
-     *             a problem with reading the input stream
+     * @throws Exception a problem with reading the input stream
      */
     @Path(SUB_RESOURCE_PATH)
     @PUT
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces( { MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON })
-    public SyndEntry updateBookmark(String bookmark, @Context LinkBuilders linksBuilders, @Context UriInfo uriInfo, @PathParam(BOOKMARK) String bookmarkId) {
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
+    public SyndEntry updateBookmark(String bookmark,
+                                    @Context LinkBuilders linksBuilders,
+                                    @Context UriInfo uriInfo,
+                                    @PathParam(BOOKMARK) String bookmarkId) {
         // check whether the bookmark exists for update
         String value = BookmarkStore.getInstance().getBookmark(bookmarkId);
         if (value == null) {
@@ -213,15 +218,17 @@ public class BookmarksResource {
      * deleted bookmark.
      * 
      * @param linksBuilders
-     * @param uriInfo 
-     * @param bookmarkId
-     *            the bookmark id to update as it appears on the request uri
+     * @param uriInfo
+     * @param bookmarkId the bookmark id to update as it appears on the request
+     *            uri
      * @return SyndEntry with the information about the deleted bookmark
      */
     @Path(SUB_RESOURCE_PATH)
     @DELETE
-    @Produces( { MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON })
-    public SyndEntry deleteBookmark(@Context LinkBuilders linksBuilders, @Context UriInfo uriInfo, @PathParam(BOOKMARK) String bookmarkId) {
+    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
+    public SyndEntry deleteBookmark(@Context LinkBuilders linksBuilders,
+                                    @Context UriInfo uriInfo,
+                                    @PathParam(BOOKMARK) String bookmarkId) {
 
         // check whether the bookmark exists for deletion
         String bookmark = BookmarkStore.getInstance().getBookmark(bookmarkId);
@@ -247,7 +254,7 @@ public class BookmarksResource {
         entry.setTitle(new SyndText("My Bookmark " + bookmarkId));
         entry.setPublished(new Date());
         entry.setBase(uriInfo.getAbsolutePath().toString());
-        
+
         if (content != null) {
             entry.setContent(new SyndContent(content));
         }

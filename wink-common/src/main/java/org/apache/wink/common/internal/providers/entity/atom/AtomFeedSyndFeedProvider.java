@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.providers.entity.atom;
 
@@ -39,31 +38,51 @@ import javax.ws.rs.ext.Provider;
 import org.apache.wink.common.model.atom.AtomFeed;
 import org.apache.wink.common.model.synd.SyndFeed;
 
-
 @Provider
 @Consumes(MediaType.APPLICATION_ATOM_XML)
 @Produces(MediaType.APPLICATION_ATOM_XML)
-public class AtomFeedSyndFeedProvider extends AbstractAtomFeedProvider<SyndFeed> implements MessageBodyReader<SyndFeed>, MessageBodyWriter<SyndFeed> {
+public class AtomFeedSyndFeedProvider extends AbstractAtomFeedProvider<SyndFeed> implements
+    MessageBodyReader<SyndFeed>, MessageBodyWriter<SyndFeed> {
 
-    public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public boolean isReadable(Class<?> type,
+                              Type genericType,
+                              Annotation[] annotations,
+                              MediaType mediaType) {
         return type == SyndFeed.class;
     }
 
-    public SyndFeed readFrom(Class<SyndFeed> type, Type genericType, Annotation[] annotations, MediaType mediaType,
-            MultivaluedMap<String,String> httpHeaders, InputStream entityStream) throws IOException,
-            WebApplicationException {
-        AtomFeed feed = readFeed(AtomFeed.class, genericType, annotations, mediaType, httpHeaders, entityStream);
+    public SyndFeed readFrom(Class<SyndFeed> type,
+                             Type genericType,
+                             Annotation[] annotations,
+                             MediaType mediaType,
+                             MultivaluedMap<String, String> httpHeaders,
+                             InputStream entityStream) throws IOException, WebApplicationException {
+        AtomFeed feed =
+            readFeed(AtomFeed.class, genericType, annotations, mediaType, httpHeaders, entityStream);
         return feed.toSynd(new SyndFeed());
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
         return type == SyndFeed.class;
     }
 
-    public void writeTo(SyndFeed t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
-            MultivaluedMap<String,Object> httpHeaders, OutputStream entityStream) throws IOException,
-            WebApplicationException {
+    public void writeTo(SyndFeed t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
         AtomFeed feed = new AtomFeed(t);
-        writeFeed(feed, AtomFeed.class, genericType, annotations, mediaType, httpHeaders, entityStream);
+        writeFeed(feed,
+                  AtomFeed.class,
+                  genericType,
+                  annotations,
+                  mediaType,
+                  httpHeaders,
+                  entityStream);
     }
 }

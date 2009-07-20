@@ -34,10 +34,10 @@ import org.slf4j.LoggerFactory;
 
 @Path(value = "/parkinglot")
 public class ParkingLot implements CarStorage {
-	
-	Logger logger = LoggerFactory.getLogger(ParkingLot.class);
-	
-    private static Set<String> cars = new HashSet<String>();
+
+    Logger                     logger = LoggerFactory.getLogger(ParkingLot.class);
+
+    private static Set<String> cars   = new HashSet<String>();
 
     @GET
     @Path(value = "/cars")
@@ -59,24 +59,24 @@ public class ParkingLot implements CarStorage {
         resp.getMetadata().putSingle("Invoked", "ParkingLot.addCar");
         return resp;
     }
-    
+
     @DELETE
     public Response removeCar(String licenseNum) {
-    	cars.remove(licenseNum);
-    	Response resp = Response.ok().build();
+        cars.remove(licenseNum);
+        Response resp = Response.ok().build();
         resp.getMetadata().putSingle("Invoked", "ParkingLot.removeCar");
         return resp;
     }
-    
+
     @Path("/cars/remove/{type}")
     public ParkingLot removeCarSubLocater(@PathParam("type") String type) {
-    	if("ParkingLot".equals(type))
-    		return this;
-    	if("ParkingGarage".equals(type))
-    		return new ParkingGarage();
-    	if("CarFerry".equals(type))
-    		return new CarFerry();
-    	return null;
+        if ("ParkingLot".equals(type))
+            return this;
+        if ("ParkingGarage".equals(type))
+            return new ParkingGarage();
+        if ("CarFerry".equals(type))
+            return new CarFerry();
+        return null;
     }
 
     public static void clear() {

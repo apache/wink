@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.qadefect.resources;
 
 import java.util.Collection;
@@ -40,14 +40,12 @@ import org.apache.wink.common.model.synd.SyndText;
 import org.apache.wink.example.qadefect.legacy.DefectBean;
 import org.apache.wink.server.utils.LinkBuilders;
 
-
-
 /**
  * Defects resource (based on collection resource)
  */
 @Asset
 public class DefectsAsset {
-    
+
     private List<DefectBean> defects;
 
     /**
@@ -62,49 +60,52 @@ public class DefectsAsset {
      * constructor will be used when we want HTML representation for the
      * resource.
      * 
-     * @param collection
-     *            defect bean collection
+     * @param collection defect bean collection
      */
     public DefectsAsset(Collection<DefectBean> defects) {
         this();
         this.defects.addAll(defects);
     }
-    
+
     public List<DefectBean> getDefects() {
         return defects;
     }
 
     @Produces
-    public SyndFeed getSyndFeed(@Context Providers providers, @Context LinkBuilders linkProcessor, 
-            @Context UriInfo uriInfo) {
+    public SyndFeed getSyndFeed(@Context Providers providers,
+                                @Context LinkBuilders linkProcessor,
+                                @Context UriInfo uriInfo) {
         SyndFeed synd = new SyndFeed();
         synd.setId("urn:com:hp:qadefects:defects");
         synd.setTitle(new SyndText("Defects"));
         synd.addAuthor(new SyndPerson("admin"));
         synd.setUpdated(new Date());
-        
+
         // set the entries
         for (DefectBean defect : defects) {
             DefectAsset defectAsset = new DefectAsset(defect, true);
             SyndEntry entry = defectAsset.getSyndEntry(providers, uriInfo, linkProcessor);
             synd.addEntry(entry);
         }
-        
+
         synd.setBase(uriInfo.getAbsolutePath().toString());
         linkProcessor.createSystemLinksBuilder().build(synd.getLinks());
         return synd;
     }
-    
+
     @Produces
     public CsvTable getCsv() {
         CsvTable cvs = new CsvTable("Id", "Name", "Severity", "Status", "Author");
         for (DefectBean defectBean : defects) {
-            cvs.addRow(defectBean.getId(), defectBean.getName(), defectBean.getSeverity(),
-                defectBean.getStatus(), defectBean.getAuthor());
+            cvs.addRow(defectBean.getId(),
+                       defectBean.getName(),
+                       defectBean.getSeverity(),
+                       defectBean.getStatus(),
+                       defectBean.getAuthor());
         }
         return cvs;
     }
-    
+
     @Consumes
     public void setCsv(CsvTable csv) {
         for (String[] row : csv.getRows()) {
@@ -112,8 +113,10 @@ public class DefectsAsset {
                 continue;
             }
             // skip the header if it exists
-            if (row[0].equals("Id") && row[1].equals("Name") && row[2].equals("Severity") &&
-                    row[3].equals("Status") && row[4].equals("Author")) {
+            if (row[0].equals("Id") && row[1].equals("Name")
+                && row[2].equals("Severity")
+                && row[3].equals("Status")
+                && row[4].equals("Author")) {
                 continue;
             }
             DefectBean defect = new DefectBean();

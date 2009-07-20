@@ -50,34 +50,45 @@ import org.apache.wink.example.qadefect.legacy.DefectBean;
 import org.apache.wink.example.qadefect.resources.DefectsResource;
 import org.apache.wink.server.utils.LinkBuilders;
 
-
 @Provider
-@Produces( { MediaType.APPLICATION_ATOM_XML, MediaType.WILDCARD })
-@Consumes( { MediaType.APPLICATION_ATOM_XML, MediaType.WILDCARD })
+@Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.WILDCARD})
+@Consumes( {MediaType.APPLICATION_ATOM_XML, MediaType.WILDCARD})
 public class DefectBeanProvider implements MessageBodyReader<DefectBean>,
     MessageBodyWriter<DefectBean> {
 
     @Context
-    private Providers     providers;
+    private Providers    providers;
     @Context
-    private LinkBuilders  linkBuilders;
+    private LinkBuilders linkBuilders;
     @Context
-    private UriInfo       uriInfo;
+    private UriInfo      uriInfo;
 
-    public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType) {
+    public boolean isReadable(Class<?> type,
+                              Type genericType,
+                              Annotation[] annotations,
+                              MediaType mediaType) {
         return type == DefectBean.class;
     }
 
-    public DefectBean readFrom(Class<DefectBean> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream)
-        throws IOException, WebApplicationException {
+    public DefectBean readFrom(Class<DefectBean> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType,
+                               MultivaluedMap<String, String> httpHeaders,
+                               InputStream entityStream) throws IOException,
+        WebApplicationException {
 
         // deserialize to SyndEntry
-        MessageBodyReader<SyndEntry> messageBodyReader = providers.getMessageBodyReader(
-            SyndEntry.class, SyndEntry.class, annotations, mediaType);
-        SyndEntry syndEntry = messageBodyReader.readFrom(SyndEntry.class, SyndEntry.class,
-            annotations, mediaType, httpHeaders, entityStream);
+        MessageBodyReader<SyndEntry> messageBodyReader =
+            providers
+                .getMessageBodyReader(SyndEntry.class, SyndEntry.class, annotations, mediaType);
+        SyndEntry syndEntry =
+            messageBodyReader.readFrom(SyndEntry.class,
+                                       SyndEntry.class,
+                                       annotations,
+                                       mediaType,
+                                       httpHeaders,
+                                       entityStream);
 
         // verify that SyndEntry contains xml content
         SyndContent content = syndEntry.getContent();
@@ -92,47 +103,78 @@ public class DefectBeanProvider implements MessageBodyReader<DefectBean>,
         }
 
         // deserialize content to DefectBean
-        MessageBodyReader<DefectBean> reader = providers.getMessageBodyReader(type, genericType,
-            annotations, MediaType.APPLICATION_XML_TYPE);
-        return reader.readFrom(type, genericType, annotations, mediaType, httpHeaders,
-            new ByteArrayInputStream(value.getBytes()));
+        MessageBodyReader<DefectBean> reader =
+            providers.getMessageBodyReader(type,
+                                           genericType,
+                                           annotations,
+                                           MediaType.APPLICATION_XML_TYPE);
+        return reader.readFrom(type,
+                               genericType,
+                               annotations,
+                               mediaType,
+                               httpHeaders,
+                               new ByteArrayInputStream(value.getBytes()));
     }
 
-    public long getSize(DefectBean t, Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType) {
+    public long getSize(DefectBean t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
         return -1;
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
         return type == DefectBean.class;
     }
 
-    public void writeTo(DefectBean bean, Class<?> type, Type genericType, Annotation[] annotations,
-        MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
-        throws IOException, WebApplicationException {
+    public void writeTo(DefectBean bean,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
 
         // create content of SyndEntry
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        MessageBodyWriter<DefectBean> writer = providers.getMessageBodyWriter(DefectBean.class,
-            DefectBean.class, annotations, MediaType.APPLICATION_XML_TYPE);
-        writer.writeTo(bean, bean.getClass(), bean.getClass(), annotations,
-            MediaType.APPLICATION_XML_TYPE, httpHeaders, os);
+        MessageBodyWriter<DefectBean> writer =
+            providers.getMessageBodyWriter(DefectBean.class,
+                                           DefectBean.class,
+                                           annotations,
+                                           MediaType.APPLICATION_XML_TYPE);
+        writer.writeTo(bean,
+                       bean.getClass(),
+                       bean.getClass(),
+                       annotations,
+                       MediaType.APPLICATION_XML_TYPE,
+                       httpHeaders,
+                       os);
 
         // create SyndEntry
         SyndEntry syndEntry = createSyndEntry(bean);
         // set content
-        syndEntry.setContent(new SyndContent(os.toString("UTF-8"), MediaType.APPLICATION_XML, false));
+        syndEntry
+            .setContent(new SyndContent(os.toString("UTF-8"), MediaType.APPLICATION_XML, false));
 
         // generate links
-        DefectsResource defectsResource = (DefectsResource) uriInfo.getMatchedResources().get(0);
-        generateLinksForEntry(syndEntry,  linkBuilders, defectsResource.getDefectTestResource());
+        DefectsResource defectsResource = (DefectsResource)uriInfo.getMatchedResources().get(0);
+        generateLinksForEntry(syndEntry, linkBuilders, defectsResource.getDefectTestResource());
 
         // serialize SyndEntry according to the requested media type
-        MessageBodyWriter<SyndEntry> syndEntryWriter = providers.getMessageBodyWriter(
-            SyndEntry.class, SyndEntry.class, annotations, mediaType);
-        syndEntryWriter.writeTo(syndEntry, syndEntry.getClass(), syndEntry.getClass(), annotations,
-            mediaType, httpHeaders, entityStream);
+        MessageBodyWriter<SyndEntry> syndEntryWriter =
+            providers
+                .getMessageBodyWriter(SyndEntry.class, SyndEntry.class, annotations, mediaType);
+        syndEntryWriter.writeTo(syndEntry,
+                                syndEntry.getClass(),
+                                syndEntry.getClass(),
+                                annotations,
+                                mediaType,
+                                httpHeaders,
+                                entityStream);
     }
 
     public static SyndEntry createSyndEntry(DefectBean bean) {
@@ -144,10 +186,10 @@ public class DefectBeanProvider implements MessageBodyReader<DefectBean>,
         syndEntry.setSummary(new SyndText(bean.getDescription()));
         syndEntry.getAuthors().add(new SyndPerson(bean.getAuthor()));
 
-        syndEntry.getCategories().add(
-            new SyndCategory("urn:com:hp:qadefects:categories:severity", bean.getSeverity(), null));
-        syndEntry.getCategories().add(
-            new SyndCategory("urn:com:hp:qadefects:categories:status", bean.getStatus(), null));
+        syndEntry.getCategories().add(new SyndCategory("urn:com:hp:qadefects:categories:severity",
+                                                       bean.getSeverity(), null));
+        syndEntry.getCategories().add(new SyndCategory("urn:com:hp:qadefects:categories:status",
+                                                       bean.getStatus(), null));
 
         if (bean.getCreated() != null) {
             syndEntry.setPublished(bean.getCreated());
@@ -155,17 +197,18 @@ public class DefectBeanProvider implements MessageBodyReader<DefectBean>,
         return syndEntry;
     }
 
-    public static void generateLinksForEntry(SyndEntry entry, LinkBuilders linkBuilders, Object testsResource) {
-        
+    public static void generateLinksForEntry(SyndEntry entry,
+                                             LinkBuilders linkBuilders,
+                                             Object testsResource) {
+
         // generate system links
         String defectId = entry.getId().substring(entry.getId().lastIndexOf(':') + 1);
         linkBuilders.createSystemLinksBuilder().subResource(defectId).build(entry.getLinks());
-        
-        //generate related links - each defect can access its tests
-        linkBuilders.createSingleLinkBuilder().resource(testsResource).
-                      rel(AtomConstants.ATOM_REL_RELATED).
-                      pathParam(DefectsResource.DEFECT_PARAM, defectId).type(MediaType.APPLICATION_ATOM_XML_TYPE).
-                      build(entry.getLinks());
+
+        // generate related links - each defect can access its tests
+        linkBuilders.createSingleLinkBuilder().resource(testsResource)
+            .rel(AtomConstants.ATOM_REL_RELATED).pathParam(DefectsResource.DEFECT_PARAM, defectId)
+            .type(MediaType.APPLICATION_ATOM_XML_TYPE).build(entry.getLinks());
     }
 
 }

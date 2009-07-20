@@ -31,11 +31,9 @@ import org.apache.wink.common.categories.Categories;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.model.atom.AtomCategory;
 
-
 /**
- * This Resource holds all categories that are supported by QADefects Application
- * Each Category is identified by "Category Name"
- * 
+ * This Resource holds all categories that are supported by QADefects
+ * Application Each Category is identified by "Category Name"
  */
 
 public class CategoriesResource extends AbstractDynamicResource {
@@ -56,8 +54,7 @@ public class CategoriesResource extends AbstractDynamicResource {
      */
     @GET
     @Produces(MediaTypeUtils.ATOM_CATEGORIES_DOCUMENT)
-    public Categories getCategoriesDocument(
-        @PathParam(CategoryParamCN) String categoryName) {
+    public Categories getCategoriesDocument(@PathParam(CategoryParamCN) String categoryName) {
 
         Categories cats = null;
         if (categoryName.equals(SeverityCN)) {

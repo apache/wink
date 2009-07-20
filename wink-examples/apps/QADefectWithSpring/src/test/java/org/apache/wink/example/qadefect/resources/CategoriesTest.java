@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.qadefect.resources;
 
 import java.io.StringReader;
@@ -35,15 +35,16 @@ import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 /**
  *
  */
 public class CategoriesTest extends QADefectsTest {
 
     public void testServiceDocument() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "/",
-            MediaTypeUtils.ATOM_SERVICE_DOCUMENT_TYPE);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/",
+                                                        MediaTypeUtils.ATOM_SERVICE_DOCUMENT_TYPE);
         MockHttpServletResponse response = invoke(request);
         assertEquals("status", 200, response.getStatus());
 
@@ -64,7 +65,7 @@ public class CategoriesTest extends QADefectsTest {
         AppCategories categoriesHref = defectsCollection.getCategories().get(0);
         assertFalse(categoriesHref.isInline());
         assertEquals("http://localhost:80/categories/severity?alt=application%2Fatomcat%2Bxml",
-            categoriesHref.getHref());
+                     categoriesHref.getHref());
 
         AppCategories categoriesInline = defectsCollection.getCategories().get(1);
         AtomCategory category1 = categoriesInline.getCategory().get(0);
@@ -86,13 +87,14 @@ public class CategoriesTest extends QADefectsTest {
     }
 
     public void testAltLink() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-            CategoriesResource.CategoriesURL + "/" + CategoriesResource.SeverityCN,
-            MediaTypeUtils.ATOM_CATEGORIES_DOCUMENT_TYPE);
+        MockHttpServletRequest request =
+            MockRequestConstructor
+                .constructMockRequest("GET", CategoriesResource.CategoriesURL + "/"
+                    + CategoriesResource.SeverityCN, MediaTypeUtils.ATOM_CATEGORIES_DOCUMENT_TYPE);
         MockHttpServletResponse response = invoke(request);
         assertEquals("status", 200, response.getStatus());
-        AppCategories categories = AppCategories.unmarshal(new StringReader(
-            response.getContentAsString()));
+        AppCategories categories =
+            AppCategories.unmarshal(new StringReader(response.getContentAsString()));
         assertEquals("urn:com:hp:qadefects:categories:severity", categories.getScheme());
         AtomCategory category1 = categories.getCategory().get(0);
         assertEquals("critical", category1.getLabel());

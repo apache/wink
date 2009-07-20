@@ -29,7 +29,6 @@ import javax.ws.rs.core.MediaType;
 import org.apache.wink.common.model.synd.SyndLink;
 import org.apache.wink.server.utils.LinkBuilders;
 
-
 /**
  * Displays a counter.
  */

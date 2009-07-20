@@ -28,19 +28,19 @@ import javax.ws.rs.core.Response;
 
 public abstract class AbstractClassB {
 
-	@GET
-	@Path("abstract_method1/{p}")
-	@Encoded
-	public String method1(@PathParam("p") String path) {
-		return "Abstract Method1";
-	}
-	
-	@POST
-	@Path("abstract_method2/{p}")
-	@Encoded
-	public Response method2(@PathParam("p") String path) {
-		Response resp = Response.ok().build();
+    @GET
+    @Path("abstract_method1/{p}")
+    @Encoded
+    public String method1(@PathParam("p") String path) {
+        return "Abstract Method1";
+    }
+
+    @POST
+    @Path("abstract_method2/{p}")
+    @Encoded
+    public Response method2(@PathParam("p") String path) {
+        Response resp = Response.ok().build();
         resp.getMetadata().putSingle("Invoked", "AbstractClassB.method2");
         return resp;
-	}
+    }
 }

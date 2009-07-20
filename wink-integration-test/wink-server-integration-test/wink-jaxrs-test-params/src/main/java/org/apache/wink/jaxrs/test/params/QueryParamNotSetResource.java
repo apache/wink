@@ -42,25 +42,25 @@ public class QueryParamNotSetResource {
     @Path("short")
     @GET
     public String getDefault(@QueryParam("smallCount") short smallCount) {
-        return ""+smallCount;
+        return "" + smallCount;
     }
 
     @Path("long")
     @GET
     public String getDefault(@QueryParam("longCount") long longCount) {
-        return ""+longCount;
+        return "" + longCount;
     }
 
     @Path("float")
     @GET
     public String getDefault(@QueryParam("floatCount") float floatCount) {
-        return ""+floatCount;
+        return "" + floatCount;
     }
 
     @Path("double")
     @GET
     public String getDefault(@QueryParam("d") double count) {
-        return ""+count;
+        return "" + count;
     }
 
     @Path("byte")
@@ -68,8 +68,8 @@ public class QueryParamNotSetResource {
     @Produces("text/plain")
     public String getDefault(@QueryParam("b") byte count) {
         Logger logger = LoggerFactory.getLogger(QueryParamNotSetResource.class);
-        logger.error(count+"");
-        return ""+count;
+        logger.error(count + "");
+        return "" + count;
     }
 
     @Path("char")
@@ -81,12 +81,12 @@ public class QueryParamNotSetResource {
     @Path("set")
     @GET
     public String getDefault(@QueryParam("bag") Set<Integer> stuff) {
-        return ""+stuff.size();
+        return "" + stuff.size();
     }
 
     @Path("list")
     @GET
     public String getDefault(@QueryParam("letter") List<String> stuff) {
-        return ""+stuff.size();
+        return "" + stuff.size();
     }
 }

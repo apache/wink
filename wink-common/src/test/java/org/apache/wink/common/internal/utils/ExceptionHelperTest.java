@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common.internal.utils;
 
 import java.io.PrintWriter;
@@ -29,16 +29,16 @@ import junit.framework.TestCase;
 
 /**
  * Test for class ExceptionHelper
- *
+ * 
  * @see org.apache.wink.common.internal.utils.ExceptionHelper
  */
 public class ExceptionHelperTest extends TestCase {
-    private static int i = 0;
+    private static int       i             = 0;
     private static final int MAX_RECURSIVE = 200;
 
     /**
-     * Test converting Throwable message and stacktrace to String.
-     * No truncating.
+     * Test converting Throwable message and stacktrace to String. No
+     * truncating.
      */
     public void testStackTraceToStringFull() {
         // create normal exception with short stacktarce
@@ -50,25 +50,25 @@ public class ExceptionHelperTest extends TestCase {
         t.printStackTrace(new PrintWriter(stringWriter));
         String expectedStackTrace = stringWriter.toString();
         assertEquals("Stack trace of Throwable is printed fully. Tested stacktrace:" + testedStackTrace,
-                expectedStackTrace, testedStackTrace);
+                     expectedStackTrace,
+                     testedStackTrace);
     }
 
     /**
-     * Test converting Throwable message and stacktrace to String.
-     * Check that long stacktrace gets truncated.
+     * Test converting Throwable message and stacktrace to String. Check that
+     * long stacktrace gets truncated.
      */
     public void testStackTraceToStringTruncated() {
         // create long stacktrace and serialize it by helper
         Throwable t = createThrowableWithLongStacktrace();
         String testedStackTrace = ExceptionHelper.stackTraceToString(t);
         assertTrue("Stack trace of Throwable is truncated. Tested stacktrace:" + testedStackTrace,
-                testedStackTrace.contains("... [ too long - truncated ]"));
+                   testedStackTrace.contains("... [ too long - truncated ]"));
     }
-
 
     /**
      * Creates Throwable with a long stacktrace by calling itself recursively
-     *
+     * 
      * @return long stacktrace
      */
     private Throwable createThrowableWithLongStacktrace() {

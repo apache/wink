@@ -42,7 +42,6 @@ import org.apache.wink.server.internal.resources.RootResource;
 
 import junit.framework.TestCase;
 
-
 public class ApplicationProcessorTest extends TestCase {
 
     private static class ResourceRegistryMock extends ResourceRegistry {
@@ -108,21 +107,32 @@ public class ApplicationProcessorTest extends TestCase {
             return instances.add(provider);
         }
     }
-    
+
     @Provider
     private static class BadProvider extends RuntimeException {
-        public BadProvider() {super();}
-        public BadProvider(String message) {super(message);}
-    }
-    
-    @Path("bad-resource")
-    private static class BadResource extends RuntimeException {
-        public BadResource() {super();}
-        public BadResource(String message) {super(message);}
+        public BadProvider() {
+            super();
+        }
+
+        public BadProvider(String message) {
+            super(message);
+        }
     }
 
-    private static final StreamingOutputProvider StreamingOutputProvider = new StreamingOutputProvider();
-    private static final RootResource            rootResource               = new RootResource();
+    @Path("bad-resource")
+    private static class BadResource extends RuntimeException {
+        public BadResource() {
+            super();
+        }
+
+        public BadResource(String message) {
+            super(message);
+        }
+    }
+
+    private static final StreamingOutputProvider StreamingOutputProvider =
+                                                                             new StreamingOutputProvider();
+    private static final RootResource            rootResource            = new RootResource();
 
     private static class ApplicationMock extends Application {
 
@@ -150,10 +160,12 @@ public class ApplicationProcessorTest extends TestCase {
 
     }
 
-    private static final HtmlServiceDocumentResource HtmlServiceDocument = new HtmlServiceDocumentResource();
+    private static final HtmlServiceDocumentResource HtmlServiceDocument =
+                                                                             new HtmlServiceDocumentResource();
     private static final StringProvider              StringProvider      = new StringProvider();
-    private static final AbstractDynamicResource     DynamicResource     = new AbstractDynamicResource() {
-                                                                         };
+    private static final AbstractDynamicResource     DynamicResource     =
+                                                                             new AbstractDynamicResource() {
+                                                                             };
 
     private static class WinkApplicationMock extends WinkApplication {
 
@@ -195,7 +207,8 @@ public class ApplicationProcessorTest extends TestCase {
     public void testApplication() {
         ResourceRegistryMock resourceRegistry = new ResourceRegistryMock();
         ProvidersRegistryMock providersRegistry = new ProvidersRegistryMock();
-        new ApplicationProcessor(new ApplicationMock(), resourceRegistry, providersRegistry).process();
+        new ApplicationProcessor(new ApplicationMock(), resourceRegistry, providersRegistry)
+            .process();
         assertTrue(providersRegistry.classes.contains(FileProvider.class));
         assertTrue(resourceRegistry.classes.contains(RootResource.class));
         assertEquals(1, providersRegistry.classes.size());
@@ -209,7 +222,8 @@ public class ApplicationProcessorTest extends TestCase {
     public void testWinkApplication() {
         ResourceRegistryMock resourceRegistry = new ResourceRegistryMock();
         ProvidersRegistryMock providersRegistry = new ProvidersRegistryMock();
-        new ApplicationProcessor(new WinkApplicationMock(), resourceRegistry, providersRegistry).process();
+        new ApplicationProcessor(new WinkApplicationMock(), resourceRegistry, providersRegistry)
+            .process();
         assertTrue(providersRegistry.classes.contains(FileProvider.class));
         assertTrue(resourceRegistry.classes.contains(RootResource.class));
         assertEquals(1, providersRegistry.classes.size());

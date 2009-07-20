@@ -44,21 +44,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 
-
 public abstract class AbstractJAXBProvider {
 
-    private static final Logger logger = LoggerFactory.getLogger(AbstractJAXBProvider.class);
-    private static final Map<Class<?>, JAXBContext> jaxbDefaultContexts = new WeakHashMap<Class<?>, JAXBContext>();
+    private static final Logger                     logger              =
+                                                                            LoggerFactory
+                                                                                .getLogger(AbstractJAXBProvider.class);
+    private static final Map<Class<?>, JAXBContext> jaxbDefaultContexts =
+                                                                            new WeakHashMap<Class<?>, JAXBContext>();
 
     @Context
-    private Providers providers;
-    
-    protected final Unmarshaller getUnmarshaller(Class<?> type, MediaType mediaType) throws JAXBException {
+    private Providers                               providers;
+
+    protected final Unmarshaller getUnmarshaller(Class<?> type, MediaType mediaType)
+        throws JAXBException {
         JAXBContext context = getContext(type, mediaType);
         return context.createUnmarshaller();
     }
 
-    protected final Marshaller getMarshaller(Class<?> type, MediaType mediaType) throws JAXBException {
+    protected final Marshaller getMarshaller(Class<?> type, MediaType mediaType)
+        throws JAXBException {
         JAXBContext context = getContext(type, mediaType);
         return context.createMarshaller();
     }
@@ -68,16 +72,17 @@ public abstract class AbstractJAXBProvider {
     }
 
     public static boolean isJAXBObject(Class<?> type, Type genericType) {
-        return type.getAnnotation(XmlRootElement.class) != null || 
-                    type.getAnnotation(XmlType.class) != null;
+        return type.getAnnotation(XmlRootElement.class) != null || type
+            .getAnnotation(XmlType.class) != null;
     }
-    
+
     public static boolean isJAXBElement(Class<?> type, Type genericType) {
         return (type == JAXBElement.class && genericType instanceof ParameterizedType);
     }
 
     private JAXBContext getContext(Class<?> type, MediaType mediaType) throws JAXBException {
-        ContextResolver<JAXBContext> contextResolver = providers.getContextResolver(JAXBContext.class, mediaType);
+        ContextResolver<JAXBContext> contextResolver =
+            providers.getContextResolver(JAXBContext.class, mediaType);
         JAXBContext context = null;
 
         if (contextResolver != null) {
@@ -93,23 +98,25 @@ public abstract class AbstractJAXBProvider {
     private JAXBContext getDefaultContext(Class<?> type) throws JAXBException {
         synchronized (jaxbDefaultContexts) {
             JAXBContext context = jaxbDefaultContexts.get(type);
-            if(context == null){
+            if (context == null) {
                 context = JAXBContext.newInstance(type);
                 jaxbDefaultContexts.put(type, context);
             }
             return context;
         }
     }
-    
+
     /**
-     * If the object is not a JAXBElement and is annotated with XmlType but not with 
-     * XmlRootElement, then it is automatically wrapped in a JAXBElement 
+     * If the object is not a JAXBElement and is annotated with XmlType but not
+     * with XmlRootElement, then it is automatically wrapped in a JAXBElement
+     * 
      * @param t
      * @param type
      * @return
      */
     protected Object getEntityToMarshal(Object jaxbObject, Class<?> type) {
-        // in case JAXB Objects is not annotated with XmlRootElement, Wrap JAXB Objects with JAXBElement
+        // in case JAXB Objects is not annotated with XmlRootElement, Wrap JAXB
+        // Objects with JAXBElement
         if (type.getAnnotation(XmlRootElement.class) == null && type.getAnnotation(XmlType.class) != null) {
             JAXBElement<?> wrappedJAXBElement = wrapInJAXBElement(jaxbObject, type);
             if (wrappedJAXBElement == null) {
@@ -136,13 +143,15 @@ public abstract class AbstractJAXBProvider {
                 for (int i = 0; i < method.length; i++) {
                     // Invoke method
                     Method current = method[i];
-                    if (current.getParameterTypes().length == 1 && current.getParameterTypes()[0].equals(type) && current.getName().startsWith("create")) {
-                        Object result = current.invoke(factory, new Object[] { jaxbObject });
+                    if (current.getParameterTypes().length == 1 && current.getParameterTypes()[0]
+                        .equals(type)
+                        && current.getName().startsWith("create")) {
+                        Object result = current.invoke(factory, new Object[] {jaxbObject});
                         return JAXBElement.class.cast(result);
                     }
                 }
                 return null;
-            } 
+            }
             logger.warn("Failed to instantiate object factory for {}", type.getName());
             return defaultWrapInJAXBElement(jaxbObject, type);
         } catch (Exception e) {
@@ -171,13 +180,14 @@ public abstract class AbstractJAXBProvider {
         }
 
         if (!factoryClass.isAnnotationPresent(XmlRegistry.class)) {
-            logger.error("Found ObjectFactory for {} is not annotated with XmlRegistry.class", type.getName());
+            logger.error("Found ObjectFactory for {} is not annotated with XmlRegistry.class", type
+                .getName());
             return null;
         }
 
         return factoryClass;
     }
-    
+
     @SuppressWarnings("unchecked")
     private JAXBElement<?> defaultWrapInJAXBElement(Object jaxbObject, Class<?> type) {
         logger.info("Creating default JAXBElement for {}", type.getName());

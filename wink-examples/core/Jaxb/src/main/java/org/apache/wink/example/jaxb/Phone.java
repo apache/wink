@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.example.jaxb;
 
@@ -27,16 +26,17 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name="phone")
+@XmlRootElement(name = "phone")
 public class Phone {
 
     @XmlElement
     int areaCode;
     @XmlElement
     int number;
-    
-    public Phone() {}
-    
+
+    public Phone() {
+    }
+
     public Phone(int areaCode, int number) {
         this.areaCode = areaCode;
         this.number = number;

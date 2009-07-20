@@ -64,7 +64,7 @@ public class UserProvidersOverBuiltinProviderTest extends MockServletInvocationT
     }
 
     @Provider
-//    @Consumes("abcd/xyz")
+    // @Consumes("abcd/xyz")
     public static class StringReaderProvider implements MessageBodyReader<Object> {
 
         public boolean isReadable(Class<?> type,

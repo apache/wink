@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common.http;
 
 import java.util.HashMap;
@@ -28,70 +28,263 @@ import java.util.Map;
  */
 public class HttpStatus implements Cloneable {
 
-    private static Map<Integer,HttpStatus> valuesByInt = new HashMap<Integer, HttpStatus>();
+    private static Map<Integer, HttpStatus> valuesByInt                     =
+                                                                                new HashMap<Integer, HttpStatus>();
 
-    private static final String SL_11_START = "HTTP/1.1 ";
+    private static final String             SL_11_START                     = "HTTP/1.1 ";
 
-    public static final HttpStatus CONTINUE = new HttpStatus(100, "Continue", true);
-    public static final HttpStatus SWITCHING_PROTOCOLS = new HttpStatus(101, "Switching Protocols", true);
-    public static final HttpStatus PROCESSING = new HttpStatus(102, "Processing", true);
+    public static final HttpStatus          CONTINUE                        =
+                                                                                new HttpStatus(
+                                                                                               100,
+                                                                                               "Continue",
+                                                                                               true);
+    public static final HttpStatus          SWITCHING_PROTOCOLS             =
+                                                                                new HttpStatus(
+                                                                                               101,
+                                                                                               "Switching Protocols",
+                                                                                               true);
+    public static final HttpStatus          PROCESSING                      =
+                                                                                new HttpStatus(
+                                                                                               102,
+                                                                                               "Processing",
+                                                                                               true);
 
-    public static final HttpStatus OK = new HttpStatus(200, "OK", true);
-    public static final HttpStatus CREATED = new HttpStatus(201, "Created", true);
-    public static final HttpStatus ACCEPTED = new HttpStatus(202, "Accepted", true);
-    public static final HttpStatus NON_AUTHORITATIVE_INFORMATION = new HttpStatus(203, "Non Authoritative Information", true);
-    public static final HttpStatus NO_CONTENT = new HttpStatus(204, "No Content", true);
-    public static final HttpStatus RESET_CONTENT = new HttpStatus(205, "Reset Content", true);
-    public static final HttpStatus PARTIAL_CONTENT = new HttpStatus(206, "Partial Content", true);
-    public static final HttpStatus MULTI_STATUS = new HttpStatus(207, "Multi-Status", true);
+    public static final HttpStatus          OK                              =
+                                                                                new HttpStatus(
+                                                                                               200,
+                                                                                               "OK",
+                                                                                               true);
+    public static final HttpStatus          CREATED                         =
+                                                                                new HttpStatus(
+                                                                                               201,
+                                                                                               "Created",
+                                                                                               true);
+    public static final HttpStatus          ACCEPTED                        =
+                                                                                new HttpStatus(
+                                                                                               202,
+                                                                                               "Accepted",
+                                                                                               true);
+    public static final HttpStatus          NON_AUTHORITATIVE_INFORMATION   =
+                                                                                new HttpStatus(
+                                                                                               203,
+                                                                                               "Non Authoritative Information",
+                                                                                               true);
+    public static final HttpStatus          NO_CONTENT                      =
+                                                                                new HttpStatus(
+                                                                                               204,
+                                                                                               "No Content",
+                                                                                               true);
+    public static final HttpStatus          RESET_CONTENT                   =
+                                                                                new HttpStatus(
+                                                                                               205,
+                                                                                               "Reset Content",
+                                                                                               true);
+    public static final HttpStatus          PARTIAL_CONTENT                 =
+                                                                                new HttpStatus(
+                                                                                               206,
+                                                                                               "Partial Content",
+                                                                                               true);
+    public static final HttpStatus          MULTI_STATUS                    =
+                                                                                new HttpStatus(
+                                                                                               207,
+                                                                                               "Multi-Status",
+                                                                                               true);
 
-    public static final HttpStatus MULTIPLE_CHOICES = new HttpStatus(300, "Multiple Choices", true);
-    public static final HttpStatus MOVED_PERMANENTLY = new HttpStatus(301, "Moved Permanently", true);
-    public static final HttpStatus FOUND = new HttpStatus(302, "Found", true);
-    public static final HttpStatus SEE_OTHER = new HttpStatus(303, "See Other", true);
-    public static final HttpStatus NOT_MODIFIED = new HttpStatus(304, "Not Modified", true);
-    public static final HttpStatus USE_PROXY = new HttpStatus(305, "Use Proxy", true);
-    public static final HttpStatus TEMPORARY_REDIRECT = new HttpStatus(307, "Temporary Redirect", true);
+    public static final HttpStatus          MULTIPLE_CHOICES                =
+                                                                                new HttpStatus(
+                                                                                               300,
+                                                                                               "Multiple Choices",
+                                                                                               true);
+    public static final HttpStatus          MOVED_PERMANENTLY               =
+                                                                                new HttpStatus(
+                                                                                               301,
+                                                                                               "Moved Permanently",
+                                                                                               true);
+    public static final HttpStatus          FOUND                           =
+                                                                                new HttpStatus(
+                                                                                               302,
+                                                                                               "Found",
+                                                                                               true);
+    public static final HttpStatus          SEE_OTHER                       =
+                                                                                new HttpStatus(
+                                                                                               303,
+                                                                                               "See Other",
+                                                                                               true);
+    public static final HttpStatus          NOT_MODIFIED                    =
+                                                                                new HttpStatus(
+                                                                                               304,
+                                                                                               "Not Modified",
+                                                                                               true);
+    public static final HttpStatus          USE_PROXY                       =
+                                                                                new HttpStatus(
+                                                                                               305,
+                                                                                               "Use Proxy",
+                                                                                               true);
+    public static final HttpStatus          TEMPORARY_REDIRECT              =
+                                                                                new HttpStatus(
+                                                                                               307,
+                                                                                               "Temporary Redirect",
+                                                                                               true);
 
-    public static final HttpStatus BAD_REQUEST = new HttpStatus(400, "Bad Request", true);
-    public static final HttpStatus UNAUTHORIZED = new HttpStatus(401, "Unauthorized", true);
-    public static final HttpStatus PAYMENT_REQUIRED = new HttpStatus(402, "Payment Required", true);
-    public static final HttpStatus FORBIDDEN = new HttpStatus(403, "Forbidden", true);
-    public static final HttpStatus NOT_FOUND = new HttpStatus(404, "Not Found", true);
-    public static final HttpStatus METHOD_NOT_ALLOWED = new HttpStatus(405, "Method Not Allowed", true);
-    public static final HttpStatus NOT_ACCEPTABLE = new HttpStatus(406, "Not Acceptable", true);
-    public static final HttpStatus PROXY_AUTHENTICATION_REQUIRED = new HttpStatus(407, "Proxy Authentication Required", true);
-    public static final HttpStatus REQUEST_TIMEOUT = new HttpStatus(408, "Request Timeout", true);
-    public static final HttpStatus CONFLICT = new HttpStatus(409, "Conflict", true);
-    public static final HttpStatus GONE = new HttpStatus(410, "Gone", true);
-    public static final HttpStatus LENGTH_REQUIRED = new HttpStatus(411, "Length Required", true);
-    public static final HttpStatus PRECONDITION_FAILED = new HttpStatus(412, "Precondition Failed", true);
-    public static final HttpStatus REQUEST_TOO_LONG = new HttpStatus(413, "Request Too Long", true);
-    public static final HttpStatus REQUEST_URI_TOO_LONG = new HttpStatus(414, "Request-URI Too Long", true);
-    public static final HttpStatus UNSUPPORTED_MEDIA_TYPE = new HttpStatus(415, "Unsupported Media Type", true);
-    public static final HttpStatus REQUESTED_RANGE_NOT_SATISFIABLE = new HttpStatus(416, "Requested Range Not Satisfiable", true);
-    public static final HttpStatus EXPECTATION_FAILED = new HttpStatus(417, "Expectation Failed", true);
-    public static final HttpStatus INSUFFICIENT_SPACE_ON_RESOURCE = new HttpStatus(419, "Insufficient Space On Resource", true);
-    public static final HttpStatus METHOD_FAILURE = new HttpStatus(420, "Method Failure", true);
-    public static final HttpStatus UNPROCESSABLE_ENTITY = new HttpStatus(422, "Unprocessable Entity", true);
-    public static final HttpStatus LOCKED = new HttpStatus(423, "Locked", true);
-    public static final HttpStatus FAILED_DEPENDENCY = new HttpStatus(424, "Failed Dependency", true);
+    public static final HttpStatus          BAD_REQUEST                     =
+                                                                                new HttpStatus(
+                                                                                               400,
+                                                                                               "Bad Request",
+                                                                                               true);
+    public static final HttpStatus          UNAUTHORIZED                    =
+                                                                                new HttpStatus(
+                                                                                               401,
+                                                                                               "Unauthorized",
+                                                                                               true);
+    public static final HttpStatus          PAYMENT_REQUIRED                =
+                                                                                new HttpStatus(
+                                                                                               402,
+                                                                                               "Payment Required",
+                                                                                               true);
+    public static final HttpStatus          FORBIDDEN                       =
+                                                                                new HttpStatus(
+                                                                                               403,
+                                                                                               "Forbidden",
+                                                                                               true);
+    public static final HttpStatus          NOT_FOUND                       =
+                                                                                new HttpStatus(
+                                                                                               404,
+                                                                                               "Not Found",
+                                                                                               true);
+    public static final HttpStatus          METHOD_NOT_ALLOWED              =
+                                                                                new HttpStatus(
+                                                                                               405,
+                                                                                               "Method Not Allowed",
+                                                                                               true);
+    public static final HttpStatus          NOT_ACCEPTABLE                  =
+                                                                                new HttpStatus(
+                                                                                               406,
+                                                                                               "Not Acceptable",
+                                                                                               true);
+    public static final HttpStatus          PROXY_AUTHENTICATION_REQUIRED   =
+                                                                                new HttpStatus(
+                                                                                               407,
+                                                                                               "Proxy Authentication Required",
+                                                                                               true);
+    public static final HttpStatus          REQUEST_TIMEOUT                 =
+                                                                                new HttpStatus(
+                                                                                               408,
+                                                                                               "Request Timeout",
+                                                                                               true);
+    public static final HttpStatus          CONFLICT                        =
+                                                                                new HttpStatus(
+                                                                                               409,
+                                                                                               "Conflict",
+                                                                                               true);
+    public static final HttpStatus          GONE                            =
+                                                                                new HttpStatus(
+                                                                                               410,
+                                                                                               "Gone",
+                                                                                               true);
+    public static final HttpStatus          LENGTH_REQUIRED                 =
+                                                                                new HttpStatus(
+                                                                                               411,
+                                                                                               "Length Required",
+                                                                                               true);
+    public static final HttpStatus          PRECONDITION_FAILED             =
+                                                                                new HttpStatus(
+                                                                                               412,
+                                                                                               "Precondition Failed",
+                                                                                               true);
+    public static final HttpStatus          REQUEST_TOO_LONG                =
+                                                                                new HttpStatus(
+                                                                                               413,
+                                                                                               "Request Too Long",
+                                                                                               true);
+    public static final HttpStatus          REQUEST_URI_TOO_LONG            =
+                                                                                new HttpStatus(
+                                                                                               414,
+                                                                                               "Request-URI Too Long",
+                                                                                               true);
+    public static final HttpStatus          UNSUPPORTED_MEDIA_TYPE          =
+                                                                                new HttpStatus(
+                                                                                               415,
+                                                                                               "Unsupported Media Type",
+                                                                                               true);
+    public static final HttpStatus          REQUESTED_RANGE_NOT_SATISFIABLE =
+                                                                                new HttpStatus(
+                                                                                               416,
+                                                                                               "Requested Range Not Satisfiable",
+                                                                                               true);
+    public static final HttpStatus          EXPECTATION_FAILED              =
+                                                                                new HttpStatus(
+                                                                                               417,
+                                                                                               "Expectation Failed",
+                                                                                               true);
+    public static final HttpStatus          INSUFFICIENT_SPACE_ON_RESOURCE  =
+                                                                                new HttpStatus(
+                                                                                               419,
+                                                                                               "Insufficient Space On Resource",
+                                                                                               true);
+    public static final HttpStatus          METHOD_FAILURE                  =
+                                                                                new HttpStatus(
+                                                                                               420,
+                                                                                               "Method Failure",
+                                                                                               true);
+    public static final HttpStatus          UNPROCESSABLE_ENTITY            =
+                                                                                new HttpStatus(
+                                                                                               422,
+                                                                                               "Unprocessable Entity",
+                                                                                               true);
+    public static final HttpStatus          LOCKED                          =
+                                                                                new HttpStatus(
+                                                                                               423,
+                                                                                               "Locked",
+                                                                                               true);
+    public static final HttpStatus          FAILED_DEPENDENCY               =
+                                                                                new HttpStatus(
+                                                                                               424,
+                                                                                               "Failed Dependency",
+                                                                                               true);
 
-    public static final HttpStatus INTERNAL_SERVER_ERROR = new HttpStatus(500, "Internal Server Error", true);
-    public static final HttpStatus NOT_IMPLEMENTED = new HttpStatus(501, "Not Implemented", true);
-    public static final HttpStatus BAD_GATEWAY = new HttpStatus(502, "Bad Gateway", true);
-    public static final HttpStatus SERVICE_UNAVAILABLE = new HttpStatus(503, "Service Unavailable", true);
-    public static final HttpStatus GATEWAY_TIMEOUT = new HttpStatus(504, "Gateway Timeout", true);
-    public static final HttpStatus HTTP_VERSION_NOT_SUPPORTED = new HttpStatus(505, "Http Version Not Supported", true);
-    public static final HttpStatus INSUFFICIENT_STORAGE = new HttpStatus(507, "Insufficient Storage", true);
+    public static final HttpStatus          INTERNAL_SERVER_ERROR           =
+                                                                                new HttpStatus(
+                                                                                               500,
+                                                                                               "Internal Server Error",
+                                                                                               true);
+    public static final HttpStatus          NOT_IMPLEMENTED                 =
+                                                                                new HttpStatus(
+                                                                                               501,
+                                                                                               "Not Implemented",
+                                                                                               true);
+    public static final HttpStatus          BAD_GATEWAY                     =
+                                                                                new HttpStatus(
+                                                                                               502,
+                                                                                               "Bad Gateway",
+                                                                                               true);
+    public static final HttpStatus          SERVICE_UNAVAILABLE             =
+                                                                                new HttpStatus(
+                                                                                               503,
+                                                                                               "Service Unavailable",
+                                                                                               true);
+    public static final HttpStatus          GATEWAY_TIMEOUT                 =
+                                                                                new HttpStatus(
+                                                                                               504,
+                                                                                               "Gateway Timeout",
+                                                                                               true);
+    public static final HttpStatus          HTTP_VERSION_NOT_SUPPORTED      =
+                                                                                new HttpStatus(
+                                                                                               505,
+                                                                                               "Http Version Not Supported",
+                                                                                               true);
+    public static final HttpStatus          INSUFFICIENT_STORAGE            =
+                                                                                new HttpStatus(
+                                                                                               507,
+                                                                                               "Insufficient Storage",
+                                                                                               true);
 
-    private int code;
-    private String message;
+    private int                             code;
+    private String                          message;
 
     private HttpStatus(int code, String message, boolean register) {
         this.code = code;
         this.message = message;
-        if(register) {
+        if (register) {
             valuesByInt.put(code, this);
         }
     }
@@ -107,7 +300,7 @@ public class HttpStatus implements Cloneable {
 
     /**
      * Gets HttpStatus for given status code.
-     *
+     * 
      * @param code status code
      * @return HttpStatus
      */
@@ -117,22 +310,23 @@ public class HttpStatus implements Cloneable {
 
     /**
      * Gets HttpStatus for given status line.
-     *
+     * 
      * @param statusLine status line
      * @return HttpStatus
      */
     public static HttpStatus valueOfStatusLine(String statusLine) {
 
-        if(!statusLine.startsWith(SL_11_START)) {
+        if (!statusLine.startsWith(SL_11_START)) {
             throw new IllegalArgumentException(statusLine);
         }
-        int code = Integer.parseInt(statusLine.substring(SL_11_START.length(), SL_11_START.length() + 3));
+        int code =
+            Integer.parseInt(statusLine.substring(SL_11_START.length(), SL_11_START.length() + 3));
         return valuesByInt.get(code);
     }
 
     /**
      * Gets the status code.
-     *
+     * 
      * @return status code
      */
     public int getCode() {
@@ -141,7 +335,7 @@ public class HttpStatus implements Cloneable {
 
     /**
      * Gets the status message.
-     *
+     * 
      * @return status message
      */
     public String getMessage() {
@@ -150,6 +344,7 @@ public class HttpStatus implements Cloneable {
 
     /**
      * Gets the status line like <code>HTTP/1.1 404 Not Found</code>.
+     * 
      * @return the status line
      */
     public String getStatusLine() {
@@ -161,8 +356,9 @@ public class HttpStatus implements Cloneable {
 
     /**
      * Is this an error status.
-     *
-     * @return <code>true</code> if this status has code greater or equal to 400.
+     * 
+     * @return <code>true</code> if this status has code greater or equal to
+     *         400.
      */
     public boolean isError() {
         return code >= 400;
@@ -170,7 +366,7 @@ public class HttpStatus implements Cloneable {
 
     /**
      * Duplicates this status with another status message.
-     *
+     * 
      * @param message new status message
      * @return new HttpStatus
      */
@@ -185,7 +381,7 @@ public class HttpStatus implements Cloneable {
         try {
             return (HttpStatus)super.clone();
         } catch (CloneNotSupportedException cnse) {
-            throw new RuntimeException(cnse);  // can't happen
+            throw new RuntimeException(cnse); // can't happen
         }
     }
 
@@ -196,7 +392,7 @@ public class HttpStatus implements Cloneable {
 
     @Override
     public boolean equals(Object httpStatus) {
-        return httpStatus instanceof HttpStatus && ((HttpStatus) httpStatus).getCode() == getCode();
+        return httpStatus instanceof HttpStatus && ((HttpStatus)httpStatus).getCode() == getCode();
 
     }
 

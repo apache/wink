@@ -33,9 +33,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * The <code>lockdiscovery</code> Property per the WebDAV specification [RFC 4918]
+ * The <code>lockdiscovery</code> Property per the WebDAV specification [RFC
+ * 4918]
  * 
  * <pre>
  *    Name:       lockdiscovery
@@ -61,24 +61,20 @@ public class Lockdiscovery {
 
     /**
      * Gets the value of the activelock property.
-     * 
      * <p>
-     * This accessor method returns a reference to the live list, not a snapshot. Therefore any
-     * modification you make to the returned list will be present inside the JAXB object. This is
-     * why there is not a <CODE>set</CODE> method for the activelock property.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the activelock property.
      * <p>
      * For example, to add a new item, do as follows:
      * 
      * <pre>
      * getActivelock().add(newItem);
      * </pre>
-     * 
-     * 
      * <p>
-     * Objects of the following type(s) are allowed in the list {@link Activelock }
-     * 
-     * 
+     * Objects of the following type(s) are allowed in the list
+     * {@link Activelock }
      */
     public List<Activelock> getActivelock() {
         if (activelock == null) {

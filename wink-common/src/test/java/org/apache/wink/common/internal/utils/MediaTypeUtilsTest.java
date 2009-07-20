@@ -25,12 +25,18 @@ import junit.framework.TestCase;
 public class MediaTypeUtilsTest extends TestCase {
 
     public void testIsCompatibleNonCommutative() {
-        assertTrue(MediaTypeUtils.isCompatibleNonCommutative(MediaType.valueOf("*/*"), MediaType.valueOf("text/plain")));
-        assertTrue(MediaTypeUtils.isCompatibleNonCommutative(MediaType.valueOf("*/*"), MediaType.valueOf("text/*")));
-        assertTrue(MediaTypeUtils.isCompatibleNonCommutative(MediaType.valueOf("text/*"), MediaType.valueOf("text/plain")));
-        assertFalse(MediaTypeUtils.isCompatibleNonCommutative(MediaType.valueOf("text/plain"), MediaType.valueOf("*/*")));
-        assertFalse(MediaTypeUtils.isCompatibleNonCommutative(MediaType.valueOf("text/*"), MediaType.valueOf("*/*")));
-        assertFalse(MediaTypeUtils.isCompatibleNonCommutative(MediaType.valueOf("text/plain"), MediaType.valueOf("text/*")));
+        assertTrue(MediaTypeUtils.isCompatibleNonCommutative(MediaType.valueOf("*/*"), MediaType
+            .valueOf("text/plain")));
+        assertTrue(MediaTypeUtils.isCompatibleNonCommutative(MediaType.valueOf("*/*"), MediaType
+            .valueOf("text/*")));
+        assertTrue(MediaTypeUtils.isCompatibleNonCommutative(MediaType.valueOf("text/*"), MediaType
+            .valueOf("text/plain")));
+        assertFalse(MediaTypeUtils.isCompatibleNonCommutative(MediaType.valueOf("text/plain"),
+                                                              MediaType.valueOf("*/*")));
+        assertFalse(MediaTypeUtils.isCompatibleNonCommutative(MediaType.valueOf("text/*"),
+                                                              MediaType.valueOf("*/*")));
+        assertFalse(MediaTypeUtils.isCompatibleNonCommutative(MediaType.valueOf("text/plain"),
+                                                              MediaType.valueOf("text/*")));
     }
-    
+
 }

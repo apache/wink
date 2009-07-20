@@ -24,7 +24,6 @@
 // Generated on: 2008.09.15 at 12:57:27 PM IDT 
 //
 
-
 package org.apache.wink.common.model.app;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -32,7 +31,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.wink.common.model.atom.AtomCommonAttributesSimpleContent;
-
 
 /**
  * The "app:accept" Element Per RFC5023
@@ -72,9 +70,6 @@ import org.apache.wink.common.model.atom.AtomCommonAttributesSimpleContent;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "appAccept")
-public class AppAccept
-    extends AtomCommonAttributesSimpleContent
-{
-
+public class AppAccept extends AtomCommonAttributesSimpleContent {
 
 }

@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common.model.csv;
 
 /**
@@ -28,8 +28,7 @@ public interface CsvDeserializer {
     /**
      * Add a single row to the CSV
      * 
-     * @param row
-     *            the row to add
+     * @param row the row to add
      */
     void addEntity(String[] row);
 

@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.webdav;
 
 import java.io.IOException;
@@ -43,7 +43,6 @@ import org.apache.wink.webdav.WebDAVMethod;
 import org.apache.wink.webdav.server.WebDAVResponseBuilder;
 import org.apache.wink.webdav.server.WebDAVUtils;
 
-
 /**
  * This resource handles WebDAV methods for collection of tests.
  */
@@ -61,12 +60,14 @@ public class WebDAVTestsResource extends TestsResource {
      * Handles WebDAV PROPFIND method.
      */
     @WebDAVMethod.PROPFIND
-    @Consumes( { MediaType.APPLICATION_XML, MediaType.TEXT_XML })
+    @Consumes( {MediaType.APPLICATION_XML, MediaType.TEXT_XML})
     @Produces(MediaType.APPLICATION_XML)
     public Response findProperties(String body, @Context HttpHeaders headers) throws IOException {
         SyndFeed feed = super.getTests(uriInfo).getSyndFeed(providers, linkProcessor, uriInfo);
-        return WebDAVResponseBuilder.create(uriInfo).propfind(feed, body,
-            headers.getRequestHeaders().getFirst(WebDAVHeaders.DEPTH));
+        return WebDAVResponseBuilder.create(uriInfo).propfind(feed,
+                                                              body,
+                                                              headers.getRequestHeaders()
+                                                                  .getFirst(WebDAVHeaders.DEPTH));
     }
 
     /**
@@ -74,7 +75,7 @@ public class WebDAVTestsResource extends TestsResource {
      */
     @Path(TEST_PATH)
     @WebDAVMethod.PROPFIND
-    @Consumes( { MediaType.APPLICATION_XML, MediaType.TEXT_XML })
+    @Consumes( {MediaType.APPLICATION_XML, MediaType.TEXT_XML})
     @Produces(MediaType.APPLICATION_XML)
     public Response findProperties(String body, @PathParam("test") String testId)
         throws IOException {

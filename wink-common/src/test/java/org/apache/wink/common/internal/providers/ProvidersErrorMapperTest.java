@@ -34,8 +34,6 @@ import org.apache.wink.common.internal.registry.ProvidersRegistry;
 
 import junit.framework.TestCase;
 
-
-
 public class ProvidersErrorMapperTest extends TestCase {
 
     @Provider
@@ -45,7 +43,6 @@ public class ProvidersErrorMapperTest extends TestCase {
         public Response toResponse(Throwable exception) {
             return null;
         }
-
 
     }
 
@@ -83,8 +80,8 @@ public class ProvidersErrorMapperTest extends TestCase {
     }
 
     private ProvidersRegistry createProvidersRegistryImpl() {
-        ProvidersRegistry providers = new ProvidersRegistry(new LifecycleManagersRegistry(),
-            new ApplicationValidator());
+        ProvidersRegistry providers =
+            new ProvidersRegistry(new LifecycleManagersRegistry(), new ApplicationValidator());
 
         return providers;
     }
@@ -99,13 +96,13 @@ public class ProvidersErrorMapperTest extends TestCase {
         providers.addProvider(new RestExceptionMapper2());
 
         assertEquals(BaseExceptionMapper.class, providers.getExceptionMapper(IOException.class,
-            null).getClass());
-        assertEquals(ThrowableExceptionMapper.class,
-            providers.getExceptionMapper(Error.class, null).getClass());
-        assertEquals(RuntimeExceptionMapper.class, providers.getExceptionMapper(
-            NullPointerException.class, null).getClass());
+                                                                             null).getClass());
+        assertEquals(ThrowableExceptionMapper.class, providers
+            .getExceptionMapper(Error.class, null).getClass());
+        assertEquals(RuntimeExceptionMapper.class, providers
+            .getExceptionMapper(NullPointerException.class, null).getClass());
         assertEquals(RestExceptionMapper2.class, providers.getExceptionMapper(RestException.class,
-            null).getClass());
+                                                                              null).getClass());
 
         providers = createProvidersRegistryImpl();
 
@@ -113,7 +110,7 @@ public class ProvidersErrorMapperTest extends TestCase {
         providers.addProvider(new RestExceptionMapper(), 0.7);
         providers.addProvider(new RestExceptionMapper2(), 0.5);
         assertEquals(RestExceptionMapper.class, providers.getExceptionMapper(RestException.class,
-            null).getClass());
+                                                                             null).getClass());
 
     }
 }

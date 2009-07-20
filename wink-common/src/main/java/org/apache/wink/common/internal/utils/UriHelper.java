@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common.internal.utils;
 
 import java.net.URI;
@@ -36,7 +36,6 @@ import org.apache.wink.common.internal.PathSegmentImpl;
 import org.apache.wink.common.internal.uri.UriEncoder;
 import org.apache.wink.common.internal.uri.UriPathNormalizer;
 
-
 /**
  * Various methods for URI/URL manipulation.
  */
@@ -52,8 +51,7 @@ public class UriHelper {
      * <li>The last character in URI is NOT '/'</li>
      * </ul>
      * 
-     * @param uri
-     *            input URI
+     * @param uri input URI
      * @return normalized URI
      */
     public static String removeTrailingSlash(String uri) {
@@ -67,8 +65,7 @@ public class UriHelper {
     /**
      * Remove parameters for the url
      * 
-     * @param requestUri
-     *            input URI
+     * @param requestUri input URI
      * @return input URI without query string
      */
     public static String stripQueryString(String requestUri) {
@@ -84,8 +81,7 @@ public class UriHelper {
     /**
      * Get query string.
      * 
-     * @param requestUri
-     *            input URI
+     * @param requestUri input URI
      * @return query string from input URI
      */
     public static String getQueryString(String requestUri) {
@@ -100,8 +96,7 @@ public class UriHelper {
     /**
      * Strip name (last section in the path).
      * 
-     * @param requestUri
-     *            input URI
+     * @param requestUri input URI
      * @return part of URI after the last slash
      */
     public static String stripName(String requestUri) {
@@ -119,8 +114,7 @@ public class UriHelper {
     /**
      * Get the last section of the path.
      * 
-     * @param uri
-     *            URI.
+     * @param uri URI.
      * @return name.
      */
     public static String getNameFromPath(String uri) {
@@ -135,8 +129,7 @@ public class UriHelper {
     /**
      * Hide password from the URL.
      * 
-     * @param url
-     *            the URL to hide the password from
+     * @param url the URL to hide the password from
      * @return URL with user information removed
      */
     public static String hidePassword(URI url) {
@@ -157,14 +150,15 @@ public class UriHelper {
             return str;
         }
 
-        return str.substring(0, pidx) + str.substring(pidx + ui.length() + 1); // 1 for @
+        return str.substring(0, pidx) + str.substring(pidx + ui.length() + 1); // 1
+                                                                               // for
+                                                                               // @
     }
 
     /**
      * Hide password from the URL.
      * 
-     * @param url
-     *            the URL to hide the password from
+     * @param url the URL to hide the password from
      * @return URL with user information removed
      */
     public static String hidePassword(String url) {
@@ -178,8 +172,7 @@ public class UriHelper {
     /**
      * Hides password from all the urls in the list.
      * 
-     * @param urls
-     *            the list of urls to hide the password from
+     * @param urls the list of urls to hide the password from
      * @return URL with user information removed
      */
     public static List<String> hidePassword(List<String> urls) {
@@ -197,23 +190,27 @@ public class UriHelper {
     /**
      * Relativize URI path. Can add ".." and "." segments.
      * 
-     * @param basePath
-     *            relative against this path
-     * @param pathToRelativize
-     *            path to change
+     * @param basePath relative against this path
+     * @param pathToRelativize path to change
      * @return a relativized path
      */
     public static String relativize(String basePath, String pathToRelativize) {
         String normalizeBasePath = removeStartSlash(UriPathNormalizer.normalize(basePath));
         String[] splitBase = StringUtils.fastSplit(normalizeBasePath, "/", false);
-        String normalizedPathToRelativize = removeStartSlash(UriPathNormalizer.normalize(pathToRelativize));
+        String normalizedPathToRelativize =
+            removeStartSlash(UriPathNormalizer.normalize(pathToRelativize));
         String[] splitPath = StringUtils.fastSplit(normalizedPathToRelativize, "/", false);
         int pos = 0;
-        while (pos < splitBase.length && pos < splitPath.length && splitBase[pos].equals(splitPath[pos])) {
+        while (pos < splitBase.length && pos < splitPath.length
+            && splitBase[pos].equals(splitPath[pos])) {
             pos++;
         }
         StringBuilder result = new StringBuilder();
-        if (pos == splitBase.length && !normalizeBasePath.endsWith("/")) { // at the end of base
+        if (pos == splitBase.length && !normalizeBasePath.endsWith("/")) { // at
+                                                                           // the
+                                                                           // end
+                                                                           // of
+                                                                           // base
             // .../baseEnd
             String lastSegment = splitBase[pos - 1];
             result.append(lastSegment);
@@ -252,8 +249,7 @@ public class UriHelper {
     }
 
     /**
-     * @param s
-     *            a non-null string
+     * @param s a non-null string
      * @return s value with optional first character '/' removed
      */
     public static String removeStartSlash(String s) {
@@ -267,10 +263,9 @@ public class UriHelper {
     /**
      * Appends a path a baseUri.
      * 
-     * @param baseUri
-     *            the base uri, can but needn't to end with a '/', not <code>null</code>
-     * @param path
-     *            path append, can but needn't to start with a '/'
+     * @param baseUri the base uri, can but needn't to end with a '/', not
+     *            <code>null</code>
+     * @param path path append, can but needn't to start with a '/'
      * @return a string with path appended path-wise correctly to the path
      */
     public static String appendPathToBaseUri(String baseUri, String path) {
@@ -292,10 +287,8 @@ public class UriHelper {
     /**
      * Append an alt parameter to an uri.
      * 
-     * @param uri
-     *            an uri without any parameters, not null
-     * @param mediaType
-     *            the value of the alt parameter, not null
+     * @param uri an uri without any parameters, not null
+     * @param mediaType the value of the alt parameter, not null
      * @return string containing an uri, media type is uri-encoded
      */
     public static String appendAltToPath(String uri, MediaType mediaType) {
@@ -319,28 +312,27 @@ public class UriHelper {
     }
 
     /**
-     * Constructs a string with URI in unescaped form. Use as woraround with unencoding/double
-     * encoding problems with URI constructor,
-     * <code>new Uri(constructUri(...)).toASCIIString()</code> should be the original URI.
+     * Constructs a string with URI in unescaped form. Use as woraround with
+     * unencoding/double encoding problems with URI constructor,
+     * <code>new Uri(constructUri(...)).toASCIIString()</code> should be the
+     * original URI.
      * 
-     * @param scheme
-     *            URI.getScheme
-     * @param userInfo
-     *            URI.getRawUserInfo
-     * @param host
-     *            URI.getRawHost
-     * @param port
-     *            URI.getPort; -1 = no port
-     * @param path
-     *            URI.getRawPath
-     * @param query
-     *            URI.getRawQuery
-     * @param fragment
-     *            URI.getRawFragment
+     * @param scheme URI.getScheme
+     * @param userInfo URI.getRawUserInfo
+     * @param host URI.getRawHost
+     * @param port URI.getPort; -1 = no port
+     * @param path URI.getRawPath
+     * @param query URI.getRawQuery
+     * @param fragment URI.getRawFragment
      * @return URI with reserved characters escaped
      */
-    public static String contructUri(String scheme, String userInfo, String host, int port, String path, String query,
-            String fragment) {
+    public static String contructUri(String scheme,
+                                     String userInfo,
+                                     String host,
+                                     int port,
+                                     String path,
+                                     String query,
+                                     String fragment) {
         StringBuilder buffer = new StringBuilder();
         if (scheme != null) {
             buffer.append(scheme);
@@ -372,15 +364,15 @@ public class UriHelper {
     }
 
     /**
-     * The method builds the query parameters String e.g. param1=value1&param2=value2
+     * The method builds the query parameters String e.g.
+     * param1=value1&param2=value2
      * 
-     * @param queryParams
-     *            Map of query parameters
-     * @param escapeKeyParam
-     *            indicates if to escape the parameter's name and value
+     * @param queryParams Map of query parameters
+     * @param escapeKeyParam indicates if to escape the parameter's name and
+     *            value
      * @return String the query parameters String
      */
-    public static String getQueryParamsStr(Map<String,String[]> queryParams, boolean escapeKeyParam) {
+    public static String getQueryParamsStr(Map<String, String[]> queryParams, boolean escapeKeyParam) {
         if (queryParams == null || queryParams.size() < 1) {
             return "";
         }
@@ -395,8 +387,9 @@ public class UriHelper {
             }
             for (String paramInArray : params) {
                 queryParamsStr.append(appendStr);
-                queryParamsStr.append(escapeKeyParam ? UriEncoder.encodeString(key) : key).append("=").append(
-                        escapeKeyParam ? UriEncoder.encodeString(paramInArray) : paramInArray);
+                queryParamsStr.append(escapeKeyParam ? UriEncoder.encodeString(key) : key)
+                    .append("=").append(escapeKeyParam ? UriEncoder.encodeString(paramInArray)
+                        : paramInArray);
                 appendStr = "&";
             }
 
@@ -408,13 +401,14 @@ public class UriHelper {
      * The method appends query parameters to path
      * 
      * @param uri
-     * @param queryParams
-     *            Map of query parameters
-     * @param escapeKeyParam
-     *            indicates if to escape the parameter's name and value
+     * @param queryParams Map of query parameters
+     * @param escapeKeyParam indicates if to escape the parameter's name and
+     *            value
      * @return String the path with query parameters
      */
-    public static String appendQueryParamsToPath(String uri, Map<String,String[]> queryParams, boolean escapeKeyParam) {
+    public static String appendQueryParamsToPath(String uri,
+                                                 Map<String, String[]> queryParams,
+                                                 boolean escapeKeyParam) {
         if (uri == null)
             throw new NullPointerException("uri"); //$NON-NLS-1$
         if (queryParams == null || queryParams.size() < 1) {
@@ -436,8 +430,7 @@ public class UriHelper {
     /**
      * Parses a uri path into a list of PathSegements
      * 
-     * @param path
-     *            the path to parse
+     * @param path the path to parse
      * @return list of PathSegement instances
      */
     public static List<PathSegment> parsePath(String path) {
@@ -451,14 +444,14 @@ public class UriHelper {
     }
 
     /**
-     * Parses a query string (without the leading '?') into a map of parameters and values
+     * Parses a query string (without the leading '?') into a map of parameters
+     * and values
      * 
-     * @param queryStr
-     *            the query strin to parse
+     * @param queryStr the query strin to parse
      * @return a map of query parameters and values
      */
-    public static MultivaluedMap<String,String> parseQuery(String queryStr) {
-        MultivaluedMap<String,String> query = new MultivaluedMapImpl<String,String>();
+    public static MultivaluedMap<String, String> parseQuery(String queryStr) {
+        MultivaluedMap<String, String> query = new MultivaluedMapImpl<String, String>();
         if (queryStr == null || queryStr.length() == 0) {
             return query;
         }
@@ -475,21 +468,23 @@ public class UriHelper {
         }
         return query;
     }
-    
+
     /**
-     * Normalize input uri according to <a> href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>
-     * section 6.2.2. - Syntax-Based Normalization
+     * Normalize input uri according to <a>
+     * href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a> section 6.2.2. -
+     * Syntax-Based Normalization
+     * 
      * @param string
      * @return normalized instance of uri
      */
-    public static String normalize(String uri){
-        
+    public static String normalize(String uri) {
+
         // Path Segment Normalization
         uri = UriPathNormalizer.normalize(uri);
-        
+
         // Percent-Encoding Normalization & Case Normalization
         uri = UriEncoder.normalize(uri);
-        
+
         return uri;
     }
 }

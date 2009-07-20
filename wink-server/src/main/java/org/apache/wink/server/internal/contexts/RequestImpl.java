@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.contexts;
 
@@ -41,14 +40,18 @@ import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 import org.apache.wink.common.internal.http.EntityTagMatchHeader;
 import org.apache.wink.server.handlers.MessageContext;
 
-
-
 public class RequestImpl implements Request {
 
     private MessageContext                                    msgContext;
-    private static final RuntimeDelegate                      delegate              = RuntimeDelegate.getInstance();
-    private static final HeaderDelegate<EntityTagMatchHeader> ifMatchHeaderDelegate = delegate.createHeaderDelegate(EntityTagMatchHeader.class);
-    private static final HeaderDelegate<Date>                 dateHeaderDelegate    = delegate.createHeaderDelegate(Date.class);
+    private static final RuntimeDelegate                      delegate              =
+                                                                                        RuntimeDelegate
+                                                                                            .getInstance();
+    private static final HeaderDelegate<EntityTagMatchHeader> ifMatchHeaderDelegate =
+                                                                                        delegate
+                                                                                            .createHeaderDelegate(EntityTagMatchHeader.class);
+    private static final HeaderDelegate<Date>                 dateHeaderDelegate    =
+                                                                                        delegate
+                                                                                            .createHeaderDelegate(Date.class);
 
     public RequestImpl(MessageContext msgContext) {
         this.msgContext = msgContext;
@@ -84,7 +87,7 @@ public class RequestImpl implements Request {
         } catch (IllegalArgumentException e) {
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         }
-        
+
         if (!ifMatchHeader.isMatch(tag)) {
             // none of the tags matches the etag
             ResponseBuilder responseBuilder = delegate.createResponseBuilder();
@@ -104,7 +107,7 @@ public class RequestImpl implements Request {
         } catch (IllegalArgumentException e) {
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         }
-        
+
         if (ifNoneMatchHeader.isMatch(tag)) {
             // some tag matched
             ResponseBuilder responseBuilder = delegate.createResponseBuilder();
@@ -164,7 +167,8 @@ public class RequestImpl implements Request {
             ResponseBuilder isNoneMatch = evaluateIfNoneMatch(tag, ifNoneMatch);
             if (isNoneMatch != null && ifModifiedSince != null
                 && evaluateIfModifiedSince(lastModified, ifModifiedSince) == null) {
-                // although isNoneMatch is not null, but need to proceed because of IfModifiedSince
+                // although isNoneMatch is not null, but need to proceed because
+                // of IfModifiedSince
                 // requires to proceed
                 return null;
             }
@@ -188,14 +192,15 @@ public class RequestImpl implements Request {
 
     public Variant selectVariant(List<Variant> variants) throws IllegalArgumentException {
         MediaType inputMediaType = msgContext.getHttpHeaders().getMediaType();
-        String inputEncoding = msgContext.getAttribute(HttpServletRequest.class).getCharacterEncoding();
+        String inputEncoding =
+            msgContext.getAttribute(HttpServletRequest.class).getCharacterEncoding();
         String inputLanguage = getHeaderValue("Content-Language");
         for (Variant variant : variants) {
             String variantEncoding = variant.getEncoding();
             Locale variantLanguage = variant.getLanguage();
             javax.ws.rs.core.MediaType variantMediaType = variant.getMediaType();
-            if (isEncodingEqual(inputEncoding, variantEncoding)
-                && isLanguageEqual(inputLanguage, variantLanguage)
+            if (isEncodingEqual(inputEncoding, variantEncoding) && isLanguageEqual(inputLanguage,
+                                                                                   variantLanguage)
                 && isMediaTypeEqual(inputMediaType, variantMediaType)) {
                 return variant;
             }
@@ -208,8 +213,7 @@ public class RequestImpl implements Request {
             return true;
         }
 
-        if ((inputEncoding == null && variantEncoding != null)
-            || (inputEncoding != null && variantEncoding == null)) {
+        if ((inputEncoding == null && variantEncoding != null) || (inputEncoding != null && variantEncoding == null)) {
             return false;
         }
 
@@ -221,8 +225,7 @@ public class RequestImpl implements Request {
             return true;
         }
 
-        if ((inputLanguage == null && variantLanguage != null)
-            || (inputLanguage != null && variantLanguage == null)) {
+        if ((inputLanguage == null && variantLanguage != null) || (inputLanguage != null && variantLanguage == null)) {
             return false;
         }
 
@@ -234,8 +237,7 @@ public class RequestImpl implements Request {
             return true;
         }
 
-        if ((inputMediaType == null && variantMediaType != null)
-            || (inputMediaType != null && variantMediaType == null)) {
+        if ((inputMediaType == null && variantMediaType != null) || (inputMediaType != null && variantMediaType == null)) {
             return false;
         }
 

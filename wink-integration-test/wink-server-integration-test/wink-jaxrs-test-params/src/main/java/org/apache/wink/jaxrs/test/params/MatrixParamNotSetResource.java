@@ -32,37 +32,37 @@ public class MatrixParamNotSetResource {
     @Path("int")
     @GET
     public String getDefault(@MatrixParam("count") int count) {
-        return count+"";
+        return count + "";
     }
 
     @Path("short")
     @GET
     public String getDefault(@MatrixParam("smallCount") short smallCount) {
-        return smallCount+"";
+        return smallCount + "";
     }
 
     @Path("long")
     @GET
     public String getDefault(@MatrixParam("longCount") long longCount) {
-        return longCount+"";
+        return longCount + "";
     }
 
     @Path("float")
     @GET
     public String getDefault(@MatrixParam("floatCount") float floatCount) {
-        return floatCount+"";
+        return floatCount + "";
     }
 
     @Path("double")
     @GET
     public String getDefault(@MatrixParam("count") double count) {
-        return count+"";
+        return count + "";
     }
 
     @Path("byte")
     @GET
     public String getDefault(@MatrixParam("b") byte count) {
-        return count+"";
+        return count + "";
     }
 
     @Path("char")
@@ -74,12 +74,12 @@ public class MatrixParamNotSetResource {
     @Path("set")
     @GET
     public String getDefault(@MatrixParam("bag") Set<Integer> stuff) {
-        return stuff.size()+"";
+        return stuff.size() + "";
     }
 
     @Path("list")
     @GET
     public String getDefault(@MatrixParam("letter") List<String> stuff) {
-        return stuff.size()+"";
+        return stuff.size() + "";
     }
 }

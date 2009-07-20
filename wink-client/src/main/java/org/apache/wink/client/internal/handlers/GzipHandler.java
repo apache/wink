@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.client.internal.handlers;
 
@@ -33,7 +32,6 @@ import org.apache.wink.client.handlers.ClientHandler;
 import org.apache.wink.client.handlers.HandlerContext;
 import org.apache.wink.client.handlers.InputStreamAdapter;
 import org.apache.wink.client.handlers.OutputStreamAdapter;
-
 
 /**
  * Provides support for GZip encoding for requests and responses
@@ -61,6 +59,6 @@ public class GzipHandler implements ClientHandler {
             }
             return is;
         }
-        
+
     }
 }

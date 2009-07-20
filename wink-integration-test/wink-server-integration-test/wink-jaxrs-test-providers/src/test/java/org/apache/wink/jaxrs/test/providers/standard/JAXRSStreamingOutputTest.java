@@ -44,20 +44,20 @@ public class JAXRSStreamingOutputTest extends TestCase {
 
     /**
      * Tests posting to a StreamingOutput and then returning StreamingOutput.
-     *
+     * 
      * @throws HttpException
      * @throws IOException
      */
     public void testPostStreamingOutput() throws HttpException, IOException {
         HttpClient client = new HttpClient();
 
-        PostMethod postMethod = new PostMethod(getBaseURI()
-                + "/providers/standard/streamingoutput");
+        PostMethod postMethod =
+            new PostMethod(getBaseURI() + "/providers/standard/streamingoutput");
         byte[] barr = new byte[100000];
         Random r = new Random();
         r.nextBytes(barr);
-        postMethod.setRequestEntity(new InputStreamRequestEntity(
-                new ByteArrayInputStream(barr), "text/plain"));
+        postMethod.setRequestEntity(new InputStreamRequestEntity(new ByteArrayInputStream(barr),
+                                                                 "text/plain"));
         postMethod.addRequestHeader("Accept", "text/plain");
         try {
             client.executeMethod(postMethod);
@@ -74,12 +74,10 @@ public class JAXRSStreamingOutputTest extends TestCase {
             for (int c = 0; c < barr.length; ++c) {
                 assertEquals(barr[c], receivedBArr[c]);
             }
-            assertEquals("text/plain", postMethod.getResponseHeader(
-                    "Content-Type").getValue());
-            Header contentLengthHeader = postMethod
-                    .getResponseHeader("Content-Length");
-            assertNull(contentLengthHeader == null ? "null"
-                    : contentLengthHeader.getValue(), contentLengthHeader);
+            assertEquals("text/plain", postMethod.getResponseHeader("Content-Type").getValue());
+            Header contentLengthHeader = postMethod.getResponseHeader("Content-Length");
+            assertNull(contentLengthHeader == null ? "null" : contentLengthHeader.getValue(),
+                       contentLengthHeader);
         } finally {
             postMethod.releaseConnection();
         }
@@ -87,20 +85,19 @@ public class JAXRSStreamingOutputTest extends TestCase {
 
     /**
      * Tests putting and then getting a StreamingOutput.
-     *
+     * 
      * @throws HttpException
      * @throws IOException
      */
     public void testPutStreamngOutput() throws HttpException, IOException {
         HttpClient client = new HttpClient();
 
-        PutMethod putMethod = new PutMethod(getBaseURI()
-                + "/providers/standard/streamingoutput");
+        PutMethod putMethod = new PutMethod(getBaseURI() + "/providers/standard/streamingoutput");
         byte[] barr = new byte[100000];
         Random r = new Random();
         r.nextBytes(barr);
-        putMethod.setRequestEntity(new InputStreamRequestEntity(
-                new ByteArrayInputStream(barr), "bytes/array"));
+        putMethod.setRequestEntity(new InputStreamRequestEntity(new ByteArrayInputStream(barr),
+                                                                "bytes/array"));
         try {
             client.executeMethod(putMethod);
             assertEquals(204, putMethod.getStatusCode());
@@ -108,8 +105,7 @@ public class JAXRSStreamingOutputTest extends TestCase {
             putMethod.releaseConnection();
         }
 
-        GetMethod getMethod = new GetMethod(getBaseURI()
-                + "/providers/standard/streamingoutput");
+        GetMethod getMethod = new GetMethod(getBaseURI() + "/providers/standard/streamingoutput");
         try {
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());
@@ -129,10 +125,9 @@ public class JAXRSStreamingOutputTest extends TestCase {
                 (getMethod.getResponseHeader("Content-Type") == null) ? null : getMethod
                     .getResponseHeader("Content-Type").getValue();
             assertNotNull(contentType, contentType);
-            Header contentLengthHeader = getMethod
-                    .getResponseHeader("Content-Length");
-            assertNull(contentLengthHeader == null ? "null"
-                    : contentLengthHeader.getValue(), contentLengthHeader);
+            Header contentLengthHeader = getMethod.getResponseHeader("Content-Length");
+            assertNull(contentLengthHeader == null ? "null" : contentLengthHeader.getValue(),
+                       contentLengthHeader);
         } finally {
             getMethod.releaseConnection();
         }
@@ -140,21 +135,20 @@ public class JAXRSStreamingOutputTest extends TestCase {
 
     /**
      * Tests receiving a StreamingOutput with a non-standard content-type.
-     *
+     * 
      * @throws HttpException
      * @throws IOException
      */
-    public void testWithRequestAcceptHeaderWillReturnRequestedContentType()
-            throws HttpException, IOException {
+    public void testWithRequestAcceptHeaderWillReturnRequestedContentType() throws HttpException,
+        IOException {
         HttpClient client = new HttpClient();
 
-        PutMethod putMethod = new PutMethod(getBaseURI()
-                + "/providers/standard/streamingoutput");
+        PutMethod putMethod = new PutMethod(getBaseURI() + "/providers/standard/streamingoutput");
         byte[] barr = new byte[100000];
         Random r = new Random();
         r.nextBytes(barr);
-        putMethod.setRequestEntity(new InputStreamRequestEntity(
-                new ByteArrayInputStream(barr), "any/type"));
+        putMethod.setRequestEntity(new InputStreamRequestEntity(new ByteArrayInputStream(barr),
+                                                                "any/type"));
         try {
             client.executeMethod(putMethod);
             assertEquals(204, putMethod.getStatusCode());
@@ -162,8 +156,7 @@ public class JAXRSStreamingOutputTest extends TestCase {
             putMethod.releaseConnection();
         }
 
-        GetMethod getMethod = new GetMethod(getBaseURI()
-                + "/providers/standard/streamingoutput");
+        GetMethod getMethod = new GetMethod(getBaseURI() + "/providers/standard/streamingoutput");
         getMethod.addRequestHeader("Accept", "mytype/subtype");
         try {
             client.executeMethod(getMethod);
@@ -179,12 +172,10 @@ public class JAXRSStreamingOutputTest extends TestCase {
             for (int c = 0; c < barr.length; ++c) {
                 assertEquals(barr[c], receivedBArr[c]);
             }
-            assertEquals("mytype/subtype", getMethod.getResponseHeader(
-                    "Content-Type").getValue());
-            Header contentLengthHeader = getMethod
-                    .getResponseHeader("Content-Length");
-            assertNull(contentLengthHeader == null ? "null"
-                    : contentLengthHeader.getValue(), contentLengthHeader);
+            assertEquals("mytype/subtype", getMethod.getResponseHeader("Content-Type").getValue());
+            Header contentLengthHeader = getMethod.getResponseHeader("Content-Length");
+            assertNull(contentLengthHeader == null ? "null" : contentLengthHeader.getValue(),
+                       contentLengthHeader);
         } finally {
             getMethod.releaseConnection();
         }

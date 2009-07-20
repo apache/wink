@@ -28,12 +28,12 @@ public class Application extends javax.ws.rs.core.Application {
     public Set<Class<?>> getClasses() {
         Set<Class<?>> clazzes = new HashSet<Class<?>>();
         clazzes.add(ExceptionResource.class);
-//        clazzes.add(IOExceptionMapper.class);
-//        clazzes.add(MyMessageBodyReader.class);
-//        clazzes.add(NullPointerExceptionMapper.class);
+        // clazzes.add(IOExceptionMapper.class);
+        // clazzes.add(MyMessageBodyReader.class);
+        // clazzes.add(NullPointerExceptionMapper.class);
         return clazzes;
     }
-    
+
     @Override
     public Set<Object> getSingletons() {
         Set<Object> singletons = new HashSet<Object>();

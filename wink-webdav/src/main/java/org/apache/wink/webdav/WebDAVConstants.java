@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.webdav;
 
 import java.util.HashSet;
@@ -30,23 +30,44 @@ import javax.xml.namespace.QName;
  */
 public final class WebDAVConstants {
 
-    private WebDAVConstants() { }    // no instances
+    private WebDAVConstants() {
+    } // no instances
 
-    public static final String NAMESPACE_DAV = "DAV:";
+    public static final String     NAMESPACE_DAV               = "DAV:";
 
-    public static final QName PROPERTY_CREATIONDATE = new QName(NAMESPACE_DAV, "creationdate");
-    public static final QName PROPERTY_DISPLAYNAME = new QName(NAMESPACE_DAV, "displayname");
-    public static final QName PROPERTY_GETCONTENTLANGUAGE = new QName(NAMESPACE_DAV, "getcontentlanguage");
-    public static final QName PROPERTY_GETCONTENTLENGTH = new QName(NAMESPACE_DAV, "getcontentlength");
-    public static final QName PROPERTY_GETCONTENTTYPE = new QName(NAMESPACE_DAV, "getcontenttype");
-    public static final QName PROPERTY_GETETAG = new QName(NAMESPACE_DAV, "getetag");
-    public static final QName PROPERTY_GETLASTMODIFIED = new QName(NAMESPACE_DAV, "getlastmodified");
-    public static final QName PROPERTY_LOCKDISCOVERY = new QName(NAMESPACE_DAV, "lockdiscovery");
-    public static final QName PROPERTY_RESOURCETYPE = new QName(NAMESPACE_DAV, "resourcetype");
-    public static final QName PROPERTY_SUPPORTEDLOCK = new QName(NAMESPACE_DAV, "supportedlock");
+    public static final QName      PROPERTY_CREATIONDATE       =
+                                                                   new QName(NAMESPACE_DAV,
+                                                                             "creationdate");
+    public static final QName      PROPERTY_DISPLAYNAME        =
+                                                                   new QName(NAMESPACE_DAV,
+                                                                             "displayname");
+    public static final QName      PROPERTY_GETCONTENTLANGUAGE =
+                                                                   new QName(NAMESPACE_DAV,
+                                                                             "getcontentlanguage");
+    public static final QName      PROPERTY_GETCONTENTLENGTH   =
+                                                                   new QName(NAMESPACE_DAV,
+                                                                             "getcontentlength");
+    public static final QName      PROPERTY_GETCONTENTTYPE     =
+                                                                   new QName(NAMESPACE_DAV,
+                                                                             "getcontenttype");
+    public static final QName      PROPERTY_GETETAG            =
+                                                                   new QName(NAMESPACE_DAV,
+                                                                             "getetag");
+    public static final QName      PROPERTY_GETLASTMODIFIED    =
+                                                                   new QName(NAMESPACE_DAV,
+                                                                             "getlastmodified");
+    public static final QName      PROPERTY_LOCKDISCOVERY      =
+                                                                   new QName(NAMESPACE_DAV,
+                                                                             "lockdiscovery");
+    public static final QName      PROPERTY_RESOURCETYPE       =
+                                                                   new QName(NAMESPACE_DAV,
+                                                                             "resourcetype");
+    public static final QName      PROPERTY_SUPPORTEDLOCK      =
+                                                                   new QName(NAMESPACE_DAV,
+                                                                             "supportedlock");
 
-    public static final Set<QName> PROPERTIES_SET = new HashSet<QName>();
-    
+    public static final Set<QName> PROPERTIES_SET              = new HashSet<QName>();
+
     static {
         PROPERTIES_SET.add(PROPERTY_CREATIONDATE);
         PROPERTIES_SET.add(PROPERTY_DISPLAYNAME);

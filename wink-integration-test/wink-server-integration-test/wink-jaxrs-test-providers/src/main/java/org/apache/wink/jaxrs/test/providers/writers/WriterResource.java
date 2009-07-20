@@ -53,7 +53,7 @@ public class WriterResource {
         if (clazz == null) {
             byte[] barr = new byte[100000];
             for (int c = 0; c < barr.length; ++c) {
-                barr[c] = (byte) c;
+                barr[c] = (byte)c;
             }
             return Response.ok(barr).type(mt).build();
         } else if ("Vector".equals(clazz)) {
@@ -142,8 +142,8 @@ public class WriterResource {
             }).build();
         } else if ("setshort".equals(q)) {
             HashSet<Short> s = new HashSet<Short>();
-            s.add(Short.valueOf((short) 1));
-            s.add(Short.valueOf((short) 2));
+            s.add(Short.valueOf((short)1));
+            s.add(Short.valueOf((short)2));
             return Response.ok(new GenericEntity<Set<Short>>(s) {
             }).build();
         }
@@ -165,8 +165,8 @@ public class WriterResource {
             return Response.ok(s).build();
         } else if ("setshort".equals(q)) {
             HashSet<Short> s = new HashSet<Short>();
-            s.add(Short.valueOf((short) 1));
-            s.add(Short.valueOf((short) 2));
+            s.add(Short.valueOf((short)1));
+            s.add(Short.valueOf((short)2));
             return Response.ok(s).build();
         }
         return null;

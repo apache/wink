@@ -24,19 +24,17 @@ import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
-public class InjectFieldsTest extends
-    MockServletInvocationTest {
+public class InjectFieldsTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] { ResourceWithFieldsExt.class };
+        return new Class[] {ResourceWithFieldsExt.class};
     }
 
     public void testExtResource() throws Exception {
         // tests that all members were populated
-        MockHttpServletRequest getRequest = MockRequestConstructor.constructMockRequest("GET",
-            "/ext-resource", "*/*");
+        MockHttpServletRequest getRequest =
+            MockRequestConstructor.constructMockRequest("GET", "/ext-resource", "*/*");
         getRequest.setQueryString("q=hi&s=bye");
         MockHttpServletResponse response = invoke(getRequest);
         assertEquals(200, response.getStatus());

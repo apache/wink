@@ -51,7 +51,8 @@ public class CookieHeaderDelegate implements HeaderDelegate<Cookie> {
             String[] subTokens = token.trim().split("=", 2);
             String name = subTokens.length > 0 ? subTokens[0] : null;
             String value = subTokens.length > 1 ? subTokens[1] : null;
-            if (value != null && value.startsWith("\"") && value.endsWith("\"")
+            if (value != null && value.startsWith("\"")
+                && value.endsWith("\"")
                 && value.length() > 1) {
                 value = value.substring(1, value.length() - 1);
             }
@@ -73,7 +74,7 @@ public class CookieHeaderDelegate implements HeaderDelegate<Cookie> {
                 } else {
                     if (versionSet) {
                         throw new IllegalArgumentException(
-                            "Cookie cannot contain additional $Version: " + cookie);
+                                                           "Cookie cannot contain additional $Version: " + cookie);
                     }
                 }
                 versionSet = true;
@@ -106,7 +107,7 @@ public class CookieHeaderDelegate implements HeaderDelegate<Cookie> {
             throw new IllegalArgumentException("Failed to parse Cookie " + cookie);
         }
         return new Cookie(firstCookie.name, firstCookie.value, firstCookie.path,
-            firstCookie.domain, firstCookie.version);
+                          firstCookie.domain, firstCookie.version);
 
     }
 

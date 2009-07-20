@@ -37,7 +37,8 @@ public class DefaultValueParamTest extends TestCase {
 
     protected HttpClient        httpclient = new HttpClient();
 
-    final private static String BASE_URI   = ServerEnvironmentInfo.getBaseURI() + "/params/defaultvalue";
+    final private static String BASE_URI   =
+                                               ServerEnvironmentInfo.getBaseURI() + "/params/defaultvalue";
 
     /**
      * Test that if no parameters are passed, the default values are used.

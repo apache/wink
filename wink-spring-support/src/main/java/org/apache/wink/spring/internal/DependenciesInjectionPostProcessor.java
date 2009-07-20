@@ -29,22 +29,25 @@ import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
-
 public class DependenciesInjectionPostProcessor implements BeanPostProcessor {
 
-    private static final Logger logger = LoggerFactory.getLogger(DependenciesInjectionPostProcessor.class);
+    private static final Logger            logger =
+                                                      LoggerFactory
+                                                          .getLogger(DependenciesInjectionPostProcessor.class);
     private SpringLifecycleManager<Object> springOFFactory;
 
     public Object postProcessAfterInitialization(Object bean, String beanName)
         throws BeansException {
-        SpringObjectFactory springObjectFactory = springOFFactory.getSpringObjectFactory(bean,
-            beanName);
+        SpringObjectFactory springObjectFactory =
+            springOFFactory.getSpringObjectFactory(bean, beanName);
         if (springObjectFactory != null) {
             ClassMetadata classMetadata = springObjectFactory.getClassMetadata();
             try {
-                CreationUtils.injectFields(bean, classMetadata, RuntimeContextTLS.getRuntimeContext());
+                CreationUtils.injectFields(bean, classMetadata, RuntimeContextTLS
+                    .getRuntimeContext());
             } catch (Exception e) {
-                logger.error("Exception occured during the fields injection for bean " + beanName, e);
+                logger.error("Exception occured during the fields injection for bean " + beanName,
+                             e);
                 throw new WebApplicationException(e);
             }
         }

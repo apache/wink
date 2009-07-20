@@ -26,10 +26,9 @@ import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 public class NewCookieHeaderDelegate implements HeaderDelegate<NewCookie> {
 
     public NewCookie fromString(String cookie) throws IllegalArgumentException {
-        if (cookie == null){
+        if (cookie == null) {
             throw new IllegalArgumentException("Cookie is null");
         }
-
 
         String tokens[] = cookie.split(";");
         ModifiableCookie modifiableCookie = null;
@@ -37,17 +36,22 @@ public class NewCookieHeaderDelegate implements HeaderDelegate<NewCookie> {
             String[] subTokens = token.split("=", 2);
             String name = subTokens.length > 0 ? subTokens[0] : null;
             String value = subTokens.length > 1 ? subTokens[1] : null;
-            if (value!= null && value.startsWith("\"") && value.endsWith("\"") && value.length() > 1) {
+            if (value != null && value.startsWith("\"")
+                && value.endsWith("\"")
+                && value.length() > 1) {
                 value = value.substring(1, value.length() - 1);
             }
 
             // Create new NewCookie
             if (modifiableCookie == null) {
                 if (name == null) {
-                    throw new IllegalArgumentException("Invalid Cookie  - Cookie Name" + name + "is not valid");
+                    throw new IllegalArgumentException("Invalid Cookie  - Cookie Name" + name
+                        + "is not valid");
                 }
                 if (value == null) {
-                    throw new IllegalArgumentException("Invalid Cookie  - Cookie Name value " + value + "is not valid");
+                    throw new IllegalArgumentException(
+                                                       "Invalid Cookie  - Cookie Name value " + value
+                                                           + "is not valid");
                 }
                 modifiableCookie = new ModifiableCookie();
                 modifiableCookie.name = name;
@@ -72,20 +76,30 @@ public class NewCookieHeaderDelegate implements HeaderDelegate<NewCookie> {
     }
 
     private NewCookie buildNewCookie(ModifiableCookie modifiableCookie) {
-        NewCookie newCookie = new NewCookie(modifiableCookie.name, modifiableCookie.value, modifiableCookie.path, modifiableCookie.domain, modifiableCookie.comment,
-                modifiableCookie.maxAge, modifiableCookie.secure);
+        NewCookie newCookie =
+            new NewCookie(modifiableCookie.name, modifiableCookie.value, modifiableCookie.path,
+                          modifiableCookie.domain, modifiableCookie.comment,
+                          modifiableCookie.maxAge, modifiableCookie.secure);
         return newCookie;
     }
 
     public String toString(NewCookie cookie) {
-        if (cookie == null){
+        if (cookie == null) {
             throw new IllegalArgumentException("Cookie is null");
         }
-        return buildCookie(cookie.getName(), cookie.getValue(), cookie.getPath(), cookie.getDomain(), cookie.getVersion(), cookie.getComment(), cookie.getMaxAge(), cookie
-                .isSecure());
+        return buildCookie(cookie.getName(), cookie.getValue(), cookie.getPath(), cookie
+            .getDomain(), cookie.getVersion(), cookie.getComment(), cookie.getMaxAge(), cookie
+            .isSecure());
     }
 
-    private String buildCookie(String name, String value, String path, String domain, int version, String comment, int maxAge, boolean secure) {
+    private String buildCookie(String name,
+                               String value,
+                               String path,
+                               String domain,
+                               int version,
+                               String comment,
+                               int maxAge,
+                               boolean secure) {
         StringBuilder sb = new StringBuilder();
         sb.append(name).append("=");
         if (value == null || value.length() == 0)
@@ -111,13 +125,13 @@ public class NewCookieHeaderDelegate implements HeaderDelegate<NewCookie> {
     }
 
     private static class ModifiableCookie {
-        public String name;
-        public String value;
-        public int version = Cookie.DEFAULT_VERSION;
-        public String path;
-        public String domain;
-        public String comment = null;
-        public int maxAge = NewCookie.DEFAULT_MAX_AGE;
-        public boolean secure = false;
+        public String  name;
+        public String  value;
+        public int     version = Cookie.DEFAULT_VERSION;
+        public String  path;
+        public String  domain;
+        public String  comment = null;
+        public int     maxAge  = NewCookie.DEFAULT_MAX_AGE;
+        public boolean secure  = false;
     }
 }

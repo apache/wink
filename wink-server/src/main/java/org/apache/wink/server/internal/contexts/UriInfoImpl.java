@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.contexts;
 
@@ -39,18 +38,16 @@ import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.MultivaluedMapImpl;
 import org.apache.wink.common.internal.PathSegmentImpl;
 import org.apache.wink.common.internal.uri.UriEncoder;
-import org.apache.wink.common.internal.uri.UriPathNormalizer;
 import org.apache.wink.common.internal.utils.UriHelper;
 import org.apache.wink.server.handlers.MessageContext;
 import org.apache.wink.server.internal.handlers.SearchResult;
 import org.apache.wink.server.internal.registry.ResourceInstance;
 
-
 public class UriInfoImpl implements UriInfo {
-    
-    private static final Logger logger = LoggerFactory.getLogger(UriInfoImpl.class);
 
-    private MessageContext                 messageContext; 
+    private static final Logger            logger = LoggerFactory.getLogger(UriInfoImpl.class);
+
+    private MessageContext                 messageContext;
 
     private URI                            absolutePath;
     private URI                            baseUri;
@@ -62,15 +59,15 @@ public class UriInfoImpl implements UriInfo {
 
     private MultivaluedMap<String, String> queryParameters;
     private MultivaluedMap<String, String> decodedQueryParameters;
-    
+
     private List<PathSegment>              pathSegments;
     private List<PathSegment>              decodedPathSegments;
-    
+
     private List<String>                   matchedURIsStrings;
     private List<String>                   decodedMatchedURIsStrings;
 
     public UriInfoImpl(MessageContext msgContext) {
-        messageContext = msgContext; 
+        messageContext = msgContext;
         absolutePath = null;
         baseUri = null;
         baseUriString = null;
@@ -111,16 +108,18 @@ public class UriInfoImpl implements UriInfo {
     }
 
     public List<ResourceInstance> getMatchedResourceInstances() {
-        return Collections.unmodifiableList(messageContext.getAttribute(SearchResult.class).getData().getMatchedResources());
+        return Collections.unmodifiableList(messageContext.getAttribute(SearchResult.class)
+            .getData().getMatchedResources());
     }
 
     public List<Object> getMatchedResources() {
-        List<ResourceInstance> matchedResources = messageContext.getAttribute(SearchResult.class).getData().getMatchedResources();
+        List<ResourceInstance> matchedResources =
+            messageContext.getAttribute(SearchResult.class).getData().getMatchedResources();
         List<Object> resourceList = new ArrayList<Object>(matchedResources.size());
         for (ResourceInstance resourceInstance : matchedResources) {
             resourceList.add(resourceInstance.getInstance(messageContext));
         }
-        
+
         return Collections.unmodifiableList(resourceList);
     }
 
@@ -129,19 +128,20 @@ public class UriInfoImpl implements UriInfo {
     }
 
     public List<String> getMatchedURIs(boolean decode) {
-        List<List<PathSegment>> matchedURIs = messageContext.getAttribute(SearchResult.class).getData().getMatchedURIs();
+        List<List<PathSegment>> matchedURIs =
+            messageContext.getAttribute(SearchResult.class).getData().getMatchedURIs();
         if (matchedURIsStrings != null && matchedURIsStrings.size() != matchedURIs.size()) {
             matchedURIsStrings = null;
             decodedMatchedURIsStrings = null;
         }
-        
+
         if (matchedURIsStrings == null) {
             matchedURIsStrings = new ArrayList<String>(matchedURIs.size());
             for (List<PathSegment> segments : matchedURIs) {
                 matchedURIsStrings.add(PathSegmentImpl.toString(segments));
             }
         }
-        
+
         List<String> list = matchedURIsStrings;
         if (decode) {
             if (decodedMatchedURIsStrings == null) {
@@ -152,7 +152,7 @@ public class UriInfoImpl implements UriInfo {
             }
             list = decodedMatchedURIsStrings;
         }
-        
+
         return Collections.unmodifiableList(list);
     }
 
@@ -171,7 +171,7 @@ public class UriInfoImpl implements UriInfo {
 
         return path;
     }
-    
+
     public MultivaluedMap<String, String> getPathParameters() {
         return getPathParameters(true);
     }
@@ -182,7 +182,7 @@ public class UriInfoImpl implements UriInfo {
             SearchResult searchResult = messageContext.getAttribute(SearchResult.class);
             if (searchResult == null) {
                 throw new IllegalStateException("outside the scope of a request");
-            }             
+            }
             MultivaluedMapImpl.copy(searchResult.getData().getMatchedVariables(), pathParameters);
         }
 
@@ -205,7 +205,7 @@ public class UriInfoImpl implements UriInfo {
         if (pathSegments == null) {
             pathSegments = UriHelper.parsePath(getPath(false));
         }
-        
+
         List<PathSegment> list = pathSegments;
         if (decode) {
             if (decodedPathSegments == null) {
@@ -213,7 +213,7 @@ public class UriInfoImpl implements UriInfo {
             }
             list = decodedPathSegments;
         }
-        
+
         return list;
     }
 
@@ -251,7 +251,9 @@ public class UriInfoImpl implements UriInfo {
 
     private String getBaseUriString() {
         if (baseUriString == null) {
-            baseUriString = buildBaseUriString(messageContext.getAttribute(HttpServletRequest.class), messageContext.getProperties());
+            baseUriString =
+                buildBaseUriString(messageContext.getAttribute(HttpServletRequest.class),
+                                   messageContext.getProperties());
         }
         return baseUriString;
     }
@@ -296,21 +298,25 @@ public class UriInfoImpl implements UriInfo {
     private static String autodetectBaseUri(HttpServletRequest request) {
 
         try {
-            return new URI(request.getScheme(), null, request.getServerName(), request.getServerPort(), "/", null, null)
-                    .toString();
+            return new URI(request.getScheme(), null, request.getServerName(), request
+                .getServerPort(), "/", null, null).toString();
         } catch (URISyntaxException e) {
             throw new IllegalStateException(e);
         }
     }
 
-    private String appendContextAndServletPath(String basePath, HttpServletRequest request, Properties properties) {
+    private String appendContextAndServletPath(String basePath,
+                                               HttpServletRequest request,
+                                               Properties properties) {
 
         StringBuilder builder = new StringBuilder(basePath);
         if (builder.charAt(builder.length() - 1) == '/') {
             builder.deleteCharAt(builder.length() - 1);
         }
         String contextURI = properties.getProperty("wink.context.uri");
-        String contextPath = ((contextURI != null  && contextURI.length() > 0) ? contextURI : request.getContextPath());
+        String contextPath =
+            ((contextURI != null && contextURI.length() > 0) ? contextURI : request
+                .getContextPath());
         if (contextPath != null) {
             builder.append(contextPath);
         }
@@ -324,12 +330,13 @@ public class UriInfoImpl implements UriInfo {
     }
 
     private String buildRequestPath(HttpServletRequest request) {
-        // we cannot use request.getPathInfo() since it cuts off the ';' parameters on Tomcat
+        // we cannot use request.getPathInfo() since it cuts off the ';'
+        // parameters on Tomcat
         String requestPath = request.getRequestURI();
-        
+
         // Syntax-Based Normalization (RFC 3986, section 6.2.2)
         requestPath = UriHelper.normalize(requestPath);
-        
+
         // cut off the context path from the beginning
         if (request.getContextPath() != null) {
             requestPath = requestPath.substring(request.getContextPath().length());
@@ -339,14 +346,14 @@ public class UriInfoImpl implements UriInfo {
         if (request.getServletPath() != null) {
             requestPath = requestPath.substring(request.getServletPath().length());
         }
-        
+
         // cut off all leading /
         int index = 0;
-        while (index < requestPath.length() && requestPath.charAt(index) == '/')  {
+        while (index < requestPath.length() && requestPath.charAt(index) == '/') {
             ++index;
         }
         requestPath = requestPath.substring(index);
-        
+
         return requestPath;
     }
 }

@@ -35,7 +35,6 @@ import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollect
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
 import org.apache.wink.common.internal.utils.FileLoader;
 
-
 /**
  * <p>
  * Loads application file. The format of the file is a text file, while each
@@ -45,15 +44,16 @@ import org.apache.wink.common.internal.utils.FileLoader;
  */
 public class ApplicationFileLoader {
 
-    private static final Logger logger = LoggerFactory.getLogger(ApplicationFileLoader.class);
+    private static final Logger logger           =
+                                                     LoggerFactory
+                                                         .getLogger(ApplicationFileLoader.class);
     private static final String CORE_APPLICATION = "META-INF/core/wink-providers";
     private final Set<Class<?>> classes          = new LinkedHashSet<Class<?>>();
 
     /**
      * Loads core application file.
      * 
-     * @throws FileNotFoundException
-     *             if file is not found (should never happen)
+     * @throws FileNotFoundException if file is not found (should never happen)
      */
     public ApplicationFileLoader() throws FileNotFoundException {
         this(CORE_APPLICATION);
@@ -63,11 +63,9 @@ public class ApplicationFileLoader {
      * loads specific applicationConfigFile
      * 
      * @param applicationConfigFile
-     * @throws FileNotFoundException
-     *             - if file is not found
+     * @throws FileNotFoundException - if file is not found
      */
-    public ApplicationFileLoader(String appConfigFile)
-        throws FileNotFoundException {
+    public ApplicationFileLoader(String appConfigFile) throws FileNotFoundException {
         this(FileLoader.loadFileAsStream(appConfigFile));
     }
 
@@ -75,11 +73,9 @@ public class ApplicationFileLoader {
      * loads specific applicationConfigFile
      * 
      * @param applicationConfigFile
-     * @throws FileNotFoundException
-     *             - if file is not found
+     * @throws FileNotFoundException - if file is not found
      */
-    public ApplicationFileLoader(InputStream appConfigFileStream)
-        throws FileNotFoundException {
+    public ApplicationFileLoader(InputStream appConfigFileStream) throws FileNotFoundException {
         loadClasses(appConfigFileStream);
     }
 
@@ -88,7 +84,7 @@ public class ApplicationFileLoader {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
             String line;
             l: while ((line = bufferedReader.readLine()) != null) {
-                // ignore leading and trailing whitespace 
+                // ignore leading and trailing whitespace
                 line = line.trim();
                 if (line.length() == 0) {
                     // ignore empty lines
@@ -102,7 +98,8 @@ public class ApplicationFileLoader {
                 Class<?> cls = null;
                 try {
                     cls = Class.forName(line);
-                    if (ResourceMetadataCollector.isStaticResource(cls) || ProviderMetadataCollector.isProvider(cls)) {
+                    if (ResourceMetadataCollector.isStaticResource(cls) || ProviderMetadataCollector
+                        .isProvider(cls)) {
                         classes.add(cls);
                     } else {
                         logger.warn("The {} is neither resource nor provider. Ignoring.", cls);

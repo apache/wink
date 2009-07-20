@@ -41,12 +41,12 @@ class PrototypeObjectFactory<T> implements ObjectFactory<T> {
 
     @SuppressWarnings("unchecked")
     public T getInstance(RuntimeContext context) {
-        return (T) CreationUtils.createObject(metadata, context);
+        return (T)CreationUtils.createObject(metadata, context);
     }
 
     @SuppressWarnings("unchecked")
     public Class<T> getInstanceClass() {
-        return (Class<T>) metadata.getResourceClass();
+        return (Class<T>)metadata.getResourceClass();
     }
 
     @Override

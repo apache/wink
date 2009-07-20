@@ -52,32 +52,36 @@ public class FormParamTest extends TestCase {
         }
     }
 
-    // TODO Fails due to WINK-35 which is not going to be resolved for the time being
-//    public void testEntityFormParamWithOneFormParam() throws Exception {
-//        HttpClient httpclient = new HttpClient();
-//
-//        PostMethod httpMethod = new PostMethod(getBaseURI() + "/withOneKeyAndEntity");
-//        try {
-//            StringRequestEntity s =
-//                new StringRequestEntity("firstkey=somevalue&someothervalue=somethingelse",
-//                                        "application/x-www-form-urlencoded", null);
-//            httpMethod.setRequestEntity(s);
-//            httpclient.executeMethod(httpMethod);
-//            assertEquals(200, httpMethod.getStatusCode());
-//            String resp = httpMethod.getResponseBodyAsString();
-//            System.out.println(resp);
-//            assertTrue(resp, resp.startsWith("firstkey=somevalue"));
-//            assertTrue(resp, resp.contains("someothervalue=somethingelse"));
-//            assertTrue(resp, resp.contains("firstkey=somevalue"));
-//        } finally {
-//            httpMethod.releaseConnection();
-//        }
-//    }
+    // TODO Fails due to WINK-35 which is not going to be resolved for the time
+    // being
+    // public void testEntityFormParamWithOneFormParam() throws Exception {
+    // HttpClient httpclient = new HttpClient();
+    //
+    // PostMethod httpMethod = new PostMethod(getBaseURI() +
+    // "/withOneKeyAndEntity");
+    // try {
+    // StringRequestEntity s =
+    // new
+    // StringRequestEntity("firstkey=somevalue&someothervalue=somethingelse",
+    // "application/x-www-form-urlencoded", null);
+    // httpMethod.setRequestEntity(s);
+    // httpclient.executeMethod(httpMethod);
+    // assertEquals(200, httpMethod.getStatusCode());
+    // String resp = httpMethod.getResponseBodyAsString();
+    // System.out.println(resp);
+    // assertTrue(resp, resp.startsWith("firstkey=somevalue"));
+    // assertTrue(resp, resp.contains("someothervalue=somethingelse"));
+    // assertTrue(resp, resp.contains("firstkey=somevalue"));
+    // } finally {
+    // httpMethod.releaseConnection();
+    // }
+    // }
 
     /**
-     * In a weird instance, client posts a form encoded data but the resource is expecting something
-     * else (say a String) as its entity. The engine should not mangle the InputStream with
-     * ServletRequest.getParameter until absolutely required.
+     * In a weird instance, client posts a form encoded data but the resource is
+     * expecting something else (say a String) as its entity. The engine should
+     * not mangle the InputStream with ServletRequest.getParameter until
+     * absolutely required.
      * 
      * @throws Exception
      */

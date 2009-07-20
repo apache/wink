@@ -84,7 +84,8 @@ public abstract class AbstractMetadata {
     public String toString() {
         return "[" + (consumes != null ? "consumes=" + consumes + ", " : "")
             + (paths != null ? "paths=" + paths + ", " : "")
-            + (produces != null ? "produces=" + produces : "") + "]";
+            + (produces != null ? "produces=" + produces : "")
+            + "]";
     }
 
     public void setEncoded(boolean encoded) {

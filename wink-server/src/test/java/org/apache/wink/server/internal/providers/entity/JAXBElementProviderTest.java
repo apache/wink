@@ -50,23 +50,29 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 public class JAXBElementProviderTest extends MockServletInvocationTest {
 
-    private static final String SOURCE_REQUEST              = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><feed xmlns:ns2=\"http://a9.com/-/spec/opensearch/1.1/\" xmlns=\"http://www.w3.org/2005/Atom\" ><id>ID</id></feed>";
+    private static final String SOURCE_REQUEST              =
+                                                                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><feed xmlns:ns2=\"http://a9.com/-/spec/opensearch/1.1/\" xmlns=\"http://www.w3.org/2005/Atom\" ><id>ID</id></feed>";
     private static final byte[] SOURCE_REQUEST_BYTES        = SOURCE_REQUEST.getBytes();
-    private static final String SOURCE_RESPONSE             = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><feed xmlns:ns2=\"http://a9.com/-/spec/opensearch/1.1/\" xmlns=\"http://www.w3.org/2005/Atom\"><id>ID</id></feed>";
+    private static final String SOURCE_RESPONSE             =
+                                                                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><feed xmlns:ns2=\"http://a9.com/-/spec/opensearch/1.1/\" xmlns=\"http://www.w3.org/2005/Atom\"><id>ID</id></feed>";
 
-    private static final String JAXBXmlRootElement_REQUEST  = "<JAXBXmlRootElement><id>ID</id><name>NAME</name></JAXBXmlRootElement>";
+    private static final String JAXBXmlRootElement_REQUEST  =
+                                                                "<JAXBXmlRootElement><id>ID</id><name>NAME</name></JAXBXmlRootElement>";
     private static final byte[] JAXBXmlRootElement_BYTES    = JAXBXmlRootElement_REQUEST.getBytes();
-    private static final String JAXBXmlRootElement_RESPONSE = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><JAXBXmlRootElement><id>ID</id><name>NAME</name></JAXBXmlRootElement>";
+    private static final String JAXBXmlRootElement_RESPONSE =
+                                                                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><JAXBXmlRootElement><id>ID</id><name>NAME</name></JAXBXmlRootElement>";
 
-    private static final String JAXBXmlType_REQUEST         = "<JAXBXmlType><id>ID</id><name>NAME</name></JAXBXmlType>";
+    private static final String JAXBXmlType_REQUEST         =
+                                                                "<JAXBXmlType><id>ID</id><name>NAME</name></JAXBXmlType>";
     private static final byte[] JAXBXmlType_REQUEST_BYTES   = JAXBXmlType_REQUEST.getBytes();
-    private static final String JAXBXmlType_RESPONSE        = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><JAXBXmlType><id>ID</id><name>NAME</name></JAXBXmlType>";
+    private static final String JAXBXmlType_RESPONSE        =
+                                                                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><JAXBXmlType><id>ID</id><name>NAME</name></JAXBXmlType>";
 
     JAXBElement<AtomFeed>       atomfeed;
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class<?>[] { Resource.class };
+        return new Class<?>[] {Resource.class};
     }
 
     @Path("jaxbresource")
@@ -95,8 +101,8 @@ public class JAXBElementProviderTest extends MockServletInvocationTest {
             JAXBXmlType s = new JAXBXmlType();
             s.setId(resource.getId());
             s.setName(resource.getName());
-            JAXBElement<JAXBXmlType> element = new JAXBElement<JAXBXmlType>(
-                new QName("JAXBXmlType"), JAXBXmlType.class, resource);
+            JAXBElement<JAXBXmlType> element =
+                new JAXBElement<JAXBXmlType>(new QName("JAXBXmlType"), JAXBXmlType.class, resource);
             return element;
         }
 
@@ -146,95 +152,141 @@ public class JAXBElementProviderTest extends MockServletInvocationTest {
 
         JAXBElementXmlProvider provider = new JAXBElementXmlProvider();
         AtomFeed af = new AtomFeed();
-        org.apache.wink.common.model.atom.ObjectFactory objectFactory = new org.apache.wink.common.model.atom.ObjectFactory();
+        org.apache.wink.common.model.atom.ObjectFactory objectFactory =
+            new org.apache.wink.common.model.atom.ObjectFactory();
         JAXBElement<AtomFeed> feed = objectFactory.createFeed(af);
-        Type genericType = JAXBElementProviderTest.class.getDeclaredField("atomfeed").getGenericType();
+        Type genericType =
+            JAXBElementProviderTest.class.getDeclaredField("atomfeed").getGenericType();
 
         assertTrue(provider.isWriteable(feed.getClass(), genericType, null, new MediaType("text",
-            "xml")));
-        assertTrue(provider.isWriteable(feed.getClass(), genericType, null, new MediaType(
-            "application", "xml")));
-        assertTrue(provider.isWriteable(feed.getClass(), genericType, null, new MediaType(
-            "application", "atom+xml")));
-        assertTrue(provider.isWriteable(feed.getClass(), genericType, null, new MediaType(
-            "application", "atomsvc+xml")));
-        assertFalse(provider.isWriteable(feed.getClass(), genericType, null, new MediaType("text",
-            "plain")));
+                                                                                          "xml")));
+        assertTrue(provider.isWriteable(feed.getClass(),
+                                        genericType,
+                                        null,
+                                        new MediaType("application", "xml")));
+        assertTrue(provider.isWriteable(feed.getClass(),
+                                        genericType,
+                                        null,
+                                        new MediaType("application", "atom+xml")));
+        assertTrue(provider.isWriteable(feed.getClass(),
+                                        genericType,
+                                        null,
+                                        new MediaType("application", "atomsvc+xml")));
+        assertFalse(provider
+            .isWriteable(feed.getClass(), genericType, null, new MediaType("text", "plain")));
 
         assertTrue(provider.isReadable(feed.getClass(), genericType, null, new MediaType("text",
-            "xml")));
-        assertTrue(provider.isReadable(feed.getClass(), genericType, null, new MediaType(
-            "application", "xml")));
-        assertTrue(provider.isReadable(feed.getClass(), genericType, null, new MediaType(
-            "application", "atom+xml")));
-        assertTrue(provider.isReadable(feed.getClass(), genericType, null, new MediaType(
-            "application", "atomsvc+xml")));
+                                                                                         "xml")));
+        assertTrue(provider.isReadable(feed.getClass(),
+                                       genericType,
+                                       null,
+                                       new MediaType("application", "xml")));
+        assertTrue(provider.isReadable(feed.getClass(),
+                                       genericType,
+                                       null,
+                                       new MediaType("application", "atom+xml")));
+        assertTrue(provider.isReadable(feed.getClass(),
+                                       genericType,
+                                       null,
+                                       new MediaType("application", "atomsvc+xml")));
         assertFalse(provider.isReadable(feed.getClass(), genericType, null, new MediaType("text",
-            "plain")));
+                                                                                          "plain")));
     }
 
     public void testJAXBElementProviderInvocation() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("POST",
-            "/jaxbresource/jaxbelement", "text/xml", "text/xml", SOURCE_REQUEST_BYTES);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/jaxbresource/jaxbelement",
+                                                        "text/xml",
+                                                        "text/xml",
+                                                        SOURCE_REQUEST_BYTES);
         MockHttpServletResponse invoke = invoke(request);
         assertEquals(200, invoke.getStatus());
 
         JAXBContext context = JAXBContext.newInstance(AtomFeed.class);
         Unmarshaller unmarshaller = context.createUnmarshaller();
-        JAXBElement<AtomFeed> expectedResponse = (JAXBElement<AtomFeed>) unmarshaller.unmarshal(new ByteArrayInputStream(
-            SOURCE_RESPONSE.getBytes()));
-        JAXBElement<AtomFeed> response = (JAXBElement<AtomFeed>) unmarshaller.unmarshal(new ByteArrayInputStream(
-            invoke.getContentAsByteArray()));
+        JAXBElement<AtomFeed> expectedResponse =
+            (JAXBElement<AtomFeed>)unmarshaller.unmarshal(new ByteArrayInputStream(SOURCE_RESPONSE
+                .getBytes()));
+        JAXBElement<AtomFeed> response =
+            (JAXBElement<AtomFeed>)unmarshaller.unmarshal(new ByteArrayInputStream(invoke
+                .getContentAsByteArray()));
         assertEquals(expectedResponse.getValue().getId(), response.getValue().getId());
     }
 
     public void testJAXBXmlElementProviderInvocation() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("POST",
-            "/jaxbresource/xmlrootwithfactory", "text/xml", "text/xml", SOURCE_REQUEST_BYTES);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/jaxbresource/xmlrootwithfactory",
+                                                        "text/xml",
+                                                        "text/xml",
+                                                        SOURCE_REQUEST_BYTES);
         MockHttpServletResponse invoke = invoke(request);
         assertEquals(200, invoke.getStatus());
 
         JAXBContext context = JAXBContext.newInstance(AtomFeed.class);
         Unmarshaller unmarshaller = context.createUnmarshaller();
-        JAXBElement<AtomFeed> expectedResponse = (JAXBElement<AtomFeed>) unmarshaller.unmarshal(new ByteArrayInputStream(
-            SOURCE_RESPONSE.getBytes()));
-        JAXBElement<AtomFeed> response = (JAXBElement<AtomFeed>) unmarshaller.unmarshal(new ByteArrayInputStream(
-            invoke.getContentAsByteArray()));
+        JAXBElement<AtomFeed> expectedResponse =
+            (JAXBElement<AtomFeed>)unmarshaller.unmarshal(new ByteArrayInputStream(SOURCE_RESPONSE
+                .getBytes()));
+        JAXBElement<AtomFeed> response =
+            (JAXBElement<AtomFeed>)unmarshaller.unmarshal(new ByteArrayInputStream(invoke
+                .getContentAsByteArray()));
         assertEquals(expectedResponse.getValue().getId(), response.getValue().getId());
     }
 
     public void testJAXBXmlElementProviderInvocationXmltypeNoFactory() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-            "/jaxbresource/xmltypenofactory", "text/xml", "text/xml", null);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/jaxbresource/xmltypenofactory",
+                                                        "text/xml",
+                                                        "text/xml",
+                                                        null);
         MockHttpServletResponse invoke = invoke(request);
         assertEquals(200, invoke.getStatus());
         assertEquals(JAXBXmlType_RESPONSE, invoke.getContentAsString());
     }
 
     public void testJAXBXmlElementProviderInvocationXmltype() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("POST",
-            "/jaxbresource/xmltype", "text/xml", "text/xml", JAXBXmlType_REQUEST_BYTES);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/jaxbresource/xmltype",
+                                                        "text/xml",
+                                                        "text/xml",
+                                                        JAXBXmlType_REQUEST_BYTES);
         MockHttpServletResponse invoke = invoke(request);
         assertEquals(200, invoke.getStatus());
         assertEquals(JAXBXmlType_RESPONSE, invoke.getContentAsString());
     }
 
     public void testJAXBXmlElementProviderInvocationXmlRoot() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("POST",
-            "/jaxbresource/xmlrootnofactory", "text/xml", "text/xml", JAXBXmlRootElement_BYTES);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/jaxbresource/xmlrootnofactory",
+                                                        "text/xml",
+                                                        "text/xml",
+                                                        JAXBXmlRootElement_BYTES);
         MockHttpServletResponse invoke = invoke(request);
         assertEquals(200, invoke.getStatus());
         assertEquals(JAXBXmlRootElement_RESPONSE, invoke.getContentAsString());
 
-        request = MockRequestConstructor.constructMockRequest("POST",
-            "/jaxbresource/xmlrootnofactory", "text/xml", "text/xml", "<BadRequest/>".getBytes());
+        request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/jaxbresource/xmlrootnofactory",
+                                                        "text/xml",
+                                                        "text/xml",
+                                                        "<BadRequest/>".getBytes());
         invoke = invoke(request);
         assertEquals(400, invoke.getStatus());
     }
 
     public void testJAXBXmlElementProviderInvocationXmlAsset() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("POST",
-            "/jaxbresource/xmlasset", "text/xml", "text/xml", JAXBXmlType_REQUEST_BYTES);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/jaxbresource/xmlasset",
+                                                        "text/xml",
+                                                        "text/xml",
+                                                        JAXBXmlType_REQUEST_BYTES);
         MockHttpServletResponse invoke = invoke(request);
         assertEquals(200, invoke.getStatus());
         assertEquals(JAXBXmlType_RESPONSE, invoke.getContentAsString());
@@ -247,25 +299,25 @@ public class JAXBElementProviderTest extends MockServletInvocationTest {
 
         assertTrue(provider.isWriteable(af.getClass(), null, null, new MediaType("text", "xml")));
         assertTrue(provider.isWriteable(af.getClass(), null, null, new MediaType("application",
-            "xml")));
+                                                                                 "xml")));
         assertTrue(provider.isWriteable(af.getClass(), null, null, new MediaType("application",
-            "atom+xml")));
+                                                                                 "atom+xml")));
         assertTrue(provider.isWriteable(af.getClass(), null, null, new MediaType("application",
-            "atomsvc+xml")));
+                                                                                 "atomsvc+xml")));
         assertFalse(provider.isWriteable(af.getClass(), null, null, new MediaType("text", "plain")));
 
         assertTrue(provider.isReadable(af.getClass(), null, null, new MediaType("text", "xml")));
         assertTrue(provider.isReadable(af.getClass(), null, null, new MediaType("application",
-            "xml")));
+                                                                                "xml")));
         assertTrue(provider.isReadable(af.getClass(), null, null, new MediaType("application",
-            "atom+xml")));
+                                                                                "atom+xml")));
         assertTrue(provider.isReadable(af.getClass(), null, null, new MediaType("application",
-            "atomsvc+xml")));
+                                                                                "atomsvc+xml")));
         assertFalse(provider.isReadable(af.getClass(), null, null, new MediaType("text", "plain")));
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "JAXBXmlType", propOrder = { "id", "name" })
+    @XmlType(name = "JAXBXmlType", propOrder = {"id", "name"})
     public static class JAXBXmlType {
 
         @XmlElement(required = true)
@@ -295,7 +347,7 @@ public class JAXBElementProviderTest extends MockServletInvocationTest {
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "JAXBXmlRootElement", propOrder = { "id", "name" })
+    @XmlType(name = "JAXBXmlRootElement", propOrder = {"id", "name"})
     @XmlRootElement(name = "JAXBXmlRootElement")
     public static class JAXBXmlRootElement {
 

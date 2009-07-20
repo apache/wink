@@ -30,26 +30,27 @@ import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 import org.junit.Test;
 
 public class CacheControlHeaderDelegateTest {
-    
+
     @Test
     public void testSerializeCacheControlHeader() {
         RuntimeDelegate rd = RuntimeDelegate.getInstance();
-        HeaderDelegate<CacheControl> cacheControlHeaderDelegate = rd.createHeaderDelegate(CacheControl.class);
+        HeaderDelegate<CacheControl> cacheControlHeaderDelegate =
+            rd.createHeaderDelegate(CacheControl.class);
         if (cacheControlHeaderDelegate == null) {
             fail("CacheControl header delegate is not regestered in RuntimeDelegateImpl");
         }
-   
-        String expectedCacheControlHeader = "private=\"privateField1\", " +
-        		                    "no-cache=\"noCachefield1, noCachefield2\", " +
-        		                    "no-store, " +
-        		                    "no-transform, " +
-        		                    "must-revalidate, " +
-        		                    "proxy-revalidate, " +
-        		                    "max-age=21600, " +
-        		                    "s-maxage=3000, " +
-        		                    "extension=value, " +
-        		                    "extension3, " +
-        		                    "extension2=\"value with space\"";
+
+        String expectedCacheControlHeader =
+            "private=\"privateField1\", " + "no-cache=\"noCachefield1, noCachefield2\", "
+                + "no-store, "
+                + "no-transform, "
+                + "must-revalidate, "
+                + "proxy-revalidate, "
+                + "max-age=21600, "
+                + "s-maxage=3000, "
+                + "extension=value, "
+                + "extension3, "
+                + "extension2=\"value with space\"";
         CacheControl cc = new CacheControl();
         cc.setMaxAge(21600);
         cc.setMustRevalidate(true);
@@ -65,15 +66,15 @@ public class CacheControlHeaderDelegateTest {
         cc.getNoCacheFields().add("noCachefield1");
         cc.getNoCacheFields().add("noCachefield2");
         cc.getPrivateFields().add("privateField1");
-        
-        
-        String[]cache_out =cacheControlHeaderDelegate.toString(cc).split(",");
-        String[]cache_expected = expectedCacheControlHeader.split(",");
+
+        String[] cache_out = cacheControlHeaderDelegate.toString(cc).split(",");
+        String[] cache_expected = expectedCacheControlHeader.split(",");
         Arrays.sort(cache_expected);
         Arrays.sort(cache_out);
-        assertArrayEquals(cache_expected,cache_out);
-        //assertEquals(expectedCacheControlHeader, cacheControlHeaderDelegate.toString(cc));
-        
+        assertArrayEquals(cache_expected, cache_out);
+        // assertEquals(expectedCacheControlHeader,
+        // cacheControlHeaderDelegate.toString(cc));
+
         try {
             cacheControlHeaderDelegate.toString(null);
             fail("CacheControl Header is null - IllegalArgumentException must be thrown");
@@ -81,22 +82,23 @@ public class CacheControlHeaderDelegateTest {
             // success
         }
     }
-    
+
     @Test
     public void testParseCacheControlHeader() {
         RuntimeDelegate rd = RuntimeDelegate.getInstance();
-        HeaderDelegate<CacheControl> cacheControlHeaderDelegate = rd.createHeaderDelegate(CacheControl.class);
+        HeaderDelegate<CacheControl> cacheControlHeaderDelegate =
+            rd.createHeaderDelegate(CacheControl.class);
         if (cacheControlHeaderDelegate == null) {
             fail("CacheControl header delegate is not regestered in RuntimeDelegateImpl");
         }
-        
+
         try {
             cacheControlHeaderDelegate.fromString("no-cache");
             fail("JAX-RS CacheControl type is designed to support only cache-response-directives - UnsupportedOperationException must be thrown");
         } catch (UnsupportedOperationException e) {
             // success
         }
-   
+
     }
-    
+
 }

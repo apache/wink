@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.client.internal;
 
@@ -31,9 +30,8 @@ import org.apache.wink.common.internal.contexts.ProvidersImpl;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.common.internal.runtime.AbstractRuntimeContext;
 
-
 public class ClientRuntimeContext extends AbstractRuntimeContext {
-    
+
     public ClientRuntimeContext(ProvidersRegistry providersRegistry) {
         setAttribute(Providers.class, new ProvidersImpl(providersRegistry, this));
     }

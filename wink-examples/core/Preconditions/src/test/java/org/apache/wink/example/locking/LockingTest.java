@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.locking;
 
 import javax.ws.rs.core.HttpHeaders;
@@ -30,101 +30,127 @@ import org.apache.wink.test.mock.TestUtils;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 public class LockingTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] { DefectResource.class };
+        return new Class[] {DefectResource.class};
     }
-
 
     public void testLockingExample() throws Exception {
 
         // get a single defect and ensure it returns with etag
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-            "/defects/11", MediaType.APPLICATION_XML_TYPE);
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/defects/11",
+                                                        MediaType.APPLICATION_XML_TYPE);
         MockHttpServletResponse response = invoke(request);
         assertEquals("status", 200, response.getStatus());
         byte[] defect11 = response.getContentAsString().getBytes();
-        String diff = TestUtils.diffIgnoreUpdateWithAttributeQualifier(
-            "/results/defect_11.xml", defect11, getClass());
+        String diff =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier("/results/defect_11.xml",
+                                                             defect11,
+                                                             getClass());
         assertNull(diff, diff);
-        String etag = (String) response.getHeader(HttpHeaders.ETAG);
+        String etag = (String)response.getHeader(HttpHeaders.ETAG);
         assertNotNull(etag);
 
         // get collection of defects and ensure that last-modified was sent
-        request = MockRequestConstructor.constructMockRequest("GET", "/defects",
-            MediaType.APPLICATION_XML_TYPE);
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/defects",
+                                                        MediaType.APPLICATION_XML_TYPE);
         response = invoke(request);
         assertEquals("status", 200, response.getStatus());
-        String lastModified = (String) response.getHeader(HttpHeaders.LAST_MODIFIED);
+        String lastModified = (String)response.getHeader(HttpHeaders.LAST_MODIFIED);
         assertNotNull(lastModified);
 
         // get collection of defects with IF_MODIFIED_SINCE header
         // collection was not modified, so 304 should return
-        request = MockRequestConstructor.constructMockRequest("GET", "/defects",
-            MediaType.APPLICATION_XML_TYPE);
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/defects",
+                                                        MediaType.APPLICATION_XML_TYPE);
         request.addHeader(HttpHeaders.IF_MODIFIED_SINCE, lastModified);
         response = invoke(request);
         assertEquals("status", 304, response.getStatus());
 
-        
-        request = MockRequestConstructor.constructMockRequest("GET", "/defects/11",
-            MediaType.APPLICATION_XML_TYPE);
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/defects/11",
+                                                        MediaType.APPLICATION_XML_TYPE);
         request.addHeader("if-none-match", etag);
         response = invoke(request);
         assertEquals("status", 304, response.getStatus());
 
         Thread.sleep(1000);
 
-        request = MockRequestConstructor.constructMockRequest("PUT", "/defects/11",
-            MediaType.APPLICATION_XML, MediaType.APPLICATION_XML, defect11);
+        request =
+            MockRequestConstructor.constructMockRequest("PUT",
+                                                        "/defects/11",
+                                                        MediaType.APPLICATION_XML,
+                                                        MediaType.APPLICATION_XML,
+                                                        defect11);
         request.addHeader("if-match", etag);
         response = invoke(request);
         assertEquals("status", 200, response.getStatus());
 
-        
         // now, after the collection was modified
         // 200 should return
-        request = MockRequestConstructor.constructMockRequest("GET", "/defects",
-            MediaType.APPLICATION_XML_TYPE);
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/defects",
+                                                        MediaType.APPLICATION_XML_TYPE);
         request.addHeader(HttpHeaders.IF_MODIFIED_SINCE, lastModified);
         response = invoke(request);
         assertEquals("status", 200, response.getStatus());
 
-        request = MockRequestConstructor.constructMockRequest("PUT", "/defects/11",
-            MediaType.APPLICATION_XML, MediaType.APPLICATION_XML, defect11);
+        request =
+            MockRequestConstructor.constructMockRequest("PUT",
+                                                        "/defects/11",
+                                                        MediaType.APPLICATION_XML,
+                                                        MediaType.APPLICATION_XML,
+                                                        defect11);
         response = invoke(request);
         assertEquals("status", 400, response.getStatus());
 
-        
-        request = MockRequestConstructor.constructMockRequest("PUT", "/defects/11",
-            MediaType.APPLICATION_XML, MediaType.APPLICATION_XML, defect11);
+        request =
+            MockRequestConstructor.constructMockRequest("PUT",
+                                                        "/defects/11",
+                                                        MediaType.APPLICATION_XML,
+                                                        MediaType.APPLICATION_XML,
+                                                        defect11);
         request.addHeader("if-match", "\"blabla\"");
         response = invoke(request);
         assertEquals("status", 412, response.getStatus());
 
-        request = MockRequestConstructor.constructMockRequest("DELETE", "/defects/11",
-            MediaType.APPLICATION_XML);
+        request =
+            MockRequestConstructor.constructMockRequest("DELETE",
+                                                        "/defects/11",
+                                                        MediaType.APPLICATION_XML);
         request.addHeader("if-match", "\"blabla\"");
         response = invoke(request);
         assertEquals("status", 412, response.getStatus());
 
-        request = MockRequestConstructor.constructMockRequest("DELETE", "/defects/11",
-            MediaType.APPLICATION_XML);
+        request =
+            MockRequestConstructor.constructMockRequest("DELETE",
+                                                        "/defects/11",
+                                                        MediaType.APPLICATION_XML);
         response = invoke(request);
         assertEquals("status", 400, response.getStatus());
 
-        
-        request = MockRequestConstructor.constructMockRequest("DELETE", "/defects/11",
-            MediaType.APPLICATION_XML);
+        request =
+            MockRequestConstructor.constructMockRequest("DELETE",
+                                                        "/defects/11",
+                                                        MediaType.APPLICATION_XML);
         request.addHeader("if-match", etag);
         response = invoke(request);
         assertEquals("status", 200, response.getStatus());
 
-        request = MockRequestConstructor.constructMockRequest("DELETE", "/defects/11",
-            MediaType.APPLICATION_XML);
+        request =
+            MockRequestConstructor.constructMockRequest("DELETE",
+                                                        "/defects/11",
+                                                        MediaType.APPLICATION_XML);
         request.addHeader("if-match", etag);
         response = invoke(request);
         assertEquals("status", 404, response.getStatus());

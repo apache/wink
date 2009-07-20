@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal;
 
 import javax.ws.rs.Consumes;
@@ -32,7 +32,6 @@ import org.apache.wink.common.RestConstants;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 
-
 /**
  * Tests complete dispatch process up to resource throwing an error.
  */
@@ -40,21 +39,21 @@ public class ErrorResponseTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] { ErrorResource.class };
+        return new Class[] {ErrorResource.class};
     }
 
     @Path("errors/")
     public static class ErrorResource {
 
         @GET
-        @Produces( { MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON })
+        @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
         public void handleGet() {
             throw new IllegalArgumentException();
         }
 
         @GET
-        @Consumes( { MediaTypeUtils.PDF })
-        @Produces( { MediaTypeUtils.PDF })
+        @Consumes( {MediaTypeUtils.PDF})
+        @Produces( {MediaTypeUtils.PDF})
         public void handleGetPdf() {
             throw new IllegalArgumentException();
         }
@@ -67,9 +66,9 @@ public class ErrorResponseTest extends MockServletInvocationTest {
         }
 
     } // class ErrorResource
-    
 
     // TODO: we need tests for exception handling
-    
-    public void testDummy() {}
+
+    public void testDummy() {
+    }
 }

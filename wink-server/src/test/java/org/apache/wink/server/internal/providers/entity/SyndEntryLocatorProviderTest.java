@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.providers.entity;
 
@@ -35,19 +34,18 @@ import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 public class SyndEntryLocatorProviderTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class<?>[] { TestResource.class };
+        return new Class<?>[] {TestResource.class};
     }
 
     private static final SyndEntry SYND_ENTRY = new SyndEntry(new SyndText("title"), "id");
-    private static final String    ENTRY      = "<entry xmlns=\"http://www.w3.org/2005/Atom\">\n"
-                                                  + "    <id>id</id>\n"
-                                                  + "    <title type=\"text\">title</title>\n"
-                                                  + "</entry>\n";
+    private static final String    ENTRY      =
+                                                  "<entry xmlns=\"http://www.w3.org/2005/Atom\">\n" + "    <id>id</id>\n"
+                                                      + "    <title type=\"text\">title</title>\n"
+                                                      + "</entry>\n";
 
     @Asset
     public static class TestAsset {
@@ -87,16 +85,16 @@ public class SyndEntryLocatorProviderTest extends MockServletInvocationTest {
     }
 
     public void testGetAtomEntry() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-            "/test", "application/atom+xml");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "/test", "application/atom+xml");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
         assertEquals(ENTRY, response.getContentAsString());
     }
 
     public void testPostAtomEntry() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("POST",
-            "/test", "application/atom+xml");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("POST", "/test", "application/atom+xml");
         request.setContentType("application/atom+xml");
         request.setContent(ENTRY.getBytes());
         MockHttpServletResponse response = invoke(request);

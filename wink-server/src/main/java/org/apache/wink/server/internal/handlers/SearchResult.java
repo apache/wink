@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.handlers;
 
@@ -37,26 +36,25 @@ import org.apache.wink.server.internal.registry.ResourceInstance;
 import org.apache.wink.server.internal.registry.SubResourceLocatorRecord;
 import org.apache.wink.server.internal.registry.SubResourceMethodRecord;
 
-
 /**
  * Stores the result of searching for a resource method to dispatch a request to
  */
 public class SearchResult {
-    
-    private boolean found;
+
+    private boolean                 found;
     private WebApplicationException error;
-    private ResourceInstance resource;
-    private MethodRecord method;
-    private Object[] invocationParameters;
-    private AccumulatedData data;
-    private UriInfo uriInfo;
-    
+    private ResourceInstance        resource;
+    private MethodRecord            method;
+    private Object[]                invocationParameters;
+    private AccumulatedData         data;
+    private UriInfo                 uriInfo;
+
     public static class AccumulatedData implements Cloneable {
-        private UriInfo uriInfo;
-        private MultivaluedMap<String,String> matchedVariables;
-        private MultivaluedMap<String,List<PathSegment>> matchedVariablesPathSegments;
-        private LinkedList<List<PathSegment>> matchedURIs;
-        private LinkedList<ResourceInstance> matchedResources;
+        private UriInfo                                   uriInfo;
+        private MultivaluedMap<String, String>            matchedVariables;
+        private MultivaluedMap<String, List<PathSegment>> matchedVariablesPathSegments;
+        private LinkedList<List<PathSegment>>             matchedURIs;
+        private LinkedList<ResourceInstance>              matchedResources;
 
         public AccumulatedData(UriInfo uriInfo) {
             this.uriInfo = uriInfo;
@@ -72,13 +70,14 @@ public class SearchResult {
                 throw new RuntimeException(e);
             }
             clone.matchedVariables = MultivaluedMapImpl.clone(getMatchedVariables());
-            clone.matchedVariablesPathSegments = MultivaluedMapImpl.clone(getMatchedVariablesPathSegments());
+            clone.matchedVariablesPathSegments =
+                MultivaluedMapImpl.clone(getMatchedVariablesPathSegments());
             clone.matchedURIs = (LinkedList<List<PathSegment>>)getMatchedURIs().clone();
             clone.matchedResources = (LinkedList<ResourceInstance>)getMatchedResources().clone();
             return clone;
         }
 
-        public void setMatchedVariables(MultivaluedMap<String,String> matchedVariables) {
+        public void setMatchedVariables(MultivaluedMap<String, String> matchedVariables) {
             this.matchedVariables = matchedVariables;
         }
 
@@ -90,16 +89,16 @@ public class SearchResult {
             this.matchedResources = matchedResources;
         }
 
-        public MultivaluedMap<String,String> getMatchedVariables() {
+        public MultivaluedMap<String, String> getMatchedVariables() {
             if (matchedVariables == null) {
-                matchedVariables = new MultivaluedMapImpl<String,String>();
+                matchedVariables = new MultivaluedMapImpl<String, String>();
             }
             return matchedVariables;
         }
 
-        public MultivaluedMap<String,List<PathSegment>> getMatchedVariablesPathSegments() {
+        public MultivaluedMap<String, List<PathSegment>> getMatchedVariablesPathSegments() {
             if (matchedVariablesPathSegments == null) {
-                matchedVariablesPathSegments = new MultivaluedMapImpl<String,List<PathSegment>>();
+                matchedVariablesPathSegments = new MultivaluedMapImpl<String, List<PathSegment>>();
             }
             return matchedVariablesPathSegments;
         }
@@ -119,15 +118,16 @@ public class SearchResult {
         }
 
         /**
-         * Used for providing the info for the {@link UriInfo#getMatchedURIs()} method.
+         * Used for providing the info for the {@link UriInfo#getMatchedURIs()}
+         * method.
          * 
-         * @param uri
-         *            the uri that was used for the matching is is stripped from any matrix
-         *            parameters
+         * @param uri the uri that was used for the matching is is stripped from
+         *            any matrix parameters
          * @return the number of segments of the input uri
          */
         public int addMatchedURI(String uri) {
-            // get all the segments of the original request (which include the matrix parameters)
+            // get all the segments of the original request (which include the
+            // matrix parameters)
             List<PathSegment> segments = uriInfo.getPathSegments(false);
             // split the input uri into segments
             List<PathSegment> uriSegments = UriHelper.parsePath(uri);
@@ -135,8 +135,10 @@ public class SearchResult {
             // get the offset of the provided uri from the complete request path
             int offset = 0;
             if (getMatchedURIs().size() > 0) {
-                // the first uri in the "matched uri's" list always reflects all the path segments
-                // that were matched until now, from the beginning of the complete request uri
+                // the first uri in the "matched uri's" list always reflects all
+                // the path segments
+                // that were matched until now, from the beginning of the
+                // complete request uri
                 List<PathSegment> firstMatchedUri = getMatchedURIs().getFirst();
                 offset = firstMatchedUri.size();
             }
@@ -147,20 +149,23 @@ public class SearchResult {
         }
 
         private void addMatchedURI(List<PathSegment> segments, int offset, int count) {
-            // obtain the sub list of uri segments from the the complete request segments
+            // obtain the sub list of uri segments from the the complete request
+            // segments
             int toIndex = offset + count;
             List<PathSegment> subListSegments = segments.subList(offset, toIndex);
-            
+
             LinkedList<List<PathSegment>> matchedURIs = getMatchedURIs();
             if (matchedURIs.size() == 0) {
                 // if it's the first uri, simply add it
                 matchedURIs.add(subListSegments);
                 return;
             }
-            
-            // need to concatenate the sub list of segments to the first uri in the list of matched uri's
+
+            // need to concatenate the sub list of segments to the first uri in
+            // the list of matched uri's
             List<PathSegment> currentMatchedUri = matchedURIs.getFirst();
-            List<PathSegment> newMatchedUri = new ArrayList<PathSegment>(currentMatchedUri.size() + subListSegments.size());
+            List<PathSegment> newMatchedUri =
+                new ArrayList<PathSegment>(currentMatchedUri.size() + subListSegments.size());
             newMatchedUri.addAll(currentMatchedUri);
             newMatchedUri.addAll(subListSegments);
             matchedURIs.addFirst(newMatchedUri);
@@ -178,8 +183,9 @@ public class SearchResult {
 
     @Override
     public String toString() {
-        return String.format("Found: %s, Resource: %s, Method: %s, Error: %s", String.valueOf(found), String
-                .valueOf(resource), String.valueOf(method), String.valueOf(error));
+        return String.format("Found: %s, Resource: %s, Method: %s, Error: %s", String
+            .valueOf(found), String.valueOf(resource), String.valueOf(method), String
+            .valueOf(error));
     }
 
     public SearchResult(ResourceInstance resource, UriInfo uriInfo) {

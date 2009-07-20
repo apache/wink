@@ -26,8 +26,6 @@ import org.apache.wink.common.AbstractDynamicResource;
 import org.apache.wink.common.internal.application.ApplicationValidator;
 import org.apache.wink.common.internal.providers.entity.FileProvider;
 
-
-
 import junit.framework.TestCase;
 
 public class ApplicationValidatorTest extends TestCase {

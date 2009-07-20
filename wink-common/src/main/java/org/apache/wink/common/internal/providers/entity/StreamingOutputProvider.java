@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.providers.entity;
 
@@ -36,18 +35,28 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class StreamingOutputProvider implements MessageBodyWriter<StreamingOutput> {
 
-    public long getSize(StreamingOutput t, Class<?> type, Type genericType, Annotation[] annotations,
-            MediaType mediaType) {
+    public long getSize(StreamingOutput t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
         return -1;
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
         return StreamingOutput.class.isAssignableFrom(type);
     }
 
-    public void writeTo(StreamingOutput t, Class<?> type, Type genericType, Annotation[] annotations,
-            MediaType mediaType, MultivaluedMap<String,Object> httpHeaders, OutputStream entityStream)
-            throws IOException, WebApplicationException {
+    public void writeTo(StreamingOutput t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
         t.write(entityStream);
     }
 

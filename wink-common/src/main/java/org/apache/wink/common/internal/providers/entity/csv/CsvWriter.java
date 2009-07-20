@@ -17,9 +17,8 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
-package org.apache.wink.common.internal.providers.entity.csv;
 
+package org.apache.wink.common.internal.providers.entity.csv;
 
 /**
  *
@@ -29,7 +28,7 @@ public final class CsvWriter {
     private CsvWriter() {
         // prevent creating this class
     }
-    
+
     /**
      * converts string array to the CSV row
      * 
@@ -86,5 +85,4 @@ public final class CsvWriter {
         }
     }
 
-    
 }

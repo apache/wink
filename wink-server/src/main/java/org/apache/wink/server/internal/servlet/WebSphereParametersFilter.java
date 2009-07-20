@@ -17,9 +17,8 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
-package org.apache.wink.server.internal.servlet;
 
+package org.apache.wink.server.internal.servlet;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -44,47 +43,51 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 /**
- * Parse HTTP request query - generate request parameters. This filter is needed since WebSphere throws away parameters
- * which lack values (e.g. ...?create&resource-uri=abc - create parameter gets discarded).
+ * Parse HTTP request query - generate request parameters. This filter is needed
+ * since WebSphere throws away parameters which lack values (e.g.
+ * ...?create&resource-uri=abc - create parameter gets discarded).
  */
 public class WebSphereParametersFilter implements Filter {
 
-    public static final String CONTENT_TYPE_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded";
-    
+    public static final String CONTENT_TYPE_WWW_FORM_URLENCODED =
+                                                                    "application/x-www-form-urlencoded";
+
     public void init(FilterConfig filterConfig) throws ServletException {
     }
 
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+        throws IOException, ServletException {
 
-        if(request instanceof HttpServletRequest) {
+        if (request instanceof HttpServletRequest) {
 
             HttpServletRequest httpRequest = (HttpServletRequest)request;
             Map<String, List<String>> paramMapWithList = new HashMap<String, List<String>>();
 
             String query = httpRequest.getQueryString();
-            if(query != null && query.length() != 0) {
+            if (query != null && query.length() != 0) {
                 // parse query string
 
                 parseQuery(paramMapWithList, query);
             }
             String contentType = httpRequest.getContentType();
-            if(contentType != null && contentType.startsWith(CONTENT_TYPE_WWW_FORM_URLENCODED)) {
+            if (contentType != null && contentType.startsWith(CONTENT_TYPE_WWW_FORM_URLENCODED)) {
                 // parse form data
 
                 InputStreamReader isr = new InputStreamReader(httpRequest.getInputStream());
                 StringWriter sw = new StringWriter();
                 char[] buffer = new char[4096];
                 int len;
-                while((len = isr.read(buffer)) > 0) {
+                while ((len = isr.read(buffer)) > 0) {
                     sw.write(buffer, 0, len);
                 }
                 parseQuery(paramMapWithList, sw.toString());
             }
-            if(!paramMapWithList.isEmpty()) {
+            if (!paramMapWithList.isEmpty()) {
                 // something parsed - convert map to String -> String[] map
 
-                Map<String, String[]> paramMap = new HashMap<String, String[]>(paramMapWithList.size());
-                for(Map.Entry<String, List<String>> e : paramMapWithList.entrySet()) {
+                Map<String, String[]> paramMap =
+                    new HashMap<String, String[]>(paramMapWithList.size());
+                for (Map.Entry<String, List<String>> e : paramMapWithList.entrySet()) {
                     paramMap.put(e.getKey(), e.getValue().toArray(new String[e.getValue().size()]));
                 }
 
@@ -101,21 +104,21 @@ public class WebSphereParametersFilter implements Filter {
 
     /**
      * Parse query into String -> ArrayList<String> map.
-     *
+     * 
      * @param paramMap map of parameters (String -> ArrayList<String>)
-     * @param query    query to parse
+     * @param query query to parse
      */
     private static void parseQuery(Map<String, List<String>> paramMap, String query) {
 
         StringTokenizer tokenizer = new StringTokenizer(query, "&");
-        while(tokenizer.hasMoreTokens()) {
+        while (tokenizer.hasMoreTokens()) {
 
             String name;
             String value;
             String token = tokenizer.nextToken();
 
             int equal = token.indexOf('=');
-            if(equal != -1) {
+            if (equal != -1) {
                 name = UriEncoder.decodeString(token.substring(0, equal));
                 value = UriEncoder.decodeString(token.substring(equal + 1));
             } else {
@@ -124,7 +127,7 @@ public class WebSphereParametersFilter implements Filter {
             }
 
             List<String> values = paramMap.get(name);
-            if(values == null) {
+            if (values == null) {
                 values = new ArrayList<String>(1);
             }
             values.add(value);

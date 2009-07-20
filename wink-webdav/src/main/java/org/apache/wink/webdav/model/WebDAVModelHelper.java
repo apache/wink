@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.webdav.model;
 
@@ -41,15 +40,14 @@ import org.apache.wink.webdav.WebDAVConstants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-
 public class WebDAVModelHelper {
 
-    private static final JAXBContext context;
+    private static final JAXBContext            context;
     private static final DocumentBuilderFactory documentBuilderFactory;
-    private static final Document document;
-    private static final String XML_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
-    private static final SimpleDateFormat dateFormat;
-    
+    private static final Document               document;
+    private static final String                 XML_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+    private static final SimpleDateFormat       dateFormat;
+
     static {
         try {
             context = JAXBContext.newInstance(Propertyupdate.class.getPackage().getName());
@@ -61,7 +59,7 @@ public class WebDAVModelHelper {
             throw new RestException(("failed to setup PropertyHelper"), e);
         }
     }
-    
+
     public static Marshaller createMarshaller() {
         try {
             Marshaller marshaller = context.createMarshaller();
@@ -81,33 +79,43 @@ public class WebDAVModelHelper {
             throw new RestException(("failed to create WebDAV unmarshaller"), e);
         }
     }
-    
+
     public static void marshal(Marshaller m, Object element, Writer writer, String elementName) {
         try {
             m.marshal(element, writer);
         } catch (JAXBException e) {
-            throw new RestException(String.format("Unable to marshal the WebDAV \"%s\" element",elementName), e);
+            throw new RestException(String.format("Unable to marshal the WebDAV \"%s\" element",
+                                                  elementName), e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
-    public static <T> T unmarshal(Unmarshaller u, Reader reader, Class<T> elementClass, String elementName) {
+    public static <T> T unmarshal(Unmarshaller u,
+                                  Reader reader,
+                                  Class<T> elementClass,
+                                  String elementName) {
         try {
             Object object = u.unmarshal(reader);
             if (object instanceof JAXBElement) {
                 object = ((JAXBElement<?>)object).getValue();
             }
             if (!(elementClass.equals(object.getClass()))) {
-                throw new RestException(String.format("Incompatible type in the WebDAV \"%s\" element: received %s but the requested is %s", elementName, object.getClass().getName(), elementClass.getName()));
+                throw new RestException(
+                                        String
+                                            .format("Incompatible type in the WebDAV \"%s\" element: received %s but the requested is %s",
+                                                    elementName,
+                                                    object.getClass().getName(),
+                                                    elementClass.getName()));
             }
             return (T)object;
         } catch (JAXBException e) {
-            throw new RestException(String.format("Unable to parse the WebDAV \"%s\" element", elementName), e);
+            throw new RestException(String.format("Unable to parse the WebDAV \"%s\" element",
+                                                  elementName), e);
         }
     }
 
     public static Set<QName> extractPropertyNames(Prop prop, Set<QName> set) {
-        if(prop != null) {
+        if (prop != null) {
             if (prop.getCreationdate() != null) {
                 set.add(WebDAVConstants.PROPERTY_CREATIONDATE);
             }
@@ -141,10 +149,10 @@ public class WebDAVModelHelper {
             for (Element element : prop.getAny()) {
                 set.add(new QName(element.getNamespaceURI(), element.getLocalName()));
             }
-        }    
+        }
         return set;
     }
-    
+
     public static Element createElement(QName qname) {
         return createElement(qname, (String)null);
     }
@@ -171,7 +179,7 @@ public class WebDAVModelHelper {
     public static Element createElement(String namespaceURI, String name) {
         return createElement(namespaceURI, name, (String)null);
     }
-    
+
     public static Element createElement(String namespaceURI, String name, String content) {
         Element element = document.createElementNS(namespaceURI, name);
         if (content != null) {
@@ -188,16 +196,16 @@ public class WebDAVModelHelper {
         return element;
     }
 
-    /*package*/ static JAXBElement<Prop> createProp(Prop prop, QName name) {
+    /* package */static JAXBElement<Prop> createProp(Prop prop, QName name) {
         return new JAXBElement<Prop>(name, Prop.class, prop);
     }
-    
+
     public static String convertDateToXMLDate(Date date) {
         return dateFormat.format(date);
     }
-    
+
     public static Date convertXMLDateToDate(String date) throws ParseException {
         return dateFormat.parse(date);
     }
-            
+
 }

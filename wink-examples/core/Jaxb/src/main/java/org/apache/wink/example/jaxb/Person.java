@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.example.jaxb;
 
@@ -27,22 +26,23 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name="person")
+@XmlRootElement(name = "person")
 public class Person {
-    
+
     @XmlElement
     String firstName;
     @XmlElement
     String lastName;
     @XmlElement
     String email;
-    
-    public Person() { }
-    
+
+    public Person() {
+    }
+
     public Person(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
     }
-    
+
 }

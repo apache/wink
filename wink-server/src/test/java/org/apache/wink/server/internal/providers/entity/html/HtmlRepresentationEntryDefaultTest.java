@@ -50,7 +50,7 @@ public class HtmlRepresentationEntryDefaultTest extends HtmlMockServletInvocatio
     private static String           TITLE                 = "Entry 1";
     private static String           OWNER                 = "Tali";
     private static String           SUMMARY               = "summary for Entry 1";
-    private static SimpleDateFormat simpleDateFormat      = new SimpleDateFormat("dd/MM/yyyy");                                                                            //$NON-NLS-1$
+    private static SimpleDateFormat simpleDateFormat      = new SimpleDateFormat("dd/MM/yyyy");                                                                                //$NON-NLS-1$
     private static final String     CATEGORY_SCHEME       = "urn:com:hp:categories:scheme";
     private static final String     CATEGORY_TERM         = "high";
     private static final String     LINK_REL              = "urn:com:hp:links:rel";
@@ -58,26 +58,27 @@ public class HtmlRepresentationEntryDefaultTest extends HtmlMockServletInvocatio
     private static final String     LINK_HREF             = "www.google.com";
     private static final String     CONTENT_TEXT          = "<b>This is a test</b>";
 
-    private static final String     HTML_HEADER_EXPANDED  = "<script type='text/javascript' >\nvar collapseExpand1 = new CollapseExpand('1');\n</script>\n<table class='wide-table' margin-top='0' cellpadding='0' cellspacing='0'>\n<tr>\n<td >\n<table class='wide-table expandable-form-header'>\n<tr>\n<td style='{CURSOR: pointer};' class='portlet-expand-button minimum-icon-size'><div id='"
-                                                              + ID
-                                                              + "_div' onclick=\"collapseExpand"
-                                                              + ID
-                                                              + ".collapseExpand();\">-</div></td>\n<td>&nbsp;&nbsp;"
-                                                              + TITLE
-                                                              + "</td>\n</tr></table>\n</td>\n</tr>\n</table>\n<table id='"
-                                                              + ID
-                                                              + "' style='display: block' class='wide-table' cellpadding=0 cellspacing=0>\n<td class='form-area-width'>\n";
-    private static final String     HTML_HEADER_COLLAPSED = "<script type='text/javascript' >\nvar collapseExpand1 = new CollapseExpand('1');\n</script>\n<table class='wide-table' margin-top='0' cellpadding='0' cellspacing='0'>\n<tr>\n<td >\n<table class='wide-table expandable-form-header'>\n<tr>\n<td style='{CURSOR: pointer};' class='portlet-expand-button minimum-icon-size'><div id='"
-                                                              + ID
-                                                              + "_div' onclick=\"collapseExpand"
-                                                              + ID
-                                                              + ".collapseExpand();\">+</div></td>\n<td>&nbsp;&nbsp;"
-                                                              + TITLE
-                                                              + "</td>\n</tr></table>\n</td>\n</tr>\n</table>\n<table id='"
-                                                              + ID
-                                                              + "' style='display: none' class='wide-table' cellpadding=0 cellspacing=0>\n<td class='form-area-width'>\n";
-    private static final String     HTML_FOOTER_COLLAPSED = "</td>\n</table>\n<script type='text/javascript' >\ncollapseExpand"
-                                                              + ID + ".collapse();\n</script>\n";
+    private static final String     HTML_HEADER_EXPANDED  =
+                                                              "<script type='text/javascript' >\nvar collapseExpand1 = new CollapseExpand('1');\n</script>\n<table class='wide-table' margin-top='0' cellpadding='0' cellspacing='0'>\n<tr>\n<td >\n<table class='wide-table expandable-form-header'>\n<tr>\n<td style='{CURSOR: pointer};' class='portlet-expand-button minimum-icon-size'><div id='" + ID
+                                                                  + "_div' onclick=\"collapseExpand"
+                                                                  + ID
+                                                                  + ".collapseExpand();\">-</div></td>\n<td>&nbsp;&nbsp;"
+                                                                  + TITLE
+                                                                  + "</td>\n</tr></table>\n</td>\n</tr>\n</table>\n<table id='"
+                                                                  + ID
+                                                                  + "' style='display: block' class='wide-table' cellpadding=0 cellspacing=0>\n<td class='form-area-width'>\n";
+    private static final String     HTML_HEADER_COLLAPSED =
+                                                              "<script type='text/javascript' >\nvar collapseExpand1 = new CollapseExpand('1');\n</script>\n<table class='wide-table' margin-top='0' cellpadding='0' cellspacing='0'>\n<tr>\n<td >\n<table class='wide-table expandable-form-header'>\n<tr>\n<td style='{CURSOR: pointer};' class='portlet-expand-button minimum-icon-size'><div id='" + ID
+                                                                  + "_div' onclick=\"collapseExpand"
+                                                                  + ID
+                                                                  + ".collapseExpand();\">+</div></td>\n<td>&nbsp;&nbsp;"
+                                                                  + TITLE
+                                                                  + "</td>\n</tr></table>\n</td>\n</tr>\n</table>\n<table id='"
+                                                                  + ID
+                                                                  + "' style='display: none' class='wide-table' cellpadding=0 cellspacing=0>\n<td class='form-area-width'>\n";
+    private static final String     HTML_FOOTER_COLLAPSED =
+                                                              "</td>\n</table>\n<script type='text/javascript' >\ncollapseExpand" + ID
+                                                                  + ".collapse();\n</script>\n";
     private static final String     HTML_FOOTER_EXPANDED  = "</td>\n</table>\n";
 
     @Path("/defectsDefault/htmlDefect")
@@ -86,11 +87,12 @@ public class HtmlRepresentationEntryDefaultTest extends HtmlMockServletInvocatio
         @GET
         @Produces(MediaType.TEXT_HTML)
         public Object getSomeDefect(@Context HttpServletResponse httpServletResponse,
-            @Context HttpServletRequest httpServletRequest) {
-            //            HtmlEntryResource resource = new HtmlEntryResource(httpServletRequest,
-            //                httpServletResponse);
+                                    @Context HttpServletRequest httpServletRequest) {
+            // HtmlEntryResource resource = new
+            // HtmlEntryResource(httpServletRequest,
+            // httpServletResponse);
             //
-            //            return resource;
+            // return resource;
             return new HtmlDescriptor(createSyndEntry());
         }
     }// class defectDefaultResource
@@ -101,8 +103,8 @@ public class HtmlRepresentationEntryDefaultTest extends HtmlMockServletInvocatio
      * @throws IOException
      */
     public void testGetEntryHtmlDefault() throws Exception {
-        MockHttpServletResponse response = invoke(constructMockRequest("GET",
-            "/defectsDefault/htmlDefect", MediaType.TEXT_HTML));
+        MockHttpServletResponse response =
+            invoke(constructMockRequest("GET", "/defectsDefault/htmlDefect", MediaType.TEXT_HTML));
         assertEquals("HTTP status", 200, response.getStatus());
         String content = response.getContentAsString();
         assertEquals("body", HtmlConstants.DEFAULT_JSP_ENTRY_PATH, content);
@@ -120,12 +122,12 @@ public class HtmlRepresentationEntryDefaultTest extends HtmlMockServletInvocatio
         assertEquals("owner", OWNER, entryAdapter.getAuthor());
         assertEquals("summary", SUMMARY, entryAdapter.getSummary());
         assertEquals("updated", simpleDateFormat.format(CURRENT_DATE), entryAdapter.getUpdated());
-        assertEquals("published", simpleDateFormat.format(CURRENT_DATE),
-            entryAdapter.getPublished());
-        assertEquals("categories scheme", CATEGORY_SCHEME,
-            entryAdapter.getCategories().get(0).getScheme());
-        assertEquals("categories term", CATEGORY_TERM,
-            entryAdapter.getCategories().get(0).getTerm());
+        assertEquals("published", simpleDateFormat.format(CURRENT_DATE), entryAdapter
+            .getPublished());
+        assertEquals("categories scheme", CATEGORY_SCHEME, entryAdapter.getCategories().get(0)
+            .getScheme());
+        assertEquals("categories term", CATEGORY_TERM, entryAdapter.getCategories().get(0)
+            .getTerm());
         assertEquals("link rel", LINK_REL, entryAdapter.getLinks().get(0).getRel());
         assertEquals("link type", LINK_TYPE, entryAdapter.getLinks().get(0).getType());
         assertEquals("link href", LINK_HREF, entryAdapter.getLinks().get(0).getHref());
@@ -143,10 +145,12 @@ public class HtmlRepresentationEntryDefaultTest extends HtmlMockServletInvocatio
      */
 
     public void testHtmlHeaderSection() {
-        assertEquals(HTML_HEADER_EXPANDED, ExpandableSectionHelper.getFormHeaderHtml(TITLE, ID,
-            false));
-        assertEquals(HTML_HEADER_COLLAPSED, ExpandableSectionHelper.getFormHeaderHtml(TITLE, ID,
-            true));
+        assertEquals(HTML_HEADER_EXPANDED, ExpandableSectionHelper.getFormHeaderHtml(TITLE,
+                                                                                     ID,
+                                                                                     false));
+        assertEquals(HTML_HEADER_COLLAPSED, ExpandableSectionHelper.getFormHeaderHtml(TITLE,
+                                                                                      ID,
+                                                                                      true));
     }
 
     /**

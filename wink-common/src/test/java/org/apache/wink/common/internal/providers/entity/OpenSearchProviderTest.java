@@ -40,8 +40,6 @@ import org.apache.wink.test.diff.DiffIgnoreUpdateWithAttributeQualifier;
 
 import junit.framework.TestCase;
 
-
-
 public class OpenSearchProviderTest extends TestCase {
 
     private static final String TITLE                = "Defect Search";
@@ -55,7 +53,8 @@ public class OpenSearchProviderTest extends TestCase {
     private static final String LANG                 = "en-US";
     private static final String DEVELOPER            = "John Smith";
     private static final String CONTACT              = "john.smith@example.com";
-    private static final String DESC                 = "You can search defects in HP Defect Manager";
+    private static final String DESC                 =
+                                                         "You can search defects in HP Defect Manager";
     private static final String LONG_NAME            = "HP Defect Manager search engine";
     private static final String SHORT_NAME           = "HP Defect Manager search engine";
 
@@ -65,9 +64,12 @@ public class OpenSearchProviderTest extends TestCase {
     private static final String URN_ASSIGNED_TO      = "urn:hp:defect:assignedTo";
     private static final String URN_SEVERIIY         = "urn:hp:defect:severity";
     public static final String  FTS                  = "q";
-    public static final String  BASE_URL             = "http://localhost:8080/QADefectUsingResourceBeans-service/rest/";
-    public static final String  SEARCH_URL1          = "http://localhost:8080/QADefectUsingResourceBeans-service/rest/defects?q={searchTerms?}";
-    public static final String  SEARCH_URL2          = "http://localhost:8080/QADefectUsingResourceBeans-service/rest/defects?severity={urn:hp:defect:severity?}&q={searchTerms?}&assignedTo={urn:hp:defect:assignedTo?}";
+    public static final String  BASE_URL             =
+                                                         "http://localhost:8080/QADefectUsingResourceBeans-service/rest/";
+    public static final String  SEARCH_URL1          =
+                                                         "http://localhost:8080/QADefectUsingResourceBeans-service/rest/defects?q={searchTerms?}";
+    public static final String  SEARCH_URL2          =
+                                                         "http://localhost:8080/QADefectUsingResourceBeans-service/rest/defects?severity={urn:hp:defect:severity?}&q={searchTerms?}&assignedTo={urn:hp:defect:assignedTo?}";
 
     public static final String  URL                  = "/defects";
 
@@ -78,8 +80,13 @@ public class OpenSearchProviderTest extends TestCase {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         String expectedSerialization = null;
         try {
-            provider.writeTo(buildOpenSearchDescriptor(BASE_URL), OpenSearchDescription.class,
-                null, null, MediaTypeUtils.OPENSEARCH_TYPE, null, os);
+            provider.writeTo(buildOpenSearchDescriptor(BASE_URL),
+                             OpenSearchDescription.class,
+                             null,
+                             null,
+                             MediaTypeUtils.OPENSEARCH_TYPE,
+                             null,
+                             os);
         } catch (IOException e) {
             fail("Failed to serialize OpenSearchDocument");
         }
@@ -92,29 +99,37 @@ public class OpenSearchProviderTest extends TestCase {
 
         DiffIgnoreUpdateWithAttributeQualifier diff;
         try {
-            diff = new DiffIgnoreUpdateWithAttributeQualifier(expectedSerialization,
-                resultSerialization);
+            diff =
+                new DiffIgnoreUpdateWithAttributeQualifier(expectedSerialization,
+                                                           resultSerialization);
         } catch (Exception e) {
             fail("Failed to perform diff");
             throw e;
         }
 
-        assertTrue("Expected open search documents to be similar" + " " + diff.toString()
-            + "\nexpected:\n" + expectedSerialization + "\nresult:\n" + resultSerialization,
-            diff.similar());
+        assertTrue("Expected open search documents to be similar" + " "
+            + diff.toString()
+            + "\nexpected:\n"
+            + expectedSerialization
+            + "\nresult:\n"
+            + resultSerialization, diff.similar());
 
     }
 
     public void testOpenSearchDescriptor() {
         OpenSearchDescription openSearchDescriptor = buildOpenSearchDescriptor(BASE_URL);
-        assertEquals("Expected and actual values of Short Name are not same", SHORT_NAME,
-            openSearchDescriptor.getShortName());
-        assertEquals("Expected and actual values of  Description are not same", DESC,
-            openSearchDescriptor.getDescription());
-        assertEquals("Expected and actual values of  Long Name are not same", LONG_NAME,
-            openSearchDescriptor.getLongName());
-        assertEquals("Expected and actual values of  Contact are not same", CONTACT,
-            openSearchDescriptor.getContact());
+        assertEquals("Expected and actual values of Short Name are not same",
+                     SHORT_NAME,
+                     openSearchDescriptor.getShortName());
+        assertEquals("Expected and actual values of  Description are not same",
+                     DESC,
+                     openSearchDescriptor.getDescription());
+        assertEquals("Expected and actual values of  Long Name are not same",
+                     LONG_NAME,
+                     openSearchDescriptor.getLongName());
+        assertEquals("Expected and actual values of  Contact are not same",
+                     CONTACT,
+                     openSearchDescriptor.getContact());
         assertEquals("Incorrect Developer", DEVELOPER, openSearchDescriptor.getDeveloper());
 
         List<String> languageArray = openSearchDescriptor.getLanguage();
@@ -122,37 +137,44 @@ public class OpenSearchProviderTest extends TestCase {
         int binarySearchResult = Collections.binarySearch(languageArray, LANG);
         if (binarySearchResult < 0) {
             assertFalse("Accept Language " + LANG
-                + " does not exist in array of expected languages" + languageArray, true);
+                + " does not exist in array of expected languages"
+                + languageArray, true);
         }
 
-        assertEquals("Expected and actual values of  Tags are not same", TAGS,
-            openSearchDescriptor.getTags());
+        assertEquals("Expected and actual values of  Tags are not same", TAGS, openSearchDescriptor
+            .getTags());
 
         List<String> inputEncodingArray = openSearchDescriptor.getInputEncoding();
         Collections.sort(inputEncodingArray);
         int inputEncodingArraySearchResult = Collections.binarySearch(inputEncodingArray, ENCODING);
         if (inputEncodingArraySearchResult < 0) {
             assertFalse("Input Encoding " + ENCODING
-                + "  does not exist in array of input incoding values " + inputEncodingArray, true);
+                + "  does not exist in array of input incoding values "
+                + inputEncodingArray, true);
         }
 
         List<String> outputEncodingArray = openSearchDescriptor.getOutputEncoding();
         Collections.sort(outputEncodingArray);
-        int outputEncodingArraySearchResult = Collections.binarySearch(outputEncodingArray,
-            ENCODING);
+        int outputEncodingArraySearchResult =
+            Collections.binarySearch(outputEncodingArray, ENCODING);
         if (outputEncodingArraySearchResult < 0) {
             assertFalse("Output Encoding " + ENCODING
-                + "  does not exist in array of output incoding values " + outputEncodingArray,
-                true);
+                + "  does not exist in array of output incoding values "
+                + outputEncodingArray, true);
         }
 
         List<OpenSearchUrl> urlArray = openSearchDescriptor.getUrl();
         if (urlArray != null && urlArray.size() != 0) {
             for (OpenSearchUrl url : urlArray) {
                 String openSearchUrlTemplate = url.getTemplate();
-                if (!(openSearchUrlTemplate.equals(SEARCH_URL1) || openSearchUrlTemplate.equals(SEARCH_URL2))) {
+                if (!(openSearchUrlTemplate.equals(SEARCH_URL1) || openSearchUrlTemplate
+                    .equals(SEARCH_URL2))) {
                     assertFalse("Expected and actual values of  Url are not same " + " expected:"
-                        + SEARCH_URL1 + "" + SEARCH_URL2 + " actual:" + openSearchUrlTemplate, true);
+                        + SEARCH_URL1
+                        + ""
+                        + SEARCH_URL2
+                        + " actual:"
+                        + openSearchUrlTemplate, true);
                 }
             }
         }
@@ -162,26 +184,36 @@ public class OpenSearchProviderTest extends TestCase {
             assertFalse("Open Search Query is not defined", true);
         } else {
             OpenSearchQuery openSearchQuery = queryArray.get(0);
-            assertEquals("Expected and actual values of  Count are not same ", COUNT,
-                openSearchQuery.getCount().toString());
-            assertEquals("Expected and actual values of  Input Encoding are not same ", ENCODING,
-                openSearchQuery.getInputEncoding());
-            assertEquals("Expected and actual values of  Language are not same ", LANG,
-                openSearchQuery.getLanguage());
-            assertEquals("Expected and actual values of  Output Encoding are not same ", ENCODING,
-                openSearchQuery.getOutputEncoding());
+            assertEquals("Expected and actual values of  Count are not same ",
+                         COUNT,
+                         openSearchQuery.getCount().toString());
+            assertEquals("Expected and actual values of  Input Encoding are not same ",
+                         ENCODING,
+                         openSearchQuery.getInputEncoding());
+            assertEquals("Expected and actual values of  Language are not same ",
+                         LANG,
+                         openSearchQuery.getLanguage());
+            assertEquals("Expected and actual values of  Output Encoding are not same ",
+                         ENCODING,
+                         openSearchQuery.getOutputEncoding());
             assertEquals("Expected and actual values of  QueryRole are not same ",
-                OpenSearchQuery.QueryRole.example.toString(), openSearchQuery.getRole());
-            assertEquals("Expected and actual values of  SearchTerms are not same ", SEARCH_TERM,
-                openSearchQuery.getSearchTerms());
-            assertEquals("Expected and actual values of  Start Index are not same ", START_INDEX,
-                openSearchQuery.getStartIndex().toString());
-            assertEquals("Expected and actual values of  StartPage are not same ", START_PAGE,
-                openSearchQuery.getStartPage().toString());
-            assertEquals("Expected and actual values of  Title are not same ", TITLE,
-                openSearchQuery.getTitle());
-            assertEquals("Expected and actual values of  TotalResults are not same ", TOTAL_RESULT,
-                openSearchQuery.getTotalResults().toString());
+                         OpenSearchQuery.QueryRole.example.toString(),
+                         openSearchQuery.getRole());
+            assertEquals("Expected and actual values of  SearchTerms are not same ",
+                         SEARCH_TERM,
+                         openSearchQuery.getSearchTerms());
+            assertEquals("Expected and actual values of  Start Index are not same ",
+                         START_INDEX,
+                         openSearchQuery.getStartIndex().toString());
+            assertEquals("Expected and actual values of  StartPage are not same ",
+                         START_PAGE,
+                         openSearchQuery.getStartPage().toString());
+            assertEquals("Expected and actual values of  Title are not same ",
+                         TITLE,
+                         openSearchQuery.getTitle());
+            assertEquals("Expected and actual values of  TotalResults are not same ",
+                         TOTAL_RESULT,
+                         openSearchQuery.getTotalResults().toString());
         }
     }
 
@@ -198,10 +230,11 @@ public class OpenSearchProviderTest extends TestCase {
         openSearchDescriptor.addOutputEncoding(ENCODING);
 
         // set OpenSearch URL parameters
-        OpenSearchParameter severityParameter = new OpenSearchParameter(SEVERIIY, URN_SEVERIIY,
-            false);
-        OpenSearchParameter ftsParameter = new OpenSearchParameter(FTS,
-            OpenSearchParameter.OpenSearchParams.searchTerms.toString(), false);
+        OpenSearchParameter severityParameter =
+            new OpenSearchParameter(SEVERIIY, URN_SEVERIIY, false);
+        OpenSearchParameter ftsParameter =
+            new OpenSearchParameter(FTS, OpenSearchParameter.OpenSearchParams.searchTerms
+                .toString(), false);
         OpenSearchParameter assignedToParameter = new OpenSearchParameter();
         assignedToParameter.setMandatory(false);
         assignedToParameter.setParameterKey(ASSIGNED_TO);
@@ -249,8 +282,9 @@ public class OpenSearchProviderTest extends TestCase {
 
         // add OpenSearch Images
         OpenSearchImage openSearchImage;
-        openSearchImage = OpenSearchUtils.createOpenSearchImage(MediaTypeUtils.IMAGE_JPEG,
-            openSearchUrlBuilder.toString() + "splash.jpg");
+        openSearchImage =
+            OpenSearchUtils.createOpenSearchImage(MediaTypeUtils.IMAGE_JPEG, openSearchUrlBuilder
+                .toString() + "splash.jpg");
         openSearchDescriptor.addNewImage(openSearchImage);
         return openSearchDescriptor;
     }

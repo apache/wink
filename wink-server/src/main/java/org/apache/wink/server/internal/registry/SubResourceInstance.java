@@ -17,21 +17,19 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.registry;
-
 
 import org.apache.wink.common.internal.registry.metadata.MethodMetadata;
 import org.apache.wink.common.internal.uritemplate.UriTemplateMatcher;
 
 /**
- * Represents a sub-resource (method or locator) record paired with the uri template matcher that
- * was used to match the sub-resource record
+ * Represents a sub-resource (method or locator) record paired with the uri
+ * template matcher that was used to match the sub-resource record
  */
 public class SubResourceInstance implements MethodRecord, Comparable<SubResourceInstance> {
 
-    private SubResourceRecord record;
+    private SubResourceRecord  record;
     private UriTemplateMatcher matcher;
 
     public SubResourceInstance(SubResourceRecord record, UriTemplateMatcher matcher) {

@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal.providers.entity.html;
 
 import java.io.IOException;
@@ -35,7 +35,6 @@ import org.apache.wink.common.model.synd.SyndFeed;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 /**
  * Test customized Html Representation for collection resource.
  */
@@ -47,11 +46,12 @@ public class HtmlRepresentationCollectionCustomizedTest extends HtmlMockServletI
         @GET
         @Produces(MediaType.TEXT_HTML)
         public Object getSomeDefects(@Context HttpServletResponse httpServletResponse,
-            @Context HttpServletRequest httpServletRequest) {
-            //            HtmlCollectionResource resource = new HtmlCollectionResource(CUSTOMIZED_COLLECTION_URL,
-            //                httpServletRequest, httpServletResponse);
+                                     @Context HttpServletRequest httpServletRequest) {
+            // HtmlCollectionResource resource = new
+            // HtmlCollectionResource(CUSTOMIZED_COLLECTION_URL,
+            // httpServletRequest, httpServletResponse);
             //
-            //            return resource;
+            // return resource;
             return new HtmlDescriptor(new SyndFeed(), CUSTOMIZED_COLLECTION_URL);
         }
     } // class DefectsCustomizedResource
@@ -60,7 +60,7 @@ public class HtmlRepresentationCollectionCustomizedTest extends HtmlMockServletI
     protected Class<?>[] getClasses() {
         return new Class<?>[] {DefectsCustomizedResource.class};
     }
-    
+
     /**
      * The method invokes the Resource and check the response.
      * 
@@ -68,15 +68,15 @@ public class HtmlRepresentationCollectionCustomizedTest extends HtmlMockServletI
      */
     public void testGetCollectionHtmlCust() throws Exception {
         try {
-            MockHttpServletRequest request = constructMockRequest("GET", "/defectsCustomized",
-                MediaType.TEXT_HTML);
+            MockHttpServletRequest request =
+                constructMockRequest("GET", "/defectsCustomized", MediaType.TEXT_HTML);
             MockHttpServletResponse response = invoke(request);
             assertEquals("HTTP status", 200, response.getStatus());
             String content = response.getContentAsString();
             assertEquals("body", CUSTOMIZED_COLLECTION_URL, content);
         } catch (RestException e) {
             assertEquals("exception message",
-                "The file requested cannot be retrieved.", e.getMessage()); //$NON-NLS-1$
+                         "The file requested cannot be retrieved.", e.getMessage()); //$NON-NLS-1$
         }
     }
 

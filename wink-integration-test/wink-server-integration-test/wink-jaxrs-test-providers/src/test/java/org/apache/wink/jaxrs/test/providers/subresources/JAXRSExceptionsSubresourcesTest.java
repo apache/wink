@@ -82,7 +82,7 @@ public class JAXRSExceptionsSubresourcesTest extends TestCase {
         try {
             postMethod.setRequestEntity(new StringRequestEntity("<comment></comment>", "text/xml",
                                                                 null));
-//            postMethod.addRequestHeader("Accept", "text/xml");
+            // postMethod.addRequestHeader("Accept", "text/xml");
             client.executeMethod(postMethod);
             assertEquals(Status.BAD_REQUEST.getStatusCode(), postMethod.getStatusCode());
             assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><commenterror><message>Please include a comment ID, a message, and your name.</message></commenterror>",

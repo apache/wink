@@ -17,10 +17,8 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.registry;
-
 
 import org.apache.wink.common.internal.registry.metadata.MethodMetadata;
 import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor;
@@ -31,7 +29,7 @@ import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor;
 public abstract class SubResourceRecord extends TemplatedRecord implements MethodRecord {
 
     private MethodMetadata metadata;
-    
+
     public SubResourceRecord(MethodMetadata metadata) {
         super(UriTemplateProcessor.newNormalizedInstance(metadata.getPath()));
         this.metadata = metadata;
@@ -55,8 +53,8 @@ public abstract class SubResourceRecord extends TemplatedRecord implements Metho
      * sub-resource methods come ahead of sub-resource locators
      * 
      * @param other the sub-resource to compare to
-     * @return 0 is the same, -1 if compared to a sub-resource locator and 1 
-     * if compared to a sub-resource method
+     * @return 0 is the same, -1 if compared to a sub-resource locator and 1 if
+     *         compared to a sub-resource method
      */
     protected abstract int compareToSubResource(SubResourceRecord other);
 }

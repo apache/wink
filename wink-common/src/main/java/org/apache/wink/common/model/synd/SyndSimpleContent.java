@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.model.synd;
 
@@ -61,7 +60,7 @@ public abstract class SyndSimpleContent extends SyndCommonAttributes {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        SyndSimpleContent other = (SyndSimpleContent) obj;
+        SyndSimpleContent other = (SyndSimpleContent)obj;
         if (value == null) {
             if (other.value != null)
                 return false;

@@ -34,28 +34,28 @@ import org.apache.wink.server.handlers.MessageContext;
 import org.apache.wink.server.handlers.RequestHandler;
 import org.apache.wink.server.internal.registry.ResourceRegistry;
 
-
-
 public class OptionsMethodHandler implements RequestHandler {
 
     public void handleRequest(MessageContext context, HandlersChain chain) throws Throwable {
-        
+
         // first thing - proceed the chain
         chain.doChain(context);
-        
+
         // check the search result.
-        // if the request is OPTIONS and no method was found, generate the response automatically
+        // if the request is OPTIONS and no method was found, generate the
+        // response automatically
         SearchResult searchResult = context.getAttribute(SearchResult.class);
-        if (searchResult.isError() 
-                && searchResult.getError().getResponse().getStatus() == HttpStatus.METHOD_NOT_ALLOWED.getCode()
-                && context.getHttpMethod().equalsIgnoreCase(HttpMethodEx.OPTIONS)) {
+        if (searchResult.isError() && searchResult.getError().getResponse().getStatus() == HttpStatus.METHOD_NOT_ALLOWED
+            .getCode()
+            && context.getHttpMethod().equalsIgnoreCase(HttpMethodEx.OPTIONS)) {
             // get supported HTTP methods
             ResourceRegistry resourceRegistry = context.getAttribute(ResourceRegistry.class);
             Set<String> httpMethods = resourceRegistry.getOptions(searchResult.getResource());
             if (httpMethods.size() > 0) {
                 String allowHeader = HeaderUtils.buildOptionsHeader(httpMethods);
                 // add 'Allow' header to the response
-                context.getAttribute(HttpServletResponse.class).addHeader(HttpHeadersEx.ALLOW, allowHeader);
+                context.getAttribute(HttpServletResponse.class).addHeader(HttpHeadersEx.ALLOW,
+                                                                          allowHeader);
                 // remove an error from the search result
                 context.getAttribute(SearchResult.class).setError(null);
                 // set result to no-content

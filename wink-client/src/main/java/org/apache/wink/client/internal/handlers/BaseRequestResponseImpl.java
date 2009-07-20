@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.client.internal.handlers;
 
@@ -29,33 +28,31 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.apache.wink.client.internal.BaseRequestResponse;
 import org.apache.wink.common.internal.CaseInsensitiveMultivaluedMap;
 
-
 public class BaseRequestResponseImpl implements BaseRequestResponse {
 
-    MultivaluedMap<String,String> headers;
+    MultivaluedMap<String, String>  headers;
     private HashMap<String, Object> attributes;
 
     public BaseRequestResponseImpl() {
         this.attributes = new HashMap<String, Object>();
         this.headers = new CaseInsensitiveMultivaluedMap<String>();
     }
-    
-    public MultivaluedMap<String,String> getHeaders() {
+
+    public MultivaluedMap<String, String> getHeaders() {
         return headers;
     }
 
     public Map<String, Object> getAttributes() {
         return attributes;
     }
-    
-    public <T> void setAttribute(Class<T> type, T object)   {
+
+    public <T> void setAttribute(Class<T> type, T object) {
         getAttributes().put(type.getName(), object);
     }
-    
+
     @SuppressWarnings("unchecked")
     public <T> T getAttribute(Class<T> type) {
         return (T)getAttributes().get(type.getName());
     }
-
 
 }

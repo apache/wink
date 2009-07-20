@@ -24,7 +24,6 @@
 // Generated on: 2008.05.27 at 11:24:25 AM IDT 
 //
 
-
 package org.apache.wink.common.model.atom;
 
 import java.util.ArrayList;
@@ -40,7 +39,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.wink.common.RestException;
 import org.apache.wink.common.model.synd.SyndContent;
-
 
 /**
  * The &quot;atom:content&quot; element Per RFC4287
@@ -185,26 +183,23 @@ import org.apache.wink.common.model.synd.SyndContent;
  * </pre>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "atomContent", propOrder = {
-    "any"
-})
-public class AtomContent
-    extends AtomCommonAttributes
-{
-    
+@XmlType(name = "atomContent", propOrder = {"any"})
+public class AtomContent extends AtomCommonAttributes {
+
     @XmlMixed
     @XmlAnyElement
     protected List<Object> any;
     @XmlAttribute
-    protected String type;
+    protected String       type;
     @XmlAttribute
-    protected String src;
-    
-    @XmlTransient
-    private String savedValue = null;
+    protected String       src;
 
-    public AtomContent() {}
-    
+    @XmlTransient
+    private String         savedValue = null;
+
+    public AtomContent() {
+    }
+
     public AtomContent(SyndContent value) {
         super(value);
         if (value == null) {
@@ -214,7 +209,7 @@ public class AtomContent
         setType(value.getType());
         setValue(value.getValue());
     }
-    
+
     public SyndContent toSynd(SyndContent value) {
         if (value == null) {
             return value;
@@ -225,7 +220,6 @@ public class AtomContent
         value.setValue(getValue());
         return value;
     }
-
 
     private List<Object> getAny() {
         if (any == null) {
@@ -263,45 +257,53 @@ public class AtomContent
         this.src = value;
         checkValidity();
     }
-    
+
     /**
-     * Sets the content of the "atom:content" element as a String. The "type" attrbiute should be set
-     * prior to setting the contents.
-     * 
+     * Sets the content of the "atom:content" element as a String. The "type"
+     * attrbiute should be set prior to setting the contents.
      * <p>
-     * Atom Documents MUST conform to the following rules. Atom Processors MUST interpret
-     * atom:content according to the first applicable rule.
+     * Atom Documents MUST conform to the following rules. Atom Processors MUST
+     * interpret atom:content according to the first applicable rule.
      * </p>
-     * 
      * <ol>
-     * <li> If the value of "type" is "text", the content of atom:content MUST NOT contain child
-     * elements. Such text is intended to be presented to humans in a readable fashion. Thus, Atom
-     * Processors MAY collapse white space (including line breaks), and display the text using
-     * typographic techniques such as justification and proportional fonts.<li> 
-     * <li> If the value of
-     * "type" is "html", the content of atom:content MUST NOT contain child elements and SHOULD be
-     * suitable for handling as HTML [HTML]. The HTML markup MUST be escaped; for example, "<br>
-     * " as "&lt;br>". The HTML markup SHOULD be such that it could validly appear directly within
-     * an HTML <DIV> element. Atom Processors that display the content MAY use the markup to aid in
-     * displaying it. <li>
-     * <li> If the value of "type" is "xhtml", the content of atom:content MUST be a
-     * single XHTML div element [XHTML] and SHOULD be suitable for handling as XHTML. The XHTML div
-     * element itself MUST NOT be considered part of the content. Atom Processors that display the
-     * content MAY use the markup to aid in displaying it. The escaped versions of characters such
-     * as "&" and ">" represent those characters, not markup. <li>
-     * <li> If the value of "type" is an XML
-     * media type [RFC3023] or ends with "+xml" or "/xml" (case insensitive), the content of
-     * atom:content MAY include child elements and SHOULD be suitable for handling as the indicated
-     * media type. If the "src" attribute is not provided, this would normally mean that the
-     * "atom:content" element would contain a single child element that would serve as the root
-     * element of the XML document of the indicated type. <li>
-     * <li> If the value of "type" begins with
-     * "text/" (case insensitive), the content of atom:content MUST NOT contain child elements. <li>
-     * <li> For all other values of "type", the content of atom:content MUST be a valid Base64 encoding,
-     * as described in [RFC3548], section 3. When decoded, it SHOULD be suitable for handling as the
-     * indicated media type. In this case, the characters in the Base64 encoding MAY be preceded and
-     * followed in the atom:content element by white space, and lines are separated by a single
-     * newline (U+000A) character.<li>
+     * <li>If the value of "type" is "text", the content of atom:content MUST
+     * NOT contain child elements. Such text is intended to be presented to
+     * humans in a readable fashion. Thus, Atom Processors MAY collapse white
+     * space (including line breaks), and display the text using typographic
+     * techniques such as justification and proportional fonts.
+     * <li>
+     * <li>If the value of "type" is "html", the content of atom:content MUST
+     * NOT contain child elements and SHOULD be suitable for handling as HTML
+     * [HTML]. The HTML markup MUST be escaped; for example, "<br>
+     * " as "&lt;br>". The HTML markup SHOULD be such that it could validly
+     * appear directly within an HTML <DIV> element. Atom Processors that
+     * display the content MAY use the markup to aid in displaying it.
+     * <li>
+     * <li>If the value of "type" is "xhtml", the content of atom:content MUST
+     * be a single XHTML div element [XHTML] and SHOULD be suitable for handling
+     * as XHTML. The XHTML div element itself MUST NOT be considered part of the
+     * content. Atom Processors that display the content MAY use the markup to
+     * aid in displaying it. The escaped versions of characters such as "&" and
+     * ">" represent those characters, not markup.
+     * <li>
+     * <li>If the value of "type" is an XML media type [RFC3023] or ends with
+     * "+xml" or "/xml" (case insensitive), the content of atom:content MAY
+     * include child elements and SHOULD be suitable for handling as the
+     * indicated media type. If the "src" attribute is not provided, this would
+     * normally mean that the "atom:content" element would contain a single
+     * child element that would serve as the root element of the XML document of
+     * the indicated type.
+     * <li>
+     * <li>If the value of "type" begins with "text/" (case insensitive), the
+     * content of atom:content MUST NOT contain child elements.
+     * <li>
+     * <li>For all other values of "type", the content of atom:content MUST be a
+     * valid Base64 encoding, as described in [RFC3548], section 3. When
+     * decoded, it SHOULD be suitable for handling as the indicated media type.
+     * In this case, the characters in the Base64 encoding MAY be preceded and
+     * followed in the atom:content element by white space, and lines are
+     * separated by a single newline (U+000A) character.
+     * <li>
      * </ol>
      */
     public void setValue(String value) {
@@ -309,7 +311,7 @@ public class AtomContent
             getAny().clear();
             return;
         }
-        
+
         if (getAny().size() == 0) {
             getAny().add(0, value);
         } else {
@@ -318,38 +320,36 @@ public class AtomContent
 
         checkValidity();
     }
-    
+
     /**
-     * Gets the content of the "atom:content" element as a String. The "type" attribute should
-     * be used to determine how to treat the content. 
-     * 
+     * Gets the content of the "atom:content" element as a String. The "type"
+     * attribute should be used to determine how to treat the content.
      */
     public String getValue() {
         if (getAny().size() == 0) {
             return null;
-        } 
+        }
         Object s = getAny().get(0);
         return s != null ? s.toString() : null;
     }
-    
+
     public void checkValidity() {
         if (getSrc() != null && getValue() != null) {
             throw new RestException("Content element may have either inline or out-of-line content");
-        } else if (getSrc() != null && getType() != null){
-            if (type.equals("text") || 
-                type.equals("html") ||
-                type.equals("xhtml")) {
-                    throw new RestException("Type attribute of content element must be a valid mime type when content is out-of-line");
-                }
+        } else if (getSrc() != null && getType() != null) {
+            if (type.equals("text") || type.equals("html") || type.equals("xhtml")) {
+                throw new RestException(
+                                        "Type attribute of content element must be a valid mime type when content is out-of-line");
+            }
         }
     }
 
-    /*package*/ void revertValue() {
+    /* package */void revertValue() {
         setValue(savedValue);
         savedValue = null;
     }
 
-    /*package*/ String saveValue() {
+    /* package */String saveValue() {
         this.savedValue = getValue();
         setValue(null);
         return this.savedValue;

@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.webdav.model;
 
 import java.io.StringReader;
@@ -37,16 +37,14 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Element;
 
-
-
-
 public class WebDAVProppatchTest extends AbstractWebDAVModelTest {
 
-    private static final String NS = "http://ns.example.com/standards/z39.50/";
-    private static final QName SET_PROPERTY = new QName(NS, "Authors");
-    private static final QName SET_PROPERTY_CHILD = new QName(NS, "Author");
+    private static final String   NS                        =
+                                                                "http://ns.example.com/standards/z39.50/";
+    private static final QName    SET_PROPERTY              = new QName(NS, "Authors");
+    private static final QName    SET_PROPERTY_CHILD        = new QName(NS, "Author");
     private static final String[] SET_PROPERTY_CHILD_VALUES = {"Jim Whitehead", "Roy Fielding"};
-    private static final QName REMOVE_PROPERTY = new QName(NS, "Copyright-Owner");
+    private static final QName    REMOVE_PROPERTY           = new QName(NS, "Copyright-Owner");
 
     @Test
     public void test1() throws Exception {
@@ -60,7 +58,8 @@ public class WebDAVProppatchTest extends AbstractWebDAVModelTest {
         Prop prop = props.get(0);
         Set<QName> propertyNames = new HashSet<QName>();
         WebDAVModelHelper.extractPropertyNames(prop, propertyNames);
-        Assert.assertArrayEquals(propertyNames.toArray(new QName[propertyNames.size()]), new QName[] {SET_PROPERTY});
+        Assert.assertArrayEquals(propertyNames.toArray(new QName[propertyNames.size()]),
+                                 new QName[] {SET_PROPERTY});
 
         Element element = prop.getAny().get(0);
         Element child = (Element)element.getFirstChild();
@@ -68,20 +67,21 @@ public class WebDAVProppatchTest extends AbstractWebDAVModelTest {
         Assert.assertEquals(SET_PROPERTY_CHILD.getNamespaceURI(), child.getNamespaceURI());
         Assert.assertEquals(SET_PROPERTY_CHILD.getLocalPart(), child.getLocalName());
         Assert.assertEquals(SET_PROPERTY_CHILD_VALUES[0], child.getTextContent());
-        
+
         child = (Element)child.getNextSibling();
         Assert.assertNotNull(child);
         Assert.assertEquals(SET_PROPERTY_CHILD.getNamespaceURI(), child.getNamespaceURI());
         Assert.assertEquals(SET_PROPERTY_CHILD.getLocalPart(), child.getLocalName());
         Assert.assertEquals(SET_PROPERTY_CHILD_VALUES[1], child.getTextContent());
-        
+
         // remove properties
         props = propupdate.getPropsToRemove();
         Assert.assertEquals(1, props.size());
         prop = props.get(0);
         propertyNames = new HashSet<QName>();
         WebDAVModelHelper.extractPropertyNames(prop, propertyNames);
-        Assert.assertArrayEquals(propertyNames.toArray(new QName[propertyNames.size()]), new QName[] {REMOVE_PROPERTY});
+        Assert.assertArrayEquals(propertyNames.toArray(new QName[propertyNames.size()]),
+                                 new QName[] {REMOVE_PROPERTY});
 
         // test write
         Diff diff = new Diff(input, write(propupdate));
@@ -95,8 +95,10 @@ public class WebDAVProppatchTest extends AbstractWebDAVModelTest {
         set.setProp(prop);
         propupdate.getRemoveOrSet().add(set);
         element = prop.setProperty(SET_PROPERTY);
-        Element child1 = WebDAVModelHelper.createElement(SET_PROPERTY_CHILD, SET_PROPERTY_CHILD_VALUES[0]);
-        Element child2 = WebDAVModelHelper.createElement(SET_PROPERTY_CHILD, SET_PROPERTY_CHILD_VALUES[1]);
+        Element child1 =
+            WebDAVModelHelper.createElement(SET_PROPERTY_CHILD, SET_PROPERTY_CHILD_VALUES[0]);
+        Element child2 =
+            WebDAVModelHelper.createElement(SET_PROPERTY_CHILD, SET_PROPERTY_CHILD_VALUES[1]);
         element.appendChild(child1);
         element.appendChild(child2);
         // remove properties

@@ -53,12 +53,12 @@ public class CreationUtils {
      */
     static Object createObject(ClassMetadata metadata, RuntimeContext runtimeContext) {
         try {
-            // use constructor to create a prototype 
+            // use constructor to create a prototype
             ConstructorMetadata constructorMetadata = metadata.getConstructor();
             Constructor<?> constructor = constructorMetadata.getConstructor();
             List<Injectable> formalParameters = constructorMetadata.getFormalParameters();
-            Object[] params = InjectableFactory.getInstance().instantiate(formalParameters,
-                runtimeContext);
+            Object[] params =
+                InjectableFactory.getInstance().instantiate(formalParameters, runtimeContext);
             Object object = constructor.newInstance(params);
             injectFields(object, metadata, runtimeContext);
             return object;
@@ -67,7 +67,7 @@ public class CreationUtils {
         } catch (InvocationTargetException e) {
             Throwable targetException = e.getTargetException();
             if (targetException instanceof RuntimeException) {
-                throw (RuntimeException) targetException;
+                throw (RuntimeException)targetException;
             }
             throw new ObjectCreationException(targetException);
         } catch (Exception e) {
@@ -75,8 +75,10 @@ public class CreationUtils {
         }
     }
 
-    public static void injectFields(final Object object, ClassMetadata metadata,
-        RuntimeContext runtimeContext) throws IOException, PrivilegedActionException {
+    public static void injectFields(final Object object,
+                                    ClassMetadata metadata,
+                                    RuntimeContext runtimeContext) throws IOException,
+        PrivilegedActionException {
 
         List<Injectable> injectableFields = metadata.getInjectableFields();
         for (Injectable injectableData : injectableFields) {
@@ -84,9 +86,9 @@ public class CreationUtils {
             Object value = injectableData.getValue(runtimeContext);
             Member member = injectableData.getMember();
             if (member instanceof Field) {
-                injectField(object, value, (Field) member);
+                injectField(object, value, (Field)member);
             } else if (member instanceof Method) {
-                invokeMethod(object, value, (Method) member);
+                invokeMethod(object, value, (Method)member);
             } else {
                 // should never get here
                 throw new WebApplicationException();
@@ -99,8 +101,8 @@ public class CreationUtils {
         AccessController.doPrivileged(new PrivilegedExceptionAction<Object>() {
 
             public Object run() throws Exception {
-                if (!Modifier.isPublic(method.getModifiers())
-                    || !Modifier.isPublic(method.getDeclaringClass().getModifiers())) {
+                if (!Modifier.isPublic(method.getModifiers()) || !Modifier.isPublic(method
+                    .getDeclaringClass().getModifiers())) {
                     method.setAccessible(true);
                 }
                 method.invoke(object, value);
@@ -115,8 +117,8 @@ public class CreationUtils {
         AccessController.doPrivileged(new PrivilegedExceptionAction<Object>() {
 
             public Object run() throws Exception {
-                if (!Modifier.isPublic(field.getModifiers())
-                    || !Modifier.isPublic(field.getDeclaringClass().getModifiers())) {
+                if (!Modifier.isPublic(field.getModifiers()) || !Modifier.isPublic(field
+                    .getDeclaringClass().getModifiers())) {
                     field.setAccessible(true);
                 }
                 field.set(object, value);

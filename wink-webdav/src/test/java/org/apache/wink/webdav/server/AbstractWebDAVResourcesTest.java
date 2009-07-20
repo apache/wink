@@ -56,25 +56,31 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 public abstract class AbstractWebDAVResourcesTest extends MockServletInvocationTest {
 
-    public static final HttpStatus[] COLLECTION_OKS        = { HttpStatus.OK, HttpStatus.OK,
-        HttpStatus.OK                                     };
-    public static final HttpStatus[] DOCUMENT_OKS          = { HttpStatus.OK, HttpStatus.OK,
-        HttpStatus.OK, HttpStatus.OK                      };
-    public static QName[]            PROPERTIES_DOCUMENT   = new QName[] {
+    public static final HttpStatus[] COLLECTION_OKS        =
+                                                               {HttpStatus.OK, HttpStatus.OK,
+        HttpStatus.OK                                          };
+    public static final HttpStatus[] DOCUMENT_OKS          =
+                                                               {HttpStatus.OK, HttpStatus.OK,
+        HttpStatus.OK, HttpStatus.OK                           };
+    public static QName[]            PROPERTIES_DOCUMENT   =
+                                                               new QName[] {
         WebDAVConstants.PROPERTY_CREATIONDATE, WebDAVConstants.PROPERTY_DISPLAYNAME,
-        WebDAVConstants.PROPERTY_GETLASTMODIFIED, WebDAVConstants.PROPERTY_RESOURCETYPE };
+        WebDAVConstants.PROPERTY_GETLASTMODIFIED, WebDAVConstants.PROPERTY_RESOURCETYPE};
 
-    public static QName[]            PROPERTIES_COLLECTION = new QName[] {
+    public static QName[]            PROPERTIES_COLLECTION =
+                                                               new QName[] {
         WebDAVConstants.PROPERTY_RESOURCETYPE, WebDAVConstants.PROPERTY_DISPLAYNAME,
-        WebDAVConstants.PROPERTY_GETLASTMODIFIED          };
+        WebDAVConstants.PROPERTY_GETLASTMODIFIED               };
 
     protected static MockHttpServletRequest constructPropfindRequest(Propfind propfind,
-        String requestURI, int depth) throws IOException {
+                                                                     String requestURI,
+                                                                     int depth) throws IOException {
 
         MockHttpServletRequest mockRequest = new MockHttpServletRequestWrapper() {
 
             public String getPathTranslated() {
-                return null; // prevent Spring to resolve the file on the file system which fails
+                return null; // prevent Spring to resolve the file on the file
+                             // system which fails
             }
         };
         // headers
@@ -116,8 +122,9 @@ public abstract class AbstractWebDAVResourcesTest extends MockServletInvocationT
         return getMultistatus(response);
     }
 
-    private static void checkProperties(Response response, QName[] propertyNames,
-        HttpStatus[] statuses) {
+    private static void checkProperties(Response response,
+                                        QName[] propertyNames,
+                                        HttpStatus[] statuses) {
         int totalCovered = 0;
         for (Propstat propstat : response.getPropstat()) {
             int statusCode = propstat.getStatusCode();
@@ -131,8 +138,8 @@ public abstract class AbstractWebDAVResourcesTest extends MockServletInvocationT
             totalCovered += expectedPropnames.size();
 
             Prop prop = propstat.getProp();
-            Set<QName> propnames = WebDAVModelHelper.extractPropertyNames(prop,
-                new HashSet<QName>());
+            Set<QName> propnames =
+                WebDAVModelHelper.extractPropertyNames(prop, new HashSet<QName>());
             Assert.assertEquals(expectedPropnames.size(), propnames.size());
 
             for (QName name : expectedPropnames) {
@@ -163,7 +170,7 @@ public abstract class AbstractWebDAVResourcesTest extends MockServletInvocationT
     protected static void checkRootCollectionProperties(Response response, String name) {
 
         // check it contains the root collection properties with OK status
-        HttpStatus[] rootStatuses = { HttpStatus.OK, HttpStatus.OK, HttpStatus.NOT_FOUND };
+        HttpStatus[] rootStatuses = {HttpStatus.OK, HttpStatus.OK, HttpStatus.NOT_FOUND};
         checkProperties(response, PROPERTIES_COLLECTION, rootStatuses);
 
         Prop prop = response.getPropstat().get(0).getProp();
@@ -201,7 +208,8 @@ public abstract class AbstractWebDAVResourcesTest extends MockServletInvocationT
         MockHttpServletRequest request = new MockHttpServletRequest() {
 
             public String getPathTranslated() {
-                return null; // prevent Spring to resolve the file on the file system which fails
+                return null; // prevent Spring to resolve the file on the file
+                             // system which fails
             }
         };
         request.setMethod("OPTIONS");
@@ -213,7 +221,7 @@ public abstract class AbstractWebDAVResourcesTest extends MockServletInvocationT
         Assert.assertEquals("1", response.getHeader(WebDAVHeaders.DAV));
         Assert.assertEquals("DAV", response.getHeader(WebDAVHeaders.MS_AUTHOR_VIA));
         // check allow - must contain OPTIONS, PROPFIND, LOCK
-        String allowStr = (String) response.getHeader(HttpHeadersEx.ALLOW);
+        String allowStr = (String)response.getHeader(HttpHeadersEx.ALLOW);
         List<?> allows = Arrays.asList(allowStr.split("\\s*,\\s*"));
         Assert.assertTrue(allows.contains("OPTIONS"));
         Assert.assertTrue(allows.contains(WebDAVMethod.PROPFIND.name()));
@@ -230,7 +238,8 @@ public abstract class AbstractWebDAVResourcesTest extends MockServletInvocationT
         MockHttpServletRequest request = new MockHttpServletRequest() {
 
             public String getPathTranslated() {
-                return null; // prevent Spring to resolve the file on the file system which fails
+                return null; // prevent Spring to resolve the file on the file
+                             // system which fails
             }
         };
         request.setMethod(WebDAVMethod.LOCK.name());
@@ -244,8 +253,10 @@ public abstract class AbstractWebDAVResourcesTest extends MockServletInvocationT
         locktype.setWrite(new Write());
         lockinfo.setLocktype(locktype);
         StringWriter writer = new StringWriter();
-        WebDAVModelHelper.marshal(WebDAVModelHelper.createMarshaller(), lockinfo, writer,
-            "lockinfo");
+        WebDAVModelHelper.marshal(WebDAVModelHelper.createMarshaller(),
+                                  lockinfo,
+                                  writer,
+                                  "lockinfo");
         request.setContent(writer.toString().getBytes());
         MockHttpServletResponse response = invoke(request);
 
@@ -255,8 +266,11 @@ public abstract class AbstractWebDAVResourcesTest extends MockServletInvocationT
         mediaType.getParameters().clear();
         Assert.assertEquals(MediaType.APPLICATION_XML_TYPE, mediaType);
         StringReader reader = new StringReader(response.getContentAsString());
-        Prop prop = WebDAVModelHelper.unmarshal(WebDAVModelHelper.createUnmarshaller(), reader,
-            Prop.class, "prop");
+        Prop prop =
+            WebDAVModelHelper.unmarshal(WebDAVModelHelper.createUnmarshaller(),
+                                        reader,
+                                        Prop.class,
+                                        "prop");
         List<Activelock> activelocks = prop.getLockdiscovery().getActivelock();
         Assert.assertNotNull(activelocks);
         Assert.assertEquals(1, activelocks.size());
@@ -268,7 +282,8 @@ public abstract class AbstractWebDAVResourcesTest extends MockServletInvocationT
         request = new MockHttpServletRequest() {
 
             public String getPathTranslated() {
-                return null; // prevent Spring to resolve the file on the file system which fails
+                return null; // prevent Spring to resolve the file on the file
+                             // system which fails
             }
         };
         request.setMethod(WebDAVMethod.UNLOCK.name());

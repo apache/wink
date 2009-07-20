@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.providers.entity.atom;
 
@@ -38,29 +37,42 @@ import javax.ws.rs.ext.Provider;
 
 import org.apache.wink.common.model.atom.AtomFeed;
 
-
 @Provider
 @Consumes(MediaType.APPLICATION_ATOM_XML)
 @Produces(MediaType.APPLICATION_ATOM_XML)
-public class AtomFeedProvider extends AbstractAtomFeedProvider<AtomFeed> implements MessageBodyReader<AtomFeed>, MessageBodyWriter<AtomFeed> {
+public class AtomFeedProvider extends AbstractAtomFeedProvider<AtomFeed> implements
+    MessageBodyReader<AtomFeed>, MessageBodyWriter<AtomFeed> {
 
-    public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public boolean isReadable(Class<?> type,
+                              Type genericType,
+                              Annotation[] annotations,
+                              MediaType mediaType) {
         return type == AtomFeed.class;
     }
 
-    public AtomFeed readFrom(Class<AtomFeed> type, Type genericType, Annotation[] annotations, MediaType mediaType,
-            MultivaluedMap<String,String> httpHeaders, InputStream entityStream) throws IOException,
-            WebApplicationException {
+    public AtomFeed readFrom(Class<AtomFeed> type,
+                             Type genericType,
+                             Annotation[] annotations,
+                             MediaType mediaType,
+                             MultivaluedMap<String, String> httpHeaders,
+                             InputStream entityStream) throws IOException, WebApplicationException {
         return readFeed(type, genericType, annotations, mediaType, httpHeaders, entityStream);
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
         return type == AtomFeed.class;
     }
 
-    public void writeTo(AtomFeed t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
-            MultivaluedMap<String,Object> httpHeaders, OutputStream entityStream) throws IOException,
-            WebApplicationException {
+    public void writeTo(AtomFeed t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
         writeFeed(t, type, genericType, annotations, mediaType, httpHeaders, entityStream);
     }
 }

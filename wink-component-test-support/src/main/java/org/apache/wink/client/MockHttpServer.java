@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.client;
 
@@ -47,7 +46,8 @@ public class MockHttpServer extends Thread {
     private ServerSocket          serverSocket            = null;
     private boolean               serverStarted           = false;
     private ServerSocketFactory   serverSocketFactory     = null;
-    private int                   readTimeOut             = 5000;                         // 5 seconds
+    private int                   readTimeOut             = 5000;                         // 5
+                                                                                           // seconds
     private int                   delayResponseTime       = 0;
 
     // request data
@@ -130,7 +130,8 @@ public class MockHttpServer extends Thread {
             }
         } catch (IOException e) {
             if (e instanceof SocketException) {
-                if (!("Socket closed".equalsIgnoreCase(e.getMessage()) || "Socket is closed".equalsIgnoreCase(e.getMessage()))) {
+                if (!("Socket closed".equalsIgnoreCase(e.getMessage()) || "Socket is closed"
+                    .equalsIgnoreCase(e.getMessage()))) {
                     e.printStackTrace();
                     throw new RuntimeException(e);
                 }
@@ -277,20 +278,22 @@ public class MockHttpServer extends Thread {
 
                 String lineStr = new String(line);
                 // a chunk is identified as:
-                //  1) not an empty line
-                //  2) not 0. 0 means that there are no more chunks
+                // 1) not an empty line
+                // 2) not 0. 0 means that there are no more chunks
                 if ("0".equals(lineStr)) {
                     lastChunk = true;
                 }
 
                 if (!lastChunk) {
-                    // get the length of the current chunk (it is in hexadecimal form)
+                    // get the length of the current chunk (it is in hexadecimal
+                    // form)
                     int chunkLen = Integer.parseInt(lineStr, 16);
 
                     // get the chunk
                     chunk = getChunk(is, chunkLen);
 
-                    // consume the newline after the chunk that separates between 
+                    // consume the newline after the chunk that separates
+                    // between
                     // the chunk content and the next chunk size
                     readLine(is);
 
@@ -349,7 +352,7 @@ public class MockHttpServer extends Thread {
         }
 
         private void processResponse(Socket socket) throws IOException {
-            // if delaying the response failed (because it was interrupted) 
+            // if delaying the response failed (because it was interrupted)
             // then don't send the response
             if (!delayResponse())
                 return;
@@ -358,7 +361,7 @@ public class MockHttpServer extends Thread {
             BufferedOutputStream os = new BufferedOutputStream(sos);
             String reason = "";
             Status statusCode = Response.Status.fromStatusCode(mockResponseCode);
-            if(statusCode !=null){
+            if (statusCode != null) {
                 reason = statusCode.toString();
             }
             os.write(("HTTP/1.1 " + mockResponseCode + " " + reason).getBytes());
@@ -369,8 +372,8 @@ public class MockHttpServer extends Thread {
         }
 
         // return:
-        //    true - delay was successful
-        //    false - delay was unsuccessful
+        // true - delay was successful
+        // false - delay was unsuccessful
         private boolean delayResponse() {
             // delay the response by delayResponseTime milliseconds
             if (delayResponseTime > 0) {
@@ -478,9 +481,8 @@ public class MockHttpServer extends Thread {
              * server.setMockResponseContentType("text/plain;charset=UTF-8");
              * //Map<String,String> maps = new HashMap<String,String>();
              * //maps.put("Location", "http://localhost:3333/lalala");
-             * //server.setMockResponseHeaders(maps); server.startServer();
-             * 
-             * URL u = new
+             * //server.setMockResponseHeaders(maps); server.startServer(); URL
+             * u = new
              * URL("http://localhost:3334/qadefect-service/rest/defects/2");
              * HttpURLConnection huc = (HttpURLConnection)u.openConnection();
              * huc.setRequestMethod("PUT"); huc.setDoOutput(true);
@@ -500,24 +502,26 @@ public class MockHttpServer extends Thread {
              * System.out.println("readdd = " + readdd); huc.disconnect();
              */
 
-            //            RestClient client = new RestClient();
+            // RestClient client = new RestClient();
             //            
-            //            // init the resource
-            //            String url = "http://localhost:3333/qadefect-service/rest/defects/2";
-            //            Resource resource = client.newResource(url);     
+            // // init the resource
+            // String url =
+            // "http://localhost:3333/qadefect-service/rest/defects/2";
+            // Resource resource = client.newResource(url);
             //            
-            //            // get defect
-            //            Response<TextEntity> response = resource.doGet(TextEntity.class);
-            //            TextEntity d = response.getEntity();
-            //            System.out.println("GET returned content: " + d.getText());
+            // // get defect
+            // Response<TextEntity> response = resource.doGet(TextEntity.class);
+            // TextEntity d = response.getEntity();
+            // System.out.println("GET returned content: " + d.getText());
             //
-            //            TextEntity text = new TextEntity();
-            //            text.setText("Hello");
-            //            response = resource.doPut(text, TextEntity.class);
-            //            d = response.getEntity();
-            //            System.out.println("PUT sent content: " + server.getRequestContent());
-            //            System.out.println("PUT returned content: " + d.getText());
-            //            System.out.println(server.getRequestUrl());
+            // TextEntity text = new TextEntity();
+            // text.setText("Hello");
+            // response = resource.doPut(text, TextEntity.class);
+            // d = response.getEntity();
+            // System.out.println("PUT sent content: " +
+            // server.getRequestContent());
+            // System.out.println("PUT returned content: " + d.getText());
+            // System.out.println(server.getRequestUrl());
         } catch (Exception e1) {
             e1.printStackTrace();
         } finally {

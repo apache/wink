@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.client;
 
@@ -36,12 +35,12 @@ import org.apache.wink.common.internal.lifecycle.ScopeLifecycleManager;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 
-
 /**
- * The RestClient is the entry point for all rest service operations. The RestClient is used to
- * create instances of {@link Resource} classes that are used to make the actual invocations to the
- * service. The client can be initialized with a user supplied configuration to specify custom
- * Provider classes, in addition to other configuration options.
+ * The RestClient is the entry point for all rest service operations. The
+ * RestClient is used to create instances of {@link Resource} classes that are
+ * used to make the actual invocations to the service. The client can be
+ * initialized with a user supplied configuration to specify custom Provider
+ * classes, in addition to other configuration options.
  * 
  * <pre>
  *      // create the client
@@ -59,8 +58,8 @@ public class RestClient {
 
     private static final Logger logger = LoggerFactory.getLogger(RestClient.class);
 
-    private ProvidersRegistry providersRegistry;
-    private ClientConfig config;
+    private ProvidersRegistry   providersRegistry;
+    private ClientConfig        config;
 
     /**
      * Construct a new RestClient using the default client configuration
@@ -72,8 +71,7 @@ public class RestClient {
     /**
      * Construct a new RestClient using the supplied configuration
      * 
-     * @param config
-     *            the client configuration
+     * @param config the client configuration
      */
     public RestClient(ClientConfig config) {
         ClientConfig clone = config.clone();
@@ -93,8 +91,7 @@ public class RestClient {
     /**
      * Create a new {@link Resource} instance
      * 
-     * @param uri
-     *            uri of the resource to create
+     * @param uri uri of the resource to create
      * @return a new {@link Resource} instance attached to the specified uri
      */
     public Resource resource(URI uri) {
@@ -104,8 +101,7 @@ public class RestClient {
     /**
      * Create a new {@link Resource} instance
      * 
-     * @param uri
-     *            uri of the resource to create
+     * @param uri uri of the resource to create
      * @return a new {@link Resource} instance attached to the specified uri
      */
     public Resource resource(String uri) {

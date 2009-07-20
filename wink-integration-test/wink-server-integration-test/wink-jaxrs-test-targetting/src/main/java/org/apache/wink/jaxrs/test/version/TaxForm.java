@@ -38,14 +38,14 @@ import javax.ws.rs.core.MediaType;
 public class TaxForm {
 
     @Context
-    private HttpHeaders httpHeaders;
+    private HttpHeaders    httpHeaders;
 
     @Context
     private ServletContext context;
 
     @GET
     public InputStream getWithAcceptHeader(@QueryParam(value = "form") String form)
-            throws FileNotFoundException {
+        throws FileNotFoundException {
         List<MediaType> mediaTypes = httpHeaders.getAcceptableMediaTypes();
         if (mediaTypes == null || mediaTypes.isEmpty()) {
             throw new IllegalArgumentException("Accept values not found");
@@ -54,10 +54,13 @@ public class TaxForm {
         String subtype = mediaType.getSubtype();
         String version = subtype.substring(subtype.indexOf("+") + 1);
         String formPath = form + "_" + version;
-        String path = "tests" + java.io.File.separator + "test-resources"
-                + java.io.File.separator + formPath + ".xml";
-        InputStream stream = context.getResourceAsStream("/WEB-INF/classes/"
-                + path);
+        String path =
+            "tests" + java.io.File.separator
+                + "test-resources"
+                + java.io.File.separator
+                + formPath
+                + ".xml";
+        InputStream stream = context.getResourceAsStream("/WEB-INF/classes/" + path);
         if (stream != null) {
             return stream;
         }
@@ -66,13 +69,17 @@ public class TaxForm {
 
     @GET
     @Path(value = "/{form}")
-    public InputStream getWithQueryString(@PathParam(value = "form") String form, @QueryParam(value = "version") String version)
-            throws FileNotFoundException {
+    public InputStream getWithQueryString(@PathParam(value = "form") String form,
+                                          @QueryParam(value = "version") String version)
+        throws FileNotFoundException {
         String formPath = form + "_" + version;
-        String path = "tests" + java.io.File.separator + "test-resources"
-                + java.io.File.separator + formPath + ".xml";
-        InputStream stream = context.getResourceAsStream("/WEB-INF/classes/"
-                + path);
+        String path =
+            "tests" + java.io.File.separator
+                + "test-resources"
+                + java.io.File.separator
+                + formPath
+                + ".xml";
+        InputStream stream = context.getResourceAsStream("/WEB-INF/classes/" + path);
         if (stream != null) {
             return stream;
         }
@@ -81,13 +88,17 @@ public class TaxForm {
 
     @GET
     @Path(value = "/{form}/{version}")
-    public InputStream getWithPathInfo(@PathParam(value = "form") String form, @PathParam(value = "version") String version)
-            throws FileNotFoundException {
+    public InputStream getWithPathInfo(@PathParam(value = "form") String form,
+                                       @PathParam(value = "version") String version)
+        throws FileNotFoundException {
         String formPath = form + "_" + version;
-        String path = "tests" + java.io.File.separator + "test-resources"
-                + java.io.File.separator + formPath + ".xml";
-        InputStream stream = context.getResourceAsStream("/WEB-INF/classes/"
-                + path);
+        String path =
+            "tests" + java.io.File.separator
+                + "test-resources"
+                + java.io.File.separator
+                + formPath
+                + ".xml";
+        InputStream stream = context.getResourceAsStream("/WEB-INF/classes/" + path);
         if (stream != null) {
             return stream;
         }

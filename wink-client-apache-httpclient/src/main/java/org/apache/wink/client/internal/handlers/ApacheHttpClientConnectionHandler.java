@@ -47,17 +47,17 @@ import org.apache.wink.client.ClientResponse;
 import org.apache.wink.client.handlers.HandlerContext;
 
 /**
- * Extends AbstractConnectionHandler and uses Apache HttpClient to perform HTTP request execution. 
- * Each outgoing Http request is wrapped by EntityWriter.  
+ * Extends AbstractConnectionHandler and uses Apache HttpClient to perform HTTP
+ * request execution. Each outgoing Http request is wrapped by EntityWriter.
  */
 public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler {
-    
+
     private HttpClient httpclient;
-    
+
     public ApacheHttpClientConnectionHandler() {
         httpclient = null;
     }
-    
+
     public ApacheHttpClientConnectionHandler(HttpClient httpclient) {
         this.httpclient = httpclient;
     }
@@ -70,26 +70,29 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
             throw new RuntimeException(e);
         }
     }
-    
-    private HttpResponse processRequest(ClientRequest request, HandlerContext context) throws IOException {
+
+    private HttpResponse processRequest(ClientRequest request, HandlerContext context)
+        throws IOException {
         HttpClient client = openConnection(request);
         // TODO: move this functionality to the base class
         NonCloseableOutputStream ncos = new NonCloseableOutputStream();
         OutputStream os = ncos;
-        
+
         EntityWriter entityWriter = null;
         if (request.getEntity() != null) {
             os = adaptOutputStream(ncos, request, context.getOutputStreamAdapters());
             // prepare the entity that will write our entity
             entityWriter = new EntityWriter(this, request, os, ncos);
         }
-        
+
         HttpRequestBase entityRequest = setupHttpRequest(request, client, entityWriter);
-        
+
         return client.execute(entityRequest);
     }
-    
-    private HttpRequestBase setupHttpRequest(ClientRequest request, HttpClient client, EntityWriter entityWriter) {
+
+    private HttpRequestBase setupHttpRequest(ClientRequest request,
+                                             HttpClient client,
+                                             EntityWriter entityWriter) {
         URI uri = request.getURI();
         String method = request.getMethod();
         HttpRequestBase httpRequest = null;
@@ -98,14 +101,15 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
             httpRequest = entityRequest;
         } else {
             // create a new request with the specified method
-            HttpEntityEnclosingRequestBase entityRequest = new GenericHttpEntityEnclosingRequestBase(method);
+            HttpEntityEnclosingRequestBase entityRequest =
+                new GenericHttpEntityEnclosingRequestBase(method);
             entityRequest.setEntity(entityWriter);
             httpRequest = entityRequest;
         }
         // set the uri
         httpRequest.setURI(uri);
         // add all headers
-        MultivaluedMap<String,String> headers = request.getHeaders();
+        MultivaluedMap<String, String> headers = request.getHeaders();
         for (String header : headers.keySet()) {
             List<String> values = headers.get(header);
             for (String value : values) {
@@ -121,24 +125,31 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
         if (this.httpclient != null) {
             return this.httpclient;
         }
-        
+
         ClientConfig config = request.getAttribute(ClientConfig.class);
         BasicHttpParams params = new BasicHttpParams();
-        params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, Integer.valueOf(config.getConnectTimeout()));
-        params.setParameter(CoreConnectionPNames.SO_TIMEOUT, Integer.valueOf(config.getReadTimeout()));
-        params.setParameter(ClientPNames.HANDLE_REDIRECTS, Boolean.valueOf(config.isFollowRedirects()));
+        params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, Integer.valueOf(config
+            .getConnectTimeout()));
+        params.setParameter(CoreConnectionPNames.SO_TIMEOUT, Integer.valueOf(config
+            .getReadTimeout()));
+        params.setParameter(ClientPNames.HANDLE_REDIRECTS, Boolean.valueOf(config
+            .isFollowRedirects()));
         if (config.isFollowRedirects()) {
             params.setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, Boolean.TRUE);
         }
         // setup proxy
         if (config.getProxyHost() != null) {
-            params.setParameter(ConnRoutePNames.DEFAULT_PROXY, new HttpHost(config.getProxyHost(), config.getProxyPort()));
+            params.setParameter(ConnRoutePNames.DEFAULT_PROXY, new HttpHost(config.getProxyHost(),
+                                                                            config.getProxyPort()));
         }
         HttpClient httpclient = new DefaultHttpClient(params);
         return httpclient;
     }
-    
-    private ClientResponse processResponse(ClientRequest request, HandlerContext context, HttpResponse httpResponse) throws IllegalStateException, IOException {
+
+    private ClientResponse processResponse(ClientRequest request,
+                                           HandlerContext context,
+                                           HttpResponse httpResponse) throws IllegalStateException,
+        IOException {
         ClientResponse response = createResponse(request, httpResponse);
         InputStream is = httpResponse.getEntity().getContent();
         is = adaptInputStream(is, response, context.getInputStreamAdapters());
@@ -155,36 +166,41 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
         processResponseHeaders(response, httpResponse);
         return response;
     }
-    
+
     private void processResponseHeaders(ClientResponse response, HttpResponse httpResponse) {
         Header[] allHeaders = httpResponse.getAllHeaders();
         for (Header header : allHeaders) {
             response.getHeaders().add(header.getName(), header.getValue());
         }
     }
-    
+
     private static class GenericHttpRequestBase extends HttpRequestBase {
         private String method;
+
         public GenericHttpRequestBase(String method) {
             this.method = method;
         }
+
         @Override
         public String getMethod() {
             return method;
         }
     }
 
-    private static class GenericHttpEntityEnclosingRequestBase extends HttpEntityEnclosingRequestBase {
+    private static class GenericHttpEntityEnclosingRequestBase extends
+        HttpEntityEnclosingRequestBase {
         private String method;
+
         public GenericHttpEntityEnclosingRequestBase(String method) {
             this.method = method;
         }
+
         @Override
         public String getMethod() {
             return method;
         }
     }
-    
+
     // TODO: move this class to the base class
     private static class NonCloseableOutputStream extends OutputStream {
         OutputStream os;
@@ -221,15 +237,18 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
             os.write(b);
         }
     }
-    
+
     private static class EntityWriter implements HttpEntity {
-        
+
         private ApacheHttpClientConnectionHandler apacheHttpClientHandler;
-        private ClientRequest request;
-        private OutputStream adaptedOutputStream;
-        private NonCloseableOutputStream ncos;
-        
-        public EntityWriter(ApacheHttpClientConnectionHandler apacheHttpClientHandler, ClientRequest request, OutputStream adaptedOutputStream, NonCloseableOutputStream ncos) {
+        private ClientRequest                     request;
+        private OutputStream                      adaptedOutputStream;
+        private NonCloseableOutputStream          ncos;
+
+        public EntityWriter(ApacheHttpClientConnectionHandler apacheHttpClientHandler,
+                            ClientRequest request,
+                            OutputStream adaptedOutputStream,
+                            NonCloseableOutputStream ncos) {
             this.apacheHttpClientHandler = apacheHttpClientHandler;
             this.request = request;
             this.adaptedOutputStream = adaptedOutputStream;
@@ -271,6 +290,6 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
             ncos.setOutputStream(os);
             apacheHttpClientHandler.writeEntity(request, adaptedOutputStream);
         }
-        
+
     }
 }

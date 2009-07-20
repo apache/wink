@@ -45,22 +45,30 @@ public class CLIHelper {
     @SuppressWarnings("static-access")
     public CLIHelper() {
 
-        Option userOption = OptionBuilder.withArgName("user").hasArg().withDescription(
-            "Full username. Example: user@gmail.com").isRequired(true).withLongOpt("user").create(
-            USER_OPT);
-        Option passwordOption = OptionBuilder.withArgName("password").isRequired(true).hasArg().withDescription(
-            "Password").withLongOpt("password").create(PASSWORD_OPT);
-        Option uploadFileOption = OptionBuilder.withArgName("file").isRequired(false).hasArg().withDescription(
-            "Path to a file to upload").withLongOpt("upload").create(UPLOAD_FILE_OPT);
-        Option listFilesOption = OptionBuilder.hasArg(false).withDescription("List files").withLongOpt(
-            "list").create(LIST_OPT);
-        Option deleteOption = OptionBuilder.withArgName("document id").hasArg(true).withDescription(
-            "Delete document. Use --list to get a document id.").withLongOpt("delete").create(
-            DELETE_OPT);
-        Option proxyHostOption = OptionBuilder.isRequired(false).withArgName("host").hasArg(true).withDescription(
-            "Proxy host").withLongOpt("proxy").create(PROXY_HOST_ORT);
-        Option proxyPortOption = OptionBuilder.isRequired(false).withArgName("port").hasArg(true).withDescription(
-            "Proxy port").withLongOpt("port").create(PROXY_PORT_OPT);
+        Option userOption =
+            OptionBuilder.withArgName("user").hasArg()
+                .withDescription("Full username. Example: user@gmail.com").isRequired(true)
+                .withLongOpt("user").create(USER_OPT);
+        Option passwordOption =
+            OptionBuilder.withArgName("password").isRequired(true).hasArg()
+                .withDescription("Password").withLongOpt("password").create(PASSWORD_OPT);
+        Option uploadFileOption =
+            OptionBuilder.withArgName("file").isRequired(false).hasArg()
+                .withDescription("Path to a file to upload").withLongOpt("upload")
+                .create(UPLOAD_FILE_OPT);
+        Option listFilesOption =
+            OptionBuilder.hasArg(false).withDescription("List files").withLongOpt("list")
+                .create(LIST_OPT);
+        Option deleteOption =
+            OptionBuilder.withArgName("document id").hasArg(true)
+                .withDescription("Delete document. Use --list to get a document id.")
+                .withLongOpt("delete").create(DELETE_OPT);
+        Option proxyHostOption =
+            OptionBuilder.isRequired(false).withArgName("host").hasArg(true)
+                .withDescription("Proxy host").withLongOpt("proxy").create(PROXY_HOST_ORT);
+        Option proxyPortOption =
+            OptionBuilder.isRequired(false).withArgName("port").hasArg(true)
+                .withDescription("Proxy port").withLongOpt("port").create(PROXY_PORT_OPT);
 
         OptionGroup group = new OptionGroup();
         group.setRequired(true);
@@ -117,11 +125,11 @@ public class CLIHelper {
     public String getUploadFilename() {
         return commandLine.getOptionValue(UPLOAD_FILE_OPT);
     }
-    
+
     public String getDeleteId() {
         return commandLine.getOptionValue(DELETE_OPT);
     }
-    
+
     public String getProxyHost() {
         return commandLine.getOptionValue(PROXY_HOST_ORT);
     }

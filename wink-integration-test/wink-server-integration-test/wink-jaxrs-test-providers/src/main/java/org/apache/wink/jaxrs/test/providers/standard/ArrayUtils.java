@@ -22,8 +22,8 @@ package org.apache.wink.jaxrs.test.providers.standard;
 public class ArrayUtils {
 
     /**
-     * copyOf performs the very same function that JDK6 java.util.Arrays.copyOf performs.  We need
-     * it here to support JDK5
+     * copyOf performs the very same function that JDK6 java.util.Arrays.copyOf
+     * performs. We need it here to support JDK5
      * 
      * @param buffer
      * @param size
@@ -34,10 +34,10 @@ public class ArrayUtils {
         System.arraycopy(buffer, 0, copy, 0, Math.min(buffer.length, size));
         return copy;
     }
-    
+
     /**
-     * copyOf performs the very same function that JDK6 java.util.Arrays.copyOf performs.  We need
-     * it here to support JDK5
+     * copyOf performs the very same function that JDK6 java.util.Arrays.copyOf
+     * performs. We need it here to support JDK5
      * 
      * @param buffer
      * @param size
@@ -48,5 +48,5 @@ public class ArrayUtils {
         System.arraycopy(buffer, 0, copy, 0, Math.min(buffer.length, size));
         return copy;
     }
-    
+
 }

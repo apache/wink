@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.dynamicresource;
 
 import java.util.HashMap;
@@ -38,7 +38,9 @@ public class BookmarkStore {
     // --- singleton ---
 
     private static BookmarkStore             store     = new BookmarkStore();
-    private static final Map<String, String> bookmarks = Collections.synchronizedMap(new HashMap<String, String>());
+    private static final Map<String, String> bookmarks =
+                                                           Collections
+                                                               .synchronizedMap(new HashMap<String, String>());
     private static int                       id        = 0;
 
     static {
@@ -75,10 +77,8 @@ public class BookmarkStore {
     /**
      * Updates or creates bookmark of given key with provided value.
      * 
-     * @param key
-     *            bookmark key.
-     * @param bookmark
-     *            bookmark value.
+     * @param key bookmark key.
+     * @param bookmark bookmark value.
      */
     public void putBookmark(String key, String bookmark) {
         bookmarks.put(key, bookmark);
@@ -87,8 +87,7 @@ public class BookmarkStore {
     /**
      * Gives bookmark of requested bookmark Id.
      * 
-     * @param key
-     *            requested bookmark key (bookmark Id).
+     * @param key requested bookmark key (bookmark Id).
      * @return requested bookmark, or <tt>null</tt> if bookmark with such key
      *         does not exist.
      */
@@ -100,8 +99,7 @@ public class BookmarkStore {
      * Returns <tt>true</tt> is memory store has bookmark for the provided key
      * (bookmark Id).
      * 
-     * @param key
-     *            requested bookmark key (bookmark Id).
+     * @param key requested bookmark key (bookmark Id).
      * @return <tt>true</tt> if memory store has bookmark of the provided key.
      */
     public boolean containsBookmark(String key) {
@@ -120,8 +118,7 @@ public class BookmarkStore {
     /**
      * Delete bookmark of given key.
      * 
-     * @param key
-     *            bookmark key.
+     * @param key bookmark key.
      */
     public void deleteBookmark(String key) {
         bookmarks.remove(key);

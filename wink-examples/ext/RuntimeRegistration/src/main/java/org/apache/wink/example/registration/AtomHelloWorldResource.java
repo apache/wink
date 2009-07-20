@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.example.registration;
 
 import java.util.Date;
@@ -29,7 +29,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.wink.common.model.synd.SyndEntry;
 import org.apache.wink.common.model.synd.SyndText;
-
 
 @Path("atom")
 public class AtomHelloWorldResource {

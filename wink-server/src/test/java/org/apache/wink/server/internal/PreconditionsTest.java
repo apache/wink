@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal;
 
 import java.util.Date;
@@ -42,16 +42,17 @@ import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 public class PreconditionsTest extends MockServletInvocationTest {
 
     private static final String                    THE_CONTENT        = ">>>The Content<<<";
-    private final static HeaderDelegate<EntityTag> etagHeaderDelegate = RuntimeDelegate.getInstance().createHeaderDelegate(
-                                                                          EntityTag.class);
+    private final static HeaderDelegate<EntityTag> etagHeaderDelegate =
+                                                                          RuntimeDelegate
+                                                                              .getInstance()
+                                                                              .createHeaderDelegate(EntityTag.class);
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] { ConditionalGetResource.class };
+        return new Class[] {ConditionalGetResource.class};
     }
 
     @Path("get/{variable}")
@@ -70,8 +71,9 @@ public class PreconditionsTest extends MockServletInvocationTest {
             if (lastModified != null) {
                 evaluatePreconditions = request.evaluatePreconditions(lastModified);
             } else {
-                evaluatePreconditions = request.evaluatePreconditions(etagHeaderDelegate.fromString("\""
-                    + variable + "\""));
+                evaluatePreconditions =
+                    request.evaluatePreconditions(etagHeaderDelegate.fromString("\"" + variable
+                        + "\""));
             }
             if (evaluatePreconditions != null) {
                 return evaluatePreconditions.build();
@@ -94,11 +96,13 @@ public class PreconditionsTest extends MockServletInvocationTest {
         @GET
         @Produces("text/plain")
         @Path("etag/{etag}")
-        public Object get2(@Context Request request, @PathParam("variable") String date,
-            @PathParam("etag") String etag) {
+        public Object get2(@Context Request request,
+                           @PathParam("variable") String date,
+                           @PathParam("etag") String etag) {
 
-            ResponseBuilder evaluatePreconditions = request.evaluatePreconditions(new Date(
-                Long.parseLong(date)), etagHeaderDelegate.fromString("\"" + etag + "\""));
+            ResponseBuilder evaluatePreconditions =
+                request.evaluatePreconditions(new Date(Long.parseLong(date)), etagHeaderDelegate
+                    .fromString("\"" + etag + "\""));
 
             if (evaluatePreconditions != null) {
                 return evaluatePreconditions.build();
@@ -109,11 +113,13 @@ public class PreconditionsTest extends MockServletInvocationTest {
         @PUT
         @Produces("text/plain")
         @Path("etag/{etag}")
-        public Object put2(@Context Request request, @PathParam("variable") String date,
-            @PathParam("etag") String etag) {
+        public Object put2(@Context Request request,
+                           @PathParam("variable") String date,
+                           @PathParam("etag") String etag) {
 
-            ResponseBuilder evaluatePreconditions = request.evaluatePreconditions(new Date(
-                Long.parseLong(date)), etagHeaderDelegate.fromString("\"" + etag + "\""));
+            ResponseBuilder evaluatePreconditions =
+                request.evaluatePreconditions(new Date(Long.parseLong(date)), etagHeaderDelegate
+                    .fromString("\"" + etag + "\""));
 
             if (evaluatePreconditions != null) {
                 return evaluatePreconditions.build();
@@ -134,8 +140,9 @@ public class PreconditionsTest extends MockServletInvocationTest {
             if (lastModified != null) {
                 evaluatePreconditions = request.evaluatePreconditions(lastModified);
             } else {
-                evaluatePreconditions = request.evaluatePreconditions(etagHeaderDelegate.fromString("\""
-                    + variable + "\""));
+                evaluatePreconditions =
+                    request.evaluatePreconditions(etagHeaderDelegate.fromString("\"" + variable
+                        + "\""));
             }
             if (evaluatePreconditions != null) {
                 return evaluatePreconditions.build();
@@ -146,8 +153,8 @@ public class PreconditionsTest extends MockServletInvocationTest {
     } // 
 
     public void testNormalGet() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET",
-            "get/0/null", "*/*");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "get/0/null", "*/*");
         MockHttpServletResponse response = invoke(request);
         assertEquals("status", 200, response.getStatus());
         assertEquals("content", THE_CONTENT, response.getContentAsString());
@@ -158,15 +165,17 @@ public class PreconditionsTest extends MockServletInvocationTest {
         Date modified_since = new GregorianCalendar(2007, 11, 07, 10, 0, 0).getTime();
 
         // GET
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "get/"
-            + String.valueOf(date_to_return.getTime()), "*/*");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "get/" + String
+                .valueOf(date_to_return.getTime()), "*/*");
         request.addHeader(HttpHeaders.IF_MODIFIED_SINCE, HttpDateParser.toHttpDate(modified_since));
         MockHttpServletResponse response = invoke(request);
         assertEquals("status", 304, response.getStatus());
 
         // PUT
-        request = MockRequestConstructor.constructMockRequest("PUT", "get/"
-            + String.valueOf(date_to_return.getTime()), "*/*");
+        request =
+            MockRequestConstructor.constructMockRequest("PUT", "get/" + String
+                .valueOf(date_to_return.getTime()), "*/*");
         request.addHeader(HttpHeaders.IF_MODIFIED_SINCE, HttpDateParser.toHttpDate(modified_since));
         response = invoke(request);
         assertEquals("status", 304, response.getStatus());
@@ -177,15 +186,17 @@ public class PreconditionsTest extends MockServletInvocationTest {
         Date modified_since = new GregorianCalendar(2007, 11, 06, 10, 0, 0).getTime();
 
         // GET
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "get/"
-            + String.valueOf(date_to_return.getTime()), "*/*");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "get/" + String
+                .valueOf(date_to_return.getTime()), "*/*");
         request.addHeader(HttpHeaders.IF_MODIFIED_SINCE, HttpDateParser.toHttpDate(modified_since));
         MockHttpServletResponse response = invoke(request);
         assertEquals("status", 200, response.getStatus());
 
         // PUT
-        request = MockRequestConstructor.constructMockRequest("PUT", "get/"
-            + String.valueOf(date_to_return.getTime()), "*/*");
+        request =
+            MockRequestConstructor.constructMockRequest("PUT", "get/" + String
+                .valueOf(date_to_return.getTime()), "*/*");
         request.addHeader(HttpHeaders.IF_MODIFIED_SINCE, HttpDateParser.toHttpDate(modified_since));
         response = invoke(request);
         assertEquals("status", 200, response.getStatus());
@@ -197,16 +208,22 @@ public class PreconditionsTest extends MockServletInvocationTest {
         String etag = "blablabla";
 
         // GET
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "get/"
-            + String.valueOf(date_to_return.getTime()) + "/etag/" + etag, "*/*");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "get/" + String
+                .valueOf(date_to_return.getTime())
+                + "/etag/"
+                + etag, "*/*");
         request.addHeader(HttpHeaders.IF_MODIFIED_SINCE, HttpDateParser.toHttpDate(modified_since));
         request.addHeader(HttpHeaders.IF_NONE_MATCH, "\"notmatch\"");
         MockHttpServletResponse response = invoke(request);
         assertEquals("status", 200, response.getStatus());
 
         // PUT
-        request = MockRequestConstructor.constructMockRequest("PUT", "get/"
-            + String.valueOf(date_to_return.getTime()) + "/etag/" + etag, "*/*");
+        request =
+            MockRequestConstructor.constructMockRequest("PUT", "get/" + String
+                .valueOf(date_to_return.getTime())
+                + "/etag/"
+                + etag, "*/*");
         request.addHeader(HttpHeaders.IF_MODIFIED_SINCE, HttpDateParser.toHttpDate(modified_since));
         request.addHeader(HttpHeaders.IF_NONE_MATCH, "\"notmatch\"");
         response = invoke(request);
@@ -219,16 +236,22 @@ public class PreconditionsTest extends MockServletInvocationTest {
         String etag = "blablabla";
 
         // GET
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "get/"
-            + String.valueOf(date_to_return.getTime()) + "/etag/" + etag, "*/*");
-        request.addHeader(HttpHeaders.IF_UNMODIFIED_SINCE,
-            HttpDateParser.toHttpDate(modified_since));
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "get/" + String
+                .valueOf(date_to_return.getTime())
+                + "/etag/"
+                + etag, "*/*");
+        request.addHeader(HttpHeaders.IF_UNMODIFIED_SINCE, HttpDateParser
+            .toHttpDate(modified_since));
         MockHttpServletResponse response = invoke(request);
         assertEquals("status", 412, response.getStatus());
 
         // PUT
-        request = MockRequestConstructor.constructMockRequest("PUT", "get/"
-            + String.valueOf(date_to_return.getTime()) + "/etag/" + etag, "*/*");
+        request =
+            MockRequestConstructor.constructMockRequest("PUT", "get/" + String
+                .valueOf(date_to_return.getTime())
+                + "/etag/"
+                + etag, "*/*");
         request.addHeader(HttpHeaders.IF_MATCH, "\"" + etag + "\"");
         response = invoke(request);
         assertEquals("status", 200, response.getStatus());
@@ -239,8 +262,8 @@ public class PreconditionsTest extends MockServletInvocationTest {
         String etag = "blablabla";
 
         // GET
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "get/"
-            + etag, "*/*");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "get/" + etag, "*/*");
         request.addHeader(HttpHeaders.IF_MATCH, "\"" + etag + "\"");
         MockHttpServletResponse response = invoke(request);
         assertEquals("status", 200, response.getStatus());
@@ -252,7 +275,7 @@ public class PreconditionsTest extends MockServletInvocationTest {
         assertEquals("status", 200, response.getStatus());
 
     }
-    
+
     /**
      * ensure multiple etags are supported
      */
@@ -260,8 +283,8 @@ public class PreconditionsTest extends MockServletInvocationTest {
         String etag = "blablabla";
 
         // GET
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "get/"
-            + etag, "*/*");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "get/" + etag, "*/*");
         request.addHeader(HttpHeaders.IF_MATCH, "\"atlantic\",\"" + etag + "\",\"pacific\"");
         MockHttpServletResponse response = invoke(request);
         assertEquals("status", 200, response.getStatus());
@@ -272,58 +295,56 @@ public class PreconditionsTest extends MockServletInvocationTest {
         response = invoke(request);
         assertEquals("status", 200, response.getStatus());
     }
-    
+
     /**
-     * ETags not wrapped in quotes are invalid.  See http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.11
+     * ETags not wrapped in quotes are invalid. See
+     * http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.11
      */
     public void testConditionIfMatchesUnquoted() throws Exception {
         String etag = "blablabla";
 
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "get/"
-                + etag, "*/*");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "get/" + etag, "*/*");
         // no quotes
         request.addHeader(HttpHeaders.IF_MATCH, etag);
         MockHttpServletResponse response = invoke(request);
         assertEquals("status", 400, response.getStatus());
-        
-        request = MockRequestConstructor.constructMockRequest("GET", "get/"
-                + etag, "*/*");
+
+        request = MockRequestConstructor.constructMockRequest("GET", "get/" + etag, "*/*");
         // beginning quote only
         request.addHeader(HttpHeaders.IF_MATCH, "\"" + etag);
         response = invoke(request);
         assertEquals("status", 400, response.getStatus());
-        
-        request = MockRequestConstructor.constructMockRequest("GET", "get/"
-                + etag, "*/*");
+
+        request = MockRequestConstructor.constructMockRequest("GET", "get/" + etag, "*/*");
         // end quote only
         request.addHeader(HttpHeaders.IF_MATCH, etag + "\"");
         response = invoke(request);
         assertEquals("status", 400, response.getStatus());
 
     }
-    
+
     /**
-     * ETags not wrapped in quotes are invalid.  See http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.11
+     * ETags not wrapped in quotes are invalid. See
+     * http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.11
      */
     public void testConditionIfNoneMatchesUnquoted() throws Exception {
         String etag = "blablabla";
 
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "get/"
-                + etag, "*/*");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "get/" + etag, "*/*");
         // no quotes
         request.addHeader(HttpHeaders.IF_NONE_MATCH, etag);
         MockHttpServletResponse response = invoke(request);
         assertEquals("status", 400, response.getStatus());
-        
-        request = MockRequestConstructor.constructMockRequest("GET", "get/"
-                + etag, "*/*");
+
+        request = MockRequestConstructor.constructMockRequest("GET", "get/" + etag, "*/*");
         // beginning quote only
         request.addHeader(HttpHeaders.IF_NONE_MATCH, "\"" + etag);
         response = invoke(request);
         assertEquals("status", 400, response.getStatus());
-        
-        request = MockRequestConstructor.constructMockRequest("GET", "get/"
-                + etag, "*/*");
+
+        request = MockRequestConstructor.constructMockRequest("GET", "get/" + etag, "*/*");
         // end quote only
         request.addHeader(HttpHeaders.IF_NONE_MATCH, etag + "\"");
         response = invoke(request);
@@ -335,8 +356,8 @@ public class PreconditionsTest extends MockServletInvocationTest {
         String etag = "blablabla";
 
         // GET
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "get/"
-            + etag, "*/*");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "get/" + etag, "*/*");
         request.addHeader(HttpHeaders.IF_MATCH, "\"notmatch\"");
         MockHttpServletResponse response = invoke(request);
         assertEquals("status", 412, response.getStatus());
@@ -353,8 +374,8 @@ public class PreconditionsTest extends MockServletInvocationTest {
         String etag = "blablabla";
 
         // GET
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "get/"
-            + etag, "*/*");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "get/" + etag, "*/*");
         request.addHeader(HttpHeaders.IF_NONE_MATCH, "\"notmatch\"");
         MockHttpServletResponse response = invoke(request);
         assertEquals("status", 200, response.getStatus());
@@ -366,18 +387,18 @@ public class PreconditionsTest extends MockServletInvocationTest {
         assertEquals("status", 200, response.getStatus());
 
     }
-    
-    
+
     /**
-     * ensure multiple etags are supported.  These are strange tests;  I need to ensure it goes through
-     * the IF_NONE_MATCH code and hits the second string in the IF_NONE_MATCH header, so I want a 304 or 412 response.
+     * ensure multiple etags are supported. These are strange tests; I need to
+     * ensure it goes through the IF_NONE_MATCH code and hits the second string
+     * in the IF_NONE_MATCH header, so I want a 304 or 412 response.
      */
     public void testConditionIfNoneMatchesMultipleOnSingleHeader() throws Exception {
         String etag = "blablabla";
 
         // GET
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "get/"
-            + etag, "*/*");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "get/" + etag, "*/*");
         request.addHeader(HttpHeaders.IF_NONE_MATCH, "\"atlantic\",\"" + etag + "\",\"pacific\"");
         MockHttpServletResponse response = invoke(request);
         assertEquals("status", 304, response.getStatus());
@@ -394,8 +415,8 @@ public class PreconditionsTest extends MockServletInvocationTest {
         String etag = "blablabla";
 
         // GET
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "get/"
-            + etag, "*/*");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "get/" + etag, "*/*");
         request.addHeader(HttpHeaders.IF_NONE_MATCH, "\"" + etag + "\"");
         MockHttpServletResponse response = invoke(request);
         assertEquals("status", 304, response.getStatus());
@@ -413,19 +434,21 @@ public class PreconditionsTest extends MockServletInvocationTest {
         Date modified_since = new GregorianCalendar(2007, 11, 07, 10, 0, 0).getTime();
 
         // GET
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "get/"
-            + String.valueOf(date_to_return.getTime()), "*/*");
-        request.addHeader(HttpHeaders.IF_UNMODIFIED_SINCE,
-            HttpDateParser.toHttpDate(modified_since));
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "get/" + String
+                .valueOf(date_to_return.getTime()), "*/*");
+        request.addHeader(HttpHeaders.IF_UNMODIFIED_SINCE, HttpDateParser
+            .toHttpDate(modified_since));
         MockHttpServletResponse response = invoke(request);
         assertEquals("status", 200, response.getStatus());
         assertEquals("content", THE_CONTENT, response.getContentAsString());
 
         // PUT
-        request = MockRequestConstructor.constructMockRequest("PUT", "get/"
-            + String.valueOf(date_to_return.getTime()), "*/*");
-        request.addHeader(HttpHeaders.IF_UNMODIFIED_SINCE,
-            HttpDateParser.toHttpDate(modified_since));
+        request =
+            MockRequestConstructor.constructMockRequest("PUT", "get/" + String
+                .valueOf(date_to_return.getTime()), "*/*");
+        request.addHeader(HttpHeaders.IF_UNMODIFIED_SINCE, HttpDateParser
+            .toHttpDate(modified_since));
         response = invoke(request);
         assertEquals("status", 200, response.getStatus());
         assertEquals("content", THE_CONTENT, response.getContentAsString());
@@ -437,18 +460,20 @@ public class PreconditionsTest extends MockServletInvocationTest {
         Date modified_since = new GregorianCalendar(2007, 11, 06, 10, 0, 0).getTime();
 
         // GET
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "get/"
-            + String.valueOf(date_to_return.getTime()), "*/*");
-        request.addHeader(HttpHeaders.IF_UNMODIFIED_SINCE,
-            HttpDateParser.toHttpDate(modified_since));
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "get/" + String
+                .valueOf(date_to_return.getTime()), "*/*");
+        request.addHeader(HttpHeaders.IF_UNMODIFIED_SINCE, HttpDateParser
+            .toHttpDate(modified_since));
         MockHttpServletResponse response = invoke(request);
         assertEquals("status", 412, response.getStatus());
 
         // PUT
-        request = MockRequestConstructor.constructMockRequest("PUT", "get/"
-            + String.valueOf(date_to_return.getTime()), "*/*");
-        request.addHeader(HttpHeaders.IF_UNMODIFIED_SINCE,
-            HttpDateParser.toHttpDate(modified_since));
+        request =
+            MockRequestConstructor.constructMockRequest("PUT", "get/" + String
+                .valueOf(date_to_return.getTime()), "*/*");
+        request.addHeader(HttpHeaders.IF_UNMODIFIED_SINCE, HttpDateParser
+            .toHttpDate(modified_since));
         response = invoke(request);
         assertEquals("status", 412, response.getStatus());
     }

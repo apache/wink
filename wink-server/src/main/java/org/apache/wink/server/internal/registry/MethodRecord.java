@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.registry;
 
@@ -30,6 +29,7 @@ public interface MethodRecord {
 
     /**
      * Get the {@link MethodMetadata} of this record
+     * 
      * @return MethodMetadata instance of this record
      */
     public MethodMetadata getMetadata();

@@ -49,7 +49,8 @@ public class JAXRSHttpHeadersTest extends TestCase {
      */
     public void testAcceptableLanguagesNoneGiven() throws HttpException, IOException {
         HttpClient client = new HttpClient();
-        GetMethod getMethod = new GetMethod(getBaseURI() + "/context/httpheaders/acceptablelanguages");
+        GetMethod getMethod =
+            new GetMethod(getBaseURI() + "/context/httpheaders/acceptablelanguages");
         try {
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());
@@ -68,7 +69,8 @@ public class JAXRSHttpHeadersTest extends TestCase {
      */
     public void testAcceptableLanguagesOneGiven() throws HttpException, IOException {
         HttpClient client = new HttpClient();
-        GetMethod getMethod = new GetMethod(getBaseURI() + "/context/httpheaders/acceptablelanguages");
+        GetMethod getMethod =
+            new GetMethod(getBaseURI() + "/context/httpheaders/acceptablelanguages");
         getMethod.setRequestHeader("Accept-Language", "de");
         try {
             client.executeMethod(getMethod);
@@ -88,7 +90,8 @@ public class JAXRSHttpHeadersTest extends TestCase {
      */
     public void testAcceptableLanguagesManyGiven() throws HttpException, IOException {
         HttpClient client = new HttpClient();
-        GetMethod getMethod = new GetMethod(getBaseURI() + "/context/httpheaders/acceptablelanguages");
+        GetMethod getMethod =
+            new GetMethod(getBaseURI() + "/context/httpheaders/acceptablelanguages");
         getMethod.setRequestHeader("Accept-Language", "de, en, zh");
         try {
             client.executeMethod(getMethod);
@@ -113,7 +116,8 @@ public class JAXRSHttpHeadersTest extends TestCase {
      */
     public void testAcceptableLanguagesManyGivenQSort() throws HttpException, IOException {
         HttpClient client = new HttpClient();
-        GetMethod getMethod = new GetMethod(getBaseURI() + "/context/httpheaders/acceptablelanguages");
+        GetMethod getMethod =
+            new GetMethod(getBaseURI() + "/context/httpheaders/acceptablelanguages");
         getMethod.setRequestHeader("Accept-Language", "de;q=0.6, en;q=0.8, zh;q=0.7");
         try {
             client.executeMethod(getMethod);
@@ -134,7 +138,8 @@ public class JAXRSHttpHeadersTest extends TestCase {
      */
     public void testAcceptableMediaTypesNoneGiven() throws HttpException, IOException {
         HttpClient client = new HttpClient();
-        GetMethod getMethod = new GetMethod(getBaseURI() + "/context/httpheaders/acceptablemediatypes");
+        GetMethod getMethod =
+            new GetMethod(getBaseURI() + "/context/httpheaders/acceptablemediatypes");
         try {
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());
@@ -154,7 +159,8 @@ public class JAXRSHttpHeadersTest extends TestCase {
      */
     public void testAcceptableMediaTypesOneGiven() throws HttpException, IOException {
         HttpClient client = new HttpClient();
-        GetMethod getMethod = new GetMethod(getBaseURI() + "/context/httpheaders/acceptablemediatypes");
+        GetMethod getMethod =
+            new GetMethod(getBaseURI() + "/context/httpheaders/acceptablemediatypes");
         getMethod.setRequestHeader("Accept", "text/plain");
         try {
             client.executeMethod(getMethod);
@@ -176,13 +182,17 @@ public class JAXRSHttpHeadersTest extends TestCase {
      */
     public void testAcceptableMediaTypesManyGiven() throws HttpException, IOException {
         HttpClient client = new HttpClient();
-        GetMethod getMethod = new GetMethod(getBaseURI() + "/context/httpheaders/acceptablemediatypes");
-        getMethod.addRequestHeader("Accept", "text/plain;q=1.0,*/*;q=0.6, application/json;q=0.7,text/xml;q=0.8");
+        GetMethod getMethod =
+            new GetMethod(getBaseURI() + "/context/httpheaders/acceptablemediatypes");
+        getMethod
+            .addRequestHeader("Accept",
+                              "text/plain;q=1.0,*/*;q=0.6, application/json;q=0.7,text/xml;q=0.8");
         try {
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());
             String responseBody = getMethod.getResponseBodyAsString();
-            assertEquals("acceptablemediatypes:text/plain:text/xml:application/json:*/*:", responseBody);
+            assertEquals("acceptablemediatypes:text/plain:text/xml:application/json:*/*:",
+                         responseBody);
             assertEquals("text/plain;q=1.0", getMethod.getResponseHeader("Content-Type").getValue());
         } finally {
             getMethod.releaseConnection();
@@ -198,7 +208,8 @@ public class JAXRSHttpHeadersTest extends TestCase {
      */
     public void testMediaTypesRequestTextPlain() throws HttpException, IOException {
         HttpClient client = new HttpClient();
-        PostMethod postMethod = new PostMethod(getBaseURI() + "/context/httpheaders/requestmediatype");
+        PostMethod postMethod =
+            new PostMethod(getBaseURI() + "/context/httpheaders/requestmediatype");
         postMethod.setRequestEntity(new StringRequestEntity("Hello world!", "text/plain", "UTF-8"));
         try {
             client.executeMethod(postMethod);
@@ -221,7 +232,8 @@ public class JAXRSHttpHeadersTest extends TestCase {
      */
     public void testMediaTypesRequestJSON() throws HttpException, IOException {
         HttpClient client = new HttpClient();
-        PostMethod postMethod = new PostMethod(getBaseURI() + "/context/httpheaders/requestmediatype");
+        PostMethod postMethod =
+            new PostMethod(getBaseURI() + "/context/httpheaders/requestmediatype");
         postMethod.setRequestEntity(new StringRequestEntity("Hello world!", "defg/abcd", "UTF-8"));
         try {
             client.executeMethod(postMethod);
@@ -241,7 +253,8 @@ public class JAXRSHttpHeadersTest extends TestCase {
      */
     public void testMediaTypesRequestNoRequestEntity() throws HttpException, IOException {
         HttpClient client = new HttpClient();
-        PostMethod postMethod = new PostMethod(getBaseURI() + "/context/httpheaders/requestmediatype");
+        PostMethod postMethod =
+            new PostMethod(getBaseURI() + "/context/httpheaders/requestmediatype");
         try {
             client.executeMethod(postMethod);
             assertEquals(200, postMethod.getStatusCode());
@@ -498,8 +511,10 @@ public class JAXRSHttpHeadersTest extends TestCase {
             assertEquals(200, getMethod.getStatusCode());
             String responseBody = getMethod.getResponseBodyAsString();
             assertTrue(responseBody, responseBody.contains("requestheaders:"));
-            assertTrue(responseBody, responseBody.contains(":host=") || responseBody.contains(":Host="));
-            assertTrue(responseBody, responseBody.contains(":user-agent=") || responseBody.contains(":User-Agent="));
+            assertTrue(responseBody, responseBody.contains(":host=") || responseBody
+                .contains(":Host="));
+            assertTrue(responseBody, responseBody.contains(":user-agent=") || responseBody
+                .contains(":User-Agent="));
         } finally {
             getMethod.releaseConnection();
         }

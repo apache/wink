@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.webdav.server;
 
 import java.io.IOException;
@@ -43,14 +43,14 @@ import org.apache.wink.webdav.WebDAVMethod;
 import org.apache.wink.webdav.server.WebDAVLockableResource;
 import org.apache.wink.webdav.server.WebDAVResponseBuilder;
 
-
-
 @Path("/feed/{entry}")
 public class WebDAVTestDocumentResource extends WebDAVLockableResource {
 
-    public static int ENTRY_NUMBER = 3;
+    public static int                    ENTRY_NUMBER = 3;
 
-    public static Map<String, SyndEntry> entries = new HashMap<String, SyndEntry>(ENTRY_NUMBER);
+    public static Map<String, SyndEntry> entries      =
+                                                          new HashMap<String, SyndEntry>(
+                                                                                         ENTRY_NUMBER);
 
     static {
         for (int i = 0; i < ENTRY_NUMBER; i++) {
@@ -66,9 +66,11 @@ public class WebDAVTestDocumentResource extends WebDAVLockableResource {
     }
 
     @WebDAVMethod.PROPFIND
-    @Consumes({MediaType.APPLICATION_XML, MediaType.TEXT_XML})
+    @Consumes( {MediaType.APPLICATION_XML, MediaType.TEXT_XML})
     @Produces(MediaType.APPLICATION_XML)
-    public Response findProperties(@Context UriInfo uriInfo, @PathParam("entry") String id, String body) throws IOException {
+    public Response findProperties(@Context UriInfo uriInfo,
+                                   @PathParam("entry") String id,
+                                   String body) throws IOException {
         SyndEntry entry = entries.get(id);
         if (entry != null) {
             return WebDAVResponseBuilder.create(uriInfo).propfind(entry, body);
@@ -76,5 +78,5 @@ public class WebDAVTestDocumentResource extends WebDAVLockableResource {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
     }
-    
+
 }

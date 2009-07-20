@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.model.synd;
 
@@ -86,7 +85,7 @@ public class SyndPerson {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        SyndPerson other = (SyndPerson) obj;
+        SyndPerson other = (SyndPerson)obj;
         if (email == null) {
             if (other.email != null)
                 return false;
@@ -104,7 +103,5 @@ public class SyndPerson {
             return false;
         return true;
     }
-
-
 
 }

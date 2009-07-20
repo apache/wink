@@ -24,7 +24,6 @@ import javax.ws.rs.Path;
 import org.apache.wink.common.annotations.Scope;
 import org.apache.wink.common.annotations.Scope.ScopeType;
 
-
 /**
  * The Singleton Counter declares scope as Singleton. This overrides the default
  * JAX-RS scope of resource.

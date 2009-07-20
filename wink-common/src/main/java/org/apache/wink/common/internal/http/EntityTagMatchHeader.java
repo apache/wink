@@ -28,7 +28,6 @@ import javax.ws.rs.core.EntityTag;
 /**
  * Used to represent headers that contains multiple Entity Tags (like If-Match,
  * If-None-Match)
- * 
  */
 public class EntityTagMatchHeader {
 

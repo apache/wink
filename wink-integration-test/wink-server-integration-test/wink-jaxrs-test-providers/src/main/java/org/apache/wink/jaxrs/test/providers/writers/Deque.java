@@ -18,11 +18,10 @@
  */
 package org.apache.wink.jaxrs.test.providers.writers;
 
-
 /**
- * this class is a dummy class to fill in for the Deque we were originally
- * using from JDK6.
- *
+ * this class is a dummy class to fill in for the Deque we were originally using
+ * from JDK6.
+ * 
  * @param <T>
  */
 public interface Deque<T> extends Queue<T> {

@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.runtime;
 
@@ -33,7 +32,7 @@ import javax.ws.rs.ext.Providers;
 public abstract class AbstractRuntimeContext implements RuntimeContext {
 
     private HashMap<String, Object> attributes;
-    
+
     public AbstractRuntimeContext() {
         this.attributes = new HashMap<String, Object>();
     }
@@ -41,16 +40,16 @@ public abstract class AbstractRuntimeContext implements RuntimeContext {
     public Map<String, Object> getAttributes() {
         return attributes;
     }
-    
-    public <T> void setAttribute(Class<T> type, T object)   {
+
+    public <T> void setAttribute(Class<T> type, T object) {
         getAttributes().put(type.getName(), object);
     }
-    
+
     @SuppressWarnings("unchecked")
     public <T> T getAttribute(Class<T> type) {
         return (T)getAttributes().get(type.getName());
     }
-    
+
     public Providers getProviders() {
         return getAttribute(Providers.class);
     }

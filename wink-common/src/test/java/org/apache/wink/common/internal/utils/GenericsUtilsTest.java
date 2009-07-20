@@ -25,7 +25,6 @@ import java.util.Map;
 
 import org.apache.wink.common.internal.utils.GenericsUtils;
 
-
 import junit.framework.TestCase;
 
 public class GenericsUtilsTest extends TestCase {
@@ -64,16 +63,19 @@ public class GenericsUtilsTest extends TestCase {
     public void testIsAssignableFrom() throws Exception {
         assertTrue(GenericsUtils.isAssignableFrom(List.class, A.class));
         assertTrue(GenericsUtils.isAssignableFrom(A.class.getField("stringList").getGenericType(),
-            List.class));
+                                                  List.class));
     }
 
     public void testIsGenericInterfaceAssignableFrom() {
-        assertTrue(GenericsUtils.isGenericInterfaceAssignableFrom(String.class, B.class, List.class));
+        assertTrue(GenericsUtils
+            .isGenericInterfaceAssignableFrom(String.class, B.class, List.class));
         assertTrue(GenericsUtils.isGenericInterfaceAssignableFrom(Integer.class, B.class, I.class));
-        assertTrue(GenericsUtils.isGenericInterfaceAssignableFrom(byte[].class, C.class, List.class));
+        assertTrue(GenericsUtils
+            .isGenericInterfaceAssignableFrom(byte[].class, C.class, List.class));
         assertTrue(GenericsUtils.isGenericInterfaceAssignableFrom(List.class, L.class, List.class));
-        assertTrue(GenericsUtils.isGenericInterfaceAssignableFrom(ArrayList.class, L.class,
-            List.class));
+        assertTrue(GenericsUtils.isGenericInterfaceAssignableFrom(ArrayList.class,
+                                                                  L.class,
+                                                                  List.class));
     }
 
     public void testGetClassType() throws Exception {

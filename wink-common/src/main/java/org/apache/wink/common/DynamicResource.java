@@ -17,13 +17,13 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.common;
 
 /**
  * This interface replaces DispatchedPath annotation to declare a resource. It's
- * impossible to declare resource using both DynamicResource interface and DispatchedPath
- * annotation.
+ * impossible to declare resource using both DynamicResource interface and
+ * DispatchedPath annotation.
  * 
  * @see org.apache.wink.common.AbstractDynamicResource
  */
@@ -49,8 +49,8 @@ public interface DynamicResource {
     void setBeanName(String beanName);
 
     /**
-     * Returns array of URI templates. Like value() of
-     * javax.ws.rs.Path annotation.
+     * Returns array of URI templates. Like value() of javax.ws.rs.Path
+     * annotation.
      * 
      * @return array of URI templates
      */
@@ -90,7 +90,6 @@ public interface DynamicResource {
      * 
      * @return workspace title
      * @see org.apache.wink.common.annotations.Workspace
-     * 
      */
     String getWorkspaceTitle();
 

@@ -163,11 +163,11 @@ public class MediaTypeUtils {
     }
 
     /**
-     * The method returns true if m1 is compatible to m2.
-     * However, the method doesn't check that m2 is compatible to m1.
+     * The method returns true if m1 is compatible to m2. However, the method
+     * doesn't check that m2 is compatible to m1. For example:
+     * isCompatibleNonCommutative("text/*", "text/plain") returns true, but
+     * isCompatibleNonCommutative("text/plain", "text/*") returns false
      * 
-     * For example: isCompatibleNonCommutative("text/*", "text/plain") returns true,
-     * but isCompatibleNonCommutative("text/plain", "text/*") returns false
      * @param m1
      * @param m2
      * @return
@@ -181,7 +181,8 @@ public class MediaTypeUtils {
         }
         if (m1.getType().equals(MediaType.MEDIA_TYPE_WILDCARD))
             return true;
-        else if (m1.getType().equalsIgnoreCase(m2.getType()) && (m1.getSubtype().equals(MediaType.MEDIA_TYPE_WILDCARD)))
+        else if (m1.getType().equalsIgnoreCase(m2.getType()) && (m1.getSubtype()
+            .equals(MediaType.MEDIA_TYPE_WILDCARD)))
             return true;
         else
             return m1.getType().equalsIgnoreCase(m2.getType()) && m1.getSubtype()

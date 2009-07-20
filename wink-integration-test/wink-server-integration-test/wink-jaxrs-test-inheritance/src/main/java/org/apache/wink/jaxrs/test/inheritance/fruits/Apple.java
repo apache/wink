@@ -21,10 +21,9 @@ package org.apache.wink.jaxrs.test.inheritance.fruits;
 
 import javax.ws.rs.PathParam;
 
-
 public class Apple extends Fruit {
 
-	public String getFruitName(@PathParam("p") String suffix) {
-		return Apple.class.getName()+";"+suffix;
-	}
+    public String getFruitName(@PathParam("p") String suffix) {
+        return Apple.class.getName() + ";" + suffix;
+    }
 }

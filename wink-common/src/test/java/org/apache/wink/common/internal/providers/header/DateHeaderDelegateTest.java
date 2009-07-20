@@ -37,17 +37,19 @@ public class DateHeaderDelegateTest {
      * The date format pattern for RFC 1123.
      */
     private static final String RFC1123_DATE_FORMAT_PATTERN = "EEE, dd MMM yyyy HH:mm:ss zzz";
-    private static final String RFC1123_DATE = "Sun, 06 Nov 1994 08:49:37 GMT";
+    private static final String RFC1123_DATE                = "Sun, 06 Nov 1994 08:49:37 GMT";
 
     /**
-     * The date example for format pattern for RFC 1036 - <EEEE, dd-MMM-yy HH:mm:ss zzz>
+     * The date example for format pattern for RFC 1036 - <EEEE, dd-MMM-yy
+     * HH:mm:ss zzz>
      */
-    private static final String RFC1036_DATE = "Sunday, 06-Nov-94 08:49:37 GMT";
+    private static final String RFC1036_DATE                = "Sunday, 06-Nov-94 08:49:37 GMT";
 
     /**
-     * The date example for format pattern for ANSI C asctime() - <EEE MMM d HH:mm:ss yyyy>
+     * The date example for format pattern for ANSI C asctime() - <EEE MMM d
+     * HH:mm:ss yyyy>
      */
-    private static final String ANSI_C_ASCTIME_DATE = "Sun Nov 6 08:49:37 1994";
+    private static final String ANSI_C_ASCTIME_DATE         = "Sun Nov 6 08:49:37 1994";
 
     @Test
     public void testParseHeaderDelegate() throws ParseException {
@@ -99,7 +101,6 @@ public class DateHeaderDelegateTest {
         } catch (IllegalArgumentException e) {
             // success
         }
-        
 
         try {
             dateHeaderDelegate.fromString(null);
@@ -123,13 +124,14 @@ public class DateHeaderDelegateTest {
         String expectedDate = RFC1123_DATE;
 
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat(RFC1123_DATE_FORMAT_PATTERN, Locale.US);
+            SimpleDateFormat dateFormat =
+                new SimpleDateFormat(RFC1123_DATE_FORMAT_PATTERN, Locale.US);
             Date expectedDate_RFC1123 = dateFormat.parse(RFC1123_DATE);
             assertEquals(expectedDate, dateHeaderDelegate.toString(expectedDate_RFC1123));
         } catch (Exception e) {
             fail("Failed to write date " + RFC1123_DATE);
         }
-        
+
         try {
             dateHeaderDelegate.toString(null);
             fail("Date is null- IllegalArgumentException must be thrown");

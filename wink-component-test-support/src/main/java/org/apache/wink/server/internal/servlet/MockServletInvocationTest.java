@@ -43,7 +43,8 @@ import org.springframework.mock.web.MockServletConfig;
  */
 public abstract class MockServletInvocationTest extends TestCase {
 
-    private static ThreadLocal<MockServletInvocationTest> tls = new ThreadLocal<MockServletInvocationTest>();
+    private static ThreadLocal<MockServletInvocationTest> tls =
+                                                                  new ThreadLocal<MockServletInvocationTest>();
     private HttpServlet                                   servlet;
 
     public static class MockApplication extends Application {
@@ -81,7 +82,9 @@ public abstract class MockServletInvocationTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        servlet = (HttpServlet) Class.forName("org.apache.wink.server.internal.servlet.RestServlet").newInstance();
+        servlet =
+            (HttpServlet)Class.forName("org.apache.wink.server.internal.servlet.RestServlet")
+                .newInstance();
         MockServletConfig servletConfig = new MockServletConfig();
         servletConfig.addInitParameter("javax.ws.rs.Application", getApplicationClassName());
 
@@ -121,8 +124,7 @@ public abstract class MockServletInvocationTest extends TestCase {
     /**
      * Passes the test to the servlet instance simulating AS behaviour.
      * 
-     * @param request
-     *            the filled request
+     * @param request the filled request
      * @return a new response as filled by the servlet
      * @throws IOException
      * @throws ServletException

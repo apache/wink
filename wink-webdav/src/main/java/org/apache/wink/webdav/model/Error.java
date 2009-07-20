@@ -64,7 +64,6 @@ public class Error {
      * Gets the value of the any property.
      * 
      * @return possible object is {@link Object }
-     * 
      */
     public Object getAny() {
         return any;
@@ -73,9 +72,7 @@ public class Error {
     /**
      * Sets the value of the any property.
      * 
-     * @param value
-     *            allowed object is {@link Object }
-     * 
+     * @param value allowed object is {@link Object }
      */
     public void setAny(Object value) {
         this.any = value;

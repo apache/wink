@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.application;
 
@@ -30,7 +29,6 @@ import org.apache.wink.common.internal.application.ApplicationFileLoader;
 import org.apache.wink.common.internal.application.SimpleWinkApplication;
 import org.apache.wink.server.internal.utils.ServletFileLoader;
 
-
 public class ServletWinkApplication extends SimpleWinkApplication {
 
     private final ServletContext servletContext;
@@ -41,13 +39,14 @@ public class ServletWinkApplication extends SimpleWinkApplication {
     }
 
     @Override
-    protected ApplicationFileLoader getApplicationFileLoader(InputStream is) throws FileNotFoundException {
+    protected ApplicationFileLoader getApplicationFileLoader(InputStream is)
+        throws FileNotFoundException {
         return new ServletApplicationFileLoader(is);
     }
-    
+
     @Override
     protected InputStream getFileStream(String applicationConfigFile) throws FileNotFoundException {
         return ServletFileLoader.loadFileAsStream(servletContext, applicationConfigFile);
     }
-    
+
 }

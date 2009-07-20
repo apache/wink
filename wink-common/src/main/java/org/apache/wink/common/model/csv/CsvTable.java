@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.model.csv;
 
@@ -26,8 +25,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Represents a CSV table with multiple rows. If the table is initialized with a header,
- * then the header will be the first row.
+ * Represents a CSV table with multiple rows. If the table is initialized with a
+ * header, then the header will be the first row.
  */
 public class CsvTable implements CsvSerializer, CsvDeserializer {
 
@@ -43,8 +42,7 @@ public class CsvTable implements CsvSerializer, CsvDeserializer {
     /**
      * Creates a new CsvTable with the specified header.
      * 
-     * @param header
-     *            the header of the table
+     * @param header the header of the table
      */
     public CsvTable(String... header) {
         this();
@@ -54,10 +52,10 @@ public class CsvTable implements CsvSerializer, CsvDeserializer {
     }
 
     /**
-     * Add a row to the table. This is a shortcut for <code>getRows().add(row)</code>
+     * Add a row to the table. This is a shortcut for
+     * <code>getRows().add(row)</code>
      * 
-     * @param row
-     *            the row to add
+     * @param row the row to add
      */
     public void addRow(String... row) {
         content.add(row);

@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal.resources;
 
 import java.util.LinkedHashMap;
@@ -43,16 +43,17 @@ import org.apache.wink.common.model.app.AppYesNo;
 import org.apache.wink.common.model.atom.AtomCategory;
 import org.apache.wink.common.model.atom.AtomText;
 
-
 /**
- * Base class for an Resource handling the root of the REST-style web service namespace. 
- * It provides APP service document using introspection of registered collection resources.
+ * Base class for an Resource handling the root of the REST-style web service
+ * namespace. It provides APP service document using introspection of registered
+ * collection resources.
  */
 @Path("/")
 public class RootResource {
 
     /**
      * Returns the service document.
+     * 
      * @return the service document bean
      */
     @GET
@@ -60,20 +61,22 @@ public class RootResource {
     public AppService getServiceDocument(@Context UriInfo uriInfo) {
 
         List<ServiceDocumentCollectionData> serviceDocument = getCollections(uriInfo);
-        return  buildAppService(serviceDocument, uriInfo);
+        return buildAppService(serviceDocument, uriInfo);
     }
-    
+
     /**
      * Gets all service document collections.
+     * 
      * @return the service document collections
      */
     public List<ServiceDocumentCollectionData> getCollections(UriInfo uriInfo) {
-        List<ServiceDocumentCollectionData> buildServiceDocumentCollectionList = ServiceDocumentCollectionData.buildServiceDocumentCollectionList(uriInfo);
+        List<ServiceDocumentCollectionData> buildServiceDocumentCollectionList =
+            ServiceDocumentCollectionData.buildServiceDocumentCollectionList(uriInfo);
         return buildServiceDocumentCollectionList;
     }
-    
 
-    private AppService buildAppService(List<ServiceDocumentCollectionData> collectionList, UriInfo uriInfo) {
+    private AppService buildAppService(List<ServiceDocumentCollectionData> collectionList,
+                                       UriInfo uriInfo) {
         if (collectionList == null) {
             // this should never happen
             throw new NullPointerException("collectionList");
@@ -123,13 +126,12 @@ public class RootResource {
     /**
      * Add Collection to input AppWorkspace
      * 
-     * @param workspace
-     *            App Workspace
-     * @param serviceDocumentCollection
-     *            Service Document Collection
+     * @param workspace App Workspace
+     * @param serviceDocumentCollection Service Document Collection
      */
     private void addCollection(AppWorkspace workspace,
-        ServiceDocumentCollectionData serviceDocumentCollection, String baseUri) {
+                               ServiceDocumentCollectionData serviceDocumentCollection,
+                               String baseUri) {
 
         // new collection
         AppCollection collection = new AppCollection();
@@ -169,13 +171,11 @@ public class RootResource {
     /**
      * Add Inline and OutOfline categories
      * 
-     * @param serviceDocumentCollection
-     *            Service Document Collection
-     * @param collection
-     *            App Collection
+     * @param serviceDocumentCollection Service Document Collection
+     * @param collection App Collection
      */
     private void addCategories(ServiceDocumentCollectionData serviceDocumentCollection,
-        AppCollection collection) {
+                               AppCollection collection) {
 
         List<AppCategories> appCategories = collection.getCategories();
         List<Categories> categories = serviceDocumentCollection.getCategories();
@@ -200,10 +200,8 @@ public class RootResource {
     /**
      * Add Inline Categories to Service Document Collection
      * 
-     * @param cats
-     *            Categories
-     * @param collection
-     *            App Categories
+     * @param cats Categories
+     * @param collection App Categories
      */
     private void addInlineCategories(Categories cats, AppCategories appCategory) {
         // XML Categories document

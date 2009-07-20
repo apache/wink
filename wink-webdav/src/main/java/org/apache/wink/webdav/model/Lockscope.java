@@ -32,7 +32,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>lockscope</code> XML element per the WebDAV specification [RFC 4918]
+ * The <code>lockscope</code> XML element per the WebDAV specification [RFC
+ * 4918]
  * 
  * <pre>
  *    Name:       lockscope
@@ -49,13 +50,12 @@ import javax.xml.bind.annotation.XmlType;
 public class Lockscope {
 
     protected Exclusive exclusive;
-    protected Shared shared;
+    protected Shared    shared;
 
     /**
      * Gets the value of the exclusive property.
      * 
      * @return possible object is {@link Exclusive }
-     * 
      */
     public Exclusive getExclusive() {
         return exclusive;
@@ -64,9 +64,7 @@ public class Lockscope {
     /**
      * Sets the value of the exclusive property.
      * 
-     * @param value
-     *            allowed object is {@link Exclusive }
-     * 
+     * @param value allowed object is {@link Exclusive }
      */
     public void setExclusive(Exclusive value) {
         this.exclusive = value;
@@ -76,7 +74,6 @@ public class Lockscope {
      * Gets the value of the shared property.
      * 
      * @return possible object is {@link Shared }
-     * 
      */
     public Shared getShared() {
         return shared;
@@ -85,9 +82,7 @@ public class Lockscope {
     /**
      * Sets the value of the shared property.
      * 
-     * @param value
-     *            allowed object is {@link Shared }
-     * 
+     * @param value allowed object is {@link Shared }
      */
     public void setShared(Shared value) {
         this.shared = value;

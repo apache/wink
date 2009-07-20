@@ -25,8 +25,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 public class GuestbookRuntimeExceptionMapper implements ExceptionMapper<RuntimeException> {
 
     public Response toResponse(RuntimeException arg0) {
-        return Response.serverError().entity("RuntimeExceptionMapper was used")
-                .build();
+        return Response.serverError().entity("RuntimeExceptionMapper was used").build();
     }
 
 }

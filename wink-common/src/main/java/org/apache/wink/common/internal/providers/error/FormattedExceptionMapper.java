@@ -25,7 +25,8 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 /**
- * Default implementation for ExceptionMapper that maps all Throwables to a Formatted Response
+ * Default implementation for ExceptionMapper that maps all Throwables to a
+ * Formatted Response
  */
 @Provider
 public class FormattedExceptionMapper implements ExceptionMapper<Throwable> {
@@ -35,7 +36,7 @@ public class FormattedExceptionMapper implements ExceptionMapper<Throwable> {
         int status = Response.Status.INTERNAL_SERVER_ERROR.getStatusCode();
 
         if (exception instanceof WebApplicationException) {
-            WebApplicationException wae = (WebApplicationException) exception;
+            WebApplicationException wae = (WebApplicationException)exception;
             if (wae.getResponse().getEntity() != null) {
                 return wae.getResponse();
             }

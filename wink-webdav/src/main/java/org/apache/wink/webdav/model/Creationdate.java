@@ -38,9 +38,9 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.wink.common.RestException;
 
-
 /**
- * The <code>creationdate</code> Property per the WebDAV specification [RFC 4918]
+ * The <code>creationdate</code> Property per the WebDAV specification [RFC
+ * 4918]
  * 
  * <pre>
  *    Name:       creationdate
@@ -63,10 +63,13 @@ public class Creationdate {
     @XmlMixed
     protected List<String> content;
 
-    public Creationdate() {}
+    public Creationdate() {
+    }
+
     public Creationdate(String value) {
         setValue(value);
     }
+
     public Creationdate(Date value) {
         setValue(value);
     }
@@ -77,12 +80,11 @@ public class Creationdate {
         }
         return this.content;
     }
-    
+
     /**
      * Sets the value.
      * 
-     * @param value
-     *            the value to set
+     * @param value the value to set
      */
     public void setValue(String value) {
         List<String> content = getContent();
@@ -108,8 +110,7 @@ public class Creationdate {
     /**
      * Sets the value.
      * 
-     * @param value
-     *            the value to set
+     * @param value the value to set
      */
     public void setValue(Date value) {
         setValue(WebDAVModelHelper.convertDateToXMLDate(value));

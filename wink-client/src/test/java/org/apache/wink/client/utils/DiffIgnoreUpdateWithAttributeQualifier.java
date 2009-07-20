@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.client.utils;
 
 import org.custommonkey.xmlunit.Difference;
@@ -36,19 +36,19 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
- * Class that overrides XmlUnit DiffWithAttributeQualifier class.
- * It is designated to ignore fields with time values, like "updated".
+ * Class that overrides XmlUnit DiffWithAttributeQualifier class. It is
+ * designated to ignore fields with time values, like "updated".
  * <p/>
  * It is implemented to be used by Stm application tests for XML comparison.
  */
 public class DiffIgnoreUpdateWithAttributeQualifier extends DiffWithAttributeQualifier {
 
     /**
-     * Constructor of XmlUnit Diff that ignores field "updated".
-     * XQuery of omitted field: /feed[1]/updated[1]/text()[1]
-     *
+     * Constructor of XmlUnit Diff that ignores field "updated". XQuery of
+     * omitted field: /feed[1]/updated[1]/text()[1]
+     * 
      * @param controlDocument XML document that contains expected results
-     * @param testedDocument  XML document which is being tested
+     * @param testedDocument XML document which is being tested
      */
     public DiffIgnoreUpdateWithAttributeQualifier(Document controlDocument, Document testedDocument) {
         super(controlDocument, testedDocument);
@@ -56,25 +56,27 @@ public class DiffIgnoreUpdateWithAttributeQualifier extends DiffWithAttributeQua
     }
 
     /**
-     * Constructor of XmlUnit Diff that ignores field "updated".
-     * XQuery of omitted field: /feed[1]/updated[1]/text()[1]
-     *
-     * @param controlDocument String containing XML document that contains expected results
-     * @param testedDocument  String containing XML document which is being tested
+     * Constructor of XmlUnit Diff that ignores field "updated". XQuery of
+     * omitted field: /feed[1]/updated[1]/text()[1]
+     * 
+     * @param controlDocument String containing XML document that contains
+     *            expected results
+     * @param testedDocument String containing XML document which is being
+     *            tested
      * @throws java.io.IOException
      * @throws org.xml.sax.SAXException
      */
-    public DiffIgnoreUpdateWithAttributeQualifier(String controlDocument, String testedDocument) throws IOException, SAXException {
+    public DiffIgnoreUpdateWithAttributeQualifier(String controlDocument, String testedDocument)
+        throws IOException, SAXException {
         super(controlDocument, testedDocument);
         this.overrideDifferenceListener(new DifferenceListenerIgnoreUpdateOrCompareTimes());
     }
-
 
     /**
      * Implementation of difference listener that ignores element <feed><update>
      */
     private class DifferenceListenerIgnoreUpdateOrCompareTimes implements DifferenceListener {
-        private Set<String> timeNodeNameSet = new HashSet<String>();
+        private Set<String>     timeNodeNameSet = new HashSet<String>();
         private DatatypeFactory datatypeFactory;
 
         public DifferenceListenerIgnoreUpdateOrCompareTimes() {
@@ -83,12 +85,14 @@ public class DiffIgnoreUpdateWithAttributeQualifier extends DiffWithAttributeQua
             } catch (DatatypeConfigurationException e) {
                 throw new RuntimeException(e);
             }
-            String[] names = {"updated","published","atom:updated","atom:published","stm:created", "created","stm:closed", "closed", "ns:expires"};
+            String[] names =
+                {"updated", "published", "atom:updated", "atom:published", "stm:created",
+                    "created", "stm:closed", "closed", "ns:expires"};
             for (String name : names)
                 timeNodeNameSet.add(name);
         }
 
-       public int differenceFound(Difference difference) {
+        public int differenceFound(Difference difference) {
             String xpath = difference.getTestNodeDetail().getXpathLocation();
             if (xpath.equals("/feed[1]/updated[1]/text()[1]")) {
                 // ignore field "updated" since it contains current time
@@ -104,8 +108,10 @@ public class DiffIgnoreUpdateWithAttributeQualifier extends DiffWithAttributeQua
             if (timeNodeNameSet.contains(testNodeName)) {
                 String testDateStr = testDetail.getValue();
                 String controlDateStr = difference.getControlNodeDetail().getValue();
-                XMLGregorianCalendar gDateBuilderTest = datatypeFactory.newXMLGregorianCalendar(testDateStr);
-                XMLGregorianCalendar gDateBuilderControl = datatypeFactory.newXMLGregorianCalendar(controlDateStr);
+                XMLGregorianCalendar gDateBuilderTest =
+                    datatypeFactory.newXMLGregorianCalendar(testDateStr);
+                XMLGregorianCalendar gDateBuilderControl =
+                    datatypeFactory.newXMLGregorianCalendar(controlDateStr);
                 if (gDateBuilderTest.equals(gDateBuilderControl))
                     return RETURN_IGNORE_DIFFERENCE_NODES_IDENTICAL;
             }

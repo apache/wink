@@ -44,20 +44,19 @@ public class JAXRSInputStreamTest extends TestCase {
 
     /**
      * Tests posting to an InputStream
-     *
+     * 
      * @throws HttpException
      * @throws IOException
      */
     public void testPostInputStream() throws HttpException, IOException {
         HttpClient client = new HttpClient();
 
-        PostMethod postMethod = new PostMethod(getBaseURI()
-                + "/providers/standard/inputstream");
+        PostMethod postMethod = new PostMethod(getBaseURI() + "/providers/standard/inputstream");
         byte[] barr = new byte[100000];
         Random r = new Random();
         r.nextBytes(barr);
-        postMethod.setRequestEntity(new InputStreamRequestEntity(
-                new ByteArrayInputStream(barr), "text/plain"));
+        postMethod.setRequestEntity(new InputStreamRequestEntity(new ByteArrayInputStream(barr),
+                                                                 "text/plain"));
         postMethod.addRequestHeader("Accept", "text/plain");
         try {
             client.executeMethod(postMethod);
@@ -74,12 +73,10 @@ public class JAXRSInputStreamTest extends TestCase {
             for (int c = 0; c < barr.length; ++c) {
                 assertEquals(barr[c], receivedBArr[c]);
             }
-            assertEquals("text/plain", postMethod.getResponseHeader(
-                    "Content-Type").getValue());
-            Header contentLengthHeader = postMethod
-                    .getResponseHeader("Content-Length");
-            assertNull(contentLengthHeader == null ? "null"
-                    : contentLengthHeader.getValue(), contentLengthHeader);
+            assertEquals("text/plain", postMethod.getResponseHeader("Content-Type").getValue());
+            Header contentLengthHeader = postMethod.getResponseHeader("Content-Length");
+            assertNull(contentLengthHeader == null ? "null" : contentLengthHeader.getValue(),
+                       contentLengthHeader);
         } finally {
             postMethod.releaseConnection();
         }
@@ -87,20 +84,19 @@ public class JAXRSInputStreamTest extends TestCase {
 
     /**
      * Tests putting and then getting a byte array.
-     *
+     * 
      * @throws HttpException
      * @throws IOException
      */
     public void testPutInputStream() throws HttpException, IOException {
         HttpClient client = new HttpClient();
 
-        PutMethod putMethod = new PutMethod(getBaseURI()
-                + "/providers/standard/inputstream");
+        PutMethod putMethod = new PutMethod(getBaseURI() + "/providers/standard/inputstream");
         byte[] barr = new byte[100000];
         Random r = new Random();
         r.nextBytes(barr);
-        putMethod.setRequestEntity(new InputStreamRequestEntity(
-                new ByteArrayInputStream(barr), "bytes/array"));
+        putMethod.setRequestEntity(new InputStreamRequestEntity(new ByteArrayInputStream(barr),
+                                                                "bytes/array"));
         try {
             client.executeMethod(putMethod);
             assertEquals(204, putMethod.getStatusCode());
@@ -108,8 +104,7 @@ public class JAXRSInputStreamTest extends TestCase {
             putMethod.releaseConnection();
         }
 
-        GetMethod getMethod = new GetMethod(getBaseURI()
-                + "/providers/standard/inputstream");
+        GetMethod getMethod = new GetMethod(getBaseURI() + "/providers/standard/inputstream");
         try {
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());
@@ -129,10 +124,9 @@ public class JAXRSInputStreamTest extends TestCase {
                 (getMethod.getResponseHeader("Content-Type") == null) ? null : getMethod
                     .getResponseHeader("Content-Type").getValue();
             assertNotNull(contentType, contentType);
-            Header contentLengthHeader = getMethod
-                    .getResponseHeader("Content-Length");
-            assertNull(contentLengthHeader == null ? "null"
-                    : contentLengthHeader.getValue(), contentLengthHeader);
+            Header contentLengthHeader = getMethod.getResponseHeader("Content-Length");
+            assertNull(contentLengthHeader == null ? "null" : contentLengthHeader.getValue(),
+                       contentLengthHeader);
         } finally {
             getMethod.releaseConnection();
         }
@@ -140,21 +134,20 @@ public class JAXRSInputStreamTest extends TestCase {
 
     /**
      * Tests receiving an empty byte array.
-     *
+     * 
      * @throws HttpException
      * @throws IOException
      */
-    public void testWithRequestAcceptHeaderWillReturnRequestedContentType()
-            throws HttpException, IOException {
+    public void testWithRequestAcceptHeaderWillReturnRequestedContentType() throws HttpException,
+        IOException {
         HttpClient client = new HttpClient();
 
-        PutMethod putMethod = new PutMethod(getBaseURI()
-                + "/providers/standard/inputstream");
+        PutMethod putMethod = new PutMethod(getBaseURI() + "/providers/standard/inputstream");
         byte[] barr = new byte[100000];
         Random r = new Random();
         r.nextBytes(barr);
-        putMethod.setRequestEntity(new InputStreamRequestEntity(
-                new ByteArrayInputStream(barr), "any/type"));
+        putMethod.setRequestEntity(new InputStreamRequestEntity(new ByteArrayInputStream(barr),
+                                                                "any/type"));
         try {
             client.executeMethod(putMethod);
             assertEquals(204, putMethod.getStatusCode());
@@ -162,8 +155,7 @@ public class JAXRSInputStreamTest extends TestCase {
             putMethod.releaseConnection();
         }
 
-        GetMethod getMethod = new GetMethod(getBaseURI()
-                + "/providers/standard/inputstream");
+        GetMethod getMethod = new GetMethod(getBaseURI() + "/providers/standard/inputstream");
         getMethod.addRequestHeader("Accept", "mytype/subtype");
         try {
             client.executeMethod(getMethod);
@@ -179,12 +171,10 @@ public class JAXRSInputStreamTest extends TestCase {
             for (int c = 0; c < barr.length; ++c) {
                 assertEquals(barr[c], receivedBArr[c]);
             }
-            assertEquals("mytype/subtype", getMethod.getResponseHeader(
-                    "Content-Type").getValue());
-            Header contentLengthHeader = getMethod
-                    .getResponseHeader("Content-Length");
-            assertNull(contentLengthHeader == null ? "null"
-                    : contentLengthHeader.getValue(), contentLengthHeader);
+            assertEquals("mytype/subtype", getMethod.getResponseHeader("Content-Type").getValue());
+            Header contentLengthHeader = getMethod.getResponseHeader("Content-Length");
+            assertNull(contentLengthHeader == null ? "null" : contentLengthHeader.getValue(),
+                       contentLengthHeader);
         } finally {
             getMethod.releaseConnection();
         }
@@ -194,21 +184,20 @@ public class JAXRSInputStreamTest extends TestCase {
      * Tests a resource method invoked with a ByteArrayInputStream as a
      * parameter. This should fail with a 415 since the reader has no way to
      * necessarily wrap it to the type.
-     *
+     * 
      * @throws HttpException
      * @throws IOException
      */
-    public void testInputStreamImplementation() throws HttpException,
-            IOException {
+    public void testInputStreamImplementation() throws HttpException, IOException {
         HttpClient client = new HttpClient();
 
-        PostMethod postMethod = new PostMethod(getBaseURI()
-                + "/providers/standard/inputstream/subclasses/shouldfail");
+        PostMethod postMethod =
+            new PostMethod(getBaseURI() + "/providers/standard/inputstream/subclasses/shouldfail");
         byte[] barr = new byte[100000];
         Random r = new Random();
         r.nextBytes(barr);
-        postMethod.setRequestEntity(new InputStreamRequestEntity(
-                new ByteArrayInputStream(barr), "any/type"));
+        postMethod.setRequestEntity(new InputStreamRequestEntity(new ByteArrayInputStream(barr),
+                                                                 "any/type"));
         try {
             client.executeMethod(postMethod);
             assertEquals(415, postMethod.getStatusCode());

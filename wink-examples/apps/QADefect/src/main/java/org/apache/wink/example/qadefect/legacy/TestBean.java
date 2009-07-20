@@ -32,15 +32,8 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "TestType", propOrder = {
-    "id",
-    "name",
-    "description",
-    "created",
-    "author",
-    "status"
-})
-@XmlRootElement(name="test")
+@XmlType(name = "TestType", propOrder = {"id", "name", "description", "created", "author", "status"})
+@XmlRootElement(name = "test")
 public class TestBean {
 
     @XmlElement(required = true)
@@ -63,8 +56,13 @@ public class TestBean {
 
     }
 
-    public TestBean(String id, String name, String description, Date created,
-        String author, String status, List<DefectBean> defects) {
+    public TestBean(String id,
+                    String name,
+                    String description,
+                    Date created,
+                    String author,
+                    String status,
+                    List<DefectBean> defects) {
         super();
         this.id = id;
         this.name = name;

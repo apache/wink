@@ -29,7 +29,7 @@ public class SameNumParamConstructorResource2 {
     /*
      * determines the number of times the constructors have been called in total
      */
-    private static int constructorCallCount = 0;
+    private static int   constructorCallCount = 0;
 
     final private String whichConstructor;
 

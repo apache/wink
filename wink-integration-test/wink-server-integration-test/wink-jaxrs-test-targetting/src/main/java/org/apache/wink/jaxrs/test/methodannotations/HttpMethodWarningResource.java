@@ -37,7 +37,6 @@ public class HttpMethodWarningResource {
 
     }
 
-    
     @PUT
     @POST
     public String multiHttpMethodBadBehavior() {
@@ -51,7 +50,8 @@ public class HttpMethodWarningResource {
     @SuppressWarnings("unused")
     @GET
     @Path("/{id}")
-    private String nonPublicGETMethod(@PathParam("id") String id, @QueryParam("detailed") String isDetailed) {
+    private String nonPublicGETMethod(@PathParam("id") String id,
+                                      @QueryParam("detailed") String isDetailed) {
         return "Should not be able to GET me.";
     }
 

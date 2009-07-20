@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.providers.entity;
 
@@ -48,49 +47,47 @@ import org.json.JSONObject;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-
 public class AssetProviderTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class<?>[]{TestResource.class};
+        return new Class<?>[] {TestResource.class};
     }
 
     private static final String STRING = "hello message";
-    private static final String XML = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><entry><id>entry:id</id><title type=\"text\">entry title</title></entry>";
-    private static final String JSON = 
-        "{\"entry\": {\n" + 
-        "  \"id\": {\"$\": \"entry:id\"},\n" + 
-        "  \"title\": {\n" + 
-        "    \"@type\": \"text\",\n" + 
-        "    \"$\": \"entry title\"\n" + 
-        "  }\n" + 
-        "}}";
-    
+    private static final String XML    =
+                                           "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><entry><id>entry:id</id><title type=\"text\">entry title</title></entry>";
+    private static final String JSON   =
+                                           "{\"entry\": {\n" + "  \"id\": {\"$\": \"entry:id\"},\n"
+                                               + "  \"title\": {\n"
+                                               + "    \"@type\": \"text\",\n"
+                                               + "    \"$\": \"entry title\"\n"
+                                               + "  }\n"
+                                               + "}}";
+
     @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "Entry", propOrder = { "id", "title"})
+    @XmlType(name = "Entry", propOrder = {"id", "title"})
     @XmlRootElement(name = "entry")
     public static class Entry {
-        @XmlElement(name="id")
+        @XmlElement(name = "id")
         public String id;
         @XmlElementRef
-        public Title title;
+        public Title  title;
     }
-    
+
     @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "Title", propOrder = { "type"})
+    @XmlType(name = "Title", propOrder = {"type"})
     @XmlRootElement(name = "title")
     public static class Title {
-        @XmlAttribute(name="type")
+        @XmlAttribute(name = "type")
         public String type;
         @XmlValue
         public String value;
     }
-    
 
     @Asset
     public static class TestAsset {
-        
+
         @Produces(MediaType.APPLICATION_JSON)
         public JSONObject getJSONObject(@Context UriInfo info) {
             assertNotNull(info);
@@ -100,7 +97,7 @@ public class AssetProviderTest extends MockServletInvocationTest {
                 throw new RuntimeException(e);
             }
         }
-        
+
         @Produces(MediaType.APPLICATION_XML)
         public Entry getJAXBEntry() {
             Title title = new Title();
@@ -111,12 +108,12 @@ public class AssetProviderTest extends MockServletInvocationTest {
             entry.title = title;
             return entry;
         }
-        
+
         @Produces(MediaType.TEXT_PLAIN)
         public String getString() {
             return STRING;
         }
-        
+
         @Consumes(MediaType.APPLICATION_XML)
         public void setJAXBEntry(Entry entry, @Context Providers providers) {
             assertNotNull(providers);
@@ -126,33 +123,34 @@ public class AssetProviderTest extends MockServletInvocationTest {
             assertEquals("text", entry.title.type);
             assertEquals("entry title", entry.title.value);
         }
-        
+
         @Consumes(MediaType.TEXT_PLAIN)
         public void setString(String string) {
             assertNotNull(string);
             assertEquals(STRING, string);
         }
-        
+
     }
-    
+
     @Path("test")
     public static class TestResource {
         @GET
-        @Produces({"application/json", "application/xml", "text/plain"})
+        @Produces( {"application/json", "application/xml", "text/plain"})
         public TestAsset getAsset() {
             return new TestAsset();
         }
 
         @POST
-        @Produces({"application/json", "application/xml", "text/plain"})
-        @Consumes({"application/xml", "text/plain"})
+        @Produces( {"application/json", "application/xml", "text/plain"})
+        @Consumes( {"application/xml", "text/plain"})
         public TestAsset postAsset(TestAsset asset) {
             return asset;
         }
-}
-    
+    }
+
     public void testAssetGetJson() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "/test", "application/json");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "/test", "application/json");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
         JSONObject result = JSONUtils.objectForString(response.getContentAsString());
@@ -161,42 +159,64 @@ public class AssetProviderTest extends MockServletInvocationTest {
     }
 
     public void testAssetGetXml() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "/test", "application/xml");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "/test", "application/xml");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
         assertEquals(XML, response.getContentAsString());
     }
-    
+
     public void testAssetGetString() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", "/test", "text/plain");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "/test", "text/plain");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
         assertEquals(STRING, response.getContentAsString());
     }
 
     public void testAssetPostXmlGetXml() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("POST", "/test", "application/xml", "application/xml", XML.getBytes());
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/test",
+                                                        "application/xml",
+                                                        "application/xml",
+                                                        XML.getBytes());
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
         assertEquals(XML, response.getContentAsString());
     }
-    
+
     public void testAssetPostStringGetString() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("POST", "/test", "text/plain", "text/plain", STRING.getBytes());
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/test",
+                                                        "text/plain",
+                                                        "text/plain",
+                                                        STRING.getBytes());
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
         assertEquals(STRING, response.getContentAsString());
     }
 
     public void testAssetPostXmlGetString() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("POST", "/test", "text/plain", "application/xml", XML.getBytes());
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/test",
+                                                        "text/plain",
+                                                        "application/xml",
+                                                        XML.getBytes());
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
         assertEquals(STRING, response.getContentAsString());
     }
-    
+
     public void testAssetPostStringGetXml() throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("POST", "/test", "application/xml", "text/plain", STRING.getBytes());
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/test",
+                                                        "application/xml",
+                                                        "text/plain",
+                                                        STRING.getBytes());
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
         assertEquals(XML, response.getContentAsString());

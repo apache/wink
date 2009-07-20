@@ -43,116 +43,131 @@ import org.slf4j.LoggerFactory;
 @Provider
 @Produces("*/*")
 @Consumes("*/*")
-
 public class FileProvider implements MessageBodyWriter<File>, MessageBodyReader<File> {
-	private static final Logger logger = LoggerFactory.getLogger(FileProvider.class);
-	private String prefix = "FP_PRE";
-	private String uploadDir = null;
-	private String suffix = "FP_SUF";
+    private static final Logger logger    = LoggerFactory.getLogger(FileProvider.class);
+    private String              prefix    = "FP_PRE";
+    private String              uploadDir = null;
+    private String              suffix    = "FP_SUF";
 
-	/********************** Writer **************************************/
-	
-	public long getSize(File t, Class<?> type, Type genericType,
-			Annotation[] annotations, MediaType mediaType) {
-		return t.length();
-	}
- 
-	public boolean isWriteable(Class<?> type, Type genericType,
-			Annotation[] annotations, MediaType mediaType) {
-		return File.class.isAssignableFrom(type);
-	}
+    /********************** Writer **************************************/
 
-	public void writeTo(File t, Class<?> type, Type genericType,
-			Annotation[] annotations, MediaType mediaType,
-			MultivaluedMap<String, Object> httpHeaders,
-			OutputStream entityStream) throws IOException,
-			WebApplicationException {
-		if(!t.canRead() || t.isDirectory()){
-	        logger.warn("Can not write file {} to response, file is not readable or a Directory ", t.getAbsoluteFile());
-			throw new WebApplicationException();
-		}else{
-			FileInputStream fis = new FileInputStream(t);
-			pipe(fis,entityStream);
-			fis.close();
-		}
-		
-	}
-	
-	/********************** Reader **************************************/
+    public long getSize(File t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
+        return t.length();
+    }
 
-	public boolean isReadable(Class<?> type, Type genericType,
-			Annotation[] annotations, MediaType mediaType) {
-		return type.isAssignableFrom(File.class);
-	}
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
+        return File.class.isAssignableFrom(type);
+    }
 
-	public File readFrom(Class<File> type, Type genericType,
-			Annotation[] annotations, MediaType mediaType,
-			MultivaluedMap<String, String> httpHeaders, InputStream entityStream)
-			throws IOException, WebApplicationException {
-		File dir = null;
-		if(uploadDir != null){
-			dir = new File(uploadDir);
-			if(!dir.exists() || !dir.isDirectory()){
-				dir = null;
-				logger.warn("Upload directory '{}' does not exist or not a directory, uploading entity to deafult temporary directory", uploadDir);
-		        throw new WebApplicationException();
-				
-			}
-		}
-		File f  = File.createTempFile(prefix, suffix, dir);
-		FileOutputStream fos = new FileOutputStream(f);
-		pipe(entityStream,fos);
-		fos.close();
-		return f;
-	}
-	
-	/********************** Help methods ************************************/
-	private void pipe(InputStream is, OutputStream os) throws IOException {
-		byte[] ba = new byte[1024];
-		int i= is.read(ba);
-		while ( i != -1){
-			os.write(ba, 0, i);
-			i= is.read(ba);				
-		}		
-	}
-	
-	/********************** getters & setters *********************************/
+    public void writeTo(File t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
+        if (!t.canRead() || t.isDirectory()) {
+            logger.warn("Can not write file {} to response, file is not readable or a Directory ",
+                        t.getAbsoluteFile());
+            throw new WebApplicationException();
+        } else {
+            FileInputStream fis = new FileInputStream(t);
+            pipe(fis, entityStream);
+            fis.close();
+        }
 
-	public String getPrefix() {
-		return prefix;
-	}
-	
-	/**
-	 * set the prefix of the uploaded files
-	 * @return
-	 */
+    }
 
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
-	}
+    /********************** Reader **************************************/
 
-	public String getUploadDir() {
-		return uploadDir;
-	}
+    public boolean isReadable(Class<?> type,
+                              Type genericType,
+                              Annotation[] annotations,
+                              MediaType mediaType) {
+        return type.isAssignableFrom(File.class);
+    }
 
-	/**
-	 * set the directory where this provider save the upload files
-	 * @param uploadDir
-	 */
-	public void setUploadDir(String uploadDir) {
-		this.uploadDir = uploadDir;
-	}
-	
+    public File readFrom(Class<File> type,
+                         Type genericType,
+                         Annotation[] annotations,
+                         MediaType mediaType,
+                         MultivaluedMap<String, String> httpHeaders,
+                         InputStream entityStream) throws IOException, WebApplicationException {
+        File dir = null;
+        if (uploadDir != null) {
+            dir = new File(uploadDir);
+            if (!dir.exists() || !dir.isDirectory()) {
+                dir = null;
+                logger
+                    .warn("Upload directory '{}' does not exist or not a directory, uploading entity to deafult temporary directory",
+                          uploadDir);
+                throw new WebApplicationException();
 
-	public String getSuffix() {
-		return suffix;
-	}
+            }
+        }
+        File f = File.createTempFile(prefix, suffix, dir);
+        FileOutputStream fos = new FileOutputStream(f);
+        pipe(entityStream, fos);
+        fos.close();
+        return f;
+    }
 
-	/**
-	 * set the suffix of the uploaded files
-	 * @return
-	 */
-	public void setSuffix(String suffix) {
-		this.suffix = suffix;
-	}
+    /********************** Help methods ************************************/
+    private void pipe(InputStream is, OutputStream os) throws IOException {
+        byte[] ba = new byte[1024];
+        int i = is.read(ba);
+        while (i != -1) {
+            os.write(ba, 0, i);
+            i = is.read(ba);
+        }
+    }
+
+    /********************** getters & setters *********************************/
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    /**
+     * set the prefix of the uploaded files
+     * 
+     * @return
+     */
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public String getUploadDir() {
+        return uploadDir;
+    }
+
+    /**
+     * set the directory where this provider save the upload files
+     * 
+     * @param uploadDir
+     */
+    public void setUploadDir(String uploadDir) {
+        this.uploadDir = uploadDir;
+    }
+
+    public String getSuffix() {
+        return suffix;
+    }
+
+    /**
+     * set the suffix of the uploaded files
+     * 
+     * @return
+     */
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
+    }
 }

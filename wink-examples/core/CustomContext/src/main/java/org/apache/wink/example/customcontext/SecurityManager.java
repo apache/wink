@@ -25,16 +25,23 @@ import java.util.Map;
 @SuppressWarnings("serial")
 public class SecurityManager {
 
-    public static final String READ_ONLY = "READ_ONLY";
-    public static final String READ_WRITE = "READ_WRITE";
-    private static final long serialVersionUID = 1L;
+    public static final String                    READ_ONLY        = "READ_ONLY";
+    public static final String                    READ_WRITE       = "READ_WRITE";
+    private static final long                     serialVersionUID = 1L;
 
-    public static Map<String, CustomerPermission> customers = new HashMap<String, CustomerPermission>() {
-        {
-            put("admin", new CustomerPermission("admin", READ_WRITE));
-            put("john", new CustomerPermission("john", READ_ONLY));
-        }
-    };
+    public static Map<String, CustomerPermission> customers        =
+                                                                       new HashMap<String, CustomerPermission>() {
+                                                                           {
+                                                                               put("admin",
+                                                                                   new CustomerPermission(
+                                                                                                          "admin",
+                                                                                                          READ_WRITE));
+                                                                               put("john",
+                                                                                   new CustomerPermission(
+                                                                                                          "john",
+                                                                                                          READ_ONLY));
+                                                                           }
+                                                                       };
 
     public static class CustomerPermission {
         public String customerId;

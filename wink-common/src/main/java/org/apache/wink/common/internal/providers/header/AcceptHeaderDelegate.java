@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.internal.providers.header;
 
@@ -30,12 +29,11 @@ import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 import org.apache.wink.common.internal.http.Accept;
 import org.apache.wink.common.internal.utils.StringUtils;
 
-
-
 public class AcceptHeaderDelegate implements HeaderDelegate<Accept> {
 
     public Accept fromString(String value) throws IllegalArgumentException {
-        // if there is no Accept header it means that all media types are acceptable
+        // if there is no Accept header it means that all media types are
+        // acceptable
         if (value == null) {
             value = MediaType.WILDCARD;
         }
@@ -50,7 +48,7 @@ public class AcceptHeaderDelegate implements HeaderDelegate<Accept> {
         }
         return new Accept(list);
     }
-    
+
     public String toString(Accept value) {
         StringBuilder result = new StringBuilder();
         for (MediaType valuedMediaType : value.getMediaTypes()) {

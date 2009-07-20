@@ -25,32 +25,30 @@ import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.wink.common.internal.MultivaluedMapImpl;
 
-
 import junit.framework.TestCase;
 
 public class MultivaluedMapImplTest extends TestCase {
 
     public void testMultivaluedMapImplOperations() {
-        MultivaluedMap<String,String> map = getMultivaluedMap();
+        MultivaluedMap<String, String> map = getMultivaluedMap();
         assertMap(map);
     }
 
-
     public void testMultivaluedMapImplClone() {
-        MultivaluedMapImpl<String,String> map = getMultivaluedMap();
-        
-        MultivaluedMap<String,String> clone = map.clone();
+        MultivaluedMapImpl<String, String> map = getMultivaluedMap();
+
+        MultivaluedMap<String, String> clone = map.clone();
         assertMap(clone);
     }
-    
+
     public void testToString() {
         String string = MultivaluedMapImpl.toString(getMultivaluedMap(), ",");
         String expected = "a=a1,b=b1,c=c1,c=c2,d";
         assertEquals(expected, string);
     }
-    
-    private MultivaluedMapImpl<String,String> getMultivaluedMap() {
-        MultivaluedMapImpl<String,String> map = new MultivaluedMapImpl<String,String>();
+
+    private MultivaluedMapImpl<String, String> getMultivaluedMap() {
+        MultivaluedMapImpl<String, String> map = new MultivaluedMapImpl<String, String>();
         map.add("a", "a1");
         map.add("b", "b1");
         map.add("c", "c1");
@@ -59,37 +57,37 @@ public class MultivaluedMapImplTest extends TestCase {
         return map;
     }
 
-    private void assertMap(MultivaluedMap<String,String> map) {
+    private void assertMap(MultivaluedMap<String, String> map) {
         List<String> list = map.get("a");
         assertNotNull(list);
         assertTrue(list.size() == 1);
         assertEquals(list.get(0), "a1");
-        
+
         list = map.get("b");
         assertNotNull(list);
         assertTrue(list.size() == 1);
         assertEquals(list.get(0), "b1");
         assertEquals(map.getFirst("b"), "b1");
-        
+
         list = map.get("c");
         assertNotNull(list);
         assertTrue(list.size() == 2);
         assertEquals(list.get(0), "c1");
         assertEquals(list.get(1), "c2");
         assertEquals(map.getFirst("c"), "c1");
-        
+
         list = map.get("d");
         assertNotNull(list);
         assertTrue(list.size() == 1);
         assertNull(list.get(0));
-        
+
         map.putSingle("c", "c3");
         list = map.get("c");
         assertNotNull(list);
         assertTrue(list.size() == 1);
         assertEquals(list.get(0), "c3");
         assertEquals(map.getFirst("c"), "c3");
-        
+
         assertNull(map.get("e"));
     }
 

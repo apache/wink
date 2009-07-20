@@ -63,7 +63,7 @@ public class HtmlRepresentationCollectionDefaultTest extends HtmlMockServletInvo
         @GET
         @Produces(MediaType.TEXT_HTML)
         public Object getSomeDefects(@Context HttpServletResponse httpServletResponse,
-            @Context HttpServletRequest httpServletRequest) {
+                                     @Context HttpServletRequest httpServletRequest) {
 
             return new HtmlDescriptor(createSyndFeed());
         }
@@ -76,8 +76,8 @@ public class HtmlRepresentationCollectionDefaultTest extends HtmlMockServletInvo
      */
     @Test
     public void testGetCollectionHtmlDefault() throws Exception {
-        MockHttpServletResponse response = invoke(constructMockRequest("GET", "/defectsDefault",
-            MediaType.TEXT_HTML));
+        MockHttpServletResponse response =
+            invoke(constructMockRequest("GET", "/defectsDefault", MediaType.TEXT_HTML));
         assertEquals("HTTP status", 200, response.getStatus());
         String content = response.getContentAsString();
         assertEquals("body", HtmlConstants.DEFAULT_JSP_COLLECTION_PATH, content);
@@ -92,20 +92,20 @@ public class HtmlRepresentationCollectionDefaultTest extends HtmlMockServletInvo
         SyndFeed syndFeed = createSyndFeed();
         HtmlSyndFeedAdapter collectionAdapter = new HtmlSyndFeedAdapter(syndFeed);
         assertEquals("id", COL_ID, collectionAdapter.getId());
-        assertEquals("updated", simpleDateFormat.format(CURRENT_DATE),
-            collectionAdapter.getUpdated());
+        assertEquals("updated", simpleDateFormat.format(CURRENT_DATE), collectionAdapter
+            .getUpdated());
         assertEquals("title", COL_TITLE, collectionAdapter.getTitle());
         assertEquals("link rel", COL_LINK_REL, collectionAdapter.getLinks().get(0).getRel());
         assertEquals("link type", COL_LINK_TYPE, collectionAdapter.getLinks().get(0).getType());
         assertEquals("link href", COL_LINK_HREF, collectionAdapter.getLinks().get(0).getHref());
-        assertEquals("categories scheme", COL_CATEGORY_SCHEME,
-            collectionAdapter.getCategories().get(0).getScheme());
-        assertEquals("categories term", COL_CATEGORY_TERM,
-            collectionAdapter.getCategories().get(0).getTerm());
+        assertEquals("categories scheme", COL_CATEGORY_SCHEME, collectionAdapter.getCategories()
+            .get(0).getScheme());
+        assertEquals("categories term", COL_CATEGORY_TERM, collectionAdapter.getCategories().get(0)
+            .getTerm());
         assertEquals("owner", COL_OWNER, collectionAdapter.getAuthor());
         assertEquals("summary", COL_SUB_TITLE, collectionAdapter.getSubTitle());
-        //        assertEquals("id", ENTRY_NAME, new HtmlSyndEntryAdapter(
-        //            collectionAdapter.getEntryResource(0)).getId());
+        // assertEquals("id", ENTRY_NAME, new HtmlSyndEntryAdapter(
+        // collectionAdapter.getEntryResource(0)).getId());
     }
 
     /**
@@ -133,6 +133,5 @@ public class HtmlRepresentationCollectionDefaultTest extends HtmlMockServletInvo
         feed.setSubtitle(new SyndText(COL_SUB_TITLE));
         return feed;
     }
-
 
 }

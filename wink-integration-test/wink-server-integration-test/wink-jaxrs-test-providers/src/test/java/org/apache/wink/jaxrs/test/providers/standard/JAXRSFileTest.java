@@ -43,20 +43,19 @@ public class JAXRSFileTest extends TestCase {
 
     /**
      * Tests posting to a File entity parameter.
-     *
+     * 
      * @throws HttpException
      * @throws IOException
      */
     public void testPostFile() throws HttpException, IOException {
         HttpClient client = new HttpClient();
 
-        PostMethod postMethod = new PostMethod(getBaseURI()
-                + "/providers/standard/file");
+        PostMethod postMethod = new PostMethod(getBaseURI() + "/providers/standard/file");
         byte[] barr = new byte[1000];
         Random r = new Random();
         r.nextBytes(barr);
-        postMethod.setRequestEntity(new InputStreamRequestEntity(
-                new ByteArrayInputStream(barr), "text/plain"));
+        postMethod.setRequestEntity(new InputStreamRequestEntity(new ByteArrayInputStream(barr),
+                                                                 "text/plain"));
         postMethod.addRequestHeader("Accept", "text/plain");
         try {
             client.executeMethod(postMethod);
@@ -73,11 +72,9 @@ public class JAXRSFileTest extends TestCase {
             for (int c = 0; c < barr.length; ++c) {
                 assertEquals(barr[c], receivedBArr[c]);
             }
-            assertEquals("text/plain", postMethod.getResponseHeader(
-                    "Content-Type").getValue());
-            assertEquals(1000, Integer.valueOf(
-                    postMethod.getResponseHeader("Content-Length").getValue())
-                    .intValue());
+            assertEquals("text/plain", postMethod.getResponseHeader("Content-Type").getValue());
+            assertEquals(1000, Integer.valueOf(postMethod.getResponseHeader("Content-Length")
+                .getValue()).intValue());
         } finally {
             postMethod.releaseConnection();
         }
@@ -87,21 +84,20 @@ public class JAXRSFileTest extends TestCase {
 
     /**
      * Tests receiving an empty byte array.
-     *
+     * 
      * @throws HttpException
      * @throws IOException
      */
-    public void testWithRequestAcceptHeaderWillReturnRequestedContentType()
-            throws HttpException, IOException {
+    public void testWithRequestAcceptHeaderWillReturnRequestedContentType() throws HttpException,
+        IOException {
         HttpClient client = new HttpClient();
 
-        PutMethod putMethod = new PutMethod(getBaseURI()
-                + "/providers/standard/file");
+        PutMethod putMethod = new PutMethod(getBaseURI() + "/providers/standard/file");
         byte[] barr = new byte[1000];
         Random r = new Random();
         r.nextBytes(barr);
-        putMethod.setRequestEntity(new InputStreamRequestEntity(
-                new ByteArrayInputStream(barr), "any/type"));
+        putMethod.setRequestEntity(new InputStreamRequestEntity(new ByteArrayInputStream(barr),
+                                                                "any/type"));
         try {
             client.executeMethod(putMethod);
             assertEquals(204, putMethod.getStatusCode());
@@ -109,8 +105,7 @@ public class JAXRSFileTest extends TestCase {
             putMethod.releaseConnection();
         }
 
-        GetMethod getMethod = new GetMethod(getBaseURI()
-                + "/providers/standard/file");
+        GetMethod getMethod = new GetMethod(getBaseURI() + "/providers/standard/file");
         getMethod.addRequestHeader("Accept", "mytype/subtype");
         try {
             client.executeMethod(getMethod);
@@ -126,11 +121,9 @@ public class JAXRSFileTest extends TestCase {
             for (int c = 0; c < barr.length; ++c) {
                 assertEquals(barr[c], receivedBArr[c]);
             }
-            assertEquals("mytype/subtype", getMethod.getResponseHeader(
-                    "Content-Type").getValue());
-            assertEquals(barr.length, Integer.valueOf(
-                    getMethod.getResponseHeader("Content-Length").getValue())
-                    .intValue());
+            assertEquals("mytype/subtype", getMethod.getResponseHeader("Content-Type").getValue());
+            assertEquals(barr.length, Integer.valueOf(getMethod.getResponseHeader("Content-Length")
+                .getValue()).intValue());
         } finally {
             getMethod.releaseConnection();
         }

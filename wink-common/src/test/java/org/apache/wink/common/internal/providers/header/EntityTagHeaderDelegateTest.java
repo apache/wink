@@ -31,35 +31,36 @@ import org.junit.Test;
 public class EntityTagHeaderDelegateTest {
 
     @Test
-    public void testParseEtag(){
+    public void testParseEtag() {
         RuntimeDelegate rd = RuntimeDelegate.getInstance();
-        HeaderDelegate<EntityTag> entityTagHeaderDelegate = rd.createHeaderDelegate(EntityTag.class);
+        HeaderDelegate<EntityTag> entityTagHeaderDelegate =
+            rd.createHeaderDelegate(EntityTag.class);
         if (entityTagHeaderDelegate == null) {
             fail("EntityTag header delegate is not regestered in RuntimeDelegateImpl");
         }
-        
+
         String expectedEntityTagString = "12321-\"12321-\t123123";
         EntityTag expectedWeekEntityTag = new EntityTag(expectedEntityTagString, true);
         EntityTag expectedStrongEntityTag = new EntityTag(expectedEntityTagString, false);
-        
+
         String inputEntityTagString = "\"" + "12321-\\\"12321-\t123123" + "\"";
-        
+
         // Test Weak Entity Tag
-        EntityTag parsedWeakEntityTag = entityTagHeaderDelegate.fromString("W/" + inputEntityTagString);
+        EntityTag parsedWeakEntityTag =
+            entityTagHeaderDelegate.fromString("W/" + inputEntityTagString);
         assertEquals(expectedWeekEntityTag, parsedWeakEntityTag);
-        
+
         // Test Strong Entity Tag
         EntityTag parsedStrongEntityTag = entityTagHeaderDelegate.fromString(inputEntityTagString);
         assertEquals(expectedStrongEntityTag, parsedStrongEntityTag);
 
-        
         // Negative test - Etag in null
         try {
             entityTagHeaderDelegate.fromString(null);
             fail("EntityTag is null - IllegalArgumentException must be thrown");
         } catch (IllegalArgumentException e) {
         }
-        
+
         // Negative test - Etag in not valid
         try {
             entityTagHeaderDelegate.fromString("Not quoted Entity Tag");
@@ -67,30 +68,31 @@ public class EntityTagHeaderDelegateTest {
         } catch (IllegalArgumentException e) {
         }
     }
-    
+
     @Test
-    public void testSerializeEtag(){
+    public void testSerializeEtag() {
         RuntimeDelegate rd = RuntimeDelegate.getInstance();
-        HeaderDelegate<EntityTag> entityTagHeaderDelegate = rd.createHeaderDelegate(EntityTag.class);
+        HeaderDelegate<EntityTag> entityTagHeaderDelegate =
+            rd.createHeaderDelegate(EntityTag.class);
         if (entityTagHeaderDelegate == null) {
             fail("EntityTag header delegate is not regestered in RuntimeDelegateImpl");
         }
-        
+
         String entityTagString = "12321-\"12321-123123";
         String expectedEntityTagString = "\"" + "12321-\\\"12321-123123" + "\"";
-        
+
         // Test Weak Entity Tag
         EntityTag weakETag = new EntityTag(entityTagString, true);
         String weakETagString = entityTagHeaderDelegate.toString(weakETag);
-        
-        assertEquals("W/"+ expectedEntityTagString, weakETagString);
+
+        assertEquals("W/" + expectedEntityTagString, weakETagString);
 
         // Test String Entity Tag
         EntityTag strongETag = new EntityTag(entityTagString, false);
         String strongETagString = entityTagHeaderDelegate.toString(strongETag);
-        
+
         assertEquals(expectedEntityTagString, strongETagString);
-        
+
         // Negative test - Etag in null
         try {
             EntityTag eTag = null;

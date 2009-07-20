@@ -25,13 +25,13 @@ import java.util.List;
 /**
  * this class is a dummy class to fill in for the ArrayDeque we were originally
  * using from JDK6.
- *
+ * 
  * @param <T>
  */
 public class ArrayDeque<T> implements Deque<T> {
 
     List<T> list = null;
-    
+
     public ArrayDeque(List<T> asList) {
         list = asList;
     }

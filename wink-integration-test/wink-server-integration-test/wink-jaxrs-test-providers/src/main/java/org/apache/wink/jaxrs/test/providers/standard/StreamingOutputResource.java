@@ -40,8 +40,7 @@ public class StreamingOutputResource {
     public Response getStreamingOutputStream() {
         return Response.ok(new StreamingOutput() {
 
-            public void write(OutputStream arg0) throws IOException,
-                    WebApplicationException {
+            public void write(OutputStream arg0) throws IOException, WebApplicationException {
                 arg0.write(barr);
             }
 
@@ -52,8 +51,7 @@ public class StreamingOutputResource {
     public StreamingOutput postInputStream(final InputStream is) {
         return new StreamingOutput() {
 
-            public void write(OutputStream arg0) throws IOException,
-                    WebApplicationException {
+            public void write(OutputStream arg0) throws IOException, WebApplicationException {
                 int read = 0;
                 while ((read = is.read()) != -1) {
                     arg0.write(read);

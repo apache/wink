@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.internal.handlers;
 
@@ -27,14 +26,14 @@ import org.apache.wink.server.handlers.HandlersChain;
 import org.apache.wink.server.handlers.MessageContext;
 import org.apache.wink.server.handlers.RequestHandler;
 
-
 public class SearchResultHandler implements RequestHandler {
 
     public void handleRequest(MessageContext context, HandlersChain chain) throws Throwable {
         // first thing - proceed the chain
         chain.doChain(context);
-        
-        // if failed to locate a method to invoke, throw the error as an exception
+
+        // if failed to locate a method to invoke, throw the error as an
+        // exception
         SearchResult searchResult = context.getAttribute(SearchResult.class);
         if (searchResult.isError()) {
             throw searchResult.getError();
@@ -43,5 +42,5 @@ public class SearchResultHandler implements RequestHandler {
 
     public void init(Properties props) {
     }
-    
+
 }

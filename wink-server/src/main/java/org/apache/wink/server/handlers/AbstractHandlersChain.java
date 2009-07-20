@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.server.handlers;
 
@@ -26,7 +25,7 @@ import java.util.ListIterator;
 
 public abstract class AbstractHandlersChain<T extends Handler> implements HandlersChain, Cloneable {
 
-    private LinkedList<T> list = new LinkedList<T>();
+    private LinkedList<T>   list     = new LinkedList<T>();
     private ListIterator<T> iterator = null;
 
     public AbstractHandlersChain() {
@@ -48,14 +47,15 @@ public abstract class AbstractHandlersChain<T extends Handler> implements Handle
         if (!iterator.hasNext()) {
             return;
         }
-        
+
         try {
             // get the next handler from the chain to handle
             T handler = iterator.next();
             // invoke the handler
             handle(handler, context);
         } finally {
-            // set the iterator back one handler on the chain so the same handler can be re-invoked
+            // set the iterator back one handler on the chain so the same
+            // handler can be re-invoked
             iterator.previous();
         }
     }
@@ -67,7 +67,7 @@ public abstract class AbstractHandlersChain<T extends Handler> implements Handle
         clone.iterator = list.listIterator();
         return clone;
     }
-    
+
     protected abstract void handle(T handler, MessageContext context) throws Throwable;
 
 }

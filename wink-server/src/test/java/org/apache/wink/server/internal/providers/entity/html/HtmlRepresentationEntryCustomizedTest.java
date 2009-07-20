@@ -44,7 +44,7 @@ public class HtmlRepresentationEntryCustomizedTest extends HtmlMockServletInvoca
         @GET
         @Produces(MediaType.TEXT_HTML)
         public Object getSomeDefects(@Context HttpServletResponse httpServletResponse,
-            @Context HttpServletRequest httpServletRequest) {
+                                     @Context HttpServletRequest httpServletRequest) {
 
             return new HtmlDescriptor(new SyndEntry(), CUSTOMIZED_ENTRY_URL);
         }
@@ -56,8 +56,8 @@ public class HtmlRepresentationEntryCustomizedTest extends HtmlMockServletInvoca
      * @throws IOException
      */
     public void testGetEntryHtmlCust() throws Exception {
-        MockHttpServletResponse response = invoke(constructMockRequest("GET",
-            "/defectsCustomized/htmlDefect", MediaType.TEXT_HTML));
+        MockHttpServletResponse response =
+            invoke(constructMockRequest("GET", "/defectsCustomized/htmlDefect", MediaType.TEXT_HTML));
         assertEquals("HTTP status", 200, response.getStatus());
         String content = response.getContentAsString();
         assertEquals("body", CUSTOMIZED_ENTRY_URL, content);

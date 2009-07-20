@@ -17,7 +17,6 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
 
 package org.apache.wink.common.utils;
 
@@ -42,7 +41,6 @@ import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Providers;
 
 import org.apache.wink.common.internal.MultivaluedMapImpl;
-
 
 public class ProviderUtils {
 
@@ -72,12 +70,14 @@ public class ProviderUtils {
         return os.toByteArray();
     }
 
-    public static String readFromStreamAsString(InputStream stream, MediaType mt) throws IOException {
+    public static String readFromStreamAsString(InputStream stream, MediaType mt)
+        throws IOException {
         ByteArrayOutputStream os = readFromStream(stream);
         return os.toString(ProviderUtils.getCharset(mt));
     }
 
-    public static void writeToStream(String string, OutputStream os, MediaType mt) throws IOException {
+    public static void writeToStream(String string, OutputStream os, MediaType mt)
+        throws IOException {
         os.write(string.getBytes(getCharset(mt)));
     }
 
@@ -93,25 +93,42 @@ public class ProviderUtils {
         return writeToString(providers, object, object.getClass(), mediaType);
     }
 
-    public static String writeToString(Providers providers, Object object, Class<?> type, MediaType mediaType) {
+    public static String writeToString(Providers providers,
+                                       Object object,
+                                       Class<?> type,
+                                       MediaType mediaType) {
         return writeToString(providers, object, type, type, mediaType);
     }
 
-    public static String writeToString(Providers providers, Object object, Class<?> type, Type genericType,
-            MediaType mediaType) {
-        return writeToString(providers, object, type, type, new MultivaluedMapImpl<String,Object>(), mediaType);
+    public static String writeToString(Providers providers,
+                                       Object object,
+                                       Class<?> type,
+                                       Type genericType,
+                                       MediaType mediaType) {
+        return writeToString(providers,
+                             object,
+                             type,
+                             type,
+                             new MultivaluedMapImpl<String, Object>(),
+                             mediaType);
     }
 
     @SuppressWarnings("unchecked")
-    public static String writeToString(Providers providers, Object object, Class<?> type, Type genericType,
-            MultivaluedMap<String,Object> httpHeaders, MediaType mediaType) {
+    public static String writeToString(Providers providers,
+                                       Object object,
+                                       Class<?> type,
+                                       Type genericType,
+                                       MultivaluedMap<String, Object> httpHeaders,
+                                       MediaType mediaType) {
         try {
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            MessageBodyWriter writer = providers.getMessageBodyWriter(type, genericType, null, mediaType);
+            MessageBodyWriter writer =
+                providers.getMessageBodyWriter(type, genericType, null, mediaType);
             if (writer == null) {
                 return null;
             }
-            writer.writeTo(object, type, genericType, new Annotation[0], mediaType, httpHeaders, os);
+            writer
+                .writeTo(object, type, genericType, new Annotation[0], mediaType, httpHeaders, os);
             String contentString = os.toString(getCharset(mediaType));
             return contentString;
         } catch (WebApplicationException e) {
@@ -121,23 +138,42 @@ public class ProviderUtils {
         }
     }
 
-    public static <T> T readFromString(Providers providers, String input, Class<T> type, MediaType mediaType) {
+    public static <T> T readFromString(Providers providers,
+                                       String input,
+                                       Class<T> type,
+                                       MediaType mediaType) {
         return readFromString(providers, input, type, type, mediaType);
     }
-    
-    public static <T> T readFromString(Providers providers, String input, Class<T> type, Type genericType, MediaType mediaType) {
-        return readFromString(providers, input, type, genericType, new MultivaluedMapImpl<String,String>(), mediaType);
+
+    public static <T> T readFromString(Providers providers,
+                                       String input,
+                                       Class<T> type,
+                                       Type genericType,
+                                       MediaType mediaType) {
+        return readFromString(providers,
+                              input,
+                              type,
+                              genericType,
+                              new MultivaluedMapImpl<String, String>(),
+                              mediaType);
     }
 
-    public static <T> T readFromString(Providers providers, String input, Class<T> type, Type genericType,
-            MultivaluedMap<String,String> httpHeaders, MediaType mediaType) {
+    public static <T> T readFromString(Providers providers,
+                                       String input,
+                                       Class<T> type,
+                                       Type genericType,
+                                       MultivaluedMap<String, String> httpHeaders,
+                                       MediaType mediaType) {
         try {
-            ByteArrayInputStream is = new ByteArrayInputStream(input.getBytes(getCharset(mediaType)));
-            MessageBodyReader<T> reader = providers.getMessageBodyReader(type, genericType, null, mediaType);
+            ByteArrayInputStream is =
+                new ByteArrayInputStream(input.getBytes(getCharset(mediaType)));
+            MessageBodyReader<T> reader =
+                providers.getMessageBodyReader(type, genericType, null, mediaType);
             if (reader == null) {
                 return null;
             }
-            return reader.readFrom(type, genericType, new Annotation[0], mediaType, httpHeaders, is);
+            return reader
+                .readFrom(type, genericType, new Annotation[0], mediaType, httpHeaders, is);
         } catch (WebApplicationException e) {
             throw e;
         } catch (IOException e) {

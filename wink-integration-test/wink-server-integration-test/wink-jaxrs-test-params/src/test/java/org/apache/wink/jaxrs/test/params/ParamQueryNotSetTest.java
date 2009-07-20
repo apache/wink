@@ -38,8 +38,9 @@ public class ParamQueryNotSetTest extends TestCase {
     }
 
     /**
-     * Tests that given a HttpMethod with a query or matrix parameter, if the parameter is not sent,
-     * then the default value is given back for basic Java types.
+     * Tests that given a HttpMethod with a query or matrix parameter, if the
+     * parameter is not sent, then the default value is given back for basic
+     * Java types.
      */
     public void testCharParamEmpty() throws Exception {
         GetMethod getMethod = new GetMethod(getBaseURI() + "/queryparamnotset/char");
@@ -101,8 +102,9 @@ public class ParamQueryNotSetTest extends TestCase {
     }
 
     /**
-     * Tests that given a HttpMethod with a query or matrix parameter, if the parameter is not sent,
-     * then the default value is given back for basic Java types.
+     * Tests that given a HttpMethod with a query or matrix parameter, if the
+     * parameter is not sent, then the default value is given back for basic
+     * Java types.
      */
     public void testByteParamEmpty() throws Exception {
         /*
@@ -174,8 +176,9 @@ public class ParamQueryNotSetTest extends TestCase {
     }
 
     /**
-     * Tests that given a HttpMethod with a query or matrix parameter, if the parameter is not sent,
-     * then the default value is given back for basic Java types.
+     * Tests that given a HttpMethod with a query or matrix parameter, if the
+     * parameter is not sent, then the default value is given back for basic
+     * Java types.
      */
     public void testDoubleParamEmpty() throws Exception {
         /*
@@ -247,8 +250,9 @@ public class ParamQueryNotSetTest extends TestCase {
     }
 
     /**
-     * Tests that given a HttpMethod with a query or matrix parameter, if the parameter is not sent,
-     * then the default value is given back for basic Java types.
+     * Tests that given a HttpMethod with a query or matrix parameter, if the
+     * parameter is not sent, then the default value is given back for basic
+     * Java types.
      */
     public void testFloatParamEmpty() throws Exception {
         /*
@@ -320,8 +324,9 @@ public class ParamQueryNotSetTest extends TestCase {
     }
 
     /**
-     * Tests that given a HttpMethod with a query or matrix parameter, if the parameter is not sent,
-     * then the default value is given back for basic Java types.
+     * Tests that given a HttpMethod with a query or matrix parameter, if the
+     * parameter is not sent, then the default value is given back for basic
+     * Java types.
      */
     public void testIntParamEmpty() throws Exception {
         /*
@@ -393,8 +398,9 @@ public class ParamQueryNotSetTest extends TestCase {
     }
 
     /**
-     * Tests that given a HttpMethod with a query or matrix parameter, if the parameter is not sent,
-     * then the default value is given back for basic Java types.
+     * Tests that given a HttpMethod with a query or matrix parameter, if the
+     * parameter is not sent, then the default value is given back for basic
+     * Java types.
      */
     public void testShortParamEmpty() throws Exception {
         /*
@@ -466,8 +472,9 @@ public class ParamQueryNotSetTest extends TestCase {
     }
 
     /**
-     * Tests that given a HttpMethod with a query or matrix parameter, if the parameter is not sent,
-     * then the default value is given back for basic Java types.
+     * Tests that given a HttpMethod with a query or matrix parameter, if the
+     * parameter is not sent, then the default value is given back for basic
+     * Java types.
      */
     public void testLongParamEmpty() throws Exception {
         /*
@@ -539,8 +546,9 @@ public class ParamQueryNotSetTest extends TestCase {
     }
 
     /**
-     * Tests that given a HttpMethod with a query or matrix parameter, if the parameter is not sent,
-     * then the default value is given back for basic Java types.
+     * Tests that given a HttpMethod with a query or matrix parameter, if the
+     * parameter is not sent, then the default value is given back for basic
+     * Java types.
      */
     public void testSetParamEmpty() throws Exception {
         /*
@@ -612,8 +620,9 @@ public class ParamQueryNotSetTest extends TestCase {
     }
 
     /**
-     * Tests that given a HttpMethod with a query or matrix parameter, if the parameter is not sent,
-     * then the default value is given back for basic Java types.
+     * Tests that given a HttpMethod with a query or matrix parameter, if the
+     * parameter is not sent, then the default value is given back for basic
+     * Java types.
      */
     public void testListParamEmpty() throws Exception {
         /*

@@ -39,14 +39,14 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 public class EntityLocatorProviderTest extends MockServletInvocationTest {
 
-    private static final String ENTRY = "<entry xmlns=\"http://www.w3.org/2005/Atom\">\n"
-                                          + "    <id>id</id>\n"
-                                          + "    <title type=\"text\">title</title>\n"
-                                          + "</entry>\n";
+    private static final String ENTRY =
+                                          "<entry xmlns=\"http://www.w3.org/2005/Atom\">\n" + "    <id>id</id>\n"
+                                              + "    <title type=\"text\">title</title>\n"
+                                              + "</entry>\n";
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class<?>[] { AtomEntryResource.class };
+        return new Class<?>[] {AtomEntryResource.class};
     }
 
     @Path("test")
@@ -148,16 +148,16 @@ public class EntityLocatorProviderTest extends MockServletInvocationTest {
     }
 
     private void getAtomEntry(String url) throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("GET", url,
-            "application/atom+xml");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", url, "application/atom+xml");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
         assertEquals(ENTRY, response.getContentAsString());
     }
 
     private void postAtomEntry(String url) throws Exception {
-        MockHttpServletRequest request = MockRequestConstructor.constructMockRequest("POST", url,
-            "application/atom+xml");
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("POST", url, "application/atom+xml");
         request.setContentType("application/atom+xml");
         request.setContent(ENTRY.getBytes());
         MockHttpServletResponse response = invoke(request);

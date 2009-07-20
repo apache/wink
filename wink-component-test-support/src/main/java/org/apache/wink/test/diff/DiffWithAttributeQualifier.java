@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.test.diff;
 
 import org.custommonkey.xmlunit.Diff;
@@ -28,10 +28,10 @@ import org.xml.sax.SAXException;
 import java.io.IOException;
 
 /**
- * Class that overrides XmlUnit Diff class.
- * Only Elements with the same name as well as the same values for all attributes qualify.
- * The order of elements is ignored.
- * The qualifier is {@link ElementNameAndAttributeQualifier} with no argument.
+ * Class that overrides XmlUnit Diff class. Only Elements with the same name as
+ * well as the same values for all attributes qualify. The order of elements is
+ * ignored. The qualifier is {@link ElementNameAndAttributeQualifier} with no
+ * argument.
  * <p/>
  * It is implemented to be used by Stm application tests for XML comparison.
  */
@@ -39,9 +39,9 @@ public class DiffWithAttributeQualifier extends Diff {
 
     /**
      * Constructor of XmlUnit Diff with ElementNameAndAttributeQualifier
-     *
+     * 
      * @param controlDocument XML document that contains expected results
-     * @param testedDocument  XML document which is being tested
+     * @param testedDocument XML document which is being tested
      */
     public DiffWithAttributeQualifier(Document controlDocument, Document testedDocument) {
         super(controlDocument, testedDocument);
@@ -51,13 +51,16 @@ public class DiffWithAttributeQualifier extends Diff {
 
     /**
      * Constructor of XmlUnit Diff with ElementNameAndAttributeQualifier
-     *
-     * @param controlDocument String containing XML document that contains expected results
-     * @param testedDocument  String containing XML document which is being tested
+     * 
+     * @param controlDocument String containing XML document that contains
+     *            expected results
+     * @param testedDocument String containing XML document which is being
+     *            tested
      * @throws java.io.IOException
      * @throws org.xml.sax.SAXException
      */
-    public DiffWithAttributeQualifier(String controlDocument, String testedDocument) throws IOException, SAXException {
+    public DiffWithAttributeQualifier(String controlDocument, String testedDocument)
+        throws IOException, SAXException {
         super(controlDocument, testedDocument);
         this.overrideElementQualifier(new ElementNameAndAttributeQualifier());
         this.overrideDifferenceListener(new DifferenceListenerIgnoreWhitespace());

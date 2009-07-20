@@ -40,7 +40,6 @@ import org.apache.wink.common.model.app.ObjectFactory;
 import org.apache.wink.common.model.atom.AtomJAXBUtils;
 import org.apache.wink.common.utils.ProviderUtils;
 
-
 /**
  * Representation of Atom Category Document. Category Document is a document
  * that describes the categories allowed in a Collection.
@@ -49,16 +48,28 @@ import org.apache.wink.common.utils.ProviderUtils;
 @Produces(MediaTypeUtils.ATOM_CATEGORIES_DOCUMENT)
 public class AppCategoriesProvider implements MessageBodyWriter<AppCategories> {
 
-    public long getSize(AppCategories t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public long getSize(AppCategories t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
         return -1;
     }
 
-    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    public boolean isWriteable(Class<?> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
         return type == AppCategories.class;
     }
 
-    public void writeTo(AppCategories t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
-            OutputStream entityStream) throws IOException, WebApplicationException {
+    public void writeTo(AppCategories t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException, WebApplicationException {
         try {
             ObjectFactory objectFactory = new ObjectFactory();
             JAXBElement<AppCategories> feedElement = objectFactory.createCategories(t);

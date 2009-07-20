@@ -54,7 +54,7 @@ public class MethodMetadata extends AbstractMetadata {
     public String getHttpMethod() {
         return httpMethod;
     }
-    
+
     public void setHttpMethod(String httpMethod) {
         this.httpMethod = httpMethod;
     }
@@ -87,7 +87,8 @@ public class MethodMetadata extends AbstractMetadata {
             + (formalParameters != null ? "formalParameters=" + formalParameters + ", " : "")
             + (httpMethod != null ? "httpMethod=" + httpMethod + ", " : "")
             + (parent != null ? "parent=" + parent + ", " : "")
-            + (reflectionMethod != null ? "reflectionMethod=" + reflectionMethod : "") + "]";
+            + (reflectionMethod != null ? "reflectionMethod=" + reflectionMethod : "")
+            + "]";
     }
 
 }

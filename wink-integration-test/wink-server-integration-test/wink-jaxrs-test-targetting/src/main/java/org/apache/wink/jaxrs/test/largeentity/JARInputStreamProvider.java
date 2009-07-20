@@ -40,8 +40,12 @@ public class JARInputStreamProvider implements MessageBodyReader<JarInputStream>
         return JarInputStream.class.isAssignableFrom(arg0);
     }
 
-    public JarInputStream readFrom(Class<JarInputStream> arg0, Type arg1, Annotation[] arg2, MediaType arg3, MultivaluedMap<String, String> arg4, InputStream arg5)
-            throws IOException, WebApplicationException {
+    public JarInputStream readFrom(Class<JarInputStream> arg0,
+                                   Type arg1,
+                                   Annotation[] arg2,
+                                   MediaType arg3,
+                                   MultivaluedMap<String, String> arg4,
+                                   InputStream arg5) throws IOException, WebApplicationException {
         return new JarInputStream(arg5);
     }
 

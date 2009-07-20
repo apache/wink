@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.server.internal;
 
 import junit.framework.TestCase;
@@ -26,7 +26,6 @@ import org.apache.wink.server.internal.servlet.WebSphereParametersFilter;
 import org.springframework.mock.web.MockFilterChain;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-
 
 import javax.servlet.ServletRequest;
 import java.util.Arrays;
@@ -46,13 +45,15 @@ public class WebSphereParametersTest extends TestCase {
         MockFilterChain chain = new MockFilterChain();
 
         // test query parameters before parsing
-        assertEquals("Query parameters are not empty before parsing", 0, request.getParameterMap().size());
+        assertEquals("Query parameters are not empty before parsing", 0, request.getParameterMap()
+            .size());
 
         // invoke filter
         new WebSphereParametersFilter().doFilter(request, response, chain);
 
         // test query parameters
-        assertEquals("There are not 3 query parameters", 3, chain.getRequest().getParameterMap().size());
+        assertEquals("There are not 3 query parameters", 3, chain.getRequest().getParameterMap()
+            .size());
         assertParameters(chain.getRequest(), "a", "b", "c");
     }
 
@@ -71,22 +72,30 @@ public class WebSphereParametersTest extends TestCase {
         MockFilterChain chain = new MockFilterChain();
 
         // test query parameters before parsing
-        assertEquals("Query parameters are not empty before parsing", 0, request.getParameterMap().size());
+        assertEquals("Query parameters are not empty before parsing", 0, request.getParameterMap()
+            .size());
 
         // invoke filter
         new WebSphereParametersFilter().doFilter(request, response, chain);
 
         // test query and POST parameters
-        assertEquals("There are not 6 query parameters", 6, chain.getRequest().getParameterMap().size());
+        assertEquals("There are not 6 query parameters", 6, chain.getRequest().getParameterMap()
+            .size());
         assertParameters(chain.getRequest(), "a", "b", "c");
         assertParameters(chain.getRequest(), "d", "e", "f");
     }
 
-    private static void assertParameters(ServletRequest request, String nameNonValue, String nameEmpty, String nameDouble12) {
+    private static void assertParameters(ServletRequest request,
+                                         String nameNonValue,
+                                         String nameEmpty,
+                                         String nameDouble12) {
 
-        assertEquals("Parameter " + nameNonValue + " has value", "", request.getParameter(nameNonValue));
-        assertEquals("Parameter " + nameEmpty + " is not empty", "", request.getParameter(nameEmpty));
+        assertEquals("Parameter " + nameNonValue + " has value", "", request
+            .getParameter(nameNonValue));
+        assertEquals("Parameter " + nameEmpty + " is not empty", "", request
+            .getParameter(nameEmpty));
         assertEquals("Parameter " + nameDouble12 + " has not two values",
-                     Arrays.asList("1", "2"), Arrays.asList(request.getParameterValues(nameDouble12)));
+                     Arrays.asList("1", "2"),
+                     Arrays.asList(request.getParameterValues(nameDouble12)));
     }
 }

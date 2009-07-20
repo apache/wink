@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
- 
+
 package org.apache.wink.webdav;
 
 import java.lang.annotation.ElementType;
@@ -34,8 +34,6 @@ public enum WebDAVMethod {
 
     PROPFIND, PROPPATCH, MKCOL, COPY, MOVE, LOCK, UNLOCK;
 
-    
-    
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.METHOD)
     @HttpMethod(value = "PROPFIND")

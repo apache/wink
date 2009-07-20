@@ -30,7 +30,7 @@ public class ExceptionResource {
     public String echo(String input) {
         return "echo:" + input;
     }
-    
+
     @GET
     public Object something() {
         return new Object();
