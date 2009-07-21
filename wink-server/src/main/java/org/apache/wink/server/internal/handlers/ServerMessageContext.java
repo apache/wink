@@ -37,7 +37,6 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 
-import org.apache.wink.common.http.HttpHeadersEx;
 import org.apache.wink.common.internal.contexts.ProvidersImpl;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.common.internal.runtime.AbstractRuntimeContext;
@@ -57,13 +56,14 @@ public class ServerMessageContext extends AbstractRuntimeContext implements Mess
     private int       responseStatusCode;
     private Object    responseEntity;
     private MediaType responseMediaType;
-
     private String    httpMethod;
 
     public ServerMessageContext(HttpServletRequest servletRequest,
                                 HttpServletResponse servletResponse,
                                 DeploymentConfiguration configuration) {
-        this.httpMethod = buildHttpMethod(servletRequest);
+
+        this.httpMethod =
+            buildHttpMethod(configuration.getHttpMethodOverrideHeaders(), servletRequest);
         this.responseStatusCode = -1;
 
         // save stuff on attributes
@@ -95,17 +95,18 @@ public class ServerMessageContext extends AbstractRuntimeContext implements Mess
         setAttribute(LinkBuilders.class, new LinkBuildersImpl(this));
     }
 
-    private String buildHttpMethod(HttpServletRequest servletRequest) {
-        String xHttpMethodOverride = servletRequest.getHeader(HttpHeadersEx.X_HTTP_METHOD_OVERRIDE);
-        if (xHttpMethodOverride != null) {
-            return xHttpMethodOverride.trim();
-        }
+    private String buildHttpMethod(String[] httpMethodOverrideHeaders,
+                                   HttpServletRequest servletRequest) {
 
-        String xMethodOverride = servletRequest.getHeader(HttpHeadersEx.X_METHOD_OVERRIDE);
-        if (xMethodOverride != null) {
-            return xMethodOverride.trim();
+        if (httpMethodOverrideHeaders != null) {
+            for (String httpMethodOverrideHeader : httpMethodOverrideHeaders) {
+                String xHttpMethodOverride =
+                    servletRequest.getHeader(httpMethodOverrideHeader.trim());
+                if (xHttpMethodOverride != null) {
+                    return xHttpMethodOverride.trim();
+                }
+            }
         }
-
         try {
             return servletRequest.getMethod();
         } catch (IllegalArgumentException e) {

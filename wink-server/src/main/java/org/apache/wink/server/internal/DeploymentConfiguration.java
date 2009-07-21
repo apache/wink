@@ -75,12 +75,15 @@ import org.apache.wink.server.internal.registry.ServerInjectableFactory;
  */
 public class DeploymentConfiguration {
 
-    private static final Logger       logger                   =
-                                                                   LoggerFactory
-                                                                       .getLogger(DeploymentConfiguration.class);
-    private static final String       ALTERNATIVE_SHORTCUTS    =
-                                                                   "META-INF/wink-alternate-shortcuts.properties";
-    private static final String       VALIDATE_LOCATION_HEADER = "wink.validateLocationHeader";
+    private static final Logger       logger                            =
+                                                                            LoggerFactory
+                                                                                .getLogger(DeploymentConfiguration.class);
+    private static final String       ALTERNATIVE_SHORTCUTS             =
+                                                                            "META-INF/wink-alternate-shortcuts.properties";
+    private static final String       VALIDATE_LOCATION_HEADER          =
+                                                                            "wink.validateLocationHeader";
+    private static final String       HTTP_METHOD_OVERRIDE_HEADERS_PROP =
+                                                                            "wink.httpMethodOverrideHeaders";
 
     // handler chains
     private RequestHandlersChain      requestHandlersChain;
@@ -107,6 +110,8 @@ public class DeploymentConfiguration {
     private ServletConfig             servletConfig;
     private ServletContext            servletContext;
 
+    private String[]                  httpMethodOverrideHeaders;
+
     /**
      * Makes sure that the object was properly initialized. Should be invoked
      * AFTER all the setters were invoked.
@@ -115,6 +120,11 @@ public class DeploymentConfiguration {
         if (properties == null) {
             properties = new Properties();
         }
+        String httpMethodOverrideHeadersProperty =
+            properties.getProperty(HTTP_METHOD_OVERRIDE_HEADERS_PROP);
+        httpMethodOverrideHeaders =
+            httpMethodOverrideHeadersProperty != null ? httpMethodOverrideHeadersProperty
+                .split(",") : null;
         initRegistries();
         initAlternateShortcutMap();
         initMediaTypeMapper();
@@ -430,6 +440,14 @@ public class DeploymentConfiguration {
         } catch (IllegalAccessException e) {
             throw new WebApplicationException(e);
         }
+    }
+
+    public void setHttpMethodOverrideHeaders(String[] httpMethodOverrideHeaders) {
+        this.httpMethodOverrideHeaders = httpMethodOverrideHeaders;
+    }
+
+    public String[] getHttpMethodOverrideHeaders() {
+        return httpMethodOverrideHeaders;
     }
 
 }

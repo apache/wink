@@ -20,6 +20,8 @@
 
 package org.apache.wink.server.internal;
 
+import java.util.Properties;
+
 import javax.ws.rs.HttpMethod;
 
 import junit.framework.TestCase;
@@ -37,13 +39,29 @@ import org.springframework.mock.web.MockHttpServletResponse;
 public class MethodOverrideTest extends TestCase {
 
     public void testXHttpMethodOverride() {
+
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setMethod("POST");
         request.addHeader(HttpHeadersEx.X_HTTP_METHOD_OVERRIDE, "PUT");
         MessageContext context =
-            new ServerMessageContext(request, new MockHttpServletResponse(),
-                                     new DeploymentConfiguration());
+            new ServerMessageContext(
+                                     request,
+                                     new MockHttpServletResponse(),
+                                     getDeploymentConfiguration("X-HTTP-Method-Override,X-Method-Override"));
         assertEquals("HTTP method", HttpMethod.PUT, context.getHttpMethod());
+    }
+    
+    public void testDefaultXHttpMethodOverride() {
+
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setMethod("POST");
+        request.addHeader(HttpHeadersEx.X_HTTP_METHOD_OVERRIDE, "PUT");
+        MessageContext context =
+            new ServerMessageContext(
+                                     request,
+                                     new MockHttpServletResponse(),
+                                     getDeploymentConfiguration(null));
+        assertEquals("HTTP method", HttpMethod.POST, context.getHttpMethod());
     }
 
     public void testXMethodOverride() {
@@ -51,9 +69,34 @@ public class MethodOverrideTest extends TestCase {
         request.setMethod("POST");
         request.addHeader(HttpHeadersEx.X_METHOD_OVERRIDE, "DELETE");
         MessageContext context =
-            new ServerMessageContext(request, new MockHttpServletResponse(),
-                                     new DeploymentConfiguration());
+            new ServerMessageContext(
+                                     request,
+                                     new MockHttpServletResponse(),
+                                     getDeploymentConfiguration("X-HTTP-Method-Override,X-Method-Override"));
         assertEquals("HTTP method", HttpMethod.DELETE, context.getHttpMethod());
+    }
+    
+    public void testDefaultXMethodOverride() {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setMethod("POST");
+        request.addHeader(HttpHeadersEx.X_METHOD_OVERRIDE, "DELETE");
+        MessageContext context =
+            new ServerMessageContext(
+                                     request,
+                                     new MockHttpServletResponse(),
+                                     getDeploymentConfiguration(null));
+        assertEquals("HTTP method", HttpMethod.POST, context.getHttpMethod());
+    }
+
+    private DeploymentConfiguration getDeploymentConfiguration(String winkhttpMethodOverrideHeader) {
+        DeploymentConfiguration configuration = new DeploymentConfiguration();
+        Properties properties = new Properties();
+        if (winkhttpMethodOverrideHeader != null) {
+            properties.setProperty("wink.httpMethodOverrideHeaders", winkhttpMethodOverrideHeader);
+        }
+        configuration.setProperties(properties);
+        configuration.init();
+        return configuration;
     }
 
 }
