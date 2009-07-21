@@ -22,7 +22,6 @@ package org.apache.wink.common.internal.providers.entity.xml;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
@@ -41,9 +40,9 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.wink.common.utils.ProviderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.wink.common.utils.ProviderUtils;
 
 @Provider
 @Consumes( {MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.WILDCARD})
@@ -108,11 +107,14 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
                         OutputStream entityStream) throws IOException, WebApplicationException {
         try {
             Marshaller marshaller = getMarshaller(type, mediaType);
-            OutputStreamWriter writer =
-                new OutputStreamWriter(entityStream, ProviderUtils.getCharset(mediaType));
+
+            marshaller.setProperty(Marshaller.JAXB_ENCODING, ProviderUtils.getCharset(mediaType));
+
             Object entityToMarshal = getEntityToMarshal(t, type);
-            marshaller.marshal(entityToMarshal, writer);
-            writer.flush();
+
+            // Use an OutputStream directly instead of a Writer for performance.
+            marshaller.marshal(entityToMarshal, entityStream);
+            entityStream.flush();
         } catch (JAXBException e) {
             logger.error("Failed to marshal {}", type.getName());
             throw new WebApplicationException(e);
