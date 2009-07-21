@@ -19,16 +19,12 @@
     under the License.
 -->
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.apache.wink</groupId>
 	<artifactId>wink-client-apache-httpclient</artifactId>
-	<packaging>jar</packaging>
-	<version>0.1-incubating-SNAPSHOT</version>
 	<name>Wink Client :: Apache Http Client</name>
 	<parent>
 		<groupId>org.apache.wink</groupId>
 		<artifactId>wink</artifactId>
 		<version>0.1-incubating-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<dependencies>
         <dependency>

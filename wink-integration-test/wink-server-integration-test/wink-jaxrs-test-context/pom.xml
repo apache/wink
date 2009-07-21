@@ -25,10 +25,7 @@
         <version>0.1-incubating-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.apache.wink</groupId>
     <artifactId>wink-jaxrs-test-context</artifactId>
     <packaging>war</packaging>
     <name>wink-jaxrs-test-context Maven Webapp</name>
-    <version>0.1-incubating-SNAPSHOT</version>
-    <url>http://maven.apache.org</url>
 </project>

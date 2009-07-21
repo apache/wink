@@ -22,18 +22,13 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <!-- Project detailes -->
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.apache.wink.example</groupId>
     <artifactId>RuntimeRegistration</artifactId>
     <packaging>war</packaging>
-    <version>0.1-incubating-SNAPSHOT</version>
     <name>Wink Examples Ext :: RuntimeRegistration</name>
-    <properties>
-    </properties>
     <parent>
         <groupId>org.apache.wink.example</groupId>
         <artifactId>ext</artifactId>
         <version>0.1-incubating-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
     <!-- Build section -->
     <build>

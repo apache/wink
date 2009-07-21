@@ -24,13 +24,10 @@
         <version>0.1-incubating-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.apache.wink</groupId>
     <artifactId>wink-server-integration-test</artifactId>
     <packaging>pom</packaging>
     <name>Wink Server Integration Test</name>
-    <version>0.1-incubating-SNAPSHOT</version>
-    <description>This is the base module for wink-server integration
-        tests.</description>
+    <description>This is the base module for wink-server integration tests.</description>
     <modules>
         <module>wink-jaxrs-test-context</module>
         <module>wink-jaxrs-test-providers</module>

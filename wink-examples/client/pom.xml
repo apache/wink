@@ -21,10 +21,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.apache.wink.example</groupId>
     <artifactId>client</artifactId>
     <packaging>pom</packaging>
-    <version>0.1-incubating-SNAPSHOT</version>
     <name>Wink Examples Clients</name>
     <properties>
     </properties>
@@ -32,7 +30,6 @@
         <groupId>org.apache.wink.example</groupId>
         <artifactId>wink-examples</artifactId>
         <version>0.1-incubating-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
     <modules>
         <module>QADefects-client</module>

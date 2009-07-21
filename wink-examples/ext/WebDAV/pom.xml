@@ -23,18 +23,13 @@
 
     <!-- Project detailes -->
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.apache.wink.example</groupId>
     <artifactId>WebDAV</artifactId>
     <packaging>war</packaging>
-    <version>0.1-incubating-SNAPSHOT</version>
     <name>Wink Examples Ext :: WebDAV</name>
-    <properties>
-    </properties>
     <parent>
         <groupId>org.apache.wink.example</groupId>
         <artifactId>ext</artifactId>
         <version>0.1-incubating-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
     <build>
         <finalName>WebDAV</finalName>
