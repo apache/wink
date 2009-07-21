@@ -25,7 +25,7 @@
 <web-app>
     <display-name>Archetype Created Web Application</display-name>
     <servlet>
-        <servlet-name>HttpHeadersApp</servlet-name>
+        <servlet-name>HTTPHeadersApp</servlet-name>
         <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
@@ -50,12 +50,80 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>ProvidersApp</servlet-name>
+        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>org.apache.wink.jaxrs.test.context.providers.Application</param-value>
+        </init-param>
+        <init-param>
+            <param-name>requestProcessorAttribute</param-name>
+            <param-value>requestProcessorAttribute_1</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>RequestApp</servlet-name>
+        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>org.apache.wink.jaxrs.test.context.request.Application</param-value>
+        </init-param>
+        <init-param>
+            <param-name>requestProcessorAttribute</param-name>
+            <param-value>requestProcessorAttribute_2</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>SecurityContextApp</servlet-name>
+        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>org.apache.wink.jaxrs.test.context.securitycontext.Application</param-value>
+        </init-param>
+        <init-param>
+            <param-name>requestProcessorAttribute</param-name>
+            <param-value>requestProcessorAttribute_3</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>URIInfoApp</servlet-name>
+        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>org.apache.wink.jaxrs.test.context.uriinfo.Application</param-value>
+        </init-param>
+        <init-param>
+            <param-name>requestProcessorAttribute</param-name>
+            <param-value>requestProcessorAttribute_4</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
     <servlet-mapping>
-        <servlet-name>HttpHeadersApp</servlet-name>
+        <servlet-name>HTTPHeadersApp</servlet-name>
         <url-pattern>/httpheaders/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>WebContainerTests</servlet-name>
         <url-pattern>/webcontainer/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProvidersApp</servlet-name>
+        <url-pattern>/providers/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RequestApp</servlet-name>
+        <url-pattern>/request/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SecurityContextApp</servlet-name>
+        <url-pattern>/securitycontext/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>URIInfoApp</servlet-name>
+        <url-pattern>/uriinfo/*</url-pattern>
     </servlet-mapping>
 </web-app>
