@@ -25,7 +25,7 @@
     <display-name>Archetype Created Web Application</display-name>
     <servlet>
         <servlet-name>CustomHTTPMethodAnnotations</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.methodannotations.Application</param-value>
@@ -38,7 +38,7 @@
     </servlet>
     <servlet>
         <servlet-name>Lifecycles</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.lifecycles.Application</param-value>
@@ -51,7 +51,7 @@
     </servlet>
     <servlet>
         <servlet-name>ReturnTypes</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.returntype.Application</param-value>
@@ -64,7 +64,7 @@
     </servlet>
     <servlet>
         <servlet-name>Exceptional</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.exceptions.Application</param-value>
@@ -77,7 +77,7 @@
     </servlet>
     <servlet>
         <servlet-name>Sequence</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.sequence.Application</param-value>
@@ -90,7 +90,7 @@
     </servlet>
     <servlet>
         <servlet-name>LargeEntity</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.largeentity.Application</param-value>
@@ -103,7 +103,7 @@
     </servlet>
     <servlet>
         <servlet-name>Headers</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.headers.Application</param-value>
@@ -116,7 +116,7 @@
     </servlet>
     <servlet>
         <servlet-name>NoFindMethods</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.nofindmethods.Application</param-value>
@@ -129,7 +129,7 @@
     </servlet>
     <servlet>
         <servlet-name>Cache</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.cache.Application</param-value>
@@ -142,7 +142,7 @@
     </servlet>
     <servlet>
         <servlet-name>ContentNegotiation</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.contentnegotiation.Application</param-value>
@@ -155,7 +155,7 @@
     </servlet>
     <servlet>
         <servlet-name>AddressBook</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.addressbook.AddressApplication</param-value>
@@ -168,7 +168,7 @@
     </servlet>
     <servlet>
         <servlet-name>VersionTests</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.version.Application</param-value>
@@ -181,7 +181,7 @@
     </servlet>
     <servlet>
         <servlet-name>ContentEncoding</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.contentencoding.ContentEncodingApplication</param-value>
@@ -194,7 +194,7 @@
     </servlet>
     <servlet>
         <servlet-name>TransferEncoding</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.transferencoding.TransferEncodingApplication</param-value>

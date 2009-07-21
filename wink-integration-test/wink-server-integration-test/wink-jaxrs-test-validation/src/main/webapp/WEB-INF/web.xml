@@ -25,7 +25,7 @@
     <display-name>Archetype Created Web Application</display-name>
     <servlet>
         <servlet-name>ConstructorValidation</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.constructors.Application</param-value>
@@ -38,7 +38,7 @@
     </servlet>
     <servlet>
         <servlet-name>ParamEntity</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.param.entity.Application</param-value>
@@ -51,7 +51,7 @@
     </servlet>
     <servlet>
         <servlet-name>FormFieldValidation</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.param.formfield.Application</param-value>
@@ -64,7 +64,7 @@
     </servlet>
     <servlet>
         <servlet-name>FormParamValidation</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.param.formparam.Application</param-value>
@@ -77,7 +77,7 @@
     </servlet>
     <servlet>
         <servlet-name>FormPropertyValidation</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.param.formproperty.Application</param-value>
@@ -90,7 +90,7 @@
     </servlet>
     <servlet>
         <servlet-name>PathMethodValidation</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.pathmethods.Application</param-value>

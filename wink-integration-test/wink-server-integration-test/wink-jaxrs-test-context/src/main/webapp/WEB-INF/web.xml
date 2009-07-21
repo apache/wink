@@ -26,7 +26,7 @@
     <display-name>Archetype Created Web Application</display-name>
     <servlet>
         <servlet-name>HTTPHeadersApp</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.context.httpheaders.Application</param-value>
@@ -39,7 +39,7 @@
     </servlet>
     <servlet>
         <servlet-name>WebContainerTests</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.context.environment.servlets.Application</param-value>
@@ -52,7 +52,7 @@
     </servlet>
     <servlet>
         <servlet-name>ProvidersApp</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.context.providers.Application</param-value>
@@ -65,7 +65,7 @@
     </servlet>
     <servlet>
         <servlet-name>RequestApp</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.context.request.Application</param-value>
@@ -78,7 +78,7 @@
     </servlet>
     <servlet>
         <servlet-name>SecurityContextApp</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.context.securitycontext.Application</param-value>
@@ -91,7 +91,7 @@
     </servlet>
     <servlet>
         <servlet-name>URIInfoApp</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.context.uriinfo.Application</param-value>

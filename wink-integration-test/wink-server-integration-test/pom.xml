@@ -40,6 +40,7 @@
     <properties>
         <wink.server.hostname>localhost</wink.server.hostname>
         <wink.server.port>8080</wink.server.port>
+        <wink.rest.servlet>org.apache.wink.server.internal.servlet.RestServlet</wink.rest.servlet>
     </properties>
 
     <dependencies>

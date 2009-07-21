@@ -26,7 +26,7 @@
     <display-name>Archetype Created Web Application</display-name>
     <servlet>
         <servlet-name>Params</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.params.Application</param-value>
@@ -39,7 +39,7 @@
     </servlet>
     <servlet>
         <servlet-name>NewCookies</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.newcookie.Application</param-value>

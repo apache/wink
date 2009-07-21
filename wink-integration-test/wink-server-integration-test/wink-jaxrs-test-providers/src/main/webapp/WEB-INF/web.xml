@@ -26,7 +26,7 @@
     <display-name>Archetype Created Web Application</display-name>
     <servlet>
         <servlet-name>MessageBodyReaders</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.providers.readers.Application</param-value>
@@ -39,7 +39,7 @@
     </servlet>
     <servlet>
         <servlet-name>MessageBodyReaderExceptions</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.providers.readerexceptions.Application</param-value>
@@ -52,7 +52,7 @@
     </servlet>
     <servlet>
         <servlet-name>MessageBodyWriters</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.providers.writers.Application</param-value>
@@ -65,7 +65,7 @@
     </servlet>
     <servlet>
         <servlet-name>MessageBodyWriterExceptions</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.providers.writerexceptions.Application</param-value>
@@ -74,7 +74,7 @@
     </servlet>
     <servlet>
         <servlet-name>StandardEntityProviders</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.providers.standard.Application</param-value>
@@ -87,7 +87,7 @@
     </servlet>
     <servlet>
         <servlet-name>ExceptionMapperMappedProviders</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.providers.exceptionmappers.mapped.GuestbookApplication</param-value>
@@ -100,7 +100,7 @@
     </servlet>
     <servlet>
         <servlet-name>ExceptionMapperNoMapper</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.providers.exceptionmappers.nomapper.GuestbookApplication</param-value>
@@ -114,7 +114,7 @@
         
     <servlet>
         <servlet-name>ExceptionMapperNull</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.providers.exceptionmappers.nullconditions.Application</param-value>
@@ -127,7 +127,7 @@
     </servlet>
     <servlet>
         <servlet-name>SubresourceExceptions</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.providers.subresource.Application</param-value>
@@ -140,7 +140,7 @@
     </servlet>
     <servlet>
         <servlet-name>SimpleContestResolver</servlet-name>
-        <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>org.apache.wink.jaxrs.test.providers.contextresolver.Application</param-value>
