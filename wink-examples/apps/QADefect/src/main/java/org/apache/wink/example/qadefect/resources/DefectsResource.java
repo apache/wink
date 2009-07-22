@@ -6,16 +6,16 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *  
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  *  Unless required by applicable law or agreed to in writing,
  *  software distributed under the License is distributed on an
  *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
- *  
+ *
  *******************************************************************************/
 
 package org.apache.wink.example.qadefect.resources;
@@ -137,11 +137,7 @@ public class DefectsResource {
 
         // create open search base uri
         StringBuilder openSearchUrlBuilder = new StringBuilder(baseUri);
-        if (baseUri.endsWith("/") && DefectsResource.DEFECTS_PATH.startsWith("/")) {
-            openSearchUrlBuilder.append(DefectsResource.DEFECTS_PATH.substring(1));
-        } else {
-            openSearchUrlBuilder.append(DefectsResource.DEFECTS_PATH);
-        }
+
         openSearchUrl.setBaseUri(openSearchUrlBuilder.toString());
         openSearchUrlForBrowsers.setBaseUri(openSearchUrlBuilder.toString());
 
@@ -237,7 +233,7 @@ public class DefectsResource {
      * <em>Examples of handled URIs:</em>
      * <li><code>/defects/1/attachment</code> - returns defects' attachment in
      * JPEG format.
-     * 
+     *
      * @param defectId defect id
      * @return resource of defects' attachment
      */
