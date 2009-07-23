@@ -1,10 +1,19 @@
+Apache Wink
+Copyright 2009 The Apache Software Foundation
 
-This product includes software developed by the Apache Software Foundation (http://www.apache.org/)
-(The above notice applies to, commons-lang, commons-logging
-geronimo-j2ee, spring, stax-api, xercesImpl)
+This product includes software developed at
+The Apache Software Foundation (http://www.apache.org/).
 
-This product includes software developed by Taras Puchko, Copyright (c) 2005 - 2007, All rights reserved.
-(The above notice applies to Retrotranslator)
+This product includes software developed by the JSON.org
+
+This product includes/uses software, StAX API (http://stax.codehaus.org/)
+
+This product includes software developed for the JAXB Reference Implementation project. (https://jaxb.dev.java.net/)
+
+This product includes/uses software, Xerces (http://xerces.apache.org)
+
+This product includes/uses software, JSR-311 (https://jsr311.dev.java.net/)
  
-This product includes software developed by the JSON.org, Copyright (c) 2002
-(The above notice applies to Json)
+This product includes/uses software, JavaBeans Activation Framework (http://java.sun.com/javase/technologies/desktop/javabeans/jaf/)
+ 
+This product includes/uses software, SLF4J(http://www.slf4j.org/)
