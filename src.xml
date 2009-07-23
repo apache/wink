@@ -18,16 +18,26 @@
     under the License.
 -->
 
+
 <assembly>
-	<formats>
+    <formats>
         <format>zip</format>
         <format>tar.gz</format>
-	</formats>
-	<includeBaseDirectory>false</includeBaseDirectory>
+    </formats>
     <fileSets>
         <fileSet>
-            <directory>target/dist</directory>
-            <outputDirectory>/</outputDirectory>
+            <directory>/</directory>
+            <useDefaultExcludes>true</useDefaultExcludes>
+            <excludes>
+                <exclude>**/target</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>**/site</exclude>
+                <exclude>**/site/**</exclude>
+                <exclude>**/assembly</exclude>
+                <exclude>**/assembly/**</exclude>
+                <exclude>**/wink-scripts</exclude>
+                <exclude>src.xml</exclude>
+            </excludes>
         </fileSet>
- 	</fileSets>
+    </fileSets>
 </assembly>
