@@ -26,7 +26,6 @@
     </formats>
     <fileSets>
         <fileSet>
-            <directory>./</directory>
             <useDefaultExcludes>true</useDefaultExcludes>
             <excludes>
                 <exclude>**/target</exclude>
