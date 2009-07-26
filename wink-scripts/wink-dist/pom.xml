@@ -20,12 +20,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>wink-dist</artifactId>
+	<artifactId>apache-wink</artifactId>
 	<packaging>pom</packaging>
 	<name>Wink Scripts :: Dist</name>
 	<properties>
-		<target.zip>target/wink-${project.version}.zip</target.zip>
-		<target.jar>target/dist/wink-${project.version}/dist/wink-${project.version}.jar</target.jar>
+    	<target.zip>target/apache-wink-${project.version}.zip</target.zip>
+		<target.jar>target/dist/apache-wink-${project.version}/dist/apache-wink-${project.version}.jar</target.jar>
 	</properties>
 	<parent>
 		<groupId>org.apache.wink</groupId>
@@ -139,10 +139,13 @@
 						</configuration>
 					</plugin>
 					<plugin>
-						<artifactId>maven-assembly-plugin</artifactId>
+						  <groupId>org.apache.maven.plugins</groupId>
+                          <artifactId>maven-assembly-plugin</artifactId>
+                          <version>2.2-beta-3</version> 
 						<configuration>
 							<descriptors>
-								<descriptor>dist.xml</descriptor>
+								<descriptor>bin.xml</descriptor>
+                                <descriptor>src.xml</descriptor>
 							</descriptors>
 						</configuration>
 						<executions>

@@ -20,13 +20,16 @@
 
 
 <assembly>
+    <id>src</id>
     <formats>
         <format>zip</format>
         <format>tar.gz</format>
     </formats>
     <fileSets>
         <fileSet>
-            <useDefaultExcludes>true</useDefaultExcludes>
+           <directory>../..</directory>
+           <useDefaultExcludes>true</useDefaultExcludes>
+           <outputDirectory>apache-wink-${project.version}-src</outputDirectory>
             <excludes>
                 <exclude>**/target</exclude>
                 <exclude>**/target/**</exclude>
@@ -35,8 +38,18 @@
                 <exclude>**/assembly</exclude>
                 <exclude>**/assembly/**</exclude>
                 <exclude>**/wink-scripts</exclude>
-                <exclude>src.xml</exclude>
+                <exclude>src/**</exclude>
             </excludes>
+        </fileSet>
+        <fileSet>
+           <directory>../../src/doc</directory>
+           <useDefaultExcludes>true</useDefaultExcludes>
+           <outputDirectory>apache-wink-${project.version}-src</outputDirectory>
+            <includes>
+                <include>DISCLAIMER.txt</include>
+                <include>LICENSE.txt</include>
+                <include>NOTICE.txt</include>
+            </includes>
         </fileSet>
     </fileSets>
 </assembly>
