@@ -39,7 +39,7 @@
 
 	<property name="tmp" value="${basedir}/target/tmp" />
 	<property name="dist" value="${basedir}/target/dist" />
-	<property name="dist.root" value="${dist}/wink-${project.version}" />
+	<property name="dist.root" value="${dist}/apache-wink-${project.version}" />
 	<property name="dist.docs" value="${dist.root}/docs" />
 	<property name="dist.docs.api" value="${dist.docs}/api" />
 	<property name="dist.dist" value="${dist.root}/dist" />

@@ -147,6 +147,7 @@
 								<descriptor>bin.xml</descriptor>
                                 <descriptor>src.xml</descriptor>
 							</descriptors>
+                            <tarLongFileMode>gnu</tarLongFileMode>
 						</configuration>
 						<executions>
 							<execution>
