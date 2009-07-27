@@ -9,7 +9,7 @@ SDK version
 
 Wink distribution file
 ===============================================================================
-wink-dist-@PROJECT_VERSION@.zip
+apache-wink-@PROJECT_VERSION@.zip
 
 
 Java version
@@ -37,14 +37,12 @@ NOTICE.txt
   - NOTICE file corresponding to third party licenses requirements
 readme.txt
   - this file
-third-party-licenses.txt
-  - Third party components license file
 
 
 SDK installation
 ===============================================================================
 Install SDK by unzipping the distribution file. As a result the directory 
-wink-@PROJECT_VERSION@ is created. This directory is referred to as SDK_HOME.
+apache-wink-@PROJECT_VERSION@ is created. This directory is referred to as SDK_HOME.
 
 
 SDK documentation
@@ -76,14 +74,19 @@ List of libraries SDK is dependent on
 geronimo-j2ee_1.4_spec-1.1.jar (only for compilation)
 activation-1.1.jar
 commons-lang-2.3.jar
-commons-logging-1.1.jar
-jaxb-api-2.1.jar
 jaxb-api-2.1-sources.jar
-jaxb-impl-2.1.4.jar
+jaxb-api-2.1.jar
 jaxb-impl-2.1.4-sources.jar
+jaxb-impl-2.1.4.jar
+jcl-over-slf4j-1.5.6.jar
+json-20080701.jar
+jsr311-api-1.0.jar
+slf4j-api-1.5.8.jar
+slf4j-simple-1.5.8.jar
 spring-2.5.jar
-stax-api-1.0.2.jar
+stax-api-1.0-2.jar
 xercesImpl-2.6.2.jar
+commons-cli-1.2.jar (only for running client examples)
 
 
 Maven

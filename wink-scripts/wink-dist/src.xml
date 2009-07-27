@@ -39,7 +39,9 @@
                 <exclude>**/assembly</exclude>
                 <exclude>**/assembly/**</exclude>
                 <exclude>**/wink-scripts</exclude>
-                <exclude>src/**</exclude>
+                <exclude>src/assembly/**</exclude>
+                <exclude>src/doc/**</exclude>
+                <exclude>src/site/**</exclude>
             </excludes>
         </fileSet>
         <fileSet>

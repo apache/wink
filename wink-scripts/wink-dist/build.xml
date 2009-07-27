@@ -223,7 +223,10 @@
 	<target name="create.dist.root.docs" depends="init">
 		<echo>Making root documents</echo>
 		<copy todir="${dist.root}" flatten="true" includeemptydirs="false">
-			<fileset dir="${project.root}/src" includes="doc/*.txt" />
+			<fileset dir="${project.root}/src" includes="doc/DISCLAIMER*" />
+			<fileset dir="${project.root}/src" includes="doc/LICENSE*" />
+			<fileset dir="${project.root}/src" includes="doc/NOTICE*" />
+			<fileset dir="${project.root}/src" includes="doc/readme.txt" />
 		</copy>
 		<!-- replace the version in the copied readme.txt files -->
 		<replace file="${dist.root}/readme.txt">
