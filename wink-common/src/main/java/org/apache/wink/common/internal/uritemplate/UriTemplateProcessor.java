@@ -280,12 +280,12 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
      * @see UriTemplateProcessor#normalizeUri(String)
      */
     public static UriTemplateProcessor newNormalizedInstance(String uriTemplate) {
-        try {
+//        try {
             return JaxRsUriTemplateProcessor.newNormalizedInstance(uriTemplate);
-        } catch (IllegalArgumentException e) {
-            // fallback to handle BitWorking style templates
-            return BitWorkingUriTemplateProcessor.newNormalizedInstance(uriTemplate);
-        }
+//        } catch (IllegalArgumentException e) {
+//            // fallback to handle BitWorking style templates
+//            return BitWorkingUriTemplateProcessor.newNormalizedInstance(uriTemplate);
+//        }
     }
 
     /**

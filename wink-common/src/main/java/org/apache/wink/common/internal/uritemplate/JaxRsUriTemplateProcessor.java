@@ -251,6 +251,24 @@ public class JaxRsUriTemplateProcessor extends UriTemplateProcessor {
             }
         }
 
+        @Override
+        protected void createTail() {
+            // overriding the tail creation to handle the special case
+            // where the complete path template is empty (i.e. it was either
+            // @Path("") or @Path("/")).
+            // we need this to be able to handle resources with @Path("/") that 
+            // have sub-resource methods or locators.
+            // if we don't do this and there's a resource with @Path("/") and a 
+            // sub-resource @Path("hello"), then a request to "/hello" will not
+            // be picked up becuase the default tail is "(/.*)?"
+            if (processor.template.equals("")) {
+                // let the tail catch all characters, whether there is a / or not
+                processor.tail = createVariable(TEMPLATE_TAIL_NAME, "(.*)?", null);
+            } else {
+                // normal behavior
+                super.createTail();
+            }
+        }
     }
 
     /**
