@@ -17,149 +17,149 @@
     specific language governing permissions and limitations
     under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<artifactId>apache-wink</artifactId>
-	<packaging>pom</packaging>
-	<name>Wink Scripts :: Dist</name>
-	<properties>
-    	<target.zip>target/apache-wink-${project.version}.zip</target.zip>
-		<target.jar>target/dist/apache-wink-${project.version}/dist/apache-wink-${project.version}.jar</target.jar>
-	</properties>
-	<parent>
-		<groupId>org.apache.wink</groupId>
-		<artifactId>wink-scripts</artifactId>
-		<version>0.1-incubating-SNAPSHOT</version>
-	</parent>
-	<build>
-		<plugins>
-			<plugin>
-				<!-- Deploys the distribution zip to the repository -->
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>deploy-zip</id>
-						<configuration>
-							<file>${target.zip}</file>
-							<url>${distributionManagement.repository.url}</url>
-							<packaging>zip</packaging>
-							<groupId>${groupId}</groupId>
-							<artifactId>${artifactId}</artifactId>
-							<version>${version}</version>
-							<uniqueVersion>${distributionManagement.repository.uniqueVersion}</uniqueVersion>
-						</configuration>
-						<phase>deploy</phase>
-						<goals>
-							<goal>deploy-file</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>deploy-jar</id>
-						<configuration>
-							<file>${target.jar}</file>
-							<url>${distributionManagement.repository.url}</url>
-							<pomFile>../../pom.xml</pomFile>
-							<packaging>jar</packaging>
-							<groupId>${groupId}</groupId>
-							<artifactId>wink</artifactId>
-							<version>${version}</version>
-							<uniqueVersion>${distributionManagement.repository.uniqueVersion}</uniqueVersion>
-						</configuration>
-						<phase>deploy</phase>
-						<goals>
-							<goal>deploy-file</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
 
-	<profiles>
-		<profile>
-			<!--
-				Populates the file separator for the ANT script. Needed, since when
-				ANT runs from maven, it doesn't receives the file separator from the
-				environment.
-			-->
-			<activation>
-				<os>
-					<family>Windows</family>
-				</os>
-			</activation>
-			<properties>
-				<file.separator>\</file.separator>
-			</properties>
-		</profile>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>apache-wink</artifactId>
+    <packaging>pom</packaging>
+    <name>Wink Scripts :: Dist</name>
+    <properties>
+        <target.zip>target/apache-wink-${project.version}.zip</target.zip>
+        <target.jar>target/dist/apache-wink-${project.version}/dist/apache-wink-${project.version}.jar</target.jar>
+    </properties>
+    <parent>
+        <groupId>org.apache.wink</groupId>
+        <artifactId>wink-scripts</artifactId>
+        <version>0.1-incubating-SNAPSHOT</version>
+    </parent>
+    <build>
+        <plugins>
+            <plugin>
+                <!-- Deploys the distribution zip to the repository -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>deploy-zip</id>
+                        <configuration>
+                            <file>${target.zip}</file>
+                            <url>${distributionManagement.repository.url}</url>
+                            <packaging>zip</packaging>
+                            <groupId>${groupId}</groupId>
+                            <artifactId>${artifactId}</artifactId>
+                            <version>${version}</version>
+                            <uniqueVersion>${distributionManagement.repository.uniqueVersion}</uniqueVersion>
+                        </configuration>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy-file</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>deploy-jar</id>
+                        <configuration>
+                            <file>${target.jar}</file>
+                            <url>${distributionManagement.repository.url}</url>
+                            <pomFile>../../pom.xml</pomFile>
+                            <packaging>jar</packaging>
+                            <groupId>${groupId}</groupId>
+                            <artifactId>wink</artifactId>
+                            <version>${version}</version>
+                            <uniqueVersion>${distributionManagement.repository.uniqueVersion}</uniqueVersion>
+                        </configuration>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy-file</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
-		<profile>
-			<id>CI Build</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-				<property>
-					<name>build</name>
-					<value>CI</value>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>ant.dist</id>
-								<phase>verify</phase>
-								<goals>
-									<goal>run</goal>
-								</goals>
-							</execution>
-						</executions>
-						<inherited>false</inherited>
-						<configuration>
-							<tasks>
-								<typedef resource="org/apache/maven/artifact/ant/antlib.xml">
-									<classpath refid="maven.dependency.classpath" />
-								</typedef>
-								<property name="file.separator" value="${file.separator}" />
-								<property name="project.name" value="${parent.artifactId}-${parent.version}" />
-								<property name="project.version" value="${project.version}" />
-								<property name="artifact.id" value="${artifactId}" />
-								<property name="group.id" value="${groupId}" />
-								<property name="title.name" value="${project.name}" />
-								<property name="user.name" value="${user.name}" />
-								<property name="java.version" value="${java.version}" />
-								<property name="target.zip" value="${target.zip}" />
-								<ant antfile="build.xml">
-									<target name="dist" />
-								</ant>
-							</tasks>
-						</configuration>
-					</plugin>
-					<plugin>
-						  <groupId>org.apache.maven.plugins</groupId>
-                          <artifactId>maven-assembly-plugin</artifactId>
-                          <version>2.2-beta-3</version> 
-						<configuration>
-							<descriptors>
-								<descriptor>bin.xml</descriptor>
+    <profiles>
+        <profile>
+            <!--
+            Populates the file separator for the ANT script. Needed, since when
+            ANT runs from maven, it doesn't receives the file separator from the
+            environment.
+            -->
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+            <properties>
+                <file.separator>\</file.separator>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>CI Build</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>build</name>
+                    <value>CI</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>ant.dist</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <inherited>false</inherited>
+                        <configuration>
+                            <tasks>
+                                <typedef resource="org/apache/maven/artifact/ant/antlib.xml">
+                                    <classpath refid="maven.dependency.classpath" />
+                                </typedef>
+                                <property name="file.separator" value="${file.separator}" />
+                                <property name="project.name" value="${parent.artifactId}-${parent.version}" />
+                                <property name="project.version" value="${project.version}" />
+                                <property name="artifact.id" value="${artifactId}" />
+                                <property name="group.id" value="${groupId}" />
+                                <property name="title.name" value="${project.name}" />
+                                <property name="user.name" value="${user.name}" />
+                                <property name="java.version" value="${java.version}" />
+                                <property name="target.zip" value="${target.zip}" />
+                                <ant antfile="build.xml">
+                                    <target name="dist" />
+                                </ant>
+                            </tasks>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <version>2.2-beta-3</version>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>bin.xml</descriptor>
                                 <descriptor>src.xml</descriptor>
-							</descriptors>
+                            </descriptors>
                             <tarLongFileMode>gnu</tarLongFileMode>
-						</configuration>
-						<executions>
-							<execution>
-								<phase>verify</phase>
-								<goals>
-									<goal>single</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

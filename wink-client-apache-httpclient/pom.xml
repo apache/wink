@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
     Licensed to the Apache Software Foundation (ASF) under one
     or more contributor license agreements.  See the NOTICE file
@@ -18,36 +17,38 @@
     specific language governing permissions and limitations
     under the License.
 -->
-	<modelVersion>4.0.0</modelVersion>
-	<artifactId>wink-client-apache-httpclient</artifactId>
-	<name>Wink Client :: Apache Http Client</name>
-	<parent>
-		<groupId>org.apache.wink</groupId>
-		<artifactId>wink</artifactId>
-		<version>0.1-incubating-SNAPSHOT</version>
-	</parent>
-	<dependencies>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>wink-client-apache-httpclient</artifactId>
+    <name>Wink Client :: Apache Http Client</name>
+    <parent>
+        <groupId>org.apache.wink</groupId>
+        <artifactId>wink</artifactId>
+        <version>0.1-incubating-SNAPSHOT</version>
+    </parent>
+    <dependencies>
         <dependency>
             <groupId>org.apache.wink</groupId>
             <artifactId>wink-client</artifactId>
         </dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.0-beta2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.wink</groupId>
-			<artifactId>wink-component-test-support</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.0-beta2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.wink</groupId>
+            <artifactId>wink-component-test-support</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>
