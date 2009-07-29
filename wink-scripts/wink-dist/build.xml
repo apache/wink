@@ -29,7 +29,6 @@
 		a. merge.sources - if component should be added to the javadoc.
 			Notice that only packages that start with org.* are added to the javadoc.
 		b. create.dist.components - if the component's target includes jars that should be included in dist/components and in main jars.
-		c. create.dist.resources - if the component has resources (e.g. *.xsd)
 	3. When new component is added under the root level components (e.g. under server in addition to server-core),
 	   the following targets are effected:
 	   	a.  create.dist.lib - if component has dependencies
@@ -43,8 +42,7 @@
 	<property name="dist.docs" value="${dist.root}/docs" />
 	<property name="dist.docs.api" value="${dist.docs}/api" />
 	<property name="dist.dist" value="${dist.root}/dist" />
-	<property name="dist.components" value="${dist.dist}/components" />
-	<property name="dist.resources" value="${dist.dist}/resources" />
+	<property name="dist.components" value="${dist.dist}" />
 	<property name="dist.examples" value="${dist.root}/examples" />
 	<property name="dist.lib" value="${dist.root}/lib" />
 
@@ -62,7 +60,7 @@
 	<property name="tmp.src" value="${tmp}/src" />
 	<property name="tmp.binary" value="${tmp}/binary" />
 
-	<property name="wink.main.jar.name" value="wink-sdk-${project.version}.jar" />
+	<property name="wink.main.jar.name" value="wink-${project.version}.jar" />
 	<property name="project.developerGuide.file" value="${basedir}/../../src/doc/DeveloperGuide/Apache_Wink_User_Guide.pdf" />
 
 	<!-- Init -->
@@ -73,27 +71,6 @@
 		<echo message="Building distribution of ${project.name}" />
 		<delete dir="target" />
 	</target>
-
-
-	<!-- Merges sources of all components to a single folder. -->
-	<!-- Used to create a javadoc -->
-	<!--target name="merge.sources" depends="init">
-
-
-		<mkdir dir="${tmp.src}" />
-
-		<!- - Sets file separator for the RE - ->
-		<condition property="re.file.sep" value="\\" else="/">
-			<equals arg1="${file.separator}" arg2="\" />
-		</condition>
-
-		<copy todir="${tmp.src}">
-			<fileset dir="${project.common}" includes="**/src/main/java/org/**" />
-			<fileset dir="${project.server}" includes="**/src/main/java/org/**" />
-			<fileset dir="${project.client}" includes="**/src/main/java/org/**" />
-			<mapper type="regexp" from="^(.*)src${re.file.sep}main${re.file.sep}java${re.file.sep}org(.*)$" to="org/\2" />
-		</copy>
-	</target -->
 
 	<!-- Creates javadoc folder with javadocs for all sources in org.hp package -->
 	<!-- Javadoc is common for all components -->
@@ -118,44 +95,26 @@
 		<copy todir="${dist.components}" flatten="true" includeemptydirs="false">
 			<fileset dir="${project.common}">
 				<include name="**/*.jar" />
-				<exclude name="**/*xmlbeans-generated*" />
 			</fileset>
 			<fileset dir="${project.server}">
 				<include name="**/*.jar" />
-				<exclude name="**/*xmlbeans-generated*" />
 				<exclude name="**/*test-support*" />
 			</fileset>
 			<fileset dir="${project.client}">
 				<include name="**/*.jar" />
-				<exclude name="**/*xmlbeans-generated*" />
 			</fileset>
 			<fileset dir="${project.apache.httpclient}">
 				<include name="**/*.jar" />
 			</fileset>
 			<fileset dir="${project.webdav}">
 				<include name="**/*.jar" />
-				<exclude name="**/*xmlbeans-generated*" />
 			</fileset>
 			<fileset dir="${project.spring}">
 				<include name="**/*.jar" />
-				<exclude name="**/*xmlbeans-generated*" />
 			</fileset>
 		</copy>
 
 	</target>
-
-	<!--
-	<!- - Creates resources folder with xsds. - ->
-	<target name="create.dist.resources" depends="init">
-		<echo>Making resources</echo>
-		<mkdir dir="${dist.resources}" />
-		<copy todir="${dist.resources}" flatten="true" includeemptydirs="false">
-			<fileset dir="${project.client}" includes="**/src/main/xsd/**" />
-			<fileset dir="${project.common}" includes="**/src/main/xsd/**" />
-			<fileset dir="${project.server}" includes="**/src/main/xsd/**" />
-		</copy>
-	</target>
-	-->
 
 	<!-- Creates lib folder with the third party jars -->
 	<target name="create.dist.lib" depends="init">
@@ -238,7 +197,7 @@
 
 	<!-- Creates jar that aggregates all components -->
 	<target name="create.dist.main.jar" depends="create.dist.components">
-		<echo>Making main jar</echo>
+		<echo>Making all in one jar</echo>
 		<ant target="create.dist.aggregator.jar">
 			<property name="tmp.unzip" value="${tmp.binary}" />
 			<property name="aggregator.target" value="${dist.components}" />
@@ -250,12 +209,12 @@
 
 	<!-- Creates jar that aggregates sources of all components -->
 	<target name="create.dist.main.sources.jar" depends="create.dist.components">
-		<echo>Making main sources jar</echo>
+		<echo>Making all in one sources jar</echo>
 		<ant target="create.dist.aggregator.jar">
 			<property name="tmp.unzip" value="${tmp.binary}" />
 			<property name="aggregator.target" value="${dist.components}" />
 			<property name="aggregator.includes" value="*-${project.version}-sources.jar" />
-			<property name="aggregator.jar.name" value="${dist.dist}/wink-sdk-${project.version}-sources.jar" />
+			<property name="aggregator.jar.name" value="${dist.dist}/wink-${project.version}-sources.jar" />
 		</ant>
 	</target>
 
@@ -305,9 +264,8 @@
 		</copy>
 	</target>
 
-	<!-- Creates final zip -->
+	<!-- Done building distribution -->
 	<target name="dist" depends="create.javadoc, create.dist.components, create.dist.lib, create.dist.root.docs, create.dist.main.jar, create.dist.main.sources.jar, create.examples">
-		<!--zip destfile="${target.zip}" basedir="${dist}" /-->
 	</target>
 
 </project>

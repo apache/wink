@@ -413,41 +413,6 @@
     </dependencyManagement>
     <reporting>
         <plugins>
-            <!--
-                This plugin creates the changelog report for each
-                module. Should be un comment when the repository is
-                define
-            -->
-            <!--
-                <plugin> <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-changelog-plugin</artifactId>
-                <reportSets> <reportSet> <id>changelog-report</id>
-                <reports> <report>changelog</report> </reports>
-                </reportSet> </reportSets> <configuration>
-                <type>range</type> <range>30</range> </configuration>
-                </plugin>
-            -->
-
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>index</report>
-                            <!-- <report>dependencies</report> -->
-                            <report>dependency-convergence</report>
-                            <report>project-team</report>
-                            <report>license</report>
-                            <!-- report>scm</report-->
-                            <!-- report>mailing-list</report-->
-                            <!-- report>cim</report-->
-                            <!-- report>issue-tracking</report-->
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
@@ -473,56 +438,6 @@
             </plugin>
         </plugins>
     </reporting>
-    <developers>
-        <developer>
-            <id>baram</id>
-            <name>Eli Baram</name>
-            <email>eliezer.baram@hp.com</email>
-            <roles>
-                <role>project manager</role>
-            </roles>
-        </developer>
-        <developer>
-            <id>shadi</id>
-            <name>Tomer Shadi</name>
-            <email>tomer.shadi@hp.com</email>
-            <roles>
-                <role>project architect</role>
-            </roles>
-        </developer>
-        <developer>
-            <id>snitkovsky</id>
-            <name>Martin Snitkovsky</name>
-            <email>martin.snitkovsky@hp.com</email>
-            <roles>
-                <role>developer</role>
-            </roles>
-        </developer>
-        <developer>
-            <id>elman</id>
-            <name>Elman Michael</name>
-            <email>elman@hp.com</email>
-            <roles>
-                <role>developer</role>
-            </roles>
-        </developer>
-        <developer>
-            <id>fischer</id>
-            <name>Nadav Fischer</name>
-            <email>nadav.fischer@hp.com</email>
-            <roles>
-                <role>developer</role>
-            </roles>
-        </developer>
-        <developer>
-            <id>cohen</id>
-            <name>Tali Alsaigh Cohen</name>
-            <email>tali.alsaigh-cohen@hp.com</email>
-            <roles>
-                <role>developer</role>
-            </roles>
-        </developer>
-    </developers>
     <profiles>
         <!--
             This profile should be activated during CI build.
