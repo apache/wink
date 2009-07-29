@@ -1,0 +1,64 @@
+Apache Wink 0.1 Release Notes
+
+1. Overview
+ 
+This is the first official release of Apache Wink project.
+Apache Wink is a framework that helps you to produce and consume RESTful Web Services. 
+Apache Wink is TCK compliant implementation of the JAX-RS v1.0 specification. 
+The project also introduces Java API for writing clients that consume HTTP-based RESTful Web Services. 
+
+2. Installation Prerequisites 
+
+Before installing Apache Wink, make sure the following products,
+with the specified versions, are installed on your system:
+
+    * Java 5(or newer) Development Kit
+    * Apache ant 1.6
+
+2.1 Java 5 Development Kit 
+
+You must install the J2SE Development Kit (JDK) 5.0, which can be downloaded
+from:
+
+    http://java.sun.com/j2se/1.5.0/download.jsp
+
+After installing the JDK, set or modify the following environment variables:
+
+    * JAVA_HOME -- set this environment variable
+      to point at the root directory of the JDK 5.0 installation.
+
+    * PATH -- make sure that your PATH includes: 
+      %JAVA_HOME%\bin  (Windows) 
+      $JAVA_HOME/bin   (UNIX)
+
+2.2 Apache Ant 1.6.5 (or newer, 1.7.0 should work as well)
+
+To run samples included in the binary distribution of Apache Wink,
+you must install the Apache Ant 1.6.5 build utility, which can be downloaded
+from:
+
+    http://ant.apache.org/bindownload.cgi
+
+After installing Apache Ant, add the <AntInstallDir>/bin directory to your PATH.
+
+For more details, see the Installation Guide.
+
+
+3. Building the Examples
+
+Building the examples included in the binary distribution is easy. Change to
+the examples directory and follow the build instructions in the readme.txt file 
+included with each sample.
+
+4. Reporting Problems
+
+If you have any problems or want to send feedback of any kind, please e-mail the
+wink dev list, wink-dev@incubator.apache.org.  You can also file issues in JIRA at:
+
+http://issues.apache.org/jira/browse/WINK
+
+
+
+
+
+

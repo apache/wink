@@ -185,12 +185,12 @@
 			<fileset dir="${project.root}/src" includes="doc/DISCLAIMER*" />
 			<fileset dir="${project.root}/src" includes="doc/LICENSE*" />
 			<fileset dir="${project.root}/src" includes="doc/NOTICE*" />
-			<fileset dir="${project.root}/src" includes="doc/readme.txt" />
+			<fileset dir="${project.root}/src" includes="doc/release_notes.txt" />
 		</copy>
 		<!-- replace the version in the copied readme.txt files -->
-		<replace file="${dist.root}/readme.txt">
+		<!--replace file="${dist.root}/readme.txt">
 			<replacefilter token="@PROJECT_VERSION@" value="${project.version}" />
-		</replace>
+		</replace-->
 		<!-- Copy PDF Developer Guide that exists under trunk/src/doc/DeveloperGuide into doc directory -->
 		<copy file="${project.developerGuide.file}" todir="${dist.docs}" />
 	</target>

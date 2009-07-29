@@ -1,0 +1,40 @@
+Building Apache Wink
+=====================
+
+Initial Setup
+-------------
+
+1) Install J2SE 5.0 SDK (or newer), which can be downloaded from 
+   http://java.sun.com/j2se/1.5.0/download.jsp.
+
+2) Make sure that your JAVA_HOME environment variable is set to the newly installed 
+   JDK location, and that your PATH includes %JAVA_HOME%\bin (windows) or 
+   $JAVA_HOME$/bin (unix).
+
+3) Install Maven 2.0.9 or newer, which can be downloaded from 
+   http://maven.apache.org/download.html. Make sure that your PATH includes 
+   the MVN_HOME/bin directory. 
+
+
+Building
+--------
+
+1) Change to the top level directory of Apache Wink source distribution.
+2) Run
+	$> mvn install
+   This will compile Apache Wink and run all of the tests in the Apache Wink source
+   distribution. Alternatively, you can run
+         $> mvn install -Dmaven.test.skip
+   This will compile Apache Wink without running the tests and takes less
+   time to build.
+   Depending on the load of remote Maven repositories, you may have 
+   to run "mvn" several times until the required dependencies are 
+   all located in your local maven repository. It usually takes some time for 
+   maven to download required dependencies in the first build.
+
+Building distribution archives
+------------
+1) From top level, run
+         $> mvn -Dbuild=CI install
+   This will build an Apache Wink distribution archives under "wink-scripts/wink-dist/target"
+   directory.
