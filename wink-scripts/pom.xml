@@ -30,6 +30,5 @@
     </parent>
     <modules>
         <module>wink-dist</module>
-        <module>wink-site-deploy</module>
     </modules>
 </project>

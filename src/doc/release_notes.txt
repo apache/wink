@@ -7,50 +7,29 @@ Apache Wink is a framework that helps you to produce and consume RESTful Web Ser
 Apache Wink is TCK compliant implementation of the JAX-RS v1.0 specification. 
 The project also introduces Java API for writing clients that consume HTTP-based RESTful Web Services. 
 
-2. Installation Prerequisites 
+2. Runtime dependencies
 
-Before installing Apache Wink, make sure the following products,
-with the specified versions, are installed on your system:
-
-    * Java 5(or newer) Development Kit
-    * Apache ant 1.6
-
-2.1 Java 5 Development Kit 
-
-You must install the J2SE Development Kit (JDK) 5.0, which can be downloaded
-from:
-
-    http://java.sun.com/j2se/1.5.0/download.jsp
-
-After installing the JDK, set or modify the following environment variables:
-
-    * JAVA_HOME -- set this environment variable
-      to point at the root directory of the JDK 5.0 installation.
-
-    * PATH -- make sure that your PATH includes: 
-      %JAVA_HOME%\bin  (Windows) 
-      $JAVA_HOME/bin   (UNIX)
-
-2.2 Apache Ant 1.6.5 (or newer, 1.7.0 should work as well)
-
-To run samples included in the binary distribution of Apache Wink,
-you must install the Apache Ant 1.6.5 build utility, which can be downloaded
-from:
-
-    http://ant.apache.org/bindownload.cgi
-
-After installing Apache Ant, add the <AntInstallDir>/bin directory to your PATH.
-
-For more details, see the Installation Guide.
-
-
-3. Building the Examples
+   \lib folder of this archive contains all Apache Wink runtime dependencies.
+   
+   NOTICE #1: The following dependencies are required for Java 5 only:
+	   	
+		   	* activation-<VERSION>.jar
+		   	* jaxb-api-<VERSION>.jar
+		   	* jaxb-impl-<VERSION>.jar
+		   	* stax-api-<VERSION>.jar
+		   	
+   NOTICE #2: Apache Wink uses SLF4J logging framework, and by default is shipped with simple SLF4J binding (slf4j-simple-1.5.8.jar).
+   	Application that uses another logging framework (e.g. LOG4J), must replace default binding with 
+   	relevant one. For example, application that uses LOG4J will replace slf4j-simple-1.5.8.jar with slf4j-log4j12-1.5.8.jar  
+   	For more details about SLF4J configuration, refer to http://www.slf4j.org/   	
+    
+2. Building the Examples
 
 Building the examples included in the binary distribution is easy. Change to
-the examples directory and follow the build instructions in the readme.txt file 
-included with each sample.
+the examples directory and follow the build instructions in the readme.txt file. 
 
-4. Reporting Problems
+
+3. Reporting Problems
 
 If you have any problems or want to send feedback of any kind, please e-mail the
 wink dev list, wink-dev@incubator.apache.org.  You can also file issues in JIRA at:
