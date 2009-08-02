@@ -33,7 +33,7 @@
 		<module>Spring</module>
 		<module>DynamicResource</module>
 		<module>History</module>
-		<module>WebDAV</module>
+		<!-- module>WebDAV</module-->
 		<module>RuntimeRegistration</module>
 		<module>LinkBuilders</module>
 		<module>Scope</module>
