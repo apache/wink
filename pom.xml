@@ -250,7 +250,7 @@
                       <!--
                         During release:perform, enable the "release" profile
                        -->
-                      <releaseProfiles>CIBuild</releaseProfiles>
+                       <arguments>-PCIBuild</arguments>
                     </configuration>
                 </plugin>
             </plugins>
