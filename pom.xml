@@ -33,7 +33,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javadoc.aggregate>true</javadoc.aggregate>
-        <javadoc.exclude.patterns>*internal:org.apache.wink.example</javadoc.exclude.patterns>
+        <javadoc.exclude.patterns>*.internal:org.apache.wink.example.*</javadoc.exclude.patterns>
     </properties>
     <modules>
         <module>wink-component-test-support</module>
@@ -481,7 +481,6 @@
                             <excludePackageNames>${javadoc.exclude.patterns}</excludePackageNames>
                             <maxmemory>1024m</maxmemory>
                             <minmemory>512m</minmemory>
-                            <aggregate>${javadoc.aggregate}</aggregate>
                             <groups>
                                 <group>
                                     <title>Common Packages</title>
@@ -508,7 +507,7 @@
                         <executions>
                             <execution>
                                 <goals>
-                                    <goal>javadoc</goal>
+                                    <goal>aggregate</goal>
                                 </goals>
                                 <phase>package</phase>
                             </execution>
