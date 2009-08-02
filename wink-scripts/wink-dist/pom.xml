@@ -32,51 +32,6 @@
         <artifactId>wink-scripts</artifactId>
         <version>0.2-incubating-SNAPSHOT</version>
     </parent>
-    <build>
-        <plugins>
-            <plugin>
-                <!-- Deploys the distribution zip to the repository -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>deploy-zip</id>
-                        <configuration>
-                            <file>${target.zip}</file>
-                            <url>${distributionManagement.repository.url}</url>
-                            <packaging>zip</packaging>
-                            <groupId>${groupId}</groupId>
-                            <artifactId>${artifactId}</artifactId>
-                            <version>${version}</version>
-                            <uniqueVersion>${distributionManagement.repository.uniqueVersion}</uniqueVersion>
-                        </configuration>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>deploy-file</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>deploy-jar</id>
-                        <configuration>
-                            <file>${target.jar}</file>
-                            <url>${distributionManagement.repository.url}</url>
-                            <pomFile>../../pom.xml</pomFile>
-                            <packaging>jar</packaging>
-                            <groupId>${groupId}</groupId>
-                            <artifactId>wink</artifactId>
-                            <version>${version}</version>
-                            <uniqueVersion>${distributionManagement.repository.uniqueVersion}</uniqueVersion>
-                        </configuration>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>deploy-file</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-
     <profiles>
         <profile>
             <!--
