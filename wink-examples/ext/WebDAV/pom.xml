@@ -52,6 +52,7 @@
                                 <artifactItem>
                                     <groupId>org.apache.wink.example</groupId>
                                     <artifactId>QADefect</artifactId>
+                                    <version>${project.version}</version>
                                     <type>war</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.directory}/QADefect</outputDirectory>
