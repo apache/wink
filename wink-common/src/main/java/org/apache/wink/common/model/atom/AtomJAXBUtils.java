@@ -710,9 +710,9 @@ public class AtomJAXBUtils {
                 }
                 if (isXmlOpen) {
                     result = result.trim();
-                    if (!result.startsWith("<")) {
+                    if (!result.startsWith("<") && !isXhtml) {
                         throw new RuntimeException(
-                                                   "Illegal atom content: must contain a single child element");
+                                "Illegal atom content: must contain a single child element");
                     }
                 }
                 return result;
@@ -720,10 +720,6 @@ public class AtomJAXBUtils {
 
             public boolean isDone() {
                 return elementCounter == 0;
-            }
-
-            public void setContentIsXhtml(boolean isContentXhtml) {
-                this.isXhtml = isContentXhtml;
             }
 
             private boolean isFirstElement() {

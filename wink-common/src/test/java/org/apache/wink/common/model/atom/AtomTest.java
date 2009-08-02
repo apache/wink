@@ -57,6 +57,14 @@ public class AtomTest extends TestCase {
                                                                  + "        <h1>title</h1>\n"
                                                                  + "    </div>\n"
                                                                  + "</title>\n";
+    private static final String ATOM_TEXT_XHTML_WITH_TEXT =
+        "<title type=\"xhtml\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + "    <div xmlns=\""
+            + RestConstants.NAMESPACE_XHTML
+            + "\">\n"
+            + "        title\n"
+            + "    </div>\n"
+            + "</title>\n";
+
     private static final String ATOM_TEXT_XHTML_WITH_DIV =
                                                              "<title type=\"xhtml\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + "    <div xmlns=\""
                                                                  + RestConstants.NAMESPACE_XHTML
@@ -78,6 +86,14 @@ public class AtomTest extends TestCase {
                                                                  + "        <h1>title</h1>\n"
                                                                  + "    </div>\n"
                                                                  + "</content>\n";
+    private static final String ATOM_CONTENT_XHTML_WITH_TEXT       =
+        "<content type=\"xhtml\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + "    <div xmlns=\""
+            + RestConstants.NAMESPACE_XHTML
+            + "\">\n"
+            + "        title\n"
+            + "    </div>\n"
+            + "</content>\n";
+
     private static final String ATOM_CONTENT_XML         =
                                                              "<content type=\"application/xml\" xml:lang=\"en-us\" xml:base=\"http://title/base\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + "    <x xmlns=\"http://x/\">title</x>\n"
                                                                  + "</content>\n";
@@ -329,7 +345,18 @@ public class AtomTest extends TestCase {
         assertEquals("<h1 xmlns=\"" + RestConstants.NAMESPACE_XHTML + "\">title</h1>", text
             .getValue());
         assertEquals(AtomTextType.xhtml, text.getType());
-    }
+
+        element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_TEXT_XHTML_WITH_TEXT));
+        assertNotNull(element);
+        assertTrue(element instanceof AtomText);
+        text = (AtomText)element;
+        assertNotNull(text);
+        assertEquals("en-us", text.getLang());
+        assertEquals("http://title/base", text.getBase());
+        assertEquals("title", text
+            .getValue());
+        assertEquals(AtomTextType.xhtml, text.getType());
+}
 
     public void testAtomTextUnmarshalXhtml() throws Exception {
         Unmarshaller u = JAXBUtils.createUnmarshaller(ctx);
@@ -418,6 +445,17 @@ public class AtomTest extends TestCase {
         assertEquals("<h1 xmlns=\"" + RestConstants.NAMESPACE_XHTML + "\">title</h1>", content
             .getValue());
         assertEquals("xhtml", content.getType());
+        
+        element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_CONTENT_XHTML_WITH_TEXT));
+        assertNotNull(element);
+        assertTrue(element instanceof AtomContent);
+        content = (AtomContent)element;
+        assertNotNull(content);
+        assertEquals("en-us", content.getLang());
+        assertEquals("http://title/base", content.getBase());
+        assertEquals("title", content
+            .getValue());
+        assertEquals("xhtml", content.getType());        
 
         element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_CONTENT_XML));
         assertNotNull(element);
