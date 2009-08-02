@@ -22,7 +22,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.wink</groupId>
     <artifactId>wink</artifactId>
-    <version>0.1-incubating-SNAPSHOT</version>
+    <version>0.1-incubating</version>
     <packaging>pom</packaging>
     <name>Wink</name>
     <parent>
@@ -34,12 +34,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javadoc.aggregate>true</javadoc.aggregate>
         <javadoc.exclude.patterns>*internal:org.apache.wink.example</javadoc.exclude.patterns>
-        <site.deploy.dir>C:/wink/buildsReports</site.deploy.dir>
-        <file.system.site.deploy.dir>C:/wink/reports</file.system.site.deploy.dir>
-        <distribution.deploy.directory.snapshots>TBD</distribution.deploy.directory.snapshots>
-        <distribution.deploy.directory.release>TBD</distribution.deploy.directory.release>
-        <distribution.deploy.directory>${distribution.deploy.directory.snapshots}</distribution.deploy.directory>
-        <distribution.url>http://TBD/</distribution.url>
     </properties>
     <modules>
         <module>wink-component-test-support</module>
@@ -53,9 +47,9 @@
         <module>wink-scripts</module>
     </modules>
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/wink/trunk</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/wink/trunk</developerConnection>
-        <url>http://svn.apache.org/viewvc/incubator/wink/trunk</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/wink/tags/wink-0.1-incubating</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/wink/tags/wink-0.1-incubating</developerConnection>
+        <url>http://svn.apache.org/viewvc/incubator/wink/tags/wink-0.1-incubating</url>
     </scm>
     <build>
         <plugins>
@@ -244,6 +238,15 @@
                                 </includes>
                             </resource>
                         </webResources>
+                    </configuration>
+                </plugin>
+                  <plugin>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <configuration>
+                      <!--
+                        During release:perform, enable the "release" profile
+                       -->
+                      <releaseProfiles>CIBuild</releaseProfiles>
                     </configuration>
                 </plugin>
             </plugins>
@@ -443,7 +446,7 @@
             This profile should be activated during CI build.
         -->
         <profile>
-            <id>CI Build</id>
+            <id>CIBuild</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
                 <property>
@@ -453,35 +456,6 @@
             </activation>
             <build>
                 <plugins>
-                    <!-- Hudson  fails with obertura-maven-plugin. Comment it out   
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>cobertura-maven-plugin</artifactId>
-                        <version>2.3</version>
-                        <executions>
-                            <execution>
-                                <phase>install</phase>
-                                <goals>
-                                    <goal>cobertura</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <instrumentation>
-                                <ignores>
-                                    <ignore>org.apache.commons.logging.*</ignore>
-                                </ignores>
-                                <excludes>
-                                    <exclude>apache/wink/common/internal/model/admin/**/*.class</exclude>
-                                </excludes>
-                            </instrumentation>
-                            <formats>
-                                <format>xml</format>
-                                <format>html</format>
-                            </formats>
-                        </configuration>
-                    </plugin>
-                    -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
@@ -541,26 +515,8 @@
             <!--
                 properties>
                 <distribution.deploy.directory>ast</distribution.deploy.directory>
-                </properties
-            -->
+                </properties -->
         </profile>
     </profiles>
-    <distributionManagement>
-        <!-- The deployment will be done with the following details -->
-        <repository>
-            <id>TBD</id>
-            <name>My Organisation Internal Repository</name>
-            <url>${distribution.url}/${distribution.deploy.directory}</url>
-            <!--
-                This will not add timestamp to the created outputs in
-                the repository
-            -->
-            <uniqueVersion>false</uniqueVersion>
-        </repository>
-        <site>
-            <url>file://${site.deploy.dir}/latest_tmp</url>
-        </site>
-    </distributionManagement>
     <inceptionYear>2009</inceptionYear>
-
 </project>

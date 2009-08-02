@@ -30,7 +30,7 @@
     <parent>
         <groupId>org.apache.wink</groupId>
         <artifactId>wink-scripts</artifactId>
-        <version>0.1-incubating-SNAPSHOT</version>
+        <version>0.1-incubating</version>
     </parent>
     <build>
         <plugins>
@@ -95,7 +95,7 @@
         </profile>
 
         <profile>
-            <id>CI Build</id>
+            <id>CIBuild</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
                 <property>
