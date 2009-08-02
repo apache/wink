@@ -26,14 +26,14 @@
     <parent>
         <groupId>org.apache.wink.example</groupId>
         <artifactId>wink-examples</artifactId>
-        <version>0.1-incubating</version>
+        <version>0.1-incubating-SNAPSHOT</version>
     </parent>
     <modules>
 		<module>Asset</module>
 		<module>Spring</module>
 		<module>DynamicResource</module>
 		<module>History</module>
-		<!-- module>WebDAV</module-->
+		<module>WebDAV</module>
 		<module>RuntimeRegistration</module>
 		<module>LinkBuilders</module>
 		<module>Scope</module>

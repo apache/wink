@@ -22,7 +22,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.wink</groupId>
     <artifactId>wink</artifactId>
-    <version>0.1-incubating</version>
+    <version>0.1-incubating-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Wink</name>
     <parent>
@@ -243,6 +243,10 @@
                   <plugin>
                     <artifactId>maven-release-plugin</artifactId>
                     <configuration>
+                      <tagBase>https://svn.apache.org/repos/asf/incubator/wink/tags</tagBase>
+                      <preparationGoals>clean install</preparationGoals>
+                      <autoVersionSubmodules>true</autoVersionSubmodules>
+              
                       <!--
                         During release:perform, enable the "release" profile
                        -->
