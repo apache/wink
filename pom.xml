@@ -22,7 +22,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.wink</groupId>
     <artifactId>wink</artifactId>
-    <version>0.2-incubating-SNAPSHOT</version>
+    <version>0.1-incubating-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Wink</name>
     <parent>
@@ -246,10 +246,8 @@
                       <tagBase>https://svn.apache.org/repos/asf/incubator/wink/tags</tagBase>
                       <preparationGoals>clean install</preparationGoals>
                       <autoVersionSubmodules>true</autoVersionSubmodules>
-                      <!-- Run  CIBuild profile from command line for release:perform-->
-                      <!-- mvn release:perform -P CIBuild-->
-                      <!-- http://jira.codehaus.org/browse/MRELEASE-459 -->
-                      <!-- releaseProfiles>CIBuild</releaseProfiles-->
+                      <!-- Run  CIBuild profile -->
+                      <releaseProfiles>CIBuild</releaseProfiles>
                     </configuration>
                 </plugin>
             </plugins>
