@@ -120,11 +120,15 @@ public class DeploymentConfiguration {
         if (properties == null) {
             properties = new Properties();
         }
+        
+        // check to see if an override property was specified.  if so, then configure
+        // the headers from there using a comma delimited string.  
         String httpMethodOverrideHeadersProperty =
             properties.getProperty(HTTP_METHOD_OVERRIDE_HEADERS_PROP);
         httpMethodOverrideHeaders =
-            httpMethodOverrideHeadersProperty != null ? httpMethodOverrideHeadersProperty
-                .split(",") : null;
+            (httpMethodOverrideHeadersProperty != null && httpMethodOverrideHeadersProperty.length() > 0) 
+                ? httpMethodOverrideHeadersProperty.split(",") : null;
+                
         initRegistries();
         initAlternateShortcutMap();
         initMediaTypeMapper();
