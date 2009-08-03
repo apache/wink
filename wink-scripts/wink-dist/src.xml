@@ -49,9 +49,9 @@
            <useDefaultExcludes>true</useDefaultExcludes>
            <outputDirectory>apache-wink-${project.version}-src</outputDirectory>
             <includes>
-                <include>DISCLAIMER.txt</include>
-                <include>LICENSE.txt</include>
-                <include>NOTICE.txt</include>
+                <include>DISCLAIMER</include>
+                <include>LICENSE</include>
+                <include>NOTICE</include>
             </includes>
         </fileSet>
     </fileSets>
