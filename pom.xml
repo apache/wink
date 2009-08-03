@@ -246,8 +246,10 @@
                       <tagBase>https://svn.apache.org/repos/asf/incubator/wink/tags</tagBase>
                       <preparationGoals>clean install</preparationGoals>
                       <autoVersionSubmodules>true</autoVersionSubmodules>
-                      <!-- Run  CIBuild profile -->
-                      <releaseProfiles>CIBuild</releaseProfiles>
+                      <!-- Run  CIBuild profile from command line for release:perform-->
+                      <!-- mvn release:perform -P CIBuild-->
+                      <!-- http://jira.codehaus.org/browse/MRELEASE-459 -->
+                      <!-- releaseProfiles>CIBuild</releaseProfiles-->
                     </configuration>
                 </plugin>
             </plugins>
