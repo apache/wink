@@ -257,8 +257,6 @@
                       <tagBase>https://svn.apache.org/repos/asf/incubator/wink/tags</tagBase>
                       <preparationGoals>clean install</preparationGoals>
                       <autoVersionSubmodules>true</autoVersionSubmodules>
-                      <!-- Run  CIBuild profile -->
-                      <releaseProfiles>CIBuild</releaseProfiles>
                     </configuration>
                 </plugin>
                 <plugin>
