@@ -250,7 +250,7 @@
                       <!--
                         During release:perform, enable the "release" profile
                        -->
-                       <arguments>-PCIBuild</arguments>
+                       <releaseProfiles>-PCIBuild</releaseProfiles>
                     </configuration>
                 </plugin>
             </plugins>
@@ -509,7 +509,7 @@
                                 <goals>
                                     <goal>aggregate</goal>
                                 </goals>
-                                <phase>package</phase>
+                                <phase>install</phase>
                             </execution>
                         </executions>
                     </plugin>
