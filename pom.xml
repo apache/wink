@@ -246,11 +246,8 @@
                       <tagBase>https://svn.apache.org/repos/asf/incubator/wink/tags</tagBase>
                       <preparationGoals>clean install</preparationGoals>
                       <autoVersionSubmodules>true</autoVersionSubmodules>
-              
-                      <!--
-                        During release:perform, enable the "release" profile
-                       -->
-                       <releaseProfiles>CIBuild</releaseProfiles>
+                      <!-- Run  CIBuild profile -->
+                      <arguments>-PCIBuild</arguments>
                     </configuration>
                 </plugin>
             </plugins>
