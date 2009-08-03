@@ -247,7 +247,7 @@
                       <preparationGoals>clean install</preparationGoals>
                       <autoVersionSubmodules>true</autoVersionSubmodules>
                       <!-- Run  CIBuild profile -->
-                      <arguments>-PCIBuild</arguments>
+                      <releaseProfiles>CIBuild</releaseProfiles>
                     </configuration>
                 </plugin>
             </plugins>
