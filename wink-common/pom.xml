@@ -28,7 +28,7 @@
     <parent>
         <groupId>org.apache.wink</groupId>
         <artifactId>wink</artifactId>
-        <version>0.1-incubating-SNAPSHOT</version>
+        <version>0.2-incubating-SNAPSHOT</version>
     </parent>
     
     <!-- depending on the following jars -->
