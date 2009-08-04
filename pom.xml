@@ -20,7 +20,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.wink</groupId>
     <artifactId>wink</artifactId>
-    <version>0.2-incubating-SNAPSHOT</version>
+    <version>0.1-incubating-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Wink</name>
     <parent>
@@ -45,9 +45,9 @@
         <module>wink-scripts</module>
     </modules>
     <scm>
-        <connection>scm:svn:https://svn.apache.org/repos/asf/incubator/wink/tags/apache-wink-0.1-incubating-branch</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/wink/branches/apache-wink-0.1-incubating-branch</developerConnection>
-        <url>https://svn.apache.org/repos/asf/incubator/wink/tags/apache-wink-0.1-incubating-branch</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/wink/trunk</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/wink/trunk</developerConnection>
+        <url>http://svn.apache.org/viewvc/incubator/wink/trunk</url>
     </scm>
     <build>
         <plugins>
