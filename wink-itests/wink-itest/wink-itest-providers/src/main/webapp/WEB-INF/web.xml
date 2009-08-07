@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+    
+     http://www.apache.org/licenses/LICENSE-2.0
+    
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+    <display-name>Archetype Created Web Application</display-name>
+    <servlet>
+        <servlet-name>MessageBodyReaders</servlet-name>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>org.apache.wink.itest.readers.Application</param-value>
+        </init-param>
+        <init-param>
+            <param-name>requestProcessorAttribute</param-name>
+            <param-value>requestProcessorAttribute_3</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>MessageBodyReaderExceptions</servlet-name>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>org.apache.wink.itest.readerexceptions.Application</param-value>
+        </init-param>
+        <init-param>
+            <param-name>requestProcessorAttribute</param-name>
+            <param-value>requestProcessorAttribute_2</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>MessageBodyWriters</servlet-name>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>org.apache.wink.itest.writers.Application</param-value>
+        </init-param>
+        <init-param>
+            <param-name>requestProcessorAttribute</param-name>
+            <param-value>requestProcessorAttribute_4</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>MessageBodyWriterExceptions</servlet-name>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>org.apache.wink.itest.writerexceptions.Application</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>StandardEntityProviders</servlet-name>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>org.apache.wink.itest.standard.Application</param-value>
+        </init-param>
+        <init-param>
+            <param-name>requestProcessorAttribute</param-name>
+            <param-value>requestProcessorAttribute_standard</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>ExceptionMapperMappedProviders</servlet-name>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>org.apache.wink.itest.exceptionmappers.mapped.GuestbookApplication</param-value>
+        </init-param>
+        <init-param>
+            <param-name>requestProcessorAttribute</param-name>
+            <param-value>requestProcessorAttribute_exceptionmappers</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>ExceptionMapperNoMapper</servlet-name>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>org.apache.wink.itest.exceptionmappers.nomapper.GuestbookApplication</param-value>
+        </init-param>
+        <init-param>
+            <param-name>requestProcessorAttribute</param-name>
+            <param-value>requestProcessorAttribute_noexceptionmappers</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+        
+    <servlet>
+        <servlet-name>ExceptionMapperNull</servlet-name>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>org.apache.wink.itest.exceptionmappers.nullconditions.Application</param-value>
+        </init-param>
+        <init-param>
+            <param-name>requestProcessorAttribute</param-name>
+            <param-value>requestProcessorAttribute_nullconditions</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>SubresourceExceptions</servlet-name>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>org.apache.wink.itest.subresource.Application</param-value>
+        </init-param>
+        <init-param>
+            <param-name>requestProcessorAttribute</param-name>
+            <param-value>requestProcessorAttribute_subresourceexceptions</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>SimpleContestResolver</servlet-name>
+        <servlet-class>${wink.rest.servlet}</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>org.apache.wink.itest.contextresolver.Application</param-value>
+        </init-param>
+        <init-param>
+            <param-name>requestProcessorAttribute</param-name>
+            <param-value>requestProcessorAttribute_simplecontextresolver</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MessageBodyReaders</servlet-name>
+        <url-pattern>/readers/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MessageBodyReaderExceptions</servlet-name>
+        <url-pattern>/readerexceptions/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MessageBodyWriters</servlet-name>
+        <url-pattern>/writers/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MessageBodyWriterExceptions</servlet-name>
+        <url-pattern>/writerexceptions/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StandardEntityProviders</servlet-name>
+        <url-pattern>/standard/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ExceptionMapperMappedProviders</servlet-name>
+        <url-pattern>/exceptionsmapped/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ExceptionMapperNoMapper</servlet-name>
+        <url-pattern>/exceptionsnomapper/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ExceptionMapperNull</servlet-name>
+        <url-pattern>/exceptionsnull/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SubresourceExceptions</servlet-name>
+        <url-pattern>/subresourceexceptions/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SimpleContestResolver</servlet-name>
+        <url-pattern>/simplecontextresolver/*</url-pattern>
+    </servlet-mapping>
+    
+</web-app>
