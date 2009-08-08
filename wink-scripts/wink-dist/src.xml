@@ -34,25 +34,7 @@
             <excludes>
                 <exclude>**/target</exclude>
                 <exclude>**/target/**</exclude>
-                <exclude>**/site</exclude>
-                <exclude>**/site/**</exclude>
-                <exclude>**/assembly</exclude>
-                <exclude>**/assembly/**</exclude>
-                <exclude>**/wink-scripts</exclude>
-                <exclude>src/assembly/**</exclude>
-                <exclude>src/doc/**</exclude>
-                <exclude>src/site/**</exclude>
             </excludes>
-        </fileSet>
-        <fileSet>
-           <directory>../../src/doc</directory>
-           <useDefaultExcludes>true</useDefaultExcludes>
-           <outputDirectory>apache-wink-${project.version}-src</outputDirectory>
-            <includes>
-                <include>DISCLAIMER</include>
-                <include>LICENSE</include>
-                <include>NOTICE</include>
-            </includes>
         </fileSet>
     </fileSets>
 </assembly>
