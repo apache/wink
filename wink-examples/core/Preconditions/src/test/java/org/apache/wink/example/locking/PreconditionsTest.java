@@ -30,7 +30,7 @@ import org.apache.wink.test.mock.TestUtils;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-public class LockingTest extends MockServletInvocationTest {
+public class PreconditionsTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
@@ -94,7 +94,8 @@ public class LockingTest extends MockServletInvocationTest {
         request.addHeader("if-match", etag);
         response = invoke(request);
         assertEquals("status", 200, response.getStatus());
-
+        etag = (String)response.getHeader(HttpHeaders.ETAG);
+        
         // now, after the collection was modified
         // 200 should return
         request =

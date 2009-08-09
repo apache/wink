@@ -44,7 +44,7 @@ public class DefectBean {
     @XmlElement(required = true)
     private String description;
     @XmlElement(required = true)
-    @XmlSchemaType(name = "dateTime")
+    @XmlSchemaType(name = "dateTime", type=javax.xml.datatype.XMLGregorianCalendar.class)
     private Date   created;
     @XmlElement(required = true)
     private String author;
