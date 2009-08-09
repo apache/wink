@@ -32,7 +32,6 @@
         <module>Bookmarks</module>
         <module>HelloWorld</module>
         <module>QADefect</module>
-        <module>QADefectWithSpring</module>
         <module>SimpleDefects</module>
     </modules>
 </project>

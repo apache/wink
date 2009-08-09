@@ -7,7 +7,6 @@ This document describes the examples available in Wink distribution
 		- HelloWorld
 		- Bookmarks
 		- QADefect
-		- QADefectWithSpring
 		- SimpleDefects
 
 	"core" module contains JAX-RS core features
