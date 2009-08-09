@@ -174,15 +174,8 @@
 		</dependencies>
 
 		<copy todir="${dist.lib}" flatten="true" overwrite="false">
-            <fileset refid="dependency.fileset" />
+			<fileset refid="dependency.fileset" />
 		</copy>
-
-        <delete>
-           <fileset dir="${dist.lib}">
-                <include name="jaxb-api-*-sources.jar" />
-                <include name="jaxb-impl-*-sources.jar" />
-           </fileset>
-        </delete>
 	</target>
 
 	<!-- Copies legal documents to the root folder and SDK PDF document to the doc directory. -->
