@@ -34,6 +34,7 @@
             <excludes>
                 <exclude>**/target</exclude>
                 <exclude>**/target/**</exclude>
+                <exclude>KEYS</exclude>
             </excludes>
         </fileSet>
     </fileSets>

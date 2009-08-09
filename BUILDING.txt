@@ -35,6 +35,6 @@ Building
 Building distribution archives
 ------------
 1) From top level, run
-         $> mvn -Dbuild=CI install
+         $> mvn install -PCIBuild
    This will build an Apache Wink distribution archives under "wink-scripts/wink-dist/target"
    directory.

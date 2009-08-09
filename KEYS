@@ -9,42 +9,43 @@ Developers:
              && gpg --armor --export <your name>) >> this file.
              
 
-pub   1024D/9C7FE9DE 2009-07-30
+pub   1024D/5E67E108 2009-07-30
 uid                  Martin Snitkovsky (martins@apache.org) <martins@apache.org>
-sig 3        9C7FE9DE 2009-07-30  Martin Snitkovsky (martins@apache.org) <martins@apache.org>
-sub   2048g/24A4870F 2009-07-30
-sig          9C7FE9DE 2009-07-30  Martin Snitkovsky (martins@apache.org) <martins@apache.org>
+sig 3        5E67E108 2009-07-30  Martin Snitkovsky (martins@apache.org) <martins@apache.org>
+sub   2048g/1B3AAEF0 2009-07-30
+sig          5E67E108 2009-07-30  Martin Snitkovsky (martins@apache.org) <martins@apache.org>
 
 -----BEGIN PGP PUBLIC KEY BLOCK-----
-Version: GnuPG v2.0.11 (FreeBSD)
+Version: GnuPG v1.4.9 (MingW32)
 
-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
+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
-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
-=eyhP
+Zz6IYAQTEQIAIAUCSnGZQwIbAwYLCQgHAwIEFQIIAwQWAgMBAh4BAheAAAoJEPRp
+4YpeZ+EIXfAAn3fjUkLB9Iy1RqC2BlfFhiv39WfVAJ4pD7h/OTdoU5djk20SxtUl
+jpEr17kCDQRKcZlDEAgA1IvKPw7PH4wlcrf+ZPF5sGIH+Mf4qKuP89qgCal6pScc
+DixTjo66zNvWmMGYTI++kopj6UqlLFUn6iwAoxJmQUC0OBPeLVnLeyznQsDy1XmZ
+/uB6i3bBI24FvlDXM8gA+QWFdk6vJteUsb1N5zVK+3Wz6q6GpJJLL/p3rlTqzKRi
+dHQvqbCHeYnxlaXDUq4I+HN/fCU0rmK5SmiMlbZ4LXX7QpYHTapfJTSb2Cq1Pw9T
+UR9he/el5tEjDCFRsZlACJAhAoYu0DpWMuWcdZgLVpf6YC4H77KYpe4CO9QKg/Zh
+2wlOHmpNri2ZosRRV/714tJaOnhBq+dQWsYGKjWBnwADBQgAtFfnjbFK9s+hp6ZQ
+xou3EtPRxATAojcz7GDd3LQjcUMSC91mztkLkf2oailtCIDQiharUUqBNF5QPKsx
+DnGLnuGfFQTrRq0PJqYTvRdJWRJ8QWh+YiOc1ElO2iZ5q4Zjvu/uieJGQ8RozhVJ
+SK0ZPYhv+H73pMY+or9g9/stFUnciFDLnhCcz1zRk1JLD3e5qq664LTnvX/tUtM0
+p+rG0KQu7aGw6hv30rxLhhONmkvjsH1MzKtE9Ir96jXrRRUiUGJk/EkLP+teNPcx
+Rb5FRaOWfsL4NHmII71jysFRy6gl/9S98NuyZgG0jHWNfDidncSq+KZxrz3+CO0g
+iq4tkYhJBBgRAgAJBQJKcZlDAhsMAAoJEPRp4YpeZ+EIr8EAoOlHvUgi4I3SOEez
+oWqdN3EpboLBAKDBUwa9hDvdAdSR3gvjJzK7G1Dy/Q==
+=ctJW
 -----END PGP PUBLIC KEY BLOCK-----
+
 pub   1024D/67B04C22 2009-07-30
 uid                  Michael Elman <elman@apache.org>
 sig 3        67B04C22 2009-07-30  Michael Elman <elman@apache.org>
