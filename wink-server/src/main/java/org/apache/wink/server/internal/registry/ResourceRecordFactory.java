@@ -20,15 +20,12 @@
 
 package org.apache.wink.server.internal.registry;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wink.common.DynamicResource;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.lifecycle.ObjectFactory;
@@ -36,6 +33,8 @@ import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
 import org.apache.wink.common.internal.runtime.RuntimeContext;
 import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ResourceRecordFactory {
 
@@ -237,20 +236,19 @@ public class ResourceRecordFactory {
      */
     private ClassMetadata fixInstanceMetadata(ClassMetadata classMetadata,
                                               DynamicResource dynamicResource) {
-        String[] dispatchedPath = dynamicResource.getDispatchedPath();
-        if (dispatchedPath != null) {
-            classMetadata.addPaths(Arrays.asList(dispatchedPath));
+        String path = dynamicResource.getPath();
+        if (path != null) {
+            classMetadata.addPath(path);
             if (logger.isDebugEnabled()) {
-                logger.debug("Adding dispatched path from instance: {}", Arrays
-                    .toString(dispatchedPath));
+                logger.debug("Adding dispatched path from instance: {}", path);
             }
         }
 
-        Object[] parents = dynamicResource.getParents();
-        if (parents != null) {
-            classMetadata.getParentInstances().addAll(Arrays.asList(parents));
+        Object parent = dynamicResource.getParent();
+        if (parent != null) {
+            classMetadata.getParentInstances().add(parent);
             if (logger.isDebugEnabled()) {
-                logger.debug("Adding parent beans from instance: {}", Arrays.toString(parents));
+                logger.debug("Adding parent beans from instance: {}", parent);
             }
         }
 

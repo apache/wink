@@ -41,11 +41,10 @@ public class AbstractResourceWithEmptyPathTest extends MockServletInvocationTest
         @Override
         public Set<Object> getInstances() {
             AbstractTestCollectionResource emptyPath = new AbstractTestCollectionResource();
-            emptyPath.setDispatchedPath(new String[] {"/a"});
+            emptyPath.setPath("/a");
 
             AbstractTestCollectionResource2 emptyParent = new AbstractTestCollectionResource2();
-            emptyParent.setDispatchedPath(new String[] {"/emptyParent"});
-            emptyParent.setParents(new Object[0]);
+            emptyParent.setPath("/emptyParent");
             Set<Object> set = new HashSet<Object>();
             set.add(emptyPath);
             set.add(emptyParent);

@@ -47,14 +47,14 @@ public class AbstractResourceWithDuplicateWorkspaceTest extends MockServletInvoc
             AbstractTestWithWorkspaceResource servicesCollectionWithWorskapce =
                 new AbstractTestWithWorkspaceResource();
             servicesCollectionWithWorskapce
-                .setDispatchedPath(new String[] {"/services/withWorkspace"});
+                .setPath("/services/withWorkspace");
             servicesCollectionWithWorskapce.setCollectionTitle("Spring Collection");
             servicesCollectionWithWorskapce.setWorkspaceTitle("Spring Workspace");
 
             AbstractTestWithWorkspaceResource servicesCollectionWithoutWorskapce =
                 new AbstractTestWithWorkspaceResource();
             servicesCollectionWithoutWorskapce
-                .setDispatchedPath(new String[] {"/services/withoutWorkspace"});
+                .setPath("/services/withoutWorkspace");
 
             set.add(servicesCollectionWithWorskapce);
             set.add(servicesCollectionWithoutWorskapce);

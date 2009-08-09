@@ -23,14 +23,17 @@ package org.apache.wink.common;
 /**
  * Provides a basic implementation of the
  * org.apache.wink.common.DynamicResource.
+ * <p>
+ * In general it's recommended to extend from this class, instead of
+ * implementing the DynamicResource.
  */
 public abstract class AbstractDynamicResource implements DynamicResource {
 
-    private String[] dispatchedPath;
-    private Object[] parents;
-    private String   workspaceTitle;
-    private String   collectionTitle;
-    private String   beanName;
+    private String path;
+    private Object parent;
+    private String workspaceTitle;
+    private String collectionTitle;
+    private String beanName;
 
     public String getBeanName() {
         return beanName;
@@ -38,22 +41,6 @@ public abstract class AbstractDynamicResource implements DynamicResource {
 
     public void setBeanName(String beanName) {
         this.beanName = beanName;
-    }
-
-    public void setDispatchedPath(String[] dispatchedPath) {
-        this.dispatchedPath = dispatchedPath;
-    }
-
-    public String[] getDispatchedPath() {
-        return dispatchedPath;
-    }
-
-    public void setParents(Object[] parents) {
-        this.parents = parents;
-    }
-
-    public Object[] getParents() {
-        return parents;
     }
 
     public void setWorkspaceTitle(String workspaceTitle) {
@@ -70,6 +57,22 @@ public abstract class AbstractDynamicResource implements DynamicResource {
 
     public String getCollectionTitle() {
         return collectionTitle;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setParent(Object parent) {
+        this.parent = parent;
+    }
+
+    public Object getParent() {
+        return parent;
     }
 
 }

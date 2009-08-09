@@ -32,7 +32,7 @@ public class MyApplication extends WinkApplication {
         BookmarksResource br = new BookmarksResource();
         br.setWorkspaceTitle("Demo Bookmarks Service");
         br.setCollectionTitle("My Bookmarks");
-        br.setDispatchedPath(new String[] {"/bookmarks"});
+        br.setPath("/bookmarks");
         hs.add(br);
         return hs;
     }

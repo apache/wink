@@ -90,7 +90,7 @@ public class ResourceRecordFactoryTest extends TestCase {
     public void testDynamicResource() {
         ResourceRecordFactory factory = new ResourceRecordFactory(new LifecycleManagersRegistry());
         Dynamic dynamic = new Dynamic();
-        dynamic.setDispatchedPath(new String[] {"/pathDyna"});
+        dynamic.setPath("/pathDyna");
 
         ResourceRecord dynamicRecord = factory.getResourceRecord(dynamic);
         assertEquals("/pathDyna", dynamicRecord.getMetadata().getPath());
@@ -99,7 +99,7 @@ public class ResourceRecordFactoryTest extends TestCase {
         assertTrue(o == dynamic);
 
         Dynamic dynamic2 = new Dynamic();
-        dynamic2.setDispatchedPath(new String[] {"/pathDyna2"});
+        dynamic2.setPath("/pathDyna2");
         ResourceRecord dynamicRecord2 = factory.getResourceRecord(dynamic2);
         assertEquals("/pathDyna2", dynamicRecord2.getMetadata().getPath());
         Object o2 = dynamicRecord2.getObjectFactory().getInstance(null);

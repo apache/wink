@@ -38,23 +38,21 @@ public class ExtensionResourceBeanTest extends MockServletInvocationTest {
     @Override
     protected Object[] getSingletons() {
         BasicBeanResource basicResourceResource = new BasicBeanResource();
-        basicResourceResource.setDispatchedPath(new String[] {"/basicBeanUrl",
-            "/basicBeanUrlNoParent"});
+        basicResourceResource.setPath("/basicBeanUrl");
 
         BasicResource basit = new BasicResource();
 
         ExtendedBasicBeanResource extendedBasicBeanResource = new ExtendedBasicBeanResource();
-        extendedBasicBeanResource.setDispatchedPath(new String[] {""});
-        extendedBasicBeanResource.setParents(new Object[] {basicResourceResource});
+        extendedBasicBeanResource.setPath("");
+        extendedBasicBeanResource.setParent(basicResourceResource);
 
         ExtendedBasicBeanWithNoParentResource extendedBasicBeanWithNoParentResource =
             new ExtendedBasicBeanWithNoParentResource();
-        extendedBasicBeanWithNoParentResource.setDispatchedPath(new String[] {"/basicBeanUrl",
-            "/basicBeanUrlNoParent"});
+        extendedBasicBeanWithNoParentResource.setPath("/basicBeanUrl");
 
         ExtendedBasicResource extendedBasicResource = new ExtendedBasicResource();
-        extendedBasicResource.setDispatchedPath(new String[] {""});
-        extendedBasicResource.setParents(new Object[] {basicResourceResource});
+        extendedBasicResource.setPath("");
+        extendedBasicResource.setParent(basicResourceResource);
 
         Set<Object> set = new HashSet<Object>();
         set.add(basicResourceResource);

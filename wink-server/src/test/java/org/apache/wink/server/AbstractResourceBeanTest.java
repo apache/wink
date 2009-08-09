@@ -46,46 +46,34 @@ public class AbstractResourceBeanTest extends MockServletInvocationTest {
         public Set<Object> getInstances() {
             AbstractTestCollectionResource servicesCollection =
                 new AbstractTestCollectionResource();
-            servicesCollection.setDispatchedPath(new String[] {"/services"});
+            servicesCollection.setPath("/services");
 
             AbstractTestCollectionResource servicesCollectionWithWorkspaceAndTitle =
                 new AbstractTestCollectionResource();
-            servicesCollectionWithWorkspaceAndTitle
-                .setDispatchedPath(new String[] {"/services/workspaceAndTitle"});
+            servicesCollectionWithWorkspaceAndTitle.setPath("/services/workspaceAndTitle");
             servicesCollectionWithWorkspaceAndTitle.setWorkspaceTitle("Services Workspace Title");
             servicesCollectionWithWorkspaceAndTitle.setCollectionTitle("Services Collection Title");
 
             AbstractTestSingleResource singleService = new AbstractTestSingleResource();
-            singleService.setDispatchedPath(new String[] {"/services/{id}"});
+            singleService.setPath("/services/{id}");
 
-            // TODO: do we support multiple paths?
             AbstractTestSingleResource singleServiceDifferentURIs =
                 new AbstractTestSingleResource();
-            singleServiceDifferentURIs.setDispatchedPath(new String[] {"/services1/{id}"/*
-                                                                                         * ,
-                                                                                         * "/services2/{id}"
-                                                                                         */});
+            singleServiceDifferentURIs.setPath("/services1/{id}");
 
             AbstractTestSingleParentResource singleServiceParent =
                 new AbstractTestSingleParentResource();
-            singleServiceParent.setDispatchedPath(new String[] {"parent"});
-            singleServiceParent.setParents(new Object[] {singleService});
+            singleServiceParent.setPath("parent");
+            singleServiceParent.setParent(singleService);
 
-            // TODO: do we support multiple paths and multiple parents?
             AbstractTestSingleParentResource singleServiceMultipleParents =
                 new AbstractTestSingleParentResource();
-            singleServiceMultipleParents.setDispatchedPath(new String[] {"parent1"/*
-                                                                                   * ,
-                                                                                   * "parent2"
-                                                                                   */});
-            singleServiceMultipleParents.setParents(new Object[] {singleService /*
-                                                                                 * ,
-                                                                                 * singleServiceDifferentURIs
-                                                                                 */});
+            singleServiceMultipleParents.setPath("parent1");
+            singleServiceMultipleParents.setParent(singleService);
 
             AbstractTestReferencingBeanResource beanReferencingaAnotherBean =
                 new AbstractTestReferencingBeanResource();
-            beanReferencingaAnotherBean.setDispatchedPath(new String[] {"/referenceBean/{id}"});
+            beanReferencingaAnotherBean.setPath("/referenceBean/{id}");
             beanReferencingaAnotherBean.setRefdBean(singleService);
 
             AbstractTestWithAnnotationsResource resourceWithAnnotations =
@@ -93,13 +81,13 @@ public class AbstractResourceBeanTest extends MockServletInvocationTest {
 
             AbstractTestReferencingBeanResource beanReferencingClass =
                 new AbstractTestReferencingBeanResource();
-            beanReferencingClass.setDispatchedPath(new String[] {"/referenceClass/{id}"});
+            beanReferencingClass.setPath("/referenceClass/{id}");
             beanReferencingClass.setRefdBean(resourceWithAnnotations);
 
             AbstractTestSingleParentResource singleServiceParentIsClass =
                 new AbstractTestSingleParentResource();
-            singleServiceParentIsClass.setDispatchedPath(new String[] {"parent"});
-            singleServiceParentIsClass.setParents(new Object[] {resourceWithAnnotations});
+            singleServiceParentIsClass.setPath("parent");
+            singleServiceParentIsClass.setParent(resourceWithAnnotations);
 
             Set<Object> set = new HashSet<Object>();
             set.add(servicesCollection);
