@@ -26,6 +26,5 @@
   <groupId>org.apache.wink</groupId>
   <artifactId>wink-itest-extra-providers</artifactId>
   <packaging>war</packaging>
-  <name>wink-jaxrs-optional-providers Maven Webapp</name>
-  <version>0.1-incubating-SNAPSHOT</version>
+  <name>Wink Integration Extra Providers Tests</name>
 </project>

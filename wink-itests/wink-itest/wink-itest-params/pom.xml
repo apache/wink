@@ -26,5 +26,5 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>wink-itest-params</artifactId>
   <packaging>war</packaging>
-  <name>wink-jaxrs-test-params Maven Webapp</name>
+  <name>Wink Integration Parameters Tests</name>
 </project>

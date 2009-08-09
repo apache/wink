@@ -27,5 +27,5 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>wink-itest-context</artifactId>
     <packaging>war</packaging>
-    <name>wink-jaxrs-test-context Maven Webapp</name>
+    <name>Wink Integration Context Tests</name>
 </project>
