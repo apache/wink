@@ -20,7 +20,6 @@
 
 package org.apache.wink.test.diff;
 
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TimeZone;
@@ -79,7 +78,7 @@ public class DifferenceListenerIgnoreUpdateOrCompareTimes extends
                 XMLGregorianCalendar test = datatypeFactory.newXMLGregorianCalendar(testDateStr);
                 XMLGregorianCalendar control =
                     datatypeFactory.newXMLGregorianCalendar(controlDateStr);
-                if (TimeZone.getDefault().useDaylightTime()) {
+                if (TimeZone.getDefault().useDaylightTime() && TimeZone.getDefault().getRawOffset() == 0) {
                     test.setTimezone(60);
                 }
                 if (test.compare(control) == DatatypeConstants.EQUAL)
