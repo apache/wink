@@ -38,7 +38,7 @@ import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-public class MessageBodyWriterProviderCorrectParameters extends MockServletInvocationTest {
+public class MessageBodyWriterProviderCorrectParametersTest extends MockServletInvocationTest {
 
     private static final String PROVIDER_STR = "write with myprovider";
 
