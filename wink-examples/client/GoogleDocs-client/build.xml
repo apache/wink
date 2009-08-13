@@ -35,9 +35,8 @@
 	<property name="client.base" location="${basedir}/../../.." />
 	<property name="client.lib" location="${client.base}/lib" />
 	<property name="client.dist" location="${client.base}/dist" />
-	<property name="client.components" location="${client.dist}/components" />
-	<property name="client.jar" location="${client.components}/${client.jar.name}" />
-	<property name="common.jar" location="${client.components}/${common.jar.name}" />
+	<property name="client.jar" location="${client.dist}/${client.jar.name}" />
+	<property name="common.jar" location="${client.dist}/${common.jar.name}" />
 	<property name="example.jar" location="${basedir}/${example.jar.name}" />
 	<property name="main" location="${basedir}/src/main" />
 	<property name="resources" location="${main}/resources" />
@@ -70,7 +69,10 @@
 			<classpath>
 				<fileset dir="${client.lib}" includes="*.jar" />
 				<fileset dir="${client.lib}/examples" includes="*.jar" />
-				<fileset dir="${client.components}" includes="*.jar" />
+				<fileset dir="${client.dist}">
+                    <include name="${common.jar.name}"/>
+                    <include name="${client.jar.name}"/>
+                </fileset>
 			</classpath>
 		</manifestclasspath>
 
