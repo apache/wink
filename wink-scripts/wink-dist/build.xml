@@ -41,7 +41,6 @@
 	<property name="dist.root" value="${dist}/apache-wink-${project.version}" />
 	<property name="dist.docs" value="${dist.root}/docs" />
 	<property name="dist.docs.api" value="${dist.docs}/api" />
-	<property name="dist.licences" value="${dist.root}/licences" />
 	<property name="dist.dist" value="${dist.root}/dist" />
 	<property name="dist.components" value="${dist.dist}" />
 	<property name="dist.examples" value="${dist.root}/examples" />
@@ -89,17 +88,6 @@
 		</copy>
 	</target>
 	
-	<!-- Creates licences folder with all 3-rd party licences -->
-	<target name="create.licences" depends="init">
-		<echo>Copying Licences ...</echo>
-		<mkdir dir="${dist.licences}" />
-		<copy todir="${dist.licences}">
-			<fileset dir="${basedir}/../../src/licences">
-				<include name="**/*.txt" />
-			</fileset>
-		</copy>
-	</target>
-
 	<!-- Creates components folder with jar of each component -->
 	<target name="create.dist.components" depends="init">
 		<echo>Making components</echo>
@@ -277,7 +265,7 @@
 	</target>
 
 	<!-- Done building distribution -->
-	<target name="dist" depends="create.javadoc, create.licences, create.dist.components, create.dist.lib, create.dist.root.docs, create.dist.main.jar, create.dist.main.sources.jar, create.examples">
+	<target name="dist" depends="create.javadoc, create.dist.components, create.dist.lib, create.dist.root.docs, create.dist.main.jar, create.dist.main.sources.jar, create.examples">
 	</target>
 
 </project>
