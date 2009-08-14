@@ -23,7 +23,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>Bookmarks</artifactId>
 	<packaging>war</packaging>
-	<name>Wink Examples Apps :: Bookmarks</name>
+	<name>Apache Wink Examples Apps :: Bookmarks</name>
 	<parent>
 		<groupId>org.apache.wink.example</groupId>
 		<artifactId>apps</artifactId>

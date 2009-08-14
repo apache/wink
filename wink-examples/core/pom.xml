@@ -22,7 +22,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>core</artifactId>
     <packaging>pom</packaging>
-    <name>Wink Examples Core</name>
+    <name>Apache Wink Examples Core</name>
     <parent>
         <groupId>org.apache.wink.example</groupId>
         <artifactId>wink-examples</artifactId>

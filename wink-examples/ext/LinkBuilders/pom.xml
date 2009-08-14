@@ -23,7 +23,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>LinkBuilders</artifactId>
     <packaging>war</packaging>
-    <name>Wink Examples Ext :: LinkBuilders</name>
+    <name>Apache Wink Examples Ext :: LinkBuilders</name>
     <parent>
         <groupId>org.apache.wink.example</groupId>
         <artifactId>ext</artifactId>

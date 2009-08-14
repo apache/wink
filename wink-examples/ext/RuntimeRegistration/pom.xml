@@ -23,7 +23,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>RuntimeRegistration</artifactId>
     <packaging>war</packaging>
-    <name>Wink Examples Ext :: RuntimeRegistration</name>
+    <name>Apache Wink Examples Ext :: RuntimeRegistration</name>
     <parent>
         <groupId>org.apache.wink.example</groupId>
         <artifactId>ext</artifactId>

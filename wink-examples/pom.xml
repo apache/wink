@@ -23,7 +23,7 @@
     <groupId>org.apache.wink.example</groupId>
     <artifactId>wink-examples</artifactId>
     <packaging>pom</packaging>
-    <name>Wink Examples</name>
+    <name>Apache Wink Examples</name>
     <properties>
     </properties>
     <parent>

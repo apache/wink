@@ -23,7 +23,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>CustomContext</artifactId>
     <packaging>war</packaging>
-    <name>Wink Examples Core :: CustomContext</name>
+    <name>Apache Wink Examples Core :: CustomContext</name>
     <parent>
         <groupId>org.apache.wink.example</groupId>
         <artifactId>core</artifactId>

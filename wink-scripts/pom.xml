@@ -22,7 +22,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>wink-scripts</artifactId>
     <packaging>pom</packaging>
-    <name>Wink Scripts</name>
+    <name>Apache Wink Scripts</name>
     <parent>
         <groupId>org.apache.wink</groupId>
         <artifactId>wink</artifactId>

@@ -22,7 +22,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>apache-wink</artifactId>
     <packaging>pom</packaging>
-    <name>Wink Scripts :: Dist</name>
+    <name>Apache Wink Scripts :: Dist</name>
     <properties>
         <target.zip>target/apache-wink-${project.version}.zip</target.zip>
         <target.jar>target/dist/apache-wink-${project.version}/dist/apache-wink-${project.version}.jar</target.jar>

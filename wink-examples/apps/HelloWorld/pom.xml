@@ -23,7 +23,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>HelloWorld</artifactId>
     <packaging>war</packaging>
-    <name>Wink Examples Apps :: HelloWorld</name>
+    <name>Apache Wink Examples Apps :: HelloWorld</name>
     <parent>
         <groupId>org.apache.wink.example</groupId>
         <artifactId>apps</artifactId>

@@ -26,5 +26,5 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>wink-itest-validation</artifactId>
     <packaging>war</packaging>
-    <name>Wink Integration Validation Tests</name>
+    <name>Apache Wink Integration Validation Tests</name>
 </project>

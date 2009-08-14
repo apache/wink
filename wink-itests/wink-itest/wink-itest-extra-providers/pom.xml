@@ -26,5 +26,5 @@
   <groupId>org.apache.wink</groupId>
   <artifactId>wink-itest-extra-providers</artifactId>
   <packaging>war</packaging>
-  <name>Wink Integration Extra Providers Tests</name>
+  <name>Apache Wink Integration Extra Providers Tests</name>
 </project>

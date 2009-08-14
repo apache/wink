@@ -24,7 +24,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>WebDAV</artifactId>
     <packaging>war</packaging>
-    <name>Wink Examples Ext :: WebDAV</name>
+    <name>Apache Wink Examples Ext :: WebDAV</name>
     <parent>
         <groupId>org.apache.wink.example</groupId>
         <artifactId>ext</artifactId>

@@ -23,7 +23,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>History</artifactId>
     <packaging>war</packaging>
-    <name>Wink Examples Ext :: History</name>
+    <name>Apache Wink Examples Ext :: History</name>
     <parent>
         <groupId>org.apache.wink.example</groupId>
         <artifactId>ext</artifactId>

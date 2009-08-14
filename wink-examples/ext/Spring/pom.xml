@@ -23,7 +23,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>Spring</artifactId>
     <packaging>war</packaging>
-    <name>Wink Examples Ext :: Spring</name>
+    <name>Apache Wink Examples Ext :: Spring</name>
     <parent>
         <groupId>org.apache.wink.example</groupId>
         <artifactId>ext</artifactId>
