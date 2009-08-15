@@ -239,6 +239,8 @@
 				<attribute name="Specification-Title" value="${aggregator.title}" />
 				<attribute name="Specification-Version" value="${project.version}" />
 				<attribute name="Specification-Vendor" value="The Apache Software Foundation" />
+				<attribute name="X-Compile-Source-JDK" value="${maven.compile.source}" />
+				<attribute name="X-COmpile-Target-JDK" value="${maven.compile.target}" />
 			</manifest>
 		</jar>
 		<delete dir="${tmp.unzip}" />

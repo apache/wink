@@ -87,6 +87,8 @@
                                 <property name="user.name" value="${user.name}" />
                                 <property name="java.version" value="${java.version}" />
                                 <property name="target.zip" value="${target.zip}" />
+                                <property name="maven.compile.source" value="${maven.compile.source}" />
+                                <property name="maven.compile.target" value="${maven.compile.target}" />
                                 <ant antfile="build.xml">
                                     <target name="dist" />
                                 </ant>
