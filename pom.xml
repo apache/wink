@@ -16,12 +16,11 @@
         and limitations under the License.
     -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.wink</groupId>
     <artifactId>wink</artifactId>
-    <version>0.1-incubating-SNAPSHOT</version>
+    <version>0.1-incubating</version>
     <packaging>pom</packaging>
     <name>Apache Wink</name>
     <parent>
@@ -48,9 +47,9 @@
         <module>wink-scripts</module>
     </modules>
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/wink/trunk</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/wink/trunk</developerConnection>
-        <url>http://svn.apache.org/viewvc/incubator/wink/trunk</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/wink/tags/wink-0.1-incubating</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/wink/tags/wink-0.1-incubating</developerConnection>
+        <url>http://svn.apache.org/viewvc/incubator/wink/tags/wink-0.1-incubating</url>
     </scm>
     <build>
         <plugins>
@@ -552,8 +551,7 @@
             <!--
                 properties>
                 <distribution.deploy.directory>ast</distribution.deploy.directory>
-                </properties
-            -->
+                </properties -->
         </profile>
     </profiles>
     <inceptionYear>2009</inceptionYear>
