@@ -1,0 +1,53 @@
+// ------------------------------------------------------------------
+// Transitive dependencies of this project determined from the
+// maven pom organized by organization.
+// ------------------------------------------------------------------
+
+Apache Wink
+
+
+From: 'an unknown organization'
+  - Unnamed - com.sun.xml.bind:jaxb-impl:jar:2.1.4  com.sun.xml.bind:jaxb-impl:jar:2.1.4
+
+  - Unnamed - javax.activation:activation:jar:1.1  javax.activation:activation:jar:1.1
+
+  - Unnamed - javax.xml.bind:jaxb-api:jar:2.1  javax.xml.bind:jaxb-api:jar:2.1
+
+  - Streaming API for XML  javax.xml.stream:stax-api:jar:1.0-2
+    License: GNU General Public Library  (http://www.gnu.org/licenses/gpl.txt)    License: COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0  (http://www.sun.com/cddl/cddl.html)
+  - Unnamed - xerces:xercesImpl:jar:2.6.2  xerces:xercesImpl:jar:2.6.2
+
+
+From: 'JSON' (http://json.org/)
+  - JSON (JavaScript Object Notation) (http://www.json.org/java/index.html) org.json:json:jar:20080701
+    License: provided without support or warranty  (http://www.json.org/license.html)
+
+From: 'QOS.ch' (http://www.qos.ch)
+  - SLF4J API Module (http://www.slf4j.org) org.slf4j:slf4j-api:jar:1.5.8
+
+  - SLF4J Simple Binding (http://www.slf4j.org) org.slf4j:slf4j-simple:jar:1.5.8
+
+From: 'Spring Framework' (http://www.springframework.org/)
+  - Spring Framework (http://www.springframework.org) org.springframework:spring:jar:2.5
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+From: 'Sun Microsystems, Inc' (http://www.sun.com/)
+  - jsr311-api (https://jsr311.dev.java.net) javax.ws.rs:jsr311-api:jar:1.0
+    License: CDDL License  (http://www.opensource.org/licenses/cddl1.php)
+
+From: 'The Apache Software Foundation' (http://jakarta.apache.org)
+  - Lang (http://jakarta.apache.org/commons/lang/) commons-lang:commons-lang:jar:2.3
+    License: The Apache Software License, Version 2.0  (/LICENSE.txt)
+
+From: 'The Apache Software Foundation' (http://www.apache.org/)
+  - Apache Wink Common (http://www.apache.org/wink/wink-common) org.apache.wink:wink-common:jar:0.2-incubating-SNAPSHOT
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Apache Wink Server (http://www.apache.org/wink/wink-server) org.apache.wink:wink-server:jar:0.2-incubating-SNAPSHOT
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - HttpClient (http://hc.apache.org/httpcomponents-client) org.apache.httpcomponents:httpclient:jar:4.0-beta2
+    License: Apache License  (../LICENSE.txt)
+  - HttpCore (http://hc.apache.org/httpcomponents-core/) org.apache.httpcomponents:httpcore:jar:4.0-beta3
+    License: Apache License  (http://www.apache.org/licenses/LICENSE-2.0.html)
+
+
+

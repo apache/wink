@@ -240,8 +240,14 @@
 				<attribute name="Specification-Version" value="${project.version}" />
 				<attribute name="Specification-Vendor" value="The Apache Software Foundation" />
 				<attribute name="X-Compile-Source-JDK" value="${maven.compile.source}" />
-				<attribute name="X-COmpile-Target-JDK" value="${maven.compile.target}" />
+				<attribute name="X-Compile-Target-JDK" value="${maven.compile.target}" />
 			</manifest>
+
+			<zipfileset dir="${basedir}" prefix="META-INF">
+				<include name="NOTICE" />
+				<include name="DISCLAIMER" />
+				<include name="DEPENDENCIES" />
+			</zipfileset>
 		</jar>
 		<delete dir="${tmp.unzip}" />
 	</target>
