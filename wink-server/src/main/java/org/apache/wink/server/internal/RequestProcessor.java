@@ -56,7 +56,7 @@ public class RequestProcessor {
     private static final String           PROPERTY_ROOT_RESOURCE_DEFAULT   =
                                                                                PROPERTY_ROOT_RESOURCE_ATOM_HTML;
     private static final String           PROPERTY_ROOT_RESOURCE           =
-                                                                               "wink.searchPolicyContinuedSearch";
+                                                                               "wink.rootResource";
     private static final String           PROPERTY_ROOT_RESOURCE_CSS       =
                                                                                "wink.serviceDocumentCssPath";
 
