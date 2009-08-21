@@ -71,7 +71,13 @@ public class HttpHeadersImpl implements HttpHeaders {
             if (requestHeader == null || requestHeader.isEmpty()) {
                 acceptableLanguages = new LinkedList<Locale>();
             } else {
-                String acceptLanguage = requestHeader.get(0);
+                StringBuilder acceptLanguageTemp = new StringBuilder();
+                acceptLanguageTemp.append(requestHeader.get(0));
+                for(int c = 1; c < requestHeader.size(); ++c) {
+                    acceptLanguageTemp.append(",");
+                    acceptLanguageTemp.append(requestHeader.get(c));
+                }
+                String acceptLanguage = acceptLanguageTemp.toString();
                 AcceptLanguage acceptLanguages = AcceptLanguage.valueOf(acceptLanguage);
                 acceptableLanguages = acceptLanguages.getAcceptableLanguages();
             }
@@ -109,7 +115,13 @@ public class HttpHeadersImpl implements HttpHeaders {
             if (requestHeader == null || requestHeader.isEmpty()) {
                 acceptValue = null;
             } else {
-                acceptValue = requestHeader.get(0);
+                StringBuilder acceptValueTemp = new StringBuilder();
+                acceptValueTemp.append(requestHeader.get(0));
+                for(int c = 1; c < requestHeader.size(); ++c) {
+                    acceptValueTemp.append(",");
+                    acceptValueTemp.append(requestHeader.get(c));
+                }
+                acceptValue = acceptValueTemp.toString();
             }
         }
         Accept acceptHeader = Accept.valueOf(acceptValue);

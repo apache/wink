@@ -36,12 +36,13 @@ import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 
 public class HttpHeadersImplTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] {TestResource.class};
+        return new Class[] {TestResource.class, MultipleHeaders.class};
     }
 
     @Path("/test")
@@ -156,6 +157,24 @@ public class HttpHeadersImplTest extends MockServletInvocationTest {
         }
     }
 
+    @Path("/multipleheaders")
+    public static class MultipleHeaders {
+
+        private @Context
+        HttpHeaders httpHeaders;
+
+        @GET
+        @Produces("text/plain")
+        public String getMultiple() {
+            StringBuilder sb = new StringBuilder();
+            for (Locale l : httpHeaders.getAcceptableLanguages()) {
+                sb.append(l.getLanguage());
+                sb.append(",");
+            }
+            return sb.toString();
+        }
+    }
+
     @Test
     public void testHttpHeaderContext() throws Exception {
         MockHttpServletRequest servletRequest =
@@ -179,5 +198,37 @@ public class HttpHeadersImplTest extends MockServletInvocationTest {
         MockHttpServletRequest servletRequest =
             MockRequestConstructor.constructMockRequest("GET", "/test/negative", "*/*");
         invoke(servletRequest);
+    }
+
+    @Test
+    public void testMultipleHeaders() throws Exception {
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "/multipleheaders", "abcd/efgh");
+        request.addHeader("Accept", "xyz/def");
+        MockHttpServletResponse response = invoke(request);
+        assertEquals(406, response.getStatus());
+
+        request =
+            MockRequestConstructor.constructMockRequest("GET", "/multipleheaders", "abcd/efgh");
+        request.addHeader("Accept", "xyz/def");
+        request.addHeader("Accept", "text/plain");
+        request.addHeader("Accept-Language", Locale.JAPANESE.getLanguage() + ","
+            + Locale.FRENCH.getLanguage());
+
+        response = invoke(request);
+
+        assertEquals(200, response.getStatus());
+        assertEquals("ja,fr,", response.getContentAsString());
+
+        request =
+            MockRequestConstructor.constructMockRequest("GET", "/multipleheaders", "abcd/efgh");
+        request.addHeader("Accept", "xyz/def, text/plain");
+        request.addHeader("Accept-Language", Locale.JAPANESE.getLanguage());
+        request.addHeader("Accept-Language", Locale.FRENCH.getLanguage());
+
+        response = invoke(request);
+
+        assertEquals(200, response.getStatus());
+        assertEquals("ja,fr,", response.getContentAsString());
     }
 }
