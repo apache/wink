@@ -34,13 +34,13 @@ import org.apache.wink.common.model.synd.SyndText;
  * Simple example - Hello World!
  * <p/>
  * The SDK dispatches HTTP requests for URI
- * <code>http://[host]:[port]/hello/world</code>, where <code>hello</code> is
- * the context root, to this class. A simple Atom entry is returned in HTTP
- * response.
+ * <code>http://[host]:[port]/HelloWorld/rest/world</code>, where
+ * <code>HelloWorld</code> is the context root, to this class. A simple Atom
+ * entry is returned in HTTP response.
  * <p/>
  * The service document is available at URI
- * <code>http://[host]:[port]/hello</code> but it is empty because this simple
- * demo doesn't contain any collection of resources.
+ * <code>http://[host]:[port]/HelloWorld/rest</code> but it is empty because
+ * this simple demo doesn't contain any collection of resources.
  * <p/>
  * This resource must be registered within a JAX-RS application, this example
  * uses the default usage of application /WEB-INF/application
