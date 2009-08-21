@@ -20,6 +20,7 @@
 package org.apache.wink.common.internal.registry;
 
 import java.lang.annotation.Annotation;
+import java.lang.ref.SoftReference;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -34,6 +35,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -390,9 +393,12 @@ public class ProvidersRegistry {
 
     private abstract class MediaTypeMap<T> {
 
-        private final Map<MediaType, Set<ObjectFactory<T>>> data =
-                                                                     new LinkedHashMap<MediaType, Set<ObjectFactory<T>>>();
-        private final Class<?>                              rawType;
+        private final Map<MediaType, Set<ObjectFactory<T>>>                                    data           =
+                                                                                                                  new LinkedHashMap<MediaType, Set<ObjectFactory<T>>>();
+        private final Class<?>                                                                 rawType;
+
+        private Map<Class<?>, SoftReference<ConcurrentMap<MediaType, List<ObjectFactory<T>>>>> providersCache =
+                                                                                                                  new ConcurrentHashMap<Class<?>, SoftReference<ConcurrentMap<MediaType, List<ObjectFactory<T>>>>>();
 
         public MediaTypeMap(Class<?> rawType) {
             super();
@@ -407,23 +413,49 @@ public class ProvidersRegistry {
          * @return
          */
         public List<ObjectFactory<T>> getProvidersByMediaType(MediaType mediaType, Class<?> cls) {
-
             String subtype = mediaType.getSubtype();
             String type = mediaType.getType();
-            if (subtype.equals(MediaType.MEDIA_TYPE_WILDCARD) || type
-                .equals(MediaType.MEDIA_TYPE_WILDCARD)) {
-                return getProvidersByWildcardMediaType(mediaType, cls);
-            }
-            List<ObjectFactory<T>> list = new ArrayList<ObjectFactory<T>>();
             if (!mediaType.getParameters().isEmpty()) {
                 mediaType = new MediaType(type, subtype);
             }
-            Set<ObjectFactory<T>> set = data.get(mediaType);
-            limitByType(list, set, cls);
-            set = data.get(new MediaType(type, MediaType.MEDIA_TYPE_WILDCARD));
-            limitByType(list, set, cls);
-            set = data.get(MediaType.WILDCARD_TYPE);
-            limitByType(list, set, cls);
+
+            SoftReference<ConcurrentMap<MediaType, List<ObjectFactory<T>>>> mediaTypeToProvidersCacheRef =
+                providersCache.get(cls);
+            ConcurrentMap<MediaType, List<ObjectFactory<T>>> mediaTypeToProvidersCache = null;
+            if (mediaTypeToProvidersCacheRef != null) {
+                mediaTypeToProvidersCache = mediaTypeToProvidersCacheRef.get();
+            }
+            if (mediaTypeToProvidersCache == null) {
+                mediaTypeToProvidersCache =
+                    new ConcurrentHashMap<MediaType, List<ObjectFactory<T>>>();
+                providersCache
+                    .put(cls,
+                         new SoftReference<ConcurrentMap<MediaType, List<ObjectFactory<T>>>>(
+                                                                                             mediaTypeToProvidersCache));
+            }
+
+            List<ObjectFactory<T>> list = mediaTypeToProvidersCache.get(mediaType);
+
+            if (list == null) {
+                if (subtype.equals(MediaType.MEDIA_TYPE_WILDCARD) || type
+                    .equals(MediaType.MEDIA_TYPE_WILDCARD)) {
+                    list = getProvidersByWildcardMediaType(mediaType, cls);
+                    mediaTypeToProvidersCache.put(mediaType, list);
+                    return list;
+                }
+                list = new ArrayList<ObjectFactory<T>>();
+                if (!mediaType.getParameters().isEmpty()) {
+                    mediaType = new MediaType(type, subtype);
+                }
+                Set<ObjectFactory<T>> set = data.get(mediaType);
+                limitByType(list, set, cls);
+                set = data.get(new MediaType(type, MediaType.MEDIA_TYPE_WILDCARD));
+                limitByType(list, set, cls);
+                set = data.get(MediaType.WILDCARD_TYPE);
+                limitByType(list, set, cls);
+
+                mediaTypeToProvidersCache.put(mediaType, list);
+            }
 
             return list;
         }
@@ -535,6 +567,9 @@ public class ProvidersRegistry {
             }
             if (!set.add(objectFactory)) {
                 logger.warn("The set already contains {}. Skipping...", objectFactory);
+            } else {
+                // the set of providers has been changed so must clear the cache
+                providersCache.clear();
             }
         }
 
