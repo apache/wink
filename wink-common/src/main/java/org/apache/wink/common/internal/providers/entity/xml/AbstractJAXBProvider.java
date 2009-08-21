@@ -24,6 +24,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
@@ -40,20 +42,26 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
+import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.wink.common.internal.utils.MediaTypeUtils;
 
 public abstract class AbstractJAXBProvider {
 
-    private static final Logger                     logger              =
-                                                                            LoggerFactory
-                                                                                .getLogger(AbstractJAXBProvider.class);
-    private static final Map<Class<?>, JAXBContext> jaxbDefaultContexts =
-                                                                            new WeakHashMap<Class<?>, JAXBContext>();
+    private static final Logger                     logger                    =
+                                                                                  LoggerFactory
+                                                                                      .getLogger(AbstractJAXBProvider.class);
+    private static final Map<Class<?>, JAXBContext> jaxbDefaultContexts       =
+                                                                                  new WeakHashMap<Class<?>, JAXBContext>();
 
     @Context
     private Providers                               providers;
+
+    private static ConcurrentMap<String, Boolean>   jaxbIsXMLRootElementCache =
+                                                                                  new ConcurrentHashMap<String, Boolean>();
+
+    private static ConcurrentMap<String, Boolean>   jaxbIsXMLTypeCache        =
+                                                                                  new ConcurrentHashMap<String, Boolean>();
 
     protected final Unmarshaller getUnmarshaller(Class<?> type, MediaType mediaType)
         throws JAXBException {
@@ -72,8 +80,33 @@ public abstract class AbstractJAXBProvider {
     }
 
     public static boolean isJAXBObject(Class<?> type, Type genericType) {
-        return type.getAnnotation(XmlRootElement.class) != null || type
-            .getAnnotation(XmlType.class) != null;
+        return isXMLRootElement(type) || isXMLType(type);
+    }
+
+    private static boolean isXMLRootElement(Class<?> type) {
+        String className = type.getName();
+        Boolean isJAXBObject = jaxbIsXMLRootElementCache.get(className);
+
+        if (isJAXBObject == null) {
+            boolean isXmlRootElement = type.getAnnotation(XmlRootElement.class) != null;
+            isJAXBObject = Boolean.valueOf(isXmlRootElement);
+            jaxbIsXMLRootElementCache.putIfAbsent(className, isJAXBObject);
+        }
+
+        return isJAXBObject.booleanValue();
+    }
+
+    private static boolean isXMLType(Class<?> type) {
+        String className = type.getName();
+        Boolean isJAXBObject = jaxbIsXMLTypeCache.get(className);
+
+        if (isJAXBObject == null) {
+            boolean isXmlTypeElement = type.getAnnotation(XmlType.class) != null;
+            isJAXBObject = Boolean.valueOf(isXmlTypeElement);
+            jaxbIsXMLTypeCache.putIfAbsent(className, isJAXBObject);
+        }
+
+        return isJAXBObject.booleanValue();
     }
 
     public static boolean isJAXBElement(Class<?> type, Type genericType) {
@@ -117,7 +150,7 @@ public abstract class AbstractJAXBProvider {
     protected Object getEntityToMarshal(Object jaxbObject, Class<?> type) {
         // in case JAXB Objects is not annotated with XmlRootElement, Wrap JAXB
         // Objects with JAXBElement
-        if (type.getAnnotation(XmlRootElement.class) == null && type.getAnnotation(XmlType.class) != null) {
+        if (!isXMLRootElement(type) && isXMLType(type)) {
             JAXBElement<?> wrappedJAXBElement = wrapInJAXBElement(jaxbObject, type);
             if (wrappedJAXBElement == null) {
                 logger.error("Failed to find ObjectFactory for {}", type.getName());
