@@ -197,6 +197,10 @@ public class UriInfoImpl implements UriInfo {
         return map;
     }
 
+    public void resetPathParameters() {
+        pathParameters = null;
+    }
+
     public List<PathSegment> getPathSegments() {
         return getPathSegments(true);
     }

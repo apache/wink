@@ -89,7 +89,9 @@ public class ServerMessageContext extends AbstractRuntimeContext implements Mess
         setAttribute(Providers.class, new ProvidersImpl(getDeploymentConfiguration()
             .getProvidersRegistry(), this));
         setAttribute(HttpHeaders.class, new HttpHeadersImpl(this));
-        setAttribute(UriInfo.class, new UriInfoImpl(this));
+        UriInfoImpl uriInfoImpl = new UriInfoImpl(this);
+        setAttribute(UriInfo.class, uriInfoImpl);
+        setAttribute(UriInfoImpl.class, uriInfoImpl);
         setAttribute(SecurityContext.class, new SecurityContextImpl(this));
         setAttribute(Request.class, new RequestImpl(this));
         setAttribute(LinkBuilders.class, new LinkBuildersImpl(this));

@@ -34,6 +34,7 @@ import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor;
 import org.apache.wink.server.handlers.HandlersChain;
 import org.apache.wink.server.handlers.MessageContext;
 import org.apache.wink.server.handlers.RequestHandler;
+import org.apache.wink.server.internal.contexts.UriInfoImpl;
 import org.apache.wink.server.internal.handlers.SearchResult.AccumulatedData;
 import org.apache.wink.server.internal.registry.MethodRecord;
 import org.apache.wink.server.internal.registry.ResourceInstance;
@@ -254,6 +255,12 @@ public class FindResourceMethodHandler implements RequestHandler {
         // 3. save the path segments of the matched variables
         matcher.storeVariablesPathSegments(segments, offset, headSegmentsCount, result.getData()
             .getMatchedVariablesPathSegments());
+
+        // for sub resources with annotated method parameters, we need to reload
+        // path parameters so that they are injected when invoked
+        UriInfoImpl uriInfoImpl = context.getAttribute(UriInfoImpl.class);
+        if (uriInfoImpl != null && matcher.getVariables().size() > 0)
+            uriInfoImpl.resetPathParameters();
     }
 
     public void init(Properties props) {

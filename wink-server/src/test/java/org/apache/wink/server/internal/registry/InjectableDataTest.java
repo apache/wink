@@ -327,6 +327,26 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertTrue(p.contains(segment1));
             assertTrue(p.contains(segment2));
         }
+
+        @Path("subresourcelocator/{p1}")
+        public PathParamResource.PathParamSubResource getSubResource(@PathParam("p1") String p1) {
+            assertEquals("d e+f", p1);
+            return new PathParamResource.PathParamSubResource();
+        }
+
+        public class PathParamSubResource {
+            @GET
+            @Path("subresourcestring/{p2}")
+            public void getPathString(@PathParam("p2") String p2) {
+                assertEquals("g h+i", p2);
+            }
+
+            @GET
+            @Path("subresourcepathsegment/{p2}")
+            public void getPathSegment(@PathParam("p2") PathSegment p2) {
+                assertEquals(new PathSegmentImpl("j k+l"), p2);
+            }
+        }
     }
 
     @Path("queryParam")
@@ -985,6 +1005,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
         assertInvocation("pathParam/a%20b;m1=1/PathSegmentSimpleSortedSet/a%20b;m1=1/c%20d;m2=2");
         assertInvocation("pathParam/a%20b;m1=1/PathSegmentEncodedSortedSet/a%20b;m1=1/c%20d;m2=2");
         assertInvocation("pathParam/a%20b;m1=1/PathSegmentDefaultSortedSet/a%20b;m1=1/c%20d;m2=2");
+        assertInvocation("pathParam/a%20b+c/subresourcelocator/d%20e+f/subresourcestring/g%20h+i");
     }
 
     public void testQueryParam() {
