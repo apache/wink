@@ -31,6 +31,7 @@ import javax.ws.rs.core.Application;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.server.internal.DeploymentConfiguration;
 import org.apache.wink.server.internal.RequestProcessor;
 import org.apache.wink.server.internal.application.ServletWinkApplication;
@@ -150,8 +151,7 @@ public class RestServlet extends AbstractRestServlet {
         }
         String appLocationParameter = getInitParameter(APP_LOCATION_PARAM);
         if (appLocationParameter == null) {
-            String message = APP_LOCATION_PARAM + " was not defined.";
-            logger.warn(message);
+            logger.warn(Messages.getMessage("propertyNotDefined"), APP_LOCATION_PARAM);
         }
         return new ServletWinkApplication(getServletContext(), appLocationParameter);
     }
@@ -171,7 +171,7 @@ public class RestServlet extends AbstractRestServlet {
                     is.close();
                 }
             } catch (IOException e) {
-                logger.warn("Exception when closing file " + resourceName, e);
+                logger.warn(Messages.getMessage("exceptionClosingFile") + ": " + resourceName, e);
             }
         }
         return properties;

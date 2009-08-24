@@ -32,6 +32,7 @@ import javax.ws.rs.core.UriInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.http.HttpStatus;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.model.synd.SyndBase;
 import org.apache.wink.common.model.synd.SyndEntry;
 import org.apache.wink.common.model.synd.SyndFeed;
@@ -375,7 +376,7 @@ public class WebDAVResponseBuilder {
         }
         if (link == null) {
             // no link in the resource
-            logger.error("The resource {} has set no edit or self link", synd.getId());
+            logger.error(Messages.getMessage("webDAVNoEditOrSelfLink"), synd.getId());
             throw new WebApplicationException();
         }
 

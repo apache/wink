@@ -26,6 +26,7 @@ import javax.ws.rs.ext.RuntimeDelegate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.server.handlers.AbstractHandler;
 import org.apache.wink.server.handlers.MessageContext;
 
@@ -57,7 +58,7 @@ public class PopulateErrorResponseHandler extends AbstractHandler {
         try {
             return provider.toResponse(exception);
         } catch (Throwable e) {
-            logger.error("Exception occured while executing toResponse of the ExceptionMapper", e);
+            logger.error(Messages.getMessage("exceptionOccurredDuringExceptionMapper"), e);
             return RUNTIME_DELEGATE.createResponseBuilder().status(500).build();
         }
     }

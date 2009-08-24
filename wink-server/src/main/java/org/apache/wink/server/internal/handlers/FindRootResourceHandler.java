@@ -56,7 +56,7 @@ public class FindRootResourceHandler implements RequestHandler {
         // get a list of root resources that can handle the request
         List<ResourceInstance> matchedResources = registry.getMatchingRootResources(strippedPath);
         if (matchedResources.size() == 0) {
-            logger.warn("No resource found matching {}", context.getUriInfo().getPath(false));
+            logger.debug("No resource found matching {}", context.getUriInfo().getPath(false));
             SearchResult result =
                 new SearchResult(new WebApplicationException(Response.Status.NOT_FOUND));
             context.setAttribute(SearchResult.class, result);

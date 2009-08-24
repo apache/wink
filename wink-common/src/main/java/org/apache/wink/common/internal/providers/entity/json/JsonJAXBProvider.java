@@ -41,6 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.annotations.Scope;
 import org.apache.wink.common.annotations.Scope.ScopeType;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.json.JSONObject;
 
@@ -113,7 +114,7 @@ public class JsonJAXBProvider extends AbstractJsonXmlProvider implements Message
             marshaller.marshal(jaxbObject, handler);
             return handler.getJsonResult();
         } catch (JAXBException e) {
-            logger.error("Failed to convert JAXB object {} to JSONObject", type.getName());
+            logger.error(Messages.getMessage("jsonFailConvertJAXBToJSON"), type.getName());
             throw new WebApplicationException(e);
         }
     }

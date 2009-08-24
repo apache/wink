@@ -164,7 +164,7 @@ public class GenericsUtils {
             return getClassType(((WildcardType)type).getUpperBounds()[0]);
         }
 
-        logger.error(String.format("Method doesn't handle %s", String.valueOf(type)));
+        logger.error("Method doesn't handle %s", String.valueOf(type));
         return null;
     }
 

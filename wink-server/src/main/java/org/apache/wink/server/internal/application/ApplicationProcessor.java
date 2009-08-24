@@ -26,6 +26,7 @@ import javax.ws.rs.core.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.WinkApplication;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
@@ -105,13 +106,13 @@ public class ApplicationProcessor {
                 } else if (ProviderMetadataCollector.isProvider(cls)) {
                     providersRegistry.addProvider(obj, priority);
                 } else {
-                    logger.warn("Cannot handle {}. Ignoring.", obj);
+                    logger.warn(Messages
+                        .getMessage("classNotADynamicResourceNorResourceNorProvider"), obj);
                 }
             } catch (Exception e) {
-                logger
-                    .warn("The following exception occured during processing of instance {}. Ignoring.",
-                          obj.getClass().getCanonicalName());
-                e.printStackTrace();
+                logger.warn(Messages.getMessage("exceptionOccurredDuringInstanceProcessing"), obj
+                    .getClass().getCanonicalName());
+                logger.warn(Messages.getMessage("listExceptionDuringInstanceProcessing"), e);
             }
         }
     }
@@ -129,13 +130,11 @@ public class ApplicationProcessor {
                 } else if (ProviderMetadataCollector.isProvider(cls)) {
                     providersRegistry.addProvider(cls);
                 } else {
-                    logger.warn("{} is not a resource or a provider. Ignored.", cls);
+                    logger.warn(Messages.getMessage("classNotAResourceNorProvider"), cls);
                 }
             } catch (Exception e) {
-                logger
-                    .warn("The following exception occured during processing of class {}. Ignoring.",
-                          cls);
-                e.printStackTrace();
+                logger.warn(Messages.getMessage("exceptionOccurredDuringClassProcessing"), cls);
+                logger.warn(Messages.getMessage("listExceptionDuringClassProcessing"), e);
             }
         }
     }
@@ -154,13 +153,12 @@ public class ApplicationProcessor {
                 } else if (ProviderMetadataCollector.isProvider(cls)) {
                     providersRegistry.addProvider(obj);
                 } else {
-                    logger.warn("{} is not a resource or a provider. Ignoring.", obj);
+                    logger.warn(Messages.getMessage("classNotAResourceNorProvider"), obj);
                 }
             } catch (Exception e) {
-                logger
-                    .warn("The following exception occured during processing of singleton {}. Ignoring.",
-                          obj.getClass().getCanonicalName());
-                e.printStackTrace();
+                logger.warn(Messages.getMessage("exceptionOccurredDuringSingletonProcessing"), obj
+                    .getClass().getCanonicalName());
+                logger.warn(Messages.getMessage("listExceptionDuringSingletonProcessing"), e);
             }
         }
     }

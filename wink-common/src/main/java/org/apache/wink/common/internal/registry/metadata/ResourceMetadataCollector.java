@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.wink.common.DynamicResource;
 import org.apache.wink.common.annotations.Parent;
 import org.apache.wink.common.annotations.Workspace;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.registry.Injectable;
 import org.apache.wink.common.internal.registry.InjectableFactory;
 
@@ -162,7 +163,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                         for (Injectable id : methodMetadata.getFormalParameters()) {
                             if (id.getParamType() == Injectable.ParamType.ENTITY) {
                                 logger
-                                    .warn("Sub-Resource locator {} contains an illegal entity parameter. The locator will be ignored.",
+                                    .warn(Messages.getMessage("subresourceLocatorIllegalEntityParameter"),
                                           methodName);
                                 continue F1;
                             }
@@ -172,7 +173,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                         if (!methodMetadata.getConsumes().isEmpty() || !methodMetadata
                             .getProduces().isEmpty()) {
                             logger
-                                .warn("Sub-Resource locator {} is annotated with Consumes/Produces. These annotations are ignored for sub-resource locators",
+                                .warn(Messages.getMessage("subresourceLocatorAnnotatedConsumesProduces"),
                                       methodName);
                         }
                         getMetadata().getSubResourceLocators().add(methodMetadata);
@@ -270,7 +271,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
         // since there is at least one JAX-RS annotation on the method
         if (metadata.getHttpMethod() == null && metadata.getPath() == null) {
             logger
-                .warn("The method {} in class {} is not annotated with an http method designator nor the Path annotation. " + "This method will be ignored.",
+                .warn(Messages.getMessage("methodNotAnnotatedCorrectly"),
                       method.getName(),
                       method.getDeclaringClass().getCanonicalName());
             return null;

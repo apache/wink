@@ -35,6 +35,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.model.atom.AtomFeed;
 import org.apache.wink.common.model.atom.AtomJAXBUtils;
 import org.apache.wink.common.model.atom.ObjectFactory;
@@ -96,7 +97,7 @@ public abstract class AbstractAtomFeedProvider<T> {
         if (object instanceof AtomFeed) {
             feed = (AtomFeed)object;
         } else {
-            logger.error("request entity is not an atom feed (it was unmarshalled as {})", object
+            logger.error(Messages.getMessage("atomRequestEntityNotAtomFeed"), object
                 .getClass());
             throw new WebApplicationException(Status.BAD_REQUEST);
         }

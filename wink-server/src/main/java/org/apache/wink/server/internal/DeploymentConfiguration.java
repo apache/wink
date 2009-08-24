@@ -38,6 +38,7 @@ import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.application.ApplicationValidator;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.lifecycle.ScopeLifecycleManager;
 import org.apache.wink.common.internal.registry.InjectableFactory;
@@ -278,7 +279,7 @@ public class DeploymentConfiguration {
                     alternateShortcutMap.put((String)entry.getKey(), (String)entry.getValue());
                 }
             } catch (IOException e) {
-                logger.error("Failed to load alternateShortcutMap", e);
+                logger.error(Messages.getMessage("alternateShortcutMapLoadFailure"), e);
                 throw new WebApplicationException(e);
             } finally {
                 try {
@@ -286,7 +287,7 @@ public class DeploymentConfiguration {
                         is.close();
                     }
                 } catch (IOException e) {
-                    logger.info("Exception when closing file " + ALTERNATIVE_SHORTCUTS, e);
+                    logger.info(Messages.getMessage("alternateShortcutMapCloseFailure") + ALTERNATIVE_SHORTCUTS, e);
                 }
             }
         }

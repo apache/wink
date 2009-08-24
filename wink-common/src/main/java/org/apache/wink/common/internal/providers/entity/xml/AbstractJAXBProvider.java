@@ -42,6 +42,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -153,7 +154,7 @@ public abstract class AbstractJAXBProvider {
         if (!isXMLRootElement(type) && isXMLType(type)) {
             JAXBElement<?> wrappedJAXBElement = wrapInJAXBElement(jaxbObject, type);
             if (wrappedJAXBElement == null) {
-                logger.error("Failed to find ObjectFactory for {}", type.getName());
+                logger.error(Messages.getMessage("jaxbObjectFactoryNotFound"), type.getName());
                 throw new WebApplicationException();
             }
             return wrappedJAXBElement;
@@ -185,10 +186,10 @@ public abstract class AbstractJAXBProvider {
                 }
                 return null;
             }
-            logger.warn("Failed to instantiate object factory for {}", type.getName());
+            logger.warn(Messages.getMessage("jaxbObjectFactoryInstantiate"), type.getName());
             return defaultWrapInJAXBElement(jaxbObject, type);
         } catch (Exception e) {
-            logger.error("Failed to build JAXBElement for {}", type.getName());
+            logger.error(Messages.getMessage("jaxbElementFailToBuild"), type.getName());
             return null;
         }
 
@@ -208,12 +209,12 @@ public abstract class AbstractJAXBProvider {
         try {
             factoryClass = Thread.currentThread().getContextClassLoader().loadClass(b.toString());
         } catch (ClassNotFoundException e) {
-            logger.error("ObjectFactory for {} was not found", type.getName());
+            logger.error(Messages.getMessage("jaxbObjectFactoryNotFound"), type.getName());
             return null;
         }
 
         if (!factoryClass.isAnnotationPresent(XmlRegistry.class)) {
-            logger.error("Found ObjectFactory for {} is not annotated with XmlRegistry.class", type
+            logger.error(Messages.getMessage("jaxbObjectFactoryNotAnnotatedXMLRegistry"), type
                 .getName());
             return null;
         }
@@ -223,7 +224,7 @@ public abstract class AbstractJAXBProvider {
 
     @SuppressWarnings("unchecked")
     private JAXBElement<?> defaultWrapInJAXBElement(Object jaxbObject, Class<?> type) {
-        logger.info("Creating default JAXBElement for {}", type.getName());
+        logger.info(Messages.getMessage("jaxbCreateDefaultJAXBElement"), type.getName());
         String typeStr = type.getAnnotation(XmlType.class).name();
         return new JAXBElement(new QName(typeStr), type, jaxbObject);
     }

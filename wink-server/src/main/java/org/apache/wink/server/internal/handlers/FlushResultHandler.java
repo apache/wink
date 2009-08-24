@@ -46,6 +46,7 @@ import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.MultivaluedMapImpl;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.server.handlers.AbstractHandler;
 import org.apache.wink.server.handlers.MessageContext;
@@ -174,9 +175,9 @@ public class FlushResultHandler extends AbstractHandler {
 
         } else {
             logger
-                .warn("Could not find a writer for {} and {}. Try to find JAF DataSourceProvider",
-                      entity.getClass().getName(),
-                      responseMediaType);
+                .debug("Could not find a writer for {} and {}. Try to find JAF DataSourceProvider",
+                       entity.getClass().getName(),
+                       responseMediaType);
         }
 
         DataContentHandler dataContentHandler = null;
@@ -189,7 +190,8 @@ public class FlushResultHandler extends AbstractHandler {
                 .createDataContentHandler(responseMediaType.toString());
 
         if (dataContentHandler == null) {
-            logger.error("Could not find a DataSourceProvider for {} ", responseMediaType);
+            logger.error(Messages.getMessage("noWriterOrDataSourceProvider"), entity.getClass()
+                .getName(), responseMediaType);
             throw new WebApplicationException(500);
         }
 

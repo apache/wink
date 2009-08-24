@@ -51,6 +51,7 @@ import javax.ws.rs.ext.MessageBodyWriter;
 
 import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.internal.application.ApplicationValidator;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.lifecycle.ObjectFactory;
 import org.apache.wink.common.internal.runtime.RuntimeContext;
@@ -155,7 +156,7 @@ public class ProvidersRegistry {
             retValue = true;
         }
         if (retValue == false) {
-            logger.warn("Unknown provider: {}", cls);
+            logger.warn(Messages.getMessage("classIsUnknownProvider"), cls);
         }
         return retValue;
 
@@ -566,7 +567,7 @@ public class ProvidersRegistry {
                 data.put(key, set);
             }
             if (!set.add(objectFactory)) {
-                logger.warn("The set already contains {}. Skipping...", objectFactory);
+                logger.warn(Messages.getMessage("mediaTypeSetAlreadyContains"), objectFactory);
             } else {
                 // the set of providers has been changed so must clear the cache
                 providersCache.clear();

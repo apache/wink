@@ -31,6 +31,7 @@ import javax.ws.rs.WebApplicationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
 import org.apache.wink.common.internal.utils.FileLoader;
@@ -102,10 +103,10 @@ public class ApplicationFileLoader {
                         .isProvider(cls)) {
                         classes.add(cls);
                     } else {
-                        logger.warn("The {} is neither resource nor provider. Ignoring.", cls);
+                        logger.warn(Messages.getMessage("classNotAResourceNorProvider"), cls);
                     }
                 } catch (ClassNotFoundException e) {
-                    logger.error("{} is not a class. Ignoring.", line);
+                    logger.error(Messages.getMessage("isNotAClass"), line);
                 }
             }
         } catch (IOException e) {
@@ -114,7 +115,7 @@ public class ApplicationFileLoader {
             try {
                 is.close();
             } catch (IOException e) {
-                logger.info("Exception when closing file", e);
+                logger.info(Messages.getMessage("exceptionClosingFile"), e);
             }
         }
     }

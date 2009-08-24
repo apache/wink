@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 
+import org.apache.wink.common.internal.i18n.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,7 +63,7 @@ public class MediaTypeHeaderDelegate implements HeaderDelegate<MediaType> {
                 }
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-            String errMsg = String.format("Wrong MediaType format for MediaType:\"%s\"", value);
+            String errMsg = String.format(Messages.getMessage("mediaTypeWrongFormat"), value);
             logger.error(errMsg);
             throw new IllegalArgumentException(errMsg, e);
         }

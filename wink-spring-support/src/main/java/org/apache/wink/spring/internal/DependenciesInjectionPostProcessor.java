@@ -23,6 +23,7 @@ import javax.ws.rs.WebApplicationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.lifecycle.CreationUtils;
 import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
@@ -46,7 +47,7 @@ public class DependenciesInjectionPostProcessor implements BeanPostProcessor {
                 CreationUtils.injectFields(bean, classMetadata, RuntimeContextTLS
                     .getRuntimeContext());
             } catch (Exception e) {
-                logger.error("Exception occured during the fields injection for bean " + beanName,
+                logger.error(Messages.getMessage("springExceptionOccurredDuringFieldInject"),
                              e);
                 throw new WebApplicationException(e);
             }

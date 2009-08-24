@@ -39,6 +39,7 @@ import javax.ws.rs.ext.Provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.RestConstants;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.providers.entity.xml.AbstractJAXBProvider;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.utils.ProviderUtils;
@@ -80,7 +81,7 @@ public class JsonProvider extends AbstractJAXBProvider implements MessageBodyWri
         try {
             jsonString = t.toString(2);
         } catch (JSONException e) {
-            logger.error("Failed to write json object");
+            logger.error(Messages.getMessage("jsonFailWriteJSONObject"));
             throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
         }
 

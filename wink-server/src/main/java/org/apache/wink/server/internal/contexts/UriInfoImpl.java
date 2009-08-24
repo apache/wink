@@ -37,6 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.MultivaluedMapImpl;
 import org.apache.wink.common.internal.PathSegmentImpl;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.uri.UriEncoder;
 import org.apache.wink.common.internal.utils.UriHelper;
 import org.apache.wink.server.handlers.MessageContext;
@@ -97,7 +98,7 @@ public class UriInfoImpl implements UriInfo {
             try {
                 baseUri = new URI(baseUriString);
             } catch (URISyntaxException e) {
-                logger.error("bad base URI: " + baseUriString, e);
+                logger.error(Messages.getMessage("uriBadBaseURI") + baseUriString, e);
             }
         }
         return baseUri;

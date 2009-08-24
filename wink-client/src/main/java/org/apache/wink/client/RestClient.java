@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.wink.client.internal.ResourceImpl;
 import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.internal.application.ApplicationValidator;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.lifecycle.ScopeLifecycleManager;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
@@ -56,10 +57,14 @@ import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollect
  */
 public class RestClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(RestClient.class);
+    private static final Logger logger                   =
+                                                             LoggerFactory
+                                                                 .getLogger(RestClient.class);
 
     private ProvidersRegistry   providersRegistry;
     private ClientConfig        config;
+
+    private final static String CLASS_NOT_A_PROVIDER_MSG = Messages.getMessage("classNotAProvider");
 
     /**
      * Construct a new RestClient using the default client configuration
@@ -147,7 +152,7 @@ public class RestClient {
             if (ProviderMetadataCollector.isProvider(cls)) {
                 providersRegistry.addProvider(cls);
             } else {
-                logger.warn("{} is not a provider. Ignoring.", cls);
+                logger.warn(CLASS_NOT_A_PROVIDER_MSG, cls);
             }
         }
     }
@@ -158,7 +163,7 @@ public class RestClient {
             if (ProviderMetadataCollector.isProvider(cls)) {
                 providersRegistry.addProvider(obj);
             } else {
-                logger.warn("{} is not a provider. Ignoring.", obj);
+                logger.warn(CLASS_NOT_A_PROVIDER_MSG, obj);
             }
         }
     }
@@ -175,7 +180,7 @@ public class RestClient {
             if (ProviderMetadataCollector.isProvider(cls)) {
                 providersRegistry.addProvider(obj, priority);
             } else {
-                logger.warn("{} is not a provider. Ignoring.", obj);
+                logger.warn(CLASS_NOT_A_PROVIDER_MSG, obj);
             }
         }
     }

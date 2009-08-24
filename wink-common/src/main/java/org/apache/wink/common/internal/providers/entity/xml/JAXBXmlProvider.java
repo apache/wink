@@ -40,6 +40,7 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.utils.ProviderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,7 +78,7 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
                     unmarshaller.unmarshal(new StreamSource(entityStream), type).getValue();
 
         } catch (JAXBException e) {
-            logger.error("Failed to unmarshal {}", type.getName());
+            logger.error(Messages.getMessage("jaxbFailToUnmarshal"), type.getName());
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         }
         return unmarshaledResource;
@@ -116,7 +117,7 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
             marshaller.marshal(entityToMarshal, entityStream);
             entityStream.flush();
         } catch (JAXBException e) {
-            logger.error("Failed to marshal {}", type.getName());
+            logger.error(Messages.getMessage("jaxbFailToMarshal"), type.getName());
             throw new WebApplicationException(e);
         }
     }

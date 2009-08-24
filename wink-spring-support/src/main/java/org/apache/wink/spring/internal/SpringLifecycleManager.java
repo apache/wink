@@ -25,6 +25,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.DynamicResource;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.lifecycle.LifecycleManager;
 import org.apache.wink.common.internal.lifecycle.ObjectCreationException;
 import org.apache.wink.common.internal.lifecycle.ObjectFactory;
@@ -89,10 +90,10 @@ public class SpringLifecycleManager<T> implements LifecycleManager<T> {
             .isProvider(cls)) {
             SpringObjectFactory old = class2factory.put(cls, objectFactory);
             if (old != null) {
-                logger.warn("The {} was replaced by a newer object factory.", cls);
+                logger.warn(Messages.getMessage("springClassReplaceNewerObjectFactory"), cls);
             }
         } else {
-            logger.warn("The bean {} of class {} is neither resource nor provider", beanName, cls);
+            logger.warn(Messages.getMessage("springBeanNotResourceNorProvider"), beanName, cls);
         }
     }
 
@@ -103,10 +104,10 @@ public class SpringLifecycleManager<T> implements LifecycleManager<T> {
             dynResource.setBeanName(beanName);
             SpringObjectFactory old = id2factory.put(beanName, objectFactory);
             if (old != null) {
-                logger.warn("The {} was replaced by a newer object factory.", beanName);
+                logger.warn(Messages.getMessage("springClassReplaceNewerObjectFactory"), beanName);
             }
         } else {
-            logger.warn("The bean {} of class {} is not a DynamicResource.", beanName, cls);
+            logger.warn(Messages.getMessage("springBeanClassNotDynamicResource"), beanName, cls);
         }
     }
 

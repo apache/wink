@@ -27,6 +27,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.WinkApplication;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.utils.FileLoader;
 
 /**
@@ -78,7 +79,7 @@ public class SimpleWinkApplication extends WinkApplication {
                         .addAll(getApplicationFileLoader(getFileStream(applicationConfigFile))
                             .getClasses());
                 } catch (FileNotFoundException e) {
-                    logger.warn("Could not find {}. Ignoring.", applicationConfigFile);
+                    logger.warn(Messages.getMessage("configNotFound"), applicationConfigFile);
                 }
             }
         }

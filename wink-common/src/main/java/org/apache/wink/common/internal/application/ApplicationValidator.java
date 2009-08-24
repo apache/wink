@@ -28,6 +28,7 @@ import javax.ws.rs.ext.Provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.DynamicResource;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
 
@@ -80,7 +81,7 @@ public class ApplicationValidator {
     private boolean classUnique(Class<? extends Object> cls) {
         if (!singletonClasses.add(cls)) {
             // the singleton of this class already exists
-            logger.warn("The class {} was already added. Ignored.", cls);
+            logger.warn(Messages.getMessage("classAlreadyAdded"), cls);
             return false;
         }
         return true;
@@ -107,7 +108,7 @@ public class ApplicationValidator {
         boolean valid = counter <= 1;
 
         if (!valid) {
-            logger.warn("The class {} may only have one of the following declarations: {}, {}, {}",
+            logger.warn(Messages.getMessage("classNotValid"),
                         new Object[] {cls, Path.class.getName(), DynamicResource.class.getName(),
                             Provider.class.getName()});
         }

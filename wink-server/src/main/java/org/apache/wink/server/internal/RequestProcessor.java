@@ -36,6 +36,7 @@ import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.application.ApplicationFileLoader;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.server.internal.handlers.ServerMessageContext;
 import org.apache.wink.server.internal.resources.HtmlServiceDocumentResource;
@@ -117,7 +118,7 @@ public class RequestProcessor {
             handleRequestWithoutFaultBarrier(request, response);
         } catch (Throwable t) {
             // exception was not handled properly
-            logger.error("Unhandled exception", t);
+            logger.error(Messages.getMessage("unhandledExceptionToContainer"), t);
             if (t instanceof RuntimeException) {
                 // let the servlet container to handle the runtime exception
                 throw (RuntimeException)t;
@@ -149,7 +150,7 @@ public class RequestProcessor {
     }
 
     private void logException(Throwable t) {
-        String messageFormat = "%s occured during the handlers chain invocation";
+        String messageFormat = Messages.getMessage("exceptionOccurredDuringInvocation");
         String exceptionName = t.getClass().getSimpleName();
         if (t instanceof WebApplicationException) {
             WebApplicationException wae = (WebApplicationException)t;

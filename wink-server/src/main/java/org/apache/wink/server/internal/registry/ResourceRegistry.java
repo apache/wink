@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.http.HttpStatus;
 import org.apache.wink.common.internal.application.ApplicationValidator;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.registry.Injectable;
 import org.apache.wink.common.internal.registry.metadata.MethodMetadata;
@@ -107,7 +108,7 @@ public class ResourceRegistry {
         writersLock.lock();
         try {
             if (!applicationValidator.isValidResource(instance.getClass())) {
-                logger.warn("The resource {} is not a valid resource. Ignoring.", instance);
+                logger.warn(Messages.getMessage("resourceClassNotValid"), instance);
                 return;
             }
 
@@ -132,7 +133,7 @@ public class ResourceRegistry {
         writersLock.lock();
         try {
             if (!applicationValidator.isValidResource(clazz)) {
-                logger.warn("The resource class {} is not a valid resource. Ignoring.", clazz);
+                logger.warn(Messages.getMessage("resourceClassNotValid"), clazz);
                 return;
             }
             ResourceRecord record = getRecord(clazz);
@@ -369,7 +370,7 @@ public class ResourceRegistry {
             }
         }
         if (methodRecords.size() == 0) {
-            logger.info("Could not find any method in class {} that supports {}", resource
+            logger.info(Messages.getMessage("noMethodInClassSupportsHTTPMethod"), resource
                 .getResourceClass().getName(), context.getRequest().getMethod());
             throw new WebApplicationException(HttpStatus.METHOD_NOT_ALLOWED.getCode());
         }

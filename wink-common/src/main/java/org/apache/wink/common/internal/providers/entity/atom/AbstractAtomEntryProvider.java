@@ -35,6 +35,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.model.atom.AtomEntry;
 import org.apache.wink.common.model.atom.AtomJAXBUtils;
 import org.apache.wink.common.model.atom.ObjectFactory;
@@ -97,7 +98,7 @@ public abstract class AbstractAtomEntryProvider<T> {
         if (object instanceof AtomEntry) {
             entry = (AtomEntry)object;
         } else {
-            logger.error("request entity is not an atom entry (it was unmarshalled as {})", object
+            logger.error(Messages.getMessage("atomRequestEntityNotAtomEntry"), object
                 .getClass());
             throw new WebApplicationException(Status.BAD_REQUEST);
         }

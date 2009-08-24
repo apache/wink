@@ -23,6 +23,7 @@ package org.apache.wink.common.internal.lifecycle;
 import java.io.IOException;
 import java.security.PrivilegedActionException;
 
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
@@ -41,10 +42,10 @@ public class LifecycleManagerUtils {
             CreationUtils.injectFields(object, classMetadata, null);
             return new SingletonObjectFactory<T>(object);
         } catch (IOException e) {
-            logger.error("Failed to inject fields of singleton {}", cls);
+            logger.error(Messages.getMessage("injectionFailureSingleton"), cls);
             throw new ObjectCreationException(e);
         } catch (PrivilegedActionException e) {
-            logger.error("Failed to inject fields of singleton {}", cls);
+            logger.error(Messages.getMessage("injectionFailureSingleton"), cls);
             throw new ObjectCreationException(e);
         }
     }

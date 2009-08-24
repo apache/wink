@@ -37,6 +37,7 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
+import org.apache.wink.common.internal.i18n.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +75,7 @@ public class FileProvider implements MessageBodyWriter<File>, MessageBodyReader<
                         MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException, WebApplicationException {
         if (!t.canRead() || t.isDirectory()) {
-            logger.warn("Can not write file {} to response, file is not readable or a Directory ",
+            logger.warn(Messages.getMessage("cannotUseFileAsResponse"),
                         t.getAbsoluteFile());
             throw new WebApplicationException();
         } else {
@@ -105,9 +106,7 @@ public class FileProvider implements MessageBodyWriter<File>, MessageBodyReader<
             dir = new File(uploadDir);
             if (!dir.exists() || !dir.isDirectory()) {
                 dir = null;
-                logger
-                    .warn("Upload directory '{}' does not exist or not a directory, uploading entity to deafult temporary directory",
-                          uploadDir);
+                logger.warn(Messages.getMessage("uploadDirDoesNotExist"), uploadDir);
                 throw new WebApplicationException();
 
             }

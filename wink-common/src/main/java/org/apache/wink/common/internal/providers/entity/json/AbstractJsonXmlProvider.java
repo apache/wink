@@ -32,6 +32,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.providers.entity.xml.AbstractJAXBProvider;
 import org.apache.wink.common.model.atom.AtomJAXBUtils;
 import org.xml.sax.Attributes;
@@ -60,7 +61,7 @@ public class AbstractJsonXmlProvider extends AbstractJAXBProvider {
             spf.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
         } catch (Exception e) {
             // shouldn't happen!
-            logger.error("Error while setting SAX parser feature for JSON provider");
+            logger.error(Messages.getMessage("jsonErrorSAXParserFeature"));
             throw new WebApplicationException(e);
         }
     }
@@ -149,7 +150,7 @@ public class AbstractJsonXmlProvider extends AbstractJAXBProvider {
                 }
 
             } catch (JSONException e) {
-                logger.error("failed to convert XML to JSon");
+                logger.error(Messages.getMessage("jsonFailConvertXMLToJSON"));
                 throw new WebApplicationException(e);
             }
         }
@@ -171,7 +172,7 @@ public class AbstractJsonXmlProvider extends AbstractJAXBProvider {
                     properties.put("$", text);
                 }
             } catch (JSONException e) {
-                logger.error("failed to convert XML to JSon");
+                logger.error(Messages.getMessage("jsonFailConvertXMLToJSON"));
                 throw new WebApplicationException(e);
             }
         }
@@ -182,7 +183,7 @@ public class AbstractJsonXmlProvider extends AbstractJAXBProvider {
                 String xmlToParse = xmlStringToParse.toString();
                 AtomJAXBUtils.saxParse(new StringReader(xmlToParse),
                                        this,
-                                       "failed to convert XML to JSon");
+                                       Messages.getMessage("jsonFailConvertXMLToJSON"));
             }
 
             try {

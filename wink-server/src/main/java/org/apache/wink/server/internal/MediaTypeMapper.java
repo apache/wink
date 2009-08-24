@@ -28,6 +28,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 
 /**
@@ -85,7 +86,7 @@ public final class MediaTypeMapper {
 
     public void addMapping(String userAgent, String resultMimeType, String typeToSend) {
         if (userAgent == null || resultMimeType == null || typeToSend == null) {
-            logger.warn("Record {} is not complete => ignored", userAgent);
+            logger.warn(Messages.getMessage("mediaTypeMapperIncompleteRecord"), userAgent);
             return;
         }
         this.mappings.add(new AgentStartsWith(userAgent, resultMimeType, typeToSend));
