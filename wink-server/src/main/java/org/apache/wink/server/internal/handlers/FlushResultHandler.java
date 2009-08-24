@@ -46,8 +46,10 @@ import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.MultivaluedMapImpl;
+import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.server.handlers.AbstractHandler;
 import org.apache.wink.server.handlers.MessageContext;
+import org.apache.wink.server.internal.contexts.RequestImpl;
 
 public class FlushResultHandler extends AbstractHandler {
 
@@ -200,6 +202,14 @@ public class FlushResultHandler extends AbstractHandler {
     @SuppressWarnings("unchecked")
     private static void flushHeaders(final HttpServletResponse httpResponse,
                                      final MultivaluedMap<String, Object> headers) {
+        if (headers.get(HttpHeaders.VARY) == null) {
+            RequestImpl.VaryHeader varyHeader =
+                RuntimeContextTLS.getRuntimeContext().getAttribute(RequestImpl.VaryHeader.class);
+            if (varyHeader != null) {
+                headers.putSingle(HttpHeaders.VARY, varyHeader.getVaryHeaderValue());
+            }
+        }
+
         for (Entry<String, List<Object>> entry : headers.entrySet()) {
             String key = entry.getKey();
             List<Object> values = entry.getValue();

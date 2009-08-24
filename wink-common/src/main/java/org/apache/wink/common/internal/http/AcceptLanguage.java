@@ -37,6 +37,24 @@ import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
  */
 public class AcceptLanguage {
 
+    public static final class ValuedLocale implements Comparable<ValuedLocale> {
+        public final double qValue;
+        public final Locale locale;
+
+        public ValuedLocale(double qValue, Locale locale) {
+            this.qValue = qValue;
+            this.locale = locale;
+        }
+
+        public int compareTo(ValuedLocale other) {
+            return Double.compare(qValue, other.qValue);
+        }
+
+        public boolean isWildcard() {
+            return locale == null;
+        }
+    }
+
     private static final HeaderDelegate<AcceptLanguage> delegate =
                                                                      RuntimeDelegate
                                                                          .getInstance()
@@ -46,15 +64,18 @@ public class AcceptLanguage {
     private final boolean                               anyAllowed;
     private final List<Locale>                          acceptable;
     private final List<Locale>                          banned;
+    private final List<AcceptLanguage.ValuedLocale>     valuedLocales;
 
     public AcceptLanguage(String acceptLanguageValue,
                           List<Locale> acceptableLanguages,
                           List<Locale> bannedLanguages,
-                          boolean anyLanguageAllowed) {
+                          boolean anyLanguageAllowed,
+                          List<AcceptLanguage.ValuedLocale> valuedLocales) {
         this.acceptLanguageHeader = acceptLanguageValue;
         this.anyAllowed = anyLanguageAllowed;
         this.acceptable = Collections.unmodifiableList(acceptableLanguages);
         this.banned = Collections.unmodifiableList(bannedLanguages);
+        this.valuedLocales = Collections.unmodifiableList(valuedLocales);
     }
 
     // /**
@@ -201,6 +222,10 @@ public class AcceptLanguage {
 
     public String getAcceptLanguageHeader() {
         return acceptLanguageHeader;
+    }
+
+    public List<AcceptLanguage.ValuedLocale> getValuedLocales() {
+        return valuedLocales;
     }
 
     @Override

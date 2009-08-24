@@ -38,9 +38,11 @@ import org.apache.wink.common.internal.ResponseImpl;
 import org.apache.wink.common.internal.UriBuilderImpl;
 import org.apache.wink.common.internal.VariantListBuilderImpl;
 import org.apache.wink.common.internal.http.Accept;
+import org.apache.wink.common.internal.http.AcceptEncoding;
 import org.apache.wink.common.internal.http.AcceptLanguage;
 import org.apache.wink.common.internal.http.ContentDispositionHeader;
 import org.apache.wink.common.internal.http.EntityTagMatchHeader;
+import org.apache.wink.common.internal.providers.header.AcceptEncodingHeaderDelegate;
 import org.apache.wink.common.internal.providers.header.AcceptHeaderDelegate;
 import org.apache.wink.common.internal.providers.header.AcceptLanguageHeaderDelegate;
 import org.apache.wink.common.internal.providers.header.CacheControlHeaderDelegate;
@@ -67,6 +69,7 @@ public class RuntimeDelegateImpl extends RuntimeDelegate {
         headerDelegates.put(EntityTagMatchHeader.class, new EntityTagMatchHeaderDelegate());
         headerDelegates.put(Accept.class, new AcceptHeaderDelegate());
         headerDelegates.put(AcceptLanguage.class, new AcceptLanguageHeaderDelegate());
+        headerDelegates.put(AcceptEncoding.class, new AcceptEncodingHeaderDelegate());
         headerDelegates.put(ContentDispositionHeader.class, new ContentDispositionHeaderDelegate());
     }
 

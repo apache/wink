@@ -38,9 +38,9 @@ public class AcceptLanguageHeaderDelegate implements HeaderDelegate<AcceptLangua
         boolean anyAllowed = (value == null);
 
         // parse the Accept-Language header
-        List<ValuedLocale> qLocales = parseAcceptLanguage(value);
+        List<AcceptLanguage.ValuedLocale> qLocales = parseAcceptLanguage(value);
 
-        for (ValuedLocale qLocale : qLocales) {
+        for (AcceptLanguage.ValuedLocale qLocale : qLocales) {
             if (anyAllowed) {
                 if (qLocale.qValue == 0 && !qLocale.isWildcard()) {
                     banned.add(qLocale.locale);
@@ -56,11 +56,11 @@ public class AcceptLanguageHeaderDelegate implements HeaderDelegate<AcceptLangua
                 }
             }
         }
-        return new AcceptLanguage(value, acceptable, banned, anyAllowed);
+        return new AcceptLanguage(value, acceptable, banned, anyAllowed, qLocales);
     }
 
-    private List<ValuedLocale> parseAcceptLanguage(String acceptLanguageValue) {
-        List<ValuedLocale> qLocales = new LinkedList<ValuedLocale>();
+    private List<AcceptLanguage.ValuedLocale> parseAcceptLanguage(String acceptLanguageValue) {
+        List<AcceptLanguage.ValuedLocale> qLocales = new LinkedList<AcceptLanguage.ValuedLocale>();
         if (acceptLanguageValue == null) {
             return qLocales;
         }
@@ -90,32 +90,14 @@ public class AcceptLanguageHeaderDelegate implements HeaderDelegate<AcceptLangua
                 // ignore empty language specifications
                 continue;
             } else if (languageSpec.equals("*")) {
-                qLocales.add(new ValuedLocale(qValue, null));
+               qLocales.add(new AcceptLanguage.ValuedLocale(qValue, null));
             } else {
                 Locale newLocale = HeaderUtils.languageToLocale(languageSpec);
-                qLocales.add(new ValuedLocale(qValue, newLocale));
+                qLocales.add(new AcceptLanguage.ValuedLocale(qValue, newLocale));
             }
         }
         Collections.sort(qLocales, Collections.reverseOrder());
         return qLocales;
-    }
-
-    private static final class ValuedLocale implements Comparable<ValuedLocale> {
-        final double qValue;
-        final Locale locale;
-
-        ValuedLocale(double qValue, Locale locale) {
-            this.qValue = qValue;
-            this.locale = locale;
-        }
-
-        public int compareTo(ValuedLocale other) {
-            return Double.compare(qValue, other.qValue);
-        }
-
-        boolean isWildcard() {
-            return locale == null;
-        }
     }
 
     public String toString(AcceptLanguage value) {

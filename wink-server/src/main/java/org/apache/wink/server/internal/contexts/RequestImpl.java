@@ -21,10 +21,11 @@
 package org.apache.wink.server.internal.contexts;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.EntityTag;
@@ -37,6 +38,8 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.ext.RuntimeDelegate;
 import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 
+import org.apache.wink.common.internal.http.AcceptEncoding;
+import org.apache.wink.common.internal.http.AcceptLanguage;
 import org.apache.wink.common.internal.http.EntityTagMatchHeader;
 import org.apache.wink.server.handlers.MessageContext;
 
@@ -191,57 +194,225 @@ public class RequestImpl implements Request {
     }
 
     public Variant selectVariant(List<Variant> variants) throws IllegalArgumentException {
-        MediaType inputMediaType = msgContext.getHttpHeaders().getMediaType();
-        String inputEncoding =
-            msgContext.getAttribute(HttpServletRequest.class).getCharacterEncoding();
-        String inputLanguage = getHeaderValue("Content-Language");
-        for (Variant variant : variants) {
-            String variantEncoding = variant.getEncoding();
-            Locale variantLanguage = variant.getLanguage();
-            javax.ws.rs.core.MediaType variantMediaType = variant.getMediaType();
-            if (isEncodingEqual(inputEncoding, variantEncoding) && isLanguageEqual(inputLanguage,
-                                                                                   variantLanguage)
-                && isMediaTypeEqual(inputMediaType, variantMediaType)) {
-                return variant;
+        if (variants == null) {
+            throw new IllegalArgumentException();
+        }
+
+        if (variants.size() == 0) {
+            return null;
+        }
+
+        // algorithm is based on Apache Content Negotiation algorithm with
+        // slight modifications
+        // http://httpd.apache.org/docs/2.0/content-negotiation.html
+
+        // eliminate all Accept* variants that are not acceptable
+        List<MediaType> acceptableMediaTypes =
+            msgContext.getHttpHeaders().getAcceptableMediaTypes();
+
+        List<String> acceptableLanguages =
+            msgContext.getHttpHeaders().getRequestHeader(HttpHeaders.ACCEPT_LANGUAGE);
+        AcceptLanguage languages = null;
+        if (acceptableLanguages != null) {
+            StringBuilder acceptLanguageTemp = new StringBuilder();
+            acceptLanguageTemp.append(acceptableLanguages.get(0));
+            for (int c = 1; c < acceptableLanguages.size(); ++c) {
+                acceptLanguageTemp.append(",");
+                acceptLanguageTemp.append(acceptableLanguages.get(c));
             }
+            String acceptLanguage = acceptLanguageTemp.toString();
+            languages = AcceptLanguage.valueOf(acceptLanguage);
         }
-        return null;
+
+        List<String> acceptableEncodings =
+            msgContext.getHttpHeaders().getRequestHeader(HttpHeaders.ACCEPT_ENCODING);
+        AcceptEncoding encodings = null;
+        if (acceptableEncodings != null) {
+            StringBuilder acceptEncodingsTemp = new StringBuilder();
+            acceptEncodingsTemp.append(acceptableEncodings.get(0));
+            for (int c = 1; c < acceptableEncodings.size(); ++c) {
+                acceptEncodingsTemp.append(",");
+                acceptEncodingsTemp.append(acceptableEncodings.get(c));
+            }
+            String acceptEncodings = acceptEncodingsTemp.toString();
+            encodings = AcceptEncoding.valueOf(acceptEncodings);
+        }
+
+        VariantQChecked bestVariant = null;
+        boolean isIdentityEncodingChecked = false;
+
+        for (Iterator<Variant> iter = variants.iterator(); iter.hasNext();) {
+            double acceptQFactor = -1.0d;
+            Variant v = iter.next();
+            MediaType vMediaType = v.getMediaType();
+            if (vMediaType != null && acceptableMediaTypes != null) {
+                boolean isCompatible = false;
+                boolean isAcceptable = true; // explicitly denied by the client
+                for (MediaType mt : acceptableMediaTypes) {
+                    if (mt.isCompatible(vMediaType)) {
+                        Map<String, String> params = mt.getParameters();
+                        String q = params.get("q");
+                        if (q != null) {
+                            try {
+                                Double qAsDouble = Double.valueOf(q);
+                                if (qAsDouble.equals(0.0)) {
+                                    isAcceptable = false;
+                                    break;
+                                }
+                                acceptQFactor = qAsDouble;
+                            } catch (NumberFormatException e) {
+                                // silently ignore
+                                e.printStackTrace();
+                            }
+                        } else {
+                            acceptQFactor = 1.0d;
+                        }
+                        isCompatible = true;
+                        break;
+                    }
+                }
+                if (!isCompatible || !isAcceptable) {
+                    continue;
+                }
+            }
+
+            if (bestVariant != null) {
+                if (acceptQFactor < bestVariant.acceptMediaTypeQFactor) {
+                    continue;
+                }
+            }
+
+            double acceptLanguageQFactor = -1.0d;
+            Locale vLocale = v.getLanguage();
+            if (vLocale != null && languages != null) {
+                boolean isCompatible = false;
+                if (languages.getBannedLanguages().contains(vLocale)) {
+                    continue;
+                }
+                for (AcceptLanguage.ValuedLocale locale : languages.getValuedLocales()) {
+                    if (locale.isWildcard() || vLocale.equals(locale.locale)) {
+                        isCompatible = true;
+                        acceptLanguageQFactor = locale.qValue;
+                        break;
+                    }
+                }
+                if (!isCompatible) {
+                    continue;
+                }
+            }
+
+            if (bestVariant != null) {
+                if (acceptLanguageQFactor < bestVariant.acceptLanguageQFactor) {
+                    continue;
+                }
+            }
+
+            double acceptEncodingQFactor = -1.0d;
+            String vEncoding = v.getEncoding();
+            if (vEncoding != null) {
+                if (encodings == null || encodings.isAnyEncodingAllowed()) {
+                    if (!v.getEncoding().equalsIgnoreCase("identity")) {
+                        // if there is no Accept Encoding, only identity is
+                        // acceptable
+                        isIdentityEncodingChecked = true;
+                        continue;
+                    }
+                } else {
+                    boolean isAcceptable = true;
+                    for (String encoding : encodings.getBannedEncodings()) {
+                        if (encoding.equalsIgnoreCase(vEncoding)) {
+                            isAcceptable = false;
+                            break;
+                        }
+                    }
+                    if (!isAcceptable) {
+                        continue;
+                    }
+
+                    boolean isCompatible = false;
+                    for (AcceptEncoding.ValuedEncoding encoding : encodings.getValuedEncodings()) {
+                        if (encoding.isWildcard() || encoding.encoding.equalsIgnoreCase(vEncoding)) {
+                            isCompatible = true;
+                            acceptEncodingQFactor = encoding.qValue;
+                            break;
+                        }
+                    }
+                    if (!isCompatible) {
+                        continue;
+                    }
+                }
+            }
+
+            if (bestVariant != null) {
+                if (acceptEncodingQFactor < bestVariant.acceptEncodingQFactor) {
+                    continue;
+                }
+            }
+
+            bestVariant =
+                new VariantQChecked(v, acceptQFactor, acceptLanguageQFactor, acceptEncodingQFactor);
+        }
+
+        if (bestVariant == null) {
+            return null;
+        }
+
+        StringBuilder varyHeaderValue = new StringBuilder();
+        boolean isValueWritten = false;
+        if (bestVariant.acceptMediaTypeQFactor > 0) {
+            varyHeaderValue.append(HttpHeaders.ACCEPT);
+            isValueWritten = true;
+        }
+        if (bestVariant.acceptLanguageQFactor > 0) {
+            if (isValueWritten) {
+                varyHeaderValue.append(", ");
+            }
+            varyHeaderValue.append(HttpHeaders.ACCEPT_LANGUAGE);
+            isValueWritten = true;
+        }
+        if (isIdentityEncodingChecked || bestVariant.acceptEncodingQFactor > 0) {
+            if (isValueWritten) {
+                varyHeaderValue.append(", ");
+            }
+            varyHeaderValue.append(HttpHeaders.ACCEPT_ENCODING);
+            isValueWritten = true;
+        }
+
+        msgContext.setAttribute(RequestImpl.VaryHeader.class, new VaryHeader(varyHeaderValue
+            .toString().trim()));
+        return bestVariant.variant;
     }
 
-    private boolean isEncodingEqual(String inputEncoding, String variantEncoding) {
-        if (inputEncoding == null && variantEncoding == null) {
-            return true;
-        }
+    private static class VariantQChecked {
+        final Variant variant;
+        final double  acceptMediaTypeQFactor;
+        final double  acceptLanguageQFactor;
+        final double  acceptEncodingQFactor;
 
-        if ((inputEncoding == null && variantEncoding != null) || (inputEncoding != null && variantEncoding == null)) {
-            return false;
+        public VariantQChecked(Variant v,
+                               double acceptMediaType,
+                               double acceptLanguage,
+                               double acceptEncoding) {
+            this.variant = v;
+            this.acceptMediaTypeQFactor = acceptMediaType;
+            this.acceptLanguageQFactor = acceptLanguage;
+            this.acceptEncodingQFactor = acceptEncoding;
         }
-
-        return variantEncoding.equals(inputEncoding.toString());
     }
 
-    private boolean isLanguageEqual(String inputLanguage, Locale variantLanguage) {
-        if (inputLanguage == null && variantLanguage == null) {
-            return true;
+    /**
+     * Stores the Vary header value created from the
+     * {@link RequestImpl#selectVariant(List)} method call.
+     */
+    public static class VaryHeader {
+        final private String varyHeaderValue;
+
+        private VaryHeader(String varyHeaderValue) {
+            this.varyHeaderValue = varyHeaderValue;
         }
 
-        if ((inputLanguage == null && variantLanguage != null) || (inputLanguage != null && variantLanguage == null)) {
-            return false;
+        public String getVaryHeaderValue() {
+            return varyHeaderValue;
         }
-
-        return variantLanguage.getLanguage().equalsIgnoreCase(inputLanguage.toString());
     }
-
-    private boolean isMediaTypeEqual(MediaType inputMediaType, MediaType variantMediaType) {
-        if (inputMediaType == null && variantMediaType == null) {
-            return true;
-        }
-
-        if ((inputMediaType == null && variantMediaType != null) || (inputMediaType != null && variantMediaType == null)) {
-            return false;
-        }
-
-        return variantMediaType.toString().equals(inputMediaType.toString());
-    }
-
 }
