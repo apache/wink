@@ -1,0 +1,19 @@
+------=_Part_7_10584188.1123489648993
+Content-Type: text/xml; charset=utf-8
+Content-Id: soapPart
+
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><SOAP-ENV:Header/><SOAP-ENV:Body><ztrade:GetLastTradePrice xmlns:ztrade="http://wombat.ztrade.com"><ztrade:symbol>SUNW</ztrade:symbol></ztrade:GetLastTradePrice></SOAP-ENV:Body></SOAP-ENV:Envelope>
+------=_Part_7_10584188.1123489648993
+Content-Type: text/xml
+Content-ID: attachmentPart
+
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body/></Envelope>
+
+------=_Part_7_10584188.1123489648993--

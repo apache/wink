@@ -134,6 +134,15 @@ public class MediaTypeUtils {
                                                                          new MediaType(
                                                                                        "application",
                                                                                        "vnd.ms-powerpoint");
+    public static final String         MULTIPART_MIXED               = "multipart/mixed";
+    public static final MediaType      MULTIPART_MIXED_TYPE          =
+                                                                         new MediaType("multipart",
+                                                                                       "mixed");
+
+    public static final String         MULTIPART_FORM_DATA           = "multipart/form-data";
+    public static final MediaType      MULTIPART_FORM_DATA_TYPE      =
+                                                                         new MediaType("multipart",
+                                                                                       "form-data");
 
     public static final Set<MediaType> JSON_TYPES                    = createJsonTypes();
 

@@ -1,0 +1,52 @@
+------=_Part_1_2_3_4_5_6
+
+Modified:
+    incubator/wink/trunk/pom.xml
+    incubator/wink/trunk/wink-client-apache-httpclient/pom.xml
+    incubator/wink/trunk/wink-client/pom.xml
+    incubator/wink/trunk/wink-common/pom.xml
+    incubator/wink/trunk/wink-component-test-support/pom.xml
+    incubator/wink/trunk/wink-examples/apps/Bookmarks/pom.xml
+    incubator/wink/trunk/wink-examples/apps/HelloWorld/pom.xml
+    incubator/wink/trunk/wink-examples/apps/QADefect/pom.xml
+    incubator/wink/trunk/wink-examples/apps/SimpleDefects/pom.xml
+    incubator/wink/trunk/wink-examples/apps/pom.xml
+    incubator/wink/trunk/wink-examples/client/GoogleDocs-client/pom.xml
+    incubator/wink/trunk/wink-examples/client/QADefects-client/pom.xml
+    incubator/wink/trunk/wink-examples/client/pom.xml
+    incubator/wink/trunk/wink-examples/core/CustomContext/pom.xml
+    incubator/wink/trunk/wink-examples/core/CustomExceptionMapper/pom.xml
+    incubator/wink/trunk/wink-examples/core/Jaxb/pom.xml
+    incubator/wink/trunk/wink-examples/core/Preconditions/pom.xml
+    incubator/wink/trunk/wink-examples/core/pom.xml
+    incubator/wink/trunk/wink-examples/ext/Asset/pom.xml
+    incubator/wink/trunk/wink-examples/ext/DynamicResource/pom.xml
+    incubator/wink/trunk/wink-examples/ext/History/pom.xml
+    incubator/wink/trunk/wink-examples/ext/LinkBuilders/pom.xml
+    incubator/wink/trunk/wink-examples/ext/RuntimeRegistration/pom.xml
+    incubator/wink/trunk/wink-examples/ext/Scope/pom.xml
+    incubator/wink/trunk/wink-examples/ext/Spring/pom.xml
+    incubator/wink/trunk/wink-examples/ext/WebDAV/pom.xml
+    incubator/wink/trunk/wink-examples/ext/pom.xml
+    incubator/wink/trunk/wink-examples/pom.xml
+    incubator/wink/trunk/wink-scripts/pom.xml
+    incubator/wink/trunk/wink-scripts/wink-dist/pom.xml
+    incubator/wink/trunk/wink-server/pom.xml
+    incubator/wink/trunk/wink-spring-support/pom.xml
+    incubator/wink/trunk/wink-webdav/pom.xml
+
+
+------=_Part_1_2_3_4_5_6
+
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+ Apache Wink is a project that enables development and consumption of REST style web services. 
+ The core server runtime is based on the JAX-RS (JSR 311) standard. The project also introduces 
+ a client runtime which can leverage certain components of the server-side runtime. Apache Wink 
+ will deliver component technology that can be easily integrated into a variety of environments.
+-->
+
+<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body/></Envelope>
+
+------=_Part_1_2_3_4_5_6--

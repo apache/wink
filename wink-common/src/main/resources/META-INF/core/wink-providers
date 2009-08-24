@@ -81,5 +81,11 @@ org.apache.wink.common.internal.providers.entity.csv.CsvDeserializerProvider
 # Exception
 org.apache.wink.common.internal.providers.entity.FormatedExceptionProvider
 
+# MultiPart
+org.apache.wink.common.internal.providers.multipart.OutMultiPartProvider
+org.apache.wink.common.internal.providers.multipart.InMultiPartProvider
+org.apache.wink.common.internal.providers.multipart.BufferedInMultiPartProvider
+
+
 
 

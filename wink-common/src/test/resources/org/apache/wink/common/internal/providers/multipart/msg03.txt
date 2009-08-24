@@ -1,0 +1,20 @@
+------=_Part_7_10584188.1123489648993
+Content-Type: text/xml; charset=utf-8
+Content-Id: soapPart
+
+------=_Part_7_10584188.1123489648993
+Content-Type: text/xml
+Content-ID: attachmentPart
+
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+ Apache Wink is a project that enables development and consumption of REST style web services. 
+ The core server runtime is based on the JAX-RS (JSR 311) standard. The project also introduces 
+ a client runtime which can leverage certain components of the server-side runtime. Apache Wink 
+ will deliver component technology that can be easily integrated into a variety of environments.
+-->
+
+<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body/></Envelope>
+
+------=_Part_7_10584188.1123489648993--
