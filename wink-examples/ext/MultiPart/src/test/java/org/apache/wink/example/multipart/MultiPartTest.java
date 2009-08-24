@@ -113,7 +113,7 @@ public class MultiPartTest extends MockServletInvocationTest {
         // check the collection
         MockHttpServletRequest request =
             MockRequestConstructor.constructMockRequest("GET",
-                                                        "/users",
+                                                        "/MP/users",
                                                         MediaTypeUtils.MULTIPART_MIXED);
         MockHttpServletResponse response = invoke(request);
         assertEquals("status", 200, response.getStatus());
@@ -132,7 +132,7 @@ public class MultiPartTest extends MockServletInvocationTest {
         request =
             MockRequestConstructor
                 .constructMockRequest("POST",
-                                      "/users",
+                                      "/MP/users",
                                       MediaTypeUtils.MULTIPART_MIXED,
                                       MediaTypeUtils.MULTIPART_MIXED + ";boundary=" + boundary,
                                       requestStr.getBytes());
@@ -173,7 +173,7 @@ public class MultiPartTest extends MockServletInvocationTest {
         request =
             MockRequestConstructor
                 .constructMockRequest("POST",
-                                      "/files",
+                                      "/MP/files",
                                       MediaType.TEXT_PLAIN,
                                       MediaTypeUtils.MULTIPART_FORM_DATA + ";boundary=" + boundary,
                                       msg);
