@@ -20,6 +20,7 @@
 
 package org.apache.wink.example.qadefect.resources;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
@@ -74,7 +75,7 @@ public class DefectsAsset {
     @Produces
     public SyndFeed getSyndFeed(@Context Providers providers,
                                 @Context LinkBuilders linkProcessor,
-                                @Context UriInfo uriInfo) {
+                                @Context UriInfo uriInfo) throws IOException {
         SyndFeed synd = new SyndFeed();
         synd.setId("urn:com:hp:qadefects:defects");
         synd.setTitle(new SyndText("Defects"));

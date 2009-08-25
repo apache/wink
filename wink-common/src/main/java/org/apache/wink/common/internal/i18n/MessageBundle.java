@@ -22,47 +22,20 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
- * Accept parameters for ProjectResourceBundle, but defer object instantiation
- * (and therefore resource bundle loading) until required.
+ * Loads and holds a ResourceBundle according to the specified parameters.
  */
 public class MessageBundle {
-    private static final Logger logger          = LoggerFactory.getLogger(MessageBundle.class);
 
-    private boolean             loaded          = false;
+    private final ResourceBundle resourceBundle;
+    private final String         className;
 
-    private ResourceBundle      _resourceBundle = null;
-
-    private final String        packageName;
-    private final String        resourceName;
-    private final Locale        locale;
-    private final ClassLoader   classLoader;
-
-    public final ResourceBundle getResourceBundle() {
-        if (!loaded) {
-            try {
-                _resourceBundle =
-                    ResourceBundle.getBundle(packageName + "." + resourceName, locale, classLoader);
-            } catch (MissingResourceException e) {
-                logger.debug("loadBundle: Ignoring MissingResourceException: " + e.getMessage(), e);
-            }
-            loaded = true;
-        }
-        return _resourceBundle;
-    }
-
-    /** Construct a new ExtendMessages */
     public MessageBundle(String packageName,
                          String resourceName,
                          Locale locale,
                          ClassLoader classLoader) throws MissingResourceException {
-        this.packageName = packageName;
-        this.resourceName = resourceName;
-        this.locale = locale;
-        this.classLoader = classLoader;
+        className = packageName + '.' + resourceName;
+        resourceBundle = ResourceBundle.getBundle(className, locale, classLoader);
     }
 
     /**
@@ -72,20 +45,13 @@ public class MessageBundle {
      * @return The message
      */
     public String getMessage(String key) throws MissingResourceException {
-        String msg = null;
-        if (getResourceBundle() != null) {
-            msg = getResourceBundle().getString(key);
-        }
+        String msg = resourceBundle.getString(key);
 
         if (msg == null) {
-            String className = packageName + '.' + resourceName;
             throw new MissingResourceException("Cannot find resource key \"" + key
                 + "\" in base name "
-                + packageName
-                + '.'
-                + resourceName, className, key);
+                + className, className, key);
         }
-
         return msg;
     }
 }

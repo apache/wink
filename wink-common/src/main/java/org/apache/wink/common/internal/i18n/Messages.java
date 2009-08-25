@@ -18,48 +18,18 @@
  */
 package org.apache.wink.common.internal.i18n;
 
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.MissingResourceException;
 
 public class Messages {
-    private static final Class<?>             thisClass                  = Messages.class;
 
-    private static final String               resourceName               =
-                                                                             MessagesConstants.resourceName;
-    private static final Locale               locale                     = MessagesConstants.locale;
-
-    public static final String                DEFAULT_MESSAGE_BUNDLE_KEY = "default";
-    private static final String               NO_MESSAGE_BUNDLE          =
-                                                                             "Message Bundle is not available";
-
-    private static final String               packageName                =
-                                                                             getPackage(thisClass
-                                                                                 .getName());
-    private static final ClassLoader          classLoader                =
-                                                                             thisClass
-                                                                                 .getClassLoader();
-
-    private static Map<String, MessageBundle> messageBundleMap           =
-                                                                             new HashMap<String, MessageBundle>();
+    private static final String        resourceName = "resource";
+    private static final MessageBundle messageBundle;
 
     static {
-        MessageBundle defaultMessageBundle =
-            new MessageBundle(packageName, resourceName, locale, classLoader);
-        addMessageBundle(DEFAULT_MESSAGE_BUNDLE_KEY, defaultMessageBundle);
-    }
-
-    /**
-     * To add a new Message Bundle to the MessageBundle list. Must be called
-     * before runtime starts.
-     * 
-     * @param messageBundleKey The key which will be used to refer to this
-     *            message bundle later.
-     * @param messageBundle The message bundle.
-     */
-    public static void addMessageBundle(String messageBundleKey, MessageBundle messageBundle) {
-        messageBundleMap.put(messageBundleKey, messageBundle);
+        messageBundle =
+            new MessageBundle(Messages.class.getPackage().getName(), resourceName, Locale
+                .getDefault(), Messages.class.getClassLoader());
     }
 
     /**
@@ -70,33 +40,7 @@ public class Messages {
      * @return The formatted message
      */
     public static String getMessage(String key) throws MissingResourceException {
-        MessageBundle messageBundle = getMessageBundle(DEFAULT_MESSAGE_BUNDLE_KEY);
         return messageBundle.getMessage(key);
     }
 
-    public static MessageBundle getMessageBundle(String messageBundleKey) {
-        MessageBundle messageBundle = (MessageBundle)messageBundleMap.get(messageBundleKey);
-        return messageBundle;
-    }
-
-    /**
-     * Get a message from resource.properties from the package of the given
-     * object.
-     * 
-     * @param messageBundleKey The key for getting the correct message bundle.
-     * @param key The resource key
-     * @return The formatted message
-     */
-    public static String getMessageFromBundle(String messageBundleKey, String key)
-        throws MissingResourceException, Exception {
-        MessageBundle messageBundle = getMessageBundle(messageBundleKey);
-        if (messageBundle == null)
-            throw new Exception(NO_MESSAGE_BUNDLE);
-
-        return messageBundle.getMessage(key);
-    }
-
-    private static String getPackage(String name) {
-        return name.substring(0, name.lastIndexOf('.')).intern();
-    }
 }

@@ -204,13 +204,17 @@ public class WebDAVDefectsResource extends DefectsResource {
             // if the property being set is getcontentlength
             if (property instanceof Getcontentlength) {
                 // serialize the synd to atom to get its length as atom
-                String body =
-                    ProviderUtils.writeToString(providers,
-                                                synd,
-                                                MediaType.APPLICATION_ATOM_XML_TYPE);
-                ((Getcontentlength)property).setValue(String.valueOf(body.length()));
-                response.setPropertyOk(property);
-                return;
+                try {
+                    String body =
+                        ProviderUtils.writeToString(providers,
+                                                    synd,
+                                                    MediaType.APPLICATION_ATOM_XML_TYPE);
+                    ((Getcontentlength)property).setValue(String.valueOf(body.length()));
+                    response.setPropertyOk(property);
+                    return;
+                } catch (IOException e) {
+                    throw new WebApplicationException(e);
+                }
             }
             // delegate to the parent for all other properties
             super.setPropertyValue(builder, response, property, synd);

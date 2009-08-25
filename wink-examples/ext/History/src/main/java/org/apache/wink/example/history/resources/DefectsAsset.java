@@ -20,6 +20,7 @@
 
 package org.apache.wink.example.history.resources;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
@@ -79,11 +80,12 @@ public class DefectsAsset {
     /**
      * Called for producing the entity of a response that supports SyndFeed is
      * made (such as application/atom+xml or application/json)
+     * @throws IOException 
      */
     @Produces
     public SyndFeed getSyndFeed(@Context Providers providers,
                                 @Context LinkBuilders linkBuilders,
-                                @Context UriInfo uriInfo) {
+                                @Context UriInfo uriInfo) throws IOException {
         SyndFeed feed = new SyndFeed();
         feed.setId("urn:com:hp:qadefects:defects");
         feed.setTitle(new SyndText("Defects"));

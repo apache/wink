@@ -20,6 +20,7 @@
 
 package org.apache.wink.example.qadefect.resources;
 
+import java.io.IOException;
 import java.util.Date;
 
 import javax.ws.rs.Consumes;
@@ -81,7 +82,7 @@ public class DefectAsset {
     @Produces( {MediaType.WILDCARD, MediaType.APPLICATION_JSON})
     public SyndEntry getSyndEntry(@Context Providers providers,
                                   @Context UriInfo uriInfo,
-                                  @Context LinkBuilders linkProcessor) {
+                                  @Context LinkBuilders linkProcessor) throws IOException {
         SyndEntry entry = new SyndEntry();
         entry.setId("urn:com:hp:qadefects:defect:" + defect.getId());
         entry.setTitle(new SyndText(defect.getName()));
@@ -133,7 +134,7 @@ public class DefectAsset {
     }
 
     @Consumes
-    public void setSyndEntry(SyndEntry entry, @Context Providers providers) {
+    public void setSyndEntry(SyndEntry entry, @Context Providers providers) throws IOException {
         defect = null;
         SyndContent content = entry.getContent();
         if (content == null) {
