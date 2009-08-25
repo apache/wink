@@ -16,6 +16,7 @@ This document describes the examples available in Wink distribution
 		- Preconditions
 
 	"client" module contains Wink client examples
+		- ReadRSS-client
 		- QADefects-client
 		- GoogleDocs-client
 
