@@ -20,6 +20,8 @@
 
 package org.apache.wink.common.internal.runtime;
 
+import org.apache.wink.common.RuntimeContext;
+
 public abstract class RuntimeContextTLS {
 
     private static ThreadLocal<RuntimeContext> threadLocal = new ThreadLocal<RuntimeContext>();

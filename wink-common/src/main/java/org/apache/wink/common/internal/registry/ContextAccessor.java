@@ -30,7 +30,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Providers;
 
-import org.apache.wink.common.internal.runtime.RuntimeContext;
+import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 
 public class ContextAccessor {

@@ -24,7 +24,7 @@ import java.util.Properties;
 
 import javax.ws.rs.core.MediaType;
 
-import org.apache.wink.common.internal.runtime.RuntimeContext;
+import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.server.utils.LinkBuilders;
 
 /**

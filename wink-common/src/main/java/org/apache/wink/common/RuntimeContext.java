@@ -18,7 +18,7 @@
  *  
  *******************************************************************************/
 
-package org.apache.wink.common.internal.runtime;
+package org.apache.wink.common;
 
 import java.io.IOException;
 import java.io.InputStream;

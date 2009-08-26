@@ -29,7 +29,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
-import org.apache.wink.common.internal.runtime.RuntimeContext;
+import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 
 /**

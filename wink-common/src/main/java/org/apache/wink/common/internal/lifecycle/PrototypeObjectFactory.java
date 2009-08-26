@@ -19,8 +19,8 @@
  *******************************************************************************/
 package org.apache.wink.common.internal.lifecycle;
 
+import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
-import org.apache.wink.common.internal.runtime.RuntimeContext;
 
 /**
  * Implements ObjectFactory that creates a new object for each call based on its

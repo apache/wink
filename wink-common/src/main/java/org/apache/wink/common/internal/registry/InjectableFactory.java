@@ -36,7 +36,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 
-import org.apache.wink.common.internal.runtime.RuntimeContext;
+import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.internal.utils.GenericsUtils;
 
 public class InjectableFactory {

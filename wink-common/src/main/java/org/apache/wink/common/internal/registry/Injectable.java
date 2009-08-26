@@ -34,7 +34,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.apache.wink.common.internal.runtime.RuntimeContext;
+import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.internal.utils.GenericsUtils;
 
 /**

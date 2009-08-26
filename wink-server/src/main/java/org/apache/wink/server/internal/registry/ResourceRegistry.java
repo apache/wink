@@ -38,6 +38,7 @@ import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.http.HttpStatus;
 import org.apache.wink.common.internal.application.ApplicationValidator;
@@ -45,7 +46,6 @@ import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.registry.Injectable;
 import org.apache.wink.common.internal.registry.metadata.MethodMetadata;
-import org.apache.wink.common.internal.runtime.RuntimeContext;
 import org.apache.wink.common.internal.uritemplate.UriTemplateMatcher;
 import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;

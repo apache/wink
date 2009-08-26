@@ -33,8 +33,8 @@ import org.apache.wink.client.ClientResponse;
 import org.apache.wink.client.ClientRuntimeException;
 import org.apache.wink.client.EntityType;
 import org.apache.wink.client.internal.ClientRuntimeContext;
+import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
-import org.apache.wink.common.internal.runtime.RuntimeContext;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 
 public class ClientResponseImpl extends BaseRequestResponseImpl implements ClientResponse {

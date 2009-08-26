@@ -44,13 +44,13 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.Providers;
 
+import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.internal.PathSegmentImpl;
 import org.apache.wink.common.internal.registry.BoundInjectable;
 import org.apache.wink.common.internal.registry.ContextAccessor;
 import org.apache.wink.common.internal.registry.Injectable;
 import org.apache.wink.common.internal.registry.InjectableFactory;
 import org.apache.wink.common.internal.registry.ValueConvertor.ConversionException;
-import org.apache.wink.common.internal.runtime.RuntimeContext;
 import org.apache.wink.common.internal.uri.UriEncoder;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.internal.utils.StringUtils;

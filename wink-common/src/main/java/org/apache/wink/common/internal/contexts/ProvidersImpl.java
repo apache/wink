@@ -30,8 +30,8 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Providers;
 
+import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
-import org.apache.wink.common.internal.runtime.RuntimeContext;
 
 /**
  *

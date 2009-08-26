@@ -38,8 +38,8 @@ import org.apache.wink.client.handlers.ConnectionHandler;
 import org.apache.wink.client.handlers.InputStreamAdapter;
 import org.apache.wink.client.handlers.OutputStreamAdapter;
 import org.apache.wink.client.internal.ClientRuntimeContext;
+import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
-import org.apache.wink.common.internal.runtime.RuntimeContext;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 
 public abstract class AbstractConnectionHandler implements ConnectionHandler {

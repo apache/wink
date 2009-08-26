@@ -27,11 +27,11 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.wink.common.DynamicResource;
+import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.lifecycle.ObjectFactory;
 import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
-import org.apache.wink.common.internal.runtime.RuntimeContext;
 import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

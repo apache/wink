@@ -29,6 +29,8 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 
+import org.apache.wink.common.RuntimeContext;
+
 public abstract class AbstractRuntimeContext implements RuntimeContext {
 
     private HashMap<String, Object> attributes;

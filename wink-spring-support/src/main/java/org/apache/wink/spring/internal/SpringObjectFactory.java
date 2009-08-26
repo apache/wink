@@ -19,9 +19,9 @@
  *******************************************************************************/
 package org.apache.wink.spring.internal;
 
+import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.internal.lifecycle.ObjectFactory;
 import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
-import org.apache.wink.common.internal.runtime.RuntimeContext;
 import org.springframework.context.ApplicationContext;
 
 public class SpringObjectFactory implements ObjectFactory<Object> {

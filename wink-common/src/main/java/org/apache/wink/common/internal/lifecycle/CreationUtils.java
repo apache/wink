@@ -33,11 +33,11 @@ import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
 
+import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.internal.registry.Injectable;
 import org.apache.wink.common.internal.registry.InjectableFactory;
 import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
 import org.apache.wink.common.internal.registry.metadata.ConstructorMetadata;
-import org.apache.wink.common.internal.runtime.RuntimeContext;
 
 public class CreationUtils {
 

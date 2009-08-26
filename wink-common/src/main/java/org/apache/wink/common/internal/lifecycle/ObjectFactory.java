@@ -19,7 +19,7 @@
  *******************************************************************************/
 package org.apache.wink.common.internal.lifecycle;
 
-import org.apache.wink.common.internal.runtime.RuntimeContext;
+import org.apache.wink.common.RuntimeContext;
 
 public interface ObjectFactory<T> {
 
