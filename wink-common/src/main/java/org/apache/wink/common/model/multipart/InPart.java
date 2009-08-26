@@ -35,87 +35,102 @@ import javax.ws.rs.ext.Providers;
 
 import org.apache.wink.common.internal.CaseInsensitiveMultivaluedMap;
 
+/**
+ * This class is used to represent a single part in an inbound MultiPart
+ * messages,
+ * 
+ * @see InMultiPart
+ */
 public class InPart {
-	private MultivaluedMap<String, String> headers = new CaseInsensitiveMultivaluedMap<String>();
-	private InputStream inputStream;
-	private Providers providers;
-	
-	public Providers getProviders() {
-		return providers;
-	}
+    private MultivaluedMap<String, String> headers = new CaseInsensitiveMultivaluedMap<String>();
+    private InputStream                    inputStream;
+    private Providers                      providers;
 
-	public void setProviders(Providers providers) {
-		this.providers = providers;
-	}
+    /**
+     * get the providers that are used by the @see InPart#getBody(Class, Type)
+     * method for deserialization of the part
+     * 
+     * @return
+     */
+    public Providers getProviders() {
+        return providers;
+    }
+
+    /**
+     * set the providers to be used by the @see InPart#getBody(Class, Type)
+     * method for deserialization of the part
+     * 
+     * @return
+     */
+    public void setProviders(Providers providers) {
+        this.providers = providers;
+    }
+
+    public InPart() {
+
+    }
+
+    public InPart(MultivaluedMap<String, String> headers, Providers providers) {
+        super();
+        this.headers = headers;
+        this.providers = providers;
+    }
+
+    protected void setInputStream(InputStream inputStream) {
+        this.inputStream = inputStream;
+    }
+
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
+    protected void setHeaders(MultivaluedMap<String, String> headers) {
+        this.headers = headers;
+    }
+
+    /**
+     * Get the part's headers
+     * 
+     * @return
+     */
+    public MultivaluedMap<String, String> getHeaders() {
+        return headers;
+    }
 
 
-	public InPart() {
-	
-	}
-	
-	
-	public InPart(MultivaluedMap<String, String> headers,Providers providers) {
-		super();
-		this.headers = headers;
-		this.providers = providers;
-	}
+    public String getContentType() {
+        return getHeaders().getFirst(HttpHeaders.CONTENT_TYPE);
+    }
 
+    public Set<String> getHeadersName() {
+        return getHeaders().keySet();
+    }
 
-	public void setInputStream(InputStream inputStream) {
-		this.inputStream = inputStream;
-	}
+    /**
+     * This method is used for deserialization of the part stream to a <T>
+     * object using the given providers.<br>
+     * 
+     * @param <T>
+     * @param type
+     * @param genericType
+     * @param providers
+     * @return
+     * @throws IOException
+     */
+    public <T> T getBody(Class<T> type, Type genericType, Providers providers) throws IOException {
+        MediaType mt = MediaType.valueOf(getContentType());
+        MessageBodyReader<T> reader = providers.getMessageBodyReader(type, genericType, null, mt);
+        if (reader == null)
+            throw new WebApplicationException(Response.Status.UNSUPPORTED_MEDIA_TYPE);
+        return reader.readFrom(type, genericType, null, mt, getHeaders(), getInputStream());
+    }
 
-	public InputStream getInputStream() {
-		return inputStream;
-	}
-
-	public void setHeaders(MultivaluedMap<String, String> headers) {
-		this.headers = headers;
-	}
-
-	public MultivaluedMap<String, String> getHeaders() {
-		return headers;
-	}
-	
-
-	public void addHeader(String name, String value) {
-		getHeaders().add(name, value);
-	}
-
-	public void setContentType(String contentType) {
-		getHeaders().putSingle(HttpHeaders.CONTENT_TYPE, contentType);
-	}
-	
-	public String getContentType() {
-		return getHeaders().getFirst(HttpHeaders.CONTENT_TYPE);
-	}
-
-	public void setLocationHeader(String location) {
-		getHeaders().putSingle("location", location);
-	}
-
-	public Set<String> getHeadersName() {
-		return getHeaders().keySet();
-	}
-
-	//public abstract InputStream getInputStream();
-		
-	
-	public  <T> T getBody(Class<T> type, Type genericType,Providers providers) throws IOException{
-		MediaType mt = MediaType.valueOf(getContentType());
-		MessageBodyReader<T> reader = providers.getMessageBodyReader(type, genericType, null, mt);
-		if(reader == null)
-			throw new WebApplicationException(Response.Status.UNSUPPORTED_MEDIA_TYPE);
-		return reader.readFrom(type, genericType, null, mt, getHeaders(),getInputStream());		
-	}
-	
-
-	public  <T> T getBody(Class<T> type, Type genericType) throws IOException{
-		return getBody(type, genericType,this.providers);
-	}
-
-	
-
-	
+    /**
+     * This method is used for deserialization of the part stream. It make a
+     * usage of its providers data member for the deserialization <br>
+     */
+    public <T> T getBody(Class<T> type, Type genericType) throws IOException {
+        return getBody(type, genericType, this.providers);
+    }
 
 }

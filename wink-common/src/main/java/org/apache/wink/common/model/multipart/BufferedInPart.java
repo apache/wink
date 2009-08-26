@@ -25,11 +25,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * An extension to the {@link InPart} class that enables calling of the
+ * {@link BufferedInPart#getBody(Class, java.lang.reflect.Type)} multiple times and in a non sequential order.
+ * 
+ * @author elib
+ */
 public class BufferedInPart extends InPart {
     byte[] content;
 
     public BufferedInPart(InPart ip) throws IOException {
-        super(ip.getHeaders(),ip.getProviders());
+        super(ip.getHeaders(), ip.getProviders());
         InputStream src = ip.getInputStream();
         ByteArrayOutputStream dst = new ByteArrayOutputStream(1024);
         byte[] bytes = new byte[1024];

@@ -55,7 +55,6 @@ public class InMultiPartProvider implements MessageBodyReader<InMultiPart>  {
 		String boundary = mediaType.getParameters().get("boundary");
 		MultiPartParser mpParser = new MultiPartParser(entityStream,boundary);
 		InMultiPart imp = new InMultiPart(mpParser);
-		imp.setBoundary(boundary);
 		imp.setProviders(providers);
 		return imp;
 		

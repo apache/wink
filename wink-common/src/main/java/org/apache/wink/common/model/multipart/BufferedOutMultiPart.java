@@ -24,7 +24,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-
+/**
+ * A simple implementation of the {@link OutMultiPart} 
+ * @author elib
+ *
+ */
 public class BufferedOutMultiPart extends OutMultiPart {
 	private List<OutPart> parts = new ArrayList<OutPart>();
 

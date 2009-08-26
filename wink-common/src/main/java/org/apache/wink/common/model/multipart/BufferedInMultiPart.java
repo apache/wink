@@ -24,27 +24,44 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is used to represent inbound MultiPart messages, unlike the {@link InMultiPart} 
+ * the {@link BufferedInMultiPart} enable non sequential access to the message's parts   
+ *  <code>
+ * 
+ * @POST
+ * @Consumes( MediaTypeUtils.MULTIPART_FORM_DATA) <br>
+ *            public String postMultipart(InMultiPart inMP) throws IOException <br>
+ *            { <br>
+ *            while(inMP.hasNext()) { <br>
+ *            InPart part = inMP.next();<br>
+ *            MyClass myOject =part.getBody(MyClass.class, null);<br>
+ *            // Do somthing<br>
+ * <br>
+ *            .<br>
+ *            .<br>
+ *            }<br>
+ *            
+ */
 public class BufferedInMultiPart {
-	private List<InPart> parts = new ArrayList<InPart>();
-	private InMultiPart imp;
-	
-	public BufferedInMultiPart(InMultiPart imp) throws IOException{
-		this.imp = imp;
-		while(imp.hasNext()){
-			BufferedInPart cip = new BufferedInPart(imp.next()); 
-			parts.add(cip);
-		}		
-	}
+    private List<InPart> parts = new ArrayList<InPart>();
 
-	public String getBoundary() {
-		return imp.getBoundary();
-	}
-	public int getSize(){
-		return parts.size();
-	}	
-	
-	public List<InPart> getParts() {
-		return parts;
-	}
+    public BufferedInMultiPart(InMultiPart imp) throws IOException {
+        while (imp.hasNext()) {
+            BufferedInPart cip = new BufferedInPart(imp.next());
+            parts.add(cip);
+        }
+    }
+
+    /**
+     * return the number of parts in the multipart message
+     */
+    public int getSize() {
+        return parts.size();
+    }
+
+    public List<InPart> getParts() {
+        return parts;
+    }
 
 }

@@ -34,15 +34,32 @@ import org.apache.wink.common.internal.CaseInsensitiveMultivaluedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This class is used to represent a part in an {@link OutMultiPart} message,
+ * basically it holds the part headers and body
+ * 
+ * @author elib
+ */
 public class OutPart {
     private MultivaluedMap<String, String> headers = new CaseInsensitiveMultivaluedMap<String>();
     private Object                         body;
     private static final Logger            logger  = LoggerFactory.getLogger(OutPart.class);
 
+    /**
+     * add header to the part
+     * 
+     * @param name
+     * @param value
+     */
     public void addHeader(String name, String value) {
         getHeaders().add(name, value);
     }
 
+    /**
+     * Add the content type header
+     * 
+     * @param contentType
+     */
     public void setContentType(String contentType) {
         getHeaders().putSingle(HttpHeaders.CONTENT_TYPE, contentType);
     }
@@ -51,13 +68,24 @@ public class OutPart {
         return getHeaders().getFirst(HttpHeaders.CONTENT_TYPE);
     }
 
+    /**
+     * set the location header
+     * 
+     * @param location
+     */
     public void setLocationHeader(String location) {
         getHeaders().putSingle("location", location);
     }
 
-    
-    
-    public void writeBody(OutputStream os, Providers providers) throws IOException {
+    /**
+     * write the part body to the os stream, the providers might be used to
+     * serialize the body
+     * 
+     * @param os
+     * @param providers
+     * @throws IOException
+     */
+    protected void writeBody(OutputStream os, Providers providers) throws IOException {
 
         if (getBody() != null) {
             MessageBodyWriter writer =
@@ -75,6 +103,13 @@ public class OutPart {
         }
     }
 
+    /**
+     * write the entire part to the os stream, the providers might be used to serialize the body
+     * 
+     * @param os
+     * @param providers
+     * @throws IOException
+     */
     public void writePart(OutputStream os, Providers providers) throws IOException {
         // writeHeaders
         for (String name : getHeaders().keySet()) {
@@ -91,6 +126,7 @@ public class OutPart {
         writeBody(os, providers);
     }
 
+    
     public void setBody(Object body) {
         this.body = body;
     }
