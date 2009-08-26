@@ -141,7 +141,7 @@ public class GenericsUtils {
      * @return the class type of type
      */
     public static Class<?> getClassType(Type type) {
-        if (type instanceof Class) {
+        if (type instanceof Class<?>) {
             return (Class<?>)type;
         }
 

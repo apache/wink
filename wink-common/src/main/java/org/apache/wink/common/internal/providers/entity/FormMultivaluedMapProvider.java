@@ -103,8 +103,8 @@ public class FormMultivaluedMapProvider implements
         Type[] actualTypeArguments = pType.getActualTypeArguments();
         Type type1 = actualTypeArguments[0];
         Type type2 = actualTypeArguments[1];
-        if (!(type1 instanceof Class) || !((Class<?>)type1).equals(String.class)
-            || !(type2 instanceof Class)
+        if (!(type1 instanceof Class<?>) || !((Class<?>)type1).equals(String.class)
+            || !(type2 instanceof Class<?>)
             || !((Class<?>)type2).equals(String.class)) {
             return false;
         }

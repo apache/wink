@@ -39,7 +39,7 @@ public class PopulateResponseStatusHandler extends AbstractHandler {
             entity = response.getEntity();
         }
 
-        if (entity instanceof GenericEntity) {
+        if (entity instanceof GenericEntity<?>) {
             GenericEntity<?> genericEntity = (GenericEntity<?>)entity;
             entity = genericEntity.getEntity();
         }

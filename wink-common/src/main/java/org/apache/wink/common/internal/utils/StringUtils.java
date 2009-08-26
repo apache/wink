@@ -160,7 +160,7 @@ public class StringUtils {
             if (object instanceof Object[] && ((Object[])object).length == 0) {
                 return true;
             }
-            if (object instanceof Collection && ((Collection<?>)object).size() == 0) {
+            if (object instanceof Collection<?> && ((Collection<?>)object).size() == 0) {
                 return true;
             }
         }
