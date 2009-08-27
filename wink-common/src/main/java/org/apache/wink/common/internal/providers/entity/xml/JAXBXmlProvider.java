@@ -115,7 +115,6 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
 
             // Use an OutputStream directly instead of a Writer for performance.
             marshaller.marshal(entityToMarshal, entityStream);
-            entityStream.flush();
         } catch (JAXBException e) {
             logger.error(Messages.getMessage("jaxbFailToMarshal"), type.getName());
             throw new WebApplicationException(e);

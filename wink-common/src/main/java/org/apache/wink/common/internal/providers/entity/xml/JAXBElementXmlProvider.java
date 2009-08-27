@@ -109,14 +109,11 @@ public class JAXBElementXmlProvider extends AbstractJAXBProvider implements
                         OutputStream entityStream) throws IOException, WebApplicationException {
         try {
             Marshaller marshaller = getMarshaller(t.getDeclaredType(), mediaType);
-            OutputStreamWriter writer =
-                new OutputStreamWriter(entityStream, ProviderUtils.getCharset(mediaType));
-            marshaller.marshal(t, writer);
-            writer.flush();
+            marshaller.setProperty(Marshaller.JAXB_ENCODING, ProviderUtils.getCharset(mediaType));
+            marshaller.marshal(t, entityStream);
         } catch (JAXBException e) {
             logger.error(Messages.getMessage("jaxbFailToMarshal"), t.getName());
             throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
         }
-
     }
 }
