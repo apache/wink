@@ -45,6 +45,7 @@
         <module>wink-webdav</module>
         <module>wink-examples</module>
         <module>wink-scripts</module>
+        <module>wink-providers</module>
     </modules>
     <scm>
         <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/wink/trunk</connection>
