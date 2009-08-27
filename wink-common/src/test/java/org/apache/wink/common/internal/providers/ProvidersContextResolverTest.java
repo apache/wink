@@ -257,4 +257,18 @@ public class ProvidersContextResolverTest extends TestCase {
                                                          null).getContext(String.class));
     }
 
+    public void testContextResolverNullMediaType() {
+        ProvidersRegistry providers = createProvidersRegistryImpl();
+        // note: the order these are added is important to the test
+        assertTrue(providers.addProvider(new StringContextResolver4()));
+        assertTrue(providers.addProvider(new StringContextResolver3()));
+        assertTrue(providers.addProvider(new StringContextResolver2()));
+
+        // StringContextResolver2 takes priority over the others due to the
+        // media type in @Produces
+        assertSame(STRING2, providers.getContextResolver(String.class,
+                                                         null,
+                                                         null).getContext(String.class));
+    }
+
 }

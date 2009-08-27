@@ -178,7 +178,8 @@ public class ProvidersRegistry {
             throw new NullPointerException("contextType");
         }
         if (mediaType == null) {
-            throw new NullPointerException("mediaType");
+            // see https://issues.apache.org/jira/browse/WINK-153
+            mediaType = MediaType.WILDCARD_TYPE;
         }
         readersLock.lock();
         try {
