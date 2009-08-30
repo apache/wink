@@ -35,8 +35,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.application.ApplicationValidator;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
@@ -46,6 +44,7 @@ import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.common.internal.utils.FileLoader;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.server.handlers.Handler;
+import org.apache.wink.server.handlers.HandlersFactory;
 import org.apache.wink.server.handlers.RequestHandler;
 import org.apache.wink.server.handlers.RequestHandlersChain;
 import org.apache.wink.server.handlers.ResponseHandler;
@@ -65,6 +64,8 @@ import org.apache.wink.server.internal.handlers.PopulateResponseStatusHandler;
 import org.apache.wink.server.internal.handlers.SearchResultHandler;
 import org.apache.wink.server.internal.registry.ResourceRegistry;
 import org.apache.wink.server.internal.registry.ServerInjectableFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -81,11 +82,12 @@ public class DeploymentConfiguration {
                                                                                 .getLogger(DeploymentConfiguration.class);
     private static final String       ALTERNATIVE_SHORTCUTS             =
                                                                             "META-INF/wink-alternate-shortcuts.properties";
-    private static final String       VALIDATE_LOCATION_HEADER          =
-                                                                            "wink.validateLocationHeader";
     private static final String       HTTP_METHOD_OVERRIDE_HEADERS_PROP =
                                                                             "wink.httpMethodOverrideHeaders";
-
+    private static final String       HANDLERS_FACTORY_CLASS_PROP       =
+                                                                            "wink.handlersFactoryClass";
+    private static final String       VALIDATE_LOCATION_HEADER          =
+                                                                            "wink.validateLocationHeader";
     // handler chains
     private RequestHandlersChain      requestHandlersChain;
     private ResponseHandlersChain     responseHandlersChain;
@@ -121,15 +123,16 @@ public class DeploymentConfiguration {
         if (properties == null) {
             properties = new Properties();
         }
-        
-        // check to see if an override property was specified.  if so, then configure
-        // the headers from there using a comma delimited string.  
+
+        // check to see if an override property was specified. if so, then
+        // configure
+        // the headers from there using a comma delimited string.
         String httpMethodOverrideHeadersProperty =
             properties.getProperty(HTTP_METHOD_OVERRIDE_HEADERS_PROP);
         httpMethodOverrideHeaders =
-            (httpMethodOverrideHeadersProperty != null && httpMethodOverrideHeadersProperty.length() > 0) 
-                ? httpMethodOverrideHeadersProperty.split(",") : null;
-                
+            (httpMethodOverrideHeadersProperty != null && httpMethodOverrideHeadersProperty
+                .length() > 0) ? httpMethodOverrideHeadersProperty.split(",") : null;
+
         initRegistries();
         initAlternateShortcutMap();
         initMediaTypeMapper();
@@ -224,11 +227,11 @@ public class DeploymentConfiguration {
         this.responseUserHandlers = responseUserHandlers;
     }
 
-    public List<ResponseHandler> getResponseUserHandlers() {
+    public List<? extends ResponseHandler> getResponseUserHandlers() {
         return responseUserHandlers;
     }
 
-    public List<RequestHandler> getRequestUserHandlers() {
+    public List<? extends RequestHandler> getRequestUserHandlers() {
         return requestUserHandlers;
     }
 
@@ -236,7 +239,7 @@ public class DeploymentConfiguration {
         this.errorUserHandlers = errorUserHandlers;
     }
 
-    public List<ResponseHandler> getErrorUserHandlers() {
+    public List<? extends ResponseHandler> getErrorUserHandlers() {
         return errorUserHandlers;
     }
 
@@ -287,7 +290,9 @@ public class DeploymentConfiguration {
                         is.close();
                     }
                 } catch (IOException e) {
-                    logger.info(Messages.getMessage("alternateShortcutMapCloseFailure") + ALTERNATIVE_SHORTCUTS, e);
+                    logger
+                        .info(Messages.getMessage("alternateShortcutMapCloseFailure") + ALTERNATIVE_SHORTCUTS,
+                              e);
                 }
             }
         }
@@ -314,7 +319,37 @@ public class DeploymentConfiguration {
      * Initializes the main handlers chain. Override in order to change the
      * chains.
      */
+    @SuppressWarnings("unchecked")
     private void initHandlers() {
+
+        String handlersFactoryClassName = properties.getProperty(HANDLERS_FACTORY_CLASS_PROP);
+        if (handlersFactoryClassName != null) {
+            try {
+                Class<HandlersFactory> handlerFactoryClass =
+                    (Class<HandlersFactory>)Class.forName(handlersFactoryClassName);
+                HandlersFactory handlersFactory = handlerFactoryClass.newInstance();
+                if (requestUserHandlers == null) {
+                    requestUserHandlers =
+                        (List<RequestHandler>)handlersFactory.getRequestHandlers();
+                }
+                if (responseUserHandlers == null) {
+                    responseUserHandlers =
+                        (List<ResponseHandler>)handlersFactory.getResponseHandlers();
+                }
+                if (errorUserHandlers == null) {
+                    errorUserHandlers = (List<ResponseHandler>)handlersFactory.getErrorHandlers();
+                }
+            } catch (ClassNotFoundException e) {
+                logger.error(Messages.getMessage("isNotAClass", handlersFactoryClassName), e);
+            } catch (InstantiationException e) {
+                logger.error(Messages.getMessage("classInstantiationException",
+                                                 handlersFactoryClassName), e);
+            } catch (IllegalAccessException e) {
+                logger
+                    .error(Messages.getMessage("classIllegalAccess", handlersFactoryClassName), e);
+            }
+        }
+
         if (requestUserHandlers == null) {
             requestUserHandlers = initRequestUserHandlers();
         }
@@ -324,6 +359,7 @@ public class DeploymentConfiguration {
         if (errorUserHandlers == null) {
             errorUserHandlers = initErrorUserHandlers();
         }
+
         if (requestHandlersChain == null) {
             requestHandlersChain = initRequestHandlersChain();
         }
@@ -350,9 +386,11 @@ public class DeploymentConfiguration {
         handlersChain.addHandler(createHandler(FindRootResourceHandler.class));
         handlersChain.addHandler(createHandler(FindResourceMethodHandler.class));
         handlersChain.addHandler(createHandler(CreateInvocationParametersHandler.class));
-        for (RequestHandler h : requestUserHandlers) {
-            h.init(properties);
-            handlersChain.addHandler(h);
+        if (requestUserHandlers != null) {
+            for (RequestHandler h : requestUserHandlers) {
+                h.init(properties);
+                handlersChain.addHandler(h);
+            }
         }
         handlersChain.addHandler(createHandler(InvokeMethodHandler.class));
         return handlersChain;
@@ -405,9 +443,11 @@ public class DeploymentConfiguration {
         ResponseHandlersChain handlersChain = new ResponseHandlersChain();
         handlersChain.addHandler(createHandler(PopulateResponseStatusHandler.class));
         handlersChain.addHandler(createHandler(PopulateResponseMediaTypeHandler.class));
-        for (ResponseHandler h : responseUserHandlers) {
-            h.init(properties);
-            handlersChain.addHandler(h);
+        if (responseUserHandlers != null) {
+            for (ResponseHandler h : responseUserHandlers) {
+                h.init(properties);
+                handlersChain.addHandler(h);
+            }
         }
         handlersChain.addHandler(createHandler(FlushResultHandler.class));
         handlersChain.addHandler(createHandler(HeadMethodHandler.class));
@@ -427,9 +467,11 @@ public class DeploymentConfiguration {
             createHandler(PopulateResponseMediaTypeHandler.class);
         populateMediaTypeHandler.setErrorFlow(true);
         handlersChain.addHandler(populateMediaTypeHandler);
-        for (ResponseHandler h : errorUserHandlers) {
-            h.init(properties);
-            handlersChain.addHandler(h);
+        if (errorUserHandlers != null) {
+            for (ResponseHandler h : errorUserHandlers) {
+                h.init(properties);
+                handlersChain.addHandler(h);
+            }
         }
         handlersChain.addHandler(createHandler(FlushResultHandler.class));
         return handlersChain;

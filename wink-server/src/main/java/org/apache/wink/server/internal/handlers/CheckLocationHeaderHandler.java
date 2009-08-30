@@ -26,6 +26,10 @@ import org.apache.wink.common.http.HttpStatus;
 import org.apache.wink.server.handlers.AbstractHandler;
 import org.apache.wink.server.handlers.MessageContext;
 
+/**
+ * This response handler verifies that required header LOCATION is present for
+ * the following statuses: 201, 301, 302, 303, 305 and 307
+ */
 public class CheckLocationHeaderHandler extends AbstractHandler {
 
     public void handleResponse(MessageContext msgContext) throws Throwable {

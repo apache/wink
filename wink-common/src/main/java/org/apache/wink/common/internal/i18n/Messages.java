@@ -18,6 +18,7 @@
  */
 package org.apache.wink.common.internal.i18n;
 
+import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
@@ -41,6 +42,20 @@ public class Messages {
      */
     public static String getMessage(String key) throws MissingResourceException {
         return messageBundle.getMessage(key);
+    }
+
+    /**
+     * 
+     * Get a message from resource.properties from the package of the given
+     * object.
+     * 
+     * @param key The resource key
+     * @param args Any parameter arguments for the message
+     * @return The formatted message
+     */
+    public static String getMessage(String key, Object... args) {
+        String msg = getMessage(key);
+        return MessageFormat.format(msg, args);
     }
 
 }
