@@ -27,21 +27,31 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 
 import org.apache.wink.common.internal.i18n.Messages;
+import org.apache.wink.common.internal.utils.SoftConcurrentMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MediaTypeHeaderDelegate implements HeaderDelegate<MediaType> {
 
-    private static final Logger  logger    = LoggerFactory.getLogger(MediaTypeHeaderDelegate.class);
-    private static final Pattern EQUALS    = Pattern.compile("=");
-    private static final Pattern SEMICOLON = Pattern.compile(";");
-    private static final Pattern SLASH     = Pattern.compile("/");
+    private static final Logger                               logger    =
+                                                                            LoggerFactory
+                                                                                .getLogger(MediaTypeHeaderDelegate.class);
+    private static final Pattern                              EQUALS    = Pattern.compile("=");
+    private static final Pattern                              SEMICOLON = Pattern.compile(";");
+    private static final Pattern                              SLASH     = Pattern.compile("/");
+    private static final SoftConcurrentMap<String, MediaType> cache     =
+                                                                            new SoftConcurrentMap<String, MediaType>();
 
     public MediaType fromString(String value) throws IllegalArgumentException {
         if (value == null) {
             throw new IllegalArgumentException("MediaType header is null");
         }
-
+        
+        MediaType cached = cache.get(value);
+        if (cached != null) {
+            return cached;
+        }
+        
         String type = "*";
         String subType = "*";
         Map<String, String> paramsMap = null;
@@ -68,7 +78,7 @@ public class MediaTypeHeaderDelegate implements HeaderDelegate<MediaType> {
             throw new IllegalArgumentException(errMsg, e);
         }
 
-        return new MediaType(type, subType, paramsMap);
+        return cache.put(value, new MediaType(type, subType, paramsMap));
     }
 
     public String toString(MediaType value) {

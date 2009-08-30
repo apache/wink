@@ -27,11 +27,19 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 
 import org.apache.wink.common.internal.http.Accept;
+import org.apache.wink.common.internal.utils.SoftConcurrentMap;
 import org.apache.wink.common.internal.utils.StringUtils;
 
 public class AcceptHeaderDelegate implements HeaderDelegate<Accept> {
 
+    private static final SoftConcurrentMap<String, Accept> cache = new SoftConcurrentMap<String, Accept>();
+    
     public Accept fromString(String value) throws IllegalArgumentException {
+        Accept cached = cache.get(value);
+        if (cached != null) {
+            return cached;
+        }
+        
         // if there is no Accept header it means that all media types are
         // acceptable
         if (value == null) {
@@ -46,7 +54,7 @@ public class AcceptHeaderDelegate implements HeaderDelegate<Accept> {
             }
             list.add(MediaType.valueOf(mediaRange));
         }
-        return new Accept(list);
+        return cache.put(value, new Accept(list));
     }
 
     public String toString(Accept value) {

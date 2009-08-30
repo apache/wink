@@ -35,8 +35,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -56,6 +54,8 @@ import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.lifecycle.ObjectFactory;
 import org.apache.wink.common.internal.utils.GenericsUtils;
+import org.apache.wink.common.internal.utils.SimpleConcurrentMap;
+import org.apache.wink.common.internal.utils.SimpleMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -395,12 +395,12 @@ public class ProvidersRegistry {
 
     private abstract class MediaTypeMap<T> {
 
-        private final Map<MediaType, Set<ObjectFactory<T>>>                                    data           =
-                                                                                                                  new LinkedHashMap<MediaType, Set<ObjectFactory<T>>>();
-        private final Class<?>                                                                 rawType;
+        private final Map<MediaType, Set<ObjectFactory<T>>>                                            data           =
+                                                                                                                          new LinkedHashMap<MediaType, Set<ObjectFactory<T>>>();
+        private final Class<?>                                                                         rawType;
 
-        private Map<Class<?>, SoftReference<ConcurrentMap<MediaType, List<ObjectFactory<T>>>>> providersCache =
-                                                                                                                  new ConcurrentHashMap<Class<?>, SoftReference<ConcurrentMap<MediaType, List<ObjectFactory<T>>>>>();
+        private final SimpleMap<Class<?>, SoftReference<SimpleMap<MediaType, List<ObjectFactory<T>>>>> providersCache =
+                                                                                                                          new SimpleConcurrentMap<Class<?>, SoftReference<SimpleMap<MediaType, List<ObjectFactory<T>>>>>(); ;
 
         public MediaTypeMap(Class<?> rawType) {
             super();
@@ -421,19 +421,19 @@ public class ProvidersRegistry {
                 mediaType = new MediaType(type, subtype);
             }
 
-            SoftReference<ConcurrentMap<MediaType, List<ObjectFactory<T>>>> mediaTypeToProvidersCacheRef =
+            SoftReference<SimpleMap<MediaType, List<ObjectFactory<T>>>> mediaTypeToProvidersCacheRef =
                 providersCache.get(cls);
-            ConcurrentMap<MediaType, List<ObjectFactory<T>>> mediaTypeToProvidersCache = null;
+            SimpleMap<MediaType, List<ObjectFactory<T>>> mediaTypeToProvidersCache = null;
             if (mediaTypeToProvidersCacheRef != null) {
                 mediaTypeToProvidersCache = mediaTypeToProvidersCacheRef.get();
             }
             if (mediaTypeToProvidersCache == null) {
                 mediaTypeToProvidersCache =
-                    new ConcurrentHashMap<MediaType, List<ObjectFactory<T>>>();
+                    new SimpleConcurrentMap<MediaType, List<ObjectFactory<T>>>();
                 providersCache
                     .put(cls,
-                         new SoftReference<ConcurrentMap<MediaType, List<ObjectFactory<T>>>>(
-                                                                                             mediaTypeToProvidersCache));
+                         new SoftReference<SimpleMap<MediaType, List<ObjectFactory<T>>>>(
+                                                                                         mediaTypeToProvidersCache));
             }
 
             List<ObjectFactory<T>> list = mediaTypeToProvidersCache.get(mediaType);
