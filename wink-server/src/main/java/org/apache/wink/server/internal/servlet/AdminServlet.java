@@ -254,7 +254,7 @@ public class AdminServlet extends AbstractRestServlet {
         uri2ResourceMap.clear();
         for (MethodMetadata subResourceMethod : subResourceMethods) {
             UriTemplateProcessor uriTemplate = record.getTemplateProcessor();
-            String uri = SLASH + uriTemplate.getTemplate() + subResourceMethod.getPath();
+            String uri = SLASH + uriTemplate.getTemplate() +SLASH+ subResourceMethod.getPath();
             org.apache.wink.common.internal.model.admin.Methods xmlSRM =
                 createXMLSubResourceMethod(subResourceMethod);
             addResourceMethods(uri2ResourceMap, uri, xmlSRM);
