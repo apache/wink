@@ -22,8 +22,6 @@ package org.apache.wink.common.internal.providers.entity.xml;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Map;
-import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -44,25 +42,27 @@ import javax.xml.namespace.QName;
 
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
+import org.apache.wink.common.internal.utils.SimpleMap;
+import org.apache.wink.common.internal.utils.SoftConcurrentMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class AbstractJAXBProvider {
 
-    private static final Logger                     logger                    =
-                                                                                  LoggerFactory
-                                                                                      .getLogger(AbstractJAXBProvider.class);
-    private static final Map<Class<?>, JAXBContext> jaxbDefaultContexts       =
-                                                                                  new WeakHashMap<Class<?>, JAXBContext>();
+    private static final Logger                           logger                    =
+                                                                                        LoggerFactory
+                                                                                            .getLogger(AbstractJAXBProvider.class);
+    private static final SimpleMap<Class<?>, JAXBContext> jaxbDefaultContexts       =
+                                                                                        new SoftConcurrentMap<Class<?>, JAXBContext>();
 
     @Context
-    private Providers                               providers;
+    private Providers                                     providers;
 
-    private static ConcurrentMap<String, Boolean>   jaxbIsXMLRootElementCache =
-                                                                                  new ConcurrentHashMap<String, Boolean>();
+    private static final ConcurrentMap<Class<?>, Boolean> jaxbIsXMLRootElementCache =
+                                                                                        new ConcurrentHashMap<Class<?>, Boolean>();
 
-    private static ConcurrentMap<String, Boolean>   jaxbIsXMLTypeCache        =
-                                                                                  new ConcurrentHashMap<String, Boolean>();
+    private static final ConcurrentMap<Class<?>, Boolean> jaxbIsXMLTypeCache        =
+                                                                                        new ConcurrentHashMap<Class<?>, Boolean>();
 
     protected final Unmarshaller getUnmarshaller(Class<?> type, MediaType mediaType)
         throws JAXBException {
@@ -85,26 +85,24 @@ public abstract class AbstractJAXBProvider {
     }
 
     private static boolean isXMLRootElement(Class<?> type) {
-        String className = type.getName();
-        Boolean isJAXBObject = jaxbIsXMLRootElementCache.get(className);
+        Boolean isJAXBObject = jaxbIsXMLRootElementCache.get(type);
 
         if (isJAXBObject == null) {
             boolean isXmlRootElement = type.getAnnotation(XmlRootElement.class) != null;
             isJAXBObject = Boolean.valueOf(isXmlRootElement);
-            jaxbIsXMLRootElementCache.putIfAbsent(className, isJAXBObject);
+            jaxbIsXMLRootElementCache.putIfAbsent(type, isJAXBObject);
         }
 
         return isJAXBObject.booleanValue();
     }
 
     private static boolean isXMLType(Class<?> type) {
-        String className = type.getName();
-        Boolean isJAXBObject = jaxbIsXMLTypeCache.get(className);
+        Boolean isJAXBObject = jaxbIsXMLTypeCache.get(type);
 
         if (isJAXBObject == null) {
             boolean isXmlTypeElement = type.getAnnotation(XmlType.class) != null;
             isJAXBObject = Boolean.valueOf(isXmlTypeElement);
-            jaxbIsXMLTypeCache.putIfAbsent(className, isJAXBObject);
+            jaxbIsXMLTypeCache.putIfAbsent(type, isJAXBObject);
         }
 
         return isJAXBObject.booleanValue();
@@ -130,14 +128,12 @@ public abstract class AbstractJAXBProvider {
     }
 
     private JAXBContext getDefaultContext(Class<?> type) throws JAXBException {
-        synchronized (jaxbDefaultContexts) {
-            JAXBContext context = jaxbDefaultContexts.get(type);
-            if (context == null) {
-                context = JAXBContext.newInstance(type);
-                jaxbDefaultContexts.put(type, context);
-            }
-            return context;
+        JAXBContext context = jaxbDefaultContexts.get(type);
+        if (context == null) {
+            context = JAXBContext.newInstance(type);
+            jaxbDefaultContexts.put(type, context);
         }
+        return context;
     }
 
     /**
@@ -203,7 +199,7 @@ public abstract class AbstractJAXBProvider {
         // return null;
         // }
         // Search for Factory
-        StringBuilder b = new StringBuilder(getPackageName(type));
+        StringBuilder b = new StringBuilder(type.getPackage().getName());
         b.append(".ObjectFactory");
         Class<?> factoryClass = null;
         try {
@@ -229,14 +225,4 @@ public abstract class AbstractJAXBProvider {
         return new JAXBElement(new QName(typeStr), type, jaxbObject);
     }
 
-    private String getPackageName(Class<?> type) {
-        String packageName;
-        int packageSeparator = type.getName().lastIndexOf('.');
-        if (packageSeparator != -1) {
-            packageName = type.getName().substring(0, packageSeparator);
-        } else {
-            packageName = type.getName();
-        }
-        return packageName;
-    }
 }
