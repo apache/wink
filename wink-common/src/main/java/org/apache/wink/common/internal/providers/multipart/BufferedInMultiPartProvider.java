@@ -42,7 +42,11 @@ public class BufferedInMultiPartProvider implements MessageBodyReader<BufferedIn
 	@Context
 	private Providers providers;
 
-	public boolean isReadable(Class<?> type, Type genericType,
+	public void setProviders(Providers providers) {
+        this.providers = providers;
+    }
+
+    public boolean isReadable(Class<?> type, Type genericType,
 			Annotation[] annotations, MediaType mediaType) {
 		return BufferedInMultiPart.class.equals(type);
 	}
