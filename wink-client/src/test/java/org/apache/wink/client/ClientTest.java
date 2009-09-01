@@ -265,4 +265,23 @@ public class ClientTest extends BaseTest {
             server.stopServer();
         }
     }
+
+    public void testResponseEmptyContentType() throws IOException {
+        MockHttpServer server = new MockHttpServer(34567);
+        server.setMockResponseCode(200);
+        server.setMockResponseContent("REQUEST".getBytes("UTF-8"));
+        server.setMockResponseContentType("");
+
+        server.startServer();
+        try {
+            RestClient client = getRestClient();
+            Resource resource =
+                client.resource(MessageFormat.format(SERVICE_URL, String.valueOf(server
+                    .getServerPort())));
+            String response = resource.accept(MediaType.TEXT_PLAIN_TYPE).get(String.class);
+            assertEquals("REQUEST", response);
+        } finally {
+            server.stopServer();
+        }
+    }
 }

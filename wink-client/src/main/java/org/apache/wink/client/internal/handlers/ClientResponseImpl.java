@@ -101,6 +101,9 @@ public class ClientResponseImpl extends BaseRequestResponseImpl implements Clien
         RuntimeContextTLS.setRuntimeContext(runtimeContext);
         try {
             String contentType = getHeaders().getFirst(HttpHeaders.CONTENT_TYPE);
+            if (contentType == null || contentType.length() == 0) {
+                contentType = MediaType.APPLICATION_OCTET_STREAM;
+            }
             MediaType contentMediaType = MediaType.valueOf(contentType);
             MessageBodyReader<T> reader =
                 providersRegistry.getMessageBodyReader(type,
