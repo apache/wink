@@ -20,8 +20,12 @@
 
 package org.apache.wink.server.internal.providers.entity;
 
+import java.io.StringReader;
+import java.util.Collections;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -43,8 +47,10 @@ import org.apache.wink.common.model.synd.SyndFeed;
 import org.apache.wink.common.model.synd.SyndText;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -83,6 +89,8 @@ public class JsonProviderTest extends MockServletInvocationTest {
                                                               + "  }\n"
                                                               + "}}";
 
+    private static final String    JSON_ARRAY         = "[" + JSON + ", {\"test\":\"ing\"}]";
+
     private static final String    JSON_AS_ATOM_ENTRY =
                                                           "{\"entry\": {\n" + "  \"@xmlns\": {\"$\": \"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\n"
                                                               + "  \"id\": {\n"
@@ -111,6 +119,29 @@ public class JsonProviderTest extends MockServletInvocationTest {
         @Produces("application/json")
         public JSONObject getJson() throws Exception {
             return new JSONObject(JSON);
+        }
+
+        @POST
+        @Path("json")
+        @Consumes(MediaType.APPLICATION_JSON)
+        @Produces(MediaType.APPLICATION_JSON)
+        public JSONObject postJson(JSONObject object) throws Exception {
+            return object.put("foo", "bar");
+        }
+
+        @GET
+        @Path("jsonarray")
+        @Produces(MediaType.APPLICATION_JSON)
+        public JSONArray getJsonArray() throws Exception {
+            return new JSONArray(JSON_ARRAY);
+        }
+
+        @POST
+        @Path("jsonarray")
+        @Consumes(MediaType.APPLICATION_JSON)
+        @Produces(MediaType.APPLICATION_JSON)
+        public JSONArray postJson(JSONArray array) throws Exception {
+            return array.put(Collections.singletonMap("foo", "bar"));
         }
 
         @GET
@@ -249,6 +280,48 @@ public class JsonProviderTest extends MockServletInvocationTest {
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
         compairJsonContent(JSON, response.getContentAsString());
+    }
+
+    public void testPostJson() throws Exception {
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/test/json",
+                                                        "application/json",
+                                                        MediaType.APPLICATION_JSON,
+                                                        JSON.getBytes());
+        MockHttpServletResponse response = invoke(request);
+        assertEquals(200, response.getStatus());
+        JSONObject result = JSONUtils.objectForString(response.getContentAsString());
+        JSONObject want = JSONUtils.objectForString(JSON).put("foo", "bar");
+        assertTrue(JSONUtils.equals(want, result));
+    }
+
+    public void testGetJsonArray() throws Exception {
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/test/jsonarray",
+                                                        "application/json");
+        MockHttpServletResponse response = invoke(request);
+        assertEquals(200, response.getStatus());
+        JSONArray result =
+            new JSONArray(new JSONTokener(new StringReader(response.getContentAsString())));
+        JSONArray want = new JSONArray(JSON_ARRAY);
+        assertTrue(JSONUtils.equals(want, result));
+    }
+
+    public void testPostJsonArray() throws Exception {
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/test/jsonarray",
+                                                        "application/json",
+                                                        MediaType.APPLICATION_JSON,
+                                                        JSON_ARRAY.getBytes());
+        MockHttpServletResponse response = invoke(request);
+        assertEquals(200, response.getStatus());
+        JSONArray result =
+            new JSONArray(new JSONTokener(new StringReader(response.getContentAsString())));
+        JSONArray want = new JSONArray(JSON_ARRAY).put(Collections.singletonMap("foo", "bar"));
+        assertTrue(JSONUtils.equals(want, result));
     }
 
     public void testGetJsonFeed() throws Exception {

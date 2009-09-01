@@ -61,6 +61,7 @@ org.apache.wink.common.internal.providers.entity.opensearch.OpenSearchDescriptio
 
 # Json
 org.apache.wink.common.internal.providers.entity.json.JsonProvider
+org.apache.wink.common.internal.providers.entity.json.JsonArrayProvider
 org.apache.wink.common.internal.providers.entity.json.JsonJAXBProvider
 org.apache.wink.common.internal.providers.entity.json.JsonSyndEntryProvider
 org.apache.wink.common.internal.providers.entity.json.JsonSyndFeedProvider
