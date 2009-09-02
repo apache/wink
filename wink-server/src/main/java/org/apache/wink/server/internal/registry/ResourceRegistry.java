@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -36,8 +37,6 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.http.HttpStatus;
@@ -49,6 +48,8 @@ import org.apache.wink.common.internal.registry.metadata.MethodMetadata;
 import org.apache.wink.common.internal.uritemplate.UriTemplateMatcher;
 import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Registry for maintaining a set of all the known root resources and finding
@@ -621,7 +622,55 @@ public class ResourceRegistry {
             return -1;
         }
 
-        return MediaTypeUtils.compareTo(bestMatch1, bestMatch2);
+        int retVal = MediaTypeUtils.compareTo(bestMatch1, bestMatch2);
+
+        if (retVal != 0) {
+            return retVal;
+        }
+
+        Map<String, String> inputParameters = inputMediaType.getParameters();
+
+        Map<String, String> bestMatch1Params = bestMatch1.getParameters();
+        boolean didMatchAllParamsForBestMatch1 = true;
+        for (String key : bestMatch1Params.keySet()) {
+            String inputValue = inputParameters.get(key);
+            String value1 = bestMatch1Params.get(key);
+            if (!value1.equals(inputValue)) {
+                didMatchAllParamsForBestMatch1 = false;
+                break;
+            }
+        }
+
+        Map<String, String> bestMatch2Params = bestMatch2.getParameters();
+        boolean didMatchAllParamsForBestMatch2 = true;
+        for (String key : bestMatch2Params.keySet()) {
+            String inputValue = inputParameters.get(key);
+            String value2 = bestMatch2Params.get(key);
+            if (!value2.equals(inputValue)) {
+                didMatchAllParamsForBestMatch2 = false;
+                break;
+            }
+        }
+
+        if (didMatchAllParamsForBestMatch1 && !didMatchAllParamsForBestMatch2) {
+            return 1;
+        }
+
+        if (!didMatchAllParamsForBestMatch1 && didMatchAllParamsForBestMatch2) {
+            return -1;
+        }
+
+        if (didMatchAllParamsForBestMatch1 && didMatchAllParamsForBestMatch2) {
+            int size1 = bestMatch1Params.size();
+            int size2 = bestMatch2Params.size();
+            if (size1 > size2) {
+                return 1;
+            } else if (size2 > size1) {
+                return -1;
+            }
+        }
+
+        return 0;
     }
 
     /**
