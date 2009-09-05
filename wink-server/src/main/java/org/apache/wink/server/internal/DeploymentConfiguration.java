@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Map.Entry;
 
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.ws.rs.WebApplicationException;
@@ -112,6 +113,7 @@ public class DeploymentConfiguration {
     // servlet configuration
     private ServletConfig             servletConfig;
     private ServletContext            servletContext;
+    private FilterConfig              filterConfig;
 
     private String[]                  httpMethodOverrideHeaders;
 
@@ -209,6 +211,14 @@ public class DeploymentConfiguration {
 
     public void setServletConfig(ServletConfig servletConfig) {
         this.servletConfig = servletConfig;
+    }
+
+    public FilterConfig getFilterConfig() {
+        return filterConfig;
+    }
+
+    public void setFilterConfig(FilterConfig filterConfig) {
+        this.filterConfig = filterConfig;
     }
 
     public ServletContext getServletContext() {

@@ -27,22 +27,24 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
+import javax.servlet.FilterConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.PathSegment;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.MultivaluedMapImpl;
 import org.apache.wink.common.internal.PathSegmentImpl;
 import org.apache.wink.common.internal.i18n.Messages;
+import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.common.internal.uri.UriEncoder;
 import org.apache.wink.common.internal.utils.UriHelper;
 import org.apache.wink.server.handlers.MessageContext;
 import org.apache.wink.server.internal.handlers.SearchResult;
 import org.apache.wink.server.internal.registry.ResourceInstance;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UriInfoImpl implements UriInfo {
 
@@ -325,7 +327,10 @@ public class UriInfoImpl implements UriInfo {
         if (contextPath != null) {
             builder.append(contextPath);
         }
-        if (request.getServletPath() != null) {
+
+        boolean isServlet =
+            RuntimeContextTLS.getRuntimeContext().getAttribute(FilterConfig.class) == null;
+        if (request.getServletPath() != null && isServlet) {
             builder.append(request.getServletPath());
         }
         if (builder.charAt(builder.length() - 1) != '/') {
@@ -334,7 +339,7 @@ public class UriInfoImpl implements UriInfo {
         return builder.toString();
     }
 
-    private String buildRequestPath(HttpServletRequest request) {
+    private static String buildRequestPath(HttpServletRequest request) {
         // we cannot use request.getPathInfo() since it cuts off the ';'
         // parameters on Tomcat
         String requestPath = request.getRequestURI();
@@ -348,7 +353,9 @@ public class UriInfoImpl implements UriInfo {
         }
 
         // cut off the servlet path from the beginning
-        if (request.getServletPath() != null) {
+        boolean isServlet =
+            RuntimeContextTLS.getRuntimeContext().getAttribute(FilterConfig.class) == null;
+        if (request.getServletPath() != null && isServlet) {
             requestPath = requestPath.substring(request.getServletPath().length());
         }
 

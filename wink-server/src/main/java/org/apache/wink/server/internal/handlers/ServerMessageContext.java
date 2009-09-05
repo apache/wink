@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -78,6 +79,7 @@ public class ServerMessageContext extends AbstractRuntimeContext implements Mess
         setAttribute(HttpServletResponseWrapper.class, responseWrapper);
         setAttribute(ServletContext.class, configuration.getServletContext());
         setAttribute(ServletConfig.class, configuration.getServletConfig());
+        setAttribute(FilterConfig.class, configuration.getFilterConfig());
         setAttribute(DeploymentConfiguration.class, configuration);
         setAttribute(ResourceRegistry.class, configuration.getResourceRegistry());
         setAttribute(ProvidersRegistry.class, configuration.getProvidersRegistry());
