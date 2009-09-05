@@ -40,7 +40,10 @@ public class ContentNegotiationClientTest extends TestCase {
     HttpClient                  httpclient = new HttpClient();
 
     final private static String BASE_URI   =
-                                               ServerEnvironmentInfo.getBaseURI() + "/contentNegotiation/customerservice";
+                                               ServerEnvironmentInfo.getBaseURI() + ((ServerEnvironmentInfo
+                                                   .isRestFilterUsed()) ? ""
+                                                   : "/contentNegotiation")
+                                                   + "/customerservice";
 
     public void testGetReturningXML() {
         // Sent HTTP GET request to query customer info, expect XML

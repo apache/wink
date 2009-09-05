@@ -38,10 +38,16 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
  */
 public class CookieFieldsTest extends TestCase {
 
-    protected HttpClient        httpclient = new HttpClient();
+    protected HttpClient  httpclient = new HttpClient();
 
-    final private static String BASE_URI   =
-                                               ServerEnvironmentInfo.getBaseURI() + "/newcookies/cookiestests";
+    private static String BASE_URI   =
+                                         ServerEnvironmentInfo.getBaseURI() + "/newcookies/cookiestests";
+
+    static {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            BASE_URI = ServerEnvironmentInfo.getBaseURI() + "/cookiestests";
+        }
+    }
 
     /**
      * Test that the HttpHeaders.getCookies() method returns correct cookies and
@@ -78,21 +84,25 @@ public class CookieFieldsTest extends TestCase {
             if (!"".equals(contextRoot)) {
                 contextRoot = "/" + contextRoot;
             }
+            String servletPath = (ServerEnvironmentInfo.isRestFilterUsed()) ? "" : "/newcookies";
             while (t.hasMoreTokens()) {
                 next = t.nextToken();
                 if (next.startsWith("name3")) {
                     assertEquals("name3,value3," + contextRoot
-                        + "/newcookies/cookiestests,"
+                        + servletPath
+                        + "/cookiestests,"
                         + ServerEnvironmentInfo.getHostname(), next);
                     name3Found = true;
                 } else if (next.startsWith("name2")) {
                     assertEquals("name2,value2," + contextRoot
-                        + "/newcookies/cookiestests,"
+                        + servletPath
+                        + "/cookiestests,"
                         + ServerEnvironmentInfo.getHostname(), next);
                     name2Found = true;
                 } else if (next.startsWith("name")) {
                     assertEquals("name,value," + contextRoot
-                        + "/newcookies/cookiestests,"
+                        + servletPath
+                        + "/cookiestests,"
                         + ServerEnvironmentInfo.getHostname(), next);
                     nameFound = true;
                 } else

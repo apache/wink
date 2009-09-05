@@ -40,6 +40,9 @@ public class HttpMethodWarningsTest extends TestCase {
     protected HttpClient httpclient = new HttpClient();
 
     public static String getBaseURI() {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI();
+        }
         return ServerEnvironmentInfo.getBaseURI() + "/customannotations";
     }
 
@@ -80,7 +83,8 @@ public class HttpMethodWarningsTest extends TestCase {
 
         try {
             PutMethod putMethod = new PutMethod();
-            putMethod.setURI(new URI(BASE_URI, false));
+            System.out.println(BASE_URI);
+            putMethod.setURI(new URI(BASE_URI, true));
             httpclient = new HttpClient();
 
             try {
@@ -89,7 +93,11 @@ public class HttpMethodWarningsTest extends TestCase {
                 System.out.println("Response body: ");
                 String responseBody = putMethod.getResponseBodyAsString();
                 System.out.println(responseBody);
-                assertEquals(404, result);
+                /*
+                 * if a filter is used, then the 404 will fall through to the
+                 * container
+                 */
+                assertTrue("The result is " + result, (result == 403 && "tomcat".equals(ServerEnvironmentInfo.getContainerName())) || result == 405 || result == 404);
             } catch (IOException ioe) {
                 ioe.printStackTrace();
                 fail(ioe.getMessage());
@@ -140,7 +148,11 @@ public class HttpMethodWarningsTest extends TestCase {
                 System.out.println("Response body: ");
                 String responseBody = httpMethod.getResponseBodyAsString();
                 System.out.println(responseBody);
-                assertEquals(404, result);
+                /*
+                 * if a filter is used, then the 404 will fall through to the
+                 * container
+                 */
+                assertTrue("The result is " + result, (result == 403 && "tomcat".equals(ServerEnvironmentInfo.getContainerName())) || result == 405 || result == 404);
             } catch (IOException ioe) {
                 ioe.printStackTrace();
                 fail(ioe.getMessage());

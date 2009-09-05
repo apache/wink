@@ -39,6 +39,7 @@ final public class ServerContainerAssertions {
             Assert.assertTrue(responseBody, responseBody.contains(Integer.toString(statusCode)));
             return;
         }
-        Assert.assertTrue(responseBody, (responseBody == null) || ("".equals(responseBody)));
+        Assert.assertTrue(responseBody, (responseBody == null) || ("".equals(responseBody))
+            || responseBody.contains(Integer.toString(statusCode)));
     }
 }

@@ -31,25 +31,27 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
 public class InheritanceTest extends TestCase {
 
-    protected HttpClient        httpClient         = new HttpClient();
+    protected HttpClient httpClient = new HttpClient();
 
-    final private static String PARKING_LOT_URI    =
-                                                       ServerEnvironmentInfo.getBaseURI() + "/inheritance/parkinglot";
+    private static String getBaseURI() {
+        String isFilterUsed = System.getProperty("wink-rest-filter-used");
+        if (isFilterUsed != null && Boolean.valueOf(isFilterUsed).booleanValue()) {
+            return ServerEnvironmentInfo.getBaseURI();
+        }
+        return ServerEnvironmentInfo.getBaseURI() + "/inheritance";
+    }
 
-    final private static String PARKING_GARAGE_URI =
-                                                       ServerEnvironmentInfo.getBaseURI() + "/inheritance/parkinggarage";
+    final private static String PARKING_LOT_URI    = getBaseURI() + "/parkinglot";
 
-    final private static String CARPORT_URI        =
-                                                       ServerEnvironmentInfo.getBaseURI() + "/inheritance/carport";
+    final private static String PARKING_GARAGE_URI = getBaseURI() + "/parkinggarage";
 
-    final private static String CARFERRY_URI       =
-                                                       ServerEnvironmentInfo.getBaseURI() + "/inheritance/carferry";
+    final private static String CARPORT_URI        = getBaseURI() + "/carport";
 
-    final private static String CLASS_C_URI        =
-                                                       ServerEnvironmentInfo.getBaseURI() + "/inheritance/classc";
+    final private static String CARFERRY_URI       = getBaseURI() + "/carferry";
 
-    final private static String FRUIT_URI          =
-                                                       ServerEnvironmentInfo.getBaseURI() + "/inheritance/fruit";
+    final private static String CLASS_C_URI        = getBaseURI() + "/classc";
+
+    final private static String FRUIT_URI          = getBaseURI() + "/fruit";
 
     public void testOverrideInterfaceAnnotations() throws Exception {
         PostMethod postMethod = new PostMethod(PARKING_LOT_URI + "/cars");
@@ -213,18 +215,17 @@ public class InheritanceTest extends TestCase {
             // resources
             httpClient.executeMethod(getMethod);
             String response = getMethod.getResponseBodyAsString();
-            assertEquals("org.apache.wink.itest.fruits.Fruit;fruit%20suffix",
-                         response);
+            assertEquals("org.apache.wink.itest.fruits.Fruit;fruit%20suffix", response);
             getMethod.releaseConnection();
             getMethod = new GetMethod(FRUIT_URI + "/apple%20suffix");
             httpClient.executeMethod(getMethod);
             response = getMethod.getResponseBodyAsString();
             assertEquals("org.apache.wink.itest.fruits.Apple;apple suffix", // parameters
-                                                                                             // on
-                                                                                             // class
-                                                                                             // are
-                                                                                             // not
-                                                                                             // inherited
+                         // on
+                         // class
+                         // are
+                         // not
+                         // inherited
                          response);
             getMethod.releaseConnection();
             getMethod = new GetMethod(FRUIT_URI + "/orange%20suffix");
@@ -232,8 +233,7 @@ public class InheritanceTest extends TestCase {
             assertEquals(405, getMethod.getStatusCode());
             httpClient.executeMethod(postMethod);
             response = postMethod.getResponseBodyAsString();
-            assertEquals("org.apache.wink.itest.fruits.Orange;orange suffix",
-                         response);
+            assertEquals("org.apache.wink.itest.fruits.Orange;orange suffix", response);
             assertEquals(200, postMethod.getStatusCode());
         } catch (Exception e) {
             e.printStackTrace();

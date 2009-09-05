@@ -38,8 +38,14 @@ public class CookieParamTest extends TestCase {
 
     protected HttpClient        httpclient = new HttpClient();
 
-    final private static String BASE_URI   =
+    private static String BASE_URI   =
                                                ServerEnvironmentInfo.getBaseURI() + "/params/cookiemonster";
+    
+    static {
+        if(ServerEnvironmentInfo.isRestFilterUsed()) {
+            BASE_URI = ServerEnvironmentInfo.getBaseURI() + "/cookiemonster";
+        }
+    }
 
     /**
      * Tests that a cookie parameter is retrieved.

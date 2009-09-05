@@ -39,6 +39,9 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
 public class JAXRSStreamingOutputTest extends TestCase {
 
     public String getBaseURI() {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI();
+        }
         return ServerEnvironmentInfo.getBaseURI() + "/standard";
     }
 

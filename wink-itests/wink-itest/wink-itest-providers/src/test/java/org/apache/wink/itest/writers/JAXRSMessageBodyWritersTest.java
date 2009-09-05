@@ -35,7 +35,10 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
 public class JAXRSMessageBodyWritersTest extends TestCase {
 
-    public String getBaseURI() {
+    public static String getBaseURI() {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI();
+        }
         return ServerEnvironmentInfo.getBaseURI() + "/writers";
     }
 
@@ -71,8 +74,8 @@ public class JAXRSMessageBodyWritersTest extends TestCase {
             client.executeMethod(getMethod);
 
             assertEquals(200, getMethod.getStatusCode());
-            assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", getMethod
-                .getResponseBodyAsString());
+            assertTrue(getMethod.getResponseBodyAsString(), getMethod.getResponseBodyAsString()
+                .startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\""));
             assertEquals("text/xml", getMethod.getResponseHeader("Content-Type").getValue());
         } finally {
             getMethod.releaseConnection();

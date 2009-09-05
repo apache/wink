@@ -42,7 +42,8 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
 public class StringTest extends TestCase {
 
     final private static String BASE_URI =
-                                             ServerEnvironmentInfo.getBaseURI() + "/addressBook/"
+                                             ServerEnvironmentInfo.getBaseURI() + (ServerEnvironmentInfo
+                                                 .isRestFilterUsed() ? "" : "/addressBook/")
                                                  + "/unittests/addresses";
 
     @Override

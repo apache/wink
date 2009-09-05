@@ -33,6 +33,9 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
 public class ConstructorTest extends TestCase {
 
     private static String getBaseURI() {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI() + "/";
+        }
         return ServerEnvironmentInfo.getBaseURI() + "/constructors/";
     }
 

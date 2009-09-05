@@ -40,10 +40,11 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
 public class ContextTest extends TestCase {
 
-    final private static String USER_URI = getBaseURI() + "/simplecontextresolver/user";
-
     public static String getBaseURI() {
-        return ServerEnvironmentInfo.getBaseURI();
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI() + "/user";
+        }
+        return ServerEnvironmentInfo.getBaseURI() + "/simplecontextresolver/user";
     }
 
     public void testUserContextProvider() throws Exception {
@@ -57,7 +58,7 @@ public class ContextTest extends TestCase {
         StringWriter sw = new StringWriter();
         Marshaller m = context.createMarshaller();
         m.marshal(element, sw);
-        PostMethod postMethod = new PostMethod(USER_URI);
+        PostMethod postMethod = new PostMethod(getBaseURI());
         try {
             postMethod.setRequestEntity(new ByteArrayRequestEntity(sw.toString().getBytes(),
                                                                    "text/xml"));
@@ -67,7 +68,7 @@ public class ContextTest extends TestCase {
             postMethod.releaseConnection();
         }
 
-        GetMethod getMethod = new GetMethod(USER_URI + "/joedoe@example.com");
+        GetMethod getMethod = new GetMethod(getBaseURI() + "/joedoe@example.com");
         try {
             httpClient.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());

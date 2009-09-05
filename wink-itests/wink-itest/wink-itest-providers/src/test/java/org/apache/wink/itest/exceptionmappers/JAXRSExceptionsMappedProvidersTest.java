@@ -34,6 +34,9 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
 public class JAXRSExceptionsMappedProvidersTest extends TestCase {
 
     public String getBaseURI() {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI() + "/guestbookmapped";
+        }
         return ServerEnvironmentInfo.getBaseURI() + "/exceptionsmapped" + "/guestbookmapped";
     }
 
@@ -46,7 +49,11 @@ public class JAXRSExceptionsMappedProvidersTest extends TestCase {
     public void testRegularWorkflow() throws Exception {
         HttpClient client = new HttpClient();
 
-        PostMethod postMethod = new PostMethod(getBaseURI());
+        PostMethod postMethod = new PostMethod(getBaseURI() + "/clear");
+        client.executeMethod(postMethod);
+        assertEquals(204, postMethod.getStatusCode());
+
+        postMethod = new PostMethod(getBaseURI());
         postMethod
             .setRequestEntity(new StringRequestEntity(
                                                       "<comment><message>Hello World!</message><author>Anonymous</author></comment>",

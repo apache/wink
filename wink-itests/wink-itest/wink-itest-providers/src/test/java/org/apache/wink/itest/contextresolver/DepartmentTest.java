@@ -46,6 +46,9 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
 public class DepartmentTest extends TestCase {
 
     public static String getBaseURI() {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI() + "/departments";
+        }
         return ServerEnvironmentInfo.getBaseURI() + "/simplecontextresolver/departments";
     }
 

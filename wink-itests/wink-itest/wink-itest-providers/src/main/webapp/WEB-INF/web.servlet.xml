@@ -111,7 +111,6 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
-        
     <servlet>
         <servlet-name>ExceptionMapperNull</servlet-name>
         <servlet-class>${wink.rest.servlet}</servlet-class>
@@ -191,5 +190,4 @@
         <servlet-name>SimpleContestResolver</servlet-name>
         <url-pattern>/simplecontextresolver/*</url-pattern>
     </servlet-mapping>
-    
 </web-app>

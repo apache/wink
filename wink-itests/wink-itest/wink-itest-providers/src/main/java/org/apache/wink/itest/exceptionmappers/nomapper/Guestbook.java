@@ -21,6 +21,7 @@ package org.apache.wink.itest.exceptionmappers.nomapper;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -36,6 +37,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
+
+import org.apache.wink.itest.exceptionmappers.nomapper.GuestbookDatabase;
 
 /**
  * The main JAX-RS resource.
@@ -157,5 +160,14 @@ public class Guestbook {
     public Response deleteMessage(@PathParam("id") String msgId) {
         GuestbookDatabase.getGuestbook().deleteComment(Integer.valueOf(msgId));
         return Response.noContent().build();
+    }
+
+    @POST
+    @Path("/clear")
+    public void clearMessages() {
+        Collection<Integer> keys = GuestbookDatabase.getGuestbook().getCommentKeys();
+        for (Integer k : keys) {
+            GuestbookDatabase.getGuestbook().deleteComment(k);
+        }
     }
 }

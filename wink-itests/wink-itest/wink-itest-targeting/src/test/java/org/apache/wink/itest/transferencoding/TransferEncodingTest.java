@@ -34,7 +34,9 @@ public class TransferEncodingTest extends TestCase {
 
     private HttpClient          client;
 
-    final private static String BASE_URI = ServerEnvironmentInfo.getBaseURI() + "/transferencoding";
+    final private static String BASE_URI =
+                                             ServerEnvironmentInfo.getBaseURI() + ((ServerEnvironmentInfo
+                                                 .isRestFilterUsed()) ? "" : "/transferencoding");
 
     @Override
     public void setUp() {

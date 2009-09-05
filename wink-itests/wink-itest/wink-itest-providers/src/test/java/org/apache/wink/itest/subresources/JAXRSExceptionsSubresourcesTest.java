@@ -34,6 +34,9 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
 public class JAXRSExceptionsSubresourcesTest extends TestCase {
 
     public String getBaseURI() {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI() + "/guestbooksubresources";
+        }
         return ServerEnvironmentInfo.getBaseURI() + "/subresourceexceptions/guestbooksubresources";
     }
 

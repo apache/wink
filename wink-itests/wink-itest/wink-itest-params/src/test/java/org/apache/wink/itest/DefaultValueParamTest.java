@@ -35,10 +35,15 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
  */
 public class DefaultValueParamTest extends TestCase {
 
-    protected HttpClient        httpclient = new HttpClient();
+    protected HttpClient  httpclient = new HttpClient();
 
-    final private static String BASE_URI   =
-                                               ServerEnvironmentInfo.getBaseURI() + "/params/defaultvalue";
+    private static String BASE_URI   = ServerEnvironmentInfo.getBaseURI() + "/params/defaultvalue";
+
+    static {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            BASE_URI = ServerEnvironmentInfo.getBaseURI() + "/defaultvalue";
+        }
+    }
 
     /**
      * Test that if no parameters are passed, the default values are used.

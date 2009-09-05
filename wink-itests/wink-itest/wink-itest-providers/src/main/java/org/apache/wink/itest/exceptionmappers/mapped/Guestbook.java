@@ -21,6 +21,7 @@ package org.apache.wink.itest.exceptionmappers.mapped;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -163,5 +164,14 @@ public class Guestbook {
     public Response deleteMessage(@PathParam("id") String msgId) {
         GuestbookDatabase.getGuestbook().deleteComment(Integer.valueOf(msgId));
         return Response.noContent().build();
+    }
+
+    @POST
+    @Path("/clear")
+    public void clearMessages() {
+        Collection<Integer> keys = GuestbookDatabase.getGuestbook().getCommentKeys();
+        for (Integer k : keys) {
+            GuestbookDatabase.getGuestbook().deleteComment(k);
+        }
     }
 }

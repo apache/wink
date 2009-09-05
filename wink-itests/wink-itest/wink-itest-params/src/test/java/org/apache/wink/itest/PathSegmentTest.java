@@ -30,6 +30,9 @@ public class PathSegmentTest extends TestCase {
     private static HttpClient httpclient = new HttpClient();
 
     public String getBaseURI() {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI() + "/params/pathsegment";
+        }
         return ServerEnvironmentInfo.getBaseURI() + "/params/params/pathsegment";
     }
 

@@ -37,10 +37,19 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
  */
 public class URIInfoDetailedMethodTest extends TestCase {
 
-    public String appBase = "/uriinfo";
+    public static String appBase = "/uriinfo";
+
+    static {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            appBase = "";
+        }
+    }
 
     public String getBaseURI() {
-        return ServerEnvironmentInfo.getBaseURI() + appBase;
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI();
+        }
+        return ServerEnvironmentInfo.getBaseURI() + "/uriinfo";
     }
 
     /**

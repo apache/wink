@@ -42,9 +42,15 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
  */
 public class QueryParamTest extends TestCase {
 
-    protected HttpClient        httpclient = new HttpClient();
+    protected HttpClient  httpclient = new HttpClient();
 
-    final private static String BASE_URI   = ServerEnvironmentInfo.getBaseURI() + "/params/";
+    private static String BASE_URI   = ServerEnvironmentInfo.getBaseURI() + "/params/";
+
+    static {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            BASE_URI = ServerEnvironmentInfo.getBaseURI() + "/";
+        }
+    }
 
     protected String sendGoodRequestAndGetResponse(String aPartialRequestURL,
                                                    Class<? extends HttpMethod> aClass) {

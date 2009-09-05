@@ -39,6 +39,9 @@ public class ReturnTypeStatusTest extends TestCase {
     protected HttpClient httpclient = new HttpClient();
 
     public static String getBaseURI() {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI();
+        }
         return ServerEnvironmentInfo.getBaseURI() + "/returntypes";
     }
 

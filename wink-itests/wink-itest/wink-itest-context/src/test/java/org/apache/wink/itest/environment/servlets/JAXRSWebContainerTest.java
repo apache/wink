@@ -31,9 +31,12 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
  */
 public class JAXRSWebContainerTest extends TestCase {
 
-    private static String getBaseURI() {
+    public String getBaseURI() {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI() + "/environment/webcontainer/context";
+        }
         return ServerEnvironmentInfo.getBaseURI() + "/webcontainer"
-            + "/environment/webcontainer/context/";
+            + "/environment/webcontainer/context";
     }
 
     /**
@@ -47,8 +50,12 @@ public class JAXRSWebContainerTest extends TestCase {
         GetMethod getMethod = new GetMethod(getBaseURI());
         try {
             client.executeMethod(getMethod);
-            assertEquals(200, getMethod.getStatusCode());
-            assertTrue(getBaseURI().endsWith(getMethod.getResponseBodyAsString()));
+            if (ServerEnvironmentInfo.isRestFilterUsed()) {
+                assertEquals(204, getMethod.getStatusCode());
+            } else {
+                assertEquals(200, getMethod.getStatusCode());
+                assertTrue(getBaseURI().endsWith(getMethod.getResponseBodyAsString()));
+            }
         } finally {
             getMethod.releaseConnection();
         }

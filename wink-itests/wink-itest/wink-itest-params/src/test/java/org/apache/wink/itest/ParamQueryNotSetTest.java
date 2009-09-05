@@ -34,6 +34,9 @@ public class ParamQueryNotSetTest extends TestCase {
     private static Random r          = new Random();
 
     private String getBaseURI() {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI();
+        }
         return ServerEnvironmentInfo.getBaseURI() + "/params";
     }
 

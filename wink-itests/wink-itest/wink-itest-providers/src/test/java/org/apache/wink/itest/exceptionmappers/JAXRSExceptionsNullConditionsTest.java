@@ -38,6 +38,9 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
 public class JAXRSExceptionsNullConditionsTest extends TestCase {
 
     public String getBaseURI() {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI() + "/guestbooknullconditions";
+        }
         return ServerEnvironmentInfo.getBaseURI() + "/exceptionsnull" + "/guestbooknullconditions";
     }
 

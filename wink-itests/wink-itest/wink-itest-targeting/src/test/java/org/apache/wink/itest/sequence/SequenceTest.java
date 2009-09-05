@@ -39,6 +39,9 @@ public class SequenceTest extends TestCase {
     private HttpClient client = new HttpClient();
 
     public static String getBaseURI() {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI();
+        }
         return ServerEnvironmentInfo.getBaseURI() + "/sequence";
     }
 

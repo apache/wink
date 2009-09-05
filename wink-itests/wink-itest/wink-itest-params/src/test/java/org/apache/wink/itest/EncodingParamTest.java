@@ -38,11 +38,18 @@ public class EncodingParamTest extends TestCase {
 
     protected HttpClient        httpclient      = new HttpClient();
 
-    final private static String BASE_URI_DECODE =
+    private static String BASE_URI_DECODE =
                                                     ServerEnvironmentInfo.getBaseURI() + "/params/decodedparams";
 
-    final private static String BASE_URI_ENCODE =
+    private static String BASE_URI_ENCODE =
                                                     ServerEnvironmentInfo.getBaseURI() + "/params/encodingparam";
+
+    static {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            BASE_URI_DECODE = ServerEnvironmentInfo.getBaseURI() + "/decodedparams";
+            BASE_URI_ENCODE = ServerEnvironmentInfo.getBaseURI() + "/encodingparam";
+        }
+    }
 
     // /**
     // * Test that if regular parameters are passed, the parameters are correct.

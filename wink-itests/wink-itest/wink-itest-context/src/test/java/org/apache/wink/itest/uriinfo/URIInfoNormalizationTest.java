@@ -27,9 +27,18 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
 public class URIInfoNormalizationTest extends TestCase {
 
-    private final String appRoot = "/uriinfo";
+    private static String appRoot = "/uriinfo";
+
+    static {
+        if(ServerEnvironmentInfo.isRestFilterUsed()) {
+            appRoot = "";
+        }
+    }
 
     public String getBaseURI() {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI();
+        }
         return ServerEnvironmentInfo.getBaseURI() + appRoot;
     }
 

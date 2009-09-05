@@ -77,6 +77,9 @@ public class RequestMethodsTest extends TestCase {
     }
 
     public String getBaseURI() {
+        if(ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI();
+        }
         return ServerEnvironmentInfo.getBaseURI() + "/request";
     }
 

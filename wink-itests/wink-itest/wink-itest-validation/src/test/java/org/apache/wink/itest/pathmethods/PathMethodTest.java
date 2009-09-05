@@ -34,6 +34,9 @@ public class PathMethodTest extends TestCase {
     protected HttpClient httpclient = new HttpClient();
 
     private static String getBaseURI() {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI();
+        }
         return ServerEnvironmentInfo.getBaseURI() + "/pathmethod/pathwarnings";
     }
 

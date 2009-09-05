@@ -35,6 +35,9 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
 public class NullValuesDuringTargettingTest extends TestCase {
 
     public static String getBaseURI() {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI();
+        }
         return ServerEnvironmentInfo.getBaseURI() + "/exceptional";
     }
 

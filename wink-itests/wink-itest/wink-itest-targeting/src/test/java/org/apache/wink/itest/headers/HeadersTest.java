@@ -39,6 +39,9 @@ public class HeadersTest extends TestCase {
     final private static String BASE_URI = getBaseURI() + "/headers";
 
     public static String getBaseURI() {
+        if(ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI();
+        }
         return ServerEnvironmentInfo.getBaseURI() + "/headers";
     }
 

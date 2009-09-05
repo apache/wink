@@ -38,6 +38,9 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
 public class JAXRSSourceTest extends TestCase {
 
     public String getBaseURI() {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI();
+        }
         return ServerEnvironmentInfo.getBaseURI() + "/standard";
     }
 
@@ -186,8 +189,7 @@ public class JAXRSSourceTest extends TestCase {
             String str = getMethod.getResponseBodyAsString();
             assertEquals(str, 200, getMethod.getStatusCode());
 
-            assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><message><user>user1</user><password>user1pwd</password></message>",
-                         str);
+            assertTrue(str, str.contains("<message><user>user1</user><password>user1pwd</password></message>"));
 
             String contentType =
                 (getMethod.getResponseHeader("Content-Type") == null) ? null : getMethod

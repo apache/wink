@@ -42,9 +42,18 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
  */
 public class HeaderParamTest extends TestCase {
 
-    final private static String BASE_URI = ServerEnvironmentInfo.getBaseURI() + "/params/header";
+    private static String BASE_URI = ServerEnvironmentInfo.getBaseURI() + "/params/header";
+
+    static {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            BASE_URI = ServerEnvironmentInfo.getBaseURI() + "/header";
+        }
+    }
 
     public String getBaseURI() {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI();
+        }
         return ServerEnvironmentInfo.getBaseURI() + "/params";
     }
 

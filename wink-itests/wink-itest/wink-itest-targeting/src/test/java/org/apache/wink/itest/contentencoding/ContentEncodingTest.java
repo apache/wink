@@ -38,7 +38,9 @@ public class ContentEncodingTest extends TestCase {
 
     private HttpClient          client;
 
-    final private static String BASE_URI = ServerEnvironmentInfo.getBaseURI() + "/contentencoding";
+    final private static String BASE_URI =
+                                             ServerEnvironmentInfo.getBaseURI() + ((ServerEnvironmentInfo
+                                                 .isRestFilterUsed()) ? "" : "/contentencoding");
 
     @Override
     public void setUp() {

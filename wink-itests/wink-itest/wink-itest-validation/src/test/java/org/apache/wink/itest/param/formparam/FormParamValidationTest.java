@@ -31,7 +31,10 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
 public class FormParamValidationTest extends TestCase {
 
     private static String getBaseURI() {
-        return ServerEnvironmentInfo.getBaseURI() + "/param/formparam/";
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI();
+        }
+        return ServerEnvironmentInfo.getBaseURI() + "/param/formparam";
     }
 
     /**

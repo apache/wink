@@ -36,6 +36,11 @@ final public class ServerEnvironmentInfo {
         return System.getProperty("wink-test-context-root");
     }
 
+    public static boolean isRestFilterUsed() {
+        String winkRestFilterUsed = System.getProperty("wink-rest-filter-used");
+        return winkRestFilterUsed != null && Boolean.valueOf(winkRestFilterUsed).booleanValue();
+    }
+
     public static String getBaseURI() {
         String contextRoot = getContextRoot();
         if (contextRoot == null) {
@@ -48,10 +53,7 @@ final public class ServerEnvironmentInfo {
         return System.getProperty("wink-test-work-dir");
     }
 
-    static String getContainerName() {
-        /*
-         * tests should not use this
-         */
+    public static String getContainerName() {
         return System.getProperty("wink-test-container");
     }
 }

@@ -41,7 +41,9 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
 public class ClientTest extends TestCase {
 
     final private static String     NEWS_BASE_URI =
-                                                      ServerEnvironmentInfo.getBaseURI() + "/cache/news";
+                                                      ServerEnvironmentInfo.getBaseURI() + ((ServerEnvironmentInfo
+                                                          .isRestFilterUsed()) ? "" : "/cache")
+                                                          + "/news";
 
     private static final DateFormat formatter     =
                                                       new SimpleDateFormat(
