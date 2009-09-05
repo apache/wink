@@ -36,6 +36,7 @@
         <module>wink-itest-targeting</module>
         <module>wink-itest-validation</module>
         <module>wink-itest-extra-providers</module>
+        <module>wink-itest-filter</module>
     </modules>
 
     <properties>
