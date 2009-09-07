@@ -33,15 +33,15 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.apache.wink.common.internal.application.ApplicationFileLoader;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
+import org.apache.wink.server.internal.application.ServletApplicationFileLoader;
 import org.apache.wink.server.internal.handlers.ServerMessageContext;
 import org.apache.wink.server.internal.resources.HtmlServiceDocumentResource;
 import org.apache.wink.server.internal.resources.RootResource;
 import org.apache.wink.server.utils.RegistrationUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Responsible for request processing.
@@ -71,7 +71,7 @@ public class RequestProcessor {
 
     private void registerDefaultApplication() {
         try {
-            final Set<Class<?>> classes = new ApplicationFileLoader().getClasses();
+            final Set<Class<?>> classes = new ServletApplicationFileLoader().getClasses();
             configuration.addApplication(new RegistrationUtils.InnerApplication(classes));
         } catch (FileNotFoundException e) {
             throw new WebApplicationException(e);
