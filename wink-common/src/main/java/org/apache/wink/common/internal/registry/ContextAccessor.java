@@ -26,6 +26,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Providers;
@@ -35,48 +36,6 @@ import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 
 public class ContextAccessor {
 
-    // private static Object[] EMPTY_ARRAY = new Object[0];
-    // private static final Logger logger =
-    // LoggerFactory.getLogger(ContextAccessor.class);
-
-    // private static final Map<Class<?>,Method> contextAccessors = new
-    // HashMap<Class<?>,Method>();
-
-    // static {
-    // // initialize contextAccessors map.
-    // // the map holds the methods that can be accessible using the @Context
-    // annotation
-    // try {
-    // contextAccessors.put(HttpServletRequest.class,
-    // RuntimeContext.class.getMethod("getHttpServletRequest"));
-    // contextAccessors.put(HttpServletResponse.class,
-    // RuntimeContext.class.getMethod("getHttpServletResponse"));
-    // contextAccessors.put(UriInfo.class,
-    // RuntimeContext.class.getMethod("getUriInfo"));
-    // contextAccessors.put(HttpHeaders.class,
-    // RuntimeContext.class.getMethod("getHttpHeaders"));
-    // contextAccessors.put(Request.class,
-    // RuntimeContext.class.getMethod("getRequest"));
-    // contextAccessors.put(SecurityContext.class,
-    // RuntimeContext.class.getMethod("getSecurityContext"));
-    // contextAccessors.put(Providers.class,
-    // RuntimeContext.class.getMethod("getProviders"));
-    // contextAccessors.put(ServletContext.class,
-    // RuntimeContext.class.getMethod("getServletContext"));
-    // contextAccessors.put(ServletConfig.class,
-    // RuntimeContext.class.getMethod("getServletConfig"));
-    // contextAccessors.put(LinkBuilders.class,
-    // RuntimeContext.class.getMethod("getLinkBuilders"));
-    // } catch (Exception e) {
-    // // should never happen
-    // logger.error(e.getMessage(), e);
-    // throw new WebApplicationException(e);
-    // }
-    // }
-
-    // public Method getAccessor(Class<?> cls) {
-    // return contextAccessors.get(cls);
-    // }
 
     public <T> T getContext(Class<T> contextClass, RuntimeContext runtimeContext) {
 
@@ -164,7 +123,12 @@ public class ContextAccessor {
         }
         Providers providers = runtimeContext.getProviders();
         if (providers != null) {
-            MediaType mediaType = runtimeContext.getHttpHeaders().getMediaType();
+            HttpHeaders httpHeaders = runtimeContext.getHttpHeaders();
+            MediaType mediaType = null;
+            if (httpHeaders != null) {
+                // this is hotfix for WINK-166
+                mediaType = httpHeaders.getMediaType();
+            }
             if (mediaType == null) {
                 mediaType = MediaType.WILDCARD_TYPE;
             }
