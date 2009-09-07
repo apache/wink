@@ -20,6 +20,7 @@
 
 package org.apache.wink.client;
 
+import java.io.FileNotFoundException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -32,6 +33,7 @@ import org.apache.wink.client.handlers.ClientHandler;
 import org.apache.wink.client.handlers.ConnectionHandler;
 import org.apache.wink.client.internal.handlers.HttpURLConnectionHandler;
 import org.apache.wink.common.WinkApplication;
+import org.apache.wink.common.internal.application.ApplicationFileLoader;
 
 /**
  * Provides client configuration. The ClientConfig is implemented using the
@@ -72,66 +74,24 @@ public class ClientConfig implements Cloneable {
     }
 
     private void initDefaultApplication() {
-        // TODO: use SimpleWinkAplication
-        applications(new WinkApplication() {
-            @Override
-            public Set<Class<?>> getClasses() {
-                Set<Class<?>> set = new HashSet<Class<?>>();
-                set.add(org.apache.wink.common.internal.providers.entity.StringProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.FileProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.ByteArrayProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.InputStreamProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.StringProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.ReaderProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.DataSourceProvider.class);
-                set
-                    .add(org.apache.wink.common.internal.providers.entity.FormMultivaluedMapProvider.class);
-                set
-                    .add(org.apache.wink.common.internal.providers.entity.SourceProvider.StreamSourceProvider.class);
-                set
-                    .add(org.apache.wink.common.internal.providers.entity.SourceProvider.SAXSourceProvider.class);
-                set
-                    .add(org.apache.wink.common.internal.providers.entity.SourceProvider.DOMSourceProvider.class);
-                set
-                    .add(org.apache.wink.common.internal.providers.entity.StreamingOutputProvider.class);
-                set
-                    .add(org.apache.wink.common.internal.providers.entity.xml.JAXBElementXmlProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.xml.JAXBXmlProvider.class);
-                set
-                    .add(org.apache.wink.common.internal.providers.entity.atom.AtomFeedProvider.class);
-                set
-                    .add(org.apache.wink.common.internal.providers.entity.atom.AtomFeedSyndFeedProvider.class);
-                set
-                    .add(org.apache.wink.common.internal.providers.entity.atom.AtomFeedJAXBElementProvider.class);
-                set
-                    .add(org.apache.wink.common.internal.providers.entity.atom.AtomEntryProvider.class);
-                set
-                    .add(org.apache.wink.common.internal.providers.entity.atom.AtomEntrySyndEntryProvider.class);
-                set
-                    .add(org.apache.wink.common.internal.providers.entity.atom.AtomEntryJAXBElementProvider.class);
-                set
-                    .add(org.apache.wink.common.internal.providers.entity.app.AppServiceProvider.class);
-                set
-                    .add(org.apache.wink.common.internal.providers.entity.app.AppCategoriesProvider.class);
-                set
-                    .add(org.apache.wink.common.internal.providers.entity.app.CategoriesProvider.class);
-                set
-                    .add(org.apache.wink.common.internal.providers.entity.opensearch.OpenSearchDescriptionProvider.class);
-                set.add(org.apache.wink.common.internal.providers.entity.json.JsonProvider.class);
-                set
-                    .add(org.apache.wink.common.internal.providers.entity.json.JsonJAXBProvider.class);
-                set
-                    .add(org.apache.wink.common.internal.providers.entity.json.JsonSyndEntryProvider.class);
-                set
-                    .add(org.apache.wink.common.internal.providers.entity.json.JsonSyndFeedProvider.class);
-                return set;
-            }
 
-            @Override
-            public double getPriority() {
-                return 0.1;
-            }
-        });
+        try {
+            final Set<Class<?>> classes = new ApplicationFileLoader().getClasses();
+
+            applications(new WinkApplication() {
+                @Override
+                public Set<Class<?>> getClasses() {
+                    return classes;
+                }
+
+                @Override
+                public double getPriority() {
+                    return 0.1;
+                }
+            });
+        } catch (FileNotFoundException e) {
+            throw new ClientConfigException(e);
+        }
     }
 
     /**
