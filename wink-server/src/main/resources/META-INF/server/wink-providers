@@ -21,3 +21,6 @@
 org.apache.wink.server.internal.providers.entity.html.HtmlProvider
 #org.apache.wink.server.internal.providers.entity.html.HtmlSyndEntryProvider
 #org.apache.wink.server.internal.providers.entity.html.HtmlSyndFeedProvider
+
+# Asset Provider
+org.apache.wink.common.internal.providers.entity.AssetProvider
