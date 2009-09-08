@@ -29,6 +29,8 @@ import java.net.Proxy;
 import java.net.URL;
 import java.util.List;
 
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.wink.client.ClientConfig;
@@ -100,6 +102,14 @@ public class HttpURLConnectionHandler extends AbstractConnectionHandler {
                     connection.addRequestProperty(header, value);
                 }
             }
+        }
+        /*
+         * HttpUrlConnection may set an illegal Accept header by default (a
+         * "*;q=0.2" without a subtytle) so if there wasn't an Accept header,
+         * then set one here.
+         */
+        if (headers.getFirst(HttpHeaders.ACCEPT) == null) {
+            connection.addRequestProperty(HttpHeaders.ACCEPT, MediaType.WILDCARD);
         }
     }
 

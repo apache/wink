@@ -222,9 +222,6 @@ public class ResourceImpl implements Resource {
         request.setURI(uriBuilder.build());
         request.setMethod(method);
         request.getHeaders().putAll(headers);
-        if (headers.getFirst(HttpHeaders.ACCEPT) == null) {
-            request.getHeaders().add(HttpHeaders.ACCEPT, MediaType.WILDCARD);
-        }
         if (headers.getFirst(HttpHeaders.USER_AGENT) == null) {
             request.getHeaders().add(HttpHeaders.USER_AGENT, USER_AGENT);
         }

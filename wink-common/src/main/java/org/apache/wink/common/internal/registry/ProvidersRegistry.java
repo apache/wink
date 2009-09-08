@@ -347,6 +347,37 @@ public class ProvidersRegistry {
         }
     }
 
+    public Set<MediaType> getMessageBodyReaderMediaTypesLimitByIsReadable(Class<?> type,
+                                                                          RuntimeContext runtimeContext) {
+        Set<MediaType> mediaTypes = new HashSet<MediaType>();
+        readersLock.lock();
+        try {
+            List<ObjectFactory<MessageBodyReader<?>>> readerFactories =
+                messageBodyReaders.getProvidersByMediaType(MediaType.WILDCARD_TYPE, type);
+
+            Annotation[] ann = new Annotation[0];
+            for (ObjectFactory<MessageBodyReader<?>> factory : readerFactories) {
+                MessageBodyReader<?> reader = factory.getInstance(runtimeContext);
+                Consumes consumes = factory.getInstanceClass().getAnnotation(Consumes.class);
+                String[] values = null;
+                if (consumes != null) {
+                    values = consumes.value();
+                } else {
+                    values = new String[] {MediaType.WILDCARD};
+                }
+                for (String v : values) {
+                    MediaType mt = MediaType.valueOf(v);
+                    if (reader.isReadable(type, type, ann, mt)) {
+                        mediaTypes.add(mt);
+                    }
+                }
+            }
+        } finally {
+            readersLock.unlock();
+        }
+        return mediaTypes;
+    }
+
     public Set<MediaType> getMessageBodyWriterMediaTypes(Class<?> type) {
         if (type == null) {
             throw new NullPointerException("type");

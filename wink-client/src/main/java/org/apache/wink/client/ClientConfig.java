@@ -22,7 +22,6 @@ package org.apache.wink.client;
 
 import java.io.FileNotFoundException;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -31,6 +30,7 @@ import javax.ws.rs.core.Application;
 
 import org.apache.wink.client.handlers.ClientHandler;
 import org.apache.wink.client.handlers.ConnectionHandler;
+import org.apache.wink.client.internal.handlers.AcceptHeaderHandler;
 import org.apache.wink.client.internal.handlers.HttpURLConnectionHandler;
 import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.internal.application.ApplicationFileLoader;
@@ -51,6 +51,7 @@ public class ClientConfig implements Cloneable {
     private LinkedList<ClientHandler> handlers;
     private LinkedList<Application>   applications;
     private boolean                   modifiable;
+    private boolean                   isAcceptHeaderAutoSet;
 
     /**
      * Construct a new ClientConfig with the following default settings:
@@ -68,6 +69,7 @@ public class ClientConfig implements Cloneable {
         connectTimeout = 60000;
         readTimeout = 60000;
         followRedirects = true;
+        isAcceptHeaderAutoSet = true;
         handlers = new LinkedList<ClientHandler>();
         applications = new LinkedList<Application>();
         initDefaultApplication();
@@ -220,6 +222,33 @@ public class ClientConfig implements Cloneable {
     }
 
     /**
+     * Returns whether client will automatically set an appropriate Accept
+     * header
+     * 
+     * @return true if client will automatically set an appropriate Accept
+     *         header; false otherwise
+     */
+    public final boolean isAcceptHeaderAutoSet() {
+        return isAcceptHeaderAutoSet;
+    }
+
+    /**
+     * Set whether client will automatically set an appropriate Accept header
+     * 
+     * @param isAcceptHeaderAutoSet whether client will automatically set an
+     *            appropriate Accept header
+     * @return this client configuration
+     * @throws ClientConfigException
+     */
+    public final ClientConfig acceptHeaderAutoSet(boolean isAcceptHeaderAutoSet) {
+        if (!modifiable) {
+            throw new ClientConfigException("configuration is unmodifiable");
+        }
+        this.isAcceptHeaderAutoSet = isAcceptHeaderAutoSet;
+        return this;
+    }
+
+    /**
      * Get an unmodifiable list of the client handlers
      * 
      * @return an unmodifiable list of the client handlers
@@ -246,6 +275,9 @@ public class ClientConfig implements Cloneable {
     }
 
     /* package */ClientConfig build() {
+        if (isAcceptHeaderAutoSet) {
+            handlers.add(new AcceptHeaderHandler());
+        }
         handlers.add(getConnectionHandler());
         modifiable = false;
         return this;
