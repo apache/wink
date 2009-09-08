@@ -72,7 +72,7 @@ public class Comment {
         AtomEntry entry = new AtomEntry();
         AtomContent content = new AtomContent();
         content.setValue(this.content);
-        content.setType("String");
+        content.setType("text");
         entry.setContent(content);
         entry.getAuthors().add(this.author.toAtomPerson());
         entry.setTitle(new AtomText(this.title));

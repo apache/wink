@@ -187,7 +187,7 @@ public class AtomTest extends TestCase {
         author.setEmail("winkblogadmin@wink.blog.com");
         entry.getAuthors().add(author);
         AtomContent content = new AtomContent();
-        content.setType("String");
+        content.setType("text");
         content.setValue("This is a new entry in the blog");
         entry.setContent(content);
         entry.setTitle(new AtomText(("New blog entry")));
@@ -235,7 +235,7 @@ public class AtomTest extends TestCase {
         author.setEmail("winkcoder@mybusiness.com");
         entry.getAuthors().add(author);
         AtomContent content = new AtomContent();
-        content.setType("String");
+        content.setType("text");
         content.setValue("I was able to set up the Wink development environment!");
         entry.setContent(content);
         entry.setTitle(new AtomText(("Success")));
