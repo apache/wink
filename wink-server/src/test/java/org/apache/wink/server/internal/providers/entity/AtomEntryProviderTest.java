@@ -39,6 +39,7 @@ import org.apache.wink.common.model.atom.AtomEntry;
 import org.apache.wink.common.model.synd.SyndEntry;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
+import org.apache.wink.test.mock.TestUtils;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -111,7 +112,9 @@ public class AtomEntryProviderTest extends MockServletInvocationTest {
                                                         "application/atom+xml");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(ENTRY, response.getContentAsString());
+        String msg =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(ENTRY, response.getContentAsString());
+        assertNull(msg, msg);
     }
 
     public void testGetAtomEntryElement() throws Exception {
@@ -121,7 +124,9 @@ public class AtomEntryProviderTest extends MockServletInvocationTest {
                                                         "application/atom+xml");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(ENTRY, response.getContentAsString());
+        String msg =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(ENTRY, response.getContentAsString());
+        assertNull(msg, msg);
     }
 
     public void testGetAtomSyndEntry() throws Exception {
@@ -131,7 +136,9 @@ public class AtomEntryProviderTest extends MockServletInvocationTest {
                                                         "application/atom+xml");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(ENTRY, response.getContentAsString());
+        String msg =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(ENTRY, response.getContentAsString());
+        assertNull(msg, msg);
     }
 
     public void testPostAtomEntry() throws Exception {
@@ -143,7 +150,9 @@ public class AtomEntryProviderTest extends MockServletInvocationTest {
         request.setContent(ENTRY.getBytes());
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(ENTRY, response.getContentAsString());
+        String msg =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(ENTRY, response.getContentAsString());
+        assertNull(msg, msg);
     }
 
     public void testPostAtomEntryElement() throws Exception {
@@ -155,7 +164,9 @@ public class AtomEntryProviderTest extends MockServletInvocationTest {
         request.setContent(ENTRY.getBytes());
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(ENTRY, response.getContentAsString());
+        String msg =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(ENTRY, response.getContentAsString());
+        assertNull(msg, msg);
     }
 
     public void testPostAtomSyndEntry() throws Exception {
@@ -167,7 +178,9 @@ public class AtomEntryProviderTest extends MockServletInvocationTest {
         request.setContent(ENTRY.getBytes());
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(ENTRY, response.getContentAsString());
+        String msg =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(ENTRY, response.getContentAsString());
+        assertNull(msg, msg);
     }
 
     private static final String ENTRY_STR =

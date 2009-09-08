@@ -100,6 +100,22 @@ public class TestUtils {
         System.err.println("Actual:\r\n" + TestUtils.printPrettyXML(xmlActual));
         return diff.toString();
     }
+    public static String diffIgnoreUpdateWithAttributeQualifier(String expected, String actual) throws Exception {
+        return diffIgnoreUpdateWithAttributeQualifier(expected.getBytes("UTF-8"), actual.getBytes("UTF-8"));
+    }
+    
+    public static String diffIgnoreUpdateWithAttributeQualifier(byte[] expected, byte[] actual)
+        throws Exception {
+        Document xmlExpected = getXML(expected);
+        Document xmlActual = getXML(actual);
+        Diff diff = new DiffIgnoreUpdateWithAttributeQualifier(xmlExpected, xmlActual);
+        if (diff.similar()) {
+            return null;
+        }
+        System.err.println("Expected:\r\n" + TestUtils.printPrettyXML(xmlExpected));
+        System.err.println("Actual:\r\n" + TestUtils.printPrettyXML(xmlActual));
+        return diff.toString();
+    }
 
     public static String printPrettyXML(Document doc) throws Exception {
         Transformer transformer = TransformerFactory.newInstance().newTransformer();

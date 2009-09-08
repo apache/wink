@@ -31,6 +31,8 @@ import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.namespace.QName;
 
+import org.apache.wink.common.RestConstants;
+
 /**
  * This object contains factory methods for each Java content interface and Java
  * element interface generated in the org.apache.wink.common.model.atom package.
@@ -96,6 +98,10 @@ public class ObjectFactory {
         return new AtomEntry();
     }
 
+    public AtomXhtml createAtomXhtml() {
+        return new AtomXhtml();
+    }
+
     /**
      * Create an instance of {@link AtomCommonAttributes }
      */
@@ -138,6 +144,12 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://www.w3.org/2005/Atom", name = "content")
     public JAXBElement<AtomContent> createContent(AtomContent value) {
         return new JAXBElement<AtomContent>(_Content_QNAME, AtomContent.class, null, value);
+    }
+
+    @XmlElementDecl(namespace = RestConstants.NAMESPACE_XHTML, name = "div")
+    public JAXBElement<AtomXhtml> createAtomXhtml(AtomXhtml value) {
+        return new JAXBElement<AtomXhtml>(new QName(RestConstants.NAMESPACE_XHTML, "div"),
+                                          AtomXhtml.class, null, value);
     }
 
     /**

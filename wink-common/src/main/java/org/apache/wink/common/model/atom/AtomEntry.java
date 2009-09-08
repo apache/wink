@@ -170,7 +170,8 @@ public class AtomEntry extends AtomCommonAttributes implements NamespacePrefixMa
     }
 
     public static Marshaller getMarshaller() {
-        return JAXBUtils.createMarshaller(atomContext);
+        Marshaller marshaller = JAXBUtils.createMarshaller(atomContext);
+        return marshaller;
     }
 
     public static Unmarshaller getUnmarshaller() {
@@ -190,7 +191,7 @@ public class AtomEntry extends AtomCommonAttributes implements NamespacePrefixMa
     public static void marshal(AtomEntry entry, OutputStream os) throws IOException {
         JAXBElement<AtomEntry> entryElement = new ObjectFactory().createEntry(entry);
         Marshaller marshaller = AtomEntry.getMarshaller();
-        AtomJAXBUtils.marshal(marshaller, entryElement, null, os);
+        AtomJAXBUtils.marshal(marshaller, entryElement, os);
     }
 
     public JAXBNamespacePrefixMapper getNamespacePrefixMapper() {

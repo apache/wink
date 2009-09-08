@@ -18,23 +18,24 @@
     under the License.
 -->
 
-<entry xml:base="http://localhost:80/defects" xmlns="http://www.w3.org/2005/Atom">
+<entry xmlns="http://www.w3.org/2005/Atom" xmlns:ns2="http://a9.com/-/spec/opensearch/1.1/" xmlns:ns3="http://www.w3.org/1999/xhtml" xml:base="http://localhost:80/defects">
     <id>urn:com:hp:qadefects:defect:1</id>
     <title type="text">Missing asterisk for mandatory fields</title>
+    <summary type="text">In Payment Services page, there is no indication for mandatory fields.</summary>
+    <published>1970-01-01T16:01:45.052+02:00</published>
     <link href="http://localhost:80/defects/1" rel="edit"/>
-    <link href="http://localhost:80/defects/1/history?alt=application%2Fatom%2Bxml" type="application/atom+xml" rel="history"/>
+    <link href="http://localhost:80/defects/1/history?alt=application%2Fatom%2Bxml" rel="history" type="application/atom+xml"/>
+    <link href="http://localhost:80/defects/1;rev=4?alt=application%2Fatom%2Bxml" rel="alternate" type="application/atom+xml"/>
+    <link href="http://localhost:80/defects/1;rev=4?alt=application%2Fxml" rel="alternate" type="application/xml"/>
+    <link href="http://localhost:80/defects/1;rev=4?alt=application%2Fjson" rel="alternate" type="application/json"/>
     <link href="http://localhost:80/defects/1;rev=4" rel="self"/>
-    <link href="http://localhost:80/defects/1;rev=4?alt=application%2Fatom%2Bxml" type="application/atom+xml" rel="alternate"/>
-    <link href="http://localhost:80/defects/1;rev=4?alt=application%2Fjson" type="application/json" rel="alternate"/>
-    <link href="http://localhost:80/defects/1;rev=4?alt=application%2Fxml" type="application/xml" rel="alternate"/>
-    <category scheme="urn:com:hp:qadefects:categories:severity" term="4-minor"/>
-    <category scheme="urn:com:hp:qadefects:categories:status" term="Assigned"/>
     <author>
         <name>tester2</name>
     </author>
-    <published>1970-01-01T16:01:45.052+02:00</published>
+    <category scheme="urn:com:hp:qadefects:categories:severity" term="4-minor"/>
+    <category scheme="urn:com:hp:qadefects:categories:status" term="Assigned"/>
     <content type="application/xml">
-        <defect>
+        <defect xmlns="" xmlns:ns4="http://www.w3.org/2005/Atom">
             <id>1</id>
             <revision>4</revision>
             <deleted>false</deleted>
@@ -47,5 +48,4 @@
             <assignedTo>developer3</assignedTo>
         </defect>
     </content>
-    <summary type="text">In Payment Services page, there is no indication for mandatory fields.</summary>
 </entry>

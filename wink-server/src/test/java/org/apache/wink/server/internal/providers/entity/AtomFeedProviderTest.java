@@ -39,6 +39,7 @@ import org.apache.wink.common.model.atom.AtomFeed;
 import org.apache.wink.common.model.synd.SyndFeed;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
+import org.apache.wink.test.mock.TestUtils;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -111,7 +112,9 @@ public class AtomFeedProviderTest extends MockServletInvocationTest {
                                                         "application/atom+xml");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(FEED, response.getContentAsString());
+        String msg =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(FEED, response.getContentAsString());
+        assertNull(msg, msg);
     }
 
     public void testGetAtomFeedElement() throws Exception {
@@ -121,7 +124,9 @@ public class AtomFeedProviderTest extends MockServletInvocationTest {
                                                         "application/atom+xml");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(FEED, response.getContentAsString());
+        String msg =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(FEED, response.getContentAsString());
+        assertNull(msg, msg);
     }
 
     public void testGetAtomSyndFeed() throws Exception {
@@ -131,7 +136,9 @@ public class AtomFeedProviderTest extends MockServletInvocationTest {
                                                         "application/atom+xml");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(FEED, response.getContentAsString());
+        String msg =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(FEED, response.getContentAsString());
+        assertNull(msg, msg);
     }
 
     public void testPostAtomFeed() throws Exception {
@@ -143,7 +150,9 @@ public class AtomFeedProviderTest extends MockServletInvocationTest {
         request.setContent(FEED.getBytes());
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(FEED, response.getContentAsString());
+        String msg =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(FEED, response.getContentAsString());
+        assertNull(msg, msg);
     }
 
     public void testPostAtomFeedElement() throws Exception {
@@ -155,7 +164,9 @@ public class AtomFeedProviderTest extends MockServletInvocationTest {
         request.setContent(FEED.getBytes());
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(FEED, response.getContentAsString());
+        String msg =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(FEED, response.getContentAsString());
+        assertNull(msg, msg);
     }
 
     public void testPostAtomSyndFeed() throws Exception {
@@ -167,7 +178,9 @@ public class AtomFeedProviderTest extends MockServletInvocationTest {
         request.setContent(FEED.getBytes());
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(FEED, response.getContentAsString());
+        String msg =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(FEED, response.getContentAsString());
+        assertNull(msg, msg);
     }
 
     private static final String FEED_STR =

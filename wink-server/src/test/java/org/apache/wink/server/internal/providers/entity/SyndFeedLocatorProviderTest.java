@@ -31,6 +31,7 @@ import org.apache.wink.common.model.synd.SyndFeed;
 import org.apache.wink.common.model.synd.SyndText;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
+import org.apache.wink.test.mock.TestUtils;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -88,7 +89,9 @@ public class SyndFeedLocatorProviderTest extends MockServletInvocationTest {
             MockRequestConstructor.constructMockRequest("GET", "/test", "application/atom+xml");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(FEED, response.getContentAsString());
+        String msg =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(FEED, response.getContentAsString());
+        assertNull(msg, msg);
     }
 
     public void testPostAtomFeed() throws Exception {
@@ -98,7 +101,9 @@ public class SyndFeedLocatorProviderTest extends MockServletInvocationTest {
         request.setContent(FEED.getBytes());
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(FEED, response.getContentAsString());
+        String msg =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(FEED, response.getContentAsString());
+        assertNull(msg, msg);
     }
 
 }

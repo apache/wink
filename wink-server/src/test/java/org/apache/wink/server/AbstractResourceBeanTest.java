@@ -34,6 +34,7 @@ import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
+import org.apache.wink.test.mock.TestUtils;
 import org.custommonkey.xmlunit.Diff;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -204,9 +205,10 @@ public class AbstractResourceBeanTest extends MockServletInvocationTest {
                                                         MediaTypeUtils.ATOM_SERVICE_DOCUMENT_TYPE);
         response = invoke(mockRequest);
         responseContent = response.getContentAsString();
-        Diff diff = new Diff(EXPECTED_SERVICE_DOCUMENT, responseContent);
-        assertTrue("Comparing service document with expected one: " + diff.toString(), diff
-            .identical());
+        String msg =
+            TestUtils
+                .diffIgnoreUpdateWithAttributeQualifier(EXPECTED_SERVICE_DOCUMENT, responseContent);
+        assertNull(msg, msg);
     }
 
     public void testServicesSingleEntry() throws Exception {

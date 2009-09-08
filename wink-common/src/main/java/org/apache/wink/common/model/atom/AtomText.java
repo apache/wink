@@ -26,9 +26,16 @@
 
 package org.apache.wink.common.model.atom;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.List;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.ext.Providers;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
@@ -123,14 +130,25 @@ import org.apache.wink.common.model.synd.SyndTextType;
 @XmlType(name = "atomText", propOrder = {"any"})
 public class AtomText extends AtomCommonAttributes {
 
-    @XmlMixed
-    @XmlAnyElement(lax = true)
-    protected List<Object> any;
+    @XmlTransient
+    private List<Object>   any;
+
     @XmlAttribute
     protected AtomTextType type;
 
     @XmlTransient
     private String         savedValue = null;
+
+    @XmlMixed
+    @XmlAnyElement(lax = true, value = AnyContentHandler.class)
+    List<Object> getAny() {
+        AtomJAXBUtils.fixAnyContent(any, type == null ? null : type.name());
+        return any;
+    }
+
+    void setAny(List<Object> any) {
+        this.any = any;
+    }
 
     /**
      * Create an empty AtomText with no type and no value
@@ -166,7 +184,7 @@ public class AtomText extends AtomCommonAttributes {
         if (value.getType() != null) {
             setType(AtomTextType.valueOf(value.getType().toString()));
         }
-        setValue(value.getValue());
+        setValue(value.getValue(Object.class));
     }
 
     public SyndText toSynd(SyndText value) {
@@ -177,40 +195,77 @@ public class AtomText extends AtomCommonAttributes {
         if (getType() != null) {
             value.setType(SyndTextType.valueOf(getType().toString()));
         }
-        value.setValue(getValue());
+        value.setValue(getValue(Object.class));
         return value;
     }
 
-    private List<Object> getAny() {
-        if (any == null) {
-            any = new ArrayList<Object>();
-        }
-        return this.any;
-    }
-
-    public void setValue(String value) {
-        if (value == null) {
-            getAny().clear();
-            return;
-        }
-
-        if (getAny().size() == 0) {
-            getAny().add(value);
+    public void setValue(Object value) {
+        if (value != null) {
+            any = Arrays.asList(value);
         } else {
-            getAny().set(0, value);
+            any = null;
         }
     }
 
+    /**
+     * <p>
+     * Gets the content of the "atom:text" element as a String. The "type"
+     * attribute should be used to determine how to treat the content.
+     * <p>
+     * Pay attention that de-serialization occurs each time the method is
+     * called, so multiple calls to this method may effect the application
+     * performance.
+     */
     public String getValue() {
-        if (getAny().size() == 0) {
-            return null;
-        }
+        return getValue(String.class);
+    }
 
-        Object o = getAny().get(0);
-        if (o instanceof String) {
-            return (String)o;
+    /**
+     * <p>
+     * Gets the content of the "atom:text" element serialized to provided class.
+     * The "type" attribute should be used to determine how to treat the
+     * content.
+     * <p>
+     * Pay attention that de-serialization occurs each time the method is
+     * called, so multiple calls to this method may effect the application
+     * performance.
+     */
+    public <T> T getValue(Class<T> cls) {
+        try {
+            return getValue(cls,
+                            cls,
+                            null,
+                            AtomJAXBUtils.EMPTY_ARRAY,
+                            AtomJAXBUtils.EMPTY_STRING_MAP,
+                            AtomJAXBUtils.determineMediaType(type == null ? null : type.name()));
+        } catch (IOException e) {
+            // should never happen
+            throw new WebApplicationException(e);
         }
-        return null;
+    }
+
+    /**
+     * <p>
+     * Gets the content of the "atom:text" element serialized to provided class
+     * according to provided parameters.
+     * <p>
+     * Pay attention that de-serialization occurs each time the method is
+     * called, so multiple calls to this method may effect the application
+     * performance.
+     */
+    public <T> T getValue(Class<T> cls,
+                          Type genericType,
+                          Providers providers,
+                          Annotation[] annotations,
+                          MultivaluedMap<String, String> httpHeaders,
+                          MediaType mediaType) throws IOException {
+        return AtomJAXBUtils.readValue(getAny(),
+                                       cls,
+                                       providers,
+                                       genericType,
+                                       annotations,
+                                       httpHeaders,
+                                       mediaType);
     }
 
     /**

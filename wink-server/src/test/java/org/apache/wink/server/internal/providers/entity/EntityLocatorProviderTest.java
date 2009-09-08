@@ -34,6 +34,7 @@ import org.apache.wink.common.model.atom.AtomTextType;
 import org.apache.wink.common.model.atom.ObjectFactory;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
+import org.apache.wink.test.mock.TestUtils;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -152,7 +153,9 @@ public class EntityLocatorProviderTest extends MockServletInvocationTest {
             MockRequestConstructor.constructMockRequest("GET", url, "application/atom+xml");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(ENTRY, response.getContentAsString());
+        String msg =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(ENTRY, response.getContentAsString());
+        assertNull(msg, msg);
     }
 
     private void postAtomEntry(String url) throws Exception {
@@ -162,7 +165,9 @@ public class EntityLocatorProviderTest extends MockServletInvocationTest {
         request.setContent(ENTRY.getBytes());
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(ENTRY, response.getContentAsString());
+        String msg =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(ENTRY, response.getContentAsString());
+        assertNull(msg, msg);
     }
 
 }

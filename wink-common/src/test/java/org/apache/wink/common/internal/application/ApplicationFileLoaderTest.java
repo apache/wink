@@ -20,16 +20,15 @@
 package org.apache.wink.common.internal.application;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Set;
-
-import org.apache.wink.common.internal.application.ApplicationFileLoader;
 
 import junit.framework.TestCase;
 
 public class ApplicationFileLoaderTest extends TestCase {
 
-    public void testDefault() throws FileNotFoundException {
+    public void testDefault() throws IOException {
         ApplicationFileLoader applicationFileLoader = new ApplicationFileLoader();
         Set<Class<?>> classes = applicationFileLoader.getClasses();
         assertTrue(classes

@@ -32,6 +32,7 @@ import org.apache.wink.client.Resource;
 import org.apache.wink.client.RestClient;
 import org.apache.wink.common.internal.providers.entity.atom.AtomFeedProvider;
 import org.apache.wink.common.model.atom.AtomFeed;
+import org.apache.wink.test.mock.TestUtils;
 
 import junit.framework.TestCase;
 
@@ -81,7 +82,7 @@ public class ProvidersTest extends TestCase {
                                                     + "    </entry>\n"
                                                     + "</feed>\n";
 
-    public void testAtomFeedReadWrite() throws WebApplicationException, IOException {
+    public void testAtomFeedReadWrite() throws Exception {
         MockHttpServer server = new MockHttpServer(SERVER_PORT);
         server.setMockResponseCode(200);
         server.setMockResponseContentEchoRequest(true);
@@ -116,7 +117,8 @@ public class ProvidersTest extends TestCase {
                         os);
             String actual = os.toString();
 
-            assertEquals(FEED, actual);
+            String msg = TestUtils.diffIgnoreUpdateWithAttributeQualifier(FEED, actual);
+            assertNull(msg, msg);
         } finally {
             server.stopServer();
         }

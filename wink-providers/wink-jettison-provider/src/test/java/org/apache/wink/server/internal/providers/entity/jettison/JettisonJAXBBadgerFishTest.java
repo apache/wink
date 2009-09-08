@@ -236,11 +236,12 @@ public class JettisonJAXBBadgerFishTest extends MockServletInvocationTest {
                                                        + "</entry>\n";
 
     private static String       ENTRY_STR_JSON =
-                                                   "{\"entry\":{\"@xmlns\":{\"ns2\":\"http:\\/\\/a9.com\\/-\\/spec\\/opensearch\\/1.1\\/\",\"$\":\"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\"@xml:base\":\"http:\\/\\/b216:8080\\/reporting\\/reports\",\"id\":{\"$\":\"toptenvalidators\"},\"updated\":{\"$\":\"@TIME@\"},\"title\":{\"@type\":\"text\",\"@xml:lang\":\"en\",\"$\":\"top ten validators\"},\"published\":{\"$\":\"@TIME@\"},\"link\":{\"@href\":\"http:\\/\\/b216:8080\\/reporting\\/reports\\/toptenvalidators?alt=application\\/json\",\"@type\":\"application\\/json\",\"@rel\":\"alternate\"},\"author\":{\"name\":{\"$\":\"admin\"}},\"category\":{\"@label\":\"report definition\",\"@scheme\":\"urn:com:systinet:reporting:kind\",\"@term\":\"urn:com:systinet:reporting:kind:definition\"}}}";
+                                                   "{\"entry\":{\"@xmlns\":{\"ns3\":\"http:\\/\\/www.w3.org\\/1999\\/xhtml\",\"ns2\":\"http:\\/\\/a9.com\\/-\\/spec\\/opensearch\\/1.1\\/\",\"$\":\"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\"@xml:base\":\"http:\\/\\/b216:8080\\/reporting\\/reports\",\"id\":{\"$\":\"toptenvalidators\"},\"updated\":{\"$\":\"@TIME@\"},\"title\":{\"@type\":\"text\",\"@xml:lang\":\"en\",\"$\":\"top ten validators\"},\"published\":{\"$\":\"@TIME@\"},\"link\":{\"@href\":\"http:\\/\\/b216:8080\\/reporting\\/reports\\/toptenvalidators?alt=application\\/json\",\"@type\":\"application\\/json\",\"@rel\":\"alternate\"},\"author\":{\"name\":{\"$\":\"admin\"}},\"category\":{\"@label\":\"report definition\",\"@scheme\":\"urn:com:systinet:reporting:kind\",\"@term\":\"urn:com:systinet:reporting:kind:definition\"}}}";
 
     private static String       ENTRY_STR_POST =
                                                    "{\"entry\":" + "{\"@xmlns\":"
-                                                       + "{\"ns2\":\"http:\\/\\/a9.com\\/-\\/spec\\/opensearch\\/1.1\\/\",\"$\":\"http:\\/\\/www.w3.org\\/2005\\/Atom\"},"
+                                                       + "{\"ns3\":\"http:\\/\\/www.w3.org\\/1999\\/xhtml\","
+                                                       + "\"ns2\":\"http:\\/\\/a9.com\\/-\\/spec\\/opensearch\\/1.1\\/\",\"$\":\"http:\\/\\/www.w3.org\\/2005\\/Atom\"},"
                                                        + "\"id\":{\"$\":\"toptenvalidators\"},"
                                                        + "\"updated\":{\"$\":\"@TIME@\"},"
                                                        + "\"title\":{"

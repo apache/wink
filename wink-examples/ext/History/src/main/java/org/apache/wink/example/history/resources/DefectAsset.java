@@ -111,9 +111,9 @@ public class DefectAsset {
         }
 
         // serialize the defect xml
-        String contentString =
-            ProviderUtils.writeToString(providers, defect, MediaType.APPLICATION_XML_TYPE);
-        entry.setContent(new SyndContent(contentString, MediaType.APPLICATION_XML, false));
+//        String contentString =
+//            ProviderUtils.writeToString(providers, defect, MediaType.APPLICATION_XML_TYPE);
+        entry.setContent(new SyndContent(defect, MediaType.APPLICATION_XML));
 
         // set base uri if this is a standalone entry
         if (!child) {

@@ -20,27 +20,76 @@
 
 package org.apache.wink.common.model.synd;
 
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+import java.util.Arrays;
+
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.ext.Providers;
+
+import org.apache.wink.common.model.atom.AtomJAXBUtils;
+
 public abstract class SyndSimpleContent extends SyndCommonAttributes {
 
-    private String value;
+    private Object   value;
+    protected String type;
 
     public SyndSimpleContent() {
     }
 
-    public SyndSimpleContent(String value) {
+    public SyndSimpleContent(Object value) {
+        this(value, SyndTextType.text.name());
+    }
+
+    public SyndSimpleContent(Object value, String type) {
         this.value = value;
+        this.type = type;
     }
 
     public SyndSimpleContent(SyndSimpleContent other) {
         super(other);
         this.value = other.value;
+        this.type = other.type;
     }
 
     public String getValue() {
-        return value;
+        return getValue(String.class);
     }
 
-    public void setValue(String value) {
+    public <T> T getValue(Class<T> cls) {
+        try {
+            return getValue(cls,
+                            cls,
+                            null,
+                            AtomJAXBUtils.EMPTY_ARRAY,
+                            AtomJAXBUtils.EMPTY_STRING_MAP,
+                            AtomJAXBUtils.determineMediaType(type));
+        } catch (IOException e) {
+            // should never happen
+            throw new WebApplicationException(e);
+        }
+    }
+
+    public <T> T getValue(Class<T> cls,
+                          Type genericType,
+                          Providers providers,
+                          Annotation[] annotations,
+                          MultivaluedMap<String, String> httpHeaders,
+                          MediaType mediaType) throws IOException {
+
+        return AtomJAXBUtils.readValue(Arrays.asList(value),
+                                       cls,
+                                       providers,
+                                       genericType,
+                                       annotations,
+                                       httpHeaders,
+                                       mediaType);
+    }
+
+    public void setValue(Object value) {
         this.value = value;
     }
 

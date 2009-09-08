@@ -18,23 +18,24 @@
     under the License.
 -->
 
-<entry xml:base="http://localhost:80/defects/1" xmlns="http://www.w3.org/2005/Atom">
+<entry xmlns="http://www.w3.org/2005/Atom" xmlns:ns2="http://a9.com/-/spec/opensearch/1.1/" xmlns:ns3="http://www.w3.org/1999/xhtml" xml:base="http://localhost:80/defects/1">
     <id>urn:com:hp:qadefects:defect:1</id>
     <title type="text">Id field is disabled in Edit Profile page</title>
+    <summary type="text">Cannot change the Id in Edit Profile page, it is disabled.</summary>
+    <published>1970-01-01T16:01:45.052+02:00</published>
     <link href="http://localhost:80/defects/1" rel="edit"/>
-    <link href="http://localhost:80/defects/1/history?alt=application%2Fatom%2Bxml" type="application/atom+xml" rel="history"/>
+    <link href="http://localhost:80/defects/1/history?alt=application%2Fatom%2Bxml" rel="history" type="application/atom+xml"/>
+    <link href="http://localhost:80/defects/1;rev=2?alt=application%2Fxml" rel="alternate" type="application/xml"/>
+    <link href="http://localhost:80/defects/1;rev=2?alt=application%2Fatom%2Bxml" rel="alternate" type="application/atom+xml"/>
+    <link href="http://localhost:80/defects/1;rev=2?alt=application%2Fjson" rel="alternate" type="application/json"/>
     <link href="http://localhost:80/defects/1;rev=2" rel="self"/>
-    <link href="http://localhost:80/defects/1;rev=2?alt=application%2Fatom%2Bxml" type="application/atom+xml" rel="alternate"/>
-    <link href="http://localhost:80/defects/1;rev=2?alt=application%2Fjson" type="application/json" rel="alternate"/>
-    <link href="http://localhost:80/defects/1;rev=2?alt=application%2Fxml" type="application/xml" rel="alternate"/>
-    <category scheme="urn:com:hp:qadefects:categories:severity" term="2-high"/>
-    <category scheme="urn:com:hp:qadefects:categories:status" term="New"/>
     <author>
         <name>tester1</name>
     </author>
-    <published>1970-01-01T16:01:45.052+02:00</published>
+    <category scheme="urn:com:hp:qadefects:categories:severity" term="2-high"/>
+    <category scheme="urn:com:hp:qadefects:categories:status" term="New"/>
     <content type="application/xml">
-        <defect>
+        <defect xmlns="" xmlns:ns4="http://www.w3.org/2005/Atom">
             <id>1</id>
             <revision>2</revision>
             <deleted>false</deleted>
@@ -47,5 +48,5 @@
             <assignedTo>developer1</assignedTo>
         </defect>
     </content>
-    <summary type="text">Cannot change the Id in Edit Profile page, it is disabled.</summary>
 </entry>
+

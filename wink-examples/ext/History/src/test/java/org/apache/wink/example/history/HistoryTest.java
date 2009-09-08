@@ -78,7 +78,7 @@ public class HistoryTest extends MockServletInvocationTest {
         diff =
             TestUtils.diffIgnoreUpdateWithAttributeQualifier("initial_defect1_atom.xml", response
                 .getContentAsString().getBytes(), getClass());
-        assertNull(diff);
+        assertNull(diff, diff);
 
         // get revision of specific defect
         request =

@@ -33,6 +33,7 @@ import javax.xml.namespace.QName;
 import junit.framework.TestCase;
 
 import org.apache.wink.common.model.atom.AtomJAXBUtils;
+import org.apache.wink.test.mock.TestUtils;
 
 public class OpenSearchTest extends TestCase {
 
@@ -69,7 +70,7 @@ public class OpenSearchTest extends TestCase {
     // }
     // }
 
-    public void testOpenSearchMarshal() throws IOException {
+    public void testOpenSearchMarshal() throws Exception {
         // Map<String,String> p2n = new HashMap<String,String>();
         // p2n.put("otherAttrNs", "other");
         // JAXBNamespacePrefixMapper namespacePrefixMapper =
@@ -83,8 +84,9 @@ public class OpenSearchTest extends TestCase {
         JAXBElement<OpenSearchDescription> element =
             (new ObjectFactory()).createOpenSearchDescription(osd);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        AtomJAXBUtils.marshal(m, element, null, os);
-        assertEquals(OPENSEARCH, os.toString());
+        AtomJAXBUtils.marshal(m, element, os);
+        String msg = TestUtils.diffIgnoreUpdateWithAttributeQualifier(OPENSEARCH, os.toString());
+        assertNull(msg, msg);
     }
 
     public void testOpenSearchUnmarshal() throws IOException {
@@ -100,7 +102,7 @@ public class OpenSearchTest extends TestCase {
         assertOpenSearchDescription(expectedOsd, osd);
     }
 
-    public void testOpenSearchUnmarshalMarshal() throws IOException {
+    public void testOpenSearchUnmarshalMarshal() throws Exception {
         // Marshaller m = AtomJAXBUtils.createMarshaller(ctx, new
         // JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_OPENSEARCH));
         Marshaller m = OpenSearchDescription.getMarshaller();
@@ -111,8 +113,9 @@ public class OpenSearchTest extends TestCase {
         JAXBElement<OpenSearchDescription> element =
             (new ObjectFactory()).createOpenSearchDescription((OpenSearchDescription)service);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        AtomJAXBUtils.marshal(m, element, null, os);
-        assertEquals(OPENSEARCH, os.toString());
+        AtomJAXBUtils.marshal(m, element, os);
+        String msg = TestUtils.diffIgnoreUpdateWithAttributeQualifier(OPENSEARCH, os.toString());
+        assertNull(msg, msg);
     }
 
     private void assertOpenSearchDescription(OpenSearchDescription expectedOsd,

@@ -22,7 +22,6 @@ package org.apache.wink.common.model.synd;
 
 public class SyndContent extends SyndSimpleContent {
 
-    private String type;
     private String src;
 
     public SyndContent() {
@@ -34,20 +33,9 @@ public class SyndContent extends SyndSimpleContent {
      * 
      * @param value the value of the text construct
      */
-    public SyndContent(String value) {
-        this(value, SyndTextType.text.name(), false);
+    public SyndContent(Object value) {
+        this(value, SyndTextType.text.name());
     }
-
-    /**
-     * Creates a new SyndContent with the specified value and type attribute.
-     * 
-     * @param value the value of the text construct
-     * @param type the type attribute
-     */
-    // TODO: Michael: uncomment this constructor
-    // public SyndContent(String value, String type) {
-    // this(value, type, false);
-    // }
 
     /**
      * Creates a new SyndContent with the specified value or src, and type
@@ -57,17 +45,19 @@ public class SyndContent extends SyndSimpleContent {
      *            attribute.
      * @param type the type attribute
      * @param isSrc true indicates that the value parameter is the value of the
-     *            src attribute
+     *            src attribute.
      */
-    public SyndContent(String value, String type, boolean isSrc) {
-        super(isSrc ? null : value);
-        this.type = type;
-        this.src = isSrc ? value : null;
+    public SyndContent(Object value, String type, boolean isSrc) {
+        super(isSrc ? null : value, type);
+        this.src = isSrc ? String.valueOf(value) : null;
+    }
+
+    public SyndContent(Object value, String type) {
+        super(value, type);
     }
 
     public SyndContent(SyndContent other) {
         super(other);
-        this.type = other.type;
         this.src = other.src;
     }
 

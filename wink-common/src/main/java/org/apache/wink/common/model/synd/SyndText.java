@@ -22,8 +22,6 @@ package org.apache.wink.common.model.synd;
 
 public class SyndText extends SyndSimpleContent {
 
-    private SyndTextType type;
-
     public SyndText() {
     }
 
@@ -32,21 +30,19 @@ public class SyndText extends SyndSimpleContent {
     }
 
     public SyndText(String text, SyndTextType type) {
-        super(text);
-        this.type = type;
+        super(text, type == null ? null : type.name());
     }
 
     public SyndText(SyndText other) {
         super(other);
-        this.type = other.type;
     }
 
     public SyndTextType getType() {
-        return type;
+        return type == null ? null : SyndTextType.valueOf(type);
     }
 
     public void setType(SyndTextType type) {
-        this.type = type;
+        this.type = type == null ? null : type.name();
     }
 
     @Override

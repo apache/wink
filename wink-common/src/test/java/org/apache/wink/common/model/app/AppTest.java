@@ -30,19 +30,13 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 
+import junit.framework.TestCase;
+
 import org.apache.wink.common.RestException;
-import org.apache.wink.common.model.app.AppAccept;
-import org.apache.wink.common.model.app.AppCategories;
-import org.apache.wink.common.model.app.AppCollection;
-import org.apache.wink.common.model.app.AppService;
-import org.apache.wink.common.model.app.AppWorkspace;
-import org.apache.wink.common.model.app.AppYesNo;
-import org.apache.wink.common.model.app.ObjectFactory;
 import org.apache.wink.common.model.atom.AtomCategory;
 import org.apache.wink.common.model.atom.AtomJAXBUtils;
 import org.apache.wink.common.model.atom.AtomText;
-
-import junit.framework.TestCase;
+import org.apache.wink.test.mock.TestUtils;
 
 public class AppTest extends TestCase {
 
@@ -105,7 +99,7 @@ public class AppTest extends TestCase {
     // }
     // }
 
-    public void testAppMarshal() throws IOException {
+    public void testAppMarshal() throws Exception {
         // Marshaller m = AtomJAXBUtils.createMarshaller(ctx, new
         // JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_APP));
         Marshaller m = AppService.getMarshaller();
@@ -113,8 +107,9 @@ public class AppTest extends TestCase {
         AppService service = getService();
         JAXBElement<AppService> element = (new ObjectFactory()).createService(service);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        AtomJAXBUtils.marshal(m, element, null, os);
-        assertEquals(SERVICE_DOCUMENT, os.toString());
+        AtomJAXBUtils.marshal(m, element, os);
+        String msg = TestUtils.diffIgnoreUpdateWithAttributeQualifier(SERVICE_DOCUMENT, os.toString());
+        assertNull(msg, msg);
     }
 
     public void testAppUnmarshal() throws IOException {
@@ -130,7 +125,7 @@ public class AppTest extends TestCase {
         assertService(expectedService, service);
     }
 
-    public void testAppUnmarshalMarshal() throws IOException {
+    public void testAppUnmarshalMarshal() throws Exception {
         // Marshaller m = AtomJAXBUtils.createMarshaller(ctx, new
         // JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_APP));
         Marshaller m = AppService.getMarshaller();
@@ -140,8 +135,9 @@ public class AppTest extends TestCase {
         Object service = AtomJAXBUtils.unmarshal(u, new StringReader(SERVICE_DOCUMENT));
         JAXBElement<AppService> element = (new ObjectFactory()).createService((AppService)service);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        AtomJAXBUtils.marshal(m, element, null, os);
-        assertEquals(SERVICE_DOCUMENT, os.toString());
+        AtomJAXBUtils.marshal(m, element, os);
+        String msg = TestUtils.diffIgnoreUpdateWithAttributeQualifier(SERVICE_DOCUMENT, os.toString());
+        assertNull(msg, msg);
     }
 
     public void testCategories() {

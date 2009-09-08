@@ -259,7 +259,7 @@ public class AtomFeed extends AtomCommonAttributes implements NamespacePrefixMap
     public static void marshal(AtomFeed feed, OutputStream os) throws IOException {
         JAXBElement<AtomFeed> feedElement = new ObjectFactory().createFeed(feed);
         Marshaller marshaller = AtomFeed.getMarshaller();
-        AtomJAXBUtils.marshal(marshaller, feedElement, null, os);
+        AtomJAXBUtils.marshal(marshaller, feedElement,  os);
     }
 
     public JAXBNamespacePrefixMapper getNamespacePrefixMapper() {
