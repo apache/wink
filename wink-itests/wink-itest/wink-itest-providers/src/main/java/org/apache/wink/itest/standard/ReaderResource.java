@@ -64,4 +64,14 @@ public class ReaderResource {
         }
         carr = ArrayUtils.copyOf(buffer, offset);
     }
+
+    @POST
+    @Path("empty")
+    public Response postEmptyReader(Reader reader) throws IOException {
+        if (reader != null && reader.read() == -1) {
+            return Response.ok("expected").build();
+        }
+        return Response.serverError().build();
+    }
+
 }

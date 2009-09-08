@@ -42,6 +42,8 @@ public class Application extends javax.ws.rs.core.Application {
         objs.add(new SourceResource());
         objs.add(new DataSourceResource());
         objs.add(new DSResource());
+        objs.add(new StringResource());
+        objs.add(new JAXBResource());
         return objs;
     }
 

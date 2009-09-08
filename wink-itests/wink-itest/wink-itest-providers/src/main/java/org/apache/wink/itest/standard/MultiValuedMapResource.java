@@ -61,4 +61,14 @@ public class MultiValuedMapResource {
     public void putMultivaluedMap(MultivaluedMap<String, String> map) throws IOException {
         formData = map;
     }
+
+    @POST
+    @Produces("text/plain")
+    @Path("/empty")
+    public Response postEmptyMultivaluedMap(MultivaluedMap<String, String> map) {
+        if (map != null && map.isEmpty()) {
+            return Response.ok("expected").build();
+        }
+        return Response.serverError().build();
+    }
 }

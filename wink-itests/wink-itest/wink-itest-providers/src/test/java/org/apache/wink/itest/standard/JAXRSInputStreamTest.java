@@ -208,4 +208,43 @@ public class JAXRSInputStreamTest extends TestCase {
             postMethod.releaseConnection();
         }
     }
+
+    /**
+     * Tests posting to an InputStream entity parameter with no incoming request entity.
+     * 
+     * @throws HttpException
+     * @throws IOException
+     */
+    public void testPostInputStreamEmptyRequestEntity() throws HttpException, IOException {
+        HttpClient client = new HttpClient();
+
+        PostMethod postMethod = new PostMethod(getBaseURI() + "/providers/standard/file/empty");
+        try {
+            client.executeMethod(postMethod);
+            assertEquals(200, postMethod.getStatusCode());
+            assertEquals("expected", postMethod.getResponseBodyAsString());
+        } finally {
+            postMethod.releaseConnection();
+        }
+    }
+
+    /**
+     * Tests posting an empty request entity to a InputStream.
+     * 
+     * @throws HttpException
+     * @throws IOException
+     */
+    public void testSendingNoRequestEntityInputStream() throws HttpException, IOException {
+        HttpClient client = new HttpClient();
+
+        PostMethod postMethod =
+            new PostMethod(getBaseURI() + "/providers/standard/inputstream/empty");
+        try {
+            client.executeMethod(postMethod);
+            assertEquals(200, postMethod.getStatusCode());
+            assertEquals("expected", postMethod.getResponseBodyAsString());
+        } finally {
+            postMethod.releaseConnection();
+        }
+    }
 }

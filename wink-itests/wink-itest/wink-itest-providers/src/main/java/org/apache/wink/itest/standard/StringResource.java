@@ -16,44 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package org.apache.wink.itest.standard;
 
-import javax.ws.rs.GET;
+import java.io.IOException;
+
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-@Path("providers/standard/bytesarray")
-public class BytesArrayResource {
-
-    private byte[] barr = null;
-
-    @GET
-    public Response getByteArray() {
-        return Response.ok(barr).build();
-    }
-
-    @POST
-    public byte[] postByteArray(byte[] bytearray) {
-        return bytearray;
-    }
-
-    @PUT
-    public void putByteArray(byte[] bytearray) {
-        barr = bytearray;
-    }
+@Path("providers/standard/string")
+public class StringResource {
 
     @POST
     @Path("/empty")
-    @Produces("text/plain")
-    public Response postEmptyByteArray(byte[] bytearray) {
-        if (bytearray != null && bytearray.length == 0) {
+    public Response postString(String str) throws IOException {
+        if (str != null && str.length() == 0) {
             return Response.ok("expected").build();
         }
         return Response.serverError().build();
     }
-
 }

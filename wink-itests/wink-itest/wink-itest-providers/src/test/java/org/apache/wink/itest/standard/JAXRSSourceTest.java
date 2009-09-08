@@ -23,6 +23,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Random;
 
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
+
 import junit.framework.TestCase;
 
 import org.apache.commons.httpclient.Header;
@@ -224,6 +227,25 @@ public class JAXRSSourceTest extends TestCase {
         try {
             client.executeMethod(postMethod);
             assertEquals(415, postMethod.getStatusCode());
+        } finally {
+            postMethod.releaseConnection();
+        }
+    }
+
+    /**
+     * Tests sending in no request entity to a Source entity parameter.
+     * 
+     * @throws HttpException
+     * @throws IOException
+     */
+    public void testSendingNoRequestEntitySource() throws HttpException, IOException {
+        HttpClient client = new HttpClient();
+        PostMethod postMethod = new PostMethod(getBaseURI() + "/providers/standard/source/empty");
+        postMethod.addRequestHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_XML);
+        try {
+            client.executeMethod(postMethod);
+            assertEquals(200, postMethod.getStatusCode());
+            assertEquals("expected", postMethod.getResponseBodyAsString());
         } finally {
             postMethod.releaseConnection();
         }

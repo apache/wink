@@ -222,4 +222,22 @@ public class JAXRSReaderTest extends TestCase {
             postMethod.releaseConnection();
         }
     }
+
+    /**
+     * Tests sending in no request entity to a Reader entity parameter.
+     * 
+     * @throws HttpException
+     * @throws IOException
+     */
+    public void testSendingNoRequestEntityReader() throws HttpException, IOException {
+        HttpClient client = new HttpClient();
+        PostMethod postMethod = new PostMethod(getBaseURI() + "/providers/standard/reader/empty");
+        try {
+            client.executeMethod(postMethod);
+            assertEquals(200, postMethod.getStatusCode());
+            assertEquals("expected", postMethod.getResponseBodyAsString());
+        } finally {
+            postMethod.releaseConnection();
+        }
+    }
 }

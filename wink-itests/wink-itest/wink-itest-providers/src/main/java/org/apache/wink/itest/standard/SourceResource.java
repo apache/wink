@@ -29,6 +29,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import javax.xml.transform.Source;
 import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
 
 @Path("providers/standard/source")
 public class SourceResource {
@@ -68,6 +69,18 @@ public class SourceResource {
 
     @PUT
     public void putSource(DOMSource source) throws IOException {
-        this.source = source;
+        SourceResource.source = source;
+    }
+
+    @POST
+    @Path("/empty")
+    public Response postReader(Source source) throws IOException {
+        if (source != null && source instanceof StreamSource) {
+            StreamSource s = (StreamSource)source;
+            if (s.getInputStream().read() == -1) {
+                return Response.ok("expected").build();
+            }
+        }
+        return Response.serverError().build();
     }
 }

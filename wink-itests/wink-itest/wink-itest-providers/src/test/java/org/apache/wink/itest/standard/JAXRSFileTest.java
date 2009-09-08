@@ -131,4 +131,24 @@ public class JAXRSFileTest extends TestCase {
             getMethod.releaseConnection();
         }
     }
+
+    /**
+     * Tests posting to a File entity parameter with no incoming request entity.
+     * 
+     * @throws HttpException
+     * @throws IOException
+     */
+    public void testPostFileEmptyRequestEntity() throws HttpException, IOException {
+        HttpClient client = new HttpClient();
+
+        PostMethod postMethod = new PostMethod(getBaseURI() + "/providers/standard/file/empty");
+        try {
+            client.executeMethod(postMethod);
+            assertEquals(200, postMethod.getStatusCode());
+            assertEquals("expected", postMethod.getResponseBodyAsString());
+        } finally {
+            postMethod.releaseConnection();
+        }
+    }
+
 }

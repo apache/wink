@@ -177,4 +177,24 @@ public class JAXRSBytesArrayTest extends TestCase {
             getMethod.releaseConnection();
         }
     }
+
+    /**
+     * Tests posting an request parameter to a byte[] entity parameter.
+     * 
+     * @throws HttpException
+     * @throws IOException
+     */
+    public void testSendingNoRequestEntityByteArray() throws HttpException, IOException {
+        HttpClient client = new HttpClient();
+
+        PostMethod postMethod =
+            new PostMethod(getBaseURI() + "/providers/standard/bytesarray/empty");
+        try {
+            client.executeMethod(postMethod);
+            assertEquals(200, postMethod.getStatusCode());
+            assertEquals("expected", postMethod.getResponseBodyAsString());
+        } finally {
+            postMethod.releaseConnection();
+        }
+    }
 }

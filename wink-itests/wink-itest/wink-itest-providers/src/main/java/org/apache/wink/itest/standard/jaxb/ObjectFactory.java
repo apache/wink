@@ -16,44 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.wink.itest.standard.jaxb;
 
-package org.apache.wink.itest.standard;
+import javax.xml.bind.annotation.XmlRegistry;
 
-import java.io.File;
-import java.io.IOException;
+@XmlRegistry
+public class ObjectFactory {
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.Response;
-
-@Path("providers/standard/file")
-public class FileResource {
-
-    private static File f;
-
-    @POST
-    public File postFile(File f) {
-        return f;
-    }
-
-    @GET
-    public Response getFile() {
-        return Response.ok(FileResource.f).build();
-    }
-
-    @PUT
-    public void putFile(File f) throws IOException {
-        FileResource.f = f;
-    }
-
-    @POST
-    @Path("/empty")
-    public Response postEmptyFile(File f) {
-        if (f.exists() && f.length() == 0) {
-            return Response.ok("expected").build();
-        }
-        return Response.serverError().build();
+    public Person createPerson() {
+        return new Person();
     }
 }

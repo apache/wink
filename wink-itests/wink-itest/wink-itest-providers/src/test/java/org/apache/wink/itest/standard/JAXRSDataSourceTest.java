@@ -252,4 +252,24 @@ public class JAXRSDataSourceTest extends TestCase {
             }
         }
     }
+
+    /**
+     * Tests posting an empty request entity to a DataSource entity parameter.
+     * 
+     * @throws HttpException
+     * @throws IOException
+     */
+    public void testSendingNoRequestEntityDataSource() throws HttpException, IOException {
+        HttpClient client = new HttpClient();
+
+        PostMethod postMethod =
+            new PostMethod(getBaseURI() + "/dstest/empty");
+        try {
+            client.executeMethod(postMethod);
+            assertEquals(200, postMethod.getStatusCode());
+            assertEquals("expected", postMethod.getResponseBodyAsString());
+        } finally {
+            postMethod.releaseConnection();
+        }
+    }
 }

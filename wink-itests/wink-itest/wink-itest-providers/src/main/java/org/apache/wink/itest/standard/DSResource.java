@@ -27,6 +27,7 @@ import java.io.OutputStream;
 import javax.activation.DataSource;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
@@ -91,6 +92,21 @@ public class DSResource {
             return null;
         }
 
+    }
+
+    @POST
+    @Path("/empty")
+    public Response postEmpty(DataSource dataSource) {
+        InputStream inputStream;
+        try {
+            inputStream = dataSource.getInputStream();
+            if (inputStream.read() == -1) {
+                return Response.ok("expected").build();
+            }
+        } catch (IOException e) {
+            throw new WebApplicationException(e);
+        }
+        return Response.serverError().build();
     }
 
 }

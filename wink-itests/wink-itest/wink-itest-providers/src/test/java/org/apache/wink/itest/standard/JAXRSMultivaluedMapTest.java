@@ -23,6 +23,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
+
 import junit.framework.TestCase;
 
 import org.apache.commons.httpclient.Header;
@@ -199,6 +202,28 @@ public class JAXRSMultivaluedMapTest extends TestCase {
             getMethod.releaseConnection();
         }
     }
+
+    /**
+     * Tests posting an empty request entity to a MultivaluedMap.
+     * 
+     * @throws HttpException
+     * @throws IOException
+     */
+    public void testSendingNoRequestEntityMultivaluedMap() throws HttpException, IOException {
+        HttpClient client = new HttpClient();
+
+        PostMethod postMethod =
+            new PostMethod(getBaseURI() + "/providers/standard/multivaluedmap/empty");
+        postMethod.addRequestHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED);
+        try {
+            client.executeMethod(postMethod);
+            assertEquals(200, postMethod.getStatusCode());
+            assertEquals("expected", postMethod.getResponseBodyAsString());
+        } finally {
+            postMethod.releaseConnection();
+        }
+    }
+
     //
     // /**
     // * Tests a resource method invoked with a MultivaluedMap&lt;String,

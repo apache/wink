@@ -63,4 +63,14 @@ public class InputStreamResource {
         }
         barr = ArrayUtils.copyOf(buffer, offset);
     }
+
+    @POST
+    @Path("/empty")
+    public Response postEmptyInputStream(InputStream is) throws IOException {
+        if (is != null && is.read() == -1) {
+            return Response.ok("expected").build();
+        }
+        return Response.serverError().build();
+    }
+
 }
