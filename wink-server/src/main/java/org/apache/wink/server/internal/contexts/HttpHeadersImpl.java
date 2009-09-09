@@ -49,6 +49,7 @@ public class HttpHeadersImpl implements HttpHeaders {
 
     private MessageContext                 msgContext;
     private MultivaluedMap<String, String> headers;
+    private MultivaluedMap<String, String> allHeaders;
     private List<Locale>                   acceptableLanguages;
     private List<MediaType>                acceptableMediaTypes;
     private Map<String, Cookie>            cookies;
@@ -57,12 +58,13 @@ public class HttpHeadersImpl implements HttpHeaders {
 
     public HttpHeadersImpl(MessageContext msgContext) {
         this.msgContext = msgContext;
-        headers = buildRequestHeaders();
+        headers = new CaseInsensitiveMultivaluedMap<String>();
         acceptableLanguages = null;
         acceptableMediaTypes = null;
         cookies = null;
         language = null;
         mediaType = null;
+        allHeaders = null;
     }
 
     public List<Locale> getAcceptableLanguages() {
@@ -73,7 +75,7 @@ public class HttpHeadersImpl implements HttpHeaders {
             } else {
                 StringBuilder acceptLanguageTemp = new StringBuilder();
                 acceptLanguageTemp.append(requestHeader.get(0));
-                for(int c = 1; c < requestHeader.size(); ++c) {
+                for (int c = 1; c < requestHeader.size(); ++c) {
                     acceptLanguageTemp.append(",");
                     acceptLanguageTemp.append(requestHeader.get(c));
                 }
@@ -117,7 +119,7 @@ public class HttpHeadersImpl implements HttpHeaders {
             } else {
                 StringBuilder acceptValueTemp = new StringBuilder();
                 acceptValueTemp.append(requestHeader.get(0));
-                for(int c = 1; c < requestHeader.size(); ++c) {
+                for (int c = 1; c < requestHeader.size(); ++c) {
                     acceptValueTemp.append(",");
                     acceptValueTemp.append(requestHeader.get(c));
                 }
@@ -131,7 +133,7 @@ public class HttpHeadersImpl implements HttpHeaders {
     public Map<String, Cookie> getCookies() {
         if (cookies == null) {
             cookies = new HashMap<String, Cookie>();
-            List<String> cookiesHeaders = headers.get(HttpHeaders.COOKIE);
+            List<String> cookiesHeaders = getRequestHeaderInternal(HttpHeaders.COOKIE);
             if (cookiesHeaders != null) {
                 for (String cookieHeader : cookiesHeaders) {
                     Cookie cookie = Cookie.valueOf(cookieHeader);
@@ -146,6 +148,14 @@ public class HttpHeadersImpl implements HttpHeaders {
         if (language == null) {
             String languageStr = headers.getFirst(HttpHeaders.CONTENT_LANGUAGE);
             if (languageStr == null) {
+                List<String> s = getRequestHeaderInternal(HttpHeaders.CONTENT_LANGUAGE);
+                if (s == null || s.isEmpty()) {
+                    return null;
+                } else {
+                    languageStr = s.get(0);
+                }
+            }
+            if (languageStr == null) {
                 return null;
             }
             String[] locales = StringUtils.fastSplit(languageStr, ",");
@@ -158,23 +168,54 @@ public class HttpHeadersImpl implements HttpHeaders {
         if (mediaType == null) {
             String contentType = headers.getFirst(HttpHeaders.CONTENT_TYPE);
             if (contentType == null) {
-                return null;
+                List<String> s = getRequestHeaderInternal(HttpHeaders.CONTENT_TYPE);
+                if (s == null || s.isEmpty()) {
+                    return null;
+                } else {
+                    contentType = s.get(0);
+                }
             }
             mediaType = MediaType.valueOf(contentType);
         }
         return mediaType;
     }
 
-    public List<String> getRequestHeader(String name) {
+    private List<String> getRequestHeaderInternal(String name) {
+        if (allHeaders != null) {
+            return allHeaders.get(name);
+        }
         List<String> list = headers.get(name);
         if (list == null) {
+            Enumeration<?> headerValues =
+                msgContext.getAttribute(HttpServletRequest.class).getHeaders(name);
+            list = new ArrayList<String>();
+            while (headerValues.hasMoreElements()) {
+                list.add((String)headerValues.nextElement());
+            }
+
+            headers.put(name, list);
+        }
+
+        return list;
+    }
+
+    public List<String> getRequestHeader(String name) {
+        if (name == null) {
+            return null;
+        }
+        List<String> list = getRequestHeaderInternal(name);
+        if (list == null || list.isEmpty()) {
             return null;
         }
         return Collections.unmodifiableList(list);
     }
 
     public MultivaluedMap<String, String> getRequestHeaders() {
-        return headers;
+        if (allHeaders == null) {
+            allHeaders = buildRequestHeaders();
+        }
+
+        return allHeaders;
     }
 
     private MultivaluedMap<String, String> buildRequestHeaders() {
