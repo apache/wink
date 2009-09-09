@@ -19,6 +19,7 @@
 package org.apache.wink.itest.exceptionmappers;
 
 import javax.ws.rs.core.Response.Status;
+import javax.xml.bind.JAXBContext;
 
 import junit.framework.TestCase;
 
@@ -28,6 +29,8 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.apache.wink.itest.exceptionmappers.mapped.Comment;
+import org.apache.wink.itest.exceptionmappers.mapped.CommentError;
 import org.apache.wink.test.integration.ServerContainerAssertions;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
@@ -65,8 +68,13 @@ public class JAXRSExceptionsMappedProvidersTest extends TestCase {
         GetMethod getMethod = new GetMethod(newPostURILocation);
         client.executeMethod(getMethod);
         assertEquals(200, getMethod.getStatusCode());
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><comment><author>Anonymous</author><id>1</id><message>Hello World!</message></comment>",
-                     getMethod.getResponseBodyAsString());
+
+        Comment c =
+            (Comment)JAXBContext.newInstance(Comment.class.getPackage().getName())
+                .createUnmarshaller().unmarshal(getMethod.getResponseBodyAsStream());
+        assertEquals("Anonymous", c.getAuthor());
+        assertEquals(1, c.getId().intValue());
+        assertEquals("Hello World!", c.getMessage());
     }
 
     /**
@@ -143,8 +151,11 @@ public class JAXRSExceptionsMappedProvidersTest extends TestCase {
                                                       "text/xml", null));
         client.executeMethod(postMethod);
         assertEquals(400, postMethod.getStatusCode());
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><commenterror><message>Missing the message in the comment.</message></commenterror>",
-                     postMethod.getResponseBodyAsString());
+
+        CommentError c =
+            (CommentError)JAXBContext.newInstance(CommentError.class.getPackage().getName())
+                .createUnmarshaller().unmarshal(postMethod.getResponseBodyAsStream());
+        assertEquals("Missing the message in the comment.", c.getErrorMessage());
     }
 
     /**
@@ -167,8 +178,11 @@ public class JAXRSExceptionsMappedProvidersTest extends TestCase {
         assertEquals("Some message", postMethod
             .getResponseHeader("throwemptyentitywebappexception").getValue());
         assertEquals(getBaseURI(), postMethod.getResponseHeader("ExceptionPage").getValue());
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><commenterror><message>WebApplicationExceptionMapProvider set message</message></commenterror>",
-                     postMethod.getResponseBodyAsString());
+
+        CommentError c =
+            (CommentError)JAXBContext.newInstance(CommentError.class.getPackage().getName())
+                .createUnmarshaller().unmarshal(postMethod.getResponseBodyAsStream());
+        assertEquals("WebApplicationExceptionMapProvider set message", c.getErrorMessage());
     }
 
     /**
@@ -187,8 +201,11 @@ public class JAXRSExceptionsMappedProvidersTest extends TestCase {
                                                       "text/xml", null));
         client.executeMethod(postMethod);
         assertEquals(498, postMethod.getStatusCode());
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><commenterror><message>Cannot post an invalid message.</message></commenterror>",
-                     postMethod.getResponseBodyAsString());
+
+        CommentError c =
+            (CommentError)JAXBContext.newInstance(CommentError.class.getPackage().getName())
+                .createUnmarshaller().unmarshal(postMethod.getResponseBodyAsStream());
+        assertEquals("Cannot post an invalid message.", c.getErrorMessage());
     }
 
     /**
@@ -206,11 +223,11 @@ public class JAXRSExceptionsMappedProvidersTest extends TestCase {
         DeleteMethod postMethod = new DeleteMethod(getBaseURI() + "/abcd");
         client.executeMethod(postMethod);
         assertEquals(450, postMethod.getStatusCode());
-        String responseBody = postMethod.getResponseBodyAsString();
-        assertTrue(responseBody,
-                   "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><commenterror><message>For input string: \"abcd\"</message></commenterror>"
-                       .equals(responseBody) || "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><commenterror><message>For input string: &quot;abcd&quot;</message></commenterror>"
-                       .equals(responseBody));
+
+        CommentError c =
+            (CommentError)JAXBContext.newInstance(CommentError.class.getPackage().getName())
+                .createUnmarshaller().unmarshal(postMethod.getResponseBodyAsStream());
+        assertEquals("For input string: \"abcd\"", c.getErrorMessage());
     }
 
     /**
@@ -224,8 +241,11 @@ public class JAXRSExceptionsMappedProvidersTest extends TestCase {
         DeleteMethod postMethod = new DeleteMethod(getBaseURI() + "/10000");
         client.executeMethod(postMethod);
         assertEquals(451, postMethod.getStatusCode());
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><commenterror><message>The comment did not previously exist.</message></commenterror>",
-                     postMethod.getResponseBodyAsString());
+
+        CommentError c =
+            (CommentError)JAXBContext.newInstance(CommentError.class.getPackage().getName())
+                .createUnmarshaller().unmarshal(postMethod.getResponseBodyAsStream());
+        assertEquals("The comment did not previously exist.", c.getErrorMessage());
     }
 
     /**
@@ -239,8 +259,11 @@ public class JAXRSExceptionsMappedProvidersTest extends TestCase {
         DeleteMethod postMethod = new DeleteMethod(getBaseURI() + "/-99999");
         client.executeMethod(postMethod);
         assertEquals(453, postMethod.getStatusCode());
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><commenterror><message>Simulated error</message></commenterror>",
-                     postMethod.getResponseBodyAsString());
+
+        CommentError c =
+            (CommentError)JAXBContext.newInstance(CommentError.class.getPackage().getName())
+                .createUnmarshaller().unmarshal(postMethod.getResponseBodyAsStream());
+        assertEquals("Simulated error", c.getErrorMessage());
     }
 
     /**
@@ -258,7 +281,10 @@ public class JAXRSExceptionsMappedProvidersTest extends TestCase {
                                                       "text/xml", null));
         client.executeMethod(putMethod);
         assertEquals(454, putMethod.getStatusCode());
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><commenterror><message>Unexpected ID.</message></commenterror>",
-                     putMethod.getResponseBodyAsString());
+
+        CommentError c =
+            (CommentError)JAXBContext.newInstance(CommentError.class.getPackage().getName())
+                .createUnmarshaller().unmarshal(putMethod.getResponseBodyAsStream());
+        assertEquals("Unexpected ID.", c.getErrorMessage());
     }
 }

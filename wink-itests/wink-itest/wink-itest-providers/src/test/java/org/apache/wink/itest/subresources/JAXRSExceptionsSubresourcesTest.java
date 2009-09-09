@@ -20,6 +20,7 @@
 package org.apache.wink.itest.subresources;
 
 import javax.ws.rs.core.Response.Status;
+import javax.xml.bind.JAXBContext;
 
 import junit.framework.TestCase;
 
@@ -29,6 +30,8 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.apache.wink.itest.exceptionmappers.nomapper.CommentError;
+import org.apache.wink.itest.subresource.Comment;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
 public class JAXRSExceptionsSubresourcesTest extends TestCase {
@@ -65,8 +68,13 @@ public class JAXRSExceptionsSubresourcesTest extends TestCase {
         try {
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());
-            assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><comment><author>Anonymous</author><id>10000</id><message>Hi there</message></comment>",
-                         getMethod.getResponseBodyAsString());
+
+            Comment c =
+                (Comment)JAXBContext.newInstance(Comment.class.getPackage().getName())
+                    .createUnmarshaller().unmarshal(getMethod.getResponseBodyAsStream());
+            assertEquals("Anonymous", c.getAuthor());
+            assertEquals(10000, c.getId().intValue());
+            assertEquals("Hi there", c.getMessage());
         } finally {
             getMethod.releaseConnection();
         }
@@ -88,8 +96,12 @@ public class JAXRSExceptionsSubresourcesTest extends TestCase {
             // postMethod.addRequestHeader("Accept", "text/xml");
             client.executeMethod(postMethod);
             assertEquals(Status.BAD_REQUEST.getStatusCode(), postMethod.getStatusCode());
-            assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><commenterror><message>Please include a comment ID, a message, and your name.</message></commenterror>",
-                         postMethod.getResponseBodyAsString());
+
+            CommentError c =
+                (CommentError)JAXBContext.newInstance(CommentError.class.getPackage().getName())
+                    .createUnmarshaller().unmarshal(postMethod.getResponseBodyAsStream());
+            assertEquals("Please include a comment ID, a message, and your name.", c
+                .getErrorMessage());
         } finally {
             postMethod.releaseConnection();
         }

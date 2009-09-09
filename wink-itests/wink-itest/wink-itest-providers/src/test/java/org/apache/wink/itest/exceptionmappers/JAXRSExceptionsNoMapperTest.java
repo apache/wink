@@ -20,6 +20,7 @@
 package org.apache.wink.itest.exceptionmappers;
 
 import javax.ws.rs.core.Response.Status;
+import javax.xml.bind.JAXBContext;
 
 import junit.framework.TestCase;
 
@@ -29,6 +30,8 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.apache.wink.itest.exceptionmappers.nomapper.Comment;
+import org.apache.wink.itest.exceptionmappers.nomapper.CommentError;
 import org.apache.wink.test.integration.ServerContainerAssertions;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
@@ -70,8 +73,13 @@ public class JAXRSExceptionsNoMapperTest extends TestCase {
         GetMethod getMethod = new GetMethod(newPostURILocation);
         client.executeMethod(getMethod);
         assertEquals(200, getMethod.getStatusCode());
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><comment><author>Anonymous</author><id>1</id><message>Hello World!</message></comment>",
-                     getMethod.getResponseBodyAsString());
+
+        Comment c =
+            (Comment)JAXBContext.newInstance(Comment.class.getPackage().getName())
+                .createUnmarshaller().unmarshal(getMethod.getResponseBodyAsStream());
+        assertEquals("Anonymous", c.getAuthor());
+        assertEquals(1, c.getId().intValue());
+        assertEquals("Hello World!", c.getMessage());
     }
 
     /**
@@ -145,8 +153,11 @@ public class JAXRSExceptionsNoMapperTest extends TestCase {
                                                       "text/xml", null));
         client.executeMethod(postMethod);
         assertEquals(Status.BAD_REQUEST.getStatusCode(), postMethod.getStatusCode());
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><commenterror><message>Missing the message in the comment.</message></commenterror>",
-                     postMethod.getResponseBodyAsString());
+
+        CommentError c =
+            (CommentError)JAXBContext.newInstance(CommentError.class.getPackage().getName())
+                .createUnmarshaller().unmarshal(postMethod.getResponseBodyAsStream());
+        assertEquals("Missing the message in the comment.", c.getErrorMessage());
     }
 
     /**
@@ -165,8 +176,11 @@ public class JAXRSExceptionsNoMapperTest extends TestCase {
                                                       "text/xml", null));
         client.executeMethod(postMethod);
         assertEquals(498, postMethod.getStatusCode());
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><commenterror><message>Cannot post an invalid message.</message></commenterror>",
-                     postMethod.getResponseBodyAsString());
+
+        CommentError c =
+            (CommentError)JAXBContext.newInstance(CommentError.class.getPackage().getName())
+                .createUnmarshaller().unmarshal(postMethod.getResponseBodyAsStream());
+        assertEquals("Cannot post an invalid message.", c.getErrorMessage());
     }
 
     /**

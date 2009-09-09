@@ -71,4 +71,9 @@ public class GuestbookDatabase {
         ++counter;
         return counter;
     }
+
+    public synchronized int resetCounter() {
+        counter = 0;
+        return counter;
+    }
 }

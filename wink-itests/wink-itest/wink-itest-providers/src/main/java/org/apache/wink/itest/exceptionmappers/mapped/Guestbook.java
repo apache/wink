@@ -173,5 +173,6 @@ public class Guestbook {
         for (Integer k : keys) {
             GuestbookDatabase.getGuestbook().deleteComment(k);
         }
+        GuestbookDatabase.getGuestbook().resetCounter();
     }
 }

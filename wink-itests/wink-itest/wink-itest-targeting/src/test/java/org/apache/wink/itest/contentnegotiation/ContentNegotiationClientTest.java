@@ -21,6 +21,10 @@ package org.apache.wink.itest.contentnegotiation;
 
 import java.io.IOException;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+
 import junit.framework.TestCase;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -45,7 +49,7 @@ public class ContentNegotiationClientTest extends TestCase {
                                                    : "/contentNegotiation")
                                                    + "/customerservice";
 
-    public void testGetReturningXML() {
+    public void testGetReturningXML() throws JAXBException {
         // Sent HTTP GET request to query customer info, expect XML
         System.out.println("Sent HTTP GET request to query customer info, expect XML");
         GetMethod get = new GetMethod(BASE_URI + "/customers/123");
@@ -58,7 +62,12 @@ public class ContentNegotiationClientTest extends TestCase {
             String responseBody = get.getResponseBodyAsString();
             System.out.println(responseBody);
             assertTrue(result == 200);
-            assertTrue(responseBody.contains("<Customer><id>123</id><name>John</name></Customer>"));
+            Unmarshaller unmarshaller =
+                JAXBContext.newInstance(ObjectFactory.class.getPackage().getName())
+                    .createUnmarshaller();
+            Customer c = (Customer)unmarshaller.unmarshal(get.getResponseBodyAsStream());
+            assertEquals(123, c.getId());
+            assertEquals("John", c.getName());
         } catch (IOException ioe) {
             ioe.printStackTrace();
             fail(ioe.getMessage());
