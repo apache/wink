@@ -41,6 +41,10 @@ public final class UriPathNormalizer {
      * @return normalize path
      */
     public static String normalize(String path) {
+        if ((path != null) && (path.indexOf(".") == -1) && (path.indexOf("//") == -1)) {
+            return path;
+        }
+
         boolean wasNormalized = true;
 
         // 1. count number of nonempty segments in path
@@ -55,7 +59,7 @@ public final class UriPathNormalizer {
                 // empty segment? (two adjacent slashes?)
                 if (slash == src) {
                     if (src != lastChar) { // ignore the first slash occurence
-                                           // (when numSegments == 0)
+                        // (when numSegments == 0)
                         wasNormalized = false;
                     }
                 } else {
