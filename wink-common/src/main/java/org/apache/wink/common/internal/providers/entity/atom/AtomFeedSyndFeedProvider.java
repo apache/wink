@@ -29,11 +29,13 @@ import java.lang.reflect.Type;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
+import javax.ws.rs.ext.Providers;
 
 import org.apache.wink.common.model.atom.AtomFeed;
 import org.apache.wink.common.model.synd.SyndFeed;
@@ -41,8 +43,11 @@ import org.apache.wink.common.model.synd.SyndFeed;
 @Provider
 @Consumes(MediaType.APPLICATION_ATOM_XML)
 @Produces(MediaType.APPLICATION_ATOM_XML)
-public class AtomFeedSyndFeedProvider extends AbstractAtomFeedProvider<SyndFeed> implements
-    MessageBodyReader<SyndFeed>, MessageBodyWriter<SyndFeed> {
+public class AtomFeedSyndFeedProvider implements MessageBodyReader<SyndFeed>,
+    MessageBodyWriter<SyndFeed> {
+
+    @Context
+    private Providers providers;
 
     public boolean isReadable(Class<?> type,
                               Type genericType,
@@ -57,8 +62,16 @@ public class AtomFeedSyndFeedProvider extends AbstractAtomFeedProvider<SyndFeed>
                              MediaType mediaType,
                              MultivaluedMap<String, String> httpHeaders,
                              InputStream entityStream) throws IOException, WebApplicationException {
+
+        MessageBodyReader<AtomFeed> reader =
+            providers.getMessageBodyReader(AtomFeed.class, genericType, annotations, mediaType);
         AtomFeed feed =
-            readFeed(AtomFeed.class, genericType, annotations, mediaType, httpHeaders, entityStream);
+            reader.readFrom(AtomFeed.class,
+                            genericType,
+                            annotations,
+                            mediaType,
+                            httpHeaders,
+                            entityStream);
         return feed.toSynd(new SyndFeed());
     }
 
@@ -77,12 +90,22 @@ public class AtomFeedSyndFeedProvider extends AbstractAtomFeedProvider<SyndFeed>
                         MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException, WebApplicationException {
         AtomFeed feed = new AtomFeed(t);
-        writeFeed(feed,
-                  AtomFeed.class,
-                  genericType,
-                  annotations,
-                  mediaType,
-                  httpHeaders,
-                  entityStream);
+        MessageBodyWriter<AtomFeed> writer =
+            providers.getMessageBodyWriter(AtomFeed.class, genericType, annotations, mediaType);
+        writer.writeTo(feed,
+                       AtomFeed.class,
+                       genericType,
+                       annotations,
+                       mediaType,
+                       httpHeaders,
+                       entityStream);
+    }
+
+    public long getSize(SyndFeed t,
+                        Class<?> type,
+                        Type genericType,
+                        Annotation[] annotations,
+                        MediaType mediaType) {
+        return -1;
     }
 }
