@@ -36,7 +36,7 @@ public abstract class AbstractRuntimeContext implements RuntimeContext {
     private HashMap<String, Object> attributes;
 
     public AbstractRuntimeContext() {
-        this.attributes = new HashMap<String, Object>();
+        this.attributes = new HashMap<String, Object>(32);
     }
 
     public final Map<String, Object> getAttributes() {
