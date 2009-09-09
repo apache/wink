@@ -46,12 +46,12 @@ public class MediaTypeHeaderDelegate implements HeaderDelegate<MediaType> {
         if (value == null) {
             throw new IllegalArgumentException("MediaType header is null");
         }
-        
+
         MediaType cached = cache.get(value);
         if (cached != null) {
             return cached;
         }
-        
+
         String type = "*";
         String subType = "*";
         Map<String, String> paramsMap = null;
@@ -62,7 +62,11 @@ public class MediaTypeHeaderDelegate implements HeaderDelegate<MediaType> {
             String main = all[0];
             String[] mainArray = SLASH.split(main);
             type = mainArray[0];
-            subType = mainArray[1];
+            if (mainArray.length == 1 && MediaType.MEDIA_TYPE_WILDCARD.equals(type)) {
+                subType = MediaType.MEDIA_TYPE_WILDCARD;
+            } else {
+                subType = mainArray[1];
+            }
 
             // parameters
             if (all.length > 1) {
@@ -74,7 +78,7 @@ public class MediaTypeHeaderDelegate implements HeaderDelegate<MediaType> {
             }
         } catch (ArrayIndexOutOfBoundsException e) {
             String errMsg = String.format(Messages.getMessage("mediaTypeWrongFormat"), value);
-            logger.error(errMsg);
+            logger.error(errMsg, e);
             throw new IllegalArgumentException(errMsg, e);
         }
 
