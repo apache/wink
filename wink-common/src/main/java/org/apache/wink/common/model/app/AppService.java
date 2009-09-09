@@ -46,11 +46,11 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.wink.common.RestConstants;
 import org.apache.wink.common.RestException;
+import org.apache.wink.common.internal.model.ModelUtils;
 import org.apache.wink.common.internal.model.NamespacePrefixMapperProvider;
 import org.apache.wink.common.internal.utils.JAXBUtils;
 import org.apache.wink.common.model.JAXBNamespacePrefixMapper;
 import org.apache.wink.common.model.atom.AtomCommonAttributes;
-import org.apache.wink.common.model.atom.AtomJAXBUtils;
 import org.w3c.dom.Element;
 
 /**
@@ -111,7 +111,7 @@ public class AppService extends AtomCommonAttributes implements NamespacePrefixM
      */
     public static AppService unmarshal(Reader reader) {
         try {
-            return (AppService)AtomJAXBUtils.unmarshal(AppService.getUnmarshaller(), reader);
+            return (AppService)ModelUtils.unmarshal(AppService.getUnmarshaller(), reader);
         } catch (IOException e) {
             throw new RestException(e);
         }

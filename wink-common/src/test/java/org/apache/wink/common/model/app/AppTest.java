@@ -33,8 +33,8 @@ import javax.xml.namespace.QName;
 import junit.framework.TestCase;
 
 import org.apache.wink.common.RestException;
+import org.apache.wink.common.internal.model.ModelUtils;
 import org.apache.wink.common.model.atom.AtomCategory;
-import org.apache.wink.common.model.atom.AtomJAXBUtils;
 import org.apache.wink.common.model.atom.AtomText;
 import org.apache.wink.test.mock.TestUtils;
 
@@ -107,7 +107,7 @@ public class AppTest extends TestCase {
         AppService service = getService();
         JAXBElement<AppService> element = (new ObjectFactory()).createService(service);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        AtomJAXBUtils.marshal(m, element, os);
+        ModelUtils.marshal(m, element, os);
         String msg = TestUtils.diffIgnoreUpdateWithAttributeQualifier(SERVICE_DOCUMENT, os.toString());
         assertNull(msg, msg);
     }
@@ -115,7 +115,7 @@ public class AppTest extends TestCase {
     public void testAppUnmarshal() throws IOException {
         // Unmarshaller u = AtomJAXBUtils.createUnmarshaller(ctx);
         Unmarshaller u = AppService.getUnmarshaller();
-        Object element = AtomJAXBUtils.unmarshal(u, new StringReader(SERVICE_DOCUMENT));
+        Object element = ModelUtils.unmarshal(u, new StringReader(SERVICE_DOCUMENT));
         assertNotNull(element);
         assertTrue(element instanceof AppService);
 
@@ -132,10 +132,10 @@ public class AppTest extends TestCase {
         // Unmarshaller u = AtomJAXBUtils.createUnmarshaller(ctx);
         Unmarshaller u = AppService.getUnmarshaller();
 
-        Object service = AtomJAXBUtils.unmarshal(u, new StringReader(SERVICE_DOCUMENT));
+        Object service = ModelUtils.unmarshal(u, new StringReader(SERVICE_DOCUMENT));
         JAXBElement<AppService> element = (new ObjectFactory()).createService((AppService)service);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        AtomJAXBUtils.marshal(m, element, os);
+        ModelUtils.marshal(m, element, os);
         String msg = TestUtils.diffIgnoreUpdateWithAttributeQualifier(SERVICE_DOCUMENT, os.toString());
         assertNull(msg, msg);
     }

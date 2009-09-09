@@ -32,7 +32,7 @@ import javax.xml.namespace.QName;
 
 import junit.framework.TestCase;
 
-import org.apache.wink.common.model.atom.AtomJAXBUtils;
+import org.apache.wink.common.internal.model.ModelUtils;
 import org.apache.wink.test.mock.TestUtils;
 
 public class OpenSearchTest extends TestCase {
@@ -84,7 +84,7 @@ public class OpenSearchTest extends TestCase {
         JAXBElement<OpenSearchDescription> element =
             (new ObjectFactory()).createOpenSearchDescription(osd);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        AtomJAXBUtils.marshal(m, element, os);
+        ModelUtils.marshal(m, element, os);
         String msg = TestUtils.diffIgnoreUpdateWithAttributeQualifier(OPENSEARCH, os.toString());
         assertNull(msg, msg);
     }
@@ -92,7 +92,7 @@ public class OpenSearchTest extends TestCase {
     public void testOpenSearchUnmarshal() throws IOException {
         // Unmarshaller u = AtomJAXBUtils.createUnmarshaller(ctx);
         Unmarshaller u = OpenSearchDescription.getUnmarshaller();
-        Object element = AtomJAXBUtils.unmarshal(u, new StringReader(OPENSEARCH));
+        Object element = ModelUtils.unmarshal(u, new StringReader(OPENSEARCH));
         assertNotNull(element);
         assertTrue(element instanceof OpenSearchDescription);
 
@@ -109,11 +109,11 @@ public class OpenSearchTest extends TestCase {
         // Unmarshaller u = AtomJAXBUtils.createUnmarshaller(ctx);
         Unmarshaller u = OpenSearchDescription.getUnmarshaller();
 
-        Object service = AtomJAXBUtils.unmarshal(u, new StringReader(OPENSEARCH));
+        Object service = ModelUtils.unmarshal(u, new StringReader(OPENSEARCH));
         JAXBElement<OpenSearchDescription> element =
             (new ObjectFactory()).createOpenSearchDescription((OpenSearchDescription)service);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        AtomJAXBUtils.marshal(m, element, os);
+        ModelUtils.marshal(m, element, os);
         String msg = TestUtils.diffIgnoreUpdateWithAttributeQualifier(OPENSEARCH, os.toString());
         assertNull(msg, msg);
     }

@@ -44,11 +44,11 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.wink.common.RestConstants;
 import org.apache.wink.common.RestException;
+import org.apache.wink.common.internal.model.ModelUtils;
 import org.apache.wink.common.internal.model.NamespacePrefixMapperProvider;
 import org.apache.wink.common.internal.utils.JAXBUtils;
 import org.apache.wink.common.model.JAXBNamespacePrefixMapper;
 import org.apache.wink.common.model.atom.AtomCategory;
-import org.apache.wink.common.model.atom.AtomJAXBUtils;
 
 /**
  * The "app:categories" Element Per RFC5023
@@ -153,7 +153,7 @@ public class AppCategories implements NamespacePrefixMapperProvider {
      */
     public static AppCategories unmarshal(Reader reader) {
         try {
-            return (AppCategories)AtomJAXBUtils.unmarshal(AppCategories.getUnmarshaller(), reader);
+            return (AppCategories)ModelUtils.unmarshal(AppCategories.getUnmarshaller(), reader);
         } catch (IOException e) {
             throw new RestException(e);
         }

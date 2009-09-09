@@ -50,6 +50,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.wink.common.RestConstants;
 import org.apache.wink.common.RestException;
+import org.apache.wink.common.internal.model.ModelUtils;
 import org.apache.wink.common.internal.model.NamespacePrefixMapperProvider;
 import org.apache.wink.common.internal.utils.JAXBUtils;
 import org.apache.wink.common.model.JAXBNamespacePrefixMapper;
@@ -185,13 +186,13 @@ public class AtomEntry extends AtomCommonAttributes implements NamespacePrefixMa
      * @return AtomEntry instance from the input
      */
     public static AtomEntry unmarshal(Reader reader) throws IOException {
-        return (AtomEntry)AtomJAXBUtils.unmarshal(AtomEntry.getUnmarshaller(), reader);
+        return (AtomEntry)ModelUtils.unmarshal(AtomEntry.getUnmarshaller(), reader);
     }
 
     public static void marshal(AtomEntry entry, OutputStream os) throws IOException {
         JAXBElement<AtomEntry> entryElement = new ObjectFactory().createEntry(entry);
         Marshaller marshaller = AtomEntry.getMarshaller();
-        AtomJAXBUtils.marshal(marshaller, entryElement, os);
+        ModelUtils.marshal(marshaller, entryElement, os);
     }
 
     public JAXBNamespacePrefixMapper getNamespacePrefixMapper() {
@@ -314,7 +315,7 @@ public class AtomEntry extends AtomCommonAttributes implements NamespacePrefixMa
      * @return the updated value, or -1 if it is not set
      */
     public long getUpdatedAsTime() {
-        return AtomJAXBUtils.xmlGregorianCalendarToTime(updated);
+        return ModelUtils.xmlGregorianCalendarToTime(updated);
     }
 
     /**
@@ -339,7 +340,7 @@ public class AtomEntry extends AtomCommonAttributes implements NamespacePrefixMa
      * Sets the value of updated.
      */
     public void setUpdated(long value) {
-        setUpdated(AtomJAXBUtils.timeToXmlGregorianCalendar(value));
+        setUpdated(ModelUtils.timeToXmlGregorianCalendar(value));
     }
 
     /**
@@ -387,7 +388,7 @@ public class AtomEntry extends AtomCommonAttributes implements NamespacePrefixMa
      * @return the published value, or -1 if it is not set
      */
     public long getPublishedAsTime() {
-        return AtomJAXBUtils.xmlGregorianCalendarToTime(published);
+        return ModelUtils.xmlGregorianCalendarToTime(published);
     }
 
     /**
@@ -412,7 +413,7 @@ public class AtomEntry extends AtomCommonAttributes implements NamespacePrefixMa
      * Sets the value of published.
      */
     public void setPublished(long value) {
-        setPublished(AtomJAXBUtils.timeToXmlGregorianCalendar(value));
+        setPublished(ModelUtils.timeToXmlGregorianCalendar(value));
     }
 
     /**

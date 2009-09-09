@@ -44,6 +44,8 @@ import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.wink.common.internal.model.AnyContentHandler;
+import org.apache.wink.common.internal.model.ModelUtils;
 import org.apache.wink.common.model.synd.SyndText;
 import org.apache.wink.common.model.synd.SyndTextType;
 
@@ -142,7 +144,7 @@ public class AtomText extends AtomCommonAttributes {
     @XmlMixed
     @XmlAnyElement(lax = true, value = AnyContentHandler.class)
     List<Object> getAny() {
-        AtomJAXBUtils.fixAnyContent(any, type == null ? null : type.name());
+        ModelUtils.fixAnyContent(any, type == null ? null : type.name());
         return any;
     }
 
@@ -235,9 +237,9 @@ public class AtomText extends AtomCommonAttributes {
             return getValue(cls,
                             cls,
                             null,
-                            AtomJAXBUtils.EMPTY_ARRAY,
-                            AtomJAXBUtils.EMPTY_STRING_MAP,
-                            AtomJAXBUtils.determineMediaType(type == null ? null : type.name()));
+                            ModelUtils.EMPTY_ARRAY,
+                            ModelUtils.EMPTY_STRING_MAP,
+                            ModelUtils.determineMediaType(type == null ? null : type.name()));
         } catch (IOException e) {
             // should never happen
             throw new WebApplicationException(e);
@@ -259,7 +261,7 @@ public class AtomText extends AtomCommonAttributes {
                           Annotation[] annotations,
                           MultivaluedMap<String, String> httpHeaders,
                           MediaType mediaType) throws IOException {
-        return AtomJAXBUtils.readValue(getAny(),
+        return ModelUtils.readValue(getAny(),
                                        cls,
                                        providers,
                                        genericType,

@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.namespace.QName;
 
 import org.apache.wink.common.RestConstants;
+import org.apache.wink.common.internal.model.AtomXhtml;
 
 /**
  * This object contains factory methods for each Java content interface and Java

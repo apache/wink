@@ -30,7 +30,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.Providers;
 
-import org.apache.wink.common.model.atom.AtomJAXBUtils;
+import org.apache.wink.common.internal.model.ModelUtils;
 
 public abstract class SyndSimpleContent extends SyndCommonAttributes {
 
@@ -64,9 +64,9 @@ public abstract class SyndSimpleContent extends SyndCommonAttributes {
             return getValue(cls,
                             cls,
                             null,
-                            AtomJAXBUtils.EMPTY_ARRAY,
-                            AtomJAXBUtils.EMPTY_STRING_MAP,
-                            AtomJAXBUtils.determineMediaType(type));
+                            ModelUtils.EMPTY_ARRAY,
+                            ModelUtils.EMPTY_STRING_MAP,
+                            ModelUtils.determineMediaType(type));
         } catch (IOException e) {
             // should never happen
             throw new WebApplicationException(e);
@@ -80,7 +80,7 @@ public abstract class SyndSimpleContent extends SyndCommonAttributes {
                           MultivaluedMap<String, String> httpHeaders,
                           MediaType mediaType) throws IOException {
 
-        return AtomJAXBUtils.readValue(Arrays.asList(value),
+        return ModelUtils.readValue(Arrays.asList(value),
                                        cls,
                                        providers,
                                        genericType,

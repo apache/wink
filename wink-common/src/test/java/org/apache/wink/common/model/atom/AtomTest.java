@@ -54,6 +54,7 @@ import org.apache.wink.common.internal.application.ApplicationValidator;
 import org.apache.wink.common.internal.contexts.ProvidersImpl;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.lifecycle.ScopeLifecycleManager;
+import org.apache.wink.common.internal.model.ModelUtils;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.runtime.AbstractRuntimeContext;
@@ -338,7 +339,7 @@ public class AtomTest extends TestCase {
         text.setValue("title");
         JAXBElement<AtomText> element = (new ObjectFactory()).createTitle(text);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        AtomJAXBUtils.marshal(m, element, os);
+        ModelUtils.marshal(m, element, os);
 
         String msg =
             TestUtils.diffIgnoreUpdateWithAttributeQualifier(ATOM_TEXT_TEXT, os.toString());
@@ -349,7 +350,7 @@ public class AtomTest extends TestCase {
         text.setValue("<h1>title</h1>");
         element = (new ObjectFactory()).createTitle(text);
         os = new ByteArrayOutputStream();
-        AtomJAXBUtils.marshal(m, element, os);
+        ModelUtils.marshal(m, element, os);
         msg = TestUtils.diffIgnoreUpdateWithAttributeQualifier(ATOM_TEXT_HTML, os.toString());
         assertNull(msg, msg);
 
@@ -358,14 +359,14 @@ public class AtomTest extends TestCase {
         text.setValue("<h1>title</h1>");
         element = (new ObjectFactory()).createTitle(text);
         os = new ByteArrayOutputStream();
-        AtomJAXBUtils.marshal(m, element, os);
+        ModelUtils.marshal(m, element, os);
         msg = TestUtils.diffIgnoreUpdateWithAttributeQualifier(ATOM_TEXT_XHTML, os.toString());
         assertNull(msg, msg);
     }
 
     public void testAtomTextUnmarshal() throws Exception {
         Unmarshaller u = JAXBUtils.createUnmarshaller(ctx);
-        Object element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_TEXT_TEXT));
+        Object element = ModelUtils.unmarshal(u, new StringReader(ATOM_TEXT_TEXT));
         assertNotNull(element);
         assertTrue(element instanceof AtomText);
         AtomText text = (AtomText)element;
@@ -375,7 +376,7 @@ public class AtomTest extends TestCase {
         assertEquals("title", text.getValue());
         assertEquals(AtomTextType.text, text.getType());
 
-        element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_TEXT_HTML));
+        element = ModelUtils.unmarshal(u, new StringReader(ATOM_TEXT_HTML));
         assertNotNull(element);
         assertTrue(element instanceof AtomText);
         text = (AtomText)element;
@@ -385,7 +386,7 @@ public class AtomTest extends TestCase {
         assertEquals("<h1>title</h1>", text.getValue());
         assertEquals(AtomTextType.html, text.getType());
 
-        element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_TEXT_XHTML));
+        element = ModelUtils.unmarshal(u, new StringReader(ATOM_TEXT_XHTML));
         assertNotNull(element);
         assertTrue(element instanceof AtomText);
         text = (AtomText)element;
@@ -399,7 +400,7 @@ public class AtomTest extends TestCase {
         assertNull(msg, msg);
         assertEquals(AtomTextType.xhtml, text.getType());
 
-        element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_TEXT_XHTML_WITH_TEXT));
+        element = ModelUtils.unmarshal(u, new StringReader(ATOM_TEXT_XHTML_WITH_TEXT));
         assertNotNull(element);
         assertTrue(element instanceof AtomText);
         text = (AtomText)element;
@@ -413,7 +414,7 @@ public class AtomTest extends TestCase {
     public void testAtomTextUnmarshalXhtml() throws Exception {
         Unmarshaller u = JAXBUtils.createUnmarshaller(ctx);
 
-        Object element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_TEXT_XHTML_WITH_DIV));
+        Object element = ModelUtils.unmarshal(u, new StringReader(ATOM_TEXT_XHTML_WITH_DIV));
         assertNotNull(element);
         assertTrue(element instanceof AtomText);
         AtomText text = (AtomText)element;
@@ -446,7 +447,7 @@ public class AtomTest extends TestCase {
         content.setValue("title");
         JAXBElement<AtomContent> element = (new ObjectFactory()).createContent(content);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        AtomJAXBUtils.marshal(m, element, os);
+        ModelUtils.marshal(m, element, os);
         String msg =
             TestUtils.diffIgnoreUpdateWithAttributeQualifier(ATOM_CONTENT_TEXT, os.toString());
         assertNull(msg, msg);
@@ -455,7 +456,7 @@ public class AtomTest extends TestCase {
         content.setValue("<h1>title</h1>");
         element = (new ObjectFactory()).createContent(content);
         os = new ByteArrayOutputStream();
-        AtomJAXBUtils.marshal(m, element, os);
+        ModelUtils.marshal(m, element, os);
         msg = TestUtils.diffIgnoreUpdateWithAttributeQualifier(ATOM_CONTENT_HTML, os.toString());
         assertNull(msg, msg);
 
@@ -463,7 +464,7 @@ public class AtomTest extends TestCase {
         content.setValue("<h1>title</h1>");
         element = (new ObjectFactory()).createContent(content);
         os = new ByteArrayOutputStream();
-        AtomJAXBUtils.marshal(m, element, os);
+        ModelUtils.marshal(m, element, os);
         msg = TestUtils.diffIgnoreUpdateWithAttributeQualifier(ATOM_CONTENT_XHTML, os.toString());
         assertNull(msg, msg);
 
@@ -473,14 +474,14 @@ public class AtomTest extends TestCase {
         content.setValue(x);
         element = (new ObjectFactory()).createContent(content);
         os = new ByteArrayOutputStream();
-        AtomJAXBUtils.marshal(m, element, os);
+        ModelUtils.marshal(m, element, os);
         msg = TestUtils.diffIgnoreUpdateWithAttributeQualifier(ATOM_CONTENT_XML, os.toString());
         assertNull(msg, msg);
         
         content.setValue("<x xmlns=\"http://x/\">title</x>");
         element = (new ObjectFactory()).createContent(content);
         os = new ByteArrayOutputStream();
-        AtomJAXBUtils.marshal(m, element, os);
+        ModelUtils.marshal(m, element, os);
         msg = TestUtils.diffIgnoreUpdateWithAttributeQualifier(ATOM_CONTENT_XML, os.toString());
         assertNull(msg, msg);
     }
@@ -501,7 +502,7 @@ public class AtomTest extends TestCase {
 
     public void testAtomContentUnmarshal() throws Exception {
         Unmarshaller u = JAXBUtils.createUnmarshaller(ctx);
-        Object element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_CONTENT_TEXT));
+        Object element = ModelUtils.unmarshal(u, new StringReader(ATOM_CONTENT_TEXT));
         assertNotNull(element);
         assertTrue(element instanceof AtomContent);
         AtomContent content = (AtomContent)element;
@@ -511,7 +512,7 @@ public class AtomTest extends TestCase {
         assertEquals("title", content.getValue());
         assertEquals("text", content.getType());
 
-        element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_CONTENT_HTML));
+        element = ModelUtils.unmarshal(u, new StringReader(ATOM_CONTENT_HTML));
         assertNotNull(element);
         assertTrue(element instanceof AtomContent);
         content = (AtomContent)element;
@@ -521,7 +522,7 @@ public class AtomTest extends TestCase {
         assertEquals("<h1>title</h1>", content.getValue());
         assertEquals("html", content.getType());
 
-        element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_CONTENT_XHTML));
+        element = ModelUtils.unmarshal(u, new StringReader(ATOM_CONTENT_XHTML));
         assertNotNull(element);
         assertTrue(element instanceof AtomContent);
         content = (AtomContent)element;
@@ -536,7 +537,7 @@ public class AtomTest extends TestCase {
         assertNull(msg, msg);
         assertEquals("xhtml", content.getType());
 
-        element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_CONTENT_XHTML_WITH_TEXT));
+        element = ModelUtils.unmarshal(u, new StringReader(ATOM_CONTENT_XHTML_WITH_TEXT));
         assertNotNull(element);
         assertTrue(element instanceof AtomContent);
         content = (AtomContent)element;
@@ -546,7 +547,7 @@ public class AtomTest extends TestCase {
         assertEquals("title", content.getValue().trim());
         assertEquals("xhtml", content.getType());
 
-        element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_CONTENT_XML));
+        element = ModelUtils.unmarshal(u, new StringReader(ATOM_CONTENT_XML));
         assertNotNull(element);
         assertTrue(element instanceof AtomContent);
         content = (AtomContent)element;
@@ -566,14 +567,14 @@ public class AtomTest extends TestCase {
         AtomEntry entry = getEntryWithoutContent("1");
         JAXBElement<AtomEntry> element = (new ObjectFactory()).createEntry(entry);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        AtomJAXBUtils.marshal(m, element, os);
+        ModelUtils.marshal(m, element, os);
         String msg = TestUtils.diffIgnoreUpdateWithAttributeQualifier(ATOM_ENTRY_1, os.toString());
         assertNull(msg, msg);
 
         entry = getEntryWithPlainTextContent("2");
         element = (new ObjectFactory()).createEntry(entry);
         os = new ByteArrayOutputStream();
-        AtomJAXBUtils.marshal(m, element, os);
+        ModelUtils.marshal(m, element, os);
         msg =
             TestUtils.diffIgnoreUpdateWithAttributeQualifier(ATOM_ENTRY_2.getBytes("UTF-8"), os
                 .toByteArray());
@@ -582,7 +583,7 @@ public class AtomTest extends TestCase {
         entry = getEntryWithXmlContent("3");
         element = (new ObjectFactory()).createEntry(entry);
         os = new ByteArrayOutputStream();
-        AtomJAXBUtils.marshal(m, element, os);
+        ModelUtils.marshal(m, element, os);
         msg =
             TestUtils.diffIgnoreUpdateWithAttributeQualifier(ATOM_ENTRY_3.getBytes("UTF-8"), os
                 .toByteArray());
@@ -591,7 +592,7 @@ public class AtomTest extends TestCase {
 
     public void testAtomEntryUnmarshal() throws Exception {
         Unmarshaller u = AtomEntry.getUnmarshaller();
-        Object element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_ENTRY_1));
+        Object element = ModelUtils.unmarshal(u, new StringReader(ATOM_ENTRY_1));
         assertNotNull(element);
         assertTrue(element instanceof AtomEntry);
 
@@ -620,7 +621,7 @@ public class AtomTest extends TestCase {
         assertEquals("scheme", entry.getCategories().get(0).getScheme());
         assertEquals("term", entry.getCategories().get(0).getTerm());
 
-        element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_ENTRY_2));
+        element = ModelUtils.unmarshal(u, new StringReader(ATOM_ENTRY_2));
         assertNotNull(element);
         assertTrue(element instanceof AtomEntry);
         entry = (AtomEntry)element;
@@ -630,7 +631,7 @@ public class AtomTest extends TestCase {
         assertEquals("text/plain", entry.getContent().getType());
         assertEquals("Gustaf's Knäckebröd", entry.getContent().getValue());
 
-        element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_ENTRY_3));
+        element = ModelUtils.unmarshal(u, new StringReader(ATOM_ENTRY_3));
         assertNotNull(element);
         assertTrue(element instanceof AtomEntry);
         entry = (AtomEntry)element;
@@ -648,7 +649,7 @@ public class AtomTest extends TestCase {
         AtomFeed feed = getFeed();
         JAXBElement<AtomFeed> element = (new ObjectFactory()).createFeed(feed);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        AtomJAXBUtils.marshal(m, element, os);
+        ModelUtils.marshal(m, element, os);
         String msg =
             TestUtils.diffIgnoreUpdateWithAttributeQualifier(ATOM_FEED_1.getBytes("UTF-8"), os
                 .toByteArray());
@@ -657,7 +658,7 @@ public class AtomTest extends TestCase {
 
     public void testAtomFeedUnmarshal() throws Exception {
         Unmarshaller u = AtomFeed.getUnmarshaller();
-        Object element = AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_FEED_1));
+        Object element = ModelUtils.unmarshal(u, new StringReader(ATOM_FEED_1));
         assertNotNull(element);
         assertTrue(element instanceof AtomFeed);
 
@@ -700,10 +701,10 @@ public class AtomTest extends TestCase {
     public void testAtomFeedMarshalUnmarshal() throws Exception {
         Marshaller m = AtomFeed.getMarshaller();
         Unmarshaller u = AtomFeed.getUnmarshaller();
-        AtomFeed feed = (AtomFeed)AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_FEED_1));
+        AtomFeed feed = (AtomFeed)ModelUtils.unmarshal(u, new StringReader(ATOM_FEED_1));
         JAXBElement<AtomFeed> element = (new ObjectFactory()).createFeed(feed);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        AtomJAXBUtils.marshal(m, element, os);
+        ModelUtils.marshal(m, element, os);
         String msg =
             TestUtils.diffIgnoreUpdateWithAttributeQualifier(ATOM_FEED_1.getBytes("UTF-8"), os.toByteArray());
         assertNull(msg, msg);
@@ -712,14 +713,14 @@ public class AtomTest extends TestCase {
     public void testAtomFeedMarshalUnmarshalWithoutOpenSearch() throws Exception {
         Marshaller m = AtomFeed.getMarshaller();
         Unmarshaller u = AtomFeed.getUnmarshaller();
-        AtomFeed feed = (AtomFeed)AtomJAXBUtils.unmarshal(u, new StringReader(ATOM_FEED_2));
+        AtomFeed feed = (AtomFeed)ModelUtils.unmarshal(u, new StringReader(ATOM_FEED_2));
         assertEquals(-1, feed.getItemsPerPage());
         assertEquals(-1, feed.getStartIndex());
         assertEquals(-1, feed.getTotalResults());
         assertEquals(0, feed.getOpenSearchQueries().size());
         JAXBElement<AtomFeed> element = (new ObjectFactory()).createFeed(feed);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        AtomJAXBUtils.marshal(m, element, os);
+        ModelUtils.marshal(m, element, os);
         String msg =
             TestUtils.diffIgnoreUpdateWithAttributeQualifier(ATOM_FEED_2.getBytes("UTF-8"), os.toByteArray());
         assertNull(msg, msg);
@@ -956,7 +957,7 @@ public class AtomTest extends TestCase {
         JAXBElement<AtomEntry> element = (new ObjectFactory()).createEntry(atomEntry);
         Marshaller marshaller = AtomEntry.getMarshaller();
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        AtomJAXBUtils.marshal(marshaller, element, os);
+        ModelUtils.marshal(marshaller, element, os);
         String defaultContent = new String(os.toByteArray(), "UTF-8");
 
         String[] encodings = {"US-ASCII", "UTF-8", "UTF-16"};
@@ -965,7 +966,7 @@ public class AtomTest extends TestCase {
             marshaller = AtomEntry.getMarshaller();
             marshaller.setProperty(Marshaller.JAXB_ENCODING, enc);
             os = new ByteArrayOutputStream();
-            AtomJAXBUtils.marshal(marshaller, element, os);
+            ModelUtils.marshal(marshaller, element, os);
             String msg =
                 TestUtils.diffIgnoreUpdateWithAttributeQualifier(defaultContent, new String(os.toByteArray(), enc));
             assertNull(msg, msg);

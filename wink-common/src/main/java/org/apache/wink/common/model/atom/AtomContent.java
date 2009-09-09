@@ -38,6 +38,8 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.wink.common.RestException;
+import org.apache.wink.common.internal.model.AnyContentHandler;
+import org.apache.wink.common.internal.model.ModelUtils;
 import org.apache.wink.common.model.synd.SyndContent;
 
 /**
@@ -338,9 +340,9 @@ public class AtomContent extends AtomCommonAttributes {
             return getValue(cls,
                             cls,
                             null,
-                            AtomJAXBUtils.EMPTY_ARRAY,
-                            AtomJAXBUtils.EMPTY_STRING_MAP,
-                            AtomJAXBUtils.determineMediaType(type));
+                            ModelUtils.EMPTY_ARRAY,
+                            ModelUtils.EMPTY_STRING_MAP,
+                            ModelUtils.determineMediaType(type));
         } catch (IOException e) {
             // should never happen
             throw new WebApplicationException(e);
@@ -361,7 +363,7 @@ public class AtomContent extends AtomCommonAttributes {
                           Annotation[] annotations,
                           MultivaluedMap<String, String> httpHeaders,
                           MediaType mediaType) throws IOException {
-        return AtomJAXBUtils.readValue(getAny(),
+        return ModelUtils.readValue(getAny(),
                                        cls,
                                        providers,
                                        genericType,
@@ -373,7 +375,7 @@ public class AtomContent extends AtomCommonAttributes {
     @XmlMixed
     @XmlAnyElement(lax = true, value = AnyContentHandler.class)
     List<Object> getAny() {
-        AtomJAXBUtils.fixAnyContent(any, type);
+        ModelUtils.fixAnyContent(any, type);
         return any;
     }
 

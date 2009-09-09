@@ -16,7 +16,7 @@
  *     specific language governing permissions and limitations
  *     under the License.
  *******************************************************************************/
-package org.apache.wink.common.model.atom;
+package org.apache.wink.common.internal.model;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;

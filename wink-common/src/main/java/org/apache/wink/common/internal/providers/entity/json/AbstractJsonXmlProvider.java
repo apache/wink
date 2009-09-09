@@ -33,8 +33,8 @@ import javax.xml.parsers.SAXParserFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.i18n.Messages;
+import org.apache.wink.common.internal.model.ModelUtils;
 import org.apache.wink.common.internal.providers.entity.xml.AbstractJAXBProvider;
-import org.apache.wink.common.model.atom.AtomJAXBUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -101,7 +101,7 @@ public class AbstractJsonXmlProvider extends AbstractJAXBProvider {
 
         @Override
         public void beforeMarshal(Object source) {
-            if (AtomJAXBUtils.isValueActuallyXml(source)) {
+            if (ModelUtils.isValueActuallyXml(source)) {
                 xmlStringToParse = new StringBuilder();
                 charactersAreXml = true;
             }
@@ -181,7 +181,7 @@ public class AbstractJsonXmlProvider extends AbstractJAXBProvider {
             if (charactersAreXml) {
                 charactersAreXml = false;
                 String xmlToParse = xmlStringToParse.toString();
-                AtomJAXBUtils.saxParse(new StringReader(xmlToParse),
+                ModelUtils.saxParse(new StringReader(xmlToParse),
                                        this,
                                        Messages.getMessage("jsonFailConvertXMLToJSON"));
             }

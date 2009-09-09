@@ -16,7 +16,7 @@
  *     specific language governing permissions and limitations
  *     under the License.
  *******************************************************************************/
-package org.apache.wink.common.model.atom;
+package org.apache.wink.common.internal.model;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Handles objects wrapped with XmlWrapper
  */
-/* package */class AnyContentHandler implements DomHandler<XmlWrapper, StreamResult> {
+public class AnyContentHandler implements DomHandler<XmlWrapper, StreamResult> {
 
     private static final Logger logger = LoggerFactory.getLogger(AnyContentHandler.class);
 
@@ -91,9 +91,9 @@ import org.slf4j.LoggerFactory;
             writer.writeTo(xmlWrapper.getValue(),
                            cls,
                            cls,
-                           AtomJAXBUtils.EMPTY_ARRAY,
+                           ModelUtils.EMPTY_ARRAY,
                            type,
-                           AtomJAXBUtils.EMPTY_OBJECT_MAP,
+                           ModelUtils.EMPTY_OBJECT_MAP,
                            os);
         } catch (IOException e) {
             throw new WebApplicationException(e);

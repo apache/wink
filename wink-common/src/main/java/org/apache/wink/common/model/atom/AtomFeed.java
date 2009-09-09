@@ -45,12 +45,14 @@ import javax.xml.bind.annotation.XmlAccessorOrder;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.wink.common.RestConstants;
 import org.apache.wink.common.RestException;
+import org.apache.wink.common.internal.model.ModelUtils;
 import org.apache.wink.common.internal.model.NamespacePrefixMapperProvider;
 import org.apache.wink.common.internal.utils.JAXBUtils;
 import org.apache.wink.common.model.JAXBNamespacePrefixMapper;
@@ -143,6 +145,7 @@ import org.w3c.dom.Element;
                                          "startIndex", "totalResults", "opensearchQuery", "link",
                                          "author", "contributor", "category", "generator", "icon",
                                          "logo", "rights", "any", "entry"})
+@XmlSeeAlso(value = {OpenSearchQuery.class})
 public class AtomFeed extends AtomCommonAttributes implements NamespacePrefixMapperProvider {
 
     @XmlElement(required = true)
@@ -253,13 +256,13 @@ public class AtomFeed extends AtomCommonAttributes implements NamespacePrefixMap
      * @return AtomFeed instance from the input
      */
     public static AtomFeed unmarshal(Reader reader) throws IOException {
-        return (AtomFeed)AtomJAXBUtils.unmarshal(AtomFeed.getUnmarshaller(), reader);
+        return (AtomFeed)ModelUtils.unmarshal(AtomFeed.getUnmarshaller(), reader);
     }
 
     public static void marshal(AtomFeed feed, OutputStream os) throws IOException {
         JAXBElement<AtomFeed> feedElement = new ObjectFactory().createFeed(feed);
         Marshaller marshaller = AtomFeed.getMarshaller();
-        AtomJAXBUtils.marshal(marshaller, feedElement,  os);
+        ModelUtils.marshal(marshaller, feedElement, os);
     }
 
     public JAXBNamespacePrefixMapper getNamespacePrefixMapper() {
@@ -384,7 +387,7 @@ public class AtomFeed extends AtomCommonAttributes implements NamespacePrefixMap
      * @return the updated value, or -1 if it is not set
      */
     public long getUpdatedAsTime() {
-        return AtomJAXBUtils.xmlGregorianCalendarToTime(updated);
+        return ModelUtils.xmlGregorianCalendarToTime(updated);
     }
 
     /**
@@ -409,7 +412,7 @@ public class AtomFeed extends AtomCommonAttributes implements NamespacePrefixMap
      * Sets the value of updated.
      */
     public void setUpdated(long value) {
-        setUpdated(AtomJAXBUtils.timeToXmlGregorianCalendar(value));
+        setUpdated(ModelUtils.timeToXmlGregorianCalendar(value));
     }
 
     /**

@@ -16,7 +16,7 @@
  *     specific language governing permissions and limitations
  *     under the License.
  *******************************************************************************/
-package org.apache.wink.common.model.atom;
+package org.apache.wink.common.internal.model;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(name = "div", propOrder = {"any"})
 @XmlAccessorType(XmlAccessType.FIELD)
-/* package */class AtomXhtml {
+public class AtomXhtml {
 
     @XmlMixed
     @XmlAnyElement(value = AnyContentHandler.class)

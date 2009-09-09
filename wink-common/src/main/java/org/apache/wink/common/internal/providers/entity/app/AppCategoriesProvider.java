@@ -34,10 +34,10 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 
+import org.apache.wink.common.internal.model.ModelUtils;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.model.app.AppCategories;
 import org.apache.wink.common.model.app.ObjectFactory;
-import org.apache.wink.common.model.atom.AtomJAXBUtils;
 import org.apache.wink.common.utils.ProviderUtils;
 
 /**
@@ -75,7 +75,7 @@ public class AppCategoriesProvider implements MessageBodyWriter<AppCategories> {
             JAXBElement<AppCategories> feedElement = objectFactory.createCategories(t);
             Marshaller marshaller = AppCategories.getMarshaller();
             marshaller.setProperty(Marshaller.JAXB_ENCODING, ProviderUtils.getCharset(mediaType));
-            AtomJAXBUtils.marshal(marshaller, feedElement, entityStream);
+            ModelUtils.marshal(marshaller, feedElement, entityStream);
         } catch (PropertyException e) {
             throw new WebApplicationException(e);
         }

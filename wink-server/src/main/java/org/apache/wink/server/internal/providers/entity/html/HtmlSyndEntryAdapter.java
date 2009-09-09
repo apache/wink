@@ -25,7 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.wink.common.model.atom.AtomJAXBUtils;
+import org.apache.wink.common.internal.model.ModelUtils;
 import org.apache.wink.common.model.synd.SyndCategory;
 import org.apache.wink.common.model.synd.SyndContent;
 import org.apache.wink.common.model.synd.SyndEntry;
@@ -171,7 +171,7 @@ public class HtmlSyndEntryAdapter {
             // TODO: get content using type?
             String value = String.valueOf(content.getValue());
             value = value != null ? value : "";
-            if (type != null && (SyndTextType.xhtml.name().equals(type) || AtomJAXBUtils
+            if (type != null && (SyndTextType.xhtml.name().equals(type) || ModelUtils
                 .isTypeXml(type))) {
                 return StringEscapeUtils.escapeXml(value);
             }

@@ -34,10 +34,10 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 
+import org.apache.wink.common.internal.model.ModelUtils;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.model.app.AppService;
 import org.apache.wink.common.model.app.ObjectFactory;
-import org.apache.wink.common.model.atom.AtomJAXBUtils;
 import org.apache.wink.common.utils.ProviderUtils;
 
 /**
@@ -75,7 +75,7 @@ public class AppServiceProvider implements MessageBodyWriter<AppService> {
             JAXBElement<AppService> sd = objectFactory.createService(t);
             Marshaller marshaller = AppService.getMarshaller();
             marshaller.setProperty(Marshaller.JAXB_ENCODING, ProviderUtils.getCharset(mediaType));
-            AtomJAXBUtils.marshal(marshaller, sd, entityStream);
+            ModelUtils.marshal(marshaller, sd, entityStream);
         } catch (PropertyException e) {
             throw new WebApplicationException(e);
         }

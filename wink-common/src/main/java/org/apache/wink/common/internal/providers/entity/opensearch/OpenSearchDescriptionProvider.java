@@ -35,10 +35,10 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 
+import org.apache.wink.common.internal.model.ModelUtils;
 import org.apache.wink.common.internal.utils.JAXBUtils;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.model.XmlFormattingOptions;
-import org.apache.wink.common.model.atom.AtomJAXBUtils;
 import org.apache.wink.common.model.opensearch.ObjectFactory;
 import org.apache.wink.common.model.opensearch.OpenSearchDescription;
 import org.apache.wink.common.utils.ProviderUtils;
@@ -78,7 +78,7 @@ public class OpenSearchDescriptionProvider implements MessageBodyWriter<OpenSear
             JAXBUtils.setXmlFormattingOptions(marshaller, XmlFormattingOptions
                 .getDefaultXmlFormattingOptions());
             marshaller.setProperty(Marshaller.JAXB_ENCODING, ProviderUtils.getCharset(mediaType));
-            AtomJAXBUtils.marshal(marshaller, openSearchDocumentWrapper, entityStream);
+            ModelUtils.marshal(marshaller, openSearchDocumentWrapper, entityStream);
         } catch (PropertyException e) {
             throw new WebApplicationException(e);
         }

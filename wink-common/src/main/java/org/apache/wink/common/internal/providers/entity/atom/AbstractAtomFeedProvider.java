@@ -36,8 +36,8 @@ import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.wink.common.internal.i18n.Messages;
+import org.apache.wink.common.internal.model.ModelUtils;
 import org.apache.wink.common.model.atom.AtomFeed;
-import org.apache.wink.common.model.atom.AtomJAXBUtils;
 import org.apache.wink.common.model.atom.ObjectFactory;
 import org.apache.wink.common.utils.ProviderUtils;
 import org.slf4j.Logger;
@@ -75,7 +75,7 @@ public abstract class AbstractAtomFeedProvider<T> {
             JAXBElement<AtomFeed> feedElement = atomObjectFactory.createFeed(feed);
             Marshaller marshaller = AtomFeed.getMarshaller();
             marshaller.setProperty(Marshaller.JAXB_ENCODING, ProviderUtils.getCharset(mediaType));
-            AtomJAXBUtils.marshal(marshaller, feedElement, entityStream);
+            ModelUtils.marshal(marshaller, feedElement, entityStream);
         } catch (PropertyException e) {
             throw new WebApplicationException(e);
         }
@@ -92,7 +92,7 @@ public abstract class AbstractAtomFeedProvider<T> {
         Unmarshaller unmarshaller = AtomFeed.getUnmarshaller();
         InputStreamReader reader =
             new InputStreamReader(entityStream, ProviderUtils.getCharset(mediaType));
-        Object object = AtomJAXBUtils.unmarshal(unmarshaller, reader);
+        Object object = ModelUtils.unmarshal(unmarshaller, reader);
         AtomFeed feed = null;
         if (object instanceof AtomFeed) {
             feed = (AtomFeed)object;

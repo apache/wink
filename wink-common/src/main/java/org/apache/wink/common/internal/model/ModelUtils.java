@@ -18,7 +18,7 @@
  *  
  *******************************************************************************/
 
-package org.apache.wink.common.model.atom;
+package org.apache.wink.common.internal.model;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -51,6 +51,9 @@ import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.internal.MultivaluedMapImpl;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.common.internal.utils.UnmodifiableMultivaluedMap;
+import org.apache.wink.common.model.atom.AtomContent;
+import org.apache.wink.common.model.atom.AtomText;
+import org.apache.wink.common.model.atom.AtomTextType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.ContentHandler;
@@ -59,7 +62,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.ext.LexicalHandler;
 
-public class AtomJAXBUtils {
+public class ModelUtils {
 
     public static final MultivaluedMap<String, Object> EMPTY_OBJECT_MAP =
                                                                             new UnmodifiableMultivaluedMap<String, Object>(
@@ -72,7 +75,7 @@ public class AtomJAXBUtils {
     private final static DatatypeFactory               datatypeFactory;
     private static final Logger                        logger           =
                                                                             LoggerFactory
-                                                                                .getLogger(AtomJAXBUtils.class);
+                                                                                .getLogger(ModelUtils.class);
 
     static {
         try {
@@ -110,7 +113,7 @@ public class AtomJAXBUtils {
         if (source instanceof AtomContent) {
             AtomContent content = (AtomContent)source;
             String type = content.getType();
-            if (AtomJAXBUtils.isTypeXml(type)) {
+            if (ModelUtils.isTypeXml(type)) {
                 return true;
             }
         } else if (source instanceof AtomText) {
