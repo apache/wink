@@ -23,6 +23,8 @@ import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -54,6 +56,18 @@ public class CommonAcceptHeaderTest extends MockServletInvocationTest {
             // System.out.println(acceptMediaTypes);
             return acceptMediaTypes.size() + "";
         }
+
+        @GET
+        @Path("onlytext")
+        @Produces("text/plain")
+        public String getHelloWorldText(@Context HttpHeaders requestHeaders) {
+            List<MediaType> acceptMediaTypes = requestHeaders.getAcceptableMediaTypes();
+            if (acceptMediaTypes == null || acceptMediaTypes.isEmpty()) {
+                return "0";
+            }
+            System.out.println(acceptMediaTypes);
+            return acceptMediaTypes.size() + "";
+        }
     }
 
     public void testWildcardOnly() throws Exception {
@@ -81,16 +95,64 @@ public class CommonAcceptHeaderTest extends MockServletInvocationTest {
         try {
             invoke(request);
             fail();
-        } catch (IllegalArgumentException e) {
-
+        } catch (WebApplicationException e) {
+            assertEquals(400, e.getResponse().getStatus());
         }
         request = MockRequestConstructor.constructMockRequest("GET", "/countaccepttypes", "      ");
         try {
             invoke(request);
             fail();
-        } catch (IllegalArgumentException e) {
-
+        } catch (WebApplicationException e) {
+            assertEquals(400, e.getResponse().getStatus());
         }
+    }
+
+    public void testIllegalStringAcceptHeader() throws Exception {
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "/countaccepttypes", "text/");
+        try {
+            invoke(request);
+            fail();
+        } catch (WebApplicationException e) {
+            assertEquals(400, e.getResponse().getStatus());
+        }
+
+        request =
+            MockRequestConstructor.constructMockRequest("GET", "/countaccepttypes", "application/");
+        try {
+            invoke(request);
+            fail();
+        } catch (WebApplicationException e) {
+            assertEquals(400, e.getResponse().getStatus());
+        }
+
+        try {
+            request =
+                MockRequestConstructor.constructMockRequest("GET", "/countaccepttypes", "/xml");
+            invoke(request);
+        } catch (WebApplicationException e) {
+            assertEquals(400, e.getResponse().getStatus());
+        }
+
+        /*
+         * while the response type isn't there
+         */
+        request =
+            MockRequestConstructor
+                .constructMockRequest("GET",
+                                      "/onlytext",
+                                      "         text              / plain                   ");
+        MockHttpServletResponse response = invoke(request);
+        assertEquals(406, response.getStatus());
+        assertEquals("", response.getContentAsString());
+
+        /*
+         * be sure that capitalization is ignore
+         */
+        request = MockRequestConstructor.constructMockRequest("GET", "/onlytext", "TEXT/pLain");
+        response = invoke(request);
+        assertEquals(200, response.getStatus());
+        assertEquals("1", response.getContentAsString());
     }
 
     public void testHttpURLConnectionAcceptHeader() throws Exception {

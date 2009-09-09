@@ -30,6 +30,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -126,8 +127,12 @@ public class HttpHeadersImpl implements HttpHeaders {
                 acceptValue = acceptValueTemp.toString();
             }
         }
-        Accept acceptHeader = Accept.valueOf(acceptValue);
-        return acceptHeader;
+        try {
+            Accept acceptHeader = Accept.valueOf(acceptValue);
+            return acceptHeader;
+        } catch (IllegalArgumentException e) {
+            throw new WebApplicationException(e, 400);
+        }
     }
 
     public Map<String, Cookie> getCookies() {
