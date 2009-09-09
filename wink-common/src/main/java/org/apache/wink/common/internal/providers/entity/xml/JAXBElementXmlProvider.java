@@ -21,10 +21,12 @@ package org.apache.wink.common.internal.providers.entity.xml;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.nio.charset.Charset;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -42,6 +44,9 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.wink.common.internal.i18n.Messages;
+import org.apache.wink.common.internal.model.ModelUtils;
+import org.apache.wink.common.internal.utils.JAXBUtils;
+import org.apache.wink.common.model.XmlFormattingOptions;
 import org.apache.wink.common.utils.ProviderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,8 +80,16 @@ public class JAXBElementXmlProvider extends AbstractJAXBProvider implements
 
         try {
             unmarshaller = getUnmarshaller(classToFill, mediaType);
-            unmarshaledResource =
-                unmarshaller.unmarshal(new StreamSource(entityStream), classToFill);
+            String charset = ProviderUtils.getCharsetOrNull(mediaType);
+            if (charset == null) {
+                // use default
+                // performance is better, though the charset cannot be ensured
+                unmarshaledResource =
+                    unmarshaller.unmarshal(new StreamSource(entityStream), classToFill);
+            } else {
+                ModelUtils.unmarshal(unmarshaller, new InputStreamReader(entityStream, Charset
+                    .forName(charset)));
+            }
         } catch (JAXBException e) {
             logger.error(Messages.getMessage("jaxbFailToUnmarshal"), type.getName());
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
@@ -109,6 +122,9 @@ public class JAXBElementXmlProvider extends AbstractJAXBProvider implements
         try {
             Marshaller marshaller = getMarshaller(t.getDeclaredType(), mediaType);
             marshaller.setProperty(Marshaller.JAXB_ENCODING, ProviderUtils.getCharset(mediaType));
+            JAXBUtils.setXmlFormattingOptions(marshaller, XmlFormattingOptions
+                .getDefaultXmlFormattingOptions());
+
             marshaller.marshal(t, entityStream);
         } catch (JAXBException e) {
             logger.error(Messages.getMessage("jaxbFailToMarshal"), t.getName());

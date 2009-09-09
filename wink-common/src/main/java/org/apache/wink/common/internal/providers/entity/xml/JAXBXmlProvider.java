@@ -41,6 +41,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.wink.common.internal.i18n.Messages;
+import org.apache.wink.common.internal.utils.JAXBUtils;
+import org.apache.wink.common.model.XmlFormattingOptions;
 import org.apache.wink.common.utils.ProviderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,6 +114,9 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
             marshaller.setProperty(Marshaller.JAXB_ENCODING, ProviderUtils.getCharset(mediaType));
 
             Object entityToMarshal = getEntityToMarshal(t, type);
+
+            JAXBUtils.setXmlFormattingOptions(marshaller, XmlFormattingOptions
+                .getDefaultXmlFormattingOptions());
 
             // Use an OutputStream directly instead of a Writer for performance.
             marshaller.marshal(entityToMarshal, entityStream);

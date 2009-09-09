@@ -45,6 +45,7 @@ import org.apache.wink.common.model.atom.AtomFeed;
 import org.apache.wink.common.model.atom.ObjectFactory;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
+import org.apache.wink.test.mock.TestUtils;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -60,13 +61,19 @@ public class JAXBElementProviderTest extends MockServletInvocationTest {
                                                                 "<JAXBXmlRootElement><id>ID</id><name>NAME</name></JAXBXmlRootElement>";
     private static final byte[] JAXBXmlRootElement_BYTES    = JAXBXmlRootElement_REQUEST.getBytes();
     private static final String JAXBXmlRootElement_RESPONSE =
-                                                                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><JAXBXmlRootElement><id>ID</id><name>NAME</name></JAXBXmlRootElement>";
+                                                                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + "<JAXBXmlRootElement>\r\n"
+                                                                    + "    <id>ID</id>\r\n"
+                                                                    + "    <name>NAME</name>\r\n"
+                                                                    + "</JAXBXmlRootElement>";
 
     private static final String JAXBXmlType_REQUEST         =
                                                                 "<JAXBXmlType><id>ID</id><name>NAME</name></JAXBXmlType>";
     private static final byte[] JAXBXmlType_REQUEST_BYTES   = JAXBXmlType_REQUEST.getBytes();
     private static final String JAXBXmlType_RESPONSE        =
-                                                                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><JAXBXmlType><id>ID</id><name>NAME</name></JAXBXmlType>";
+                                                                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + "<JAXBXmlType>\r\n"
+                                                                    + "    <id>ID</id>\r\n"
+                                                                    + "    <name>NAME</name>\r\n"
+                                                                    + "</JAXBXmlType>";
 
     JAXBElement<AtomFeed>       atomfeed;
 
@@ -193,6 +200,7 @@ public class JAXBElementProviderTest extends MockServletInvocationTest {
                                                                                           "plain")));
     }
 
+    @SuppressWarnings("unchecked")
     public void testJAXBElementProviderInvocation() throws Exception {
         MockHttpServletRequest request =
             MockRequestConstructor.constructMockRequest("POST",
@@ -214,6 +222,7 @@ public class JAXBElementProviderTest extends MockServletInvocationTest {
         assertEquals(expectedResponse.getValue().getId(), response.getValue().getId());
     }
 
+    @SuppressWarnings("unchecked")
     public void testJAXBXmlElementProviderInvocation() throws Exception {
         MockHttpServletRequest request =
             MockRequestConstructor.constructMockRequest("POST",
@@ -244,7 +253,10 @@ public class JAXBElementProviderTest extends MockServletInvocationTest {
                                                         null);
         MockHttpServletResponse invoke = invoke(request);
         assertEquals(200, invoke.getStatus());
-        assertEquals(JAXBXmlType_RESPONSE, invoke.getContentAsString());
+        String msg =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(JAXBXmlType_RESPONSE, invoke
+                .getContentAsString());
+        assertNull(msg, msg);
     }
 
     public void testJAXBXmlElementProviderInvocationXmltype() throws Exception {
@@ -256,7 +268,10 @@ public class JAXBElementProviderTest extends MockServletInvocationTest {
                                                         JAXBXmlType_REQUEST_BYTES);
         MockHttpServletResponse invoke = invoke(request);
         assertEquals(200, invoke.getStatus());
-        assertEquals(JAXBXmlType_RESPONSE, invoke.getContentAsString());
+        String msg =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(JAXBXmlType_RESPONSE, invoke
+                .getContentAsString());
+        assertNull(msg, msg);
     }
 
     public void testJAXBXmlElementProviderInvocationXmlRoot() throws Exception {
@@ -268,7 +283,10 @@ public class JAXBElementProviderTest extends MockServletInvocationTest {
                                                         JAXBXmlRootElement_BYTES);
         MockHttpServletResponse invoke = invoke(request);
         assertEquals(200, invoke.getStatus());
-        assertEquals(JAXBXmlRootElement_RESPONSE, invoke.getContentAsString());
+        String msg =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(JAXBXmlRootElement_RESPONSE, invoke
+                .getContentAsString());
+        assertNull(msg, msg);
 
         request =
             MockRequestConstructor.constructMockRequest("POST",
@@ -289,7 +307,10 @@ public class JAXBElementProviderTest extends MockServletInvocationTest {
                                                         JAXBXmlType_REQUEST_BYTES);
         MockHttpServletResponse invoke = invoke(request);
         assertEquals(200, invoke.getStatus());
-        assertEquals(JAXBXmlType_RESPONSE, invoke.getContentAsString());
+        String msg =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(JAXBXmlType_RESPONSE, invoke
+                .getContentAsString());
+        assertNull(msg, msg);
     }
 
     public void testJAXBXmlElementProviderReaderWriter() throws SecurityException,

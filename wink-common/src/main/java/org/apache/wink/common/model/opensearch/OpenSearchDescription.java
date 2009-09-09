@@ -39,6 +39,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
@@ -346,6 +347,7 @@ import org.apache.wink.common.model.JAXBNamespacePrefixMapper;
  *      &lt;OutputEncoding&gt;UTF-8&lt;/OutputEncoding&gt;
  * </pre>
  */
+//@XmlRootElement(namespace = "http://a9.com/-/spec/opensearch/1.1/", name = "Contact")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "OpenSearchDescription", propOrder = {"shortName", "description", "tags",
                                                       "contact", "url", "longName", "image",

@@ -42,6 +42,7 @@ import org.apache.wink.common.annotations.Asset;
 import org.apache.wink.common.model.json.JSONUtils;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
+import org.apache.wink.test.mock.TestUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -56,7 +57,11 @@ public class AssetProviderTest extends MockServletInvocationTest {
 
     private static final String STRING = "hello message";
     private static final String XML    =
-                                           "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><entry><id>entry:id</id><title type=\"text\">entry title</title></entry>";
+                                           "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + 
+                                           "<entry>\r\n" + 
+                                           "    <id>entry:id</id>\r\n" + 
+                                           "    <title type=\"text\">entry title</title>\r\n" + 
+                                           "</entry>\r\n";
     private static final String JSON   =
                                            "{\"entry\": {\n" + "  \"id\": {\"$\": \"entry:id\"},\n"
                                                + "  \"title\": {\n"
@@ -163,7 +168,9 @@ public class AssetProviderTest extends MockServletInvocationTest {
             MockRequestConstructor.constructMockRequest("GET", "/test", "application/xml");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(XML, response.getContentAsString());
+        String msg =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(XML, response.getContentAsString());
+        assertNull(msg, msg);
     }
 
     public void testAssetGetString() throws Exception {
@@ -183,7 +190,9 @@ public class AssetProviderTest extends MockServletInvocationTest {
                                                         XML.getBytes());
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(XML, response.getContentAsString());
+        String msg =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(XML, response.getContentAsString());
+        assertNull(msg, msg);
     }
 
     public void testAssetPostStringGetString() throws Exception {
@@ -219,6 +228,8 @@ public class AssetProviderTest extends MockServletInvocationTest {
                                                         STRING.getBytes());
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(XML, response.getContentAsString());
+        String msg =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(XML, response.getContentAsString());
+        assertNull(msg, msg);
     }
 }

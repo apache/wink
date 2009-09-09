@@ -35,6 +35,8 @@ import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 import javax.ws.rs.ext.Providers;
 
+import org.apache.wink.common.annotations.Scope;
+import org.apache.wink.common.annotations.Scope.ScopeType;
 import org.apache.wink.common.categories.Categories;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.model.app.AppCategories;
@@ -48,6 +50,7 @@ import org.apache.wink.common.model.atom.AtomCategory;
  * CollectionCategories interface
  */
 @Provider
+@Scope(ScopeType.PROTOTYPE)
 @Produces(MediaTypeUtils.ATOM_CATEGORIES_DOCUMENT)
 public class CategoriesProvider implements MessageBodyWriter<Categories> {
 
@@ -92,7 +95,7 @@ public class CategoriesProvider implements MessageBodyWriter<Categories> {
                         MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException, WebApplicationException {
         AppCategories catDoc = buildAppCatDoc(categories);
-        appCatProvider.writeTo(catDoc, null, null, null, mediaType, httpHeaders, entityStream);
+        appCatProvider.writeTo(catDoc, AppCategories.class, AppCategories.class, annotations, mediaType, httpHeaders, entityStream);
     }
 
     private AppCategories buildAppCatDoc(Categories cats) {

@@ -23,9 +23,11 @@ package org.apache.wink.example.jaxb;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.wink.common.model.XmlFormattingOptions;
 import org.apache.wink.example.jaxb.JaxbResource;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
+import org.apache.wink.test.mock.TestUtils;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -54,6 +56,12 @@ public class JaxbTest extends MockServletInvocationTest {
     protected Class<?>[] getClasses() {
         return new Class[] {JaxbResource.class};
     }
+    
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        XmlFormattingOptions.setDefaultXmlFormattingOptions(new XmlFormattingOptions(false, false));
+    }
 
     public void testAllGet() throws Exception {
         MockHttpServletRequest request =
@@ -62,7 +70,9 @@ public class JaxbTest extends MockServletInvocationTest {
                                                         MediaType.APPLICATION_XML_TYPE);
         MockHttpServletResponse response = invoke(request);
         assertEquals("status", 200, response.getStatus());
-        assertEquals(PERSON_1, response.getContentAsString());
+        String msg =
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(PERSON_1, response.getContentAsString());
+        assertNull(msg, msg);
 
         request =
             MockRequestConstructor.constructMockRequest("GET",

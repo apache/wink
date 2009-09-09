@@ -22,19 +22,30 @@ package org.apache.wink.client;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.MessageFormat;
+import java.util.Set;
 
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-
-import org.apache.wink.client.MockHttpServer;
-import org.apache.wink.client.Resource;
-import org.apache.wink.client.RestClient;
-import org.apache.wink.common.internal.providers.entity.atom.AtomFeedProvider;
-import org.apache.wink.common.model.atom.AtomFeed;
-import org.apache.wink.test.mock.TestUtils;
+import javax.ws.rs.ext.MessageBodyReader;
+import javax.ws.rs.ext.MessageBodyWriter;
+import javax.ws.rs.ext.Providers;
 
 import junit.framework.TestCase;
+
+import org.apache.wink.common.internal.application.ApplicationFileLoader;
+import org.apache.wink.common.internal.application.ApplicationValidator;
+import org.apache.wink.common.internal.contexts.ProvidersImpl;
+import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
+import org.apache.wink.common.internal.lifecycle.ScopeLifecycleManager;
+import org.apache.wink.common.internal.providers.entity.xml.JAXBXmlProvider;
+import org.apache.wink.common.internal.registry.ProvidersRegistry;
+import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
+import org.apache.wink.common.internal.runtime.AbstractRuntimeContext;
+import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
+import org.apache.wink.common.model.atom.AtomFeed;
+import org.apache.wink.test.mock.TestUtils;
 
 public class ProvidersTest extends TestCase {
 
@@ -82,6 +93,38 @@ public class ProvidersTest extends TestCase {
                                                     + "    </entry>\n"
                                                     + "</feed>\n";
 
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+
+        LifecycleManagersRegistry ofFactoryRegistry = new LifecycleManagersRegistry();
+        ofFactoryRegistry.addFactoryFactory(new ScopeLifecycleManager<Object>());
+        ProvidersRegistry providersRegistry =
+            new ProvidersRegistry(ofFactoryRegistry, new ApplicationValidator());
+
+        Set<Class<?>> classes = new ApplicationFileLoader().getClasses();
+        if (classes != null) {
+            for (Class<?> cls : classes) {
+                if (ProviderMetadataCollector.isProvider(cls)) {
+                    providersRegistry.addProvider(cls);
+                }
+            }
+        }
+        AbstractRuntimeContext runtimeContext = new AbstractRuntimeContext() {
+
+            public OutputStream getOutputStream() throws IOException {
+                return null;
+            }
+
+            public InputStream getInputStream() throws IOException {
+                return null;
+            }
+        };
+        runtimeContext.setAttribute(Providers.class, new ProvidersImpl(providersRegistry,
+                                                                       runtimeContext));
+        RuntimeContextTLS.setRuntimeContext(runtimeContext);
+    }
+
     public void testAtomFeedReadWrite() throws Exception {
         MockHttpServer server = new MockHttpServer(SERVER_PORT);
         server.setMockResponseCode(200);
@@ -93,8 +136,12 @@ public class ProvidersTest extends TestCase {
             Resource resource =
                 client.resource(MessageFormat.format(SERVICE_URL, String.valueOf(server
                     .getServerPort())));
-
-            AtomFeedProvider afp = new AtomFeedProvider();
+            Providers providers = RuntimeContextTLS.getRuntimeContext().getProviders();
+            MessageBodyReader<AtomFeed> afp =
+                providers.getMessageBodyReader(AtomFeed.class,
+                                               AtomFeed.class,
+                                               null,
+                                               MediaType.APPLICATION_ATOM_XML_TYPE);
             AtomFeed entryToPost =
                 afp.readFrom(AtomFeed.class,
                              null,
@@ -108,7 +155,12 @@ public class ProvidersTest extends TestCase {
                                                                            entryToPost);
 
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            afp.writeTo(responseEntity,
+            MessageBodyWriter<AtomFeed> writer = 
+                providers.getMessageBodyWriter(AtomFeed.class,
+                                               AtomFeed.class,
+                                               null,
+                                               MediaType.APPLICATION_ATOM_XML_TYPE);
+            writer.writeTo(responseEntity,
                         AtomFeed.class,
                         null,
                         null,

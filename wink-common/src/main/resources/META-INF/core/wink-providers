@@ -44,20 +44,11 @@ org.apache.wink.common.internal.providers.entity.xml.JAXBElementXmlProvider
 org.apache.wink.common.internal.providers.entity.xml.JAXBXmlProvider
 
 # Atom 
-org.apache.wink.common.internal.providers.entity.atom.AtomFeedProvider
 org.apache.wink.common.internal.providers.entity.atom.AtomFeedSyndFeedProvider
-org.apache.wink.common.internal.providers.entity.atom.AtomFeedJAXBElementProvider
-org.apache.wink.common.internal.providers.entity.atom.AtomEntryProvider
 org.apache.wink.common.internal.providers.entity.atom.AtomEntrySyndEntryProvider
-org.apache.wink.common.internal.providers.entity.atom.AtomEntryJAXBElementProvider
 
 # APP
-org.apache.wink.common.internal.providers.entity.app.AppServiceProvider
-org.apache.wink.common.internal.providers.entity.app.AppCategoriesProvider
 org.apache.wink.common.internal.providers.entity.app.CategoriesProvider
-
-# Open Search
-org.apache.wink.common.internal.providers.entity.opensearch.OpenSearchDescriptionProvider
 
 # Json
 org.apache.wink.common.internal.providers.entity.json.JsonProvider
