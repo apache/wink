@@ -23,8 +23,6 @@ package org.apache.wink.example.jaxb;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.wink.common.model.XmlFormattingOptions;
-import org.apache.wink.example.jaxb.JaxbResource;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
 import org.apache.wink.test.mock.TestUtils;
@@ -54,13 +52,12 @@ public class JaxbTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] {JaxbResource.class};
+        return new Class[] {JaxbResource.class, FormattingOptionsContextResolver.class};
     }
     
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        XmlFormattingOptions.setDefaultXmlFormattingOptions(new XmlFormattingOptions(false, false));
     }
 
     public void testAllGet() throws Exception {

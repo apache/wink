@@ -52,7 +52,8 @@ public class JettisonJAXBMappedTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class<?>[] {TestResource.class, PersonResource.class};
+        return new Class<?>[] {TestResource.class, PersonResource.class,
+            FormattingOptionsContextResolver.class};
     }
 
     @Override
@@ -236,7 +237,7 @@ public class JettisonJAXBMappedTest extends MockServletInvocationTest {
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
         assertTrue(JSONUtils.equals(JSONUtils.objectForString(ENTRY_JSON), JSONUtils
-                                    .objectForString(response.getContentAsString())));
+            .objectForString(response.getContentAsString())));
     }
 
     private static final String ENTRY_STR      =

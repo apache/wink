@@ -23,7 +23,6 @@ package org.apache.wink.example.locking;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.wink.common.model.XmlFormattingOptions;
 import org.apache.wink.example.locking.resources.DefectResource;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
@@ -36,12 +35,11 @@ public class PreconditionsTest extends MockServletInvocationTest {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        XmlFormattingOptions.setDefaultXmlFormattingOptions(new XmlFormattingOptions(false, false));
     }
-    
+
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] {DefectResource.class};
+        return new Class[] {DefectResource.class, FormattingOptionsContextResolver.class};
     }
 
     public void testLockingExample() throws Exception {
@@ -102,7 +100,7 @@ public class PreconditionsTest extends MockServletInvocationTest {
         response = invoke(request);
         assertEquals("status", 200, response.getStatus());
         etag = (String)response.getHeader(HttpHeaders.ETAG);
-        
+
         // now, after the collection was modified
         // 200 should return
         request =

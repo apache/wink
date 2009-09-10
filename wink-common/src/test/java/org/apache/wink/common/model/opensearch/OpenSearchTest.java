@@ -25,7 +25,9 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.math.BigInteger;
 
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
@@ -33,6 +35,7 @@ import javax.xml.namespace.QName;
 import junit.framework.TestCase;
 
 import org.apache.wink.common.internal.model.ModelUtils;
+import org.apache.wink.common.internal.utils.JAXBUtils;
 import org.apache.wink.test.mock.TestUtils;
 
 public class OpenSearchTest extends TestCase {
@@ -59,26 +62,18 @@ public class OpenSearchTest extends TestCase {
                                                    + "    <InputEncoding>input encoding 2</InputEncoding>\n"
                                                    + "</OpenSearchDescription>\n";
 
-    // private static JAXBContext ctx;
-    //    
-    // static {
-    // try {
-    // ctx =
-    // JAXBContext.newInstance(OpenSearchDescription.class.getPackage().getName());
-    // } catch (JAXBException e) {
-    // throw new RuntimeException(e);
-    // }
-    // }
+    private static JAXBContext  ctx;
+
+    static {
+        try {
+            ctx = JAXBContext.newInstance(OpenSearchDescription.class.getPackage().getName());
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public void testOpenSearchMarshal() throws Exception {
-        // Map<String,String> p2n = new HashMap<String,String>();
-        // p2n.put("otherAttrNs", "other");
-        // JAXBNamespacePrefixMapper namespacePrefixMapper =
-        // new JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_OPENSEARCH,
-        // p2n);
-        // Marshaller m = AtomJAXBUtils.createMarshaller(ctx,
-        // namespacePrefixMapper);
-        Marshaller m = OpenSearchDescription.getMarshaller();
+        Marshaller m = JAXBUtils.createMarshaller(ctx);
 
         OpenSearchDescription osd = getOpenSearchDescription();
         JAXBElement<OpenSearchDescription> element =
@@ -90,8 +85,7 @@ public class OpenSearchTest extends TestCase {
     }
 
     public void testOpenSearchUnmarshal() throws IOException {
-        // Unmarshaller u = AtomJAXBUtils.createUnmarshaller(ctx);
-        Unmarshaller u = OpenSearchDescription.getUnmarshaller();
+        Unmarshaller u = JAXBUtils.createUnmarshaller(ctx);
         Object element = ModelUtils.unmarshal(u, new StringReader(OPENSEARCH));
         assertNotNull(element);
         assertTrue(element instanceof OpenSearchDescription);
@@ -103,11 +97,8 @@ public class OpenSearchTest extends TestCase {
     }
 
     public void testOpenSearchUnmarshalMarshal() throws Exception {
-        // Marshaller m = AtomJAXBUtils.createMarshaller(ctx, new
-        // JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_OPENSEARCH));
-        Marshaller m = OpenSearchDescription.getMarshaller();
-        // Unmarshaller u = AtomJAXBUtils.createUnmarshaller(ctx);
-        Unmarshaller u = OpenSearchDescription.getUnmarshaller();
+        Marshaller m = JAXBUtils.createMarshaller(ctx);
+        Unmarshaller u = JAXBUtils.createUnmarshaller(ctx);
 
         Object service = ModelUtils.unmarshal(u, new StringReader(OPENSEARCH));
         JAXBElement<OpenSearchDescription> element =

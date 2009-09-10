@@ -32,10 +32,10 @@ package org.apache.wink.common.model;
  */
 public class XmlFormattingOptions implements Cloneable {
 
-    private boolean                     omitXmlDeclaration;
-    private boolean                     indenting;
-
-    private static XmlFormattingOptions defaultXmlFormattingOptions = new XmlFormattingOptions();
+    private final boolean                     omitXmlDeclaration;
+    private final boolean                     indenting;
+    private final static XmlFormattingOptions defaultXmlFormattingOptions =
+                                                                              new XmlFormattingOptions();
 
     public XmlFormattingOptions() {
         this(true, true);
@@ -50,31 +50,11 @@ public class XmlFormattingOptions implements Cloneable {
         return indenting;
     }
 
-    public void setIndenting(boolean indenting) {
-        this.indenting = indenting;
-    }
-
-    public static XmlFormattingOptions getDefaultXmlFormattingOptions() {
-        return defaultXmlFormattingOptions.safeClone();
-    }
-
-    public static void setDefaultXmlFormattingOptions(XmlFormattingOptions defaultXmlFormattingOptions) {
-        XmlFormattingOptions.defaultXmlFormattingOptions = defaultXmlFormattingOptions.safeClone();
-    }
-
-    public void setOmitXmlDeclaration(boolean omitXmlDeclaration) {
-        this.omitXmlDeclaration = omitXmlDeclaration;
-    }
-
     public boolean isOmitXmlDeclaration() {
         return omitXmlDeclaration;
     }
 
-    private XmlFormattingOptions safeClone() {
-        try {
-            return (XmlFormattingOptions)this.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new RuntimeException(e); // this can not happen
-        }
+    public static XmlFormattingOptions getDefaultXmlFormattingOptions() {
+        return defaultXmlFormattingOptions;
     }
 }

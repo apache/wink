@@ -41,9 +41,12 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
 import org.apache.wink.common.internal.i18n.Messages;
+import org.apache.wink.common.internal.utils.JAXBUtils;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.internal.utils.SimpleMap;
 import org.apache.wink.common.internal.utils.SoftConcurrentMap;
+import org.apache.wink.common.model.XmlFormattingOptions;
+import org.apache.wink.common.utils.ProviderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,7 +76,22 @@ public abstract class AbstractJAXBProvider {
     protected final Marshaller getMarshaller(Class<?> type, MediaType mediaType)
         throws JAXBException {
         JAXBContext context = getContext(type, mediaType);
-        return context.createMarshaller();
+        Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_ENCODING, ProviderUtils.getCharset(mediaType));
+
+        ContextResolver<XmlFormattingOptions> contextResolver =
+            providers.getContextResolver(XmlFormattingOptions.class, mediaType);
+        XmlFormattingOptions formatingOptions = null;
+        if (contextResolver != null) {
+            formatingOptions = contextResolver.getContext(type);
+        }
+        if (formatingOptions != null) {
+            JAXBUtils.setXmlFormattingOptions(marshaller, formatingOptions);
+        } else {
+            JAXBUtils.setXmlFormattingOptions(marshaller, XmlFormattingOptions
+                .getDefaultXmlFormattingOptions());
+        }
+        return marshaller;
     }
 
     protected boolean isSupportedMediaType(MediaType mediaType) {

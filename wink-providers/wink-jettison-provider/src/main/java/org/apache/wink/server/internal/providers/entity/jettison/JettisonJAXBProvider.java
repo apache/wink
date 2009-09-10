@@ -47,7 +47,6 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.providers.entity.xml.AbstractJAXBProvider;
-import org.apache.wink.common.utils.ProviderUtils;
 import org.codehaus.jettison.badgerfish.BadgerFishXMLInputFactory;
 import org.codehaus.jettison.badgerfish.BadgerFishXMLStreamWriter;
 import org.codehaus.jettison.mapped.Configuration;
@@ -168,7 +167,6 @@ public class JettisonJAXBProvider extends AbstractJAXBProvider implements
                         OutputStream entityStream) throws IOException, WebApplicationException {
         try {
             Marshaller marshaller = getMarshaller(type, mediaType);
-            marshaller.setProperty(Marshaller.JAXB_ENCODING, ProviderUtils.getCharset(mediaType));
             Object entityToMarshal = getEntityToMarshal(t, type);
 
             // Use an OutputStream directly instead of a Writer for performance.

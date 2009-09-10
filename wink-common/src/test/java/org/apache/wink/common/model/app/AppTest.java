@@ -25,7 +25,9 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
@@ -34,6 +36,7 @@ import junit.framework.TestCase;
 
 import org.apache.wink.common.RestException;
 import org.apache.wink.common.internal.model.ModelUtils;
+import org.apache.wink.common.internal.utils.JAXBUtils;
 import org.apache.wink.common.model.atom.AtomCategory;
 import org.apache.wink.common.model.atom.AtomText;
 import org.apache.wink.test.mock.TestUtils;
@@ -89,20 +92,18 @@ public class AppTest extends TestCase {
                                                          + "    </workspace>\n"
                                                          + "</service>\n";
 
-    // private static JAXBContext ctx;
-    //    
-    // static {
-    // try {
-    // ctx = JAXBContext.newInstance(AppService.class.getPackage().getName());
-    // } catch (JAXBException e) {
-    // throw new RuntimeException(e);
-    // }
-    // }
+    private static JAXBContext  ctx;
+
+    static {
+        try {
+            ctx = JAXBContext.newInstance(AppService.class.getPackage().getName());
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public void testAppMarshal() throws Exception {
-        // Marshaller m = AtomJAXBUtils.createMarshaller(ctx, new
-        // JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_APP));
-        Marshaller m = AppService.getMarshaller();
+        Marshaller m = JAXBUtils.createMarshaller(ctx);
 
         AppService service = getService();
         JAXBElement<AppService> element = (new ObjectFactory()).createService(service);
@@ -113,8 +114,7 @@ public class AppTest extends TestCase {
     }
 
     public void testAppUnmarshal() throws IOException {
-        // Unmarshaller u = AtomJAXBUtils.createUnmarshaller(ctx);
-        Unmarshaller u = AppService.getUnmarshaller();
+        Unmarshaller u = JAXBUtils.createUnmarshaller(ctx);
         Object element = ModelUtils.unmarshal(u, new StringReader(SERVICE_DOCUMENT));
         assertNotNull(element);
         assertTrue(element instanceof AppService);
@@ -126,11 +126,8 @@ public class AppTest extends TestCase {
     }
 
     public void testAppUnmarshalMarshal() throws Exception {
-        // Marshaller m = AtomJAXBUtils.createMarshaller(ctx, new
-        // JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_APP));
-        Marshaller m = AppService.getMarshaller();
-        // Unmarshaller u = AtomJAXBUtils.createUnmarshaller(ctx);
-        Unmarshaller u = AppService.getUnmarshaller();
+        Marshaller m = JAXBUtils.createMarshaller(ctx);
+        Unmarshaller u = JAXBUtils.createUnmarshaller(ctx);
 
         Object service = ModelUtils.unmarshal(u, new StringReader(SERVICE_DOCUMENT));
         JAXBElement<AppService> element = (new ObjectFactory()).createService((AppService)service);

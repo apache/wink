@@ -51,7 +51,7 @@ public class JettisonJAXBBadgerFishTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class<?>[] {TestResource.class, PersonResource.class};
+        return new Class<?>[] {TestResource.class, PersonResource.class, FormattingOptionsContextResolver.class};
     }
 
     @Override
