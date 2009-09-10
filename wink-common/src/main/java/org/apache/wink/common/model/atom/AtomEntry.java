@@ -48,12 +48,9 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.apache.wink.common.RestConstants;
 import org.apache.wink.common.RestException;
 import org.apache.wink.common.internal.model.ModelUtils;
-import org.apache.wink.common.internal.model.NamespacePrefixMapperProvider;
 import org.apache.wink.common.internal.utils.JAXBUtils;
-import org.apache.wink.common.model.JAXBNamespacePrefixMapper;
 import org.apache.wink.common.model.synd.SyndCategory;
 import org.apache.wink.common.model.synd.SyndContent;
 import org.apache.wink.common.model.synd.SyndEntry;
@@ -139,7 +136,7 @@ import org.w3c.dom.Element;
 @XmlAccessorOrder(XmlAccessOrder.UNDEFINED)
 @XmlType(name = "atomEntry", propOrder = {"id", "updated", "title", "summary", "published", "link",
                                           "author", "contributor", "category", "any", "content"})
-public class AtomEntry extends AtomCommonAttributes implements NamespacePrefixMapperProvider {
+public class AtomEntry extends AtomCommonAttributes {
 
     private static final String      MATCH_ANY_PATTERN = ".*";
 
@@ -193,13 +190,6 @@ public class AtomEntry extends AtomCommonAttributes implements NamespacePrefixMa
         JAXBElement<AtomEntry> entryElement = new ObjectFactory().createEntry(entry);
         Marshaller marshaller = AtomEntry.getMarshaller();
         ModelUtils.marshal(marshaller, entryElement, os);
-    }
-
-    public JAXBNamespacePrefixMapper getNamespacePrefixMapper() {
-        JAXBNamespacePrefixMapper mapper =
-            new JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_ATOM);
-        mapper.omitNamespace(RestConstants.NAMESPACE_OPENSEARCH);
-        return mapper;
     }
 
     public AtomEntry() {

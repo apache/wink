@@ -42,12 +42,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.wink.common.RestConstants;
 import org.apache.wink.common.RestException;
 import org.apache.wink.common.internal.model.ModelUtils;
-import org.apache.wink.common.internal.model.NamespacePrefixMapperProvider;
 import org.apache.wink.common.internal.utils.JAXBUtils;
-import org.apache.wink.common.model.JAXBNamespacePrefixMapper;
 import org.apache.wink.common.model.atom.AtomCategory;
 
 /**
@@ -108,7 +105,7 @@ import org.apache.wink.common.model.atom.AtomCategory;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "appCategories", propOrder = {"category"})
-public class AppCategories implements NamespacePrefixMapperProvider {
+public class AppCategories {
 
     @XmlElement(namespace = "http://www.w3.org/2005/Atom")
     protected List<AtomCategory>     category;
@@ -157,13 +154,6 @@ public class AppCategories implements NamespacePrefixMapperProvider {
         } catch (IOException e) {
             throw new RestException(e);
         }
-    }
-
-    public JAXBNamespacePrefixMapper getNamespacePrefixMapper() {
-        JAXBNamespacePrefixMapper mapper =
-            new JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_APP);
-        mapper.omitNamespace(RestConstants.NAMESPACE_OPENSEARCH);
-        return mapper;
     }
 
     // ============================

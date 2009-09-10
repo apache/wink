@@ -60,7 +60,6 @@ import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollect
 import org.apache.wink.common.internal.runtime.AbstractRuntimeContext;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.common.internal.utils.JAXBUtils;
-import org.apache.wink.common.model.JAXBNamespacePrefixMapper;
 import org.apache.wink.common.model.opensearch.OpenSearchQuery;
 import org.apache.wink.test.mock.TestUtils;
 
@@ -330,10 +329,6 @@ public class AtomTest extends TestCase {
         text.setBase("http://title/base");
         text.setLang("en-us");
 
-        JAXBNamespacePrefixMapper mapper =
-            new JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_ATOM);
-        mapper.omitNamespace(RestConstants.NAMESPACE_OPENSEARCH);
-
         // test type TEXT
         text.setType(AtomTextType.text);
         text.setValue("title");
@@ -435,10 +430,6 @@ public class AtomTest extends TestCase {
     public void testAtomContentMarshal() throws Exception {
         Marshaller m = JAXBUtils.createMarshaller(ctx);
 
-        JAXBNamespacePrefixMapper mapper =
-            new JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_ATOM);
-        mapper.omitNamespace(RestConstants.NAMESPACE_OPENSEARCH);
-
         AtomContent content = new AtomContent();
         content.setBase("http://title/base");
         content.setLang("en-us");
@@ -477,7 +468,7 @@ public class AtomTest extends TestCase {
         ModelUtils.marshal(m, element, os);
         msg = TestUtils.diffIgnoreUpdateWithAttributeQualifier(ATOM_CONTENT_XML, os.toString());
         assertNull(msg, msg);
-        
+
         content.setValue("<x xmlns=\"http://x/\">title</x>");
         element = (new ObjectFactory()).createContent(content);
         os = new ByteArrayOutputStream();
@@ -706,7 +697,8 @@ public class AtomTest extends TestCase {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         ModelUtils.marshal(m, element, os);
         String msg =
-            TestUtils.diffIgnoreUpdateWithAttributeQualifier(ATOM_FEED_1.getBytes("UTF-8"), os.toByteArray());
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(ATOM_FEED_1.getBytes("UTF-8"), os
+                .toByteArray());
         assertNull(msg, msg);
     }
 
@@ -722,7 +714,8 @@ public class AtomTest extends TestCase {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         ModelUtils.marshal(m, element, os);
         String msg =
-            TestUtils.diffIgnoreUpdateWithAttributeQualifier(ATOM_FEED_2.getBytes("UTF-8"), os.toByteArray());
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(ATOM_FEED_2.getBytes("UTF-8"), os
+                .toByteArray());
         assertNull(msg, msg);
     }
 
@@ -968,7 +961,8 @@ public class AtomTest extends TestCase {
             os = new ByteArrayOutputStream();
             ModelUtils.marshal(marshaller, element, os);
             String msg =
-                TestUtils.diffIgnoreUpdateWithAttributeQualifier(defaultContent, new String(os.toByteArray(), enc));
+                TestUtils.diffIgnoreUpdateWithAttributeQualifier(defaultContent, new String(os
+                    .toByteArray(), enc));
             assertNull(msg, msg);
         }
     }

@@ -39,16 +39,12 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
-import org.apache.wink.common.RestConstants;
 import org.apache.wink.common.RestException;
-import org.apache.wink.common.internal.model.NamespacePrefixMapperProvider;
 import org.apache.wink.common.internal.utils.JAXBUtils;
-import org.apache.wink.common.model.JAXBNamespacePrefixMapper;
 
 /**
  * The "OpenSearchDescription" element per OpenSearch specification
@@ -347,14 +343,15 @@ import org.apache.wink.common.model.JAXBNamespacePrefixMapper;
  *      &lt;OutputEncoding&gt;UTF-8&lt;/OutputEncoding&gt;
  * </pre>
  */
-//@XmlRootElement(namespace = "http://a9.com/-/spec/opensearch/1.1/", name = "Contact")
+// @XmlRootElement(namespace = "http://a9.com/-/spec/opensearch/1.1/", name =
+// "Contact")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "OpenSearchDescription", propOrder = {"shortName", "description", "tags",
                                                       "contact", "url", "longName", "image",
                                                       "query", "developer", "attribution",
                                                       "syndicationRight", "adultContent",
                                                       "language", "outputEncoding", "inputEncoding"})
-public class OpenSearchDescription implements NamespacePrefixMapperProvider {
+public class OpenSearchDescription {
 
     @XmlElement(name = "ShortName", required = true)
     protected String                 shortName;
@@ -408,12 +405,6 @@ public class OpenSearchDescription implements NamespacePrefixMapperProvider {
 
     public static Unmarshaller getUnmarshaller() {
         return JAXBUtils.createUnmarshaller(context);
-    }
-
-    public JAXBNamespacePrefixMapper getNamespacePrefixMapper() {
-        JAXBNamespacePrefixMapper mapper =
-            new JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_OPENSEARCH);
-        return mapper;
     }
 
     // ============================

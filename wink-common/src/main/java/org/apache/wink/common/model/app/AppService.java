@@ -44,12 +44,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.wink.common.RestConstants;
 import org.apache.wink.common.RestException;
 import org.apache.wink.common.internal.model.ModelUtils;
-import org.apache.wink.common.internal.model.NamespacePrefixMapperProvider;
 import org.apache.wink.common.internal.utils.JAXBUtils;
-import org.apache.wink.common.model.JAXBNamespacePrefixMapper;
 import org.apache.wink.common.model.atom.AtomCommonAttributes;
 import org.w3c.dom.Element;
 
@@ -76,7 +73,7 @@ import org.w3c.dom.Element;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlAccessorOrder(XmlAccessOrder.UNDEFINED)
 @XmlType(name = "appService", propOrder = {"workspace", "any"})
-public class AppService extends AtomCommonAttributes implements NamespacePrefixMapperProvider {
+public class AppService extends AtomCommonAttributes {
 
     @XmlElement(required = true)
     protected List<AppWorkspace>     workspace;
@@ -115,13 +112,6 @@ public class AppService extends AtomCommonAttributes implements NamespacePrefixM
         } catch (IOException e) {
             throw new RestException(e);
         }
-    }
-
-    public JAXBNamespacePrefixMapper getNamespacePrefixMapper() {
-        JAXBNamespacePrefixMapper mapper =
-            new JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_APP);
-        mapper.omitNamespace(RestConstants.NAMESPACE_OPENSEARCH);
-        return mapper;
     }
 
     // ============================

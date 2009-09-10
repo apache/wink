@@ -53,9 +53,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.wink.common.RestConstants;
 import org.apache.wink.common.RestException;
 import org.apache.wink.common.internal.model.ModelUtils;
-import org.apache.wink.common.internal.model.NamespacePrefixMapperProvider;
 import org.apache.wink.common.internal.utils.JAXBUtils;
-import org.apache.wink.common.model.JAXBNamespacePrefixMapper;
 import org.apache.wink.common.model.opensearch.OpenSearchDescription;
 import org.apache.wink.common.model.opensearch.OpenSearchQuery;
 import org.apache.wink.common.model.synd.SyndCategory;
@@ -146,7 +144,7 @@ import org.w3c.dom.Element;
                                          "author", "contributor", "category", "generator", "icon",
                                          "logo", "rights", "any", "entry"})
 @XmlSeeAlso(value = {OpenSearchQuery.class})
-public class AtomFeed extends AtomCommonAttributes implements NamespacePrefixMapperProvider {
+public class AtomFeed extends AtomCommonAttributes {
 
     @XmlElement(required = true)
     protected String                                                id;
@@ -263,20 +261,6 @@ public class AtomFeed extends AtomCommonAttributes implements NamespacePrefixMap
         JAXBElement<AtomFeed> feedElement = new ObjectFactory().createFeed(feed);
         Marshaller marshaller = AtomFeed.getMarshaller();
         ModelUtils.marshal(marshaller, feedElement, os);
-    }
-
-    public JAXBNamespacePrefixMapper getNamespacePrefixMapper() {
-        JAXBNamespacePrefixMapper mapper =
-            new JAXBNamespacePrefixMapper(RestConstants.NAMESPACE_ATOM);
-        if (!openSearchElementsExist()) {
-            mapper.omitNamespace(RestConstants.NAMESPACE_OPENSEARCH);
-        }
-        return mapper;
-    }
-
-    private boolean openSearchElementsExist() {
-        return (totalResults != null || itemsPerPage != null || startIndex != null || (opensearchQuery != null && opensearchQuery
-            .size() > 0));
     }
 
     private List<SyndPerson> getAuthorsAsSynd() {
