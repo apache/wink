@@ -54,13 +54,6 @@ org.apache.wink.common.internal.providers.entity.app.CategoriesProvider
 org.apache.wink.common.internal.providers.entity.json.JsonProvider
 org.apache.wink.common.internal.providers.entity.json.JsonArrayProvider
 org.apache.wink.common.internal.providers.entity.json.JsonJAXBProvider
-org.apache.wink.common.internal.providers.entity.json.JsonSyndEntryProvider
-org.apache.wink.common.internal.providers.entity.json.JsonSyndFeedProvider
-
-# Html
-org.apache.wink.server.internal.providers.entity.html.HtmlProvider
-#org.apache.wink.server.internal.providers.entity.html.HtmlSyndEntryProvider
-#org.apache.wink.server.internal.providers.entity.html.HtmlSyndFeedProvider
 
 # CSV
 org.apache.wink.common.internal.providers.entity.csv.CsvSerializerProvider

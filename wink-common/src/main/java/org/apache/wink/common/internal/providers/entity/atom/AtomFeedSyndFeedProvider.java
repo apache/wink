@@ -37,12 +37,13 @@ import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 import javax.ws.rs.ext.Providers;
 
+import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.model.atom.AtomFeed;
 import org.apache.wink.common.model.synd.SyndFeed;
 
 @Provider
-@Consumes(MediaType.APPLICATION_ATOM_XML)
-@Produces(MediaType.APPLICATION_ATOM_XML)
+@Consumes( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON, MediaTypeUtils.JAVASCRIPT})
+@Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON, MediaTypeUtils.JAVASCRIPT})
 public class AtomFeedSyndFeedProvider implements MessageBodyReader<SyndFeed>,
     MessageBodyWriter<SyndFeed> {
 
