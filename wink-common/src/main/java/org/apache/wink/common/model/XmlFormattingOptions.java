@@ -19,6 +19,10 @@
  *******************************************************************************/
 package org.apache.wink.common.model;
 
+import javax.ws.rs.core.Application;
+import javax.ws.rs.ext.ContextResolver;
+
+
 /**
  * Holds the following XML Formatting Options:
  * <ul>
@@ -29,6 +33,27 @@ package org.apache.wink.common.model;
  * </ul>
  * Can be used by XML representations to give a control over the formation of
  * XML output.
+ * <p>
+ * In order to use it, implement a ContextResolver returning an
+ * XmlFormattingOptions. And register it in {@link Application}.
+ * <p>
+ * Example:
+ * 
+ * <pre>
+ * &#064;Provider
+ * public class FormattingOptionsContextResolver implements ContextResolver&lt;XmlFormattingOptions&gt; {
+ * 
+ *     public XmlFormattingOptions getContext(Class&lt;?&gt; type) {
+ * 
+ *         if (type == MyClass.class) {
+ *             return new XmlFormattingOptions(false, false);
+ *         }
+ *         return null;
+ *     }
+ * }
+ * </pre>
+ * @see Application
+ * @see ContextResolver
  */
 public class XmlFormattingOptions implements Cloneable {
 
