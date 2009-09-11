@@ -28,5 +28,5 @@
     <groupId>org.apache.wink</groupId>
     <artifactId>wink-itest-client</artifactId>
     <packaging>war</packaging>
-    <name>Apache Wink Integration Test Client</name>
+    <name>Apache Wink Integration Client Tests</name>
 </project>
