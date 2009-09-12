@@ -40,7 +40,7 @@ import org.apache.wink.common.model.synd.SyndEntry;
 import org.apache.wink.server.internal.providers.entity.jettison.jaxb.Person;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONObject;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -51,7 +51,8 @@ public class JettisonJAXBBadgerFishTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class<?>[] {TestResource.class, PersonResource.class, FormattingOptionsContextResolver.class};
+        return new Class<?>[] {TestResource.class, PersonResource.class,
+            FormattingOptionsContextResolver.class};
     }
 
     @Override
@@ -146,10 +147,10 @@ public class JettisonJAXBBadgerFishTest extends MockServletInvocationTest {
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
 
-        assertEquals(new JSONObject(
-                                    " {\"person\":{\"desc\":{\"$\":\"My desc\"},\"name\":{\"$\":\"My Name\"}}} ")
-                         .toString(),
-                     new JSONObject(response.getContentAsString()).toString());
+        assertTrue(JSONUtils
+            .equals(new JSONObject(
+                                   " {\"person\":{\"desc\":{\"$\":\"My desc\"},\"name\":{\"$\":\"My Name\"}}} "),
+                    new JSONObject(response.getContentAsString())));
     }
 
     /**
@@ -166,10 +167,9 @@ public class JettisonJAXBBadgerFishTest extends MockServletInvocationTest {
                 .getBytes());
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(new JSONObject(
-                                    " {\"person\":{\"desc\":{\"$\":\"My desc\"},\"name\":{\"$\":\"My Name\"}}} ")
-                         .toString(),
-                     new JSONObject(response.getContentAsString()).toString());
+        assertTrue(JSONUtils.equals(new JSONObject(
+                                    " {\"person\":{\"desc\":{\"$\":\"My desc\"},\"name\":{\"$\":\"My Name\"}}} "),
+                     new JSONObject(response.getContentAsString())));
     }
 
     public void testGetAtomEntry() throws Exception {
@@ -179,7 +179,6 @@ public class JettisonJAXBBadgerFishTest extends MockServletInvocationTest {
                                                         "application/json");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        System.out.println(response.getContentAsString());
         assertTrue(JSONUtils.equals(JSONUtils.objectForString(ENTRY_JSON), JSONUtils
             .objectForString(response.getContentAsString())));
     }

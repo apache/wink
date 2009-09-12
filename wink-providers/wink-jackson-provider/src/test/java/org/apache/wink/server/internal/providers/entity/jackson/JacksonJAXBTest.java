@@ -151,8 +151,8 @@ public class JacksonJAXBTest extends MockServletInvocationTest {
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
 
-        assertEquals(new JSONObject("{\"desc\":\"My desc\",\"name\":\"My Name\"}").toString(),
-                     new JSONObject(response.getContentAsString()).toString());
+        assertTrue(JSONUtils.equals(new JSONObject("{\"desc\":\"My desc\",\"name\":\"My Name\"}"),
+                                    new JSONObject(response.getContentAsString())));
     }
 
     /**
@@ -167,8 +167,8 @@ public class JacksonJAXBTest extends MockServletInvocationTest {
         request.setContent("{\"desc\":\"My desc\",\"name\":\"My Name\"}".getBytes());
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(new JSONObject("{\"desc\":\"My desc\",\"name\":\"My Name\"}").toString(),
-                     new JSONObject(response.getContentAsString()).toString());
+        assertTrue(JSONUtils.equals(new JSONObject("{\"desc\":\"My desc\",\"name\":\"My Name\"}"),
+                                    new JSONObject(response.getContentAsString())));
     }
 
     public void testGetAtomEntry() throws Exception {
@@ -178,7 +178,6 @@ public class JacksonJAXBTest extends MockServletInvocationTest {
                                                         "application/json");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(ENTRY_JSON, response.getContentAsString());
         assertTrue(JSONUtils.equals(JSONUtils.objectForString(ENTRY_JSON), JSONUtils
             .objectForString(response.getContentAsString())));
     }
@@ -196,7 +195,7 @@ public class JacksonJAXBTest extends MockServletInvocationTest {
     }
 
     /*
-     * NOTE:  this test is currently disabled, as the Jackson-supplied provider
+     * NOTE: this test is currently disabled, as the Jackson-supplied provider
      * cannot tolerate org.w3c.dom.Element fields in the various Atom* objects
      */
     public void _testPostAtomEntry() throws Exception {
@@ -213,45 +212,39 @@ public class JacksonJAXBTest extends MockServletInvocationTest {
             .objectForString(response.getContentAsString())));
     }
 
+    private static final String ENTRY_STR           =
+                                                        "<entry xml:base=\"http://b216:8080/reporting/reports\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + "    <id>toptenvalidators</id>\n"
+                                                            + "    <updated>2009-08-31T18:30:02Z</updated>\n"
+                                                            + "    <title type=\"text\" xml:lang=\"en\">top ten validators</title>\n"
+                                                            + "    <published>2009-08-31T18:30:02Z</published>\n"
+                                                            + "    <link href=\"http://b216:8080/reporting/reports/toptenvalidators?alt=application/json\" type=\"application/json\" rel=\"alternate\"/>\n"
+                                                            + "    <author>\n"
+                                                            + "        <name>admin</name>\n"
+                                                            + "    </author>\n"
+                                                            + "    <category label=\"report definition\" scheme=\"urn:com:systinet:reporting:kind\" term=\"urn:com:systinet:reporting:kind:definition\"/>\n"
+                                                            + "</entry>\n";
 
-    private static final String ENTRY_STR = 
-        "<entry xml:base=\"http://b216:8080/reporting/reports\" xmlns=\"http://www.w3.org/2005/Atom\">\n"
-            + "    <id>toptenvalidators</id>\n"
-            + "    <updated>2009-08-31T18:30:02Z</updated>\n"
-            + "    <title type=\"text\" xml:lang=\"en\">top ten validators</title>\n"
-            + "    <published>2009-08-31T18:30:02Z</published>\n"
-            + "    <link href=\"http://b216:8080/reporting/reports/toptenvalidators?alt=application/json\" type=\"application/json\" rel=\"alternate\"/>\n"
-            + "    <author>\n"
-            + "        <name>admin</name>\n"
-            + "    </author>\n"
-            + "    <category label=\"report definition\" scheme=\"urn:com:systinet:reporting:kind\" term=\"urn:com:systinet:reporting:kind:definition\"/>\n"
-            + "</entry>\n";
+    private static final String ENTRY_STR_JSON_POST =
+                                                        "{" + "\"id\":\"top ten validators\",\"updated\":@TIME_JSON@,\"title\":{\"lang\":\"en\",\"otherAttributes\":{},\"any\":[\"top ten validators\"],\"type\":\"text\"}"
+                                                            + "}";
 
-    private static final String ENTRY_STR_JSON_POST = 
-        "{"
-        + "\"id\":\"top ten validators\",\"updated\":@TIME_JSON@,\"title\":{\"lang\":\"en\",\"otherAttributes\":{},\"any\":[\"top ten validators\"],\"type\":\"text\"}"
-        + "}";
+    private static final String ENTRY_STR_JSON      =
+                                                        "{\"base\":\"http://b216:8080/reporting/reports\"," + "\"otherAttributes\":{},"
+                                                            + "\"id\":\"toptenvalidators\","
+                                                            + "\"updated\":{\"year\":2009,\"month\":8,\"day\":31,\"timezone\":0,\"hour\":18,\"minute\":30,\"second\":2,\"millisecond\":-2147483648},"
+                                                            + "\"title\":{\"lang\":\"en\",\"otherAttributes\":{},\"type\":\"text\"},"
+                                                            + "\"published\":{\"year\":2009,\"month\":8,\"day\":31,\"timezone\":0,\"hour\":18,\"minute\":30,\"second\":2,\"millisecond\":-2147483648},"
+                                                            + "\"link\":[{\"otherAttributes\":{},\"rel\":\"alternate\",\"type\":\"application/json\",\"href\":\"http://b216:8080/reporting/reports/toptenvalidators?alt=application/json\"}],"
+                                                            + "\"author\":[{\"name\":\"admin\"}],"
+                                                            + "\"category\":[{\"otherAttributes\":{},\"term\":\"urn:com:systinet:reporting:kind:definition\",\"scheme\":\"urn:com:systinet:reporting:kind\",\"label\":\"report definition\"}]"
+                                                            + "}";
 
-    private static final String ENTRY_STR_JSON =                                                   
-        "{\"base\":\"http://b216:8080/reporting/reports\","
-        + "\"otherAttributes\":{},"
-        + "\"id\":\"toptenvalidators\","
-        + "\"updated\":{\"year\":2009,\"month\":8,\"day\":31,\"timezone\":0,\"hour\":18,\"minute\":30,\"second\":2,\"millisecond\":-2147483648},"
-        + "\"title\":{\"lang\":\"en\",\"otherAttributes\":{},\"type\":\"text\"},"
-        + "\"published\":{\"year\":2009,\"month\":8,\"day\":31,\"timezone\":0,\"hour\":18,\"minute\":30,\"second\":2,\"millisecond\":-2147483648},"
-        + "\"link\":[{\"otherAttributes\":{},\"rel\":\"alternate\",\"type\":\"application/json\",\"href\":\"http://b216:8080/reporting/reports/toptenvalidators?alt=application/json\"}],"
-        + "\"author\":[{\"name\":\"admin\"}],"
-        + "\"category\":[{\"otherAttributes\":{},\"term\":\"urn:com:systinet:reporting:kind:definition\",\"scheme\":\"urn:com:systinet:reporting:kind\",\"label\":\"report definition\"}]"
-        + "}";
-
-    private static final String ENTRY_STR_JSON_GET = 
-        "{\"name\":{\"namespaceURI\":\"http://www.w3.org/2005/Atom\",\"localPart\":\"entry\",\"prefix\":\"\"},"
-        + "\"declaredType\":\"org.apache.wink.common.model.atom.AtomEntry\","
-        + "\"scope\":\"javax.xml.bind.JAXBElement$GlobalScope\","
-        + "\"value\":"
-        + ENTRY_STR_JSON
-        + ",\"nil\":false}";
-    
+    private static final String ENTRY_STR_JSON_GET  =
+                                                        "{\"name\":{\"namespaceURI\":\"http://www.w3.org/2005/Atom\",\"localPart\":\"entry\",\"prefix\":\"\"}," + "\"declaredType\":\"org.apache.wink.common.model.atom.AtomEntry\","
+                                                            + "\"scope\":\"javax.xml.bind.JAXBElement$GlobalScope\","
+                                                            + "\"value\":"
+                                                            + ENTRY_STR_JSON
+                                                            + ",\"nil\":false}";
 
     private static final String ENTRY_JSON;
 
@@ -280,7 +273,7 @@ public class JacksonJAXBTest extends MockServletInvocationTest {
 
         ENTRY_JSON = ENTRY_STR_JSON.replaceAll("@TIME_JSON@", jsonTimeStr);
         ENTRY_JSON_POST = ENTRY_STR_JSON_POST.replaceAll("@TIME_JSON@", jsonTimeStr);
-        
+
     }
 
 }
