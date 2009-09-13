@@ -17,19 +17,23 @@
     specific language governing permissions and limitations
     under the License.
 -->
+<web-app xmlns="http://geronimo.apache.org/xml/ns/j2ee/web-2.0.1"
+    xmlns:naming="http://geronimo.apache.org/xml/ns/naming-1.2"
+    xmlns:sys="http://geronimo.apache.org/xml/ns/deployment-1.2">
 
-<web-app xmlns="http://geronimo.apache.org/xml/ns/j2ee/web-2.0.1" 
-         xmlns:naming="http://geronimo.apache.org/xml/ns/naming-1.2" 
-         xmlns:sys="http://geronimo.apache.org/xml/ns/deployment-1.2"> 
- 
-    <sys:environment> 
-        <sys:moduleId> 
-            <sys:groupId>${groupId}</sys:groupId> 
-            <sys:artifactId>${artifactId}</sys:artifactId> 
-            <sys:version>${version}</sys:version> 
-            <sys:type>war</sys:type> 
-        </sys:moduleId> 
-    </sys:environment>  
- 
-    <context-root>${artifactId}</context-root> 
+    <sys:environment>
+        <sys:moduleId>
+            <sys:groupId>${groupId}</sys:groupId>
+            <sys:artifactId>${artifactId}</sys:artifactId>
+            <sys:version>${version}</sys:version>
+            <sys:type>war</sys:type>
+        </sys:moduleId>
+    </sys:environment>
+
+    <gbean name="DirectoryLog4jConfiguration"
+        class="org.apache.geronimo.system.logging.log4j.ApplicationLog4jConfigurationGBean">
+        <attribute name="log4jResource">META-INF/log4j.properties</attribute>
+    </gbean>
+
+    <context-root>${artifactId}</context-root>
 </web-app> 

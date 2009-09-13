@@ -17,7 +17,8 @@
     specific language governing permissions and limitations
     under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <artifactId>wink-itests</artifactId>
         <groupId>org.apache.wink</groupId>
@@ -45,6 +46,7 @@
         <wink.server.port>8080</wink.server.port>
         <wink.rest.servlet>org.apache.wink.server.internal.servlet.RestServlet</wink.rest.servlet>
         <wink.rest.filter>org.apache.wink.server.internal.servlet.RestFilter</wink.rest.filter>
+        <wink.server.log.dir>${project.build.directory}/surefire-reports</wink.server.log.dir>
     </properties>
 
     <dependencies>
@@ -56,9 +58,34 @@
         </dependency>
 
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
             <groupId>javax.ws.rs</groupId>
             <artifactId>jsr311-api</artifactId>
             <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.wink</groupId>
+            <artifactId>wink-itest-logging</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -84,7 +111,7 @@
         <dependency>
             <groupId>org.apache.wink</groupId>
             <artifactId>wink-itest-support</artifactId>
-            <version>0.2-incubating-SNAPSHOT</version>
+            <version>${project.version}</version>
             <type>jar</type>
             <scope>test</scope>
         </dependency>
@@ -99,11 +126,10 @@
         <dependency>
             <groupId>org.apache.wink</groupId>
             <artifactId>wink-client-apache-httpclient</artifactId>
-            <version>0.2-incubating-SNAPSHOT</version>
+            <version>${project.version}</version>
             <type>jar</type>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -114,6 +140,34 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-logging-dependencies</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.apache.wink</groupId>
+                                    <artifactId>wink-itest-logging</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <includes>**/*</includes>
+                                    <outputDirectory>${project.build.directory}/logdependencies</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
 
         <pluginManagement>
             <plugins>
@@ -131,15 +185,25 @@
                     <artifactId>maven-war-plugin</artifactId>
                     <configuration>
                         <webXml>${project.build.directory}/${artifactId}-${version}/WEB-INF/web.servlet.xml</webXml>
+                        <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
                         <webResources>
                             <resource>
                                 <directory>${project.basedir}/src/main/webapp
                                 </directory>
+                                <includes>
+                                    <include>**/*</include>
+                                </includes>
                                 <filtering>true</filtering>
                             </resource>
                             <resource>
                                 <directory>${project.build.outputDirectory}
                                 </directory>
+                                <includes>
+                                    <include>META-INF/LICENSE</include>
+                                    <include>META-INF/NOTICE</include>
+                                    <include>META-INF/DEPENDENCIES</include>
+                                    <include>META-INF/DISCLAIMER</include>
+                                </includes>
                             </resource>
                         </webResources>
                     </configuration>
@@ -212,7 +276,8 @@
                     <artifactId>geronimo-maven-plugin</artifactId>
                     <configuration>
                         <reporters>
-                            <reporter implementation="org.apache.geronimo.mavenplugins.geronimo.reporting.SurefireReporter">
+                            <reporter
+                                implementation="org.apache.geronimo.mavenplugins.geronimo.reporting.SurefireReporter">
                                 <reportsDirectory>${project.build.directory}/surefire-reports
                                 </reportsDirectory>
                             </reporter>
@@ -310,37 +375,6 @@
                         </execution>
                     </executions>
                 </plugin>
-
-                    <plugin>
-                        <groupId>org.mortbay.jetty</groupId>
-                        <artifactId>maven-jetty-plugin</artifactId>
-                        <version>6.1.10</version>
-                        <configuration>
-                            <scanIntervalSeconds>10</scanIntervalSeconds>
-                            <stopKey>foo</stopKey>
-                            <stopPort>9999</stopPort>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>start-jetty</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                                <configuration>
-                                    <scanIntervalSeconds>0</scanIntervalSeconds>
-                                    <daemon>true</daemon>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>stop-jetty</id>
-                                <phase>post-integration-test</phase>
-                                <goals>
-                                    <goal>stop</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -354,8 +388,34 @@
                     <value>jetty</value>
                 </property>
             </activation>
-            <properties>
-            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.wink</groupId>
+                    <artifactId>wink-server</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.slf4j</groupId>
+                            <artifactId>slf4j-api</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.slf4j</groupId>
+                            <artifactId>slf4j-simple</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>javax.xml.bind</groupId>
+                            <artifactId>jaxb-api</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>com.sun.xml.bind</groupId>
+                            <artifactId>jaxb-impl</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>commons-lang</groupId>
+                            <artifactId>commons-lang</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+            </dependencies>
             <build>
                 <plugins>
                     <plugin>
@@ -406,8 +466,34 @@
                 </property>
                 <activeByDefault>true</activeByDefault>
             </activation>
-            <properties>
-            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.wink</groupId>
+                    <artifactId>wink-server</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.slf4j</groupId>
+                            <artifactId>slf4j-api</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.slf4j</groupId>
+                            <artifactId>slf4j-simple</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>javax.xml.bind</groupId>
+                            <artifactId>jaxb-api</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>com.sun.xml.bind</groupId>
+                            <artifactId>jaxb-impl</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>commons-lang</groupId>
+                            <artifactId>commons-lang</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+            </dependencies>
             <build>
                 <plugins>
                     <plugin>
@@ -448,12 +534,92 @@
             </build>
         </profile>
 
+
+        <profile>
+            <id>default-testsuite-with-geronimo-tomcat</id>
+            <activation>
+                <property>
+                    <name>!assemblyId</name>
+                </property>
+            </activation>
+            <properties>
+                <assemblyId>tomcat</assemblyId>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.wink</groupId>
+                    <artifactId>wink-server</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.slf4j</groupId>
+                            <artifactId>slf4j-api</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.slf4j</groupId>
+                            <artifactId>slf4j-simple</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>javax.xml.bind</groupId>
+                            <artifactId>jaxb-api</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>com.sun.xml.bind</groupId>
+                            <artifactId>jaxb-impl</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>commons-lang</groupId>
+                            <artifactId>commons-lang</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.geronimo.buildsupport</groupId>
+                        <artifactId>geronimo-maven-plugin</artifactId>
+                        <inherited>false</inherited>
+                        <executions>
+                            <execution>
+                                <id>start</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start-server</goal>
+                                </goals>
+                                <configuration>
+                                    <logOutput>true</logOutput>
+                                    <background>true</background>
+                                    <verifyTimeout>300</verifyTimeout>
+                                    <refresh>true</refresh>
+                                    <optionSets>
+                                        <optionSet>
+                                            <id>default</id>
+                                            <options>
+                                                <option>-XX:MaxPermSize=160m
+                                        </option>
+                                            </options>
+                                        </optionSet>
+                                    </optionSets>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.geronimo.buildsupport</groupId>
+                        <artifactId>geronimo-maven-plugin</artifactId>
+                        <inherited>true</inherited>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+
+        <!-- To test the filter instead of the servlet, use this profile -->
         <profile>
             <id>wink-rest-filter-used</id>
             <activation>
                 <property>
                     <name>wink.rest.filter.used</name>
-                    <value>true</value>
                 </property>
             </activation>
 
@@ -465,52 +631,56 @@
                         <configuration>
                             <webXml>${project.build.directory}/${artifactId}-${version}/WEB-INF/web.filter.xml</webXml>
                         </configuration>
-                        </plugin>
+                    </plugin>
                 </plugins>
             </build>
-
         </profile>
 
+        <!--
+            By default, this profile is activated which means no trace
+            is enabled or saved
+        -->
         <profile>
-            <id>testsuite-with-jetty-standalone</id>
+            <id>wink-no-logging</id>
             <activation>
                 <property>
-                    <name>assemblyId</name>
-                    <value>jetty-standalone</value>
+                    <name>!wink.log</name>
                 </property>
             </activation>
-
             <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.mortbay.jetty</groupId>
-                        <artifactId>maven-jetty-plugin</artifactId>
-                        <version>6.1.10</version>
-                        <inherited>false</inherited>
-                        <configuration>
-                            <scanIntervalSeconds>10</scanIntervalSeconds>
-                            <stopKey>foo</stopKey>
-                            <stopPort>9999</stopPort>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>jetty-do-nothing-pre-integration</id>
-                                <phase>pre-integration-test</phase>
-                            </execution>
-                            <execution>
-                                <id>jetty-do-nothing-post-integration</id>
-                                <phase>post-integration-test</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.mortbay.jetty</groupId>
-                        <artifactId>maven-jetty-plugin</artifactId>
-                        <inherited>true</inherited>
-                    </plugin>
-                </plugins>
+                <resources>
+                    <resource>
+                        <directory>${project.build.directory}/logdependencies/nolog
+                                </directory>
+                        <includes>
+                            <include>**/*</include>
+                        </includes>
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
             </build>
         </profile>
 
+        <!-- Activate this profile to save the server logs and enable trace -->
+        <profile>
+            <id>wink-logging</id>
+            <activation>
+                <property>
+                    <name>wink.log</name>
+                </property>
+            </activation>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>${project.build.directory}/logdependencies/log
+                                </directory>
+                        <includes>
+                            <include>**/*</include>
+                        </includes>
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
     </profiles>
 </project>

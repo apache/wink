@@ -20,17 +20,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
-        <artifactId>wink</artifactId>
+        <artifactId>wink-itests</artifactId>
         <groupId>org.apache.wink</groupId>
         <version>0.2-incubating-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>wink-itests</artifactId>
-    <packaging>pom</packaging>
-    <name>Apache Wink Integration Tests</name>
-    <modules>
-        <module>wink-itest-support</module>
-        <module>wink-itest-logging</module>
-        <module>wink-itest</module>
-    </modules>
+    <artifactId>wink-itest-logging</artifactId>
+    <name>Apache Wink Integration Test Logging Support</name>
 </project>
