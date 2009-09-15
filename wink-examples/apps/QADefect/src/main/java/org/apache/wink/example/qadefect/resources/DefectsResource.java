@@ -162,7 +162,7 @@ public class DefectsResource {
     }
 
     @POST
-    @Consumes("text/csv")
+    @Consumes({"text/csv"})
     @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON,
         MediaType.APPLICATION_XML})
     public Response createDefects(DefectsAsset defects,
@@ -184,7 +184,7 @@ public class DefectsResource {
     }
 
     @POST
-    @Consumes( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_XML})
+    @Consumes( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON,
         MediaType.APPLICATION_XML})
     public Response createDefect(DefectAsset asset, @Context UriInfo uriInfo) throws IOException,

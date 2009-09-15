@@ -69,7 +69,7 @@ public class DefectAsset {
         this.child = child;
     }
 
-    @Produces( {MediaType.APPLICATION_XML})
+    @Produces( {MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public DefectBean getDefect() {
         return defect;
     }
@@ -79,7 +79,7 @@ public class DefectAsset {
         return new HtmlDescriptor(defect, CUSTOMIZED_JSP_PATH, CUSTOMIZED_JSP_ATTR);
     }
 
-    @Produces( {MediaType.WILDCARD, MediaType.APPLICATION_JSON})
+    @Produces( {MediaType.WILDCARD})
     public SyndEntry getSyndEntry(@Context Providers providers,
                                   @Context UriInfo uriInfo,
                                   @Context LinkBuilders linkProcessor) throws IOException {
@@ -128,7 +128,7 @@ public class DefectAsset {
         return entry;
     }
 
-    @Consumes(MediaType.APPLICATION_XML)
+    @Consumes( {MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void setDefect(DefectBean defect) {
         this.defect = defect;
     }

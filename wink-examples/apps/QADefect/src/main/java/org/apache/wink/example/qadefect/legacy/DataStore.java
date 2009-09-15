@@ -23,10 +23,13 @@ package org.apache.wink.example.qadefect.legacy;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.Map.Entry;
 
 import org.slf4j.Logger;
@@ -303,7 +306,12 @@ public class DataStore {
         // in real world there should have been a sql query, but for example
         // purpose
         // we'll do search manually
-        HashSet<DefectBean> hashSet = new HashSet<DefectBean>();
+        Set<DefectBean> hashSet = new TreeSet<DefectBean>(new Comparator<DefectBean>() {
+
+            public int compare(DefectBean o1, DefectBean o2) {
+                return o1.getId().compareTo(o2.getId());
+            }
+        });
         synchronized (defects) {
             l_defects: for (DefectBean defect : defects.values()) {
                 for (Entry<String, String> entry : searchParameters.entrySet()) {

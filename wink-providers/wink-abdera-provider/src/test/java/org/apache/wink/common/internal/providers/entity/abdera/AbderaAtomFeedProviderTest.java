@@ -37,7 +37,7 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.wink.common.model.atom.AtomEntry;
 import org.apache.wink.common.model.atom.AtomFeed;
-import org.apache.wink.common.model.json.JSONUtils;
+import org.apache.wink.providers.json.JSONUtils;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;

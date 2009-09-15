@@ -27,7 +27,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -39,12 +38,9 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
 import org.apache.wink.common.annotations.Asset;
-import org.apache.wink.common.model.json.JSONUtils;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
 import org.apache.wink.test.mock.TestUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -57,11 +53,10 @@ public class AssetProviderTest extends MockServletInvocationTest {
 
     private static final String STRING = "hello message";
     private static final String XML    =
-                                           "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + 
-                                           "<entry>\r\n" + 
-                                           "    <id>entry:id</id>\r\n" + 
-                                           "    <title type=\"text\">entry title</title>\r\n" + 
-                                           "</entry>\r\n";
+                                           "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + "<entry>\r\n"
+                                               + "    <id>entry:id</id>\r\n"
+                                               + "    <title type=\"text\">entry title</title>\r\n"
+                                               + "</entry>\r\n";
     private static final String JSON   =
                                            "{\"entry\": {\n" + "  \"id\": {\"$\": \"entry:id\"},\n"
                                                + "  \"title\": {\n"
@@ -93,15 +88,6 @@ public class AssetProviderTest extends MockServletInvocationTest {
     @Asset
     public static class TestAsset {
 
-        @Produces(MediaType.APPLICATION_JSON)
-        public JSONObject getJSONObject(@Context UriInfo info) {
-            assertNotNull(info);
-            try {
-                return new JSONObject(JSON);
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-        }
 
         @Produces(MediaType.APPLICATION_XML)
         public Entry getJAXBEntry() {
@@ -140,27 +126,17 @@ public class AssetProviderTest extends MockServletInvocationTest {
     @Path("test")
     public static class TestResource {
         @GET
-        @Produces( {"application/json", "application/xml", "text/plain"})
+        @Produces( {"application/xml", "text/plain"})
         public TestAsset getAsset() {
             return new TestAsset();
         }
 
         @POST
-        @Produces( {"application/json", "application/xml", "text/plain"})
+        @Produces( {"application/xml", "text/plain"})
         @Consumes( {"application/xml", "text/plain"})
         public TestAsset postAsset(TestAsset asset) {
             return asset;
         }
-    }
-
-    public void testAssetGetJson() throws Exception {
-        MockHttpServletRequest request =
-            MockRequestConstructor.constructMockRequest("GET", "/test", "application/json");
-        MockHttpServletResponse response = invoke(request);
-        assertEquals(200, response.getStatus());
-        JSONObject result = JSONUtils.objectForString(response.getContentAsString());
-        JSONObject expected = JSONUtils.objectForString(JSON);
-        assertTrue(JSONUtils.equals(expected, result));
     }
 
     public void testAssetGetXml() throws Exception {

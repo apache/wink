@@ -55,6 +55,11 @@
         </dependency>
         <dependency>
             <groupId>org.apache.wink</groupId>
+            <artifactId>wink-json-provider</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.wink</groupId>
             <artifactId>wink-component-test-support</artifactId>
         </dependency>
         <dependency>

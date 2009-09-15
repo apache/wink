@@ -18,7 +18,7 @@
  *  
  *******************************************************************************/
 
-package org.apache.wink.common.model.json;
+package org.apache.wink.providers.json;
 
 import java.util.Iterator;
 

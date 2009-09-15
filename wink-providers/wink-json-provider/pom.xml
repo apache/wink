@@ -17,32 +17,47 @@
     specific language governing permissions and limitations
     under the License.
 -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<artifactId>wink-providers</artifactId>
-	<packaging>pom</packaging>
-	<name>Apache Wink Providers</name>
 	<parent>
-		<artifactId>wink</artifactId>
+		<artifactId>wink-providers</artifactId>
 		<groupId>org.apache.wink</groupId>
 		<version>0.2-incubating-SNAPSHOT</version>
 	</parent>
-	<modules>
-		<module>wink-json-provider</module>
-		<module>wink-jettison-provider</module>
-		<module>wink-abdera-provider</module>
-		<module>wink-jackson-provider</module>
-	</modules>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>wink-json-provider</artifactId>
+	<name>Apache Wink Providers :: Json Provider</name>
 	<dependencies>
+		<dependency>
+			<groupId>org.apache.wink</groupId>
+			<artifactId>wink-common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.wink</groupId>
+			<artifactId>wink-component-test-support</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+		</dependency>
+            <dependency>
+                <groupId>org.json</groupId>
+                <artifactId>json</artifactId>
+            </dependency>
         <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>jsr311-api</artifactId>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-j2ee_1.4_spec</artifactId>
+            <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>org.apache.wink</groupId>
+			<artifactId>wink-server</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>

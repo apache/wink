@@ -17,7 +17,8 @@
  *  under the License.
  *  
  *******************************************************************************/
-package org.apache.wink.common.internal.providers.entity.json;
+
+package org.apache.wink.providers.json.internal;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,8 +43,8 @@ import org.apache.wink.common.RestConstants;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.utils.ProviderUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,15 +52,15 @@ import org.slf4j.LoggerFactory;
 @Provider
 @Consumes( {MediaType.APPLICATION_JSON, MediaTypeUtils.JAVASCRIPT})
 @Produces( {MediaType.APPLICATION_JSON, MediaTypeUtils.JAVASCRIPT})
-public class JsonArrayProvider implements MessageBodyWriter<JSONArray>,
-    MessageBodyReader<JSONArray> {
+public class JsonProvider implements MessageBodyWriter<JSONObject>,
+    MessageBodyReader<JSONObject> {
 
     private static final Logger logger = LoggerFactory.getLogger(JsonProvider.class);
 
     @Context
     private UriInfo             uriInfo;
 
-    public long getSize(JSONArray t,
+    public long getSize(JSONObject t,
                         Class<?> type,
                         Type genericType,
                         Annotation[] annotations,
@@ -71,10 +72,10 @@ public class JsonArrayProvider implements MessageBodyWriter<JSONArray>,
                                Type genericType,
                                Annotation[] annotations,
                                MediaType mediaType) {
-        return type == JSONArray.class;
+        return type == JSONObject.class;
     }
 
-    public void writeTo(JSONArray t,
+    public void writeTo(JSONObject t,
                         Class<?> type,
                         Type genericType,
                         Annotation[] annotations,
@@ -85,7 +86,7 @@ public class JsonArrayProvider implements MessageBodyWriter<JSONArray>,
         try {
             jsonString = t.toString(2);
         } catch (JSONException e) {
-            logger.error(Messages.getMessage("jsonFailWriteJSONArray"));
+            logger.error(Messages.getMessage("jsonFailWriteJSONObject"));
             throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
         }
 
@@ -108,20 +109,21 @@ public class JsonArrayProvider implements MessageBodyWriter<JSONArray>,
                               Type genericType,
                               Annotation[] annotations,
                               MediaType mediaType) {
-        return type == JSONArray.class;
+        return type == JSONObject.class;
     }
 
-    public JSONArray readFrom(Class<JSONArray> type,
-                              Type genericType,
-                              Annotation[] annotations,
-                              MediaType mediaType,
-                              MultivaluedMap<String, String> httpHeaders,
-                              InputStream entityStream) throws IOException, WebApplicationException {
+    public JSONObject readFrom(Class<JSONObject> type,
+                               Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType,
+                               MultivaluedMap<String, String> httpHeaders,
+                               InputStream entityStream) throws IOException,
+        WebApplicationException {
         try {
-            return new JSONArray(new JSONTokener(ProviderUtils
-                .createReader(entityStream, mediaType)));
+            return new JSONObject(new JSONTokener(ProviderUtils.createReader(entityStream,
+                                                                             mediaType)));
         } catch (JSONException e) {
-            logger.error(Messages.getMessage("jsonFailReadJSONArray"));
+            logger.error(Messages.getMessage("jsonFailReadJSONObject"));
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         }
     }

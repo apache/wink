@@ -78,7 +78,10 @@ public class GoogleDocsClient {
         }
 
         // add google authentication handler
-        config.handlers(new GoogleAuthHandler(cliHelper.getEmail(), cliHelper.getPassword()));
+//        config.handlers(new GoogleAuthHandler(cliHelper.getEmail(), cliHelper.getPassword()));
+        APSHandler apsHandler = new APSHandler();
+        apsHandler.setChallenge("GoogleLogin");
+        config.handlers(apsHandler);
         restClient = new RestClient(config);
         this.cliHelper = cliHelper;
     }

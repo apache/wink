@@ -38,8 +38,8 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.wink.common.model.atom.AtomEntry;
-import org.apache.wink.common.model.json.JSONUtils;
 import org.apache.wink.common.model.synd.SyndEntry;
+import org.apache.wink.providers.json.JSONUtils;
 import org.apache.wink.server.internal.providers.entity.jettison.jaxb.Person;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
