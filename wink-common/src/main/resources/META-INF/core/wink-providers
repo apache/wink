@@ -50,11 +50,6 @@ org.apache.wink.common.internal.providers.entity.atom.AtomEntrySyndEntryProvider
 # APP
 org.apache.wink.common.internal.providers.entity.app.CategoriesProvider
 
-# Json
-org.apache.wink.common.internal.providers.entity.json.JsonProvider
-org.apache.wink.common.internal.providers.entity.json.JsonArrayProvider
-org.apache.wink.common.internal.providers.entity.json.JsonJAXBProvider
-
 # CSV
 org.apache.wink.common.internal.providers.entity.csv.CsvSerializerProvider
 org.apache.wink.common.internal.providers.entity.csv.CsvSyndFeedSerializerProvider
