@@ -122,6 +122,7 @@ public class ApplicationFileLoader {
                     cls = Class.forName(line);
                     if (ResourceMetadataCollector.isStaticResource(cls) || ProviderMetadataCollector
                         .isProvider(cls)) {
+                        logger.debug(Messages.getMessage("loadingClassToApplication"), line);
                         classes.add(cls);
                     } else {
                         logger.warn(Messages.getMessage("classNotAResourceNorProvider"), cls);
