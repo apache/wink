@@ -44,6 +44,7 @@ import org.apache.wink.common.annotations.Workspace;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.registry.Injectable;
 import org.apache.wink.common.internal.registry.InjectableFactory;
+import org.apache.wink.common.internal.utils.AnnotationUtils;
 
 /**
  * Collects ClassMetadata from JAX-RS Resource classes
@@ -323,7 +324,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
     private String[] getConsumes(AnnotatedElement element) {
         Consumes consumes = element.getAnnotation(Consumes.class);
         if (consumes != null) {
-            return consumes.value();
+            return AnnotationUtils.parseConsumesProducesValues(consumes.value());
         }
         return new String[] {};
     }
@@ -331,7 +332,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
     private String[] getProduces(AnnotatedElement element) {
         Produces produces = element.getAnnotation(Produces.class);
         if (produces != null) {
-            return produces.value();
+            return AnnotationUtils.parseConsumesProducesValues(produces.value());
         }
         return new String[] {};
     }

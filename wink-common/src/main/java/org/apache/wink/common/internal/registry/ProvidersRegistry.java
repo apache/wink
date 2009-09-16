@@ -55,6 +55,7 @@ import org.apache.wink.common.internal.application.ApplicationValidator;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.lifecycle.ObjectFactory;
+import org.apache.wink.common.internal.utils.AnnotationUtils;
 import org.apache.wink.common.internal.utils.GenericsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -361,7 +362,7 @@ public class ProvidersRegistry {
                 Consumes consumes = factory.getInstanceClass().getAnnotation(Consumes.class);
                 String[] values = null;
                 if (consumes != null) {
-                    values = consumes.value();
+                    values = AnnotationUtils.parseConsumesProducesValues(consumes.value());
                 } else {
                     values = new String[] {MediaType.WILDCARD};
                 }
@@ -397,7 +398,7 @@ public class ProvidersRegistry {
             if (produces == null) {
                 put(MediaType.WILDCARD_TYPE, objectFactory);
             } else {
-                String[] values = produces.value();
+                String[] values = AnnotationUtils.parseConsumesProducesValues(produces.value());
                 for (String val : values) {
                     put(MediaType.valueOf(val), objectFactory);
                 }
@@ -416,7 +417,7 @@ public class ProvidersRegistry {
             if (consumes == null) {
                 put(MediaType.WILDCARD_TYPE, objectFactory);
             } else {
-                String[] values = consumes.value();
+                String[] values = AnnotationUtils.parseConsumesProducesValues(consumes.value());
                 for (String val : values) {
                     put(MediaType.valueOf(val), objectFactory);
                 }

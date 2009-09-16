@@ -54,6 +54,7 @@ import org.apache.wink.common.internal.registry.Injectable;
 import org.apache.wink.common.internal.registry.InjectableFactory;
 import org.apache.wink.common.internal.registry.Injectable.ParamType;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
+import org.apache.wink.common.internal.utils.AnnotationUtils;
 import org.apache.wink.common.internal.utils.GenericsUtils;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 
@@ -274,7 +275,8 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
         for (Method method : methods) {
             Produces annotation = method.getAnnotation(Produces.class);
             if (annotation != null) {
-                String[] producesArray = annotation.value();
+                String[] producesArray =
+                    AnnotationUtils.parseConsumesProducesValues(annotation.value());
                 List<MediaType> produces = toSortedMediaTypes(producesArray);
                 for (MediaType mt : produces) {
                     if (mt.isCompatible(mediaType)) {
@@ -296,7 +298,8 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
         for (Method method : methods) {
             Consumes annotation = method.getAnnotation(Consumes.class);
             if (annotation != null) {
-                String[] producesArray = annotation.value();
+                String[] producesArray =
+                    AnnotationUtils.parseConsumesProducesValues(annotation.value());
                 List<MediaType> produces = toSortedMediaTypes(producesArray);
                 for (MediaType mt : produces) {
                     if (mt.isCompatible(mediaType)) {
