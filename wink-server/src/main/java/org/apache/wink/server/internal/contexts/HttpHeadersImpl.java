@@ -117,7 +117,7 @@ public class HttpHeadersImpl implements HttpHeaders {
             List<String> requestHeader = getRequestHeader(HttpHeaders.ACCEPT);
             if (requestHeader == null || requestHeader.isEmpty()) {
                 acceptValue = null;
-            } else if (requestHeader.size() > 0) {
+            } else if (requestHeader.size() > 1) {
                 StringBuilder acceptValueTemp = new StringBuilder();
                 acceptValueTemp.append(requestHeader.get(0));
                 for (int c = 1; c < requestHeader.size(); ++c) {
