@@ -56,10 +56,11 @@ public class RequestProcessor {
     private static final String           PROPERTY_ROOT_RESOURCE_ATOM_HTML = "atom+html";
     private static final String           PROPERTY_ROOT_RESOURCE_DEFAULT   =
                                                                                PROPERTY_ROOT_RESOURCE_ATOM_HTML;
-    private static final String           PROPERTY_ROOT_RESOURCE           =
-                                                                               "wink.rootResource";
+    private static final String           PROPERTY_ROOT_RESOURCE           = "wink.rootResource";
     private static final String           PROPERTY_ROOT_RESOURCE_CSS       =
                                                                                "wink.serviceDocumentCssPath";
+    private static final String           PROPERTY_LOAD_WINK_APPLICATIONS  =
+                                                                               "wink.loadApplications";
 
     private final DeploymentConfiguration configuration;
 
@@ -71,7 +72,12 @@ public class RequestProcessor {
 
     private void registerDefaultApplication() {
         try {
-            final Set<Class<?>> classes = new ServletApplicationFileLoader().getClasses();
+            String loadWinkApplicationsProperty =
+                configuration.getProperties().getProperty(PROPERTY_LOAD_WINK_APPLICATIONS,
+                                                          Boolean.toString(true));
+            final Set<Class<?>> classes =
+                new ServletApplicationFileLoader(Boolean.parseBoolean(loadWinkApplicationsProperty))
+                    .getClasses();
             configuration.addApplication(new RegistrationUtils.InnerApplication(classes));
         } catch (FileNotFoundException e) {
             throw new WebApplicationException(e);

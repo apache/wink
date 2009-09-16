@@ -11,9 +11,7 @@
 #	CONDITIONS OF ANY KIND, either express or implied. See the License for
 #	the specific language governing permissions and limitations under the
 #	License.
-org.apache.wink.server.internal.providers.entity.html.HtmlSyndEntryProvider
-org.apache.wink.server.internal.providers.entity.html.HtmlSyndFeedProvider
-org.apache.wink.example.qadefect.resources.DefectsResource
-org.apache.wink.example.qadefect.resources.TestsResource
-org.apache.wink.example.qadefect.resources.DefectTestsResource
 
+org.apache.wink.providers.json.JsonJAXBProvider
+org.apache.wink.providers.json.JsonProvider
+org.apache.wink.providers.json.JsonArrayProvider

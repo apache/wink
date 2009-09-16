@@ -29,7 +29,7 @@ import junit.framework.TestCase;
 public class ApplicationFileLoaderTest extends TestCase {
 
     public void testDefault() throws IOException {
-        ApplicationFileLoader applicationFileLoader = new ApplicationFileLoader();
+        ApplicationFileLoader applicationFileLoader = new ApplicationFileLoader(true);
         Set<Class<?>> classes = applicationFileLoader.getClasses();
         assertTrue(classes
             .contains(org.apache.wink.common.internal.providers.entity.FileProvider.class));

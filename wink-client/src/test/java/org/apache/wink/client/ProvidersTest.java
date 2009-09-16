@@ -39,7 +39,6 @@ import org.apache.wink.common.internal.application.ApplicationValidator;
 import org.apache.wink.common.internal.contexts.ProvidersImpl;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.lifecycle.ScopeLifecycleManager;
-import org.apache.wink.common.internal.providers.entity.xml.JAXBXmlProvider;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.runtime.AbstractRuntimeContext;
@@ -102,7 +101,7 @@ public class ProvidersTest extends TestCase {
         ProvidersRegistry providersRegistry =
             new ProvidersRegistry(ofFactoryRegistry, new ApplicationValidator());
 
-        Set<Class<?>> classes = new ApplicationFileLoader().getClasses();
+        Set<Class<?>> classes = new ApplicationFileLoader(true).getClasses();
         if (classes != null) {
             for (Class<?> cls : classes) {
                 if (ProviderMetadataCollector.isProvider(cls)) {

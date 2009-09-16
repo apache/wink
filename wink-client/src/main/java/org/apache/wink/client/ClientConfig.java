@@ -52,6 +52,7 @@ public class ClientConfig implements Cloneable {
     private LinkedList<Application>   applications;
     private boolean                   modifiable;
     private boolean                   isAcceptHeaderAutoSet;
+    private boolean                   loadWinkApplications = true;
 
     /**
      * Construct a new ClientConfig with the following default settings:
@@ -78,7 +79,8 @@ public class ClientConfig implements Cloneable {
     private void initDefaultApplication() {
 
         try {
-            final Set<Class<?>> classes = new ApplicationFileLoader().getClasses();
+            final Set<Class<?>> classes =
+                new ApplicationFileLoader(loadWinkApplications).getClasses();
 
             applications(new WinkApplication() {
                 @Override
@@ -334,6 +336,14 @@ public class ClientConfig implements Cloneable {
             // can't happen
             throw new RuntimeException(e);
         }
+    }
+
+    public void setLoadWinkApplications(boolean loadWinkApplications) {
+        this.loadWinkApplications = loadWinkApplications;
+    }
+
+    public boolean isLoadWinkApplications() {
+        return loadWinkApplications;
     }
 
 }

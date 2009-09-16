@@ -24,6 +24,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.Enumeration;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -45,6 +47,7 @@ import org.apache.wink.common.internal.utils.FileLoader;
  */
 public class ApplicationFileLoader {
 
+    private static final String WINK_APPLICATION = "META-INF/wink-application";
     private static final Logger logger           =
                                                      LoggerFactory
                                                          .getLogger(ApplicationFileLoader.class);
@@ -54,10 +57,27 @@ public class ApplicationFileLoader {
     /**
      * Loads core application file.
      * 
+     * @param loadWinkApplication - indicates if classes from
+     *            "META-INF/wink-application" files should be loaded
      * @throws FileNotFoundException if file is not found (should never happen)
      */
-    public ApplicationFileLoader() throws FileNotFoundException {
+    public ApplicationFileLoader(boolean loadWinkApplication) throws FileNotFoundException {
         this(CORE_APPLICATION);
+
+        // load wink-application
+        try {
+            if (loadWinkApplication) {
+                Enumeration<URL> applications =
+                    FileLoader.loadFileUsingClassLoaders(WINK_APPLICATION);
+                while (applications.hasMoreElements()) {
+                    URL url = applications.nextElement();
+                    logger.info(Messages.getMessage("loadingApplication"), url.toExternalForm());
+                    loadClasses(url.openStream());
+                }
+            }
+        } catch (IOException e) {
+            throw new WebApplicationException(e);
+        }
     }
 
     /**
@@ -67,7 +87,8 @@ public class ApplicationFileLoader {
      * @throws FileNotFoundException - if file is not found
      */
     public ApplicationFileLoader(String appConfigFile) throws FileNotFoundException {
-        this(FileLoader.loadFileAsStream(appConfigFile));
+        logger.info(Messages.getMessage("loadingApplication"), appConfigFile);
+        loadClasses(FileLoader.loadFileAsStream(appConfigFile));
     }
 
     /**

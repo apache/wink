@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Enumeration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +49,17 @@ public class FileLoader {
      * @throws FileNotFoundException
      */
     public static URL loadFile(String fileName) throws FileNotFoundException {
-        return loadFileUsingClassLoaders(fileName);
+        Enumeration<URL> resources;
+        try {
+            resources = loadFileUsingClassLoaders(fileName);
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+            throw new FileNotFoundException(fileName);
+        }
+        if (!resources.hasMoreElements()) {
+            throw new FileNotFoundException(fileName);
+        }
+        return resources.nextElement();
     }
 
     /**
@@ -80,7 +91,17 @@ public class FileLoader {
         }
 
         // file is not a normal file, try to find it using classloaders
-        URL url = loadFileUsingClassLoaders(fileName);
+        Enumeration<URL> resources;
+        try {
+            resources = loadFileUsingClassLoaders(fileName);
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+            throw new FileNotFoundException(fileName);
+        }
+        if (!resources.hasMoreElements()) {
+            throw new FileNotFoundException(fileName);
+        }
+        URL url = resources.nextElement();
         try {
             // decode any escaped sequences such as <space> which is %20 in URL
             URI uri = url.toURI();
@@ -106,40 +127,33 @@ public class FileLoader {
      * 
      * @param filename
      * @return
-     * @throws FileNotFoundException
+     * @throws IOException 
      */
-    public static URL loadFileUsingClassLoaders(String filename) throws FileNotFoundException {
+    public static Enumeration<URL> loadFileUsingClassLoaders(String filename) throws IOException {
         logger.debug("Searching for {} using thread context classloader.", filename);
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        URL url = loadFileUsingClassLoader(classLoader, filename);
-        if (url != null) {
-            return url;
+        Enumeration<URL> resources = loadFileUsingClassLoader(classLoader, filename);
+        if (resources.hasMoreElements()) {
+            return resources;
         }
 
         logger.debug("Searching for {} using current classloader.", filename);
         classLoader = FileLoader.class.getClassLoader();
-        url = loadFileUsingClassLoader(classLoader, filename);
-        if (url != null) {
-            return url;
+        resources = loadFileUsingClassLoader(classLoader, filename);
+        if (resources.hasMoreElements()) {
+            return resources;
         }
 
         logger.debug("Searching for {} using system classloader.", filename);
-        url = ClassLoader.getSystemResource(filename);
-        if (url == null) {
-            // well, the last attempt has failed! throw FileNotFoundException
-            logger.error("Failed to find file using classloaders");
-            throw new FileNotFoundException(filename);
-        }
-
-        return url;
+        return ClassLoader.getSystemResources(filename);
     }
 
-    private static URL loadFileUsingClassLoader(ClassLoader classLoader, String filename) {
-        URL url = null;
+    private static Enumeration<URL> loadFileUsingClassLoader(ClassLoader classLoader, String filename) throws IOException {
+        Enumeration<URL> resources = null;
         if (classLoader != null) {
-            url = classLoader.getResource(filename);
+            resources = classLoader.getResources(filename);
         }
-        return url;
+        return resources;
     }
 
 }

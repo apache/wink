@@ -17,8 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
-
-package org.apache.wink.providers.json.internal;
+package org.apache.wink.providers.json;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,8 +42,8 @@ import org.apache.wink.common.RestConstants;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.utils.ProviderUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,15 +51,15 @@ import org.slf4j.LoggerFactory;
 @Provider
 @Consumes( {MediaType.APPLICATION_JSON, MediaTypeUtils.JAVASCRIPT})
 @Produces( {MediaType.APPLICATION_JSON, MediaTypeUtils.JAVASCRIPT})
-public class JsonProvider implements MessageBodyWriter<JSONObject>,
-    MessageBodyReader<JSONObject> {
+public class JsonArrayProvider implements MessageBodyWriter<JSONArray>,
+    MessageBodyReader<JSONArray> {
 
     private static final Logger logger = LoggerFactory.getLogger(JsonProvider.class);
 
     @Context
     private UriInfo             uriInfo;
 
-    public long getSize(JSONObject t,
+    public long getSize(JSONArray t,
                         Class<?> type,
                         Type genericType,
                         Annotation[] annotations,
@@ -72,10 +71,10 @@ public class JsonProvider implements MessageBodyWriter<JSONObject>,
                                Type genericType,
                                Annotation[] annotations,
                                MediaType mediaType) {
-        return type == JSONObject.class;
+        return type == JSONArray.class;
     }
 
-    public void writeTo(JSONObject t,
+    public void writeTo(JSONArray t,
                         Class<?> type,
                         Type genericType,
                         Annotation[] annotations,
@@ -86,7 +85,7 @@ public class JsonProvider implements MessageBodyWriter<JSONObject>,
         try {
             jsonString = t.toString(2);
         } catch (JSONException e) {
-            logger.error(Messages.getMessage("jsonFailWriteJSONObject"));
+            logger.error(Messages.getMessage("jsonFailWriteJSONArray"));
             throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
         }
 
@@ -109,21 +108,20 @@ public class JsonProvider implements MessageBodyWriter<JSONObject>,
                               Type genericType,
                               Annotation[] annotations,
                               MediaType mediaType) {
-        return type == JSONObject.class;
+        return type == JSONArray.class;
     }
 
-    public JSONObject readFrom(Class<JSONObject> type,
-                               Type genericType,
-                               Annotation[] annotations,
-                               MediaType mediaType,
-                               MultivaluedMap<String, String> httpHeaders,
-                               InputStream entityStream) throws IOException,
-        WebApplicationException {
+    public JSONArray readFrom(Class<JSONArray> type,
+                              Type genericType,
+                              Annotation[] annotations,
+                              MediaType mediaType,
+                              MultivaluedMap<String, String> httpHeaders,
+                              InputStream entityStream) throws IOException, WebApplicationException {
         try {
-            return new JSONObject(new JSONTokener(ProviderUtils.createReader(entityStream,
-                                                                             mediaType)));
+            return new JSONArray(new JSONTokener(ProviderUtils
+                .createReader(entityStream, mediaType)));
         } catch (JSONException e) {
-            logger.error(Messages.getMessage("jsonFailReadJSONObject"));
+            logger.error(Messages.getMessage("jsonFailReadJSONArray"));
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         }
     }

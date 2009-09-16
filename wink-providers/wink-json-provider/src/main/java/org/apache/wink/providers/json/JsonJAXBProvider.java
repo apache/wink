@@ -18,7 +18,7 @@
  *  
  *******************************************************************************/
 
-package org.apache.wink.providers.json.internal;
+package org.apache.wink.providers.json;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -125,24 +125,6 @@ public class JsonJAXBProvider implements MessageBodyWriter<Object>, MessageBodyR
             throw new WebApplicationException(e);
         }
     }
-
-    // private JSONObject jaxbToJson(Object jaxbObject, Class<?> type, MediaType
-    // mediaType) {
-    // try {
-    // if (type == JAXBElement.class) {
-    // type = ((JAXBElement<?>)jaxbObject).getDeclaredType();
-    // }
-    // Marshaller marshaller = super.getMarshaller(type, mediaType);
-    // JsonContentHandler handler = new JsonContentHandler();
-    // marshaller.setListener(handler);
-    // marshaller.marshal(jaxbObject, handler);
-    // return handler.getJsonResult();
-    // } catch (JAXBException e) {
-    // logger.error(Messages.getMessage("jsonFailConvertJAXBToJSON"),
-    // type.getName());
-    // throw new WebApplicationException(e);
-    // }
-    // }
 
     public boolean isReadable(Class<?> type,
                               Type genericType,

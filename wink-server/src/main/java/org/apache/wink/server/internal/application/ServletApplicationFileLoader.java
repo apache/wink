@@ -30,8 +30,8 @@ public class ServletApplicationFileLoader extends ApplicationFileLoader {
 
     private static final String SERVER_CORE_APPLICATION = "META-INF/server/wink-providers";
 
-    public ServletApplicationFileLoader() throws FileNotFoundException {
-        super();
+    public ServletApplicationFileLoader(boolean loadWinkApplication) throws FileNotFoundException {
+        super(loadWinkApplication);
         loadClasses(ServletFileLoader.loadFileAsStream(SERVER_CORE_APPLICATION));
     }
 

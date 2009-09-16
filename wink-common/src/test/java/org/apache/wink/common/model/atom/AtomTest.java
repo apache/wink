@@ -298,7 +298,7 @@ public class AtomTest extends TestCase {
         ProvidersRegistry providersRegistry =
             new ProvidersRegistry(ofFactoryRegistry, new ApplicationValidator());
 
-        Set<Class<?>> classes = new ApplicationFileLoader().getClasses();
+        Set<Class<?>> classes = new ApplicationFileLoader(true).getClasses();
         if (classes != null) {
             for (Class<?> cls : classes) {
                 if (ProviderMetadataCollector.isProvider(cls)) {
