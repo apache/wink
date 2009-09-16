@@ -117,7 +117,7 @@ public class HttpHeadersImpl implements HttpHeaders {
             List<String> requestHeader = getRequestHeader(HttpHeaders.ACCEPT);
             if (requestHeader == null || requestHeader.isEmpty()) {
                 acceptValue = null;
-            } else {
+            } else if (requestHeader.size() > 0) {
                 StringBuilder acceptValueTemp = new StringBuilder();
                 acceptValueTemp.append(requestHeader.get(0));
                 for (int c = 1; c < requestHeader.size(); ++c) {
@@ -125,6 +125,8 @@ public class HttpHeadersImpl implements HttpHeaders {
                     acceptValueTemp.append(requestHeader.get(c));
                 }
                 acceptValue = acceptValueTemp.toString();
+            } else {
+                acceptValue = requestHeader.get(0);
             }
         }
         try {
@@ -189,13 +191,17 @@ public class HttpHeadersImpl implements HttpHeaders {
         if (allHeaders != null) {
             return allHeaders.get(name);
         }
+
         List<String> list = headers.get(name);
         if (list == null) {
             Enumeration<?> headerValues =
                 msgContext.getAttribute(HttpServletRequest.class).getHeaders(name);
             list = new ArrayList<String>();
             while (headerValues.hasMoreElements()) {
-                list.add((String)headerValues.nextElement());
+                String val = (String)headerValues.nextElement();
+                if (val != null) {
+                    list.add(val);
+                }
             }
 
             headers.put(name, list);
@@ -237,7 +243,10 @@ public class HttpHeadersImpl implements HttpHeaders {
                 msgContext.getAttribute(HttpServletRequest.class).getHeaders(name);
             List<String> values = new ArrayList<String>();
             while (headerValues.hasMoreElements()) {
-                values.add((String)headerValues.nextElement());
+                String val = (String)headerValues.nextElement();
+                if (val != null) {
+                    values.add(val);
+                }
             }
             map.put(name, values);
         }
