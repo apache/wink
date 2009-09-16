@@ -25,7 +25,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Enumeration;
@@ -103,18 +102,6 @@ public class FileLoader {
         }
         URL url = resources.nextElement();
         try {
-            // decode any escaped sequences such as <space> which is %20 in URL
-            URI uri = url.toURI();
-            String path = uri.getSchemeSpecificPart();
-            url = new URL(url.getProtocol(), null, path);
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-            throw new FileNotFoundException(fileName);
-        } catch (URISyntaxException e) {
-            // do nothing, but return the real (!) url
-        }
-
-        try {
             return url.openStream();
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
@@ -127,7 +114,7 @@ public class FileLoader {
      * 
      * @param filename
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     public static Enumeration<URL> loadFileUsingClassLoaders(String filename) throws IOException {
         logger.debug("Searching for {} using thread context classloader.", filename);
@@ -148,7 +135,8 @@ public class FileLoader {
         return ClassLoader.getSystemResources(filename);
     }
 
-    private static Enumeration<URL> loadFileUsingClassLoader(ClassLoader classLoader, String filename) throws IOException {
+    private static Enumeration<URL> loadFileUsingClassLoader(ClassLoader classLoader,
+                                                             String filename) throws IOException {
         Enumeration<URL> resources = null;
         if (classLoader != null) {
             resources = classLoader.getResources(filename);
