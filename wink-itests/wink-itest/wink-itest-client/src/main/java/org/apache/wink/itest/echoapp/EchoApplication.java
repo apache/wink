@@ -24,6 +24,8 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
+import org.apache.wink.providers.json.internal.JsonProvider;
+
 
 public class EchoApplication extends Application {
 
@@ -31,6 +33,7 @@ public class EchoApplication extends Application {
     public Set<Class<?>> getClasses() {
         Set<Class<?>> classes = new HashSet<Class<?>>();
         classes.add(EchoResource.class);
+        classes.add(JsonProvider.class);
         return classes;
     }
 

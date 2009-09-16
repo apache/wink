@@ -18,8 +18,14 @@
  */
 package org.apache.wink.itest.client;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.ws.rs.core.Application;
+
 import org.apache.wink.client.ApacheHttpClientConfig;
 import org.apache.wink.client.RestClient;
+import org.apache.wink.providers.json.internal.JsonProvider;
 
 /**
  * Tests the Accept Header Handler. Repeats the {@link AcceptHeaderHandlerTest}
@@ -29,7 +35,16 @@ public class AcceptHeaderHandlerApacheHTTPCoreTest extends AcceptHeaderHandlerTe
 
     public void setUp() throws Exception {
         super.setUp();
-        client = new RestClient(new ApacheHttpClientConfig());
+        client = new RestClient(new ApacheHttpClientConfig().applications(new Application() {
+
+            @Override
+            public Set<Class<?>> getClasses() {
+                Set<Class<?>> classes = new HashSet<Class<?>>();
+                classes.add(JsonProvider.class);
+                return classes;
+            }
+
+        }));
     }
 
 }

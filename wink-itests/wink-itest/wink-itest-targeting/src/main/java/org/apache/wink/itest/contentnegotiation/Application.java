@@ -22,11 +22,18 @@ package org.apache.wink.itest.contentnegotiation;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.wink.providers.json.internal.JsonArrayProvider;
+import org.apache.wink.providers.json.internal.JsonJAXBProvider;
+import org.apache.wink.providers.json.internal.JsonProvider;
+
 public class Application extends javax.ws.rs.core.Application {
 
     public Set<Class<?>> getClasses() {
         Set<Class<?>> set = new HashSet<Class<?>>();
         set.add(CustomerService.class);
+        set.add(JsonProvider.class);
+        set.add(JsonArrayProvider.class);
+        set.add(JsonJAXBProvider.class);
         return set;
     }
 

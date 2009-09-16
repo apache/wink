@@ -27,4 +27,11 @@
     <artifactId>wink-itest-targeting</artifactId>
     <packaging>war</packaging>
     <name>Apache Wink Integration Targeting Tests</name>
+    <dependencies>
+        <dependency>
+            <artifactId>wink-json-provider</artifactId>
+            <groupId>org.apache.wink</groupId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

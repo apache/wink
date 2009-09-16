@@ -19,7 +19,10 @@
 package org.apache.wink.itest.client;
 
 import java.io.StringReader;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -31,6 +34,7 @@ import org.apache.wink.client.ClientResponse;
 import org.apache.wink.client.RestClient;
 import org.apache.wink.client.internal.handlers.AcceptHeaderHandler;
 import org.apache.wink.itest.client.jaxb.Echo;
+import org.apache.wink.providers.json.internal.JsonProvider;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,7 +55,18 @@ public class NoAcceptHeaderHandlerTest extends TestCase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        client = new RestClient(new ClientConfig().acceptHeaderAutoSet(false));
+        client =
+            new RestClient(new ClientConfig().acceptHeaderAutoSet(false)
+                .applications(new Application() {
+
+                    @Override
+                    public Set<Class<?>> getClasses() {
+                        Set<Class<?>> classes = new HashSet<Class<?>>();
+                        classes.add(JsonProvider.class);
+                        return classes;
+                    }
+
+                }));
     }
 
     /**
