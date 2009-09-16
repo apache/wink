@@ -35,7 +35,7 @@ import org.apache.wink.client.ClientResponse;
 import org.apache.wink.client.RestClient;
 import org.apache.wink.client.internal.handlers.AcceptHeaderHandler;
 import org.apache.wink.itest.client.jaxb.Echo;
-import org.apache.wink.providers.json.internal.JsonProvider;
+import org.apache.wink.providers.json.JsonProvider;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -24,7 +24,7 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
-import org.apache.wink.providers.json.internal.JsonProvider;
+import org.apache.wink.providers.json.JsonProvider;
 
 
 public class EchoApplication extends Application {

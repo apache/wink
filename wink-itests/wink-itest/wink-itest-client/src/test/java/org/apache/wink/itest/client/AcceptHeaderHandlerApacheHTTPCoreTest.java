@@ -25,7 +25,7 @@ import javax.ws.rs.core.Application;
 
 import org.apache.wink.client.ApacheHttpClientConfig;
 import org.apache.wink.client.RestClient;
-import org.apache.wink.providers.json.internal.JsonProvider;
+import org.apache.wink.providers.json.JsonProvider;
 
 /**
  * Tests the Accept Header Handler. Repeats the {@link AcceptHeaderHandlerTest}

@@ -22,9 +22,9 @@ package org.apache.wink.itest.contentnegotiation;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.wink.providers.json.internal.JsonArrayProvider;
-import org.apache.wink.providers.json.internal.JsonJAXBProvider;
-import org.apache.wink.providers.json.internal.JsonProvider;
+import org.apache.wink.providers.json.JsonArrayProvider;
+import org.apache.wink.providers.json.JsonJAXBProvider;
+import org.apache.wink.providers.json.JsonProvider;
 
 public class Application extends javax.ws.rs.core.Application {
 

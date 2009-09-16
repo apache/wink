@@ -27,7 +27,7 @@ import org.apache.wink.client.ApacheHttpClientConfig;
 import org.apache.wink.client.ClientResponse;
 import org.apache.wink.client.RestClient;
 import org.apache.wink.client.internal.handlers.AcceptHeaderHandler;
-import org.apache.wink.providers.json.internal.JsonProvider;
+import org.apache.wink.providers.json.JsonProvider;
 
 public class NoAcceptHeaderHandlerApacheHTTPCoreTest extends NoAcceptHeaderHandlerTest {
 
