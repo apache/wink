@@ -19,27 +19,54 @@
  *******************************************************************************/
 package org.apache.wink.common.internal.registry;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import junit.framework.TestCase;
 
 public class ValueConvertorTest extends TestCase {
 
     /**
-     * custom type with both valueOf and fromString methods
+     * custom type with constructor, valueOf, and fromString methods
      */
-    static class CustomType {
+    static class CustomTypeConstructor {
 
         private String _value = "";
 
-        public CustomType(String value) {
+        public CustomTypeConstructor(String value) {
             _value = value;
         }
 
-        static CustomType valueOf(String value) {
-            return new CustomType(value + "_valueOf");
+        static CustomTypeConstructor valueOf(String value) {
+            return new CustomTypeConstructor(value + "_valueOf");
         }
 
-        static CustomType fromString(String value) {
-            return new CustomType(value + "_fromString");
+        static CustomTypeConstructor fromString(String value) {
+            return new CustomTypeConstructor(value + "_fromString");
+        }
+
+        public String toString() {
+            return _value;
+        }
+    }
+
+    /**
+     * custom type with both valueOf and fromString methods and no constructor
+     */
+    static class CustomTypeValueOf {
+
+        private String _value = "";
+
+        private CustomTypeValueOf(String value) {
+            _value = value;
+        }
+
+        static CustomTypeValueOf valueOf(String value) {
+            return new CustomTypeValueOf(value + "_valueOf");
+        }
+
+        static CustomTypeValueOf fromString(String value) {
+            return new CustomTypeValueOf(value + "_fromString");
         }
 
         public String toString() {
@@ -50,15 +77,13 @@ public class ValueConvertorTest extends TestCase {
     /**
      * custom type with fromString method only
      */
-    static class CustomTypeNoValueOf {
+    static class CustomTypeFromString {
         private String _value = "";
 
-        public CustomTypeNoValueOf(String value) {
-            _value = value;
-        }
-
-        static CustomTypeNoValueOf fromString(String value) {
-            return new CustomTypeNoValueOf(value + "_fromString");
+        static CustomTypeFromString fromString(String value) {
+            CustomTypeFromString ct = new CustomTypeFromString();
+            ct._value = value + "_fromString";
+            return ct;
         }
 
         public String toString() {
@@ -84,18 +109,28 @@ public class ValueConvertorTest extends TestCase {
         }
     }
 
+    // make sure constructor is favored over "valueOf" and "fromString"
+    public void testConvertorPrecedenceConstructor() throws Exception {
+        ValueConvertor constructorConvertor =
+            ValueConvertor.createConcreteValueConvertor(CustomTypeConstructor.class,
+                                                        CustomTypeConstructor.class);
+        assertEquals("VALUE", constructorConvertor.convert("VALUE").toString());
+    }
+
     // make sure "valueOf" is favored over "fromString"
-    public void testConvertorPrecedence() throws Exception {
+    public void testConvertorPrecedenceNoConstructor() throws Exception {
         ValueConvertor valueOfConvertor =
-            ValueConvertor.createConcreteValueConvertor(CustomType.class, CustomType.class);
+            ValueConvertor.createConcreteValueConvertor(CustomTypeValueOf.class,
+                                                        CustomTypeValueOf.class);
         assertEquals("VALUE_valueOf", valueOfConvertor.convert("VALUE").toString());
     }
 
-    // make sure fallback to "fromString" if no "valueOf" method is found
-    public void testConvertorPrecedenceNoValueOf() throws Exception {
+    // make sure fallback to "fromString" if no "valueOf" method nor constructor
+    // is found
+    public void testConvertorPrecedenceNoConstructorNoValueOf() throws Exception {
         ValueConvertor fromStringConvertor =
-            ValueConvertor.createConcreteValueConvertor(CustomTypeNoValueOf.class,
-                                                        CustomTypeNoValueOf.class);
+            ValueConvertor.createConcreteValueConvertor(CustomTypeFromString.class,
+                                                        CustomTypeFromString.class);
         assertEquals("VALUE_fromString", fromStringConvertor.convert("VALUE").toString());
     }
 
@@ -114,4 +149,16 @@ public class ValueConvertorTest extends TestCase {
         assertEquals(MyEnumWithFromString.SUNDAY_fromString, fromStringConvertor.convert("SUNDAY"));
     }
 
+    // make sure that a single value conversion will sort multiple values
+    // correctly
+    public void testMultipleValuesSortedReturned() throws Exception {
+        ValueConvertor constructorConvertor =
+            ValueConvertor.createValueConvertor(CustomTypeConstructor.class,
+                                                CustomTypeConstructor.class);
+        List<String> values = new ArrayList<String>();
+        values.add("z");
+        values.add("a");
+        values.add("aa");
+        assertEquals("a", constructorConvertor.convert(values).toString());
+    }
 }

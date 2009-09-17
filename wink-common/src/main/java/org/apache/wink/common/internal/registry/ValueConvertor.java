@@ -28,6 +28,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -125,6 +126,13 @@ public abstract class ValueConvertor {
             return null;
         }
 
+        try {
+            Constructor<?> constructor = classType.getConstructor(String.class);
+            return new ConstructorConvertor(constructor);
+        } catch (SecurityException e) {
+        } catch (NoSuchMethodException e) {
+        }
+
         // see JAX-RS 1.1 C006:
         // http://jcp.org/aboutJava/communityprocess/maintenance/jsr311/311ChangeLog.html
         // precendence for enums is fromString, then valueOf
@@ -139,13 +147,6 @@ public abstract class ValueConvertor {
             } catch (SecurityException e2) {
             } catch (NoSuchMethodException e2) {
             }
-        }
-
-        try {
-            Constructor<?> constructor = classType.getConstructor(String.class);
-            return new ConstructorConvertor(constructor);
-        } catch (SecurityException e) {
-        } catch (NoSuchMethodException e) {
         }
 
         throw new IllegalArgumentException("type '" + classType
@@ -172,6 +173,13 @@ public abstract class ValueConvertor {
         }
 
         try {
+            Constructor<?> constructor = classType.getConstructor(String.class);
+            return new ConstructorConvertor(constructor);
+        } catch (SecurityException e) {
+        } catch (NoSuchMethodException e) {
+        }
+
+        try {
             Method valueOf = classType.getDeclaredMethod("valueOf", String.class);
             return new ValueOfConvertor(valueOf);
         } catch (SecurityException e) {
@@ -185,13 +193,6 @@ public abstract class ValueConvertor {
             } catch (SecurityException e2) {
             } catch (NoSuchMethodException e2) {
             }
-        }
-
-        try {
-            Constructor<?> constructor = classType.getConstructor(String.class);
-            return new ConstructorConvertor(constructor);
-        } catch (SecurityException e) {
-        } catch (NoSuchMethodException e) {
         }
 
         throw new IllegalArgumentException("type '" + classType
@@ -243,7 +244,9 @@ public abstract class ValueConvertor {
             if (values == null || values.size() == 0) {
                 return convert((String)null);
             }
-            return convert(values.get(0));
+            List<String> valuesSorted = new ArrayList<String>(values);
+            Collections.sort(valuesSorted);
+            return convert(valuesSorted.get(0));
         }
     }
 
