@@ -113,9 +113,43 @@ public abstract class ValueConvertor {
         } else if (classType.equals(Set.class)) {
             return new SetConvertor(getSingleValueConvertor(GenericsUtils
                 .getGenericParamType(genericType)));
+        } else if (classType.isEnum()) {
+            return getEnumValueConvertor(classType);
         } else {
             return getSingleValueConvertor(classType);
         }
+    }
+
+    private static ValueConvertor getEnumValueConvertor(Class<?> classType) {
+        if (classType == null) {
+            return null;
+        }
+
+        // see JAX-RS 1.1 C006:
+        // http://jcp.org/aboutJava/communityprocess/maintenance/jsr311/311ChangeLog.html
+        // precendence for enums is fromString, then valueOf
+        try {
+            Method valueOf = classType.getDeclaredMethod("fromString", String.class);
+            return new FromStringConvertor(valueOf);
+        } catch (SecurityException e) {
+        } catch (NoSuchMethodException e) {
+            try {
+                Method fromString = classType.getDeclaredMethod("valueOf", String.class);
+                return new ValueOfConvertor(fromString);
+            } catch (SecurityException e2) {
+            } catch (NoSuchMethodException e2) {
+            }
+        }
+
+        try {
+            Constructor<?> constructor = classType.getConstructor(String.class);
+            return new ConstructorConvertor(constructor);
+        } catch (SecurityException e) {
+        } catch (NoSuchMethodException e) {
+        }
+
+        throw new IllegalArgumentException("type '" + classType
+            + "' is not a supported resource method parameter");
     }
 
     private static ValueConvertor getSingleValueConvertor(Class<?> classType) {
@@ -142,6 +176,15 @@ public abstract class ValueConvertor {
             return new ValueOfConvertor(valueOf);
         } catch (SecurityException e) {
         } catch (NoSuchMethodException e) {
+            // see JAX-RS 1.1 C006:
+            // http://jcp.org/aboutJava/communityprocess/maintenance/jsr311/311ChangeLog.html
+            // fallback to fromString method when no valueOf method exists
+            try {
+                Method fromString = classType.getDeclaredMethod("fromString", String.class);
+                return new FromStringConvertor(fromString);
+            } catch (SecurityException e2) {
+            } catch (NoSuchMethodException e2) {
+            }
         }
 
         try {
@@ -255,6 +298,18 @@ public abstract class ValueConvertor {
                 Throwable targetException = e.getTargetException();
                 throw createConversionException(value, method.getDeclaringClass(), targetException);
             }
+        }
+    }
+
+    /**
+     * FromStringConvertor class exists only to make it obvious which method we
+     * picked up from the custom *Param type being converted See
+     * http://jcp.org/aboutJava
+     * /communityprocess/maintenance/jsr311/311ChangeLog.html C006
+     */
+    private static class FromStringConvertor extends ValueOfConvertor {
+        public FromStringConvertor(Method method) {
+            super(method);
         }
     }
 
