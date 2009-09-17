@@ -66,11 +66,11 @@ public class EchoResource {
             if (MediaType.APPLICATION_JSON_TYPE.isCompatible(variant.getMediaType())) {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("value", sb.toString());
-                return Response.ok(jsonObject).build();
+                return Response.ok(jsonObject).type(MediaType.APPLICATION_JSON).build();
             } else if (MediaType.TEXT_XML_TYPE.isCompatible(variant.getMediaType())) {
                 Echo e = new Echo();
                 e.setValue(sb.toString());
-                return Response.ok(e).build();
+                return Response.ok(e).type(MediaType.TEXT_XML).build();
             }
         }
 

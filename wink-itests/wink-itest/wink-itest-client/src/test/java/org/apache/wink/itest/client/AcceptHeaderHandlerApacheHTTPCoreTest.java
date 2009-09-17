@@ -24,6 +24,7 @@ import java.util.Set;
 import javax.ws.rs.core.Application;
 
 import org.apache.wink.client.ApacheHttpClientConfig;
+import org.apache.wink.client.ClientConfig;
 import org.apache.wink.client.RestClient;
 import org.apache.wink.providers.json.JsonProvider;
 
@@ -35,7 +36,9 @@ public class AcceptHeaderHandlerApacheHTTPCoreTest extends AcceptHeaderHandlerTe
 
     public void setUp() throws Exception {
         super.setUp();
-        client = new RestClient(new ApacheHttpClientConfig().applications(new Application() {
+        ClientConfig config = new ApacheHttpClientConfig();
+        config.setLoadWinkApplications(false);
+        config.applications(new Application() {
 
             @Override
             public Set<Class<?>> getClasses() {
@@ -44,7 +47,8 @@ public class AcceptHeaderHandlerApacheHTTPCoreTest extends AcceptHeaderHandlerTe
                 return classes;
             }
 
-        }));
+        });
+        client = new RestClient(config);
     }
 
 }

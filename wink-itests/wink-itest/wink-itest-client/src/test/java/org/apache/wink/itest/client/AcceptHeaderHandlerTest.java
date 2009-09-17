@@ -30,6 +30,7 @@ import javax.xml.bind.JAXBException;
 
 import junit.framework.TestCase;
 
+import org.apache.wink.client.ApacheHttpClientConfig;
 import org.apache.wink.client.ClientConfig;
 import org.apache.wink.client.ClientResponse;
 import org.apache.wink.client.RestClient;
@@ -55,7 +56,10 @@ public class AcceptHeaderHandlerTest extends TestCase {
 
     public void setUp() throws Exception {
         super.setUp();
-        client = new RestClient(new ClientConfig().applications(new Application() {
+
+        ClientConfig config = new ApacheHttpClientConfig();
+        config.setLoadWinkApplications(false);
+        config.applications(new Application() {
 
             @Override
             public Set<Class<?>> getClasses() {
@@ -64,7 +68,9 @@ public class AcceptHeaderHandlerTest extends TestCase {
                 return classes;
             }
 
-        }));
+        });
+
+        client = new RestClient(config);
     }
 
     /**
