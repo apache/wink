@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
-package org.apache.wink.providers.jettison.internal;
+package org.apache.wink.providers.jettison;
 
 import java.io.IOException;
 import java.io.InputStream;

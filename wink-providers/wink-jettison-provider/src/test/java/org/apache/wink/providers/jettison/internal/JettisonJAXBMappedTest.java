@@ -39,8 +39,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.wink.common.model.atom.AtomEntry;
 import org.apache.wink.common.model.synd.SyndEntry;
-import org.apache.wink.providers.jettison.internal.JettisonJAXBElementProvider;
-import org.apache.wink.providers.jettison.internal.JettisonJAXBProvider;
+import org.apache.wink.providers.jettison.JettisonJAXBElementProvider;
+import org.apache.wink.providers.jettison.JettisonJAXBProvider;
 import org.apache.wink.providers.jettison.internal.jaxb.Person;
 import org.apache.wink.providers.json.JSONUtils;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;

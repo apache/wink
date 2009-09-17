@@ -35,7 +35,7 @@ import javax.xml.bind.Unmarshaller;
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Entry;
 import org.apache.wink.common.model.atom.AtomEntry;
-import org.apache.wink.providers.abdera.internal.AbderaAtomEntryProvider;
+import org.apache.wink.providers.abdera.AbderaAtomEntryProvider;
 import org.apache.wink.providers.json.JSONUtils;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;

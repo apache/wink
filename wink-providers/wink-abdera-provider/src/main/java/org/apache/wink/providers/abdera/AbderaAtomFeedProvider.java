@@ -17,7 +17,7 @@
  *  under the License.
  *  
  *******************************************************************************/
-package org.apache.wink.providers.abdera.internal;
+package org.apache.wink.providers.abdera;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,17 +35,17 @@ import javax.ws.rs.ext.Provider;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Document;
-import org.apache.abdera.model.Entry;
+import org.apache.abdera.model.Feed;
 import org.apache.abdera.writer.Writer;
 
 @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
 @Consumes(MediaType.APPLICATION_ATOM_XML)
 @Provider
-public class AbderaAtomEntryProvider implements MessageBodyReader<Entry>, MessageBodyWriter<Entry> {
+public class AbderaAtomFeedProvider implements MessageBodyWriter<Feed>, MessageBodyReader<Feed> {
 
     private static final Abdera ATOM_ENGINE = new Abdera();
 
-    public long getSize(Entry entry,
+    public long getSize(Feed feed,
                         Class<?> type,
                         Type genericType,
                         Annotation[] annotations,
@@ -57,10 +57,10 @@ public class AbderaAtomEntryProvider implements MessageBodyReader<Entry>, Messag
                                Type genericType,
                                Annotation[] annotations,
                                MediaType mediaType) {
-        return Entry.class.isAssignableFrom(type);
+        return Feed.class.isAssignableFrom(type);
     }
 
-    public void writeTo(Entry entry,
+    public void writeTo(Feed feed,
                         Class<?> type,
                         Type genericType,
                         Annotation[] annotations,
@@ -69,9 +69,9 @@ public class AbderaAtomEntryProvider implements MessageBodyReader<Entry>, Messag
                         OutputStream entityStream) throws IOException {
         if (MediaType.APPLICATION_JSON_TYPE.isCompatible(mediaType)) {
             Writer w = ATOM_ENGINE.getWriterFactory().getWriter("json");
-            entry.writeTo(w, entityStream);
+            feed.writeTo(w, entityStream);
         } else {
-            entry.writeTo(entityStream);
+            feed.writeTo(entityStream);
         }
     }
 
@@ -79,16 +79,16 @@ public class AbderaAtomEntryProvider implements MessageBodyReader<Entry>, Messag
                               Type genericType,
                               Annotation[] annotations,
                               MediaType mediaType) {
-        return Entry.class == type;
+        return Feed.class == type;
     }
 
-    public Entry readFrom(Class<Entry> type,
-                          Type genericType,
-                          Annotation[] annotations,
-                          MediaType mediaType,
-                          MultivaluedMap<String, String> httpHeaders,
-                          InputStream entityStream) throws IOException {
-        Document<Entry> doc = ATOM_ENGINE.getParser().parse(entityStream);
+    public Feed readFrom(Class<Feed> type,
+                         Type genericType,
+                         Annotation[] annotations,
+                         MediaType mediaType,
+                         MultivaluedMap<String, String> httpHeaders,
+                         InputStream entityStream) throws IOException {
+        Document<Feed> doc = ATOM_ENGINE.getParser().parse(entityStream);
         return doc.getRoot();
     }
 }
