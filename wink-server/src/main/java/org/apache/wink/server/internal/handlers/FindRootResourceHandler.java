@@ -20,7 +20,6 @@
 
 package org.apache.wink.server.internal.handlers;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
@@ -28,13 +27,13 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.PathSegment;
 import javax.ws.rs.core.Response;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wink.server.handlers.HandlersChain;
 import org.apache.wink.server.handlers.MessageContext;
 import org.apache.wink.server.handlers.RequestHandler;
 import org.apache.wink.server.internal.registry.ResourceInstance;
 import org.apache.wink.server.internal.registry.ResourceRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FindRootResourceHandler implements RequestHandler {
 
@@ -54,7 +53,13 @@ public class FindRootResourceHandler implements RequestHandler {
         String strippedPath = buildPathForMatching(segments);
 
         // get a list of root resources that can handle the request
-        List<ResourceInstance> matchedResources = registry.getMatchingRootResources(strippedPath);
+
+        // JAX-RS specification requires to search only the first matching
+        // resource,
+        // but the continued search behavior is to continue searching in all
+        // matching resources
+        List<ResourceInstance> matchedResources =
+            registry.getMatchingRootResources(strippedPath, isContinuedSearchPolicy);
         if (matchedResources.size() == 0) {
             logger.debug("No resource found matching {}", context.getUriInfo().getPath(false));
             SearchResult result =
@@ -63,23 +68,8 @@ public class FindRootResourceHandler implements RequestHandler {
             return;
         }
 
-        // JAX-RS specification requires to search only the first matching
-        // resource,
-        // but the continued search behavior is to continue searching in all
-        // matching resources
-        List<ResourceInstance> searchableResources = new LinkedList<ResourceInstance>();
-        if (!isContinuedSearchPolicy) {
-            // strict behavior - search only in the first matched root resource,
-            // as per the JAX-RS
-            // specification
-            searchableResources.add(matchedResources.get(0));
-        } else {
-            // continued search behavior - search in all matched resources
-            searchableResources.addAll(matchedResources);
-        }
-
         // search through all the matched resources (or just the first one)
-        for (ResourceInstance resource : searchableResources) {
+        for (ResourceInstance resource : matchedResources) {
             // save the matched variables, resource and uri
             SearchResult result = new SearchResult(resource, context.getUriInfo());
             context.setAttribute(SearchResult.class, result);

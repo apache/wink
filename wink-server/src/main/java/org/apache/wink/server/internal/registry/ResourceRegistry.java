@@ -22,6 +22,7 @@ package org.apache.wink.server.internal.registry;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,6 +49,8 @@ import org.apache.wink.common.internal.registry.metadata.MethodMetadata;
 import org.apache.wink.common.internal.uritemplate.UriTemplateMatcher;
 import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
+import org.apache.wink.common.internal.utils.SimpleMap;
+import org.apache.wink.common.internal.utils.SoftConcurrentMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,16 +60,21 @@ import org.slf4j.LoggerFactory;
  */
 public class ResourceRegistry {
 
-    private static final Logger        logger = LoggerFactory.getLogger(ResourceRegistry.class);
+    private static final Logger                                   logger             =
+                                                                                         LoggerFactory
+                                                                                             .getLogger(ResourceRegistry.class);
 
-    private List<ResourceRecord>       rootResources;
-    private boolean                    dirty;
+    private List<ResourceRecord>                                  rootResources;
+    private boolean                                               dirty;
 
-    private ResourceRecordFactory      resourceRecordsFactory;
+    private ResourceRecordFactory                                 resourceRecordsFactory;
 
-    private Lock                       readersLock;
-    private Lock                       writersLock;
-    private final ApplicationValidator applicationValidator;
+    private Lock                                                  readersLock;
+    private Lock                                                  writersLock;
+    private final ApplicationValidator                            applicationValidator;
+
+    private Map<Boolean, SimpleMap<String, List<ResourceRecord>>> uriToResourceCache =
+                                                                                         new HashMap<Boolean, SimpleMap<String, List<ResourceRecord>>>();
 
     public ResourceRegistry(LifecycleManagersRegistry factoryRegistry,
                             ApplicationValidator applicationValidator) {
@@ -77,6 +85,9 @@ public class ResourceRegistry {
         ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
         readersLock = readWriteLock.readLock();
         writersLock = readWriteLock.writeLock();
+        uriToResourceCache.put(Boolean.TRUE, new SoftConcurrentMap<String, List<ResourceRecord>>());
+        uriToResourceCache
+            .put(Boolean.FALSE, new SoftConcurrentMap<String, List<ResourceRecord>>());
     }
 
     /**
@@ -185,8 +196,13 @@ public class ResourceRegistry {
      * @return unmodifiable list of all the root resource records
      */
     public List<ResourceRecord> getRecords() {
-        assertSorted();
-        return Collections.unmodifiableList(rootResources);
+        readersLock.lock();
+        try {
+            assertSorted();
+            return Collections.unmodifiableList(rootResources);
+        } finally {
+            readersLock.unlock();
+        }
     }
 
     public Set<String> getOptions(ResourceInstance resource) {
@@ -216,17 +232,14 @@ public class ResourceRegistry {
      * Verify that the root resources list is sorted
      */
     private void assertSorted() {
-        readersLock.lock();
-        try {
-            if (dirty) {
-                // we use the reverse-order comparator because the sort method
-                // will sort the elements in ascending order, but we want
-                // them sorted in descending order
-                Collections.sort(rootResources, Collections.reverseOrder());
-                dirty = false;
-            }
-        } finally {
-            readersLock.unlock();
+        if (dirty) {
+            // we use the reverse-order comparator because the sort method
+            // will sort the elements in ascending order, but we want
+            // them sorted in descending order
+            Collections.sort(rootResources, Collections.reverseOrder());
+            uriToResourceCache.get(Boolean.TRUE).clear();
+            uriToResourceCache.get(Boolean.FALSE).clear();
+            dirty = false;
         }
     }
 
@@ -237,21 +250,55 @@ public class ResourceRegistry {
      * @return
      */
     public List<ResourceInstance> getMatchingRootResources(String uri) {
-        assertSorted();
+        return getMatchingRootResources(uri, true);
+    }
+
+    /**
+     * Get a list of all the root resources that match the request.
+     * 
+     * @param context
+     * @return
+     */
+    public List<ResourceInstance> getMatchingRootResources(String uri,
+                                                           boolean isContinuedSearchPolicy) {
         List<ResourceInstance> found = new ArrayList<ResourceInstance>();
         uri = UriTemplateProcessor.normalizeUri(uri);
 
         readersLock.lock();
         try {
+            assertSorted();
+            List<ResourceRecord> previousMatched = null;
+            /*
+             * the previous matches are cached so if a previous URI used is
+             * still in the cache, this will find the resources that matched
+             * skipping the expensive UriTemplateMatcher.matches()
+             */
+            previousMatched = uriToResourceCache.get(isContinuedSearchPolicy).get(uri);
+            if (previousMatched != null) {
+                for (ResourceRecord record : previousMatched) {
+                    UriTemplateMatcher matcher = record.getTemplateProcessor().matcher();
+                    if (matcher.matches(uri)) {
+                        found.add(new ResourceInstance(record, matcher));
+                    }
+                }
+                return found;
+            }
+            previousMatched = new ArrayList<ResourceRecord>();
+
             // the list of root resource records is already sorted
             for (ResourceRecord record : rootResources) {
                 UriTemplateMatcher matcher = record.getTemplateProcessor().matcher();
                 if (matcher.matches(uri)) {
                     if (matcher.isExactMatch() || record.hasSubResources()) {
+                        previousMatched.add(record);
                         found.add(new ResourceInstance(record, matcher));
+                        if (!isContinuedSearchPolicy) {
+                            break;
+                        }
                     }
                 }
             }
+            uriToResourceCache.get(isContinuedSearchPolicy).put(uri, previousMatched);
         } finally {
             readersLock.unlock();
         }
