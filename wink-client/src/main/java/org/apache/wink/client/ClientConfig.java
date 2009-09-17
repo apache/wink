@@ -72,12 +72,15 @@ public class ClientConfig implements Cloneable {
         followRedirects = true;
         isAcceptHeaderAutoSet = true;
         handlers = new LinkedList<ClientHandler>();
-        applications = new LinkedList<Application>();
-        initDefaultApplication();
     }
 
     private void initDefaultApplication() {
 
+        if (applications != null) {
+            return;
+        } else {
+            applications = new LinkedList<Application>();
+        }
         try {
             final Set<Class<?>> classes =
                 new ApplicationFileLoader(loadWinkApplications).getClasses();
@@ -305,6 +308,9 @@ public class ClientConfig implements Cloneable {
      * @return
      */
     public final List<Application> getApplications() {
+        if (applications == null) {
+            initDefaultApplication();
+        }
         return Collections.unmodifiableList(applications);
     }
 
@@ -319,6 +325,9 @@ public class ClientConfig implements Cloneable {
         if (!modifiable) {
             throw new ClientConfigException("configuration is unmodifiable");
         }
+        if (this.applications == null) {
+            initDefaultApplication();
+        }
         for (Application application : applications) {
             this.applications.add(application);
         }
@@ -327,6 +336,9 @@ public class ClientConfig implements Cloneable {
 
     @Override
     protected ClientConfig clone() {
+        if (applications == null) {
+            initDefaultApplication();
+        }
         try {
             ClientConfig clone = (ClientConfig)super.clone();
             clone.handlers = new LinkedList<ClientHandler>(handlers);
