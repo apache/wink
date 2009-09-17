@@ -21,9 +21,6 @@ package org.apache.wink.common.internal.utils;
 import java.lang.ref.SoftReference;
 import java.util.Map;
 import java.util.WeakHashMap;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Concurrent implementation of the SimpleMap interface. This implementation is
@@ -32,42 +29,35 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * <p>
  * Pay attention that put value always returns the current value and not the
  * original value. It was done to allow the following code pattern:
+ * 
  * <pre>
- * SoftConcurrentMap<K, V> cache = new SoftConcurrentMap<K, V>();
+ * SoftConcurrentMap&lt;K, V&gt; cache = new SoftConcurrentMap&lt;K, V&gt;();
  * V cached = cache.get(key);
- * return cached =! null ? cached : cache.put(createValue());
- * </pre> 
+ * return cached = !null ? cached : cache.put(createValue());
+ * </pre>
+ * 
  * @param <K>
  * @param <V>
  */
 public class SoftConcurrentMap<K, V> implements SimpleMap<K, V> {
 
-    private final Lock                     readersLock;
-    private final Lock                     writersLock;
-    private final Map<K, SoftReference<V>> map;
+    /*
+     * Note that this volatile variable is important for publication purposes.
+     */
+    private volatile Map<K, SoftReference<V>> map;
 
     /**
-     * Provides the map implementation. Pay attention that get method is
-     * synchronized using the read lock, therefore it must not change the entire
-     * collection.
+     * Provides the map implementation.
      * 
      * @param map
      */
     public SoftConcurrentMap() {
         this.map = new WeakHashMap<K, SoftReference<V>>();
-        ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
-        readersLock = readWriteLock.readLock();
-        writersLock = readWriteLock.writeLock();
     }
 
     public V get(K key) {
-        readersLock.lock();
-        try {
-            SoftReference<V> softReference = map.get(key);
-            return softReference != null ? softReference.get() : null;
-        } finally {
-            readersLock.unlock();
-        }
+        SoftReference<V> softReference = map.get(key);
+        return softReference != null ? softReference.get() : null;
     }
 
     /**
@@ -77,26 +67,25 @@ public class SoftConcurrentMap<K, V> implements SimpleMap<K, V> {
      * <p>
      * Unlike the regular Map.put method, this method returns the current value
      * and not the previous value.
+     * <p>
+     * Note that a copy on write pattern is used where the existing cache is
+     * treated as a read only cache and then it is copied to a new cache.
      * 
      * @return val - the current value.
      */
-    public V put(K key, V val) {
-        writersLock.lock();
-        try {
-            map.put(key, new SoftReference<V>(val));
-            return val;
-        } finally {
-            writersLock.unlock();
-        }
+    public synchronized V put(K key, V val) {
+        WeakHashMap<K, SoftReference<V>> copyOfMap = new WeakHashMap<K, SoftReference<V>>(map);
+        copyOfMap.put(key, new SoftReference<V>(val));
+        map = copyOfMap;
+        return val;
     }
 
-    public void clear() {
-        writersLock.lock();
-        try {
-            map.clear();
-        } finally {
-            writersLock.unlock();
-        }
+    public synchronized void clear() {
+        /*
+         * Note that a copy on write pattern is used here so that the cache is
+         * cleared by assigning to a new empty cache.
+         */
+        map = new WeakHashMap<K, SoftReference<V>>();
     }
 
 }
