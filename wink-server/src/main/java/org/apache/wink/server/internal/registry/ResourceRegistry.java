@@ -65,7 +65,6 @@ public class ResourceRegistry {
                                                                                              .getLogger(ResourceRegistry.class);
 
     private List<ResourceRecord>                                  rootResources;
-    private boolean                                               dirty;
 
     private ResourceRecordFactory                                 resourceRecordsFactory;
 
@@ -80,7 +79,6 @@ public class ResourceRegistry {
                             ApplicationValidator applicationValidator) {
         this.applicationValidator = applicationValidator;
         rootResources = new LinkedList<ResourceRecord>();
-        dirty = false;
         resourceRecordsFactory = new ResourceRecordFactory(factoryRegistry);
         ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
         readersLock = readWriteLock.readLock();
@@ -127,7 +125,7 @@ public class ResourceRegistry {
             ResourceRecord record = getRecord(instance);
             record.setPriority(priority);
             rootResources.add(record);
-            dirty = true;
+            assertSorted();
         } finally {
             writersLock.unlock();
         }
@@ -151,7 +149,7 @@ public class ResourceRegistry {
             ResourceRecord record = getRecord(clazz);
             record.setPriority(priority);
             rootResources.add(record);
-            dirty = true;
+            assertSorted();
         } finally {
             writersLock.unlock();
         }
@@ -198,7 +196,6 @@ public class ResourceRegistry {
     public List<ResourceRecord> getRecords() {
         readersLock.lock();
         try {
-            assertSorted();
             return Collections.unmodifiableList(rootResources);
         } finally {
             readersLock.unlock();
@@ -232,15 +229,12 @@ public class ResourceRegistry {
      * Verify that the root resources list is sorted
      */
     private void assertSorted() {
-        if (dirty) {
-            // we use the reverse-order comparator because the sort method
-            // will sort the elements in ascending order, but we want
-            // them sorted in descending order
-            Collections.sort(rootResources, Collections.reverseOrder());
-            uriToResourceCache.get(Boolean.TRUE).clear();
-            uriToResourceCache.get(Boolean.FALSE).clear();
-            dirty = false;
-        }
+        // we use the reverse-order comparator because the sort method
+        // will sort the elements in ascending order, but we want
+        // them sorted in descending order
+        Collections.sort(rootResources, Collections.reverseOrder());
+        uriToResourceCache.get(Boolean.TRUE).clear();
+        uriToResourceCache.get(Boolean.FALSE).clear();
     }
 
     /**
@@ -266,7 +260,6 @@ public class ResourceRegistry {
 
         readersLock.lock();
         try {
-            assertSorted();
             List<ResourceRecord> previousMatched = null;
             /*
              * the previous matches are cached so if a previous URI used is
