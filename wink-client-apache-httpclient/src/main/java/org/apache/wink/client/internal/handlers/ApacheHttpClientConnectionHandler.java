@@ -146,12 +146,29 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
         return httpclient;
     }
 
+    /**
+     * An empty input stream to simulate an empty message body.
+     */
+    private static class EmptyInputStream extends InputStream {
+
+        @Override
+        public int read() throws IOException {
+            return -1;
+        }
+    }
+
     private ClientResponse processResponse(ClientRequest request,
                                            HandlerContext context,
                                            HttpResponse httpResponse) throws IllegalStateException,
         IOException {
         ClientResponse response = createResponse(request, httpResponse);
-        InputStream is = httpResponse.getEntity().getContent();
+        HttpEntity entity = httpResponse.getEntity();
+        InputStream is = null;
+        if (entity == null) {
+            is = new EmptyInputStream();
+        } else {
+            is = entity.getContent();
+        }
         is = adaptInputStream(is, response, context.getInputStreamAdapters());
         response.setEntity(is);
         return response;
