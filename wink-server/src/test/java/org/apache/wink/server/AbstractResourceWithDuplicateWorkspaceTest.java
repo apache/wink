@@ -34,7 +34,6 @@ import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
 import org.apache.wink.test.mock.TestUtils;
-import org.custommonkey.xmlunit.Diff;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 

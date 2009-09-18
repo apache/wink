@@ -61,18 +61,18 @@ public class JAXBElementProviderTest extends MockServletInvocationTest {
                                                                 "<JAXBXmlRootElement><id>ID</id><name>NAME</name></JAXBXmlRootElement>";
     private static final byte[] JAXBXmlRootElement_BYTES    = JAXBXmlRootElement_REQUEST.getBytes();
     private static final String JAXBXmlRootElement_RESPONSE =
-                                                                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + "<JAXBXmlRootElement>\r\n"
-                                                                    + "    <id>ID</id>\r\n"
-                                                                    + "    <name>NAME</name>\r\n"
+                                                                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "<JAXBXmlRootElement>"
+                                                                    + "<id>ID</id>"
+                                                                    + "<name>NAME</name>"
                                                                     + "</JAXBXmlRootElement>";
 
     private static final String JAXBXmlType_REQUEST         =
                                                                 "<JAXBXmlType><id>ID</id><name>NAME</name></JAXBXmlType>";
     private static final byte[] JAXBXmlType_REQUEST_BYTES   = JAXBXmlType_REQUEST.getBytes();
     private static final String JAXBXmlType_RESPONSE        =
-                                                                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + "<JAXBXmlType>\r\n"
-                                                                    + "    <id>ID</id>\r\n"
-                                                                    + "    <name>NAME</name>\r\n"
+                                                                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "<JAXBXmlType>"
+                                                                    + "<id>ID</id>"
+                                                                    + "<name>NAME</name>"
                                                                     + "</JAXBXmlType>";
 
     JAXBElement<AtomFeed>       atomfeed;

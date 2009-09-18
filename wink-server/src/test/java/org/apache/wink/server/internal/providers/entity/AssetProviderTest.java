@@ -53,10 +53,10 @@ public class AssetProviderTest extends MockServletInvocationTest {
 
     private static final String STRING = "hello message";
     private static final String XML    =
-                                           "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + "<entry>\r\n"
-                                               + "    <id>entry:id</id>\r\n"
-                                               + "    <title type=\"text\">entry title</title>\r\n"
-                                               + "</entry>\r\n";
+                                           "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "<entry>"
+                                               + "<id>entry:id</id>"
+                                               + "<title type=\"text\">entry title</title>"
+                                               + "</entry>";
     private static final String JSON   =
                                            "{\"entry\": {\n" + "  \"id\": {\"$\": \"entry:id\"},\n"
                                                + "  \"title\": {\n"

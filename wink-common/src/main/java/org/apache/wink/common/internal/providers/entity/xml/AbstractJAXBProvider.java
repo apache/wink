@@ -87,9 +87,6 @@ public abstract class AbstractJAXBProvider {
         }
         if (formatingOptions != null) {
             JAXBUtils.setXmlFormattingOptions(marshaller, formatingOptions);
-        } else {
-            JAXBUtils.setXmlFormattingOptions(marshaller, XmlFormattingOptions
-                .getDefaultXmlFormattingOptions());
         }
         return marshaller;
     }
