@@ -34,8 +34,7 @@ public class InheritanceTest extends TestCase {
     protected HttpClient httpClient = new HttpClient();
 
     private static String getBaseURI() {
-        String isFilterUsed = System.getProperty("wink-rest-filter-used");
-        if (isFilterUsed != null && Boolean.valueOf(isFilterUsed).booleanValue()) {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
             return ServerEnvironmentInfo.getBaseURI();
         }
         return ServerEnvironmentInfo.getBaseURI() + "/inheritance";
