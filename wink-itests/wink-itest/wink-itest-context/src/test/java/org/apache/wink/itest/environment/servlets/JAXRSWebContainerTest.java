@@ -31,12 +31,18 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
  */
 public class JAXRSWebContainerTest extends TestCase {
 
-    public String getBaseURI() {
+    private static String getBaseURI() {
         if (ServerEnvironmentInfo.isRestFilterUsed()) {
             return ServerEnvironmentInfo.getBaseURI() + "/environment/webcontainer/context";
         }
         return ServerEnvironmentInfo.getBaseURI() + "/webcontainer"
             + "/environment/webcontainer/context";
+    }
+
+    private HttpClient client;
+
+    public void setUp() {
+        client = new HttpClient();
     }
 
     /**
@@ -45,8 +51,6 @@ public class JAXRSWebContainerTest extends TestCase {
      * @throws Exception
      */
     public void testHTTPServletRequestInjection() throws Exception {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod = new GetMethod(getBaseURI());
         try {
             client.executeMethod(getMethod);
@@ -68,8 +72,6 @@ public class JAXRSWebContainerTest extends TestCase {
      * @throws Exception
      */
     public void testHTTPServletResponseInjection() throws Exception {
-        HttpClient client = new HttpClient();
-
         PostMethod postMethod = new PostMethod(getBaseURI());
         try {
             client.executeMethod(postMethod);
@@ -88,8 +90,6 @@ public class JAXRSWebContainerTest extends TestCase {
      * @throws Exception
      */
     public void testServletContextInjection() throws Exception {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod = new GetMethod(getBaseURI() + "/servletcontext");
         try {
             client.executeMethod(getMethod);
@@ -107,8 +107,6 @@ public class JAXRSWebContainerTest extends TestCase {
      * @throws Exception
      */
     public void testServletConfigInjection() throws Exception {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod = new GetMethod(getBaseURI() + "/servletconfig");
         try {
             client.executeMethod(getMethod);

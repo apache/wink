@@ -35,13 +35,18 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
 public class ProvidersMethodsTest extends TestCase {
 
-    public String getBaseURI() {
-        if(ServerEnvironmentInfo.isRestFilterUsed()) {
+    private static String getBaseURI() {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
             return ServerEnvironmentInfo.getBaseURI();
         }
         return ServerEnvironmentInfo.getBaseURI() + "/providers";
     }
 
+    private HttpClient client;
+
+    public void setUp() {
+        client = new HttpClient();
+    }
 
     /**
      * Tests that
@@ -53,8 +58,6 @@ public class ProvidersMethodsTest extends TestCase {
      * @throws IOException
      */
     public void testContextResolverNoMatch() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/contextresolver?className=java.lang.Throwable&mediaType=*%2F*");
@@ -77,16 +80,14 @@ public class ProvidersMethodsTest extends TestCase {
      * @throws IOException
      */
     public void testContextResolverMatchSingle() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/contextresolver?className=java.lang.Exception&mediaType=*%2F*");
         try {
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());
-            assertEquals("org.apache.wink.itest.providers.MyExceptionContextResolver",
-                         getMethod.getResponseBodyAsString());
+            assertEquals("org.apache.wink.itest.providers.MyExceptionContextResolver", getMethod
+                .getResponseBodyAsString());
         } finally {
             getMethod.releaseConnection();
         }
@@ -101,8 +102,6 @@ public class ProvidersMethodsTest extends TestCase {
      * @throws IOException
      */
     public void testContextResolverNoMatchBySpecificMediaType() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/contextresolver?className=java.lang.Exception&mediaType=my%2Ftype");
@@ -123,16 +122,14 @@ public class ProvidersMethodsTest extends TestCase {
      * @throws IOException
      */
     public void testContextResolverMatchBySpecificMediaType() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/contextresolver?className=java.lang.Exception&mediaType=text%2Fxml");
         try {
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());
-            assertEquals("org.apache.wink.itest.providers.MyExceptionContextResolver",
-                         getMethod.getResponseBodyAsString());
+            assertEquals("org.apache.wink.itest.providers.MyExceptionContextResolver", getMethod
+                .getResponseBodyAsString());
         } finally {
             getMethod.releaseConnection();
         }
@@ -147,16 +144,14 @@ public class ProvidersMethodsTest extends TestCase {
      */
     public void testContextResolverMatchBySpecificMediaTypeTypeWildcard() throws HttpException,
         IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/contextresolver?className=java.lang.Exception&mediaType=*%2Fxml");
         try {
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());
-            assertEquals("org.apache.wink.itest.providers.MyExceptionContextResolver",
-                         getMethod.getResponseBodyAsString());
+            assertEquals("org.apache.wink.itest.providers.MyExceptionContextResolver", getMethod
+                .getResponseBodyAsString());
         } finally {
             getMethod.releaseConnection();
         }
@@ -171,46 +166,48 @@ public class ProvidersMethodsTest extends TestCase {
      */
     public void testContextResolverMatchBySpecificMediaTypeSubtypeWildcard() throws HttpException,
         IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/contextresolver?className=java.lang.Exception&mediaType=text%2F*");
         try {
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());
-            assertEquals("org.apache.wink.itest.providers.MyExceptionContextResolver",
-                         getMethod.getResponseBodyAsString());
+            assertEquals("org.apache.wink.itest.providers.MyExceptionContextResolver", getMethod
+                .getResponseBodyAsString());
         } finally {
             getMethod.releaseConnection();
         }
     }
 
-//    /**
-//     * Tests that when finding a {@link ContextResolver} both the application
-//     * provided and runtime provided context resolvers are searched. Invokes
-//     * with a specific JAXB class and verifies that the final context is a
-//     * JAXBContext. In this case, the runtime provided context resolver is used.
-//     * 
-//     * @throws HttpException
-//     * @throws IOException
-//     */
-//    public void testMultipleContextResolverRuntimeAndApplicationMatchByMediaTypeWildcardInvokeWithClassInvokeRuntimeProvided()
-//        throws HttpException, IOException {
-//        HttpClient client = new HttpClient();
-//
-//        GetMethod getMethod =
-//            new GetMethod(
-//                          getBaseURI() + "/context/providers/contextresolver?className=javax.xml.bind.JAXBContext&mediaType=*%2F*&invokeWithClassName=org.apache.wink.itest.providers.otherxml.OtherRootElement");
-//        try {
-//            client.executeMethod(getMethod);
-//            assertEquals(200, getMethod.getStatusCode());
-//            assertTrue(getMethod.getResponseBodyAsString(), getMethod.getResponseBodyAsString()
-//                .contains("JAXBContext"));
-//        } finally {
-//            getMethod.releaseConnection();
-//        }
-//    }
+    // /**
+    // * Tests that when finding a {@link ContextResolver} both the application
+    // * provided and runtime provided context resolvers are searched. Invokes
+    // * with a specific JAXB class and verifies that the final context is a
+    // * JAXBContext. In this case, the runtime provided context resolver is
+    // used.
+    // *
+    // * @throws HttpException
+    // * @throws IOException
+    // */
+    // public void
+    // testMultipleContextResolverRuntimeAndApplicationMatchByMediaTypeWildcardInvokeWithClassInvokeRuntimeProvided()
+    // throws HttpException, IOException {
+    // HttpClient client = new HttpClient();
+    //
+    // GetMethod getMethod =
+    // new GetMethod(
+    // getBaseURI() +
+    // "/context/providers/contextresolver?className=javax.xml.bind.JAXBContext&mediaType=*%2F*&invokeWithClassName=org.apache.wink.itest.providers.otherxml.OtherRootElement");
+    // try {
+    // client.executeMethod(getMethod);
+    // assertEquals(200, getMethod.getStatusCode());
+    // assertTrue(getMethod.getResponseBodyAsString(),
+    // getMethod.getResponseBodyAsString()
+    // .contains("JAXBContext"));
+    // } finally {
+    // getMethod.releaseConnection();
+    // }
+    // }
 
     /**
      * Tests that when finding a {@link ContextResolver} both the application
@@ -224,8 +221,6 @@ public class ProvidersMethodsTest extends TestCase {
      */
     public void testMultipleContextResolverRuntimeAndApplicationMatchByMediaTypeWildcardInvokeWithClassInvokeApplicationProvided()
         throws HttpException, IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/contextresolver?className=javax.xml.bind.JAXBContext&mediaType=*%2F*&invokeWithClassName=org.apache.wink.itest.providers.xml.RootElement");
@@ -239,78 +234,85 @@ public class ProvidersMethodsTest extends TestCase {
         }
     }
 
-//    /**
-//     * Tests that when there are multiple {@link ContextResolver}s that could
-//     * respond to a given type, that a proxy is returned that will call all of
-//     * them.
-//     * 
-//     * @throws HttpException
-//     * @throws IOException
-//     */
-//    public void testMultipleContextResolverRuntimeAndApplicationMatchByMediaTypeSpecificTextXML()
-//        throws HttpException, IOException {
-//        HttpClient client = new HttpClient();
-//
-//        GetMethod getMethod =
-//            new GetMethod(
-//                          getBaseURI() + "/context/providers/contextresolver?className=javax.xml.bind.JAXBContext&mediaType=text%2Fxml");
-//        try {
-//            client.executeMethod(getMethod);
-//            assertEquals(200, getMethod.getStatusCode());
-//            assertTrue(getMethod.getResponseBodyAsString().startsWith("$Proxy"));
-//        } finally {
-//            getMethod.releaseConnection();
-//        }
-//    }
+    // /**
+    // * Tests that when there are multiple {@link ContextResolver}s that could
+    // * respond to a given type, that a proxy is returned that will call all of
+    // * them.
+    // *
+    // * @throws HttpException
+    // * @throws IOException
+    // */
+    // public void
+    // testMultipleContextResolverRuntimeAndApplicationMatchByMediaTypeSpecificTextXML()
+    // throws HttpException, IOException {
+    // HttpClient client = new HttpClient();
+    //
+    // GetMethod getMethod =
+    // new GetMethod(
+    // getBaseURI() +
+    // "/context/providers/contextresolver?className=javax.xml.bind.JAXBContext&mediaType=text%2Fxml");
+    // try {
+    // client.executeMethod(getMethod);
+    // assertEquals(200, getMethod.getStatusCode());
+    // assertTrue(getMethod.getResponseBodyAsString().startsWith("$Proxy"));
+    // } finally {
+    // getMethod.releaseConnection();
+    // }
+    // }
 
-//    /**
-//     * Tests that when the application provided {@link ContextResolver} which
-//     * has a {@link Produces} annotation with text/xml is not the
-//     * ContextResolver returned when searching for application/json media type.
-//     * 
-//     * @throws HttpException
-//     * @throws IOException
-//     */
-//    public void testMultipleContextResolverRuntimeAndApplicationMatchByMediaTypeSpecificApplicationJSON()
-//        throws HttpException, IOException {
-//        HttpClient client = new HttpClient();
-//
-//        GetMethod getMethod =
-//            new GetMethod(
-//                          getBaseURI() + "/context/providers/contextresolver?className=javax.xml.bind.JAXBContext&mediaType=application%2Fjson");
-//        try {
-//            client.executeMethod(getMethod);
-//            assertEquals(200, getMethod.getStatusCode());
-//            assertTrue(getMethod.getResponseBodyAsString().contains("JAXBContext"));
-//        } finally {
-//            getMethod.releaseConnection();
-//        }
-//    }
+    // /**
+    // * Tests that when the application provided {@link ContextResolver} which
+    // * has a {@link Produces} annotation with text/xml is not the
+    // * ContextResolver returned when searching for application/json media
+    // type.
+    // *
+    // * @throws HttpException
+    // * @throws IOException
+    // */
+    // public void
+    // testMultipleContextResolverRuntimeAndApplicationMatchByMediaTypeSpecificApplicationJSON()
+    // throws HttpException, IOException {
+    // HttpClient client = new HttpClient();
+    //
+    // GetMethod getMethod =
+    // new GetMethod(
+    // getBaseURI() +
+    // "/context/providers/contextresolver?className=javax.xml.bind.JAXBContext&mediaType=application%2Fjson");
+    // try {
+    // client.executeMethod(getMethod);
+    // assertEquals(200, getMethod.getStatusCode());
+    // assertTrue(getMethod.getResponseBodyAsString().contains("JAXBContext"));
+    // } finally {
+    // getMethod.releaseConnection();
+    // }
+    // }
 
-//    /**
-//     * Tests that when the application provided {@link ContextResolver} which
-//     * has a {@link Produces} annotation with text/xml is not called when an
-//     * application/json is searched. This method should be able to invoke the
-//     * runtime provided JAXBContext ContextResolver but return null.
-//     * 
-//     * @throws HttpException
-//     * @throws IOException
-//     */
-//    public void testMultipleContextResolverRuntimeAndApplicationMatchByMediaTypeSpecificApplicationJSONInvokeNegative()
-//        throws HttpException, IOException {
-//        HttpClient client = new HttpClient();
-//
-//        GetMethod getMethod =
-//            new GetMethod(
-//                          getBaseURI() + "/context/providers/contextresolver?className=javax.xml.bind.JAXBContext&mediaType=application%2Fjson&invokeWithClassName=org.apache.wink.itest.providers.xml.RootElement");
-//        try {
-//            client.executeMethod(getMethod);
-//            assertEquals(200, getMethod.getStatusCode());
-//            assertEquals("null", getMethod.getResponseBodyAsString());
-//        } finally {
-//            getMethod.releaseConnection();
-//        }
-//    }
+    // /**
+    // * Tests that when the application provided {@link ContextResolver} which
+    // * has a {@link Produces} annotation with text/xml is not called when an
+    // * application/json is searched. This method should be able to invoke the
+    // * runtime provided JAXBContext ContextResolver but return null.
+    // *
+    // * @throws HttpException
+    // * @throws IOException
+    // */
+    // public void
+    // testMultipleContextResolverRuntimeAndApplicationMatchByMediaTypeSpecificApplicationJSONInvokeNegative()
+    // throws HttpException, IOException {
+    // HttpClient client = new HttpClient();
+    //
+    // GetMethod getMethod =
+    // new GetMethod(
+    // getBaseURI() +
+    // "/context/providers/contextresolver?className=javax.xml.bind.JAXBContext&mediaType=application%2Fjson&invokeWithClassName=org.apache.wink.itest.providers.xml.RootElement");
+    // try {
+    // client.executeMethod(getMethod);
+    // assertEquals(200, getMethod.getStatusCode());
+    // assertEquals("null", getMethod.getResponseBodyAsString());
+    // } finally {
+    // getMethod.releaseConnection();
+    // }
+    // }
 
     /**
      * Tests that when the application provided {@link ContextResolver} which
@@ -324,8 +326,6 @@ public class ProvidersMethodsTest extends TestCase {
      */
     public void testMultipleContextResolverRuntimeAndApplicationMatchByMediaTypeSpecificTextXMLInvoke()
         throws HttpException, IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/contextresolver?className=javax.xml.bind.JAXBContext&mediaType=text%2Fxml&invokeWithClassName=org.apache.wink.itest.providers.xml.RootElement");
@@ -348,8 +348,6 @@ public class ProvidersMethodsTest extends TestCase {
      */
     public void testContextResolverMatchMultipleSortByProducesWildcardType() throws HttpException,
         IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/contextresolver?className=java.lang.String&mediaType=abcd%2Fxml&invokeWithClassName=java.lang.Short&returnToStringValue=true");
@@ -371,8 +369,6 @@ public class ProvidersMethodsTest extends TestCase {
      */
     public void testContextResolverMatchMultipleSortByProducesWildcardSubtype()
         throws HttpException, IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/contextresolver?className=java.lang.String&mediaType=text%2Fabcd&invokeWithClassName=java.lang.Short&returnToStringValue=true");
@@ -394,8 +390,6 @@ public class ProvidersMethodsTest extends TestCase {
      */
     public void testContextResolverMatchMultipleSortByProducesAllWildcard() throws HttpException,
         IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/contextresolver?className=java.lang.String&mediaType=abcd%2Fdef&invokeWithClassName=java.lang.Short&returnToStringValue=true");
@@ -418,8 +412,6 @@ public class ProvidersMethodsTest extends TestCase {
      */
     public void testContextResolverMatchMultipleSortByProducesFindOne() throws HttpException,
         IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/contextresolver?className=java.lang.String&mediaType=text%2Fxml&invokeWithClassName=java.lang.Integer&returnToStringValue=true");
@@ -430,8 +422,6 @@ public class ProvidersMethodsTest extends TestCase {
         } finally {
             getMethod.releaseConnection();
         }
-
-        client = new HttpClient();
 
         getMethod =
             new GetMethod(
@@ -454,8 +444,6 @@ public class ProvidersMethodsTest extends TestCase {
      */
     public void testContextResolverMatchAnyMoreSpecificThanWildcards() throws HttpException,
         IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/contextresolver?className=java.lang.String&mediaType=text%2Fxml&invokeWithClassName=java.lang.Short&returnToStringValue=true");
@@ -480,16 +468,14 @@ public class ProvidersMethodsTest extends TestCase {
      */
     public void testContextResolverNoProducesMatchNotExpectedMediaType() throws HttpException,
         IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/contextresolver?className=java.lang.String&mediaType=my%2Ftype");
         try {
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());
-            assertEquals("org.apache.wink.itest.providers.MyStringContextForAllWildcard",
-                         getMethod.getResponseBodyAsString());
+            assertEquals("org.apache.wink.itest.providers.MyStringContextForAllWildcard", getMethod
+                .getResponseBodyAsString());
         } finally {
             getMethod.releaseConnection();
         }
@@ -502,16 +488,14 @@ public class ProvidersMethodsTest extends TestCase {
      * @throws IOException
      */
     public void testGetExceptionMapperAppSuppliedProvider() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/exception?className=org.apache.wink.itest.providers.MyException");
         try {
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());
-            assertEquals("org.apache.wink.itest.providers.ExceptionMapperForMyException",
-                         getMethod.getResponseBodyAsString());
+            assertEquals("org.apache.wink.itest.providers.ExceptionMapperForMyException", getMethod
+                .getResponseBodyAsString());
         } finally {
             getMethod.releaseConnection();
         }
@@ -527,16 +511,14 @@ public class ProvidersMethodsTest extends TestCase {
      */
     public void testGetExceptionMapperAppSuppliedInheritanceTree() throws HttpException,
         IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/exception?className=org.apache.wink.itest.providers.MyException2");
         try {
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());
-            assertEquals("org.apache.wink.itest.providers.ExceptionMapperForMyException",
-                         getMethod.getResponseBodyAsString());
+            assertEquals("org.apache.wink.itest.providers.ExceptionMapperForMyException", getMethod
+                .getResponseBodyAsString());
         } finally {
             getMethod.releaseConnection();
         }
@@ -550,8 +532,6 @@ public class ProvidersMethodsTest extends TestCase {
      * @throws IOException
      */
     public void testGetExceptionMapperNoMatching() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/exception?className=java.lang.Throwable");
@@ -573,8 +553,6 @@ public class ProvidersMethodsTest extends TestCase {
      * @throws IOException
      */
     public void testGetMessageBodyWriterSortByProducesMediaType() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/messagebodywriter?className=java.lang.Integer&mediaType=text%2Fxml");
@@ -615,8 +593,6 @@ public class ProvidersMethodsTest extends TestCase {
      */
     public void testGetMessageBodyWriterSortByProducesMediaTypeWithWildcards()
         throws HttpException, IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/messagebodywriter?className=java.lang.Short&mediaType=application%2Fjson");
@@ -637,9 +613,8 @@ public class ProvidersMethodsTest extends TestCase {
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());
             String response = getMethod.getResponseBodyAsString();
-            assertTrue(response,
-                       response
-                           .contains("org.apache.wink.itest.providers.MyMessageBodyWriterJSONForShort"));
+            assertTrue(response, response
+                .contains("org.apache.wink.itest.providers.MyMessageBodyWriterJSONForShort"));
         } finally {
             getMethod.releaseConnection();
         }
@@ -683,8 +658,6 @@ public class ProvidersMethodsTest extends TestCase {
      */
     public void testGetMessageBodyWriterWhichInheritsWriterInterface() throws HttpException,
         IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/messagebodywriter?className=java.util.List&mediaType=abcd%2Fefgh");
@@ -692,8 +665,7 @@ public class ProvidersMethodsTest extends TestCase {
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());
             String response = getMethod.getResponseBodyAsString();
-            assertEquals("org.apache.wink.itest.providers.MyMessageBodyWriterInherited",
-                         response);
+            assertEquals("org.apache.wink.itest.providers.MyMessageBodyWriterInherited", response);
         } finally {
             getMethod.releaseConnection();
         }
@@ -708,8 +680,6 @@ public class ProvidersMethodsTest extends TestCase {
      * @throws IOException
      */
     public void testGetMessageBodyWriterSortByIsWritable() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/messagebodywriter?className=java.lang.Integer&mediaType=application%2Fjson");
@@ -791,8 +761,6 @@ public class ProvidersMethodsTest extends TestCase {
      */
     public void testGetMessageBodyWriterUserPrecedenceOverRuntime() throws HttpException,
         IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/messagebodywriter?className=java.lang.String&mediaType=text%2Fplain");
@@ -800,8 +768,7 @@ public class ProvidersMethodsTest extends TestCase {
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());
             String response = getMethod.getResponseBodyAsString();
-            assertEquals("org.apache.wink.itest.providers.MyStringWriterForStrings",
-                         response);
+            assertEquals("org.apache.wink.itest.providers.MyStringWriterForStrings", response);
         } finally {
             getMethod.releaseConnection();
         }
@@ -817,8 +784,6 @@ public class ProvidersMethodsTest extends TestCase {
      * @throws IOException
      */
     public void testGetMessageBodyWriterNoMatching() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/messagebodywriter?className=java.lang.Float&mediaType=application%2Fjson");
@@ -854,8 +819,6 @@ public class ProvidersMethodsTest extends TestCase {
      * @throws HttpException
      */
     public void testGetMessageBodyReaderNoMatching() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/messagebodyreader?className=java.lang.Float&mediaType=mynonexistenttype%2Fmysubtype");
@@ -890,8 +853,6 @@ public class ProvidersMethodsTest extends TestCase {
      * @throws IOException
      */
     public void testGetMessageBodyReaderSortByIsReadable() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/messagebodyreader?className=java.lang.Integer&mediaType=application%2Fjson");
@@ -971,8 +932,6 @@ public class ProvidersMethodsTest extends TestCase {
      * @throws IOException
      */
     public void testGetMessageBodyReaderSortByConsumesMediaType() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/messagebodyreader?className=java.lang.Integer&mediaType=text%2Fxml");
@@ -1013,8 +972,6 @@ public class ProvidersMethodsTest extends TestCase {
      */
     public void testGetMessageBodyReaderSortByConsumesMediaTypeWithWildcards()
         throws HttpException, IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/messagebodyreader?className=java.lang.Short&mediaType=application%2Fjson");
@@ -1080,8 +1037,6 @@ public class ProvidersMethodsTest extends TestCase {
      */
     public void testGetMessageBodyReaderUserPrecedenceOverRuntime() throws HttpException,
         IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/messagebodyreader?className=java.lang.String&mediaType=text%2Fplain");
@@ -1094,7 +1049,6 @@ public class ProvidersMethodsTest extends TestCase {
         } finally {
             getMethod.releaseConnection();
         }
-
     }
 
     /**
@@ -1108,8 +1062,6 @@ public class ProvidersMethodsTest extends TestCase {
      */
     public void testGetMessageBodyReaderWhichInheritsReaderInterface() throws HttpException,
         IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/providers/messagebodyreader?className=java.util.Set&mediaType=tuv%2Fwxyz");

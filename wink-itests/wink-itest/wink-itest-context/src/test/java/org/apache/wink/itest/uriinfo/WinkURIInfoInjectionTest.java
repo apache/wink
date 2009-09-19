@@ -14,7 +14,7 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.
+ * under the License.    
  */
 
 package org.apache.wink.itest.uriinfo;
@@ -23,15 +23,12 @@ import java.io.IOException;
 
 import junit.framework.TestCase;
 
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.wink.client.ClientResponse;
+import org.apache.wink.client.RestClient;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
-/**
- * Tests that the UriInfo can be injected via various means.
- */
-public class URIInfoInjectionTest extends TestCase {
+public class WinkURIInfoInjectionTest extends TestCase {
 
     private static String getBaseURI() {
         if (ServerEnvironmentInfo.isRestFilterUsed()) {
@@ -40,11 +37,11 @@ public class URIInfoInjectionTest extends TestCase {
         return ServerEnvironmentInfo.getBaseURI() + "/uriinfo";
     }
 
-    private HttpClient client;
+    protected RestClient client;
 
     @Override
     public void setUp() {
-        client = new HttpClient();
+        client = new RestClient();
     }
 
     /**
@@ -54,13 +51,8 @@ public class URIInfoInjectionTest extends TestCase {
      * @throws HttpException
      */
     public void testURIInfoParamInjection() throws HttpException, IOException {
-        GetMethod getMethod = new GetMethod(getBaseURI() + "/context/uriinfo/param");
-        try {
-            client.executeMethod(getMethod);
-            assertEquals(204, getMethod.getStatusCode());
-        } finally {
-            getMethod.releaseConnection();
-        }
+        ClientResponse response = client.resource(getBaseURI() + "/context/uriinfo/param").get();
+        assertEquals(204, response.getStatusCode());
     }
 
     /**
@@ -70,13 +62,8 @@ public class URIInfoInjectionTest extends TestCase {
      * @throws HttpException
      */
     public void testURIInfoBeanMethodInjection() throws HttpException, IOException {
-        GetMethod getMethod = new GetMethod(getBaseURI() + "/context/uriinfo/bean");
-        try {
-            client.executeMethod(getMethod);
-            assertEquals(204, getMethod.getStatusCode());
-        } finally {
-            getMethod.releaseConnection();
-        }
+        ClientResponse response = client.resource(getBaseURI() + "/context/uriinfo/bean").get();
+        assertEquals(204, response.getStatusCode());
     }
 
     /**
@@ -86,13 +73,9 @@ public class URIInfoInjectionTest extends TestCase {
      * @throws HttpException
      */
     public void testURIInfoConstructorInjection() throws HttpException, IOException {
-        GetMethod getMethod = new GetMethod(getBaseURI() + "/context/uriinfo/constructor");
-        try {
-            client.executeMethod(getMethod);
-            assertEquals(204, getMethod.getStatusCode());
-        } finally {
-            getMethod.releaseConnection();
-        }
+        ClientResponse response =
+            client.resource(getBaseURI() + "/context/uriinfo/constructor").get();
+        assertEquals(204, response.getStatusCode());
     }
 
     /**
@@ -102,13 +85,8 @@ public class URIInfoInjectionTest extends TestCase {
      * @throws HttpException
      */
     public void testURIInfoFieldMemberInjection() throws HttpException, IOException {
-        GetMethod getMethod = new GetMethod(getBaseURI() + "/context/uriinfo/field");
-        try {
-            client.executeMethod(getMethod);
-            assertEquals(204, getMethod.getStatusCode());
-        } finally {
-            getMethod.releaseConnection();
-        }
+        ClientResponse response = client.resource(getBaseURI() + "/context/uriinfo/field").get();
+        assertEquals(204, response.getStatusCode());
     }
 
     /**
@@ -118,13 +96,8 @@ public class URIInfoInjectionTest extends TestCase {
      * @throws HttpException
      */
     public void testURIInfoNotBeanMethod() throws HttpException, IOException {
-        GetMethod getMethod = new GetMethod(getBaseURI() + "/context/uriinfo/notbeanmethod");
-        try {
-            client.executeMethod(getMethod);
-            assertEquals(204, getMethod.getStatusCode());
-        } finally {
-            getMethod.releaseConnection();
-        }
+        ClientResponse response = client.resource(getBaseURI() + "/context/uriinfo/notbeanmethod").get();
+        assertEquals(204, response.getStatusCode());
     }
 
 }

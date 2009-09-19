@@ -37,7 +37,7 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
  */
 public class URIInfoDetailedMethodTest extends TestCase {
 
-    public static String appBase = "/uriinfo";
+    private static String appBase = "/uriinfo";
 
     static {
         if (ServerEnvironmentInfo.isRestFilterUsed()) {
@@ -45,11 +45,18 @@ public class URIInfoDetailedMethodTest extends TestCase {
         }
     }
 
-    public String getBaseURI() {
+    private static String getBaseURI() {
         if (ServerEnvironmentInfo.isRestFilterUsed()) {
             return ServerEnvironmentInfo.getBaseURI();
         }
         return ServerEnvironmentInfo.getBaseURI() + "/uriinfo";
+    }
+
+    protected HttpClient client;
+
+    @Override
+    public void setUp() {
+        client = new HttpClient();
     }
 
     /**
@@ -59,7 +66,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetAbsolutePath() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(getBaseURI() + "/context/uriinfo/detailed?reqInfo=getAbsolutePath");
         try {
@@ -79,7 +85,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetAbsoluteBuilder() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(getBaseURI() + "/context/uriinfo/detailed?reqInfo=getAbsolutePathBuilder");
         try {
@@ -99,7 +104,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetBaseUri() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(getBaseURI() + "/context/uriinfo/detailed?reqInfo=getBaseUri");
         try {
@@ -118,7 +122,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetBaseUriBuilder() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(getBaseURI() + "/context/uriinfo/detailed?reqInfo=getBaseUriBuilder");
         try {
@@ -148,7 +151,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetPath() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(getBaseURI() + "/context/uriinfo/detailed?reqInfo=getPath");
         try {
@@ -167,7 +169,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetPathDecoded() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(getBaseURI() + "/context/uriinfo/detailed?reqInfo=getPathDecodedTrue");
         try {
@@ -221,7 +222,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetMatchedResourcesSimple() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(getBaseURI() + "/context/uriinfo/detailed?reqInfo=getMatchedResources");
         try {
@@ -241,7 +241,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetMatchedResourcesSubresource() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(getBaseURI() + "/context/uriinfo/detailed/matchedresources");
         try {
@@ -265,7 +264,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetMatchedURIs() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(getBaseURI() + "/context/uriinfo/detailed?reqInfo=getMatchedURIs");
         try {
@@ -284,7 +282,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetMatchedURIsSubresource() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod = new GetMethod(getBaseURI() + "/context/uriinfo/detailed/matcheduris");
         try {
             client.executeMethod(getMethod);
@@ -309,7 +306,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetMatchedURIsDecodeTrue() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/uriinfo/detailed?reqInfo=getMatchedURIsDecodedTrue");
@@ -329,7 +325,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetMatchedURIsDecodeFalse() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/uriinfo/detailed?reqInfo=getMatchedURIsDecodedFalse");
@@ -349,7 +344,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetMatchedURIsSublocatorDecodeTrue() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/uriinfo/detailed/matchedurisdecoded/!%40%23%24%25%5E%26*()?decoded=true");
@@ -370,7 +364,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetMatchedURIsSublocatorDecodeFalse() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/uriinfo/detailed/matchedurisdecoded/!%40%23%24%25%5E%26*()?decoded=false");
@@ -391,7 +384,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetPathParametersZero() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(getBaseURI() + "/context/uriinfo/detailed?reqInfo=getPathParameters");
         try {
@@ -410,7 +402,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetPathParametersOne() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(getBaseURI() + "/context/uriinfo/detailed/pathparamsone/");
         try {
@@ -456,7 +447,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetPathParametersMany() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(getBaseURI() + "/context/uriinfo/detailed/pathparamsmany/foo/bar/xyz");
         try {
@@ -485,7 +475,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetPathParametersZeroDecodedFalse() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/uriinfo/detailed?reqInfo=getPathParametersDecodedFalse");
@@ -505,7 +494,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetPathParametersOneDecodedFalse() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(getBaseURI() + "/context/uriinfo/detailed/pathparamsone/?decoded=false");
         try {
@@ -557,7 +545,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetPathParametersManyDecodedFalse() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/uriinfo/detailed/pathparamsmany/foo/bar/xyz?decoded=false");
@@ -588,7 +575,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetPathParametersZeroDecodedTrue() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/uriinfo/detailed?reqInfo=getPathParametersDecodedTrue");
@@ -608,7 +594,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetPathParametersOneDecodedTrue() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(getBaseURI() + "/context/uriinfo/detailed/pathparamsone/?decoded=true");
         try {
@@ -659,7 +644,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetPathParametersManyDecodedTrue() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/uriinfo/detailed/pathparamsmany/!%40%23%24%25%5E%26*()/bar/xyz?decoded=true");
@@ -690,7 +674,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetPathSegments() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(getBaseURI() + "/context/uriinfo/detailed?reqInfo=getPathSegments");
         try {
@@ -733,7 +716,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetPathSegmentsDecodedFalse() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/uriinfo/detailed?reqInfo=getPathSegmentsDecodedFalse");
@@ -777,7 +759,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetQueryParametersZero() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod = new GetMethod(getBaseURI() + "/context/uriinfo/detailed/queryparams");
         try {
             client.executeMethod(getMethod);
@@ -795,7 +776,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetQueryParametersOne() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(getBaseURI() + "/context/uriinfo/detailed?reqInfo=getQueryParameters");
         try {
@@ -835,7 +815,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetQueryParametersMany() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/uriinfo/detailed/queryparams?q1=value1&q2=value2");
@@ -866,7 +845,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetQueryParametersManyDecodedFalse() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(
                           getBaseURI() + "/context/uriinfo/detailed/queryparams?q1=!%40%23%24%25%5E%26*()&q2=value2&decoded=false");
@@ -887,7 +865,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetRequestUri() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(getBaseURI() + "/context/uriinfo/detailed?reqInfo=getRequestUri");
         try {
@@ -907,7 +884,6 @@ public class URIInfoDetailedMethodTest extends TestCase {
      * @throws IOException
      */
     public void testURIInfoGetRequestUriBuilder() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         GetMethod getMethod =
             new GetMethod(getBaseURI() + "/context/uriinfo/detailed?reqInfo=getRequestUriBuilder");
         try {

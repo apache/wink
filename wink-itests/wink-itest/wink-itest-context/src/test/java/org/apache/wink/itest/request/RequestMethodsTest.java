@@ -76,7 +76,7 @@ public class RequestMethodsTest extends TestCase {
         asctimeDateFormatWithOneDigit.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
 
-    public String getBaseURI() {
+    private static String getBaseURI() {
         if(ServerEnvironmentInfo.isRestFilterUsed()) {
             return ServerEnvironmentInfo.getBaseURI();
         }
@@ -423,7 +423,7 @@ public class RequestMethodsTest extends TestCase {
      * @throws HttpException
      * @throws IOException
      */
-    public void checkETagIfMatch(String etag, boolean isEntityTagWeak) throws HttpException,
+    private void checkETagIfMatch(String etag, boolean isEntityTagWeak) throws HttpException,
         IOException {
         HttpClient client = new HttpClient();
 
@@ -592,7 +592,7 @@ public class RequestMethodsTest extends TestCase {
      * @throws HttpException
      * @throws IOException
      */
-    public void checkETagIfNoneMatch(String etag, boolean isEntityTagWeak) throws HttpException,
+    private void checkETagIfNoneMatch(String etag, boolean isEntityTagWeak) throws HttpException,
         IOException {
         HttpClient client = new HttpClient();
         final String justTheTag = etag;

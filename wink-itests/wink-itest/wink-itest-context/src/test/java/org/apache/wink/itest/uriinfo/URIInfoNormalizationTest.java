@@ -30,7 +30,7 @@ public class URIInfoNormalizationTest extends TestCase {
     private static String appRoot = "/uriinfo";
 
     static {
-        if(ServerEnvironmentInfo.isRestFilterUsed()) {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
             appRoot = "";
         }
     }
@@ -42,14 +42,19 @@ public class URIInfoNormalizationTest extends TestCase {
         return ServerEnvironmentInfo.getBaseURI() + appRoot;
     }
 
+    private HttpClient client;
+
+    @Override
+    public void setUp() {
+        client = new HttpClient();
+    }
+
     /**
      * Tests that a normal "good" path is returned.
      * 
      * @throws Exception
      */
     public void testPathNormal() throws Exception {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod = new GetMethod(getBaseURI() + "/uriinfo?info=path");
         try {
             client.executeMethod(getMethod);
@@ -67,8 +72,6 @@ public class URIInfoNormalizationTest extends TestCase {
      * @throws Exception
      */
     public void testRemoveResourcePathThenAddItBack() throws Exception {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod = new GetMethod(getBaseURI() + "/uriinfo/../uriinfo" + "?info=path");
         try {
             client.executeMethod(getMethod);
@@ -139,8 +142,6 @@ public class URIInfoNormalizationTest extends TestCase {
      * @throws Exception
      */
     public void testAddPathThenRemoveIt() throws Exception {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod = new GetMethod(getBaseURI() + "/uriinfo/something/../" + "?info=path");
         try {
             client.executeMethod(getMethod);
@@ -188,7 +189,6 @@ public class URIInfoNormalizationTest extends TestCase {
      * @throws Exception
      */
     public void testCapitalization() throws Exception {
-        HttpClient client = new HttpClient();
         String contextRoot = ServerEnvironmentInfo.getContextRoot();
         if (!"".equals(contextRoot)) {
             contextRoot = "/" + contextRoot;
@@ -270,8 +270,6 @@ public class URIInfoNormalizationTest extends TestCase {
      * @throws Exception
      */
     public void testPercentEncoding() throws Exception {
-        HttpClient client = new HttpClient();
-
         /*
          * regular query
          */

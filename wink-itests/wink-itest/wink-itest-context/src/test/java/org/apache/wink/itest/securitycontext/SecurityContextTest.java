@@ -42,6 +42,12 @@ public class SecurityContextTest extends TestCase {
         return ServerEnvironmentInfo.getBaseURI() + "/securitycontext";
     }
 
+    private HttpClient client;
+
+    public void setUp() {
+        client = new HttpClient();
+    }
+
     /**
      * Tests that a security context can be injected via a parameter.
      * 
@@ -50,8 +56,6 @@ public class SecurityContextTest extends TestCase {
      * @throws JAXBException
      */
     public void testSecurityContextParamResource() throws HttpException, IOException, JAXBException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod = new GetMethod(getBaseURI() + "/context/securitycontext/param");
         try {
             client.executeMethod(getMethod);
@@ -83,8 +87,6 @@ public class SecurityContextTest extends TestCase {
      */
     public void testSecurityContextConstructorResource() throws HttpException, IOException,
         JAXBException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod = new GetMethod(getBaseURI() + "/context/securitycontext/constructor");
         try {
             client.executeMethod(getMethod);
@@ -115,8 +117,6 @@ public class SecurityContextTest extends TestCase {
      * @throws JAXBException
      */
     public void testSecurityContextBeanResource() throws HttpException, IOException, JAXBException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod = new GetMethod(getBaseURI() + "/context/securitycontext/bean");
         try {
             client.executeMethod(getMethod);
@@ -146,8 +146,6 @@ public class SecurityContextTest extends TestCase {
      * @throws HttpException
      */
     public void testSecurityContextNotBeanResource() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(getBaseURI() + "/context/securitycontext/notbeanmethod");
         try {
@@ -167,8 +165,6 @@ public class SecurityContextTest extends TestCase {
      * @throws JAXBException
      */
     public void testSecurityContextFieldResource() throws HttpException, IOException, JAXBException {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod = new GetMethod(getBaseURI() + "/context/securitycontext/field");
         try {
             client.executeMethod(getMethod);
