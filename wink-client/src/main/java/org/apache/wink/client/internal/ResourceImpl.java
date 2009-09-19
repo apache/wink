@@ -45,8 +45,11 @@ import org.apache.wink.client.internal.handlers.ClientRequestImpl;
 import org.apache.wink.client.internal.handlers.HandlerContextImpl;
 import org.apache.wink.common.http.HttpMethodEx;
 import org.apache.wink.common.internal.CaseInsensitiveMultivaluedMap;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.common.internal.utils.HeaderUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ResourceImpl implements Resource {
 
@@ -58,6 +61,8 @@ public class ResourceImpl implements Resource {
     private MultivaluedMap<String, String> headers;
     private Map<String, Object>            attributes;
     private UriBuilder                     uriBuilder;
+
+    private static Logger                  logger     = LoggerFactory.getLogger(ResourceImpl.class);
 
     public ResourceImpl(URI uri, ClientConfig config, ProvidersRegistry providersRegistry) {
         this.config = config;
@@ -200,7 +205,9 @@ public class ResourceImpl implements Resource {
         HandlerContext context = createHandlerContext();
         try {
             ClientResponse response = context.doChain(request);
-            if (ClientUtils.isErrorCode(response.getStatusCode())) {
+            int statusCode = response.getStatusCode();
+            if (ClientUtils.isErrorCode(statusCode)) {
+                logger.info(Messages.getMessage("clientResponseIsErrorCode"), statusCode);
                 throw new ClientWebException(request, response);
             }
             return response;
@@ -219,9 +226,12 @@ public class ResourceImpl implements Resource {
                                                   Object requestEntity) {
         ClientRequest request = new ClientRequestImpl();
         request.setEntity(requestEntity);
-        request.setURI(uriBuilder.build());
+        URI requestURI = uriBuilder.build();
+        request.setURI(requestURI);
         request.setMethod(method);
         request.getHeaders().putAll(headers);
+        logger.info(Messages.getMessage("clientIssueRequest"),
+                    new Object[] {method, requestURI, requestEntity, headers});
         if (headers.getFirst(HttpHeaders.USER_AGENT) == null) {
             request.getHeaders().add(HttpHeaders.USER_AGENT, USER_AGENT);
         }
@@ -265,7 +275,7 @@ public class ResourceImpl implements Resource {
     }
 
     public <T> T get(EntityType<T> responseEntity) {
-        return invoke(HttpMethod.DELETE, responseEntity, null);
+        return invoke(HttpMethod.GET, responseEntity, null);
     }
 
     public ClientResponse get() {
@@ -289,7 +299,7 @@ public class ResourceImpl implements Resource {
     }
 
     public <T> T put(EntityType<T> responseEntity, Object requestEntity) {
-        return invoke(HttpMethod.POST, responseEntity, requestEntity);
+        return invoke(HttpMethod.PUT, responseEntity, requestEntity);
     }
 
     public ClientResponse put(Object requestEntity) {
