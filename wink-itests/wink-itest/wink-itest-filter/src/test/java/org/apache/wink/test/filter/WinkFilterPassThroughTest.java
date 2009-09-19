@@ -23,50 +23,36 @@ import java.io.IOException;
 
 import junit.framework.TestCase;
 
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.wink.client.ClientResponse;
+import org.apache.wink.client.RestClient;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
-/**
- * Tests that requests not filtered through the RestFilter pass through so that
- * JSPs can be used.
- */
-public class FilterPassThroughTest extends TestCase {
+public class WinkFilterPassThroughTest extends TestCase {
 
     private static String getBaseURI() {
         return ServerEnvironmentInfo.getBaseURI();
     }
 
-    private HttpClient client;
+    protected RestClient client;
 
     @Override
     public void setUp() {
-        client = new HttpClient();
+        client = new RestClient();
     }
 
     public void testGetJSPPage() throws HttpException, IOException {
-        GetMethod getMethod = new GetMethod(getBaseURI() + "/testpage.jsp");
-        try {
-            client.executeMethod(getMethod);
-            assertEquals(200, getMethod.getStatusCode());
-            assertTrue(getMethod.getResponseBodyAsString(), getMethod.getResponseBodyAsString()
-                .contains("<html><body><h2>Hit the test page!</h2></body></html>"));
-        } finally {
-            getMethod.releaseConnection();
-        }
+        ClientResponse response = client.resource(getBaseURI() + "/testpage.jsp").get();
+        assertEquals(200, response.getStatusCode());
+        assertTrue(response.getEntity(String.class), response.getEntity(String.class)
+            .contains("<html><body><h2>Hit the test page!</h2></body></html>"));
     }
 
     public void testGetSubdirectoryJSPPage() throws HttpException, IOException {
-        GetMethod getMethod = new GetMethod(getBaseURI() + "/testing/index.jsp");
-        try {
-            client.executeMethod(getMethod);
-            assertEquals(200, getMethod.getStatusCode());
-            assertTrue(getMethod.getResponseBodyAsString(), getMethod.getResponseBodyAsString()
-                .contains("<html><body><h2>Hit the testing test page!</h2></body></html>"));
-        } finally {
-            getMethod.releaseConnection();
-        }
+        ClientResponse response = client.resource(getBaseURI() + "/testing/index.jsp").get();
+        assertEquals(200, response.getStatusCode());
+        assertTrue(response.getEntity(String.class), response.getEntity(String.class)
+            .contains("<html><body><h2>Hit the testing test page!</h2></body></html>"));
     }
 
 }

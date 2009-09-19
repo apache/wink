@@ -43,6 +43,7 @@ public class PersonAppTest extends TestCase {
 
     private HttpClient client;
 
+    @Override
     public void setUp() {
         client = new HttpClient();
     }
