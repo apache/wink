@@ -59,12 +59,19 @@ public class JettisonJAXBBadgerFishTest extends MockServletInvocationTest {
 
     @Override
     protected Object[] getSingletons() {
-
         JettisonJAXBProvider jaxbProvider = new JettisonJAXBProvider(true, null, null);
+        jaxbProvider.setUseAsReader(true);
 
         JettisonJAXBElementProvider jaxbElementProvider =
             new JettisonJAXBElementProvider(true, null, null);
+        jaxbElementProvider.setUseAsReader(true);
+
         return new Object[] {jaxbProvider, jaxbElementProvider};
+    }
+
+    @Override
+    public String getPropertiesFile() {
+        return "META-INF/wink.properties";
     }
 
     @Path("/test/person")
@@ -169,9 +176,10 @@ public class JettisonJAXBBadgerFishTest extends MockServletInvocationTest {
                 .getBytes());
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertTrue(JSONUtils.equals(new JSONObject(
-                                    " {\"person\":{\"desc\":{\"$\":\"My desc\"},\"name\":{\"$\":\"My Name\"}}} "),
-                     new JSONObject(response.getContentAsString())));
+        assertTrue(JSONUtils
+            .equals(new JSONObject(
+                                   " {\"person\":{\"desc\":{\"$\":\"My desc\"},\"name\":{\"$\":\"My Name\"}}} "),
+                    new JSONObject(response.getContentAsString())));
     }
 
     public void testGetAtomEntry() throws Exception {
@@ -207,8 +215,9 @@ public class JettisonJAXBBadgerFishTest extends MockServletInvocationTest {
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
 
-        assertTrue(JSONUtils.equals(JSONUtils.objectForString(ENTRY_JSON_POST), JSONUtils
-            .objectForString(response.getContentAsString())));
+        assertTrue(response.getContentAsString(), JSONUtils.equals(JSONUtils
+            .objectForString(ENTRY_JSON_POST), JSONUtils.objectForString(response
+            .getContentAsString())));
     }
 
     public void testPostAtomEntryElement() throws Exception {
@@ -220,8 +229,11 @@ public class JettisonJAXBBadgerFishTest extends MockServletInvocationTest {
         request.setContent(ENTRY_JSON_POST.getBytes());
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertTrue(JSONUtils.equals(JSONUtils.objectForString(ENTRY_JSON_POST), JSONUtils
-            .objectForString(response.getContentAsString())));
+        System.out.println(response.getContentAsString());
+        System.out.println(ENTRY_JSON_POST);
+        assertTrue(response.getContentAsString(), JSONUtils.equals(JSONUtils
+            .objectForString(ENTRY_JSON_POST), JSONUtils.objectForString(response
+            .getContentAsString())));
     }
 
     private static final String ENTRY_STR      =

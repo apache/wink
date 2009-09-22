@@ -59,10 +59,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A Jettison JAXBElement provider. By default, use the MappedNamespace
- * convention. Namespace mapping needs to be set if namespaces are used. In
- * Application sub-class, use {@link Application#getSingletons()} to add to
- * application.
+ * A Jettison JAXBElement provider. By default, use the BadgerFishConvention.
+ * Namespace mapping needs to be set if namespaces are used. In Application
+ * sub-class, use {@link Application#getSingletons()} to add to application.
  */
 @Provider
 @Consumes(MediaType.APPLICATION_JSON)
@@ -78,8 +77,12 @@ public class JettisonJAXBElementProvider extends AbstractJAXBProvider implements
 
     final private Configuration outputConfiguration;
 
+    private boolean             isReadable;
+
+    private boolean             isWritable;
+
     public JettisonJAXBElementProvider() {
-        this(false, null, null);
+        this(true, null, null);
     }
 
     public JettisonJAXBElementProvider(boolean isBadgerFishConventionUsed,
@@ -96,13 +99,24 @@ public class JettisonJAXBElementProvider extends AbstractJAXBProvider implements
         } else {
             this.outputConfiguration = new Configuration(new HashMap<String, String>());
         }
+        // see http://jira.codehaus.org/browse/JETTISON-74 . reading disabled for now
+        isReadable = false;
+        isWritable = true;
+    }
+
+    public void setUseAsReader(boolean isReadable) {
+        this.isReadable = isReadable;
+    }
+
+    public void setUseAsWriter(boolean isWritable) {
+        this.isWritable = isWritable;
     }
 
     public boolean isReadable(Class<?> type,
                               Type genericType,
                               Annotation[] annotations,
                               MediaType mediaType) {
-        return isJAXBElement(type, genericType);
+        return isReadable && isJAXBElement(type, genericType);
     }
 
     public JAXBElement<?> readFrom(Class<JAXBElement<?>> type,
@@ -152,7 +166,7 @@ public class JettisonJAXBElementProvider extends AbstractJAXBProvider implements
                                Type genericType,
                                Annotation[] annotations,
                                MediaType mediaType) {
-        return isJAXBElement(type, genericType);
+        return isWritable && isJAXBElement(type, genericType);
     }
 
     public void writeTo(JAXBElement<?> t,

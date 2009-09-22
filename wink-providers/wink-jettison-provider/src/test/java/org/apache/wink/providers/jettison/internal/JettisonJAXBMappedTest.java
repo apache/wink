@@ -79,11 +79,17 @@ public class JettisonJAXBMappedTest extends MockServletInvocationTest {
         JettisonJAXBProvider jaxbProvider =
             new JettisonJAXBProvider(false, new Configuration(namespaceMap),
                                      new Configuration(outputNamespaceMap));
-
+        jaxbProvider.setUseAsReader(true);
         JettisonJAXBElementProvider jaxbElementProvider =
             new JettisonJAXBElementProvider(false, new Configuration(namespaceMap),
                                             new Configuration(outputNamespaceMap));
+        jaxbElementProvider.setUseAsReader(true);
         return new Object[] {jaxbProvider, jaxbElementProvider};
+    }
+
+    @Override
+    public String getPropertiesFile() {
+        return "META-INF/wink.properties";
     }
 
     @Path("/test/person")

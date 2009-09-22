@@ -75,8 +75,12 @@ public class JettisonJAXBProvider extends AbstractJAXBProvider implements
 
     final private Configuration outputConfiguration;
 
+    private boolean             isReadable;
+
+    private boolean             isWritable;
+
     public JettisonJAXBProvider() {
-        this(false, null, null);
+        this(true, null, null);
     }
 
     public JettisonJAXBProvider(boolean isBadgerFishConventionUsed,
@@ -93,13 +97,25 @@ public class JettisonJAXBProvider extends AbstractJAXBProvider implements
         } else {
             this.outputConfiguration = new Configuration(new HashMap<String, String>());
         }
+
+        // see http://jira.codehaus.org/browse/JETTISON-74 . reading disabled for now
+        isReadable = false;
+        isWritable = true;
+    }
+
+    public void setUseAsReader(boolean isReadable) {
+        this.isReadable = isReadable;
+    }
+
+    public void setUseAsWriter(boolean isWritable) {
+        this.isWritable = isWritable;
     }
 
     public boolean isReadable(Class<?> type,
                               Type genericType,
                               Annotation[] annotations,
                               MediaType mediaType) {
-        return isJAXBObject(type, genericType);
+        return isReadable && isJAXBObject(type, genericType);
     }
 
     public Object readFrom(Class<Object> type,
@@ -155,7 +171,7 @@ public class JettisonJAXBProvider extends AbstractJAXBProvider implements
                                Type genericType,
                                Annotation[] annotations,
                                MediaType mediaType) {
-        return isJAXBObject(type, genericType);
+        return isWritable && isJAXBObject(type, genericType);
     }
 
     public void writeTo(Object t,
