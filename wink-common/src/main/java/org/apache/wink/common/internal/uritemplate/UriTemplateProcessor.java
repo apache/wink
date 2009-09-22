@@ -207,15 +207,42 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
         return resultStr;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof UriTemplateProcessor && template
-            .equals(((UriTemplateProcessor)obj).template);
-    }
+//    @Override
+//    public boolean equals(Object obj) {
+//        return obj instanceof UriTemplateProcessor && template
+//            .equals(((UriTemplateProcessor)obj).template);
+//    }
 
+    
+    
     @Override
     public String toString() {
         return template;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((template == null) ? 0 : template.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        UriTemplateProcessor other = (UriTemplateProcessor)obj;
+        if (template == null) {
+            if (other.template != null)
+                return false;
+        } else if (!template.equals(other.template))
+            return false;
+        return true;
     }
 
     @Override
