@@ -631,7 +631,28 @@ public class ProvidersRegistry {
                 return of.getInstanceClass();
             }
 
+            private static final double MAX_SYSTEM_PRIORITY = WinkApplication.SYSTEM_PRIORITY;
+
             public int compareTo(OFHolder<T> o) {
+                // check if this is a system provider
+                // system providers are less than
+                // WinkApplication.SYSTEM_PRIORITY + 0.1 (they start at
+                // WinkApplication.SYSTEM_PRIORITY and
+                // unless there are 10000000000, this shouldn't matter)
+                if (of.priority < MAX_SYSTEM_PRIORITY) {
+                    // this is a system provider
+                    if (o.of.priority > MAX_SYSTEM_PRIORITY) {
+                        // the other is a user provider so this is > 0.2
+                        return -1;
+                    }
+                } else if (o.of.priority < MAX_SYSTEM_PRIORITY) {
+                    // the other is a system provider
+                    if (of.priority > MAX_SYSTEM_PRIORITY) {
+                        // this is a user provider
+                        return 1;
+                    }
+                }
+
                 // first compare by media type
                 int compare = MediaTypeUtils.compareTo(mediaType, o.mediaType);
                 if (compare != 0) {
