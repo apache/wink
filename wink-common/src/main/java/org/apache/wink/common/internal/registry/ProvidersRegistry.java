@@ -26,10 +26,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -57,6 +58,7 @@ import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.lifecycle.ObjectFactory;
 import org.apache.wink.common.internal.utils.AnnotationUtils;
 import org.apache.wink.common.internal.utils.GenericsUtils;
+import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -428,7 +430,9 @@ public class ProvidersRegistry {
     private abstract class MediaTypeMap<T> {
 
         private final Map<MediaType, Set<ObjectFactory<T>>>                                          data           =
-                                                                                                                        new LinkedHashMap<MediaType, Set<ObjectFactory<T>>>();
+                                                                                                                        new HashMap<MediaType, Set<ObjectFactory<T>>>();
+        private boolean                                                                              dataSorted     =
+                                                                                                                        false;
         private final Class<?>                                                                       rawType;
 
         private final Map<Class<?>, SoftReference<ConcurrentMap<MediaType, List<ObjectFactory<T>>>>> providersCache =
@@ -471,91 +475,57 @@ public class ProvidersRegistry {
             List<ObjectFactory<T>> list = mediaTypeToProvidersCache.get(mediaType);
 
             if (list == null) {
-                if (subtype.equals(MediaType.MEDIA_TYPE_WILDCARD) || type
-                    .equals(MediaType.MEDIA_TYPE_WILDCARD)) {
-                    list = getProvidersByWildcardMediaType(mediaType, cls);
-                    mediaTypeToProvidersCache.put(mediaType, list);
-                    return list;
-                }
-                list = new ArrayList<ObjectFactory<T>>();
-                if (!mediaType.getParameters().isEmpty()) {
-                    mediaType = new MediaType(type, subtype);
-                }
-                Set<ObjectFactory<T>> set = data.get(mediaType);
-                limitByType(list, set, cls);
-                set = data.get(new MediaType(type, MediaType.MEDIA_TYPE_WILDCARD));
-                limitByType(list, set, cls);
-                set = data.get(MediaType.WILDCARD_TYPE);
-                limitByType(list, set, cls);
-
+                list = internalGetProvidersByMediaType(mediaType, cls);
                 mediaTypeToProvidersCache.put(mediaType, list);
             }
 
             return list;
         }
 
-        private List<ObjectFactory<T>> getProvidersByWildcardMediaType(MediaType mediaType,
+        private List<ObjectFactory<T>> internalGetProvidersByMediaType(MediaType mediaType,
                                                                        Class<?> cls) {
 
-            // according to JSR311 3.8, the providers must be searched
-            // using a concrete type
-            // if the providers are searched using a wildcard, it means
-            // that the call is done
-            // from the Providers interface, therefore isCompatible method
-            // should be used
-            // the search here is less efficient that the regular search
-            // see https://issues.apache.org/jira/browse/WINK-47
+            @SuppressWarnings("unchecked")
+            Entry<MediaType, Set<ObjectFactory<T>>>[] entrySet =
+                data.entrySet().toArray(new Entry[0]);
 
-            List<ObjectFactory<T>> list = new ArrayList<ObjectFactory<T>>();
+            if (!dataSorted) {
+                // It's important to sort the media types here to ensure that
+                // provider of the more dominant media type will precede, when
+                // adding to the compatible set.
+                Arrays.sort(entrySet, Collections
+                    .reverseOrder(new Comparator<Entry<MediaType, Set<ObjectFactory<T>>>>() {
 
-            ArrayList<Entry<MediaType, Set<ObjectFactory<T>>>> compatibleList =
-                new ArrayList<Entry<MediaType, Set<ObjectFactory<T>>>>();
-            for (Entry<MediaType, Set<ObjectFactory<T>>> entry : data.entrySet()) {
+                        public int compare(Entry<MediaType, Set<ObjectFactory<T>>> o1,
+                                           Entry<MediaType, Set<ObjectFactory<T>>> o2) {
+                            return MediaTypeUtils.compareTo(o1.getKey(), o2.getKey());
+                        }
+                    }));
+                dataSorted = true;
+            }
+
+            Set<ObjectFactory<T>> compatible =
+                new TreeSet<ObjectFactory<T>>(Collections.reverseOrder());
+            for (Entry<MediaType, Set<ObjectFactory<T>>> entry : entrySet) {
                 if (entry.getKey().isCompatible(mediaType)) {
-                    compatibleList.add(entry);
+                    // media type is compatible, check generic type of the
+                    // subset
+                    for (ObjectFactory<T> of : entry.getValue()) {
+                        if (GenericsUtils.isGenericInterfaceAssignableFrom(cls, of
+                            .getInstanceClass(), rawType)) {
+                            // Both media type and generic types are compatible.
+                            // The assumption here that more specific media
+                            // types are added first so replacing the entity
+                            // with the same object factory of the different
+                            // media type, won't change the map.
+                            compatible.add(new OFHolder<T>(entry.getKey(), of));
+                        }
+                    }
                 }
             }
-
-            // sorts according to the following algorithm: n / m > n / * > * / *
-            // in descending order
-            // see https://issues.apache.org/jira/browse/WINK-82
-            Collections.sort(compatibleList, Collections
-                .reverseOrder(new Comparator<Entry<MediaType, Set<ObjectFactory<T>>>>() {
-
-                    public int compare(Entry<MediaType, Set<ObjectFactory<T>>> o1,
-                                       Entry<MediaType, Set<ObjectFactory<T>>> o2) {
-                        MediaType m1 = o1.getKey();
-                        MediaType m2 = o2.getKey();
-                        int compareTypes = compareTypes(m1.getType(), m2.getType());
-                        if (compareTypes == 0) {
-                            return compareTypes(m1.getSubtype(), m2.getSubtype());
-                        }
-                        return compareTypes;
-                    }
-
-                    private int compareTypes(String type1, String type2) {
-                        if (type1.equals(MediaType.MEDIA_TYPE_WILDCARD)) {
-                            if (type2.equals(MediaType.MEDIA_TYPE_WILDCARD)) {
-                                // both types are wildcards
-                                return 0;
-                            }
-                            // only type2 is concrete
-                            // type2 > type1
-                            return -1;
-                        }
-                        if (type2.equals(MediaType.MEDIA_TYPE_WILDCARD)) {
-                            // only type1 is concrete
-                            return 1;
-                        }
-                        // both types are concrete
-                        return 0;
-                    }
-                }));
-
-            for (Entry<MediaType, Set<ObjectFactory<T>>> entry : compatibleList) {
-                limitByType(list, entry.getValue(), cls);
-            }
-            return list;
+            @SuppressWarnings("unchecked")
+            ObjectFactory<T>[] tmp = compatible.toArray(new ObjectFactory[compatible.size()]);
+            return Arrays.asList(tmp);
         }
 
         public Set<MediaType> getProvidersMediaTypes(Class<?> type) {
@@ -576,27 +546,14 @@ public class ProvidersRegistry {
             return mediaTypes;
         }
 
-        private void limitByType(List<ObjectFactory<T>> list,
-                                 Set<ObjectFactory<T>> set,
-                                 Class<?> type) {
-            if (set != null) {
-                for (ObjectFactory<T> t : set) {
-                    if (GenericsUtils.isGenericInterfaceAssignableFrom(type,
-                                                                       t.getInstanceClass(),
-                                                                       rawType)) {
-                        list.add(t);
-                    }
-                }
-            }
-        }
-
         void put(MediaType key, ObjectFactory<T> objectFactory) {
             if (!key.getParameters().isEmpty()) {
                 key = new MediaType(key.getType(), key.getSubtype());
             }
             Set<ObjectFactory<T>> set = data.get(key);
             if (set == null) {
-                set = new TreeSet<ObjectFactory<T>>(Collections.reverseOrder());
+                set = new HashSet<ObjectFactory<T>>();
+                dataSorted = false;
                 data.put(key, set);
             }
             if (!set.add(objectFactory)) {
@@ -612,6 +569,86 @@ public class ProvidersRegistry {
             return String.format("RawType: %s, Data: %s", String.valueOf(rawType), data.toString());
         }
 
+        private class OFHolder<T> implements ObjectFactory<T>, Comparable<OFHolder<T>> {
+
+            private final PriorityObjectFactory<T> of;
+            private final MediaType                mediaType;
+            private final Class<?>                 genericType;
+
+            public OFHolder(MediaType mediaType, ObjectFactory<T> of) {
+                super();
+                this.of = (PriorityObjectFactory<T>)of;
+                this.mediaType = mediaType;
+                genericType =
+                    GenericsUtils.getClassType(GenericsUtils.getGenericInterfaceParamType(of
+                        .getInstanceClass(), rawType));
+            }
+
+            @Override
+            public String toString() {
+                return "OFHolder [" + (genericType != null ? "genericType=" + genericType + ", "
+                    : "")
+                    + (mediaType != null ? "mediaType=" + mediaType + ", " : "")
+                    + (of != null ? "of=" + of : "")
+                    + "]";
+            }
+
+            @Override
+            public int hashCode() {
+                final int prime = 31;
+                int result = 1;
+                result = prime * result + ((of == null) ? 0 : of.hashCode());
+                return result;
+            }
+
+            @Override
+            public boolean equals(Object obj) {
+                if (this == obj) {
+                    return true;
+                }
+                if (obj == null) {
+                    return false;
+                }
+                if (getClass() != obj.getClass()) {
+                    return false;
+                }
+                OFHolder<?> other = (OFHolder<?>)obj;
+                if (of == null) {
+                    if (other.of != null) {
+                        return false;
+                    }
+                } else if (of != other.of) {
+                    return false;
+                }
+                return true;
+            }
+
+            public T getInstance(RuntimeContext context) {
+                return of.getInstance(context);
+            }
+
+            public Class<T> getInstanceClass() {
+                return of.getInstanceClass();
+            }
+
+            public int compareTo(OFHolder<T> o) {
+                // first compare by media type
+                int compare = MediaTypeUtils.compareTo(mediaType, o.mediaType);
+                if (compare != 0) {
+                    return compare;
+                }
+                // second compare by generic type
+                if (genericType != o.genericType) {
+                    if (genericType.isAssignableFrom(o.genericType)) {
+                        return -1;
+                    } else {
+                        return 1;
+                    }
+                }
+                // last compare by priority
+                return Double.compare(of.priority, o.of.priority);
+            }
+        }
     }
 
     private static class PriorityObjectFactory<T> implements ObjectFactory<T>,
@@ -619,11 +656,13 @@ public class ProvidersRegistry {
 
         private final ObjectFactory<T> of;
         private final double           priority;
+        private static double          counter = 0.00000000001;
+        private static final double    inc     = 0.00000000001;
 
         public PriorityObjectFactory(ObjectFactory<T> of, double priority) {
             super();
             this.of = of;
-            this.priority = priority;
+            this.priority = priority + (counter += inc);
         }
 
         public T getInstance(RuntimeContext context) {
@@ -634,10 +673,9 @@ public class ProvidersRegistry {
             return of.getInstanceClass();
         }
 
+        // this compare is used by exception mappers
         public int compareTo(PriorityObjectFactory<T> o) {
-            int compare = Double.compare(priority, o.priority);
-            // if the compare equals, the latest has the priority
-            return compare == 0 ? -1 : compare;
+            return Double.compare(priority, o.priority);
         }
 
         @Override

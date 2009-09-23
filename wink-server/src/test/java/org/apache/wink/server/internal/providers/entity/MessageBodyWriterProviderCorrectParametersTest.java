@@ -62,9 +62,9 @@ public class MessageBodyWriterProviderCorrectParametersTest extends MockServletI
     }
 
     @Provider
-    public static class MyMessageBodyWrite implements MessageBodyWriter<Object> {
+    public static class MyMessageBodyWrite implements MessageBodyWriter<String> {
 
-        public long getSize(Object t,
+        public long getSize(String t,
                             Class<?> type,
                             Type genericType,
                             Annotation[] annotations,
@@ -85,7 +85,7 @@ public class MessageBodyWriterProviderCorrectParametersTest extends MockServletI
             return false;
         }
 
-        public void writeTo(Object t,
+        public void writeTo(String t,
                             Class<?> type,
                             Type genericType,
                             Annotation[] annotations,

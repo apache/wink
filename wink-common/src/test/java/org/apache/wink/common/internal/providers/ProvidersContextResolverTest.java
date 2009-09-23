@@ -178,11 +178,12 @@ public class ProvidersContextResolverTest extends TestCase {
                                                           null).getContext(null));
 
         /*
-         * AtomContextResolver comes before StringContextResolver, therefore it
-         * should be invoked after
+         * StringContextResolver is registered after AtomContextResolver,
+         * therefore it should be invoked
          */
-        assertEquals(ATOM, providers
-            .getContextResolver(String.class, MediaType.WILDCARD_TYPE, null).getContext(null));
+        assertEquals(STRING, providers.getContextResolver(String.class,
+                                                          MediaType.WILDCARD_TYPE,
+                                                          null).getContext(null));
 
         /*
          * AtomContextResolver returns null, if the parameter is not null,
@@ -266,9 +267,8 @@ public class ProvidersContextResolverTest extends TestCase {
 
         // StringContextResolver2 takes priority over the others due to the
         // media type in @Produces
-        assertSame(STRING2, providers.getContextResolver(String.class,
-                                                         null,
-                                                         null).getContext(String.class));
+        assertSame(STRING2, providers.getContextResolver(String.class, null, null)
+            .getContext(String.class));
     }
 
 }

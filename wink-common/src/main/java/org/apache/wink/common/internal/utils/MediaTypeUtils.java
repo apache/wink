@@ -20,6 +20,7 @@
 package org.apache.wink.common.internal.utils;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -245,6 +246,14 @@ public class MediaTypeUtils {
             return 1;
         }
         return 0;
+    }
+
+    public static class MediaTypeComparator implements Comparator<MediaType> {
+
+        public int compare(MediaType m1, MediaType m2) {
+            return compareTo(m1, m2);
+        }
+
     }
 
 }

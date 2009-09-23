@@ -21,9 +21,9 @@ package org.apache.wink.common.internal.registry;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map.Entry;
+
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.ext.MessageBodyWriter;
 
 import junit.framework.TestCase;
 
@@ -35,6 +35,16 @@ import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
  */
 public class ProvidersRegistry11Test extends TestCase {
 
+    public class MyString {
+    }
+    
+    public class MyStringSub1 extends MyString {
+    }
+    
+    public class MyStringSub2 extends MyStringSub1 {
+    }
+    
+    
     /**
      * JAX-RS 1.1 allows syntax such as:
      * 
@@ -73,6 +83,26 @@ public class ProvidersRegistry11Test extends TestCase {
         HashMap data = (HashMap)field2.get(messageBodyWriters);
         assertEquals(3, data.size());
 
+    }
+    
+    /**
+     * JAX-RS 1.1 C004:  http://jcp.org/aboutJava/communityprocess/maintenance/jsr311/311ChangeLog.html
+     * 
+     * "Add a secondary key to the sort order used when looking for compatible MessageBodyWriters such
+     * that writers whose declared generic type is closer in terms of inheritance are sorted earlier
+     * than those whose declared generic type is further."
+     * 
+     * @throws Exception
+     */
+    public void testGenericTypeInheritanceSorting() throws Exception {
+        ProvidersRegistry providersRegistry =
+            new ProvidersRegistry(new LifecycleManagersRegistry(), new ApplicationValidator());
+        providersRegistry.addProvider(MyPrioritizedProvider.class);
+        providersRegistry.addProvider(MySecondaryProvider.class);
+        
+        MessageBodyWriter writer = providersRegistry.getMessageBodyWriter(MyStringSub2.class, MyString.class, null, MediaType.WILDCARD_TYPE, null);
+        // MyStringSub2 is closer to MyStringSub1, which is writeable by MySecondaryProvider, hence...
+        assertTrue("writer should be instance of MySecondaryProvider", writer instanceof MySecondaryProvider);
     }
 
 }

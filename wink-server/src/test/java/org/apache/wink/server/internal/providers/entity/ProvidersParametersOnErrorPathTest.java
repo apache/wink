@@ -47,9 +47,9 @@ public class ProvidersParametersOnErrorPathTest extends MockServletInvocationTes
     }
 
     @Provider
-    public static class ProviderUsingAnnotations implements MessageBodyWriter<Object> {
+    public static class ProviderUsingAnnotations implements MessageBodyWriter<String> {
 
-        public long getSize(Object arg0, Class<?> arg1, Type arg2, Annotation[] arg3, MediaType arg4) {
+        public long getSize(String arg0, Class<?> arg1, Type arg2, Annotation[] arg3, MediaType arg4) {
             return -1;
         }
 
@@ -62,7 +62,7 @@ public class ProvidersParametersOnErrorPathTest extends MockServletInvocationTes
             return false;
         }
 
-        public void writeTo(Object arg0,
+        public void writeTo(String arg0,
                             Class<?> arg1,
                             Type arg2,
                             Annotation[] arg3,
@@ -75,7 +75,7 @@ public class ProvidersParametersOnErrorPathTest extends MockServletInvocationTes
                 }
             }
 
-            arg6.write(((String)arg0).getBytes());
+            arg6.write(arg0.getBytes());
         }
 
     }
