@@ -33,6 +33,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.server.internal.application.ServletApplicationFileLoader;
@@ -78,7 +79,10 @@ public class RequestProcessor {
             final Set<Class<?>> classes =
                 new ServletApplicationFileLoader(Boolean.parseBoolean(loadWinkApplicationsProperty))
                     .getClasses();
-            configuration.addApplication(new RegistrationUtils.InnerApplication(classes));
+            RegistrationUtils.InnerApplication application =
+                new RegistrationUtils.InnerApplication(classes);
+            application.setPriority(WinkApplication.SYSTEM_PRIORITY);
+            configuration.addApplication(application);
         } catch (FileNotFoundException e) {
             throw new WebApplicationException(e);
         }
@@ -91,7 +95,7 @@ public class RequestProcessor {
         if (registerRootResource.equals(PROPERTY_ROOT_RESOURCE_ATOM)) {
             RegistrationUtils.InnerApplication application =
                 new RegistrationUtils.InnerApplication(RootResource.class);
-            application.setPriority(0.1);
+            application.setPriority(WinkApplication.SYSTEM_PRIORITY);
             configuration.addApplication(application);
         } else if (registerRootResource.equals(PROPERTY_ROOT_RESOURCE_NONE)) {
             // do nothing
@@ -103,7 +107,7 @@ public class RequestProcessor {
             }
             RegistrationUtils.InnerApplication application =
                 new RegistrationUtils.InnerApplication(instance);
-            application.setPriority(0.1);
+            application.setPriority(WinkApplication.SYSTEM_PRIORITY);
             configuration.addApplication(application);
         }
     }

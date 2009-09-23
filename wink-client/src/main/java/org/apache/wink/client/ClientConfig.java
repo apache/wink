@@ -93,7 +93,7 @@ public class ClientConfig implements Cloneable {
 
                 @Override
                 public double getPriority() {
-                    return 0.1;
+                    return WinkApplication.SYSTEM_PRIORITY;
                 }
             });
         } catch (FileNotFoundException e) {

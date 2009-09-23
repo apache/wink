@@ -32,6 +32,8 @@ public class WinkApplication extends Application {
 
     public static final double DEFAULT_PRIORITY = 0.5;
 
+    public static final double SYSTEM_PRIORITY  = 0.1;
+
     @Override
     public Set<Class<?>> getClasses() {
         return Collections.emptySet();

@@ -64,16 +64,21 @@ public class ApplicationProcessor {
     public void process() {
         logger.debug("Processing Application:");
 
+        double priority = WinkApplication.DEFAULT_PRIORITY;
+        if (application instanceof WinkApplication) {
+            priority = ((WinkApplication)application).getPriority();
+        }
+
         // process singletons
         Set<Object> singletons = application.getSingletons();
         if (singletons != null && singletons.size() > 0) {
-            processSingletons(singletons);
+            processSingletons(singletons, priority);
         }
 
         // process classes
         Set<Class<?>> classes = application.getClasses();
         if (classes != null && classes.size() > 0) {
-            processClasses(classes);
+            processClasses(classes, priority);
         }
 
         if (application instanceof WinkApplication) {
@@ -117,7 +122,7 @@ public class ApplicationProcessor {
         }
     }
 
-    private void processClasses(Set<Class<?>> classes) {
+    private void processClasses(Set<Class<?>> classes, double priority) {
 
         for (Class<?> cls : classes) {
             try {
@@ -126,9 +131,9 @@ public class ApplicationProcessor {
                 // the validations were moved to registry
 
                 if (ResourceMetadataCollector.isStaticResource(cls)) {
-                    resourceRegistry.addResource(cls);
+                    resourceRegistry.addResource(cls, priority);
                 } else if (ProviderMetadataCollector.isProvider(cls)) {
-                    providersRegistry.addProvider(cls);
+                    providersRegistry.addProvider(cls, priority);
                 } else {
                     logger.warn(Messages.getMessage("classNotAResourceNorProvider"), cls);
                 }
@@ -139,7 +144,7 @@ public class ApplicationProcessor {
         }
     }
 
-    private void processSingletons(Set<Object> singletons) {
+    private void processSingletons(Set<Object> singletons, double priority) {
 
         // add singletons
         for (Object obj : singletons) {
@@ -149,9 +154,9 @@ public class ApplicationProcessor {
                 Class<?> cls = obj.getClass();
 
                 if (ResourceMetadataCollector.isStaticResource(cls)) {
-                    resourceRegistry.addResource(obj);
+                    resourceRegistry.addResource(obj, priority);
                 } else if (ProviderMetadataCollector.isProvider(cls)) {
-                    providersRegistry.addProvider(obj);
+                    providersRegistry.addProvider(obj, priority);
                 } else {
                     logger.warn(Messages.getMessage("classNotAResourceNorProvider"), obj);
                 }
