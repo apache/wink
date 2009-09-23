@@ -429,10 +429,13 @@ public class ProvidersRegistry {
 
     private abstract class MediaTypeMap<T> {
 
-        private final Map<MediaType, Set<ObjectFactory<T>>>                                          data           =
+        private volatile Map<MediaType, Set<ObjectFactory<T>>>                                       data           =
                                                                                                                         new HashMap<MediaType, Set<ObjectFactory<T>>>();
-        private boolean                                                                              dataSorted     =
-                                                                                                                        false;
+        @SuppressWarnings("unchecked")
+        private volatile Entry<MediaType, Set<ObjectFactory<T>>>[]                                   entrySet       =
+                                                                                                                        data
+                                                                                                                            .entrySet()
+                                                                                                                            .toArray(new Entry[0]);
         private final Class<?>                                                                       rawType;
 
         private final Map<Class<?>, SoftReference<ConcurrentMap<MediaType, List<ObjectFactory<T>>>>> providersCache =
@@ -484,26 +487,6 @@ public class ProvidersRegistry {
 
         private List<ObjectFactory<T>> internalGetProvidersByMediaType(MediaType mediaType,
                                                                        Class<?> cls) {
-
-            @SuppressWarnings("unchecked")
-            Entry<MediaType, Set<ObjectFactory<T>>>[] entrySet =
-                data.entrySet().toArray(new Entry[0]);
-
-            if (!dataSorted) {
-                // It's important to sort the media types here to ensure that
-                // provider of the more dominant media type will precede, when
-                // adding to the compatible set.
-                Arrays.sort(entrySet, Collections
-                    .reverseOrder(new Comparator<Entry<MediaType, Set<ObjectFactory<T>>>>() {
-
-                        public int compare(Entry<MediaType, Set<ObjectFactory<T>>> o1,
-                                           Entry<MediaType, Set<ObjectFactory<T>>> o2) {
-                            return MediaTypeUtils.compareTo(o1.getKey(), o2.getKey());
-                        }
-                    }));
-                dataSorted = true;
-            }
-
             Set<ObjectFactory<T>> compatible =
                 new TreeSet<ObjectFactory<T>>(Collections.reverseOrder());
             for (Entry<MediaType, Set<ObjectFactory<T>>> entry : entrySet) {
@@ -518,6 +501,9 @@ public class ProvidersRegistry {
                             // types are added first so replacing the entity
                             // with the same object factory of the different
                             // media type, won't change the map.
+
+                            // This is done via the equals() of the OFHolder
+                            // which doesn't compare the MediaType
                             compatible.add(new OFHolder<T>(entry.getKey(), of));
                         }
                     }
@@ -546,19 +532,42 @@ public class ProvidersRegistry {
             return mediaTypes;
         }
 
-        void put(MediaType key, ObjectFactory<T> objectFactory) {
+        @SuppressWarnings("unchecked")
+        synchronized void put(MediaType key, ObjectFactory<T> objectFactory) {
+            Map<MediaType, Set<ObjectFactory<T>>> copyOfMap =
+                new HashMap<MediaType, Set<ObjectFactory<T>>>(data);
             if (!key.getParameters().isEmpty()) {
                 key = new MediaType(key.getType(), key.getSubtype());
             }
             Set<ObjectFactory<T>> set = data.get(key);
             if (set == null) {
                 set = new HashSet<ObjectFactory<T>>();
-                dataSorted = false;
-                data.put(key, set);
+            } else {
+                set = new HashSet<ObjectFactory<T>>(set);
             }
+            copyOfMap.put(key, set);
             if (!set.add(objectFactory)) {
                 logger.warn(Messages.getMessage("mediaTypeSetAlreadyContains"), objectFactory);
             } else {
+
+                // need to resort the entry set
+                Entry<MediaType, Set<ObjectFactory<T>>>[] newEntrySet =
+                    copyOfMap.entrySet().toArray(new Entry[0]);
+                // It's important to sort the media types here to ensure that
+                // provider of the more dominant media type will precede, when
+                // adding to the compatible set.
+                Arrays.sort(newEntrySet, Collections
+                    .reverseOrder(new Comparator<Entry<MediaType, Set<ObjectFactory<T>>>>() {
+
+                        public int compare(Entry<MediaType, Set<ObjectFactory<T>>> o1,
+                                           Entry<MediaType, Set<ObjectFactory<T>>> o2) {
+                            return MediaTypeUtils.compareTo(o1.getKey(), o2.getKey());
+                        }
+                    }));
+
+                entrySet = newEntrySet;
+                data = copyOfMap;
+
                 // the set of providers has been changed so must clear the cache
                 providersCache.clear();
             }
@@ -631,7 +640,7 @@ public class ProvidersRegistry {
                 return of.getInstanceClass();
             }
 
-            private static final double MAX_SYSTEM_PRIORITY = WinkApplication.SYSTEM_PRIORITY;
+            private static final double MAX_SYSTEM_PRIORITY = WinkApplication.SYSTEM_PRIORITY + 0.1;
 
             public int compareTo(OFHolder<T> o) {
                 // check if this is a system provider
