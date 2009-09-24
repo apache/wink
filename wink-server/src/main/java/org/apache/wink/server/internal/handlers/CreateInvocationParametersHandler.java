@@ -28,15 +28,21 @@ import org.apache.wink.common.internal.registry.InjectableFactory;
 import org.apache.wink.server.handlers.HandlersChain;
 import org.apache.wink.server.handlers.MessageContext;
 import org.apache.wink.server.handlers.RequestHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CreateInvocationParametersHandler implements RequestHandler {
+
+    private Logger logger = LoggerFactory.getLogger(CreateInvocationParametersHandler.class);
 
     public void handleRequest(MessageContext context, HandlersChain chain) throws Throwable {
         SearchResult result = context.getAttribute(SearchResult.class);
 
         // create and save the invocation parameters for the found method
         List<Injectable> formal = result.getMethod().getMetadata().getFormalParameters();
+        logger.debug("Formal Injectable parameters listis: {}", formal);
         Object[] parameters = InjectableFactory.getInstance().instantiate(formal, context);
+        logger.debug("Actual parameters list to inject is: {}", parameters);
         result.setInvocationParameters(parameters);
 
         chain.doChain(context);

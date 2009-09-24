@@ -77,6 +77,7 @@ public class FlushResultHandler extends AbstractHandler {
         }
 
         // set the status code
+        logger.debug("Response status code set to: {}", statusCode);
         httpResponse.setStatus(statusCode);
 
         // get the entity
@@ -127,6 +128,7 @@ public class FlushResultHandler extends AbstractHandler {
 
         // we're done if the actual entity is null
         if (entity == null) {
+            logger.debug("No entity so writing only the headers");
             flushHeaders(httpResponse, httpHeaders);
             return;
         }
@@ -134,6 +136,7 @@ public class FlushResultHandler extends AbstractHandler {
         // we have an entity, set the response media type
         MediaType responseMediaType = context.getResponseMediaType();
         if (responseMediaType != null) {
+            logger.debug("Set response Content-Type to: {} ", responseMediaType);
             httpResponse.setContentType(responseMediaType.toString());
         }
 
@@ -208,9 +211,12 @@ public class FlushResultHandler extends AbstractHandler {
             RequestImpl.VaryHeader varyHeader =
                 RuntimeContextTLS.getRuntimeContext().getAttribute(RequestImpl.VaryHeader.class);
             if (varyHeader != null) {
+                logger.debug("Vary header automatically set by a call to RequestImpl");
                 headers.putSingle(HttpHeaders.VARY, varyHeader.getVaryHeaderValue());
             }
         }
+
+        logger.debug("Flushing headers: {}", headers);
 
         for (Entry<String, List<Object>> entry : headers.entrySet()) {
             String key = entry.getKey();

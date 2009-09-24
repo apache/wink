@@ -25,8 +25,14 @@ import javax.ws.rs.core.Response;
 
 import org.apache.wink.server.handlers.AbstractHandler;
 import org.apache.wink.server.handlers.MessageContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PopulateResponseStatusHandler extends AbstractHandler {
+
+    private static final Logger logger =
+                                           LoggerFactory
+                                               .getLogger(PopulateResponseStatusHandler.class);
 
     public void handleResponse(MessageContext context) throws Throwable {
         Object entity = context.getResponseEntity();
@@ -45,9 +51,13 @@ public class PopulateResponseStatusHandler extends AbstractHandler {
         }
 
         if (status == -1) {
-            status = HttpServletResponse.SC_OK;
             if (entity == null) {
+                logger
+                    .debug("No status set and no entity so setting response status to 204 No Content");
                 status = HttpServletResponse.SC_NO_CONTENT;
+            } else {
+                logger.debug("No status set so setting response status to 200 OK");
+                status = HttpServletResponse.SC_OK;
             }
         }
 

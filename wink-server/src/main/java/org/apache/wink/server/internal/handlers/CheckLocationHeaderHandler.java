@@ -23,6 +23,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
 import org.apache.wink.common.http.HttpStatus;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.server.handlers.AbstractHandler;
 import org.apache.wink.server.handlers.MessageContext;
 
@@ -39,8 +40,8 @@ public class CheckLocationHeaderHandler extends AbstractHandler {
         if (result instanceof Response && isStatusWithLocation(statusCode)) {
             Response clientResponse = (Response)result;
             if (!clientResponse.getMetadata().containsKey(HttpHeaders.LOCATION)) {
-                throw new IllegalStateException(
-                                                "Mandatory 'Location' header was not set for status code " + statusCode);
+                throw new IllegalStateException(Messages
+                    .getMessage("checkLocationHeaderHandlerIllegalArg", statusCode));
             }
         }
     }

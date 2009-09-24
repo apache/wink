@@ -47,6 +47,7 @@ public class PopulateErrorResponseHandler extends AbstractHandler {
             ExceptionMapper<Throwable> provider =
                 (ExceptionMapper<Throwable>)findProvider(context, exception);
             if (provider != null) {
+                logger.debug("Using provider {} to map exception {}", provider, exception);
                 context.setResponseEntity(executeProvider(exception, provider));
             } else {
                 throw exception;
@@ -73,12 +74,16 @@ public class PopulateErrorResponseHandler extends AbstractHandler {
                                                WebApplicationException exception) {
         ExceptionMapper<WebApplicationException> provider = null;
         if (exception.getResponse().getEntity() == null) {
+            // only look for a provider if the response entity on the
+            // WebApplicationException is null (per spec)
             provider =
                 (ExceptionMapper<WebApplicationException>)findProvider(msgContext, exception);
         }
         if (provider != null) {
+            logger.debug("Using ExceptionMapper to map response from WebApplicationException");
             msgContext.setResponseEntity(provider.toResponse(exception));
         } else {
+            logger.debug("Getting response directly from WebApplicationException");
             msgContext.setResponseEntity(exception.getResponse());
         }
     }

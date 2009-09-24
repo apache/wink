@@ -35,8 +35,14 @@ import org.apache.wink.server.handlers.HandlersChain;
 import org.apache.wink.server.handlers.MessageContext;
 import org.apache.wink.server.handlers.RequestHandler;
 import org.apache.wink.server.handlers.ResponseHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HeadMethodHandler implements RequestHandler, ResponseHandler {
+
+    private static final Logger logger                     =
+                                                               LoggerFactory
+                                                                   .getLogger(HeadMethodHandler.class);
 
     private static final String ORIGINAL_RESPONSE_ATT_NAME =
                                                                HeadMethodHandler.class.getName() + "_original_response";
@@ -54,6 +60,8 @@ public class HeadMethodHandler implements RequestHandler, ResponseHandler {
         if (searchResult.isError() && searchResult.getError().getResponse().getStatus() == HttpStatus.METHOD_NOT_ALLOWED
             .getCode()
             && context.getHttpMethod().equalsIgnoreCase(HttpMethod.HEAD)) {
+            logger
+                .debug("No HEAD method so trying GET method while not sending the response entity");
             context.setHttpMethod(HttpMethod.GET);
             HttpServletResponse originalResponse = context.getAttribute(HttpServletResponse.class);
             NoBodyResponse noBodyResponse = new NoBodyResponse(originalResponse);
@@ -69,7 +77,7 @@ public class HeadMethodHandler implements RequestHandler, ResponseHandler {
         if (originalResponse != null) {
             HttpServletResponse response = context.getAttribute(HttpServletResponse.class);
             response.flushBuffer();
-            response.setContentLength(((NoBodyResponse)response).getContentLenghtValue());
+            response.setContentLength(((NoBodyResponse)response).getContentLengthValue());
             // set the original response on the context
             context.setAttribute(HttpServletResponse.class, originalResponse);
         }
@@ -85,7 +93,7 @@ public class HeadMethodHandler implements RequestHandler, ResponseHandler {
             super(servletResponse);
         }
 
-        int getContentLenghtValue() {
+        int getContentLengthValue() {
             return countingStream.getByteCount();
         }
 

@@ -50,8 +50,9 @@ public class FindRootResourceHandler implements RequestHandler {
 
         // create a path stripped from all matrix parameters to use for matching
         List<PathSegment> segments = context.getUriInfo().getPathSegments(false);
+        logger.debug("Getting URI Info path segments: {}", segments);
         String strippedPath = buildPathForMatching(segments);
-
+        logger.debug("Getting stripped path from segments: {}", strippedPath);
         // get a list of root resources that can handle the request
 
         // JAX-RS specification requires to search only the first matching
@@ -60,6 +61,7 @@ public class FindRootResourceHandler implements RequestHandler {
         // matching resources
         List<ResourceInstance> matchedResources =
             registry.getMatchingRootResources(strippedPath, isContinuedSearchPolicy);
+        logger.debug("Found resource instances: {}", matchedResources);
         if (matchedResources.size() == 0) {
             logger.debug("No resource found matching {}", context.getUriInfo().getPath(false));
             SearchResult result =
@@ -81,6 +83,8 @@ public class FindRootResourceHandler implements RequestHandler {
                                             0,
                                             headSegmentsCount,
                                             result.getData().getMatchedVariablesPathSegments());
+
+            logger.debug("Using SearchResult: {}", result);
 
             // continue that chain to find the actual resource that will handle
             // the request.

@@ -33,8 +33,12 @@ import org.apache.wink.server.handlers.HandlersChain;
 import org.apache.wink.server.handlers.MessageContext;
 import org.apache.wink.server.handlers.RequestHandler;
 import org.apache.wink.server.internal.registry.ResourceRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OptionsMethodHandler implements RequestHandler {
+
+    private static final Logger logger = LoggerFactory.getLogger(OptionsMethodHandler.class);
 
     public void handleRequest(MessageContext context, HandlersChain chain) throws Throwable {
 
@@ -51,6 +55,10 @@ public class OptionsMethodHandler implements RequestHandler {
             // get supported HTTP methods
             ResourceRegistry resourceRegistry = context.getAttribute(ResourceRegistry.class);
             Set<String> httpMethods = resourceRegistry.getOptions(searchResult.getResource());
+            logger
+                .debug("Invoking OPTIONS request handled by runtime with {} resource and {} HTTP methods",
+                       searchResult.getResource(),
+                       httpMethods);
             if (httpMethods.size() > 0) {
                 String allowHeader = HeaderUtils.buildOptionsHeader(httpMethods);
                 // add 'Allow' header to the response

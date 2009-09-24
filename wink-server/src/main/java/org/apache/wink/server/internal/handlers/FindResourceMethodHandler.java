@@ -29,6 +29,7 @@ import javax.ws.rs.core.PathSegment;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.wink.common.internal.registry.metadata.MethodMetadata;
 import org.apache.wink.common.internal.uritemplate.UriTemplateMatcher;
 import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor;
 import org.apache.wink.server.handlers.HandlersChain;
@@ -43,10 +44,14 @@ import org.apache.wink.server.internal.registry.ResourceRegistry;
 import org.apache.wink.server.internal.registry.SubResourceInstance;
 import org.apache.wink.server.internal.registry.SubResourceMethodRecord;
 import org.apache.wink.server.internal.registry.SubResourceRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FindResourceMethodHandler implements RequestHandler {
 
-    private boolean isContinuedSearchPolicy;
+    private boolean      isContinuedSearchPolicy;
+
+    private final Logger logger = LoggerFactory.getLogger(FindResourceMethodHandler.class);
 
     public void handleRequest(MessageContext context, HandlersChain chain) throws Throwable {
 
@@ -55,6 +60,7 @@ public class FindResourceMethodHandler implements RequestHandler {
 
         // resource method
         if (resource.isExactMatch()) {
+            logger.debug("Root resource @Path matches exactly so finding root resource method");
             handleResourceMethod(context, chain);
             return;
         }
@@ -62,9 +68,11 @@ public class FindResourceMethodHandler implements RequestHandler {
         // sub-resource method or locator
         UriTemplateMatcher templateMatcher = resource.getMatcher();
         String tail = UriTemplateProcessor.normalizeUri(templateMatcher.getTail(false));
+        logger.debug("Unmatched tail to the URI: {}", tail);
 
-        // get a sorted set of all the sub-resources (methods and locators)
+        // get a sorted list of all the sub-resources (methods and locators)
         List<SubResourceInstance> subResources = resource.getRecord().getMatchingSubResources(tail);
+        logger.debug("Possible subresources found: {}", subResources);
         if (subResources.size() == 0) {
             result.setError(new WebApplicationException(Response.Status.NOT_FOUND));
             return;
@@ -72,7 +80,7 @@ public class FindResourceMethodHandler implements RequestHandler {
 
         // get all the searchable sub-resources
         List<SubResourceInstance> searchableSubResources = getSearchableSubResources(subResources);
-
+        logger.debug("Possible searchable subresources found: {}", searchableSubResources);
         // save the current data in case we need to role back the information if
         // the search fails and we will need to continue to the next
         // sub-resource
@@ -129,6 +137,10 @@ public class FindResourceMethodHandler implements RequestHandler {
         result.setFound(true);
         result.setMethod(method);
         // continue the chain to invoke the method
+        if (logger.isDebugEnabled()) {
+            MethodMetadata metadata = (method == null) ? null : method.getMetadata();
+            logger.debug("Found root resource method to invoke: {} ", metadata);
+        }
         chain.doChain(context);
     }
 
@@ -157,6 +169,10 @@ public class FindResourceMethodHandler implements RequestHandler {
         saveFoundMethod(result, matcher, method, context);
 
         // continue the chain to invoke the method
+        if (logger.isDebugEnabled()) {
+            MethodMetadata metadata = (method == null) ? null : method.getMetadata();
+            logger.debug("Found subresource method to invoke: {} ", metadata);
+        }
         chain.doChain(context);
     }
 
@@ -179,12 +195,18 @@ public class FindResourceMethodHandler implements RequestHandler {
         saveFoundMethod(result, matcher, subResourceInstance, context);
 
         // continue the chain to invoke the locator
+        if (logger.isDebugEnabled()) {
+            MethodMetadata metadata =
+                (subResourceInstance == null) ? null : subResourceInstance.getMetadata();
+            logger.debug("Found subresource locator to invoke: {} ", metadata);
+        }
         chain.doChain(context);
 
         // the object returned from the locator is a sub-resource so we must
         // continue the search in it
         Object subResource = context.getResponseEntity();
         if (subResource == null) {
+            logger.debug("Subresource returned was null so returning a 404 Not Found");
             result.setError(new WebApplicationException(Status.NOT_FOUND));
             return;
         }
@@ -195,6 +217,9 @@ public class FindResourceMethodHandler implements RequestHandler {
 
         // call recursively to search in the sub-resource
         result.setFound(false);
+        logger
+            .debug("Re-invoking the chain (due to hitting a subresource locator method) with the new subresource instance {}",
+                   resourceInstance);
         handleRequest(context, chain);
     }
 
