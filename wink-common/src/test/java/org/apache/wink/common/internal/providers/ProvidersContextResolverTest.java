@@ -42,6 +42,10 @@ public class ProvidersContextResolverTest extends TestCase {
     private static final String  STRING2 = "String2";
     private static final String  STRING3 = "String3";
     private static final String  STRING4 = "String4";
+    private static final String  STRING5 = "String5";
+    private static final String  STRING6 = "String6";
+    private static final String  STRING7 = "String7";
+
     private static final String  ATOM    = "Atom";
     private static final byte[]  BYTE    = new byte[0];
     private static final Integer _12345  = new Integer(12345);
@@ -80,6 +84,30 @@ public class ProvidersContextResolverTest extends TestCase {
 
         public String getContext(Class<?> type) {
             return STRING4;
+        }
+    }
+
+    @Provider
+    public static class StringContextResolver5 implements ContextResolver<String> {
+
+        public String getContext(Class<?> type) {
+            return STRING5;
+        }
+    }
+
+    @Provider
+    public static class StringContextResolver6 implements ContextResolver<String> {
+
+        public String getContext(Class<?> type) {
+            return STRING6;
+        }
+    }
+
+    @Provider
+    public static class StringContextResolver7 implements ContextResolver<String> {
+
+        public String getContext(Class<?> type) {
+            return STRING7;
         }
     }
 
@@ -271,4 +299,18 @@ public class ProvidersContextResolverTest extends TestCase {
             .getContext(String.class));
     }
 
+    public void testContextResolverPrioritySort() {
+        ProvidersRegistry providers = createProvidersRegistryImpl();
+        // note: the order these are added is important to the test
+        assertTrue(providers.addProvider(new StringContextResolver5(), 0.5));
+        assertTrue(providers.addProvider(new StringContextResolver6(), 0.6));
+        assertTrue(providers.addProvider(new StringContextResolver7(), 0.4));
+
+        // StringContextResolver3 has the highest priority (0.2) even though
+        // StringContextResolver2
+        // more closely matches based on the media type in @Produces
+
+        assertSame(STRING6, providers.getContextResolver(String.class, null, null)
+            .getContext(String.class));
+    }
 }

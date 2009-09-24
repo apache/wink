@@ -35,6 +35,7 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
+import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.annotations.Scope;
 import org.apache.wink.common.annotations.Scope.ScopeType;
 import org.apache.wink.common.internal.application.ApplicationValidator;
@@ -118,16 +119,16 @@ public class ProvidersMessageBodyTest extends TestCase {
         FileProvider fileProvider = new FileProvider();
         IntegerMessageBodyProvider objectMessageBodyProvider = new IntegerMessageBodyProvider();
 
-        providers.addProvider(byteArrayProvider);
-        providers.addProvider(inputStreamProvider);
+        providers.addProvider(byteArrayProvider, WinkApplication.SYSTEM_PRIORITY);
+        providers.addProvider(inputStreamProvider, WinkApplication.SYSTEM_PRIORITY);
         providers.addProvider(string2Provider);
-        providers.addProvider(stringProvider);
-        providers.addProvider(fileProvider);
+        providers.addProvider(stringProvider, WinkApplication.SYSTEM_PRIORITY);
+        providers.addProvider(fileProvider, WinkApplication.SYSTEM_PRIORITY);
         providers.addProvider(objectMessageBodyProvider);
 
         assertEquals(byteArrayProvider, providers
             .getMessageBodyReader(byte[].class, null, null, MediaType.APPLICATION_JSON_TYPE, null));
-        assertEquals(stringProvider, providers.getMessageBodyReader(String.class,
+        assertEquals(string2Provider, providers.getMessageBodyReader(String.class,
                                                                     null,
                                                                     null,
                                                                     MediaType.WILDCARD_TYPE,
@@ -141,12 +142,13 @@ public class ProvidersMessageBodyTest extends TestCase {
                                   null,
                                   MediaType.APPLICATION_ATOM_XML_TYPE,
                                   null));
-        // string2Provider is favored over stringProvider because it is a user-defined provider
-//        assertEquals(string2Provider, providers.getMessageBodyWriter(String.class,
-//                                                                    null,
-//                                                                    null,
-//                                                                    MediaType.WILDCARD_TYPE,
-//                                                                    null));
+        // string2Provider is favored over stringProvider because it is a
+        // user-defined provider
+        assertEquals(string2Provider, providers.getMessageBodyWriter(String.class,
+                                                                     null,
+                                                                     null,
+                                                                     MediaType.WILDCARD_TYPE,
+                                                                     null));
         assertEquals(fileProvider, providers
             .getMessageBodyWriter(File.class, null, null, MediaType.APPLICATION_SVG_XML_TYPE, null));
 
