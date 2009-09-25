@@ -35,6 +35,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
 import org.apache.wink.server.internal.DeploymentConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -46,9 +48,13 @@ import org.apache.wink.server.internal.DeploymentConfiguration;
  */
 public class RestFilter implements Filter {
 
-    private RestServlet restServlet;
+    private RestServlet  restServlet;
+
+    private final Logger logger = LoggerFactory.getLogger(RestFilter.class);
 
     private static class FilteredHttpServletResponse extends HttpServletResponseWrapper {
+
+        private final Logger logger = LoggerFactory.getLogger(FilteredHttpServletResponse.class);
 
         public FilteredHttpServletResponse(HttpServletResponse response) {
             super(response);
@@ -60,12 +66,14 @@ public class RestFilter implements Filter {
         public void setStatus(int statusCode) {
             super.setStatus(statusCode);
             this.statusCode = statusCode;
+            logger.debug("FilteredHttpServletResponse set status code to {}", statusCode);
         }
 
         @Override
         public void setStatus(int statusCode, String msg) {
             super.setStatus(statusCode, msg);
             this.statusCode = statusCode;
+            logger.debug("FilteredHttpServletResponse set status code to {}", statusCode);
         }
 
         int getStatusCode() {
@@ -91,10 +99,16 @@ public class RestFilter implements Filter {
                  * directly), then the status code is like the filter was never
                  * invoked
                  */
+                logger
+                    .debug("Filter {} did not match a resource so letting request continue on FilterChain {}",
+                           this,
+                           chain);
                 httpServletResponse.setStatus(HttpServletResponse.SC_OK);
                 chain.doFilter(servletRequest, servletResponse);
             }
         } else {
+            logger
+                .debug("Filter {} did not expect a non-HttpServletRequest and/or non-HttpServletResponse but letting chain continue");
             chain.doFilter(servletRequest, servletResponse);
         }
     }
@@ -121,6 +135,8 @@ public class RestFilter implements Filter {
     public void init(final FilterConfig filterConfig) throws ServletException {
         restServlet = new RestServletForFilter(filterConfig);
 
+        logger.debug("Initializing RestFilter {} with {} config and {} servlet", new Object[] {
+            this, filterConfig, restServlet});
         restServlet.init(new ServletConfig() {
 
             public String getServletName() {
@@ -142,6 +158,7 @@ public class RestFilter implements Filter {
     }
 
     public void destroy() {
+        logger.debug("Destroying RestFilter {}", this);
         restServlet.destroy();
     }
 }

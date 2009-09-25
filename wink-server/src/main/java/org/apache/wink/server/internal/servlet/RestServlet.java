@@ -73,6 +73,8 @@ public class RestServlet extends AbstractRestServlet {
     @Override
     public void init() throws ServletException {
 
+        logger.debug("Initializing {} servlet", this);
+
         try {
             super.init();
             // try to get the request processor
@@ -107,6 +109,7 @@ public class RestServlet extends AbstractRestServlet {
         InstantiationException, IllegalAccessException, IOException {
         DeploymentConfiguration deploymentConfiguration = getDeploymentConfiguration();
         RequestProcessor requestProcessor = new RequestProcessor(deploymentConfiguration);
+        logger.debug("Creating request processor {} for servlet {}", requestProcessor, this);
         deploymentConfiguration.addApplication(getApplication());
         return requestProcessor;
     }
@@ -123,10 +126,15 @@ public class RestServlet extends AbstractRestServlet {
 
     protected Properties getProperties() throws IOException {
         Properties defaultProperties = loadProperties(PROPERTIES_DEFAULT_FILE, null);
+        logger.debug("Default properties {} used in RestServlet {}", defaultProperties, this);
         String propertiesLocation = getInitParameter(PROPERTIES_INIT_PARAM);
         if (propertiesLocation != null) {
+            logger.info(Messages.getMessage("restServletUsePropertiesFileAtLocation"),
+                        propertiesLocation,
+                        PROPERTIES_INIT_PARAM);
             return loadProperties(propertiesLocation, defaultProperties);
         }
+        logger.debug("Final properties {} used in RestServlet {}", defaultProperties, this);
         return defaultProperties;
     }
 
@@ -134,6 +142,9 @@ public class RestServlet extends AbstractRestServlet {
         throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         String initParameter = getInitParameter(DEPLYMENT_CONF_PARAM);
         if (initParameter != null) {
+            logger.info(Messages.getMessage("restServletUseDeploymentConfigurationParam"),
+                        initParameter,
+                        DEPLYMENT_CONF_PARAM);
             Class<?> confClass = Class.forName(initParameter);
             return (DeploymentConfiguration)confClass.newInstance();
         }
@@ -146,6 +157,9 @@ public class RestServlet extends AbstractRestServlet {
         Class<? extends Application> appClass = null;
         String initParameter = getInitParameter(APPLICATION_INIT_PARAM);
         if (initParameter != null) {
+            logger.info(Messages.getMessage("restServletJAXRSApplicationInitParam"),
+                        initParameter,
+                        APPLICATION_INIT_PARAM);
             appClass = (Class<Application>)Class.forName(initParameter);
             return appClass.newInstance();
         }
@@ -153,6 +167,9 @@ public class RestServlet extends AbstractRestServlet {
         if (appLocationParameter == null) {
             logger.warn(Messages.getMessage("propertyNotDefined"), APP_LOCATION_PARAM);
         }
+        logger.info(Messages.getMessage("restServletWinkApplicationInitParam"),
+                    initParameter,
+                    APP_LOCATION_PARAM);
         return new ServletWinkApplication(getServletContext(), appLocationParameter);
     }
 

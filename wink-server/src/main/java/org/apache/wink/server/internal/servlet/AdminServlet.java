@@ -37,6 +37,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import org.apache.wink.common.http.HttpStatus;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.model.admin.MatrixParameters;
 import org.apache.wink.common.internal.model.admin.Parameter;
 import org.apache.wink.common.internal.model.admin.QueryParameters;
@@ -90,8 +91,8 @@ public class AdminServlet extends AbstractRestServlet {
 
         RequestProcessor requestProcessor = getRequestProcessor();
         if (requestProcessor == null) {
-            throw new ServletException(
-                                       "Request processor should be initialized prior calling to admin servlet.");
+            throw new ServletException(Messages
+                .getMessage("adminServletRequestProcessorInitBeforeAdmin"));
         }
         ResourceRegistry registry = requestProcessor.getConfiguration().getResourceRegistry();
 
@@ -254,7 +255,7 @@ public class AdminServlet extends AbstractRestServlet {
         uri2ResourceMap.clear();
         for (MethodMetadata subResourceMethod : subResourceMethods) {
             UriTemplateProcessor uriTemplate = record.getTemplateProcessor();
-            String uri = SLASH + uriTemplate.getTemplate() +SLASH+ subResourceMethod.getPath();
+            String uri = SLASH + uriTemplate.getTemplate() + SLASH + subResourceMethod.getPath();
             org.apache.wink.common.internal.model.admin.Methods xmlSRM =
                 createXMLSubResourceMethod(subResourceMethod);
             addResourceMethods(uri2ResourceMap, uri, xmlSRM);

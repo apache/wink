@@ -23,11 +23,17 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 import org.apache.wink.server.internal.RequestProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Base class for RestServlet and AdminServlet
  */
 public abstract class AbstractRestServlet extends HttpServlet {
+
+    private final Logger        logger                      =
+                                                                LoggerFactory
+                                                                    .getLogger(AbstractRestServlet.class);
 
     private static final String REQUEST_PROCESSOR_ATTRIBUTE = "requestProcessorAttribute";
     private static final long   serialVersionUID            = 7721777326714438571L;
@@ -37,6 +43,7 @@ public abstract class AbstractRestServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         requestProcessorAttribute = getInitParameter(REQUEST_PROCESSOR_ATTRIBUTE);
+        logger.debug("Request processor attribute is {} for {}", requestProcessorAttribute, this);
     }
 
     protected RequestProcessor getRequestProcessor() {
