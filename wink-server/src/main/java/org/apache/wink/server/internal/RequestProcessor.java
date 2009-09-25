@@ -148,7 +148,6 @@ public class RequestProcessor {
         try {
             ServerMessageContext msgContext = createMessageContext(request, response);
             RuntimeContextTLS.setRuntimeContext(msgContext);
-            logger.debug("Creating ServerMessageContext: {}", msgContext);
             logger.debug("Set message context and starting request handlers chain: {}", msgContext);
             // run the request handler chain
             configuration.getRequestHandlersChain().run(msgContext);
@@ -162,7 +161,6 @@ public class RequestProcessor {
             ServerMessageContext msgContext = createMessageContext(request, response);
             RuntimeContextTLS.setRuntimeContext(msgContext);
             msgContext.setResponseEntity(t);
-            logger.debug("Creating ServerMessageContext: {}", msgContext);
             // run the error handler chain
             logger.debug("Exception occured, starting error handlers chain: {}", msgContext);
             configuration.getErrorHandlersChain().run(msgContext);

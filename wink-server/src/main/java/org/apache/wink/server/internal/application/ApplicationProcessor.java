@@ -62,11 +62,12 @@ public class ApplicationProcessor {
     }
 
     public void process() {
-        logger.debug("Processing Application:");
+        logger.debug("Processing Application: {}", application);
 
         double priority = WinkApplication.DEFAULT_PRIORITY;
         if (application instanceof WinkApplication) {
             priority = ((WinkApplication)application).getPriority();
+            logger.debug("WinkApplication priority is set to: {}", priority);
         }
 
         // process singletons
@@ -93,6 +94,7 @@ public class ApplicationProcessor {
         double priority = sApplication.getPriority();
 
         if (instances == null) {
+            logger.debug("WinkApplication.getInstances() returned null");
             return;
         }
 

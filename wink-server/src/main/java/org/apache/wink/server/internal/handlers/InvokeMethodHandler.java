@@ -48,6 +48,7 @@ public class InvokeMethodHandler extends AbstractHandler {
             Object result = javaMethod.invoke(instance, parameters);
             context.setResponseEntity(result);
         } catch (InvocationTargetException ite) {
+            logger.debug("Excpetion encountered during invocation: {}", ite.getTargetException());
             throw ite.getTargetException(); // unpack the original exception
         }
     }
