@@ -39,6 +39,7 @@
         <module>wink-itest-extra-providers</module>
         <module>wink-itest-filter</module>
         <module>wink-itest-client</module>
+        <module>wink-example-helloworld</module>
     </modules>
 
     <properties>
