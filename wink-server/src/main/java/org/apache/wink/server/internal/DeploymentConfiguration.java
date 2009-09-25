@@ -22,6 +22,7 @@ package org.apache.wink.server.internal;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -125,6 +126,8 @@ public class DeploymentConfiguration {
         if (properties == null) {
             properties = new Properties();
         }
+
+        logger.debug("Deployment configuration properties: {}", properties);
 
         // check to see if an override property was specified. if so, then
         // configure
@@ -287,10 +290,12 @@ public class DeploymentConfiguration {
                 Properties lproperties = new Properties();
 
                 lproperties.load(is);
+                logger.debug("Alternative shortcuts properties: {}", lproperties);
                 alternateShortcutMap = new HashMap<String, String>();
                 for (Entry<Object, Object> entry : lproperties.entrySet()) {
                     alternateShortcutMap.put((String)entry.getKey(), (String)entry.getValue());
                 }
+                logger.debug("Alternative shortcuts map: {}", alternateShortcutMap);
             } catch (IOException e) {
                 logger.error(Messages.getMessage("alternateShortcutMapLoadFailure"), e);
                 throw new WebApplicationException(e);
@@ -335,6 +340,7 @@ public class DeploymentConfiguration {
         String handlersFactoryClassName = properties.getProperty(HANDLERS_FACTORY_CLASS_PROP);
         if (handlersFactoryClassName != null) {
             try {
+                logger.debug("Handlers Factory Class is: {}", handlersFactoryClassName);
                 Class<HandlersFactory> handlerFactoryClass =
                     (Class<HandlersFactory>)Class.forName(handlersFactoryClassName);
                 HandlersFactory handlersFactory = handlerFactoryClass.newInstance();
@@ -403,6 +409,7 @@ public class DeploymentConfiguration {
             }
         }
         handlersChain.addHandler(createHandler(InvokeMethodHandler.class));
+        logger.debug("Request handlers chain is: {}", handlersChain);
         return handlersChain;
     }
 
@@ -461,6 +468,7 @@ public class DeploymentConfiguration {
         }
         handlersChain.addHandler(createHandler(FlushResultHandler.class));
         handlersChain.addHandler(createHandler(HeadMethodHandler.class));
+        logger.debug("Response handlers chain is: {}", handlersChain);
         return handlersChain;
     }
 
@@ -484,12 +492,14 @@ public class DeploymentConfiguration {
             }
         }
         handlersChain.addHandler(createHandler(FlushResultHandler.class));
+        logger.debug("Error handlers chain is: {}", handlersChain);
         return handlersChain;
     }
 
     private <T extends Handler> T createHandler(Class<T> cls) {
         try {
             T handler = cls.newInstance();
+            logger.debug("Calling {}.init(Properties)", cls);
             handler.init(getProperties());
             return handler;
         } catch (InstantiationException e) {
@@ -501,6 +511,12 @@ public class DeploymentConfiguration {
 
     public void setHttpMethodOverrideHeaders(String[] httpMethodOverrideHeaders) {
         this.httpMethodOverrideHeaders = httpMethodOverrideHeaders;
+        if (logger.isDebugEnabled()) {
+            List<String> overrideHeaders =
+                (httpMethodOverrideHeaders == null) ? null : Arrays
+                    .asList(httpMethodOverrideHeaders);
+            logger.debug("Setting HTTP Method override headers: {}", overrideHeaders);
+        }
     }
 
     public String[] getHttpMethodOverrideHeaders() {

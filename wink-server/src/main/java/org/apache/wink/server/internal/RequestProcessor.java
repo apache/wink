@@ -76,6 +76,9 @@ public class RequestProcessor {
             String loadWinkApplicationsProperty =
                 configuration.getProperties().getProperty(PROPERTY_LOAD_WINK_APPLICATIONS,
                                                           Boolean.toString(true));
+            logger.debug("{} property is set to: {}",
+                         PROPERTY_LOAD_WINK_APPLICATIONS,
+                         loadWinkApplicationsProperty);
             final Set<Class<?>> classes =
                 new ServletApplicationFileLoader(Boolean.parseBoolean(loadWinkApplicationsProperty))
                     .getClasses();
@@ -92,6 +95,7 @@ public class RequestProcessor {
         Properties properties = configuration.getProperties();
         String registerRootResource =
             properties.getProperty(PROPERTY_ROOT_RESOURCE, PROPERTY_ROOT_RESOURCE_DEFAULT);
+        logger.debug("{} property is set to: {}", PROPERTY_ROOT_RESOURCE, registerRootResource);
         if (registerRootResource.equals(PROPERTY_ROOT_RESOURCE_ATOM)) {
             RegistrationUtils.InnerApplication application =
                 new RegistrationUtils.InnerApplication(RootResource.class);
@@ -101,6 +105,7 @@ public class RequestProcessor {
             // do nothing
         } else {
             String css = properties.getProperty(PROPERTY_ROOT_RESOURCE_CSS);
+            logger.debug("{} property is set to: {}", PROPERTY_ROOT_RESOURCE_CSS, css);
             HtmlServiceDocumentResource instance = new HtmlServiceDocumentResource();
             if (css != null) {
                 instance.setServiceDocumentCssPath(css);
@@ -143,8 +148,13 @@ public class RequestProcessor {
         try {
             ServerMessageContext msgContext = createMessageContext(request, response);
             RuntimeContextTLS.setRuntimeContext(msgContext);
+            logger.debug("Creating ServerMessageContext: {}", msgContext);
+            logger.debug("Set message context and starting request handlers chain: {}", msgContext);
             // run the request handler chain
             configuration.getRequestHandlersChain().run(msgContext);
+            logger
+                .debug("Finished request handlers chain and starting response handlers chain: {}",
+                       msgContext);
             // run the response handler chain
             configuration.getResponseHandlersChain().run(msgContext);
         } catch (Throwable t) {
@@ -152,9 +162,12 @@ public class RequestProcessor {
             ServerMessageContext msgContext = createMessageContext(request, response);
             RuntimeContextTLS.setRuntimeContext(msgContext);
             msgContext.setResponseEntity(t);
+            logger.debug("Creating ServerMessageContext: {}", msgContext);
             // run the error handler chain
+            logger.debug("Exception occured, starting error handlers chain: {}", msgContext);
             configuration.getErrorHandlersChain().run(msgContext);
         } finally {
+            logger.debug("Finished response handlers chain");
             RuntimeContextTLS.setRuntimeContext(null);
         }
     }
@@ -200,7 +213,12 @@ public class RequestProcessor {
         if (attributeName == null) {
             attributeName = RequestProcessor.class.getName();
         }
-        return (RequestProcessor)servletContext.getAttribute(attributeName);
+        RequestProcessor requestProcessor =
+            (RequestProcessor)servletContext.getAttribute(attributeName);
+        logger
+            .debug("Retrieving request processor {} using attribute name {} in servlet context {}",
+                   new Object[] {requestProcessor, attributeName, servletContext});
+        return requestProcessor;
     }
 
     public void storeRequestProcessorOnServletContext(ServletContext servletContext,
@@ -208,7 +226,8 @@ public class RequestProcessor {
         if (attributeName == null || attributeName.length() == 0) {
             attributeName = RequestProcessor.class.getName();
         }
+        logger.debug("Storing request processor {} using attribute name {} in servlet context {}",
+                     new Object[] {this, attributeName, servletContext});
         servletContext.setAttribute(attributeName, this);
     }
-
 }

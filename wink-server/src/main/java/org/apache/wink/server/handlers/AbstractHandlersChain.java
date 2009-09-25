@@ -70,4 +70,8 @@ public abstract class AbstractHandlersChain<T extends Handler> implements Handle
 
     protected abstract void handle(T handler, MessageContext context) throws Throwable;
 
+    @Override
+    public String toString() {
+        return String.format("Handlers chain is %1$s", list);
+    }
 }
