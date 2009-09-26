@@ -35,7 +35,6 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Application;
-import javax.ws.rs.core.MediaType;
 
 import org.apache.wink.common.internal.application.ApplicationValidator;
 import org.apache.wink.common.internal.i18n.Messages;
@@ -44,9 +43,9 @@ import org.apache.wink.common.internal.lifecycle.ScopeLifecycleManager;
 import org.apache.wink.common.internal.registry.InjectableFactory;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.common.internal.utils.FileLoader;
-import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.server.handlers.Handler;
 import org.apache.wink.server.handlers.HandlersFactory;
+import org.apache.wink.server.handlers.MediaTypeMapperFactory;
 import org.apache.wink.server.handlers.RequestHandler;
 import org.apache.wink.server.handlers.RequestHandlersChain;
 import org.apache.wink.server.handlers.ResponseHandler;
@@ -79,17 +78,19 @@ import org.slf4j.LoggerFactory;
  */
 public class DeploymentConfiguration {
 
-    private static final Logger       logger                            =
-                                                                            LoggerFactory
-                                                                                .getLogger(DeploymentConfiguration.class);
-    private static final String       ALTERNATIVE_SHORTCUTS             =
-                                                                            "META-INF/wink-alternate-shortcuts.properties";
-    private static final String       HTTP_METHOD_OVERRIDE_HEADERS_PROP =
-                                                                            "wink.httpMethodOverrideHeaders";
-    private static final String       HANDLERS_FACTORY_CLASS_PROP       =
-                                                                            "wink.handlersFactoryClass";
-    private static final String       VALIDATE_LOCATION_HEADER          =
-                                                                            "wink.validateLocationHeader";
+    private static final Logger       logger                              =
+                                                                              LoggerFactory
+                                                                                  .getLogger(DeploymentConfiguration.class);
+    private static final String       ALTERNATIVE_SHORTCUTS               =
+                                                                              "META-INF/wink-alternate-shortcuts.properties";
+    private static final String       HTTP_METHOD_OVERRIDE_HEADERS_PROP   =
+                                                                              "wink.httpMethodOverrideHeaders";
+    private static final String       HANDLERS_FACTORY_CLASS_PROP         =
+                                                                              "wink.handlersFactoryClass";
+    private static final String       MEDIATYPE_MAPPER_FACTORY_CLASS_PROP =
+                                                                              "wink.mediaTypeMapperFactoryClass";
+    private static final String       VALIDATE_LOCATION_HEADER            =
+                                                                              "wink.validateLocationHeader";
     // handler chains
     private RequestHandlersChain      requestHandlersChain;
     private ResponseHandlersChain     responseHandlersChain;
@@ -317,16 +318,33 @@ public class DeploymentConfiguration {
      * Initializes the MediaTypeMapper. Override it to provide a custom
      * MediaTypeMapper.
      */
+    @SuppressWarnings("unchecked")
     protected void initMediaTypeMapper() {
         if (mediaTypeMapper == null) {
             mediaTypeMapper = new MediaTypeMapper();
-            mediaTypeMapper.addMapping("Mozilla/",
-                                       MediaType.APPLICATION_ATOM_XML,
-                                       MediaType.TEXT_XML);
-            mediaTypeMapper.addMapping("Mozilla/",
-                                       MediaTypeUtils.ATOM_SERVICE_DOCUMENT,
-                                       MediaType.TEXT_XML);
-            mediaTypeMapper.addMapping("Mozilla/", MediaTypeUtils.OPENSEARCH, MediaType.TEXT_XML);
+
+            String mediaTypeMapperFactoryClassName =
+                properties.getProperty(MEDIATYPE_MAPPER_FACTORY_CLASS_PROP);
+            if (mediaTypeMapperFactoryClassName != null) {
+                try {
+                    logger.debug("MediaTypeMappingFactory Class is: {}",
+                                 mediaTypeMapperFactoryClassName);
+                    Class<MediaTypeMapperFactory> handlerFactoryClass =
+                        (Class<MediaTypeMapperFactory>)Class
+                            .forName(mediaTypeMapperFactoryClassName);
+                    MediaTypeMapperFactory handlersFactory = handlerFactoryClass.newInstance();
+                    mediaTypeMapper.addMappings(handlersFactory.getMediaTypeMappings());
+                } catch (ClassNotFoundException e) {
+                    logger.error(Messages
+                        .getMessage("isNotAClass", mediaTypeMapperFactoryClassName), e);
+                } catch (InstantiationException e) {
+                    logger.error(Messages.getMessage("classInstantiationException",
+                                                     mediaTypeMapperFactoryClassName), e);
+                } catch (IllegalAccessException e) {
+                    logger.error(Messages.getMessage("classIllegalAccess",
+                                                     mediaTypeMapperFactoryClassName), e);
+                }
+            }
         }
     }
 

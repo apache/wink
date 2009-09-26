@@ -22,14 +22,13 @@ package org.apache.wink.server.internal;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.wink.server.handlers.MediaTypeMappingRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.wink.common.internal.i18n.Messages;
-import org.apache.wink.common.internal.utils.MediaTypeUtils;
 
 /**
  * Allows to map response media types to other media types based on user agent.
@@ -37,59 +36,17 @@ import org.apache.wink.common.internal.utils.MediaTypeUtils;
  */
 public final class MediaTypeMapper {
 
-    private static final Logger logger = LoggerFactory.getLogger(MediaTypeMapper.class);
+    private static final Logger          logger   = LoggerFactory.getLogger(MediaTypeMapper.class);
 
-    private interface MappingRecord {
+    private List<MediaTypeMappingRecord> mappings = new ArrayList<MediaTypeMappingRecord>();
 
-        boolean match(String userAgent, MediaType responseMediaType);
-
-        MediaType getReplacement();
-
-    }
-
-    private static class AgentStartsWith implements MappingRecord {
-
-        private String    userAgentStartsWith;
-        private MediaType responseType;
-        private MediaType replacementType;
-
-        public AgentStartsWith(String userAgentStartsWith,
-                               String responseType,
-                               String replacementType) {
-            if (userAgentStartsWith == null)
-                throw new NullPointerException();
-            this.userAgentStartsWith = userAgentStartsWith;
-            this.responseType = MediaType.valueOf(responseType);
-            this.replacementType = MediaType.valueOf(replacementType);
-        }
-
-        public boolean match(String userAgent, MediaType responseMediaType) {
-            return userAgent.startsWith(userAgentStartsWith) && MediaTypeUtils
-                .equalsIgnoreParameters(responseMediaType, responseType);
-        }
-
-        public MediaType getReplacement() {
-            return replacementType;
-        }
-    }
-
-    private List<MappingRecord> mappings = new ArrayList<MappingRecord>();
-
-    public void setMappings(List<Map<String, String>> mappings) {
-        for (Map<String, String> record : mappings) {
-            String userAgent = record.get("userAgentStartsWith"); //$NON-NLS-1$
-            String resultMimeType = record.get("resultMediaType"); //$NON-NLS-1$
-            String typeToSend = record.get("typeToSend"); //$NON-NLS-1$
-            addMapping(userAgent, resultMimeType, typeToSend);
-        }
-    }
-
-    public void addMapping(String userAgent, String resultMimeType, String typeToSend) {
-        if (userAgent == null || resultMimeType == null || typeToSend == null) {
-            logger.warn(Messages.getMessage("mediaTypeMapperIncompleteRecord"), userAgent);
+    public void addMappings(List<? extends MediaTypeMappingRecord> records) {
+        if (records == null) {
+            logger.debug("No media type mapping records to add");
             return;
         }
-        this.mappings.add(new AgentStartsWith(userAgent, resultMimeType, typeToSend));
+        logger.debug("Media type mapping records to add: {}", records);
+        this.mappings.addAll(records);
     }
 
     /**
@@ -100,14 +57,19 @@ public final class MediaTypeMapper {
      * @param userAgent User-Agent header; null is allowed
      * @return responseMediaType parameter or some non-null value
      */
-    public MediaType mapOutputMediaType(MediaType responseMediaType, String userAgent) {
-        if (userAgent != null) {
-            for (MappingRecord mappingRecord : mappings) {
-                if (mappingRecord.match(userAgent, responseMediaType)) {
-                    return mappingRecord.getReplacement();
-                }
+    public MediaType mapOutputMediaType(MediaType responseMediaType, HttpHeaders requestHeaders) {
+        for (MediaTypeMappingRecord mappingRecord : mappings) {
+            logger.debug("Attempting to map media type using mapping record: {}", mappingRecord);
+            MediaType replacement = mappingRecord.match(requestHeaders, responseMediaType);
+            if (replacement != null) {
+                logger.debug("Mapped user media type to: {} using mapping record: {}",
+                             replacement,
+                             mappingRecord);
+                return replacement;
             }
         }
+        logger.debug("Did not find a mapping record so returning original response media type: {}",
+                     responseMediaType);
         return responseMediaType; // returning the same
     }
 
