@@ -19,9 +19,12 @@
  *******************************************************************************/
 package org.apache.wink.common.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.ws.rs.core.Application;
 import javax.ws.rs.ext.ContextResolver;
-
+import javax.xml.bind.Marshaller;
 
 /**
  * Holds the following XML Formatting Options:
@@ -52,13 +55,13 @@ import javax.ws.rs.ext.ContextResolver;
  *     }
  * }
  * </pre>
+ * 
  * @see Application
  * @see ContextResolver
  */
 public class XmlFormattingOptions implements Cloneable {
 
-    private final boolean                     omitXmlDeclaration;
-    private final boolean                     indenting;
+    private final Map<String, Object>         properties;
     private final static XmlFormattingOptions defaultXmlFormattingOptions =
                                                                               new XmlFormattingOptions();
 
@@ -67,16 +70,21 @@ public class XmlFormattingOptions implements Cloneable {
     }
 
     public XmlFormattingOptions(boolean omitXmlDeclaration, boolean indenting) {
-        this.omitXmlDeclaration = omitXmlDeclaration;
-        this.indenting = indenting;
+        properties = new HashMap<String, Object>();
+        if (omitXmlDeclaration) {
+            properties.put(Marshaller.JAXB_FRAGMENT, true);
+        }
+        if (indenting) {
+            properties.put(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        }
     }
 
-    public boolean isIndenting() {
-        return indenting;
+    public XmlFormattingOptions(Map<String, Object> properties) {
+        this.properties = properties;
     }
 
-    public boolean isOmitXmlDeclaration() {
-        return omitXmlDeclaration;
+    public Map<String, Object> getProperties() {
+        return properties;
     }
 
     public static XmlFormattingOptions getDefaultXmlFormattingOptions() {

@@ -19,6 +19,8 @@
  *******************************************************************************/
 package org.apache.wink.common.internal.utils;
 
+import java.util.Map;
+
 import javax.ws.rs.WebApplicationException;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -60,8 +62,10 @@ public class JAXBUtils {
             return;
         }
         try {
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, xfo.isIndenting());
-            marshaller.setProperty(Marshaller.JAXB_FRAGMENT, xfo.isOmitXmlDeclaration());
+            Map<String, Object> properties = xfo.getProperties();
+            for (String key : properties.keySet()) {
+                marshaller.setProperty(key, properties.get(key));
+            }
         } catch (Exception e) {
             throw new WebApplicationException(e);
         }
