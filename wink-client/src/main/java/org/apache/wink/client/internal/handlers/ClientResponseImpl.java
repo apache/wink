@@ -61,6 +61,9 @@ public class ClientResponseImpl extends BaseRequestResponseImpl implements Clien
             setEntity(t);
             return t;
         }
+        if (entity == null) {
+            return null;
+        }
         throw new ClassCastException(String
             .format("entity of type %s cannot be retrieved as type %s",
                     entity.getClass().getName(),
