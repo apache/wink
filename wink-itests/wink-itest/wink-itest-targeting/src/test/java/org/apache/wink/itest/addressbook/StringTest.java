@@ -29,8 +29,6 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
-import org.apache.wink.itest.addressbook.Address;
-import org.apache.wink.itest.addressbook.AddressBook;
 import org.apache.wink.test.integration.ServerContainerAssertions;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
@@ -41,20 +39,33 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
  */
 public class StringTest extends TestCase {
 
-    final private static String BASE_URI =
-                                             ServerEnvironmentInfo.getBaseURI() + (ServerEnvironmentInfo
-                                                 .isRestFilterUsed() ? "" : "/addressBook/")
-                                                 + "/unittests/addresses";
+    protected static String getBaseURI() {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI() + "/unittests/addresses";
+        }
+        return ServerEnvironmentInfo.getBaseURI() + "/addressBook/unittests/addresses";
+    }
+
+    protected HttpClient client;
 
     @Override
-    public void setUp() {
+    public void setUp() throws Exception {
+        super.setUp();
+        client = new HttpClient();
+
         /*
          * clear the database entries
          */
-        HttpClient client = new HttpClient();
+        clearDatabase();
+    }
+
+    public void clearDatabase() {
+        /*
+         * clear the database entries
+         */
         HttpMethod method = null;
         try {
-            method = new PostMethod(BASE_URI + "/clear");
+            method = new PostMethod(getBaseURI() + "/clear");
             client.executeMethod(method);
             assertEquals(204, method.getStatusCode());
         } catch (Exception e) {
@@ -75,7 +86,7 @@ public class StringTest extends TestCase {
         HttpMethod method = null;
         try {
             HttpClient client = new HttpClient();
-            method = new GetMethod(BASE_URI);
+            method = new GetMethod(getBaseURI());
             client.executeMethod(method);
             String responseBody = method.getResponseBodyAsString();
             Address addr = AddressBook.defaultAddress;
@@ -105,13 +116,13 @@ public class StringTest extends TestCase {
 
             // make sure everything is clear before testing
             HttpClient client = new HttpClient();
-            method = new PostMethod(BASE_URI);
+            method = new PostMethod(getBaseURI());
             method
                 .setQueryString("entryName=newAddress&streetAddress=1234+Any+Street&city=" + "AnyTown&zipCode=90210&state=TX&country=US");
             client.executeMethod(method);
 
             // now let's see if the address we just created is available
-            getMethod = new GetMethod(BASE_URI + "/newAddress");
+            getMethod = new GetMethod(getBaseURI() + "/newAddress");
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());
             String responseBody = getMethod.getResponseBodyAsString();
@@ -149,14 +160,14 @@ public class StringTest extends TestCase {
 
             // make sure everything is clear before testing
             HttpClient client = new HttpClient();
-            method = new PostMethod(BASE_URI + "/fromBody");
+            method = new PostMethod(getBaseURI() + "/fromBody");
             String input = "tempAddress&1234 Any Street&AnyTown&90210&TX&US";
             RequestEntity entity = new ByteArrayRequestEntity(input.getBytes(), "text/xml");
             method.setRequestEntity(entity);
             client.executeMethod(method);
 
             // now let's see if the address we just created is available
-            getMethod = new GetMethod(BASE_URI + "/tempAddress");
+            getMethod = new GetMethod(getBaseURI() + "/tempAddress");
             client.executeMethod(getMethod);
             String responseBody = getMethod.getResponseBodyAsString();
             getMethod.releaseConnection();
@@ -172,7 +183,7 @@ public class StringTest extends TestCase {
             String query =
                 "entryName=tempAddress&streetAddress=1234+Any+Street&city=" + "AnyTown&zipCode=90210&state=AL&country=US";
             client = new HttpClient();
-            put = new PutMethod(BASE_URI);
+            put = new PutMethod(getBaseURI());
             put.setQueryString(query);
             client.executeMethod(put);
 
@@ -187,7 +198,7 @@ public class StringTest extends TestCase {
 
             // now let's delete the address
             client = new HttpClient();
-            deleteMethod = new DeleteMethod(BASE_URI + "/tempAddress");
+            deleteMethod = new DeleteMethod(getBaseURI() + "/tempAddress");
             client.executeMethod(deleteMethod);
             assertEquals(204, deleteMethod.getStatusCode());
 

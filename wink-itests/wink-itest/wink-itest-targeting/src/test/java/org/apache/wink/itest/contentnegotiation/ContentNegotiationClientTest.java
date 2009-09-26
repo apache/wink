@@ -41,18 +41,19 @@ import org.json.JSONTokener;
  */
 public class ContentNegotiationClientTest extends TestCase {
 
-    HttpClient                  httpclient = new HttpClient();
+    private HttpClient httpclient = new HttpClient();
 
-    final private static String BASE_URI   =
-                                               ServerEnvironmentInfo.getBaseURI() + ((ServerEnvironmentInfo
-                                                   .isRestFilterUsed()) ? ""
-                                                   : "/contentNegotiation")
-                                                   + "/customerservice";
+    protected static String getBaseURI() {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
+            return ServerEnvironmentInfo.getBaseURI() + "/customerservice";
+        }
+        return ServerEnvironmentInfo.getBaseURI() + "/contentNegotiation" + "/customerservice";
+    }
 
     public void testGetReturningXML() throws JAXBException {
         // Sent HTTP GET request to query customer info, expect XML
         System.out.println("Sent HTTP GET request to query customer info, expect XML");
-        GetMethod get = new GetMethod(BASE_URI + "/customers/123");
+        GetMethod get = new GetMethod(getBaseURI() + "/customers/123");
         get.addRequestHeader("Accept", "application/xml");
 
         try {
@@ -81,7 +82,7 @@ public class ContentNegotiationClientTest extends TestCase {
         // Sent HTTP GET request to query customer info, expect JSON.
         System.out.println("\n");
         System.out.println("Sent HTTP GET request to query customer info, expect JSON");
-        GetMethod get = new GetMethod(BASE_URI + "/customers/123");
+        GetMethod get = new GetMethod(getBaseURI() + "/customers/123");
         get.addRequestHeader("Accept", "application/json");
         httpclient = new HttpClient();
 
@@ -114,7 +115,7 @@ public class ContentNegotiationClientTest extends TestCase {
         // In the case of HTTP Client, the Accept header will be absent. The CXF
         // server will treat this
         // as "*/*", JSON format is returned
-        GetMethod get = new GetMethod(BASE_URI + "/customers/123");
+        GetMethod get = new GetMethod(getBaseURI() + "/customers/123");
         httpclient = new HttpClient();
 
         try {

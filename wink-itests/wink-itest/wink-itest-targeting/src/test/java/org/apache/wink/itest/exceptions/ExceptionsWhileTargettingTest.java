@@ -39,6 +39,13 @@ public class ExceptionsWhileTargettingTest extends TestCase {
         return ServerEnvironmentInfo.getBaseURI() + "/exceptional";
     }
 
+    protected HttpClient client;
+
+    @Override
+    public void setUp() {
+        client = new HttpClient();
+    }
+
     /**
      * Tests that a 404 error is thrown when no resource can be found for a
      * path.
@@ -46,8 +53,6 @@ public class ExceptionsWhileTargettingTest extends TestCase {
      * @throws Exception
      */
     public void test404WhenNoResourceExists() throws Exception {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod = new GetMethod(getBaseURI() + "/doesnotexist");
         try {
             client.executeMethod(getMethod);
@@ -66,8 +71,6 @@ public class ExceptionsWhileTargettingTest extends TestCase {
      * @throws Exception
      */
     public void test405WhenNoMethodExistsOnExistingResource() throws Exception {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod = new GetMethod(getBaseURI() + "/existingresource/");
         try {
             client.executeMethod(getMethod);
@@ -87,8 +90,6 @@ public class ExceptionsWhileTargettingTest extends TestCase {
      * @throws Exception
      */
     public void test404WhenNoSubResourceExists() throws Exception {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod = new GetMethod(getBaseURI() + "/existingresource/noexistsub");
         try {
             client.executeMethod(getMethod);
@@ -119,8 +120,6 @@ public class ExceptionsWhileTargettingTest extends TestCase {
      * @throws Exception
      */
     public void test405WhenResourceMethodDoesNotExistButOthersDo() throws Exception {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod = new GetMethod(getBaseURI() + "/existingresource/noexistsub");
         try {
             client.executeMethod(getMethod);
@@ -150,8 +149,6 @@ public class ExceptionsWhileTargettingTest extends TestCase {
      * @throws Exception
      */
     public void test415WhenResourceMethodDoesNotAcceptRequestEntity() throws Exception {
-        HttpClient client = new HttpClient();
-
         PutMethod putMethod = new PutMethod(getBaseURI() + "/targeting/resourcewithmethod");
         try {
             putMethod.setRequestEntity(new StringRequestEntity("some content", "text/plain",
@@ -184,8 +181,6 @@ public class ExceptionsWhileTargettingTest extends TestCase {
      * @throws Exception
      */
     public void test406WhenResourceMethodDoesNotProduceResponseEntityType() throws Exception {
-        HttpClient client = new HttpClient();
-
         PutMethod putMethod = new PutMethod(getBaseURI() + "/targeting/resourcewithmethod");
 
         try {

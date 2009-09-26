@@ -41,6 +41,13 @@ public class LargeEntityTest extends TestCase {
         return ServerEnvironmentInfo.getBaseURI() + "/largeentity";
     }
 
+    protected HttpClient client;
+
+    @Override
+    public void setUp() {
+        client = new HttpClient();
+    }
+
     /**
      * Tests sending a large string. Possible failures including the servlet
      * request buffer being too small, so the status headers do not get set
@@ -51,7 +58,6 @@ public class LargeEntityTest extends TestCase {
      */
     public void testSendLargeString() throws Exception {
         PostMethod postMethod = new PostMethod(getBaseURI() + "/large");
-        HttpClient client = new HttpClient();
         try {
 
             ByteArrayOutputStream originalContent = new ByteArrayOutputStream();
@@ -102,7 +108,6 @@ public class LargeEntityTest extends TestCase {
     public void testSendLargeStringChunked() throws Exception {
         PostMethod postMethod = new PostMethod(getBaseURI() + "/large");
         postMethod.setContentChunked(true);
-        HttpClient client = new HttpClient();
         try {
 
             ByteArrayOutputStream originalContent = new ByteArrayOutputStream();
@@ -146,7 +151,6 @@ public class LargeEntityTest extends TestCase {
      */
     public void testSendJAR() throws Exception {
         PostMethod postMethod = new PostMethod(getBaseURI() + "/large/zip");
-        HttpClient client = new HttpClient();
         try {
             System.out
                 .println(new File(
@@ -172,7 +176,6 @@ public class LargeEntityTest extends TestCase {
     public void testSendJARChunked() throws Exception {
         PostMethod postMethod = new PostMethod(getBaseURI() + "/large/zip");
         postMethod.setContentChunked(true);
-        HttpClient client = new HttpClient();
         try {
             System.out
                 .println(new File(

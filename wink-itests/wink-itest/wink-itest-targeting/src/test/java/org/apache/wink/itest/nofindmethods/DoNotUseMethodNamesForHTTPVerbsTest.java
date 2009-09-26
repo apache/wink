@@ -44,6 +44,13 @@ public class DoNotUseMethodNamesForHTTPVerbsTest extends TestCase {
         return ServerEnvironmentInfo.getBaseURI() + "/nofindmethods";
     }
 
+    protected HttpClient client;
+
+    @Override
+    public void setUp() {
+        client = new HttpClient();
+    }
+
     /**
      * Negative tests that method names that begin with HTTP verbs are not
      * invoked on a root resource.
@@ -52,7 +59,6 @@ public class DoNotUseMethodNamesForHTTPVerbsTest extends TestCase {
      * @throws IOException
      */
     public void testMethodsNotValid() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         HttpMethod method =
             new PostMethod(getBaseURI() + "/nousemethodnamesforhttpverbs/someresource");
         try {
@@ -104,7 +110,6 @@ public class DoNotUseMethodNamesForHTTPVerbsTest extends TestCase {
      * @throws IOException
      */
     public void testSublocatorMethodsNotValid() throws HttpException, IOException {
-        HttpClient client = new HttpClient();
         HttpMethod method =
             new PostMethod(getBaseURI() + "/nousemethodnamesforhttpverbs/sublocatorresource/sub");
         try {

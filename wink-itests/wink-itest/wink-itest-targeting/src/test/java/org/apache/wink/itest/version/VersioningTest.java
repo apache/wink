@@ -33,23 +33,21 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
 /**
  * Demonstrates different versioning techniques
  */
-public class VersioningTests extends TestCase {
+public class VersioningTest extends TestCase {
 
     protected HttpClient httpclient = new HttpClient();
 
     public static String getBaseURI() {
         if (ServerEnvironmentInfo.isRestFilterUsed()) {
-            return ServerEnvironmentInfo.getBaseURI();
+            return ServerEnvironmentInfo.getBaseURI() + "/taxform";
         }
-        return ServerEnvironmentInfo.getBaseURI() + "/version";
+        return ServerEnvironmentInfo.getBaseURI() + "/version" + "/taxform";
     }
-
-    final private static String BASE_URI = getBaseURI() + "/taxform";
 
     public void testVersionByAccept() {
         try {
             GetMethod httpMethod = new GetMethod();
-            httpMethod.setURI(new URI(BASE_URI, false));
+            httpMethod.setURI(new URI(getBaseURI(), false));
             httpMethod.setQueryString("form=1040");
             System.out.println(Arrays.asList(httpMethod.getRequestHeaders()));
             httpclient = new HttpClient();
@@ -89,7 +87,7 @@ public class VersioningTests extends TestCase {
     public void testVersionByQueryString() {
         try {
             GetMethod httpMethod = new GetMethod();
-            httpMethod.setURI(new URI(BASE_URI + "/1040", false));
+            httpMethod.setURI(new URI(getBaseURI() + "/1040", false));
             httpMethod.setQueryString("version=2007");
             System.out.println(Arrays.asList(httpMethod.getRequestHeaders()));
             httpclient = new HttpClient();
@@ -104,7 +102,7 @@ public class VersioningTests extends TestCase {
                     .contains("<deductions>"));
                 assertEquals(200, result);
 
-                httpMethod.setURI(new URI(BASE_URI + "/1040", false));
+                httpMethod.setURI(new URI(getBaseURI() + "/1040", false));
                 httpMethod.setQueryString("version=2008");
                 result = httpclient.executeMethod(httpMethod);
                 System.out.println("Response status code: " + result);
@@ -129,7 +127,7 @@ public class VersioningTests extends TestCase {
     public void testVersionByPath() {
         try {
             GetMethod httpMethod = new GetMethod();
-            httpMethod.setURI(new URI(BASE_URI + "/1040/2007", false));
+            httpMethod.setURI(new URI(getBaseURI() + "/1040/2007", false));
             System.out.println(Arrays.asList(httpMethod.getRequestHeaders()));
             httpclient = new HttpClient();
 
@@ -143,7 +141,7 @@ public class VersioningTests extends TestCase {
                     .contains("<deductions>"));
                 assertEquals(200, result);
 
-                httpMethod.setURI(new URI(BASE_URI + "/1040/2008", false));
+                httpMethod.setURI(new URI(getBaseURI() + "/1040/2008", false));
                 result = httpclient.executeMethod(httpMethod);
                 System.out.println("Response status code: " + result);
                 System.out.println("Response body: ");

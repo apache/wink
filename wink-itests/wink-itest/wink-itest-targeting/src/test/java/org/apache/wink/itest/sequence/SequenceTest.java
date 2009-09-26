@@ -36,13 +36,18 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
  */
 public class SequenceTest extends TestCase {
 
-    private HttpClient client = new HttpClient();
+    private HttpClient client;
 
     public static String getBaseURI() {
         if (ServerEnvironmentInfo.isRestFilterUsed()) {
             return ServerEnvironmentInfo.getBaseURI();
         }
         return ServerEnvironmentInfo.getBaseURI() + "/sequence";
+    }
+
+    @Override
+    public void setUp() throws Exception {
+        client = new HttpClient();
     }
 
     /**
@@ -52,8 +57,6 @@ public class SequenceTest extends TestCase {
      * @throws Exception
      */
     public void testHit100TimesRegularResource() throws Exception {
-        client = new HttpClient();
-
         DeleteMethod deleteMethod = new DeleteMethod(getBaseURI() + "/sequence/static");
         try {
             client.executeMethod(deleteMethod);
@@ -130,8 +133,6 @@ public class SequenceTest extends TestCase {
      * @throws Exception
      */
     public void testHit100TimesSingletonResource() throws Exception {
-        client = new HttpClient();
-
         DeleteMethod deleteMethod = new DeleteMethod(getBaseURI() + "/singletonsequence/static");
         try {
             client.executeMethod(deleteMethod);

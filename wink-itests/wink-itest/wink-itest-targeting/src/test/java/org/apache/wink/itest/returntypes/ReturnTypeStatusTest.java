@@ -40,12 +40,10 @@ public class ReturnTypeStatusTest extends TestCase {
 
     public static String getBaseURI() {
         if (ServerEnvironmentInfo.isRestFilterUsed()) {
-            return ServerEnvironmentInfo.getBaseURI();
+            return ServerEnvironmentInfo.getBaseURI()+ "/returntypestatus";
         }
-        return ServerEnvironmentInfo.getBaseURI() + "/returntypes";
+        return ServerEnvironmentInfo.getBaseURI() + "/returntypes"+ "/returntypestatus";
     }
-
-    final private static String BASE_URI = getBaseURI() + "/returntypestatus";
 
     /**
      * Tests that a void return type results in a response that has:
@@ -57,7 +55,7 @@ public class ReturnTypeStatusTest extends TestCase {
     public void testVoidReturnType() {
         try {
             GetMethod httpMethod = new GetMethod();
-            httpMethod.setURI(new URI(BASE_URI + "/void", false));
+            httpMethod.setURI(new URI(getBaseURI() + "/void", false));
             httpclient = new HttpClient();
 
             try {
@@ -95,7 +93,7 @@ public class ReturnTypeStatusTest extends TestCase {
     public void testNullObjectReturnType() {
         try {
             GetMethod httpMethod = new GetMethod();
-            httpMethod.setURI(new URI(BASE_URI + "/null", false));
+            httpMethod.setURI(new URI(getBaseURI() + "/null", false));
             httpclient = new HttpClient();
 
             try {
@@ -133,7 +131,7 @@ public class ReturnTypeStatusTest extends TestCase {
     public void testNullResponseReturnType() {
         try {
             GetMethod httpMethod = new GetMethod();
-            httpMethod.setURI(new URI(BASE_URI + "/nullresponse", false));
+            httpMethod.setURI(new URI(getBaseURI() + "/nullresponse", false));
             httpclient = new HttpClient();
 
             try {
@@ -169,7 +167,7 @@ public class ReturnTypeStatusTest extends TestCase {
             try {
                 GetMethod httpMethod = new GetMethod();
                 httpMethod
-                    .setURI(new URI(BASE_URI + "/responsestatus?code=" + status.name(), false));
+                    .setURI(new URI(getBaseURI() + "/responsestatus?code=" + status.name(), false));
                 httpclient = new HttpClient();
 
                 try {
@@ -207,7 +205,7 @@ public class ReturnTypeStatusTest extends TestCase {
     public void testStatusCodeNotSetResponseReturnType() {
         try {
             GetMethod httpMethod = new GetMethod();
-            httpMethod.setURI(new URI(BASE_URI + "/CustomResponseStatusNotSet", false));
+            httpMethod.setURI(new URI(getBaseURI() + "/CustomResponseStatusNotSet", false));
             httpclient = new HttpClient();
 
             try {
@@ -238,7 +236,7 @@ public class ReturnTypeStatusTest extends TestCase {
     public void testStatusCodeNotSetNullEntityResponseReturnType() {
         try {
             GetMethod httpMethod = new GetMethod();
-            httpMethod.setURI(new URI(BASE_URI + "/CustomNullResponseStatusNotSet", false));
+            httpMethod.setURI(new URI(getBaseURI() + "/CustomNullResponseStatusNotSet", false));
             httpclient = new HttpClient();
 
             try {

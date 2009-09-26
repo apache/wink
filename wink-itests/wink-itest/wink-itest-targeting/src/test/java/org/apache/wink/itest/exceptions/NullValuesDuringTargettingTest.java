@@ -41,6 +41,13 @@ public class NullValuesDuringTargettingTest extends TestCase {
         return ServerEnvironmentInfo.getBaseURI() + "/exceptional";
     }
 
+    protected HttpClient client;
+
+    @Override
+    public void setUp() {
+        client = new HttpClient();
+    }
+
     /**
      * Tests that a request to a method with no content type, no request entity,
      * but with a {@link Consumes} method results in a 415 error.
@@ -49,8 +56,6 @@ public class NullValuesDuringTargettingTest extends TestCase {
      */
     public void testNoContentTypeWithNoRequestEntityIncomingRequestWithConsumesMethod()
         throws IOException {
-        HttpClient client = new HttpClient();
-
         PostMethod postMethod =
             new PostMethod(getBaseURI() + "/targeting/nullresource/withconsumes");
         try {
@@ -74,8 +79,6 @@ public class NullValuesDuringTargettingTest extends TestCase {
      */
     public void testNoContentTypeWithRequestEntityIncomingRequestWithConsumesMethod()
         throws IOException {
-        HttpClient client = new HttpClient();
-
         PostMethod postMethod =
             new PostMethod(getBaseURI() + "/targeting/nullresource/withconsumes");
         postMethod.setRequestEntity(new ByteArrayRequestEntity(new byte[] {0, 1, 2}));
@@ -101,8 +104,6 @@ public class NullValuesDuringTargettingTest extends TestCase {
      */
     public void testNoContentTypeWithRequestEntityIncomingRequestWithNoConsumesMethod()
         throws IOException {
-        HttpClient client = new HttpClient();
-
         PostMethod postMethod =
             new PostMethod(getBaseURI() + "/targeting/nullresource/withoutconsumes");
         postMethod.setRequestEntity(new ByteArrayRequestEntity("calledWithString".getBytes()));
@@ -128,8 +129,6 @@ public class NullValuesDuringTargettingTest extends TestCase {
      */
     public void testContentTypeWithRequestEntityIncomingRequestWithNoConsumesMethod()
         throws IOException {
-        HttpClient client = new HttpClient();
-
         PostMethod postMethod =
             new PostMethod(getBaseURI() + "/targeting/nullresource/withoutconsumes");
         postMethod
@@ -156,8 +155,6 @@ public class NullValuesDuringTargettingTest extends TestCase {
      */
     public void testContentTypeWithNoRequestEntityIncomingRequestWithNoConsumesMethod()
         throws IOException {
-        HttpClient client = new HttpClient();
-
         PostMethod postMethod =
             new PostMethod(getBaseURI() + "/targeting/nullresource/withoutconsumes");
         postMethod.setRequestHeader("Content-Type", "text/plain");
@@ -183,8 +180,6 @@ public class NullValuesDuringTargettingTest extends TestCase {
      */
     public void testNoContentTypeWithNoRequestEntityIncomingRequestWithNoConsumesMethod()
         throws IOException {
-        HttpClient client = new HttpClient();
-
         PostMethod postMethod =
             new PostMethod(getBaseURI() + "/targeting/nullresource/withoutconsumes");
         try {
@@ -209,8 +204,6 @@ public class NullValuesDuringTargettingTest extends TestCase {
      */
     public void testContentTypeWithNoRequestEntityIncomingRequestWithConsumesMethod()
         throws IOException {
-        HttpClient client = new HttpClient();
-
         PostMethod postMethod =
             new PostMethod(getBaseURI() + "/targeting/nullresource/withconsumes");
         postMethod.setRequestHeader("Content-Type", "text/plain");
@@ -236,8 +229,6 @@ public class NullValuesDuringTargettingTest extends TestCase {
      */
     public void testContentTypeWithRequestEntityIncomingRequestWithConsumesMethod()
         throws IOException {
-        HttpClient client = new HttpClient();
-
         PostMethod postMethod =
             new PostMethod(getBaseURI() + "/targeting/nullresource/withconsumes");
         postMethod
@@ -262,8 +253,6 @@ public class NullValuesDuringTargettingTest extends TestCase {
      * @throws IOException
      */
     public void testAcceptHeaderIncomingRequestWithProducesMethod() throws IOException {
-        HttpClient client = new HttpClient();
-
         PostMethod postMethod =
             new PostMethod(getBaseURI() + "/targeting/nullresource/withproduces");
         postMethod.setRequestHeader("Accept", "custom/type; q=0.8");
@@ -285,8 +274,6 @@ public class NullValuesDuringTargettingTest extends TestCase {
      * @throws IOException
      */
     public void testAcceptHeaderIncomingRequestWithNoProducesMethod() throws IOException {
-        HttpClient client = new HttpClient();
-
         PostMethod postMethod =
             new PostMethod(getBaseURI() + "/targeting/nullresource/withoutproduces");
         postMethod.setRequestHeader("Accept", "custom/type2; q=0.8");
@@ -308,8 +295,6 @@ public class NullValuesDuringTargettingTest extends TestCase {
      * @throws IOException
      */
     public void testNoAcceptHeaderIncomingRequestWithProducesMethod() throws IOException {
-        HttpClient client = new HttpClient();
-
         PostMethod postMethod =
             new PostMethod(getBaseURI() + "/targeting/nullresource/withproduces");
         try {
@@ -329,8 +314,6 @@ public class NullValuesDuringTargettingTest extends TestCase {
      * @throws IOException
      */
     public void testNoAcceptHeaderIncomingRequestWithNoProducesMethod() throws IOException {
-        HttpClient client = new HttpClient();
-
         PostMethod postMethod =
             new PostMethod(getBaseURI() + "/targeting/nullresource/withoutproduces");
         try {

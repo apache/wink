@@ -16,22 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package org.apache.wink.itest.lifecycles;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import junit.framework.TestCase;
 
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.methods.DeleteMethod;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.apache.wink.client.ClientResponse;
+import org.apache.wink.client.RestClient;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
-public class LifeCycleTest extends TestCase {
+public class WinkClientLifeCycleTest extends TestCase {
 
     public static String getBaseURI() {
         if (ServerEnvironmentInfo.isRestFilterUsed()) {
@@ -40,11 +38,11 @@ public class LifeCycleTest extends TestCase {
         return ServerEnvironmentInfo.getBaseURI() + "/lifecycles";
     }
 
-    protected HttpClient client;
+    protected RestClient client;
 
     @Override
     public void setUp() {
-        client = new HttpClient();
+        client = new RestClient();
     }
 
     /**
@@ -52,33 +50,27 @@ public class LifeCycleTest extends TestCase {
      * 
      * @throws HttpException
      * @throws IOException
+     * @throws URISyntaxException
      */
-    public void testProvidersAreSingleton() throws HttpException, IOException {
+    public void testProvidersAreSingleton() throws URISyntaxException {
         StringBuffer sb = new StringBuffer();
         for (long c = 0; c < 5000; ++c) {
             sb.append("a");
         }
 
-        DeleteMethod deleteMethod = new DeleteMethod(getBaseURI() + "/jaxrs/tests/lifecycles");
-        client.executeMethod(deleteMethod);
-        assertEquals(204, deleteMethod.getStatusCode());
+        ClientResponse response =
+            client.resource(getBaseURI() + "/jaxrs/tests/lifecycles").delete();
+        assertEquals(204, response.getStatusCode());
 
         for (int counter = 0; counter < 100; ++counter) {
-            PostMethod postMethod = new PostMethod(getBaseURI() + "/jaxrs/tests/lifecycles");
-            try {
-                postMethod.setRequestEntity(new StringRequestEntity(sb.toString(), "text/plain",
-                                                                    null));
-                client.executeMethod(postMethod);
-                assertEquals(200, postMethod.getStatusCode());
-                assertEquals(sb.toString(), postMethod.getResponseBodyAsString());
-            } finally {
-                postMethod.releaseConnection();
-            }
+            String responseBody =
+                client.resource(new URI(getBaseURI() + "/jaxrs/tests/lifecycles"))
+                    .contentType("text/plain").post(String.class, sb.toString());
+            assertEquals(sb.toString(), responseBody);
         }
 
-        GetMethod getMethod = new GetMethod(getBaseURI() + "/jaxrs/tests/lifecycles");
-        client.executeMethod(getMethod);
-        assertEquals(200, getMethod.getStatusCode());
-        assertEquals("1:100:100:101:100:1", getMethod.getResponseBodyAsString());
+        response = client.resource(getBaseURI() + "/jaxrs/tests/lifecycles").get();
+        assertEquals(200, response.getStatusCode());
+        assertEquals("1:100:100:101:100:1", response.getEntity(String.class));
     }
 }

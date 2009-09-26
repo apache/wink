@@ -34,12 +34,10 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
 public class HeadersTest extends TestCase {
 
-    private HttpClient          httpClient;
-
-    final private static String BASE_URI = getBaseURI() + "/headers";
+    private HttpClient httpClient;
 
     public static String getBaseURI() {
-        if(ServerEnvironmentInfo.isRestFilterUsed()) {
+        if (ServerEnvironmentInfo.isRestFilterUsed()) {
             return ServerEnvironmentInfo.getBaseURI();
         }
         return ServerEnvironmentInfo.getBaseURI() + "/headers";
@@ -48,7 +46,7 @@ public class HeadersTest extends TestCase {
     public void testGetWithCookies() throws Exception {
         try {
             GetMethod httpMethod = new GetMethod();
-            httpMethod.setURI(new URI(BASE_URI + "/cookie", false));
+            httpMethod.setURI(new URI(getBaseURI() + "/headers/cookie", false));
             httpClient = new HttpClient();
             httpMethod.setRequestHeader("Cookie", "$Version=\"1\";login=\"jdoe\"");
             try {
@@ -72,7 +70,7 @@ public class HeadersTest extends TestCase {
     public void testGetWithLanguage() throws Exception {
         try {
             GetMethod httpMethod = new GetMethod();
-            httpMethod.setURI(new URI(BASE_URI + "/language", false));
+            httpMethod.setURI(new URI(getBaseURI() + "/headers/language", false));
             httpClient = new HttpClient();
             httpMethod.setRequestHeader("Content-Language", "en-us");
             try {
@@ -96,7 +94,7 @@ public class HeadersTest extends TestCase {
     public void testGetWithContent() throws Exception {
         try {
             GetMethod httpMethod = new GetMethod();
-            httpMethod.setURI(new URI(BASE_URI + "/content", false));
+            httpMethod.setURI(new URI(getBaseURI() + "/headers/content", false));
             httpClient = new HttpClient();
             httpMethod.setRequestHeader("Content-Type", "application/html");
             try {
@@ -120,7 +118,7 @@ public class HeadersTest extends TestCase {
     public void testGetWithAccept() throws Exception {
         try {
             GetMethod httpMethod = new GetMethod();
-            httpMethod.setURI(new URI(BASE_URI + "/accept", false));
+            httpMethod.setURI(new URI(getBaseURI() + "/headers/accept", false));
             httpClient = new HttpClient();
             httpMethod.setRequestHeader("Accept", "text/*, text/html, text/html;level=1, */*");
             try {
@@ -150,7 +148,7 @@ public class HeadersTest extends TestCase {
     public void testGetWithAcceptLanguage() throws Exception {
         try {
             GetMethod httpMethod = new GetMethod();
-            httpMethod.setURI(new URI(BASE_URI + "/acceptlang", false));
+            httpMethod.setURI(new URI(getBaseURI() + "/headers/acceptlang", false));
             httpClient = new HttpClient();
             httpMethod.setRequestHeader("Accept-Language", "fr");
             try {
@@ -174,7 +172,7 @@ public class HeadersTest extends TestCase {
     public void testGetHeadersWithCase() throws Exception {
         try {
             GetMethod httpMethod = new GetMethod();
-            httpMethod.setURI(new URI(BASE_URI + "/headercase", false));
+            httpMethod.setURI(new URI(getBaseURI() + "/headers/headercase", false));
             httpClient = new HttpClient();
             httpMethod.setRequestHeader("Custom-Header", "MyValue");
             try {
@@ -198,7 +196,7 @@ public class HeadersTest extends TestCase {
     public void testGetHeadersAcceptAsParam() throws Exception {
         try {
             GetMethod httpMethod = new GetMethod();
-            httpMethod.setURI(new URI(BASE_URI + "/headeraccept", false));
+            httpMethod.setURI(new URI(getBaseURI() + "/headers/headeraccept", false));
             httpClient = new HttpClient();
             httpMethod.setRequestHeader("Accept", "text/xml");
             try {
@@ -222,7 +220,7 @@ public class HeadersTest extends TestCase {
     public void testGetHeadersAcceptAsArg() throws Exception {
         try {
             GetMethod httpMethod = new GetMethod();
-            httpMethod.setURI(new URI(BASE_URI + "/headersasarg", false));
+            httpMethod.setURI(new URI(getBaseURI() + "/headers/headersasarg", false));
             httpClient = new HttpClient();
             httpMethod.setRequestHeader("Accept", "text/xml application/xml");
             httpMethod.setRequestHeader("Content-Type", "application/xml");

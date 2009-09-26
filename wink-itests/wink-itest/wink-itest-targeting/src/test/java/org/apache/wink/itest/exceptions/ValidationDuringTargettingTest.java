@@ -38,6 +38,13 @@ public class ValidationDuringTargettingTest extends TestCase {
         return ServerEnvironmentInfo.getBaseURI() + "/exceptional";
     }
 
+    protected HttpClient client;
+
+    @Override
+    public void setUp() {
+        client = new HttpClient();
+    }
+
     /**
      * Tests that a GET method to various paths only differing by
      * {@link Produces} works.
@@ -45,8 +52,6 @@ public class ValidationDuringTargettingTest extends TestCase {
      * @throws Exception
      */
     public void testGETOnlyDifferByProduces() throws Exception {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod = new GetMethod(getBaseURI() + "/targeting/resourceonlyproduces");
         try {
             getMethod.addRequestHeader("Accept", "application/json");
@@ -84,16 +89,6 @@ public class ValidationDuringTargettingTest extends TestCase {
         } finally {
             getMethod.releaseConnection();
         }
-
-        // boolean isWarningThrown = true;
-        // try {
-        // FVTAssert.assertLogContainsException("WARN");
-        // FVTAssert.assertInstallLogContainsException("WARN");
-        // } catch (AssertionError e) {
-        // isWarningThrown = false;
-        // }
-        //
-        // assertFalse("Warning should not be emitted", isWarningThrown);
     }
 
     /**
@@ -103,8 +98,6 @@ public class ValidationDuringTargettingTest extends TestCase {
      * @throws Exception
      */
     public void testGETOnlyDifferByConsumes() throws Exception {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod = new GetMethod(getBaseURI() + "/targeting/resourceonlyconsumes");
         getMethod.setRequestHeader("Content-Type", "application/json");
         try {
@@ -129,16 +122,6 @@ public class ValidationDuringTargettingTest extends TestCase {
         } finally {
             getMethod.releaseConnection();
         }
-
-        // boolean isWarningThrown = true;
-        // try {
-        // FVTAssert.assertLogContainsException("WARN");
-        // FVTAssert.assertInstallLogContainsException("WARN");
-        // } catch (AssertionError e) {
-        // isWarningThrown = false;
-        // }
-        //
-        // assertFalse("Warning should not be emitted", isWarningThrown);
     }
 
     /**
@@ -148,8 +131,6 @@ public class ValidationDuringTargettingTest extends TestCase {
      * @throws Exception
      */
     public void testGETOnlyDifferByConsumesAndProduces() throws Exception {
-        HttpClient client = new HttpClient();
-
         GetMethod getMethod =
             new GetMethod(getBaseURI() + "/targeting/resourceconsumesandproduces");
         getMethod.setRequestHeader("Content-Type", "application/json");
@@ -227,15 +208,5 @@ public class ValidationDuringTargettingTest extends TestCase {
         } finally {
             getMethod.releaseConnection();
         }
-
-        // boolean isWarningThrown = true;
-        // try {
-        // FVTAssert.assertLogContainsException("WARN");
-        // FVTAssert.assertInstallLogContainsException("WARN");
-        // } catch (AssertionError e) {
-        // isWarningThrown = false;
-        // }
-        //
-        // assertFalse("Warning should not be emitted", isWarningThrown);
     }
 }
