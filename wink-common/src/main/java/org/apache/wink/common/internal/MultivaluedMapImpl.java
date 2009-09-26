@@ -132,7 +132,11 @@ public class MultivaluedMapImpl<K, V> // extends LinkedHashMap<K,List<V>>
         for (Object name : params.keySet()) {
             for (Object value : params.get(name)) {
                 result.append(delim);
-                result.append(name.toString());
+                if(name == null) {
+                    result.append("null");
+                } else {
+                    result.append(name.toString());
+                }
                 if (value != null) {
                     result.append('=');
                     result.append(value.toString());

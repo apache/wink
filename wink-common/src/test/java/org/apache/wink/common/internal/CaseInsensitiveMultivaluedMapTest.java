@@ -26,8 +26,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import org.apache.wink.common.internal.CaseInsensitiveMultivaluedMap;
-
 import junit.framework.TestCase;
 
 public class CaseInsensitiveMultivaluedMapTest extends TestCase {
@@ -120,5 +118,14 @@ public class CaseInsensitiveMultivaluedMapTest extends TestCase {
         assertTrue(keySet.contains("b"));
         assertFalse(keySet.contains("c"));
         assertFalse(keySet.contains("C"));
+    }
+
+    public void testNullValue() {
+        CaseInsensitiveMultivaluedMap<String> map = new CaseInsensitiveMultivaluedMap<String>();
+        map.putSingle(null, "valueForNull");
+        map.putSingle("d", null);
+        assertEquals("valueForNull", map.getFirst(null));
+        assertEquals(null, map.getFirst("d"));
+        assertEquals("CaseInsensitiveMultivaluedMap [map=[null=valueForNull,d]]", map.toString());
     }
 }

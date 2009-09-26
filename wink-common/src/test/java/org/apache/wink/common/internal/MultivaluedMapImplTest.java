@@ -91,4 +91,13 @@ public class MultivaluedMapImplTest extends TestCase {
         assertNull(map.get("e"));
     }
 
+    public void testNullValue() {
+        MultivaluedMapImpl<String, String> map = new MultivaluedMapImpl<String, String>();
+        map.putSingle(null, "valueForNull");
+        map.putSingle("d", null);
+        assertEquals("valueForNull", map.getFirst(null));
+        assertEquals(null, map.getFirst("d"));
+        assertEquals("[null=valueForNull,d]", map.toString());
+    }
+
 }
