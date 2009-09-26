@@ -86,6 +86,9 @@ public abstract class AbstractConnectionHandler implements ConnectionHandler {
                 entity = genericEntity.getEntity();
             }
             String contentType = request.getHeaders().getFirst(HttpHeaders.CONTENT_TYPE);
+            if (contentType == null) {
+                contentType = MediaType.APPLICATION_OCTET_STREAM;
+            }
             MediaType contentMediaType = MediaType.valueOf(contentType);
             MessageBodyWriter writer =
                 providersRegistry.getMessageBodyWriter(type,
