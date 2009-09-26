@@ -17,36 +17,4 @@
     specific language governing permissions and limitations
     under the License.
 -->
-
-<entry xmlns="http://www.w3.org/2005/Atom" xmlns:ns2="http://a9.com/-/spec/opensearch/1.1/" xmlns:ns3="http://www.w3.org/1999/xhtml" xml:base="http://localhost:80/defects/1">
-    <id>urn:com:hp:qadefects:defect:1</id>
-    <title type="text">Id field is disabled in Edit Profile page</title>
-    <summary type="text">Cannot change the Id in Edit Profile page, it is disabled.</summary>
-    <published>1970-01-01T16:01:45.052+02:00</published>
-    <link href="http://localhost:80/defects/1" rel="edit"/>
-    <link href="http://localhost:80/defects/1/history?alt=application%2Fatom%2Bxml" rel="history" type="application/atom+xml"/>
-    <link href="http://localhost:80/defects/1;rev=2?alt=application%2Fxml" rel="alternate" type="application/xml"/>
-    <link href="http://localhost:80/defects/1;rev=2?alt=application%2Fatom%2Bxml" rel="alternate" type="application/atom+xml"/>
-    <link href="http://localhost:80/defects/1;rev=2?alt=application%2Fjson" rel="alternate" type="application/json"/>
-    <link href="http://localhost:80/defects/1;rev=2" rel="self"/>
-    <author>
-        <name>tester1</name>
-    </author>
-    <category scheme="urn:com:hp:qadefects:categories:severity" term="2-high"/>
-    <category scheme="urn:com:hp:qadefects:categories:status" term="New"/>
-    <content type="application/xml">
-        <defect xmlns="" xmlns:ns4="http://www.w3.org/2005/Atom">
-            <id>1</id>
-            <revision>2</revision>
-            <deleted>false</deleted>
-            <name>Id field is disabled in Edit Profile page</name>
-            <description>Cannot change the Id in Edit Profile page, it is disabled.</description>
-            <created>1970-01-01T16:01:45.052+02:00</created>
-            <author>tester1</author>
-            <status>New</status>
-            <severity>2-high</severity>
-            <assignedTo>developer1</assignedTo>
-        </defect>
-    </content>
-</entry>
-
+<entry xmlns="http://www.w3.org/2005/Atom" xmlns:ns2="http://a9.com/-/spec/opensearch/1.1/" xmlns:ns3="http://www.w3.org/1999/xhtml" xml:base="http://localhost:80/defects/1"><id>urn:com:hp:qadefects:defect:1</id><title type="text">Id field is disabled in Edit Profile page</title><summary type="text">Cannot change the Id in Edit Profile page, it is disabled.</summary><published>1970-01-01T16:01:45.052+02:00</published><link href="http://localhost:80/defects/1" rel="edit"/><link href="http://localhost:80/defects/1/history?alt=application%2Fatom%2Bxml" rel="history" type="application/atom+xml"/><link href="http://localhost:80/defects/1;rev=2?alt=application%2Fxml" rel="alternate" type="application/xml"/><link href="http://localhost:80/defects/1;rev=2?alt=application%2Fatom%2Bxml" rel="alternate" type="application/atom+xml"/><link href="http://localhost:80/defects/1;rev=2?alt=application%2Fjson" rel="alternate" type="application/json"/><link href="http://localhost:80/defects/1;rev=2" rel="self"/><author><name>tester1</name></author><category scheme="urn:com:hp:qadefects:categories:severity" term="2-high"/><category scheme="urn:com:hp:qadefects:categories:status" term="New"/><content type="application/xml"><defect xmlns="" xmlns:ns4="http://www.w3.org/2005/Atom"><id>1</id><revision>2</revision><deleted>false</deleted><name>Id field is disabled in Edit Profile page</name><description>Cannot change the Id in Edit Profile page, it is disabled.</description><created>1970-01-01T16:01:45.052+02:00</created><author>tester1</author><status>New</status><severity>2-high</severity><assignedTo>developer1</assignedTo></defect></content></entry>

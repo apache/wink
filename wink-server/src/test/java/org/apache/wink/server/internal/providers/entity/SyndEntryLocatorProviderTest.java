@@ -44,9 +44,9 @@ public class SyndEntryLocatorProviderTest extends MockServletInvocationTest {
 
     private static final SyndEntry SYND_ENTRY = new SyndEntry(new SyndText("title"), "id");
     private static final String    ENTRY      =
-                                                  "<entry xmlns=\"http://www.w3.org/2005/Atom\">\n" + "    <id>id</id>\n"
-                                                      + "    <title type=\"text\">title</title>\n"
-                                                      + "</entry>\n";
+                                                  "<entry xmlns=\"http://www.w3.org/2005/Atom\">" + "<id>id</id>"
+                                                      + "<title type=\"text\">title</title>"
+                                                      + "</entry>";
 
     @Asset
     public static class TestAsset {

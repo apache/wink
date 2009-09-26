@@ -44,9 +44,9 @@ public class SyndFeedLocatorProviderTest extends MockServletInvocationTest {
 
     private static final SyndFeed SYND_FEED = new SyndFeed(new SyndText("title"), "id");
     private static final String   FEED      =
-                                                "<feed xmlns=\"http://www.w3.org/2005/Atom\">\n" + "    <id>id</id>\n"
-                                                    + "    <title type=\"text\">title</title>\n"
-                                                    + "</feed>\n";
+                                                "<feed xmlns=\"http://www.w3.org/2005/Atom\">" + "<id>id</id>"
+                                                    + "<title type=\"text\">title</title>"
+                                                    + "</feed>";
 
     @Asset
     public static class TestAsset {

@@ -42,7 +42,6 @@ org.apache.wink.common.internal.providers.entity.StreamingOutputProvider
 # JAXB Providers
 org.apache.wink.common.internal.providers.entity.xml.JAXBElementXmlProvider
 org.apache.wink.common.internal.providers.entity.xml.JAXBXmlProvider
-org.apache.wink.common.internal.providers.entity.xml.XMLFormattingOptionsProvider
 
 # Atom 
 org.apache.wink.common.internal.providers.entity.atom.AtomFeedSyndFeedProvider

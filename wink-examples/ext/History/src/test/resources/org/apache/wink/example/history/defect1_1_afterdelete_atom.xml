@@ -17,34 +17,4 @@
     specific language governing permissions and limitations
     under the License.
 -->
-
-<entry xmlns="http://www.w3.org/2005/Atom" xmlns:ns2="http://a9.com/-/spec/opensearch/1.1/" xmlns:ns3="http://www.w3.org/1999/xhtml" xml:base="http://localhost:80/defects/1;rev=1">
-    <id>urn:com:hp:qadefects:defect:1</id>
-    <title type="text">Missing asterisk for mandatory fields</title>
-    <summary type="text">In Payment Services page, there is no indication for mandatory fields.</summary>
-    <published>1970-01-01T16:01:45.052+02:00</published>
-    <link href="http://localhost:80/defects/1/history?alt=application%2Fatom%2Bxml" rel="history" type="application/atom+xml"/>
-    <link href="http://localhost:80/defects/1;rev=1?alt=application%2Fatom%2Bxml" rel="alternate" type="application/atom+xml"/>
-    <link href="http://localhost:80/defects/1;rev=1" rel="self"/>
-    <link href="http://localhost:80/defects/1;rev=1?alt=application%2Fxml" rel="alternate" type="application/xml"/>
-    <link href="http://localhost:80/defects/1;rev=1?alt=application%2Fjson" rel="alternate" type="application/json"/>
-    <author>
-        <name>tester2</name>
-    </author>
-    <category scheme="urn:com:hp:qadefects:categories:severity" term="4-minor"/>
-    <category scheme="urn:com:hp:qadefects:categories:status" term="Assigned"/>
-    <content type="application/xml">
-        <defect xmlns="" xmlns:ns4="http://www.w3.org/2005/Atom">
-            <id>1</id>
-            <revision>1</revision>
-            <deleted>false</deleted>
-            <name>Missing asterisk for mandatory fields</name>
-            <description>In Payment Services page, there is no indication for mandatory fields.</description>
-            <created>1970-01-01T16:01:45.052+02:00</created>
-            <author>tester2</author>
-            <status>Assigned</status>
-            <severity>4-minor</severity>
-            <assignedTo>developer3</assignedTo>
-        </defect>
-    </content>
-</entry>
+<entry xmlns="http://www.w3.org/2005/Atom" xmlns:ns2="http://a9.com/-/spec/opensearch/1.1/" xmlns:ns3="http://www.w3.org/1999/xhtml" xml:base="http://localhost:80/defects/1;rev=1"><id>urn:com:hp:qadefects:defect:1</id><title type="text">Missing asterisk for mandatory fields</title><summary type="text">In Payment Services page, there is no indication for mandatory fields.</summary><published>1970-01-01T16:01:45.052+02:00</published><link href="http://localhost:80/defects/1/history?alt=application%2Fatom%2Bxml" rel="history" type="application/atom+xml"/><link href="http://localhost:80/defects/1;rev=1?alt=application%2Fatom%2Bxml" rel="alternate" type="application/atom+xml"/><link href="http://localhost:80/defects/1;rev=1" rel="self"/><link href="http://localhost:80/defects/1;rev=1?alt=application%2Fxml" rel="alternate" type="application/xml"/><link href="http://localhost:80/defects/1;rev=1?alt=application%2Fjson" rel="alternate" type="application/json"/><author><name>tester2</name></author><category scheme="urn:com:hp:qadefects:categories:severity" term="4-minor"/><category scheme="urn:com:hp:qadefects:categories:status" term="Assigned"/><content type="application/xml"><defect xmlns="" xmlns:ns4="http://www.w3.org/2005/Atom"><id>1</id><revision>1</revision><deleted>false</deleted><name>Missing asterisk for mandatory fields</name><description>In Payment Services page, there is no indication for mandatory fields.</description><created>1970-01-01T16:01:45.052+02:00</created><author>tester2</author><status>Assigned</status><severity>4-minor</severity><assignedTo>developer3</assignedTo></defect></content></entry>
