@@ -20,7 +20,6 @@
 package org.apache.wink.common.internal.registry;
 
 import java.lang.annotation.Annotation;
-import java.lang.ref.SoftReference;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -36,8 +35,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -56,6 +53,7 @@ import org.apache.wink.common.internal.lifecycle.ObjectFactory;
 import org.apache.wink.common.internal.utils.AnnotationUtils;
 import org.apache.wink.common.internal.utils.GenericsUtils;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
+import org.apache.wink.common.internal.utils.SoftConcurrentMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -504,17 +502,17 @@ public class ProvidersRegistry {
 
     private abstract class MediaTypeMap<T> {
 
-        private volatile Map<MediaType, Set<ObjectFactory<T>>>                                       data           =
-                                                                                                                        new HashMap<MediaType, Set<ObjectFactory<T>>>();
+        private volatile Map<MediaType, Set<ObjectFactory<T>>>                                          data           =
+                                                                                                                           new HashMap<MediaType, Set<ObjectFactory<T>>>();
         @SuppressWarnings("unchecked")
-        private volatile Entry<MediaType, Set<ObjectFactory<T>>>[]                                   entrySet       =
-                                                                                                                        data
-                                                                                                                            .entrySet()
-                                                                                                                            .toArray(new Entry[0]);
-        private final Class<?>                                                                       rawType;
+        private volatile Entry<MediaType, Set<ObjectFactory<T>>>[]                                      entrySet       =
+                                                                                                                           data
+                                                                                                                               .entrySet()
+                                                                                                                               .toArray(new Entry[0]);
+        private final Class<?>                                                                          rawType;
 
-        private final Map<Class<?>, SoftReference<ConcurrentMap<MediaType, List<ObjectFactory<T>>>>> providersCache =
-                                                                                                                        new ConcurrentHashMap<Class<?>, SoftReference<ConcurrentMap<MediaType, List<ObjectFactory<T>>>>>(); ;
+        private final SoftConcurrentMap<Class<?>, SoftConcurrentMap<MediaType, List<ObjectFactory<T>>>> providersCache =
+                                                                                                                           new SoftConcurrentMap<Class<?>, SoftConcurrentMap<MediaType, List<ObjectFactory<T>>>>(); ;
 
         public MediaTypeMap(Class<?> rawType) {
             super();
@@ -543,22 +541,17 @@ public class ProvidersRegistry {
                 .debug("Getting providers by media type by calling getProvidersByMediaType({}, {})",
                        mediaType,
                        cls);
-            SoftReference<ConcurrentMap<MediaType, List<ObjectFactory<T>>>> mediaTypeToProvidersCacheRef =
+            SoftConcurrentMap<MediaType, List<ObjectFactory<T>>> mediaTypeToProvidersCache =
                 providersCache.get(cls);
-            ConcurrentMap<MediaType, List<ObjectFactory<T>>> mediaTypeToProvidersCache = null;
-            if (mediaTypeToProvidersCacheRef != null) {
-                mediaTypeToProvidersCache = mediaTypeToProvidersCacheRef.get();
-            }
             if (mediaTypeToProvidersCache == null) {
                 logger
                     .debug("MediaType to providers cache for class {} does not exist so creating",
                            cls);
                 mediaTypeToProvidersCache =
-                    new ConcurrentHashMap<MediaType, List<ObjectFactory<T>>>();
-                providersCache
-                    .put(cls,
-                         new SoftReference<ConcurrentMap<MediaType, List<ObjectFactory<T>>>>(
-                                                                                             mediaTypeToProvidersCache));
+                    new SoftConcurrentMap<MediaType, List<ObjectFactory<T>>>();
+                providersCache.put(cls,
+
+                mediaTypeToProvidersCache);
             }
 
             List<ObjectFactory<T>> list = mediaTypeToProvidersCache.get(mediaType);

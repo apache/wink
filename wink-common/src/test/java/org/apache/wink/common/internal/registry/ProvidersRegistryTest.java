@@ -20,12 +20,12 @@
 package org.apache.wink.common.internal.registry;
 
 import java.lang.reflect.Field;
-import java.util.concurrent.ConcurrentHashMap;
 
 import junit.framework.TestCase;
 
 import org.apache.wink.common.internal.application.ApplicationValidator;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
+import org.apache.wink.common.internal.utils.SoftConcurrentMap;
 
 public class ProvidersRegistryTest extends TestCase {
     
@@ -55,7 +55,7 @@ public class ProvidersRegistryTest extends TestCase {
         field2.setAccessible(true);
         Object providersCache = field2.get(messageBodyReaders);
         
-        assertTrue(providersCache instanceof ConcurrentHashMap);    
+        assertTrue(providersCache instanceof SoftConcurrentMap);    
     }
     
     // TODO:  perhaps future tests should be added to actually exercise the providersCache code, but it would be an involved,
