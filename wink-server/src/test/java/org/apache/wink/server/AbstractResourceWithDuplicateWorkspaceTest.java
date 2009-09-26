@@ -46,15 +46,13 @@ public class AbstractResourceWithDuplicateWorkspaceTest extends MockServletInvoc
             Set<Object> set = new HashSet<Object>();
             AbstractTestWithWorkspaceResource servicesCollectionWithWorskapce =
                 new AbstractTestWithWorkspaceResource();
-            servicesCollectionWithWorskapce
-                .setPath("/services/withWorkspace");
+            servicesCollectionWithWorskapce.setPath("/services/withWorkspace");
             servicesCollectionWithWorskapce.setCollectionTitle("Spring Collection");
             servicesCollectionWithWorskapce.setWorkspaceTitle("Spring Workspace");
 
             AbstractTestWithWorkspaceResource servicesCollectionWithoutWorskapce =
                 new AbstractTestWithWorkspaceResource();
-            servicesCollectionWithoutWorskapce
-                .setPath("/services/withoutWorkspace");
+            servicesCollectionWithoutWorskapce.setPath("/services/withoutWorkspace");
 
             set.add(servicesCollectionWithWorskapce);
             set.add(servicesCollectionWithoutWorskapce);
@@ -70,21 +68,21 @@ public class AbstractResourceWithDuplicateWorkspaceTest extends MockServletInvoc
     private static final String EXPECTED_SERVICE_COLLECTION = "expected service collection 1";
 
     private static final String EXPECTED_SERVICE_DOCUMENT   =
-                                                                "<service xmlns:atom=\"http://www.w3.org/2005/Atom\" xmlns=\"http://www.w3.org/2007/app\">\n" + "    <workspace>\n"
-                                                                    + "        <atom:title>Annotated Workspace</atom:title>\n"
-                                                                    + "        <collection href=\"http://localhost:80/services/withoutWorkspace\">\n"
-                                                                    + "            <atom:title>Annotated Collection</atom:title>\n"
-                                                                    + "            <accept/>\n"
-                                                                    + "        </collection>\n"
-                                                                    + "    </workspace>\n"
-                                                                    + "    <workspace>\n"
-                                                                    + "        <atom:title>Spring Workspace</atom:title>\n"
-                                                                    + "        <collection href=\"http://localhost:80/services/withWorkspace\">\n"
-                                                                    + "            <atom:title>Spring Collection</atom:title>\n"
-                                                                    + "            <accept/>\n"
-                                                                    + "        </collection>\n"
-                                                                    + "    </workspace>\n"
-                                                                    + "</service>\n";
+                                                                "<service xmlns:atom=\"http://www.w3.org/2005/Atom\" xmlns=\"http://www.w3.org/2007/app\">" + "<workspace>"
+                                                                    + "<atom:title>Annotated Workspace</atom:title>"
+                                                                    + "<collection href=\"http://localhost:80/services/withoutWorkspace\">"
+                                                                    + "<atom:title>Annotated Collection</atom:title>"
+                                                                    + "<accept/>"
+                                                                    + "</collection>"
+                                                                    + "</workspace>"
+                                                                    + "<workspace>"
+                                                                    + "<atom:title>Spring Workspace</atom:title>"
+                                                                    + "<collection href=\"http://localhost:80/services/withWorkspace\">"
+                                                                    + "<atom:title>Spring Collection</atom:title>"
+                                                                    + "<accept/>"
+                                                                    + "</collection>"
+                                                                    + "</workspace>"
+                                                                    + "</service>";
 
     @Workspace(workspaceTitle = "Annotated Workspace", collectionTitle = "Annotated Collection")
     public static class AbstractTestWithWorkspaceResource extends AbstractDynamicResource {
@@ -104,7 +102,8 @@ public class AbstractResourceWithDuplicateWorkspaceTest extends MockServletInvoc
         MockHttpServletResponse response = invoke(mockRequest);
         String responseContent = response.getContentAsString();
         String msg =
-            TestUtils.diffIgnoreUpdateWithAttributeQualifier(EXPECTED_SERVICE_DOCUMENT, responseContent);
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(EXPECTED_SERVICE_DOCUMENT,
+                                                             responseContent);
         assertNull(msg, msg);
     }
 

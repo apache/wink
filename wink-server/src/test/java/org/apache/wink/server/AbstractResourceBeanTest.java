@@ -112,14 +112,14 @@ public class AbstractResourceBeanTest extends MockServletInvocationTest {
     private static final String EXPECTED_SERVICE_COLLECTION    = "expected service collection";
 
     private static final String EXPECTED_SERVICE_DOCUMENT      =
-                                                                   "<service xmlns:atom=\"http://www.w3.org/2005/Atom\" xmlns=\"http://www.w3.org/2007/app\">\n" + "    <workspace>\n"
-                                                                       + "        <atom:title>Services Workspace Title</atom:title>\n"
-                                                                       + "        <collection href=\"http://localhost:80/services/workspaceAndTitle\">\n"
-                                                                       + "            <atom:title>Services Collection Title</atom:title>\n"
-                                                                       + "            <accept/>\n"
-                                                                       + "        </collection>\n"
-                                                                       + "    </workspace>\n"
-                                                                       + "</service>\n";
+                                                                   "<service xmlns:atom=\"http://www.w3.org/2005/Atom\" xmlns=\"http://www.w3.org/2007/app\">" + "<workspace>"
+                                                                       + "<atom:title>Services Workspace Title</atom:title>"
+                                                                       + "<collection href=\"http://localhost:80/services/workspaceAndTitle\">"
+                                                                       + "<atom:title>Services Collection Title</atom:title>"
+                                                                       + "<accept/>"
+                                                                       + "</collection>"
+                                                                       + "</workspace>"
+                                                                       + "</service>";
 
     private static final String EXPECTED_SINGLE_ENTRY          = "expected single entry ";
 
@@ -205,8 +205,8 @@ public class AbstractResourceBeanTest extends MockServletInvocationTest {
         response = invoke(mockRequest);
         responseContent = response.getContentAsString();
         String msg =
-            TestUtils
-                .diffIgnoreUpdateWithAttributeQualifier(EXPECTED_SERVICE_DOCUMENT, responseContent);
+            TestUtils.diffIgnoreUpdateWithAttributeQualifier(EXPECTED_SERVICE_DOCUMENT,
+                                                             responseContent);
         assertNull(msg, msg);
     }
 

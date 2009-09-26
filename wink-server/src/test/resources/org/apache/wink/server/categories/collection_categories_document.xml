@@ -17,24 +17,5 @@
     specific language governing permissions and limitations
     under the License.
 -->
-
-<service xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://www.w3.org/2007/app">
-    <workspace>
-        <atom:title>Workspace</atom:title>
-        <collection href="http://localhost:80/cat">
-            <atom:title>Title</atom:title>
-            <accept/>
-            <categories href="http://localhost:80/categories/severity?alt=application%2Fatomcat%2Bxml"/>
-            <categories href="http://localhost:80/categories/severity?alt=application%2Fatomcat%2Bxml"/>
-            <categories scheme="urn:com:hp:qadefects:categories:status" fixed="yes">
-                <atom:category label="Assigned" scheme="urn:com:hp:qadefects:categories:status" term="Assigned"/>
-                <atom:category label="Fixed" scheme="urn:com:hp:qadefects:categories:status" term="Fixed"/>
-                <atom:category label="New" scheme="urn:com:hp:qadefects:categories:status" term="New"/>
-                <atom:category label="Rejected" scheme="urn:com:hp:qadefects:categories:status" term="Rejected"/>
-                <atom:category label="Deffered" scheme="urn:com:hp:qadefects:categories:status" term="Deffered"/>
-                <atom:category term="Approved"/>
-            </categories>
-        </collection>
-    </workspace>
-</service>
+<service xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://www.w3.org/2007/app"><workspace><atom:title>Workspace</atom:title><collection href="http://localhost:80/cat"><atom:title>Title</atom:title><accept/><categories href="http://localhost:80/categories/severity?alt=application%2Fatomcat%2Bxml"/><categories href="http://localhost:80/categories/severity?alt=application%2Fatomcat%2Bxml"/><categories scheme="urn:com:hp:qadefects:categories:status" fixed="yes"><atom:category label="Assigned" scheme="urn:com:hp:qadefects:categories:status" term="Assigned"/><atom:category label="Fixed" scheme="urn:com:hp:qadefects:categories:status" term="Fixed"/><atom:category label="New" scheme="urn:com:hp:qadefects:categories:status" term="New"/><atom:category label="Rejected" scheme="urn:com:hp:qadefects:categories:status" term="Rejected"/><atom:category label="Deffered" scheme="urn:com:hp:qadefects:categories:status" term="Deffered"/><atom:category term="Approved"/></categories></collection></workspace></service>
 

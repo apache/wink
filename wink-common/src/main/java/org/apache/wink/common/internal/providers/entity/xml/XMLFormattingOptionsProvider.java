@@ -25,8 +25,6 @@ import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
 
 import org.apache.wink.common.model.XmlFormattingOptions;
-import org.apache.wink.common.model.app.AppCategories;
-import org.apache.wink.common.model.app.AppService;
 import org.apache.wink.common.model.atom.AtomEntry;
 import org.apache.wink.common.model.atom.AtomFeed;
 
@@ -39,8 +37,6 @@ public class XMLFormattingOptionsProvider implements
     public XMLFormattingOptionsProvider() {
         classesWithDefault.add(AtomFeed.class);
         classesWithDefault.add(AtomEntry.class);
-        classesWithDefault.add(AppCategories.class);
-        classesWithDefault.add(AppService.class);
     }
 
     public XmlFormattingOptions getContext(Class<?> type) {

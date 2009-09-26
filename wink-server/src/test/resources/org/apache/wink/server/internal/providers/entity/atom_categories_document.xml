@@ -17,10 +17,4 @@
     specific language governing permissions and limitations
     under the License.
 -->
-
-<categories scheme="urn:org.apache.wink.example.default.scheme" fixed="yes" xmlns="http://www.w3.org/2007/app">
-    <atom:category label="label0" scheme="urn:org.apache.wink.scheme0" term="term0" xmlns:atom="http://www.w3.org/2005/Atom"/>
-    <atom:category label="label1" scheme="urn:org.apache.wink.scheme1" term="term1" xmlns:atom="http://www.w3.org/2005/Atom"/>
-    <atom:category label="label2" scheme="urn:org.apache.wink.scheme2" term="term2" xmlns:atom="http://www.w3.org/2005/Atom"/>
-    <atom:category label="label3" scheme="urn:org.apache.wink.scheme3" term="term3" xmlns:atom="http://www.w3.org/2005/Atom"/>
-</categories>
+<categories scheme="urn:org.apache.wink.example.default.scheme" fixed="yes" xmlns="http://www.w3.org/2007/app"><atom:category label="label0" scheme="urn:org.apache.wink.scheme0" term="term0" xmlns:atom="http://www.w3.org/2005/Atom"/><atom:category label="label1" scheme="urn:org.apache.wink.scheme1" term="term1" xmlns:atom="http://www.w3.org/2005/Atom"/><atom:category label="label2" scheme="urn:org.apache.wink.scheme2" term="term2" xmlns:atom="http://www.w3.org/2005/Atom"/><atom:category label="label3" scheme="urn:org.apache.wink.scheme3" term="term3" xmlns:atom="http://www.w3.org/2005/Atom"/></categories>
