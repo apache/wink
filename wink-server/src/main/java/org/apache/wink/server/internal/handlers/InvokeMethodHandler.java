@@ -23,15 +23,16 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wink.server.handlers.AbstractHandler;
 import org.apache.wink.server.handlers.MessageContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class InvokeMethodHandler extends AbstractHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(InvokeMethodHandler.class);
 
+    @Override
     public void handleRequest(MessageContext context) throws Throwable {
         try {
             SearchResult searchResult = context.getAttribute(SearchResult.class);
@@ -40,15 +41,17 @@ public class InvokeMethodHandler extends AbstractHandler {
             Object instance = searchResult.getResource().getInstance(context);
             if (logger.isDebugEnabled()) {
                 logger
-                    .debug("Invoking method {} of declaring class {} on the instance of a class {} with parameters {}",
+                    .debug("Invoking method {} of declaring class {} on the instance of a class {}@{} with parameters {}",
                            new Object[] {javaMethod.getName(),
                                javaMethod.getDeclaringClass().getName(),
-                               instance.getClass().getName(), Arrays.toString(parameters)});
+                               instance.getClass().getName(),
+                               Integer.toHexString(System.identityHashCode(instance)),
+                               Arrays.toString(parameters)});
             }
             Object result = javaMethod.invoke(instance, parameters);
             context.setResponseEntity(result);
         } catch (InvocationTargetException ite) {
-            logger.debug("Excpetion encountered during invocation: {}", ite.getTargetException());
+            logger.debug("Exception encountered during invocation: {}", ite.getTargetException());
             throw ite.getTargetException(); // unpack the original exception
         }
     }
