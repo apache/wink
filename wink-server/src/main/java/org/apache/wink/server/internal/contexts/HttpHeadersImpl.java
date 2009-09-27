@@ -45,8 +45,12 @@ import org.apache.wink.common.internal.utils.StringUtils;
 import org.apache.wink.common.internal.utils.UnmodifiableMultivaluedMap;
 import org.apache.wink.server.handlers.MessageContext;
 import org.apache.wink.server.internal.DeploymentConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HttpHeadersImpl implements HttpHeaders {
+
+    private final Logger                   logger = LoggerFactory.getLogger(HttpHeadersImpl.class);
 
     private MessageContext                 msgContext;
     private MultivaluedMap<String, String> headers;
@@ -81,10 +85,12 @@ public class HttpHeadersImpl implements HttpHeaders {
                     acceptLanguageTemp.append(requestHeader.get(c));
                 }
                 String acceptLanguage = acceptLanguageTemp.toString();
+                logger.debug("Accept-Language combined header is {}", acceptLanguage);
                 AcceptLanguage acceptLanguages = AcceptLanguage.valueOf(acceptLanguage);
                 acceptableLanguages = acceptLanguages.getAcceptableLanguages();
             }
         }
+        logger.debug("getAcceptableLanguages() returns {}", acceptableLanguages);
         return acceptableLanguages;
     }
 
@@ -93,6 +99,7 @@ public class HttpHeadersImpl implements HttpHeaders {
             Accept acceptHeader = getAcceptHeader();
             acceptableMediaTypes = acceptHeader.getSortedMediaTypes();
         }
+        logger.debug("getAcceptableMediaTypes() returns {}", acceptableMediaTypes);
         return acceptableMediaTypes;
     }
 
@@ -101,18 +108,21 @@ public class HttpHeadersImpl implements HttpHeaders {
             msgContext.getUriInfo().getQueryParameters()
                 .getFirst(RestConstants.REST_PARAM_MEDIA_TYPE);
         String acceptValue = null;
+        logger.debug("alternateParameter is {}", alternateParameter);
         if (alternateParameter != null) {
             // try to map alternate parameter shortcut to a real media type
             DeploymentConfiguration deploymentConfiguration =
                 msgContext.getAttribute(DeploymentConfiguration.class);
             Map<String, String> alternateShortcutMap =
                 deploymentConfiguration.getAlternateShortcutMap();
+            logger.debug("alternateShortcutMap is {}", alternateShortcutMap);
             if (alternateShortcutMap != null) {
                 acceptValue = alternateShortcutMap.get(alternateParameter);
             }
             if (acceptValue == null) {
                 acceptValue = alternateParameter;
             }
+            logger.debug("acceptValue set via alternateParameter is {}", acceptValue);
         } else {
             List<String> requestHeader = getRequestHeader(HttpHeaders.ACCEPT);
             if (requestHeader == null || requestHeader.isEmpty()) {
@@ -130,9 +140,12 @@ public class HttpHeadersImpl implements HttpHeaders {
             }
         }
         try {
+            logger.debug("Accept header is: {}", acceptValue);
             Accept acceptHeader = Accept.valueOf(acceptValue);
+            logger.debug("getAcceptHeader() returns {}", acceptHeader);
             return acceptHeader;
         } catch (IllegalArgumentException e) {
+            logger.debug("Illegal Accept request header: {}", e);
             throw new WebApplicationException(e, 400);
         }
     }
@@ -148,6 +161,7 @@ public class HttpHeadersImpl implements HttpHeaders {
                 }
             }
         }
+        logger.debug("Cookies are: {}", cookies);
         return cookies;
     }
 
@@ -162,12 +176,15 @@ public class HttpHeadersImpl implements HttpHeaders {
                     languageStr = s.get(0);
                 }
             }
+            logger.debug("Language string is {}", languageStr);
             if (languageStr == null) {
+                logger.debug("getLanguage() returning null");
                 return null;
             }
             String[] locales = StringUtils.fastSplit(languageStr, ",");
             language = HeaderUtils.languageToLocale(locales[0].trim());
         }
+        logger.debug("getLanguage() returning {}", language);
         return language;
     }
 
@@ -177,19 +194,24 @@ public class HttpHeadersImpl implements HttpHeaders {
             if (contentType == null) {
                 List<String> s = getRequestHeaderInternal(HttpHeaders.CONTENT_TYPE);
                 if (s == null || s.isEmpty()) {
+                    logger.debug("getMediaType() returning null");
                     return null;
                 } else {
                     contentType = s.get(0);
                 }
             }
+            logger.debug("Content-type is {}", contentType);
             mediaType = MediaType.valueOf(contentType);
         }
+        logger.debug("getMediaType() returning {}", mediaType);
         return mediaType;
     }
 
     private List<String> getRequestHeaderInternal(String name) {
         if (allHeaders != null) {
-            return allHeaders.get(name);
+            List<String> value = allHeaders.get(name);
+            logger.debug("Returning {} header value from allHeaders cache: {}", name, value);
+            return value;
         }
 
         List<String> list = headers.get(name);
@@ -203,27 +225,35 @@ public class HttpHeadersImpl implements HttpHeaders {
                     list.add(val);
                 }
             }
-
+            logger
+                .debug("HttpServletRequest.getHeaders({}) returned {} so putting into headers cache",
+                       name,
+                       list);
             headers.put(name, list);
         }
-
+        logger.debug("getRequestHeaderInternal({}) returning {}", name, list);
         return list;
     }
 
     public List<String> getRequestHeader(String name) {
         if (name == null) {
+            logger.debug("getRequestHeader({}) returns null", name);
             return null;
         }
         List<String> list = getRequestHeaderInternal(name);
         if (list == null || list.isEmpty()) {
+            logger.debug("getRequestHeader({}) returns null due to empty or non-existent header",
+                         name);
             return null;
         }
+        logger.debug("getRequestHeader({}) returns {}", name, list);
         return Collections.unmodifiableList(list);
     }
 
     public MultivaluedMap<String, String> getRequestHeaders() {
         if (allHeaders == null) {
             allHeaders = buildRequestHeaders();
+            logger.debug("getRequests() called so building allHeaders cache", allHeaders);
         }
 
         return allHeaders;
@@ -248,6 +278,7 @@ public class HttpHeadersImpl implements HttpHeaders {
                     values.add(val);
                 }
             }
+            logger.debug("buildRequestHeaders() adding {} header with values {}", name, values);
             map.put(name, values);
         }
         return new UnmodifiableMultivaluedMap<String, String>(map);

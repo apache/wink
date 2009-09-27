@@ -87,11 +87,14 @@ public class UriInfoImpl implements UriInfo {
             String requestPath = getPath(false);
             absolutePath = getBaseUri().resolve(requestPath);
         }
+        logger.debug("getAbsolutePath() returning: {}", absolutePath);
         return absolutePath;
     }
 
     public UriBuilder getAbsolutePathBuilder() {
-        return UriBuilder.fromUri(getAbsolutePath());
+        UriBuilder builder = UriBuilder.fromUri(getAbsolutePath());
+        logger.debug("getAbsolutePathBuilder() returning: {}", builder);
+        return builder;
     }
 
     public URI getBaseUri() {
@@ -103,16 +106,22 @@ public class UriInfoImpl implements UriInfo {
                 logger.error(Messages.getMessage("uriBadBaseURI") + baseUriString, e);
             }
         }
+        logger.debug("getBaseUri() returning: {}", baseUri);
         return baseUri;
     }
 
     public UriBuilder getBaseUriBuilder() {
-        return UriBuilder.fromUri(getBaseUri());
+        UriBuilder builder = UriBuilder.fromUri(getBaseUri());
+        logger.debug("getBaseUriBuilder() returning: {}", builder);
+        return builder;
     }
 
     public List<ResourceInstance> getMatchedResourceInstances() {
-        return Collections.unmodifiableList(messageContext.getAttribute(SearchResult.class)
-            .getData().getMatchedResources());
+        List<ResourceInstance> resources =
+            Collections.unmodifiableList(messageContext.getAttribute(SearchResult.class).getData()
+                .getMatchedResources());
+        logger.debug("getMatchedResourceInstances() returning: {}", resources);
+        return resources;
     }
 
     public List<Object> getMatchedResources() {
@@ -122,7 +131,7 @@ public class UriInfoImpl implements UriInfo {
         for (ResourceInstance resourceInstance : matchedResources) {
             resourceList.add(resourceInstance.getInstance(messageContext));
         }
-
+        logger.debug("getMatchedResources() returning: {}", resourceList);
         return Collections.unmodifiableList(resourceList);
     }
 
@@ -131,6 +140,7 @@ public class UriInfoImpl implements UriInfo {
     }
 
     public List<String> getMatchedURIs(boolean decode) {
+        logger.debug("getMatchedURIs({}) called", decode);
         List<List<PathSegment>> matchedURIs =
             messageContext.getAttribute(SearchResult.class).getData().getMatchedURIs();
         if (matchedURIsStrings != null && matchedURIsStrings.size() != matchedURIs.size()) {
@@ -141,6 +151,7 @@ public class UriInfoImpl implements UriInfo {
         if (matchedURIsStrings == null) {
             matchedURIsStrings = new ArrayList<String>(matchedURIs.size());
             for (List<PathSegment> segments : matchedURIs) {
+                logger.debug("Adding matched URI: {}", segments);
                 matchedURIsStrings.add(PathSegmentImpl.toString(segments));
             }
         }
@@ -150,12 +161,14 @@ public class UriInfoImpl implements UriInfo {
             if (decodedMatchedURIsStrings == null) {
                 decodedMatchedURIsStrings = new ArrayList<String>(matchedURIsStrings.size());
                 for (String uri : matchedURIsStrings) {
-                    decodedMatchedURIsStrings.add(UriEncoder.decodeString(uri));
+                    String decodedUri = UriEncoder.decodeString(uri);
+                    decodedMatchedURIsStrings.add(decodedUri);
+                    logger.debug("Adding decoded URI: {} from URI: {}", decodedUri, uri);
                 }
             }
             list = decodedMatchedURIsStrings;
         }
-
+        logger.debug("getMatchedURIs({}) returning {}", decode, list);
         return Collections.unmodifiableList(list);
     }
 
@@ -164,14 +177,17 @@ public class UriInfoImpl implements UriInfo {
     }
 
     public String getPath(boolean decode) {
+        logger.debug("getPath({}) called", decode);
         if (path == null) {
             path = buildRequestPath(messageContext.getAttribute(HttpServletRequest.class));
         }
 
         if (decode) {
-            return UriEncoder.decodeString(path);
+            String decodedPath = UriEncoder.decodeString(path);
+            logger.debug("getPath({}) returning {}", decode, decodedPath);
+            return decodedPath;
         }
-
+        logger.debug("getPath({}) returning {}", decode, path);
         return path;
     }
 
@@ -180,6 +196,7 @@ public class UriInfoImpl implements UriInfo {
     }
 
     public MultivaluedMap<String, String> getPathParameters(boolean decode) {
+        logger.debug("getPathParameters({}) called", decode);
         if (pathParameters == null) {
             pathParameters = new MultivaluedMapImpl<String, String>();
             SearchResult searchResult = messageContext.getAttribute(SearchResult.class);
@@ -187,6 +204,9 @@ public class UriInfoImpl implements UriInfo {
                 throw new IllegalStateException("outside the scope of a request");
             }
             MultivaluedMapImpl.copy(searchResult.getData().getMatchedVariables(), pathParameters);
+            logger.debug("getPathParameters({}) encoded path parameters are: {}",
+                         decode,
+                         pathParameters);
         }
 
         MultivaluedMap<String, String> map = pathParameters;
@@ -197,6 +217,7 @@ public class UriInfoImpl implements UriInfo {
             map = decodedPathParameters;
         }
 
+        logger.debug("getPathParameters({}) returning {}", decode, map);
         return map;
     }
 
@@ -209,8 +230,12 @@ public class UriInfoImpl implements UriInfo {
     }
 
     public List<PathSegment> getPathSegments(boolean decode) {
+        logger.debug("getPathSegments({}) called", decode);
         if (pathSegments == null) {
             pathSegments = UriHelper.parsePath(getPath(false));
+            logger.debug("getPathSegments({}) encoded path parameters are: {}",
+                         decode,
+                         pathSegments);
         }
 
         List<PathSegment> list = pathSegments;
@@ -220,7 +245,7 @@ public class UriInfoImpl implements UriInfo {
             }
             list = decodedPathSegments;
         }
-
+        logger.debug("getPathSegments({}) returning {}", decode, list);
         return list;
     }
 
@@ -229,10 +254,15 @@ public class UriInfoImpl implements UriInfo {
     }
 
     public MultivaluedMap<String, String> getQueryParameters(boolean decode) {
+        logger.debug("getQueryParameters({}) called", decode);
         if (queryParameters == null) {
             queryParameters = new MultivaluedMapImpl<String, String>();
             String query = messageContext.getAttribute(HttpServletRequest.class).getQueryString();
+            logger.debug("getQueryParameters({}) query string is: {}", decode, query);
             queryParameters = UriHelper.parseQuery(query);
+            logger.debug("getQueryParameters({}) encoded query parameters are: {}",
+                         decode,
+                         queryParameters);
         }
 
         MultivaluedMap<String, String> map = queryParameters;
@@ -242,18 +272,26 @@ public class UriInfoImpl implements UriInfo {
             }
             map = decodedQueryParameters;
         }
+        logger.debug("getQueryParameters({}) returning {}", decode, map);
         return map;
     }
 
     public URI getRequestUri() {
+        logger.debug("getRequestUri() called");
         UriBuilder builder = getAbsolutePathBuilder();
         String query = messageContext.getAttribute(HttpServletRequest.class).getQueryString();
+        logger.debug("getRequestUri() query string: {}", query);
         builder.replaceQuery(query);
-        return builder.build();
+        logger.debug("getRequestUri() build after query replacement: {}", builder);
+        URI uri = builder.build();
+        logger.debug("getRequestUri() returning: {}", uri);
+        return uri;
     }
 
     public UriBuilder getRequestUriBuilder() {
-        return UriBuilder.fromUri(getRequestUri());
+        UriBuilder builder = UriBuilder.fromUri(getRequestUri());
+        logger.debug("getRequestUriBuilder() returning: {}", builder);
+        return builder;
     }
 
     private String getBaseUriString() {
@@ -262,6 +300,7 @@ public class UriInfoImpl implements UriInfo {
                 buildBaseUriString(messageContext.getAttribute(HttpServletRequest.class),
                                    messageContext.getProperties());
         }
+        logger.debug("getBaseUriString() returned {}", baseUriString);
         return baseUriString;
     }
 
@@ -281,29 +320,35 @@ public class UriInfoImpl implements UriInfo {
 
         String baseURI = httpURI;
         if (request.isSecure()) {
+            logger.debug("buildBaseUriString request is secure");
             baseURI = httpsURI;
         }
+        logger.debug("buildBaseUriString baseURI from properties is: {}", baseURI);
         if (baseURI == null) {
             baseURI = autodetectBaseUri(request);
+            logger.debug("buildBaseUriString baseURI from autodetectBaseUri is: {}", baseURI);
         }
         return appendContextAndServletPath(baseURI, request, properties);
     }
 
     private String getURI(Properties properties, String propertyName) {
         String uri = properties.getProperty(propertyName);
+        logger.debug("getURI({}, {}) called", properties, propertyName);
         if (uri != null && uri.length() != 0) {
             try {
                 URI uriParsed = new URI(uri);
+                logger.debug("getURI({}, {}) returning {}", new Object[] {properties, propertyName,
+                    uriParsed});
                 return uriParsed.toString();
             } catch (URISyntaxException e) {
                 throw new IllegalArgumentException("invalid URI", e);
             }
         }
+        logger.debug("getURI({}, {}) returning null", properties, propertyName);
         return null;
     }
 
     private static String autodetectBaseUri(HttpServletRequest request) {
-
         try {
             return new URI(request.getScheme(), null, request.getServerName(), request
                 .getServerPort(), "/", null, null).toString();
@@ -315,7 +360,8 @@ public class UriInfoImpl implements UriInfo {
     private String appendContextAndServletPath(String basePath,
                                                HttpServletRequest request,
                                                Properties properties) {
-
+        logger.debug("appendContextAndServletPath({}, {}, {}) called", new Object[] {basePath,
+            request, properties});
         StringBuilder builder = new StringBuilder(basePath);
         if (builder.charAt(builder.length() - 1) == '/') {
             builder.deleteCharAt(builder.length() - 1);
@@ -326,37 +372,47 @@ public class UriInfoImpl implements UriInfo {
                 .getContextPath());
         if (contextPath != null) {
             builder.append(contextPath);
+            logger.debug("appendContextAndServletPath after contextPath called is: {} ", builder);
         }
 
         boolean isServlet =
             RuntimeContextTLS.getRuntimeContext().getAttribute(FilterConfig.class) == null;
+        logger.debug("appendContextAndServletPath isServlet: {} ", isServlet);
         if (request.getServletPath() != null && isServlet) {
             builder.append(request.getServletPath());
+            logger
+                .debug("appendContextAndServletPath after getServletPath called is: {} ", builder);
         }
         if (builder.charAt(builder.length() - 1) != '/') {
             builder.append('/');
         }
-        return builder.toString();
+        String builderStr = builder.toString();
+        logger.debug("appendContextAndServletPath returning: {} ", builderStr);
+        return builderStr;
     }
 
     private static String buildRequestPath(HttpServletRequest request) {
         // we cannot use request.getPathInfo() since it cuts off the ';'
         // parameters on Tomcat
         String requestPath = request.getRequestURI();
-
+        logger.debug("buildRequestPath requestPath is: {}", requestPath);
         // Syntax-Based Normalization (RFC 3986, section 6.2.2)
         requestPath = UriHelper.normalize(requestPath);
-
+        logger.debug("buildRequestPath requestPath normalized is: {}", requestPath);
         // cut off the context path from the beginning
         if (request.getContextPath() != null) {
             requestPath = requestPath.substring(request.getContextPath().length());
+            logger.debug("buildRequestPath after context path removed: {}", requestPath);
         }
 
         // cut off the servlet path from the beginning
         boolean isServlet =
             RuntimeContextTLS.getRuntimeContext().getAttribute(FilterConfig.class) == null;
+        logger.debug("buildRequestPath isServlet: {}", isServlet);
         if (request.getServletPath() != null && isServlet) {
             requestPath = requestPath.substring(request.getServletPath().length());
+            logger
+                .debug("buildRequestPath requestPath after servlet path removed: {}", requestPath);
         }
 
         // cut off all leading /
@@ -365,7 +421,7 @@ public class UriInfoImpl implements UriInfo {
             ++index;
         }
         requestPath = requestPath.substring(index);
-
+        logger.debug("buildRequestPath returning requestPath: {}", requestPath);
         return requestPath;
     }
 }
