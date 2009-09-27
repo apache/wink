@@ -43,14 +43,14 @@ import javax.ws.rs.ext.Providers;
 import javax.ws.rs.ext.RuntimeDelegate;
 import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.MultivaluedMapImpl;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.server.handlers.AbstractHandler;
 import org.apache.wink.server.handlers.MessageContext;
 import org.apache.wink.server.internal.contexts.RequestImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FlushResultHandler extends AbstractHandler {
 
@@ -160,12 +160,23 @@ public class FlushResultHandler extends AbstractHandler {
                                           genericType,
                                           declaredAnnotations,
                                           responseMediaType);
+            if (logger.isDebugEnabled()) {
+                logger.debug("{}@{}.getSize({}, {}, {}, {}, {}) returned {}", new Object[] {
+                    messageBodyWriter.getClass().getName(), Integer.toHexString(System.identityHashCode(messageBodyWriter)), entity,
+                    rawType, genericType, declaredAnnotations, responseMediaType, size});
+            }
             if (size >= 0) {
                 headers.putSingle(HttpHeaders.CONTENT_LENGTH, String.valueOf(size));
             }
 
             FlushHeadersOutputStream outputStream =
                 new FlushHeadersOutputStream(httpResponse, headers);
+            if (logger.isDebugEnabled()) {
+                logger.debug("{}@{}.writeTo({}, {}, {}, {}, {}, {}, {}) being called", new Object[] {
+                    messageBodyWriter.getClass().getName(), Integer.toHexString(System.identityHashCode(messageBodyWriter)), entity,
+                    rawType, genericType, declaredAnnotations, responseMediaType, httpHeaders,
+                    outputStream});
+            }
             messageBodyWriter.writeTo(entity,
                                       rawType,
                                       genericType,
@@ -173,6 +184,7 @@ public class FlushResultHandler extends AbstractHandler {
                                       responseMediaType,
                                       httpHeaders,
                                       outputStream);
+            logger.debug("Flushing headers if not written");
             outputStream.flushHeaders();
             return;
 
@@ -198,9 +210,18 @@ public class FlushResultHandler extends AbstractHandler {
             throw new WebApplicationException(500);
         }
 
+        logger.debug("Serialization using data content handler {}", dataContentHandler.getClass()
+            .getName());
+
         FlushHeadersOutputStream outputStream =
             new FlushHeadersOutputStream(httpResponse, httpHeaders);
+        if (logger.isDebugEnabled()) {
+            logger.debug("{}.writeTo({}, {}, {}) being called", new Object[] {
+                Integer.toHexString(System.identityHashCode(dataContentHandler)), entity, rawType,
+                responseMediaType.toString(), outputStream});
+        }
         dataContentHandler.writeTo(entity, responseMediaType.toString(), outputStream);
+        logger.debug("Flushing headers if not written");
         outputStream.flushHeaders();
     }
 
