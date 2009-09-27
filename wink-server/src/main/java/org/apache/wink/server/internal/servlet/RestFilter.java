@@ -123,6 +123,7 @@ public class RestFilter implements Filter {
             this.filterConfig = config;
         }
 
+        @Override
         protected DeploymentConfiguration getDeploymentConfiguration()
             throws ClassNotFoundException, InstantiationException, IllegalAccessException,
             IOException {
