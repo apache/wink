@@ -457,7 +457,7 @@ public final class UriEncoder {
                 if (d1 >= 0 && d2 >= 0) {
                     v = d1;
                     v = v << 4 | d2;
-                    if (decodeChars != null && !decodeChars[v]) {
+                    if (decodeChars != null && (v >= decodeChars.length || !decodeChars[v])) {
                         buffer.put((byte)string.charAt(i));
                         buffer.put(normalizedHexDigits[string.charAt(i + 1)]);
                         buffer.put(normalizedHexDigits[string.charAt(i + 2)]);

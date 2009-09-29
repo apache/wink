@@ -21,6 +21,7 @@
 package org.apache.wink.common.uri;
 
 import org.apache.wink.common.internal.uri.UriEncoder;
+import org.apache.wink.common.internal.utils.UriHelper;
 
 import junit.framework.TestCase;
 
@@ -118,5 +119,12 @@ public class UriEncoderTest extends TestCase {
 
     public void testDecodeQuery() {
         assertEquals("a b c", UriEncoder.decodeQuery("a+b%20c"));
+    }
+
+    public void testDecodeInternationalURI() {
+        // some text editors do not like the UTF-8 encoding so just making
+        // sure it doesn't throw an exception for now.
+        // see [WINK-208]
+        assertNotNull(UriHelper.normalize("http://l/%E3%81%82%E3%81%84"));
     }
 }
