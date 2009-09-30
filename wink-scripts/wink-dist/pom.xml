@@ -75,6 +75,9 @@
                         <inherited>false</inherited>
                         <configuration>
                             <tasks>
+                            	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+                                    <classpath refid="maven.dependency.classpath" />
+                            	</taskdef>
                                 <typedef resource="org/apache/maven/artifact/ant/antlib.xml">
                                     <classpath refid="maven.dependency.classpath" />
                                 </typedef>
