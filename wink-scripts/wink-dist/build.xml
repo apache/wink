@@ -19,333 +19,316 @@
 -->
 
 <project name="distromaker" default="dist" xmlns="antlib:org.apache.tools.ant">
-	<!--
+    <!--
 	Distribution script
 	===================
 	1. This script is intend to be run using maven's maven-antrun-plugin.
 	   It should run either in deploy phase, or by invoking "mvn antrun:run".
 	2. When new component is added to the project at the root level (in addition to common, server and client),
 	   the following targets are effected:
-		a. merge.sources - if component should be added to the javadoc.
-		b. create.dist.components - if the component's target includes jars that should be included in dist/components and in main jars.
+		a. create.dist.components - if the component's target includes jars that should be included in dist/components and in main jars.
 	3. When new component is added under the root level components (e.g. under server in addition to server-core),
 	   the following targets are effected:
 	   	a.  create.dist.lib - if component has dependencies
 	4. Changes in examples should not effect this script.
 	-->
 
-	<property name="tmp" value="${basedir}/target/tmp" />
-	<property name="dist" value="${basedir}/target/dist" />
-	<property name="dist.root" value="${dist}/apache-wink-${project.version}" />
-	<property name="dist.docs" value="${dist.root}/docs" />
-	<property name="dist.docs.api" value="${dist.docs}/api" />
-	<property name="dist.dist" value="${dist.root}/dist" />
-	<property name="dist.ext" value="${dist.root}/ext" />
-	<property name="dist.components" value="${dist.dist}" />
-	<property name="dist.examples" value="${dist.root}/examples" />
-	<property name="dist.lib" value="${dist.root}/lib" />
+    <property name="tmp" value="${basedir}/target/tmp" />
+    <property name="dist" value="${basedir}/target/dist" />
+    <property name="dist.root" value="${dist}/apache-wink-${project.version}" />
+    <property name="dist.docs" value="${dist.root}/docs" />
+    <property name="dist.docs.api" value="${dist.docs}/api" />
+    <property name="dist.dist" value="${dist.root}/dist" />
+    <property name="dist.ext" value="${dist.root}/ext" />
+    <property name="dist.components" value="${dist.dist}" />
+    <property name="dist.examples" value="${dist.root}/examples" />
+    <property name="dist.lib" value="${dist.root}/lib" />
 
-	<property name="project.root" value="${basedir}/../.." />
-	<property name="project.site" value="${project.root}/target/site" />
+    <property name="project.root" value="${basedir}/../.." />
+    <property name="project.site" value="${project.root}/target/site" />
 
-	<!-- Main components -->
-	<property name="project.common" value="${project.root}/wink-common" />
-	<property name="project.server" value="${project.root}/wink-server" />
-	<property name="project.client" value="${project.root}/wink-client" />
+    <!-- Main components -->
+    <property name="project.common" value="${project.root}/wink-common" />
+    <property name="project.server" value="${project.root}/wink-server" />
+    <property name="project.client" value="${project.root}/wink-client" />
 
-	<!-- Extensions -->
-	<property name="project.apache.httpclient" value="${project.root}/wink-client-apache-httpclient" />
-	<property name="project.webdav" value="${project.root}/wink-webdav" />
-	<property name="project.spring" value="${project.root}/wink-spring-support" />
-	<property name="project.abdera" value="${project.root}/wink-providers/wink-abdera-provider" />
-	<property name="project.jettison" value="${project.root}/wink-providers/wink-jettison-provider" />
-	<property name="project.json" value="${project.root}/wink-providers/wink-json-provider" />
+    <!-- Extensions -->
+    <property name="project.apache.httpclient" value="${project.root}/wink-client-apache-httpclient" />
+    <property name="project.webdav" value="${project.root}/wink-webdav" />
+    <property name="project.spring" value="${project.root}/wink-spring-support" />
+    <property name="project.abdera" value="${project.root}/wink-providers/wink-abdera-provider" />
+    <property name="project.jettison" value="${project.root}/wink-providers/wink-jettison-provider" />
+    <property name="project.json" value="${project.root}/wink-providers/wink-json-provider" />
 
-	<!-- Examples -->
-	<property name="project.examples" value="${project.root}/wink-examples" />
+    <!-- Examples -->
+    <property name="project.examples" value="${project.root}/wink-examples" />
 
-	<property name="tmp.binary" value="${tmp}/binary" />
-	<property name="wink.main.jar.name" value="wink-${project.version}.jar" />
-	<property name="project.developerGuide.file" value="${basedir}/../../src/doc/DeveloperGuide/Apache_Wink_User_Guide.pdf" />
+    <property name="tmp.binary" value="${tmp}/binary" />
+    <property name="wink.main.jar.name" value="wink-${project.version}.jar" />
+    <property name="project.developerGuide.file" value="${basedir}/../../src/doc/DeveloperGuide/Apache_Wink_User_Guide.pdf" />
 
-	<!-- Init -->
-	<target name="init">
-		<fail message="This script is not intend to be run standalone, but should run from maven only. Run 'mvn antrun:run'." unless="project.version" />
-		<echo message="Building distribution of ${project.name}" />
-		<delete dir="target" />
-	</target>
+    <!-- Init -->
+    <target name="init">
+        <fail message="This script is not intend to be run standalone, but should run from maven only. Run 'mvn antrun:run'." unless="project.version" />
+        <echo message="Building distribution of ${project.name}" />
+        <delete dir="target" />
+    </target>
 
-	<!-- Creates javadoc folder with javadocs for all sources in org.hp package -->
-	<!-- Javadoc is common for all components -->
-	<target name="create.javadoc" depends="init">
-		<echo>Copying Javadocs ...</echo>
-		<mkdir dir="${dist.docs.api}" />
-		<copy todir="${dist.docs.api}">
-			<fileset dir="${project.site}/apidocs">
-				<!-- the javadoc maven plugin creates these files and doesn't delete them if -->
-				<!-- maven is run with the -X option, but we don't want them in the distribution -->
-				<exclude name="**/javadoc.*" />
-				<exclude name="**/options" />
-				<exclude name="**/packages" />
-			</fileset>
-		</copy>
-	</target>
+    <!-- Creates javadoc folder with javadocs for all sources in org.hp package -->
+    <!-- Javadoc is common for all components -->
+    <target name="create.javadoc" depends="init">
+        <echo>Copying Javadocs ...</echo>
+        <mkdir dir="${dist.docs.api}" />
+        <copy todir="${dist.docs.api}">
+            <fileset dir="${project.site}/apidocs">
+                <!-- the javadoc maven plugin creates these files and doesn't delete them if -->
+                <!-- maven is run with the -X option, but we don't want them in the distribution -->
+                <exclude name="**/javadoc.*" />
+                <exclude name="**/options" />
+                <exclude name="**/packages" />
+            </fileset>
+        </copy>
+    </target>
 
-	<!-- Creates components folder with jar of each component -->
-	<target name="create.dist.components" depends="init">
-		<echo>Making components</echo>
-		<mkdir dir="${dist.components}" />
-		<copy todir="${dist.components}" flatten="true" includeemptydirs="false">
-			<fileset dir="${project.common}">
-				<include name="**/*.jar" />
-				<exclude name="**/*sources.jar" />
-				<exclude name="**/*javadoc.jar" />
-			</fileset>
-			<fileset dir="${project.server}">
-				<include name="**/*.jar" />
-				<exclude name="**/*sources.jar" />
-				<exclude name="**/*javadoc.jar" />
-			</fileset>
-			<fileset dir="${project.client}">
-				<include name="**/*.jar" />
-				<exclude name="**/*sources.jar" />
-				<exclude name="**/*javadoc.jar" />
-			</fileset>
-		</copy>
-	</target>
+    <!-- Creates components folder with jar of each component -->
+    <target name="create.dist.components" depends="init">
+        <echo>Making components</echo>
+        <mkdir dir="${dist.components}" />
+        <copy todir="${dist.components}" flatten="true" includeemptydirs="false">
+            <fileset dir="${project.common}">
+                <include name="**/*.jar" />
+                <exclude name="**/*sources.jar" />
+                <exclude name="**/*javadoc.jar" />
+            </fileset>
+            <fileset dir="${project.server}">
+                <include name="**/*.jar" />
+                <exclude name="**/*sources.jar" />
+                <exclude name="**/*javadoc.jar" />
+            </fileset>
+            <fileset dir="${project.client}">
+                <include name="**/*.jar" />
+                <exclude name="**/*sources.jar" />
+                <exclude name="**/*javadoc.jar" />
+            </fileset>
+        </copy>
+    </target>
 
-	<!-- Creates lib folder with the third party jars -->
-	<target name="create.dist.lib" depends="create.dist.components">
-		<echo>Making lib directory</echo>
-		<mkdir dir="${dist.lib}" />
+    <!-- Creates lib folder with the third party jars -->
+    <target name="create.dist.lib" depends="create.dist.components">
+        <echo>Making lib directory</echo>
+        <mkdir dir="${dist.lib}" />
 
-		<!-- Copies components dependencies -->
-		<ant target="copy.pom.dependencies">
-			<property name="pom.file" value="${project.root}/wink-common/pom.xml" />
-			<property name="dependency.target" value="${dist.lib}" />
-		</ant>
-		<ant target="copy.pom.dependencies">
-			<property name="pom.file" value="${project.root}/wink-client/pom.xml" />
-			<property name="dependency.target" value="${dist.lib}" />
-		</ant>
-		<ant target="copy.pom.dependencies">
-			<property name="pom.file" value="${project.root}/wink-server/pom.xml" />
-			<property name="dependency.target" value="${dist.lib}" />
-		</ant>
+        <!-- Copies components dependencies -->
+        <ant target="copy.pom.dependencies">
+            <property name="pom.file" value="${project.root}/wink-common/pom.xml" />
+            <property name="dependency.target" value="${dist.lib}" />
+        </ant>
+        <ant target="copy.pom.dependencies">
+            <property name="pom.file" value="${project.root}/wink-client/pom.xml" />
+            <property name="dependency.target" value="${dist.lib}" />
+        </ant>
+        <ant target="copy.pom.dependencies">
+            <property name="pom.file" value="${project.root}/wink-server/pom.xml" />
+            <property name="dependency.target" value="${dist.lib}" />
+        </ant>
 
-		<!-- Delete files that already appear in the distribution -->
-		<foreach target="delete.files" param="filename" delimiter=";">
-			<param name="delete.in" value="${dist.lib}" />
-			<path id="lib.path.ref">
-				<fileset dir="${dist.components}" includes="*.jar" />
-			</path>
-		</foreach>
-	</target>
+        <!-- Delete files that already appear in the distribution -->
+        <foreach target="delete.files" param="filename" delimiter=";">
+            <param name="delete.in" value="${dist.lib}" />
+            <path>
+                <fileset dir="${dist.components}" includes="*.jar" />
+            </path>
+        </foreach>
+    </target>
 
-	<target name="create.extensions" depends="create.dist.lib">
-		<echo>Making ext directory</echo>
-		<ant target="create.extension">
-			<property name="extension.name" value="spring" />
-			<property name="extension.folder" value="${project.spring}" />
-		</ant>
+    <target name="create.extensions" depends="create.dist.lib">
+        <echo>Making ext directory</echo>
+        <foreach target="create.extension" param="extension.folder" delimiter=";" inheritall="true">
+            <path>
+                <pathelement path="${project.spring}" />
+                <pathelement path="${project.apache.httpclient}" />
+                <pathelement path="${project.webdav}" />
+                <pathelement path="${project.abdera}" />
+                <pathelement path="${project.jettison}" />
+                <pathelement path="${project.json}" />
+            </path>
+        </foreach>
+    </target>
 
-		<ant target="create.extension">
-			<property name="extension.name" value="apache-httpclient" />
-			<property name="extension.folder" value="${project.apache.httpclient}" />
-		</ant>
+    <target name="create.extension">
+        <basename file="${extension.folder}" property="extension.name" />
+        <echo>Creating extension: ${extension.name}</echo>
+        <!-- Copy jars -->
+        <mkdir dir="${dist.ext}/${extension.name}" />
+        <copy todir="${dist.ext}/${extension.name}" flatten="true" includeemptydirs="false">
+            <fileset dir="${extension.folder}/target">
+                <include name="**/*.jar" />
+                <exclude name="**/*sources.jar" />
+                <exclude name="**/*javadoc.jar" />
+            </fileset>
+        </copy>
 
-		<ant target="create.extension">
-			<property name="extension.name" value="web-dav" />
-			<property name="extension.folder" value="${project.webdav}" />
-		</ant>
+        <!-- Copy dependencies -->
+        <mkdir dir="${dist.ext}/${extension.name}/lib" />
+        <ant target="copy.pom.dependencies">
+            <property name="pom.file" value="${extension.folder}/pom.xml" />
+            <property name="dependency.target" value="${dist.ext}/${extension.name}/lib" />
+        </ant>
 
-		<ant target="create.extension">
-			<property name="extension.name" value="abdera" />
-			<property name="extension.folder" value="${project.abdera}" />
-		</ant>
+        <!-- Delete files that already appear in distribution or main lib -->
+        <foreach target="delete.files" param="filename" delimiter=";">
+            <param name="delete.in" value="${dist.ext}/${extension.name}/lib" />
+            <path>
+                <fileset dir="${dist.lib}" includes="*.jar" />
+                <fileset dir="${dist.components}" includes="*.jar" />
+            </path>
+        </foreach>
+    </target>
 
-		<ant target="create.extension">
-			<property name="extension.name" value="jettison" />
-			<property name="extension.folder" value="${project.jettison}" />
-		</ant>
+    <target name="delete.files">
+        <basename file="${filename}" property="shortFileName" />
+        <available file="${delete.in}/${shortFileName}" property="fileExists">
+        </available>
+        <if>
+            <equals arg1="${fileExists}" arg2="true" />
+            <then>
+                <echo>Deleting ${delete.in}/${shortFileName}</echo>
+                <delete dir="${delete.in}">
+                    <include name="${shortFileName}" />
+                </delete>
+            </then>
+        </if>
+    </target>
 
-		<ant target="create.extension">
-			<property name="extension.name" value="json" />
-			<property name="extension.folder" value="${project.json}" />
-		</ant>
-	</target>
+    <!-- Copies dependencies of the specific pom.file to dist.lib folder. -->
+    <target name="copy.pom.dependencies">
+        <echo>"${pom.file}"</echo>
+        <pom id="maven.project" file="${pom.file}" />
+        <dependencies filesetId="dependency.fileset" useScope="runtime">
+            <pom refid="maven.project" />
+        </dependencies>
 
-	<target name="create.extension">
+        <copy todir="${dependency.target}" flatten="true" overwrite="false">
+            <fileset refid="dependency.fileset" />
+        </copy>
+    </target>
 
-		<echo>Creating extension: ${extension.name}</echo>
-		<!-- Copy jars -->
-		<mkdir dir="${dist.ext}/${extension.name}" />
-		<copy todir="${dist.ext}/${extension.name}" flatten="true" includeemptydirs="false">
-			<fileset dir="${extension.folder}/target">
-				<include name="**/*.jar" />
-				<exclude name="**/*sources.jar" />
-				<exclude name="**/*javadoc.jar" />
-			</fileset>
-		</copy>
+    <!-- Copies legal documents to the root folder and SDK PDF document to the doc directory. -->
+    <target name="create.dist.root.docs" depends="init">
+        <echo>Making root documents</echo>
+        <copy todir="${dist.root}" flatten="true" includeemptydirs="false">
+            <fileset dir="${project.root}" includes="DISCLAIMER*" />
+            <fileset dir="${project.root}" includes="LICENSE*" />
+            <fileset dir="${project.root}" includes="NOTICE*" />
+            <fileset dir="${project.root}" includes="release_notes.txt" />
+        </copy>
+        <!-- Copy PDF Developer Guide that exists under trunk/src/doc/DeveloperGuide into doc directory -->
+        <copy file="${project.developerGuide.file}" todir="${dist.docs}" />
+    </target>
 
-		<!-- Copy dependencies -->
-		<mkdir dir="${dist.ext}/${extension.name}/lib" />
-		<ant target="copy.pom.dependencies">
-			<property name="pom.file" value="${extension.folder}/pom.xml" />
-			<property name="dependency.target" value="${dist.ext}/${extension.name}/lib" />
-		</ant>
-
-		<!-- Delete files that already appear in distribution or main lib -->
-		<foreach target="delete.files" param="filename" delimiter=";">
-			<param name="delete.in" value="${dist.ext}/${extension.name}/lib" />
-			<path>
-				<fileset dir="${dist.lib}" includes="*.jar" />
-				<fileset dir="${dist.components}" includes="*.jar" />
-			</path>
-		</foreach>
-	</target>
-
-	<target name="delete.files">
-		<basename file="${filename}" property="shortFileName" />
-		<available file="${delete.in}/${shortFileName}" property="fileExists">
-		</available>
-		<if>
-			<equals arg1="${fileExists}" arg2="true" />
-			<then>
-				<echo>Deleting ${delete.in}/${shortFileName}</echo>
-				<delete dir="${delete.in}">
-					<include name="${shortFileName}" />
-				</delete>
-			</then>
-		</if>
-	</target>
-
-	<!-- Copies dependencies of the specific pom.file to dist.lib folder. -->
-	<target name="copy.pom.dependencies">
-		<echo>"${pom.file}"</echo>
-		<pom id="maven.project" file="${pom.file}" />
-		<dependencies filesetId="dependency.fileset" useScope="runtime">
-			<pom refid="maven.project" />
-		</dependencies>
-
-		<copy todir="${dependency.target}" flatten="true" overwrite="false">
-			<fileset refid="dependency.fileset" />
-		</copy>
-	</target>
-
-	<!-- Copies legal documents to the root folder and SDK PDF document to the doc directory. -->
-	<target name="create.dist.root.docs" depends="init">
-		<echo>Making root documents</echo>
-		<copy todir="${dist.root}" flatten="true" includeemptydirs="false">
-			<fileset dir="${project.root}" includes="DISCLAIMER*" />
-			<fileset dir="${project.root}" includes="LICENSE*" />
-			<fileset dir="${project.root}" includes="NOTICE*" />
-			<fileset dir="${project.root}" includes="release_notes.txt" />
-		</copy>
-		<!-- Copy PDF Developer Guide that exists under trunk/src/doc/DeveloperGuide into doc directory -->
-		<copy file="${project.developerGuide.file}" todir="${dist.docs}" />
-	</target>
-
-	<!-- Creates jar that aggregates all components -->
-	<target name="create.dist.main.jar" depends="create.dist.components">
-		<echo>Making all in one jar</echo>
-		<ant target="create.dist.aggregator.jar">
-			<property name="tmp.unzip" value="${tmp.binary}" />
-			<property name="aggregator.target" value="${dist.components}" />
-			<property name="aggregator.includes" value="*-${project.version}.jar" />
-			<property name="aggregator.jar.name" value="${dist.dist}/${wink.main.jar.name}" />
-			<property name="aggregator.title" value="Apache Wink" />
-		</ant>
-	</target>
+    <!-- Creates jar that aggregates all components -->
+    <target name="create.dist.main.jar" depends="create.dist.components">
+        <echo>Making all in one jar</echo>
+        <ant target="create.dist.aggregator.jar">
+            <property name="tmp.unzip" value="${tmp.binary}" />
+            <property name="aggregator.target" value="${dist.components}" />
+            <property name="aggregator.includes" value="*-${project.version}.jar" />
+            <property name="aggregator.jar.name" value="${dist.dist}/${wink.main.jar.name}" />
+            <property name="aggregator.title" value="Apache Wink" />
+        </ant>
+    </target>
 
 
-	<!-- Merges several jars from aggregator.target using aggregator.includes to a signle jar with aggregator.jar.name -->
-	<target name="create.dist.aggregator.jar">
-		<echo>aggregator.jar.name: ${aggregator.jar.name}</echo>
-		<mkdir dir="${tmp.unzip}" />
-		<unzip dest="${tmp.unzip}" overwrite="true">
-			<fileset dir="${aggregator.target}" includes="${aggregator.includes}" />
-		</unzip>
-		<jar destfile="${aggregator.jar.name}" basedir="${tmp.unzip}">
-			<manifest>
-				<attribute name="Created-By" value="Wink Distribution Script" />
-				<attribute name="Built-By" value="${user.name}" />
-				<attribute name="Build-Jdk" value="${java.version}" />
-				<attribute name="Implementation-Title" value="${aggregator.title}" />
-				<attribute name="Implementation-Version" value="${project.version}" />
-				<attribute name="Implementation-Vendor-Id" value="${group.id}" />
-				<attribute name="Implementation-Vendor" value="The Apache Software Foundation" />
-				<attribute name="Specification-Title" value="${aggregator.title}" />
-				<attribute name="Specification-Version" value="${project.version}" />
-				<attribute name="Specification-Vendor" value="The Apache Software Foundation" />
-				<attribute name="X-Compile-Source-JDK" value="${maven.compile.source}" />
-				<attribute name="X-Compile-Target-JDK" value="${maven.compile.target}" />
-			</manifest>
+    <!-- Merges several jars from aggregator.target using aggregator.includes to a signle jar with aggregator.jar.name -->
+    <target name="create.dist.aggregator.jar">
+        <echo>aggregator.jar.name: ${aggregator.jar.name}</echo>
+        <mkdir dir="${tmp.unzip}" />
+        <unzip dest="${tmp.unzip}" overwrite="true">
+            <fileset dir="${aggregator.target}" includes="${aggregator.includes}" />
+            <fileset dir="${project.apache.httpclient}" includes="target/**${project.version}.jar" />
+            <fileset dir="${project.webdav}" includes="target/**${project.version}.jar" />
+            <fileset dir="${project.spring}" includes="target/**${project.version}.jar" />
+        </unzip>
+        <jar destfile="${aggregator.jar.name}" basedir="${tmp.unzip}">
+            <manifest>
+                <attribute name="Created-By" value="Wink Distribution Script" />
+                <attribute name="Built-By" value="${user.name}" />
+                <attribute name="Build-Jdk" value="${java.version}" />
+                <attribute name="Implementation-Title" value="${aggregator.title}" />
+                <attribute name="Implementation-Version" value="${project.version}" />
+                <attribute name="Implementation-Vendor-Id" value="${group.id}" />
+                <attribute name="Implementation-Vendor" value="The Apache Software Foundation" />
+                <attribute name="Specification-Title" value="${aggregator.title}" />
+                <attribute name="Specification-Version" value="${project.version}" />
+                <attribute name="Specification-Vendor" value="The Apache Software Foundation" />
+                <attribute name="X-Compile-Source-JDK" value="${maven.compile.source}" />
+                <attribute name="X-Compile-Target-JDK" value="${maven.compile.target}" />
+            </manifest>
 
-			<zipfileset dir="${basedir}" prefix="META-INF">
-				<include name="NOTICE" />
-				<include name="DISCLAIMER" />
-				<include name="DEPENDENCIES" />
-			</zipfileset>
-		</jar>
-		<delete dir="${tmp.unzip}" />
-	</target>
+            <!--zipfileset dir="${basedir}" prefix="META-INF">
+                <include name="NOTICE" />
+                <include name="DISCLAIMER" />
+                <include name="DEPENDENCIES" />
+            </zipfileset -->
+        </jar>
+        <delete dir="${tmp.unzip}" />
+    </target>
 
-	<!-- Creates examples folder -->
-	<target name="create.examples" depends="init">
-		<echo>Making examples directory</echo>
-		<copy todir="${dist.examples}" includeemptydirs="false">
-			<fileset dir="${project.root}/wink-examples">
-				<include name="**/build.xml" />
-				<exclude name="**/GoogleServices-client/**" />
-				<exclude name="**/target/**" />
-			</fileset>
-			<filterset>
-				<filter token="SDK_JAR_NAME" value="${wink.main.jar.name}" />
-				<filter token="SDK_COMMON_JAR_NAME" value="wink-common-${project.version}.jar" />
-				<filter token="SDK_CLIENT_JAR_NAME" value="wink-client-${project.version}.jar" />
-			</filterset>
-		</copy>
-		<copy todir="${dist.examples}" includeemptydirs="false" overwrite="false">
-			<fileset dir="${project.root}/wink-examples">
-				<include name="**/pom.xml" />
-				<include name="**/readme.txt" />
-				<include name="**/src/main/**" />
-				<exclude name="**/target/**" />
-			</fileset>
-		</copy>
-	</target>
+    <!-- Creates examples folder -->
+    <target name="create.examples" depends="init">
+        <echo>Making examples directory</echo>
+        <copy todir="${dist.examples}" includeemptydirs="false">
+            <fileset dir="${project.root}/wink-examples">
+                <include name="**/build.xml" />
+                <exclude name="**/GoogleServices-client/**" />
+                <exclude name="**/target/**" />
+            </fileset>
+            <filterset>
+                <filter token="SDK_JAR_NAME" value="${wink.main.jar.name}" />
+                <filter token="SDK_COMMON_JAR_NAME" value="wink-common-${project.version}.jar" />
+                <filter token="SDK_CLIENT_JAR_NAME" value="wink-client-${project.version}.jar" />
+            </filterset>
+        </copy>
+        <copy todir="${dist.examples}" includeemptydirs="false" overwrite="false">
+            <fileset dir="${project.root}/wink-examples">
+                <include name="**/pom.xml" />
+                <include name="**/readme.txt" />
+                <include name="**/src/main/**" />
+                <exclude name="**/target/**" />
+            </fileset>
+        </copy>
+    </target>
 
-	<!-- Creates lib under examples. This lib doesn't include any dependencies that were already included in other modules: dist, lib or ext -->
-	<target name="create.examples.lib" depends="create.examples, create.extensions">
-		<mkdir dir="${dist.examples}/lib" />
+    <!-- Creates lib under examples. This lib doesn't include any dependencies that were already included in other modules: dist, lib or ext -->
+    <target name="create.examples.lib" depends="create.examples, create.extensions">
+        <mkdir dir="${dist.examples}/lib" />
 
-		<!-- Collect all dependencies -->
-		<foreach target="copy.pom.dependencies" param="pom.file" delimiter=";">
-			<param name="dependency.target" value="${dist.examples}/lib" />
-			<path>
-				<fileset dir="${dist.examples}" id="example.poms">
-					<include name="**/pom.xml" />
-				</fileset>
-			</path>
-		</foreach>
+        <!-- Collect all dependencies -->
+        <foreach target="copy.pom.dependencies" param="pom.file" delimiter=";">
+            <param name="dependency.target" value="${dist.examples}/lib" />
+            <path>
+                <fileset dir="${dist.examples}" id="example.poms">
+                    <include name="**/pom.xml" />
+                </fileset>
+            </path>
+        </foreach>
 
-		<!-- Remove dependencies that already appear -->
-		<foreach target="delete.files" param="filename" delimiter=";">
-			<param name="delete.in" value="${dist.examples}/lib" />
-			<path>
-				<fileset dir="${dist.examples}/lib" includes="*.war" />
-				<fileset dir="${dist.lib}" includes="*.jar" />
-				<fileset dir="${dist.components}" includes="*.jar" />
-				<fileset dir="${dist.ext}" includes="**/*.jar" />
-			</path>
-		</foreach>
+        <!-- Remove dependencies that already appear -->
+        <foreach target="delete.files" param="filename" delimiter=";">
+            <param name="delete.in" value="${dist.examples}/lib" />
+            <path>
+                <fileset dir="${dist.examples}/lib" includes="*.war" />
+                <fileset dir="${dist.lib}" includes="*.jar" />
+                <fileset dir="${dist.components}" includes="*.jar" />
+                <fileset dir="${dist.ext}" includes="**/*.jar" />
+            </path>
+        </foreach>
 
-	</target>
+    </target>
 
 
-	<!-- Done building distribution -->
-	<target name="dist" depends="create.javadoc, create.dist.components, create.dist.lib, create.extensions, create.dist.root.docs, create.dist.main.jar,  create.examples, create.examples.lib">
-	</target>
+    <!-- Done building distribution -->
+    <target name="dist" depends="create.javadoc, create.dist.components, create.dist.lib, create.extensions, create.dist.root.docs, create.dist.main.jar,  create.examples, create.examples.lib">
+    </target>
 
 </project>
