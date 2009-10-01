@@ -22,6 +22,7 @@ package org.apache.wink.common.internal.providers.entity;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
@@ -67,6 +68,15 @@ public class StringProvider implements MessageBodyReader<String>, MessageBodyWri
                         Type genericType,
                         Annotation[] annotations,
                         MediaType mediaType) {
+        String charSet = ProviderUtils.getCharset(mediaType);
+        if (charSet != null && !"UTF-8".equals(charSet)) {
+            try {
+                return t.getBytes(charSet).length;
+            } catch (UnsupportedEncodingException e) {
+                logger.debug("Unsupported character encoding exception: {}", e);
+                throw new WebApplicationException(e, 500);
+            }
+        }
         return t.length();
     }
 
