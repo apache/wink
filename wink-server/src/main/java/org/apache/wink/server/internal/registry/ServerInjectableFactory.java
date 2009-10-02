@@ -369,7 +369,10 @@ public class ServerInjectableFactory extends InjectableFactory {
             try {
                 return getConvertor().convert(values);
             } catch (ConversionException e) {
-                throw new WebApplicationException(e.getCause(), Response.Status.NOT_FOUND);
+                // See E010 http://jcp.org/aboutJava/communityprocess/maintenance/jsr311/311ChangeLog.html:
+                // "400 status code should be returned if an exception is
+                // raised during @FormParam-annotated parameter construction"
+                throw new WebApplicationException(e.getCause(), Response.Status.BAD_REQUEST);
             }
         }
 
