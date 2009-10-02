@@ -290,7 +290,17 @@ public abstract class ValueConvertor {
                 return null;
             }
             try {
-                return method.invoke(null, value);
+                Object objToReturn = method.invoke(null, value);
+                // can't use instanceof here?
+                if (!objToReturn.getClass().equals((method.getDeclaringClass()))) {
+                    // enforce E009 from http://jcp.org/aboutJava/communityprocess/maintenance/jsr311/311ChangeLog.html
+                    // note that we don't care what return object type the method declares, only what it actually returns
+                    throw createConversionException(value, method.getDeclaringClass(),
+                            new Exception("Value returned from method " + method.toString() + " must be "
+                                    + "of type " + method.getDeclaringClass() + ".  "
+                                    + "Returned object was type " + objToReturn.getClass()));
+                }
+                return objToReturn;
             } catch (IllegalArgumentException e) {
                 throw createConversionException(value, method.getDeclaringClass(), e);
             } catch (IllegalAccessException e) {

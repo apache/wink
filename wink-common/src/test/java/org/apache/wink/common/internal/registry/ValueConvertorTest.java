@@ -72,6 +72,50 @@ public class ValueConvertorTest extends TestCase {
     }
 
     /**
+     * custom type with valueOf that returns incorrect object type and has no
+     * constructor
+     */
+    static class CustomTypeValueOfWrong {
+
+        private String _value = "";
+
+        private CustomTypeValueOfWrong(String value) {
+            _value = value;
+        }
+
+        static Object valueOf(String value) {
+            // intentionally returning incorrect object type
+            return new String(value + "_valueOf");
+        }
+
+        public String toString() {
+            return _value;
+        }
+    }
+
+    /**
+     * custom type with fromString that returns incorrect object type and has no
+     * constructor
+     */
+    static class CustomTypeFromStringWrong {
+
+        private String _value = "";
+
+        private CustomTypeFromStringWrong(String value) {
+            _value = value;
+        }
+
+        static Object fromString(String value) {
+            // intentionally returning incorrect object type
+            return new String(value + "_valueOf");
+        }
+
+        public String toString() {
+            return _value;
+        }
+    }
+
+    /**
      * custom type with fromString method only
      */
     static class CustomTypeFromString {
@@ -146,4 +190,25 @@ public class ValueConvertorTest extends TestCase {
         assertEquals(MyEnumWithFromString.SUNDAY_fromString, fromStringConvertor.convert("SUNDAY"));
     }
 
+    // make sure wrong Object type returned from valueOf and fromString is
+    // handled and reported
+    public void testConvertorWrongObjectType() throws Exception {
+        try {
+            ValueConvertor valueOfConvertor =
+                ValueConvertor.createValueConvertor(CustomTypeValueOfWrong.class,
+                                                    CustomTypeValueOfWrong.class);
+            valueOfConvertor.convert("VALUE");
+            fail("Should have got an exception.");
+        } catch (Exception e) {
+        }
+
+        try {
+            ValueConvertor valueOfConvertor =
+                ValueConvertor.createValueConvertor(CustomTypeFromStringWrong.class,
+                                                    CustomTypeFromStringWrong.class);
+            valueOfConvertor.convert("VALUE");
+            fail("Should have got an exception.");
+        } catch (Exception e) {
+        }
+    }
 }
