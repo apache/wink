@@ -244,9 +244,7 @@ public abstract class ValueConvertor {
             if (values == null || values.size() == 0) {
                 return convert((String)null);
             }
-            List<String> valuesSorted = new ArrayList<String>(values);
-            Collections.sort(valuesSorted);
-            return convert(valuesSorted.get(0));
+            return convert(values.get(0));
         }
     }
 

@@ -19,9 +19,6 @@
  *******************************************************************************/
 package org.apache.wink.common.internal.registry;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import junit.framework.TestCase;
 
 public class ValueConvertorTest extends TestCase {
@@ -149,16 +146,4 @@ public class ValueConvertorTest extends TestCase {
         assertEquals(MyEnumWithFromString.SUNDAY_fromString, fromStringConvertor.convert("SUNDAY"));
     }
 
-    // make sure that a single value conversion will sort multiple values
-    // correctly
-    public void testMultipleValuesSortedReturned() throws Exception {
-        ValueConvertor constructorConvertor =
-            ValueConvertor.createValueConvertor(CustomTypeConstructor.class,
-                                                CustomTypeConstructor.class);
-        List<String> values = new ArrayList<String>();
-        values.add("z");
-        values.add("a");
-        values.add("aa");
-        assertEquals("a", constructorConvertor.convert(values).toString());
-    }
 }
