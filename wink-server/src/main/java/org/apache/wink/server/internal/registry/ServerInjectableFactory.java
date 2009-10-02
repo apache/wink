@@ -27,6 +27,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +52,7 @@ import org.apache.wink.common.internal.registry.ContextAccessor;
 import org.apache.wink.common.internal.registry.Injectable;
 import org.apache.wink.common.internal.registry.InjectableFactory;
 import org.apache.wink.common.internal.registry.ValueConvertor.ConversionException;
+import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.common.internal.uri.UriEncoder;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.internal.utils.StringUtils;
@@ -348,6 +350,25 @@ public class ServerInjectableFactory extends InjectableFactory {
                                     getAnnotations(), null);
                 formParameters =
                     (MultivaluedMap<String, String>)entityParam.getValue(runtimeContext);
+                if (formParameters.isEmpty()) {
+                    // see E011 at
+                    // http://jcp.org/aboutJava/communityprocess/maintenance/jsr311/311ChangeLog.html
+                    // Perhaps the message body was already consumed by a
+                    // servlet filter. Let's try the servlet request parameters
+                    // instead.
+                    Map map =
+                        RuntimeContextTLS.getRuntimeContext()
+                            .getAttribute(HttpServletRequest.class).getParameterMap();
+                    // We can't easily use MultivaluedMap.putAll because we have
+                    // a map whose values are String[]
+                    // Let's iterate and call the appropriate MultivaluedMap.put
+                    // method.
+                    for (Iterator it = map.keySet().iterator(); it.hasNext();) {
+                        String key = (String)it.next();
+                        String[] value = (String[])map.get(key);
+                        formParameters.put(key, Arrays.asList(value));
+                    }
+                }
                 runtimeContext.getAttributes().put(FORM_PARAMATERS, formParameters);
             }
 
@@ -369,7 +390,8 @@ public class ServerInjectableFactory extends InjectableFactory {
             try {
                 return getConvertor().convert(values);
             } catch (ConversionException e) {
-                // See E010 http://jcp.org/aboutJava/communityprocess/maintenance/jsr311/311ChangeLog.html:
+                // See E010
+                // http://jcp.org/aboutJava/communityprocess/maintenance/jsr311/311ChangeLog.html:
                 // "400 status code should be returned if an exception is
                 // raised during @FormParam-annotated parameter construction"
                 throw new WebApplicationException(e.getCause(), Response.Status.BAD_REQUEST);
