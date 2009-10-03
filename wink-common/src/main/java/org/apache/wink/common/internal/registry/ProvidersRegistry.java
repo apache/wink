@@ -663,7 +663,39 @@ public class ProvidersRegistry {
 
         @Override
         public String toString() {
-            return String.format("RawType: %s, Data: %s", String.valueOf(rawType), data.toString());
+            return toString("  ");
+        }
+
+        protected String toString(String indent) {
+            StringBuffer sb = new StringBuffer();
+
+            sb.append("\nRawType: ");
+            sb.append(String.valueOf(rawType));
+            sb.append("\nData Map: ");
+            if (data.isEmpty()) {
+                sb.append("{empty}");
+            } else {
+                sb.append("\n");
+            }
+
+            // The data Map can be huge. Separate entries
+            // to make it more understandable
+            for (MediaType k : data.keySet()) {
+                sb.append("MediaType key = ");
+                sb.append(k);
+                sb.append("\n");
+                sb.append("ObjectFactory Set value = {\n");
+
+                // Separate each ObjectFactory entry in the Set
+                // into its own line
+                for (ObjectFactory<T> of : data.get(k)) {
+                    sb.append(indent);
+                    sb.append(of);
+                    sb.append("\n");
+                }
+                sb.append("}\n");
+            }
+            return sb.toString();
         }
 
         private class OFHolder<T> implements ObjectFactory<T>, Comparable<OFHolder<T>> {
