@@ -31,7 +31,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Map.Entry;
@@ -66,28 +65,28 @@ import org.slf4j.LoggerFactory;
  */
 public class ProvidersRegistry {
 
-    private static final Logger                              logger             =
-                                                                                    LoggerFactory
-                                                                                        .getLogger(ProvidersRegistry.class);
+    private static final Logger                                 logger             =
+                                                                                       LoggerFactory
+                                                                                           .getLogger(ProvidersRegistry.class);
 
-    private final ProducesMediaTypeMap<ContextResolver<?>>   contextResolvers   =
-                                                                                    new ProducesMediaTypeMap<ContextResolver<?>>(
-                                                                                                                                 ContextResolver.class);
+    private final ProducesMediaTypeMap<ContextResolver<?>>      contextResolvers   =
+                                                                                       new ProducesMediaTypeMap<ContextResolver<?>>(
+                                                                                                                                    ContextResolver.class);
     /*
      * need exception mappers to be volatile for publication purposes
      */
-    private volatile Set<ObjectFactory<ExceptionMapper<?>>>  exceptionMappers   =
-                                                                                    new TreeSet<ObjectFactory<ExceptionMapper<?>>>(
-                                                                                                                                   Collections
-                                                                                                                                       .reverseOrder());
-    private final ConsumesMediaTypeMap<MessageBodyReader<?>> messageBodyReaders =
-                                                                                    new ConsumesMediaTypeMap<MessageBodyReader<?>>(
-                                                                                                                                   MessageBodyReader.class);
-    private final ProducesMediaTypeMap<MessageBodyWriter<?>> messageBodyWriters =
-                                                                                    new ProducesMediaTypeMap<MessageBodyWriter<?>>(
-                                                                                                                                   MessageBodyWriter.class);
-    private final ApplicationValidator                       applicationValidator;
-    private final LifecycleManagersRegistry                  factoryFactoryRegistry;
+    private volatile TreeSet<ObjectFactory<ExceptionMapper<?>>> exceptionMappers   =
+                                                                                       new TreeSet<ObjectFactory<ExceptionMapper<?>>>(
+                                                                                                                                      Collections
+                                                                                                                                          .reverseOrder());
+    private final ConsumesMediaTypeMap<MessageBodyReader<?>>    messageBodyReaders =
+                                                                                       new ConsumesMediaTypeMap<MessageBodyReader<?>>(
+                                                                                                                                      MessageBodyReader.class);
+    private final ProducesMediaTypeMap<MessageBodyWriter<?>>    messageBodyWriters =
+                                                                                       new ProducesMediaTypeMap<MessageBodyWriter<?>>(
+                                                                                                                                      MessageBodyWriter.class);
+    private final ApplicationValidator                          applicationValidator;
+    private final LifecycleManagersRegistry                     factoryFactoryRegistry;
 
     public ProvidersRegistry(LifecycleManagersRegistry factoryRegistry,
                              ApplicationValidator applicationValidator) {
@@ -132,7 +131,7 @@ public class ProvidersRegistry {
         }
         if (ExceptionMapper.class.isAssignableFrom(cls)) {
             logger.debug("Adding type {} to ExceptionMappers list", cls);
-            Set<ObjectFactory<ExceptionMapper<?>>> exceptionMappersCopy =
+            TreeSet<ObjectFactory<ExceptionMapper<?>>> exceptionMappersCopy =
                 new TreeSet<ObjectFactory<ExceptionMapper<?>>>(Collections.reverseOrder());
             exceptionMappersCopy.addAll(exceptionMappers);
             exceptionMappersCopy.add((ObjectFactory<ExceptionMapper<?>>)objectFactory);
@@ -502,10 +501,10 @@ public class ProvidersRegistry {
 
     private abstract class MediaTypeMap<T> {
 
-        private volatile Map<MediaType, Set<ObjectFactory<T>>>                                          data           =
-                                                                                                                           new HashMap<MediaType, Set<ObjectFactory<T>>>();
+        private volatile HashMap<MediaType, HashSet<ObjectFactory<T>>>                                  data           =
+                                                                                                                           new HashMap<MediaType, HashSet<ObjectFactory<T>>>();
         @SuppressWarnings("unchecked")
-        private volatile Entry<MediaType, Set<ObjectFactory<T>>>[]                                      entrySet       =
+        private volatile Entry<MediaType, HashSet<ObjectFactory<T>>>[]                                  entrySet       =
                                                                                                                            data
                                                                                                                                .entrySet()
                                                                                                                                .toArray(new Entry[0]);
@@ -549,9 +548,7 @@ public class ProvidersRegistry {
                            cls);
                 mediaTypeToProvidersCache =
                     new SoftConcurrentMap<MediaType, List<ObjectFactory<T>>>();
-                providersCache.put(cls,
-
-                mediaTypeToProvidersCache);
+                providersCache.put(cls, mediaTypeToProvidersCache);
             }
 
             List<ObjectFactory<T>> list = mediaTypeToProvidersCache.get(mediaType);
@@ -571,7 +568,7 @@ public class ProvidersRegistry {
                                                                        Class<?> cls) {
             Set<ObjectFactory<T>> compatible =
                 new TreeSet<ObjectFactory<T>>(Collections.reverseOrder());
-            for (Entry<MediaType, Set<ObjectFactory<T>>> entry : entrySet) {
+            for (Entry<MediaType, HashSet<ObjectFactory<T>>> entry : entrySet) {
                 if (entry.getKey().isCompatible(mediaType)) {
                     // media type is compatible, check generic type of the
                     // subset
@@ -599,7 +596,7 @@ public class ProvidersRegistry {
         public Set<MediaType> getProvidersMediaTypes(Class<?> type) {
             Set<MediaType> mediaTypes = new HashSet<MediaType>();
 
-            l1: for (Entry<MediaType, Set<ObjectFactory<T>>> entry : data.entrySet()) {
+            l1: for (Entry<MediaType, HashSet<ObjectFactory<T>>> entry : data.entrySet()) {
                 MediaType mediaType = entry.getKey();
                 Set<ObjectFactory<T>> set = entry.getValue();
                 for (ObjectFactory<T> t : set) {
@@ -616,12 +613,12 @@ public class ProvidersRegistry {
 
         @SuppressWarnings("unchecked")
         synchronized void put(MediaType key, ObjectFactory<T> objectFactory) {
-            Map<MediaType, Set<ObjectFactory<T>>> copyOfMap =
-                new HashMap<MediaType, Set<ObjectFactory<T>>>(data);
+            HashMap<MediaType, HashSet<ObjectFactory<T>>> copyOfMap =
+                new HashMap<MediaType, HashSet<ObjectFactory<T>>>(data);
             if (!key.getParameters().isEmpty()) {
                 key = new MediaType(key.getType(), key.getSubtype());
             }
-            Set<ObjectFactory<T>> set = data.get(key);
+            HashSet<ObjectFactory<T>> set = data.get(key);
             if (set == null) {
                 set = new HashSet<ObjectFactory<T>>();
             } else {
@@ -633,16 +630,16 @@ public class ProvidersRegistry {
             } else {
 
                 // need to resort the entry set
-                Entry<MediaType, Set<ObjectFactory<T>>>[] newEntrySet =
+                Entry<MediaType, HashSet<ObjectFactory<T>>>[] newEntrySet =
                     copyOfMap.entrySet().toArray(new Entry[0]);
                 // It's important to sort the media types here to ensure that
                 // provider of the more dominant media type will precede, when
                 // adding to the compatible set.
                 Arrays.sort(newEntrySet, Collections
-                    .reverseOrder(new Comparator<Entry<MediaType, Set<ObjectFactory<T>>>>() {
+                    .reverseOrder(new Comparator<Entry<MediaType, HashSet<ObjectFactory<T>>>>() {
 
-                        public int compare(Entry<MediaType, Set<ObjectFactory<T>>> o1,
-                                           Entry<MediaType, Set<ObjectFactory<T>>> o2) {
+                        public int compare(Entry<MediaType, HashSet<ObjectFactory<T>>> o1,
+                                           Entry<MediaType, HashSet<ObjectFactory<T>>> o2) {
                             return MediaTypeUtils.compareTo(o1.getKey(), o2.getKey());
                         }
                     }));
