@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
 
 public class HttpHeadersImpl implements HttpHeaders {
 
-    private final Logger                   logger = LoggerFactory.getLogger(HttpHeadersImpl.class);
+    private final static Logger            logger = LoggerFactory.getLogger(HttpHeadersImpl.class);
 
     private MessageContext                 msgContext;
     private MultivaluedMap<String, String> headers;

@@ -49,9 +49,9 @@ import org.slf4j.LoggerFactory;
 
 public class FindResourceMethodHandler implements RequestHandler {
 
-    private boolean      isContinuedSearchPolicy;
+    private boolean             isContinuedSearchPolicy;
 
-    private final Logger logger = LoggerFactory.getLogger(FindResourceMethodHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(FindResourceMethodHandler.class);
 
     public void handleRequest(MessageContext context, HandlersChain chain) throws Throwable {
 

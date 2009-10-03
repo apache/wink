@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractRestServlet extends HttpServlet {
 
-    private final Logger        logger                      =
+    private static final Logger logger                      =
                                                                 LoggerFactory
                                                                     .getLogger(AbstractRestServlet.class);
 

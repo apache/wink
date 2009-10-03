@@ -48,13 +48,15 @@ import org.slf4j.LoggerFactory;
  */
 public class RestFilter implements Filter {
 
-    private RestServlet  restServlet;
+    private RestServlet         restServlet;
 
-    private final Logger logger = LoggerFactory.getLogger(RestFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(RestFilter.class);
 
     private static class FilteredHttpServletResponse extends HttpServletResponseWrapper {
 
-        private final Logger logger = LoggerFactory.getLogger(FilteredHttpServletResponse.class);
+        private static final Logger logger =
+                                               LoggerFactory
+                                                   .getLogger(FilteredHttpServletResponse.class);
 
         public FilteredHttpServletResponse(HttpServletResponse response) {
             super(response);

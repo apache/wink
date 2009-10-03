@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 
 public class CreateInvocationParametersHandler implements RequestHandler {
 
-    private Logger logger = LoggerFactory.getLogger(CreateInvocationParametersHandler.class);
+    private static Logger logger = LoggerFactory.getLogger(CreateInvocationParametersHandler.class);
 
     public void handleRequest(MessageContext context, HandlersChain chain) throws Throwable {
         SearchResult result = context.getAttribute(SearchResult.class);
