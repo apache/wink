@@ -22,8 +22,6 @@ package org.apache.wink.common.internal.providers.entity.xml;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
@@ -43,7 +41,6 @@ import javax.xml.namespace.QName;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.utils.JAXBUtils;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
-import org.apache.wink.common.internal.utils.SimpleMap;
 import org.apache.wink.common.internal.utils.SoftConcurrentMap;
 import org.apache.wink.common.model.XmlFormattingOptions;
 import org.apache.wink.common.utils.ProviderUtils;
@@ -52,20 +49,20 @@ import org.slf4j.LoggerFactory;
 
 public abstract class AbstractJAXBProvider {
 
-    private static final Logger                           logger                    =
-                                                                                        LoggerFactory
-                                                                                            .getLogger(AbstractJAXBProvider.class);
-    private static final SimpleMap<Class<?>, JAXBContext> jaxbDefaultContexts       =
-                                                                                        new SoftConcurrentMap<Class<?>, JAXBContext>();
+    private static final Logger                                   logger                    =
+                                                                                                LoggerFactory
+                                                                                                    .getLogger(AbstractJAXBProvider.class);
+    private static final SoftConcurrentMap<Class<?>, JAXBContext> jaxbDefaultContexts       =
+                                                                                                new SoftConcurrentMap<Class<?>, JAXBContext>();
 
     @Context
-    private Providers                                     providers;
+    private Providers                                             providers;
 
-    private static final ConcurrentMap<Class<?>, Boolean> jaxbIsXMLRootElementCache =
-                                                                                        new ConcurrentHashMap<Class<?>, Boolean>();
+    private static final SoftConcurrentMap<Class<?>, Boolean>     jaxbIsXMLRootElementCache =
+                                                                                                new SoftConcurrentMap<Class<?>, Boolean>();
 
-    private static final ConcurrentMap<Class<?>, Boolean> jaxbIsXMLTypeCache        =
-                                                                                        new ConcurrentHashMap<Class<?>, Boolean>();
+    private static final SoftConcurrentMap<Class<?>, Boolean>     jaxbIsXMLTypeCache        =
+                                                                                                new SoftConcurrentMap<Class<?>, Boolean>();
 
     protected final Unmarshaller getUnmarshaller(Class<?> type, MediaType mediaType)
         throws JAXBException {
@@ -105,7 +102,7 @@ public abstract class AbstractJAXBProvider {
         if (isJAXBObject == null) {
             boolean isXmlRootElement = type.getAnnotation(XmlRootElement.class) != null;
             isJAXBObject = Boolean.valueOf(isXmlRootElement);
-            jaxbIsXMLRootElementCache.putIfAbsent(type, isJAXBObject);
+            jaxbIsXMLRootElementCache.put(type, isJAXBObject);
         }
 
         return isJAXBObject.booleanValue();
@@ -117,7 +114,7 @@ public abstract class AbstractJAXBProvider {
         if (isJAXBObject == null) {
             boolean isXmlTypeElement = type.getAnnotation(XmlType.class) != null;
             isJAXBObject = Boolean.valueOf(isXmlTypeElement);
-            jaxbIsXMLTypeCache.putIfAbsent(type, isJAXBObject);
+            jaxbIsXMLTypeCache.put(type, isJAXBObject);
         }
 
         return isJAXBObject.booleanValue();
