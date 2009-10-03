@@ -85,7 +85,7 @@ public class RequestProcessor {
             RegistrationUtils.InnerApplication application =
                 new RegistrationUtils.InnerApplication(classes);
             application.setPriority(WinkApplication.SYSTEM_PRIORITY);
-            configuration.addApplication(application);
+            configuration.addApplication(application, true);
         } catch (FileNotFoundException e) {
             throw new WebApplicationException(e);
         }
@@ -100,7 +100,7 @@ public class RequestProcessor {
             RegistrationUtils.InnerApplication application =
                 new RegistrationUtils.InnerApplication(RootResource.class);
             application.setPriority(WinkApplication.SYSTEM_PRIORITY);
-            configuration.addApplication(application);
+            configuration.addApplication(application, true);
         } else if (registerRootResource.equals(PROPERTY_ROOT_RESOURCE_NONE)) {
             // do nothing
         } else {
@@ -113,7 +113,7 @@ public class RequestProcessor {
             RegistrationUtils.InnerApplication application =
                 new RegistrationUtils.InnerApplication(instance);
             application.setPriority(WinkApplication.SYSTEM_PRIORITY);
-            configuration.addApplication(application);
+            configuration.addApplication(application, true);
         }
     }
 

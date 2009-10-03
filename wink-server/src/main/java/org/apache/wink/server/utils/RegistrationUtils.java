@@ -82,7 +82,7 @@ public class RegistrationUtils {
                                            String requestProcessorAttribute) {
         RequestProcessor requestProcessor =
             RequestProcessor.getRequestProcessor(servletContext, requestProcessorAttribute);
-        requestProcessor.getConfiguration().addApplication(application);
+        requestProcessor.getConfiguration().addApplication(application, false);
     }
 
     public static class InnerApplication extends WinkApplication {

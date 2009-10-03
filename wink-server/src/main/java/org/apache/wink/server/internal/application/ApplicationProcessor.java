@@ -51,14 +51,17 @@ public class ApplicationProcessor {
     private final Application       application;
     private final ResourceRegistry  resourceRegistry;
     private final ProvidersRegistry providersRegistry;
+    private final boolean           isSystemApplication;
 
     public ApplicationProcessor(Application application,
                                 ResourceRegistry resourceRegistry,
-                                ProvidersRegistry providersRegistry) {
+                                ProvidersRegistry providersRegistry,
+                                boolean isSystemApplication) {
         super();
         this.application = application;
         this.resourceRegistry = resourceRegistry;
         this.providersRegistry = providersRegistry;
+        this.isSystemApplication = isSystemApplication;
     }
 
     public void process() {
@@ -111,7 +114,7 @@ public class ApplicationProcessor {
                 } else if (ResourceMetadataCollector.isStaticResource(cls)) {
                     resourceRegistry.addResource(obj, priority);
                 } else if (ProviderMetadataCollector.isProvider(cls)) {
-                    providersRegistry.addProvider(obj, priority);
+                    providersRegistry.addProvider(obj, priority, isSystemApplication);
                 } else {
                     logger.warn(Messages
                         .getMessage("classNotADynamicResourceNorResourceNorProvider"), obj);
@@ -135,7 +138,7 @@ public class ApplicationProcessor {
                 if (ResourceMetadataCollector.isStaticResource(cls)) {
                     resourceRegistry.addResource(cls, priority);
                 } else if (ProviderMetadataCollector.isProvider(cls)) {
-                    providersRegistry.addProvider(cls, priority);
+                    providersRegistry.addProvider(cls, priority, isSystemApplication);
                 } else {
                     logger.warn(Messages.getMessage("classNotAResourceNorProvider"), cls);
                 }
@@ -158,7 +161,7 @@ public class ApplicationProcessor {
                 if (ResourceMetadataCollector.isStaticResource(cls)) {
                     resourceRegistry.addResource(obj, priority);
                 } else if (ProviderMetadataCollector.isProvider(cls)) {
-                    providersRegistry.addProvider(obj, priority);
+                    providersRegistry.addProvider(obj, priority, isSystemApplication);
                 } else {
                     logger.warn(Messages.getMessage("classNotAResourceNorProvider"), obj);
                 }

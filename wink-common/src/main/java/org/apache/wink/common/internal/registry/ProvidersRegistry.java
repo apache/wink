@@ -94,27 +94,35 @@ public class ProvidersRegistry {
         this.applicationValidator = applicationValidator;
     }
 
-    @SuppressWarnings("unchecked")
     public boolean addProvider(Class<?> cls, double priority) {
+        return addProvider(cls, priority, false);
+    }
+
+    @SuppressWarnings("unchecked")
+    public boolean addProvider(Class<?> cls, double priority, boolean isSystemProvider) {
         if (cls == null) {
             throw new NullPointerException("cls");
         }
         ObjectFactory<?> objectFactory = factoryFactoryRegistry.getObjectFactory(cls);
-        return addProvider(new PriorityObjectFactory(objectFactory, priority));
+        return addProvider(new PriorityObjectFactory(objectFactory, priority, isSystemProvider));
 
     }
 
-    @SuppressWarnings("unchecked")
     public boolean addProvider(Object provider, double priority) {
+        return addProvider(provider, priority, false);
+    }
+
+    @SuppressWarnings("unchecked")
+    public boolean addProvider(Object provider, double priority, boolean isSystemProvider) {
         if (provider == null) {
             throw new NullPointerException("provider");
         }
         ObjectFactory<?> objectFactory = factoryFactoryRegistry.getObjectFactory(provider);
-        return addProvider(new PriorityObjectFactory(objectFactory, priority));
+        return addProvider(new PriorityObjectFactory(objectFactory, priority, isSystemProvider));
     }
 
     @SuppressWarnings("unchecked")
-    private synchronized boolean addProvider(ObjectFactory<?> objectFactory) {
+    private synchronized boolean addProvider(PriorityObjectFactory<?> objectFactory) {
         Class<? extends Object> cls = objectFactory.getInstanceClass();
 
         logger.debug("Processing provider of type {}", cls);
@@ -126,7 +134,7 @@ public class ProvidersRegistry {
         }
 
         if (ContextResolver.class.isAssignableFrom(cls)) {
-            contextResolvers.putProvider((ObjectFactory<ContextResolver<?>>)objectFactory);
+            contextResolvers.putProvider((PriorityObjectFactory<ContextResolver<?>>)objectFactory);
             retValue = true;
         }
         if (ExceptionMapper.class.isAssignableFrom(cls)) {
@@ -139,11 +147,13 @@ public class ProvidersRegistry {
             retValue = true;
         }
         if (MessageBodyReader.class.isAssignableFrom(cls)) {
-            messageBodyReaders.putProvider((ObjectFactory<MessageBodyReader<?>>)objectFactory);
+            messageBodyReaders
+                .putProvider((PriorityObjectFactory<MessageBodyReader<?>>)objectFactory);
             retValue = true;
         }
         if (MessageBodyWriter.class.isAssignableFrom(cls)) {
-            messageBodyWriters.putProvider((ObjectFactory<MessageBodyWriter<?>>)objectFactory);
+            messageBodyWriters
+                .putProvider((PriorityObjectFactory<MessageBodyWriter<?>>)objectFactory);
             retValue = true;
         }
         if (retValue == false) {
@@ -184,7 +194,7 @@ public class ProvidersRegistry {
             return null;
         }
 
-        final List<ObjectFactory<ContextResolver<?>>> factories =
+        final List<MediaTypeMap<ContextResolver<?>>.OFHolder<ContextResolver<?>>> factories =
             contextResolvers.getProvidersByMediaType(mediaType, contextType);
 
         if (factories.isEmpty()) {
@@ -349,7 +359,7 @@ public class ProvidersRegistry {
                 .debug("Getting MessageBodyReader for class type {}, genericType {}, annotations {}, and media type {}",
                        new Object[] {type, genericType, anns, mediaType});
         }
-        List<ObjectFactory<MessageBodyReader<?>>> factories =
+        List<MediaTypeMap<MessageBodyReader<?>>.OFHolder<MessageBodyReader<?>>> factories =
             messageBodyReaders.getProvidersByMediaType(mediaType, type);
 
         logger.debug("Found possible MessageBodyReader ObjectFactories {}", factories);
@@ -391,7 +401,7 @@ public class ProvidersRegistry {
                 .debug("Getting MessageBodyWriter for class type {}, genericType {}, annotations {}, and media type {}",
                        new Object[] {type, genericType, anns, mediaType});
         }
-        List<ObjectFactory<MessageBodyWriter<?>>> writersFactories =
+        List<MediaTypeMap<MessageBodyWriter<?>>.OFHolder<MessageBodyWriter<?>>> writersFactories =
             messageBodyWriters.getProvidersByMediaType(mediaType, type);
         logger.debug("Found possible MessageBodyWriter ObjectFactories {}", writersFactories);
         for (ObjectFactory<MessageBodyWriter<?>> factory : writersFactories) {
@@ -419,7 +429,7 @@ public class ProvidersRegistry {
         Set<MediaType> mediaTypes = new HashSet<MediaType>();
         logger.debug("Searching MessageBodyReaders media types limited by class type {}", type);
 
-        List<ObjectFactory<MessageBodyReader<?>>> readerFactories =
+        List<MediaTypeMap<MessageBodyReader<?>>.OFHolder<MessageBodyReader<?>>> readerFactories =
             messageBodyReaders.getProvidersByMediaType(MediaType.WILDCARD_TYPE, type);
         logger.debug("Found all MessageBodyReader ObjectFactories limited by class type {}",
                      readerFactories);
@@ -467,7 +477,7 @@ public class ProvidersRegistry {
             super(rawType);
         }
 
-        public void putProvider(ObjectFactory<T> objectFactory) {
+        public void putProvider(PriorityObjectFactory<T> objectFactory) {
             Produces produces = objectFactory.getInstanceClass().getAnnotation(Produces.class);
             if (produces == null) {
                 put(MediaType.WILDCARD_TYPE, objectFactory);
@@ -486,7 +496,7 @@ public class ProvidersRegistry {
             super(rawType);
         }
 
-        public void putProvider(ObjectFactory<T> objectFactory) {
+        public void putProvider(PriorityObjectFactory<T> objectFactory) {
             Consumes consumes = objectFactory.getInstanceClass().getAnnotation(Consumes.class);
             if (consumes == null) {
                 put(MediaType.WILDCARD_TYPE, objectFactory);
@@ -501,17 +511,17 @@ public class ProvidersRegistry {
 
     private abstract class MediaTypeMap<T> {
 
-        private volatile HashMap<MediaType, HashSet<ObjectFactory<T>>>                                  data           =
-                                                                                                                           new HashMap<MediaType, HashSet<ObjectFactory<T>>>();
+        private volatile HashMap<MediaType, HashSet<PriorityObjectFactory<T>>>                     data           =
+                                                                                                                      new HashMap<MediaType, HashSet<PriorityObjectFactory<T>>>();
         @SuppressWarnings("unchecked")
-        private volatile Entry<MediaType, HashSet<ObjectFactory<T>>>[]                                  entrySet       =
-                                                                                                                           data
-                                                                                                                               .entrySet()
-                                                                                                                               .toArray(new Entry[0]);
-        private final Class<?>                                                                          rawType;
+        private volatile Entry<MediaType, HashSet<PriorityObjectFactory<T>>>[]                     entrySet       =
+                                                                                                                      data
+                                                                                                                          .entrySet()
+                                                                                                                          .toArray(new Entry[0]);
+        private final Class<?>                                                                     rawType;
 
-        private final SoftConcurrentMap<Class<?>, SoftConcurrentMap<MediaType, List<ObjectFactory<T>>>> providersCache =
-                                                                                                                           new SoftConcurrentMap<Class<?>, SoftConcurrentMap<MediaType, List<ObjectFactory<T>>>>(); ;
+        private final SoftConcurrentMap<Class<?>, SoftConcurrentMap<MediaType, List<OFHolder<T>>>> providersCache =
+                                                                                                                      new SoftConcurrentMap<Class<?>, SoftConcurrentMap<MediaType, List<OFHolder<T>>>>(); ;
 
         public MediaTypeMap(Class<?> rawType) {
             super();
@@ -529,7 +539,7 @@ public class ProvidersRegistry {
          * @param cls
          * @return
          */
-        public List<ObjectFactory<T>> getProvidersByMediaType(MediaType mediaType, Class<?> cls) {
+        public List<OFHolder<T>> getProvidersByMediaType(MediaType mediaType, Class<?> cls) {
             String subtype = mediaType.getSubtype();
             String type = mediaType.getType();
             if (!mediaType.getParameters().isEmpty()) {
@@ -540,18 +550,17 @@ public class ProvidersRegistry {
                 .debug("Getting providers by media type by calling getProvidersByMediaType({}, {})",
                        mediaType,
                        cls);
-            SoftConcurrentMap<MediaType, List<ObjectFactory<T>>> mediaTypeToProvidersCache =
+            SoftConcurrentMap<MediaType, List<OFHolder<T>>> mediaTypeToProvidersCache =
                 providersCache.get(cls);
             if (mediaTypeToProvidersCache == null) {
                 logger
                     .debug("MediaType to providers cache for class {} does not exist so creating",
                            cls);
-                mediaTypeToProvidersCache =
-                    new SoftConcurrentMap<MediaType, List<ObjectFactory<T>>>();
+                mediaTypeToProvidersCache = new SoftConcurrentMap<MediaType, List<OFHolder<T>>>();
                 providersCache.put(cls, mediaTypeToProvidersCache);
             }
 
-            List<ObjectFactory<T>> list = mediaTypeToProvidersCache.get(mediaType);
+            List<OFHolder<T>> list = mediaTypeToProvidersCache.get(mediaType);
 
             logger.debug("Get media type to providers cache for media type {} resulted in {}",
                          mediaType,
@@ -564,15 +573,13 @@ public class ProvidersRegistry {
             return list;
         }
 
-        private List<ObjectFactory<T>> internalGetProvidersByMediaType(MediaType mediaType,
-                                                                       Class<?> cls) {
-            Set<ObjectFactory<T>> compatible =
-                new TreeSet<ObjectFactory<T>>(Collections.reverseOrder());
-            for (Entry<MediaType, HashSet<ObjectFactory<T>>> entry : entrySet) {
+        private List<OFHolder<T>> internalGetProvidersByMediaType(MediaType mediaType, Class<?> cls) {
+            Set<OFHolder<T>> compatible = new TreeSet<OFHolder<T>>(Collections.reverseOrder());
+            for (Entry<MediaType, HashSet<PriorityObjectFactory<T>>> entry : entrySet) {
                 if (entry.getKey().isCompatible(mediaType)) {
                     // media type is compatible, check generic type of the
                     // subset
-                    for (ObjectFactory<T> of : entry.getValue()) {
+                    for (PriorityObjectFactory<T> of : entry.getValue()) {
                         if (GenericsUtils.isGenericInterfaceAssignableFrom(cls, of
                             .getInstanceClass(), rawType)) {
                             // Both media type and generic types are compatible.
@@ -583,23 +590,24 @@ public class ProvidersRegistry {
 
                             // This is done via the equals() of the OFHolder
                             // which doesn't compare the MediaType
-                            compatible.add(new OFHolder<T>(entry.getKey(), of));
+                            compatible
+                                .add(new OFHolder<T>(entry.getKey(), of, of.isSystemProvider));
                         }
                     }
                 }
             }
             @SuppressWarnings("unchecked")
-            ObjectFactory<T>[] tmp = compatible.toArray(new ObjectFactory[compatible.size()]);
+            OFHolder<T>[] tmp = compatible.toArray(new OFHolder[compatible.size()]);
             return Arrays.asList(tmp);
         }
 
         public Set<MediaType> getProvidersMediaTypes(Class<?> type) {
             Set<MediaType> mediaTypes = new HashSet<MediaType>();
 
-            l1: for (Entry<MediaType, HashSet<ObjectFactory<T>>> entry : data.entrySet()) {
+            l1: for (Entry<MediaType, HashSet<PriorityObjectFactory<T>>> entry : data.entrySet()) {
                 MediaType mediaType = entry.getKey();
-                Set<ObjectFactory<T>> set = entry.getValue();
-                for (ObjectFactory<T> t : set) {
+                Set<PriorityObjectFactory<T>> set = entry.getValue();
+                for (PriorityObjectFactory<T> t : set) {
                     if (GenericsUtils.isGenericInterfaceAssignableFrom(type,
                                                                        t.getInstanceClass(),
                                                                        rawType)) {
@@ -612,17 +620,17 @@ public class ProvidersRegistry {
         }
 
         @SuppressWarnings("unchecked")
-        synchronized void put(MediaType key, ObjectFactory<T> objectFactory) {
-            HashMap<MediaType, HashSet<ObjectFactory<T>>> copyOfMap =
-                new HashMap<MediaType, HashSet<ObjectFactory<T>>>(data);
+        synchronized void put(MediaType key, PriorityObjectFactory<T> objectFactory) {
+            HashMap<MediaType, HashSet<PriorityObjectFactory<T>>> copyOfMap =
+                new HashMap<MediaType, HashSet<PriorityObjectFactory<T>>>(data);
             if (!key.getParameters().isEmpty()) {
                 key = new MediaType(key.getType(), key.getSubtype());
             }
-            HashSet<ObjectFactory<T>> set = data.get(key);
+            HashSet<PriorityObjectFactory<T>> set = data.get(key);
             if (set == null) {
-                set = new HashSet<ObjectFactory<T>>();
+                set = new HashSet<PriorityObjectFactory<T>>();
             } else {
-                set = new HashSet<ObjectFactory<T>>(set);
+                set = new HashSet<PriorityObjectFactory<T>>(set);
             }
             copyOfMap.put(key, set);
             if (!set.add(objectFactory)) {
@@ -630,19 +638,21 @@ public class ProvidersRegistry {
             } else {
 
                 // need to resort the entry set
-                Entry<MediaType, HashSet<ObjectFactory<T>>>[] newEntrySet =
+                Entry<MediaType, HashSet<PriorityObjectFactory<T>>>[] newEntrySet =
                     copyOfMap.entrySet().toArray(new Entry[0]);
                 // It's important to sort the media types here to ensure that
                 // provider of the more dominant media type will precede, when
                 // adding to the compatible set.
-                Arrays.sort(newEntrySet, Collections
-                    .reverseOrder(new Comparator<Entry<MediaType, HashSet<ObjectFactory<T>>>>() {
+                Arrays
+                    .sort(newEntrySet,
+                          Collections
+                              .reverseOrder(new Comparator<Entry<MediaType, HashSet<PriorityObjectFactory<T>>>>() {
 
-                        public int compare(Entry<MediaType, HashSet<ObjectFactory<T>>> o1,
-                                           Entry<MediaType, HashSet<ObjectFactory<T>>> o2) {
-                            return MediaTypeUtils.compareTo(o1.getKey(), o2.getKey());
-                        }
-                    }));
+                                  public int compare(Entry<MediaType, HashSet<PriorityObjectFactory<T>>> o1,
+                                                     Entry<MediaType, HashSet<PriorityObjectFactory<T>>> o2) {
+                                      return MediaTypeUtils.compareTo(o1.getKey(), o2.getKey());
+                                  }
+                              }));
 
                 if (logger.isDebugEnabled()) {
                     logger.debug("Added ObjectFactory {} with MediaType {} to MediaTypeMap {}",
@@ -695,16 +705,20 @@ public class ProvidersRegistry {
             return sb.toString();
         }
 
-        private class OFHolder<T> implements ObjectFactory<T>, Comparable<OFHolder<T>> {
+        class OFHolder<T> implements ObjectFactory<T>, Comparable<OFHolder<T>> {
 
             private final PriorityObjectFactory<T> of;
             private final MediaType                mediaType;
             private final Class<?>                 genericType;
+            private final boolean                  isSystemProvider;
 
-            public OFHolder(MediaType mediaType, ObjectFactory<T> of) {
+            public OFHolder(MediaType mediaType,
+                            PriorityObjectFactory<T> of,
+                            boolean isSystemProvider) {
                 super();
-                this.of = (PriorityObjectFactory<T>)of;
+                this.of = of;
                 this.mediaType = mediaType;
+                this.isSystemProvider = isSystemProvider;
                 genericType =
                     GenericsUtils.getClassType(GenericsUtils.getGenericInterfaceParamType(of
                         .getInstanceClass(), rawType));
@@ -757,23 +771,21 @@ public class ProvidersRegistry {
                 return of.getInstanceClass();
             }
 
-            private static final double MAX_SYSTEM_PRIORITY = WinkApplication.SYSTEM_PRIORITY + 0.1;
-
             public int compareTo(OFHolder<T> o) {
                 // check if this is a system provider
                 // system providers are less than
                 // WinkApplication.SYSTEM_PRIORITY + 0.1 (they start at
                 // WinkApplication.SYSTEM_PRIORITY and
                 // unless there are 10000000000, this shouldn't matter)
-                if (of.priority < MAX_SYSTEM_PRIORITY) {
+                if (isSystemProvider) {
                     // this is a system provider
-                    if (o.of.priority > MAX_SYSTEM_PRIORITY) {
+                    if (!o.isSystemProvider) {
                         // the other is a user provider so this is > 0.2
                         return -1;
                     }
-                } else if (o.of.priority < MAX_SYSTEM_PRIORITY) {
+                } else if (o.isSystemProvider) {
                     // the other is a system provider
-                    if (of.priority > MAX_SYSTEM_PRIORITY) {
+                    if (!isSystemProvider) {
                         // this is a user provider
                         return 1;
                     }
@@ -803,13 +815,15 @@ public class ProvidersRegistry {
 
         private final ObjectFactory<T> of;
         private final double           priority;
+        final boolean                  isSystemProvider;
         private static double          counter = 0.00000000001;
         private static final double    inc     = 0.00000000001;
 
-        public PriorityObjectFactory(ObjectFactory<T> of, double priority) {
+        public PriorityObjectFactory(ObjectFactory<T> of, double priority, boolean isSystemProvider) {
             super();
             this.of = of;
             this.priority = priority + (counter += inc);
+            this.isSystemProvider = isSystemProvider;
         }
 
         public T getInstance(RuntimeContext context) {

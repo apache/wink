@@ -52,7 +52,7 @@ public class Registrar extends WinkApplication {
     }
 
     public void register(ResourceRegistry resourceRegistry, ProvidersRegistry providersRegistry) {
-        new ApplicationProcessor(this, resourceRegistry, providersRegistry).process();
+        new ApplicationProcessor(this, resourceRegistry, providersRegistry, false).process();
     }
 
     public void setInstances(Set<Object> instances) {

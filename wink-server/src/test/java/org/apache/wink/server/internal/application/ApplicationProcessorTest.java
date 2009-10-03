@@ -100,7 +100,21 @@ public class ApplicationProcessorTest extends TestCase {
             return classes.add(cls);
         }
 
+        public boolean addProvider(Class<?> cls, double priority, boolean isSystemProvider) {
+            if (BadProvider.class == cls) {
+                throw new BadProvider("BadProvider cannot be added");
+            }
+            return classes.add(cls);
+        }
+
         public boolean addProvider(Object provider, double priority) {
+            if (provider instanceof BadProvider) {
+                throw new BadProvider("BadProvider cannot be added");
+            }
+            return instances.add(provider);
+        }
+
+        public boolean addProvider(Object provider, double priority, boolean isSystemProvider) {
             if (provider instanceof BadProvider) {
                 throw new BadProvider("BadProvider cannot be added");
             }
@@ -207,7 +221,7 @@ public class ApplicationProcessorTest extends TestCase {
     public void testApplication() {
         ResourceRegistryMock resourceRegistry = new ResourceRegistryMock();
         ProvidersRegistryMock providersRegistry = new ProvidersRegistryMock();
-        new ApplicationProcessor(new ApplicationMock(), resourceRegistry, providersRegistry)
+        new ApplicationProcessor(new ApplicationMock(), resourceRegistry, providersRegistry, false)
             .process();
         assertTrue(providersRegistry.classes.contains(FileProvider.class));
         assertTrue(resourceRegistry.classes.contains(RootResource.class));
@@ -222,8 +236,8 @@ public class ApplicationProcessorTest extends TestCase {
     public void testWinkApplication() {
         ResourceRegistryMock resourceRegistry = new ResourceRegistryMock();
         ProvidersRegistryMock providersRegistry = new ProvidersRegistryMock();
-        new ApplicationProcessor(new WinkApplicationMock(), resourceRegistry, providersRegistry)
-            .process();
+        new ApplicationProcessor(new WinkApplicationMock(), resourceRegistry, providersRegistry,
+                                 false).process();
         assertTrue(providersRegistry.classes.contains(FileProvider.class));
         assertTrue(resourceRegistry.classes.contains(RootResource.class));
         assertEquals(1, providersRegistry.classes.size());

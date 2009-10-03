@@ -110,7 +110,7 @@ public class RestServlet extends AbstractRestServlet {
         DeploymentConfiguration deploymentConfiguration = getDeploymentConfiguration();
         RequestProcessor requestProcessor = new RequestProcessor(deploymentConfiguration);
         logger.debug("Creating request processor {} for servlet {}", requestProcessor, this);
-        deploymentConfiguration.addApplication(getApplication());
+        deploymentConfiguration.addApplication(getApplication(), false);
         return requestProcessor;
     }
 

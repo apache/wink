@@ -257,8 +257,9 @@ public class DeploymentConfiguration {
         return errorUserHandlers;
     }
 
-    public void addApplication(Application application) {
-        new ApplicationProcessor(application, resourceRegistry, providersRegistry).process();
+    public void addApplication(Application application, boolean isSystemApplication) {
+        new ApplicationProcessor(application, resourceRegistry, providersRegistry,
+                                 isSystemApplication).process();
     }
 
     // init methods

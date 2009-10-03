@@ -38,7 +38,7 @@ import org.apache.wink.test.integration.ServerEnvironmentInfo;
  */
 public class CookieFieldsTest extends TestCase {
 
-    protected HttpClient  httpclient = new HttpClient();
+    protected HttpClient  httpclient;
 
     private static String BASE_URI   =
                                          ServerEnvironmentInfo.getBaseURI() + "/newcookies/cookiestests";
@@ -49,6 +49,11 @@ public class CookieFieldsTest extends TestCase {
         }
     }
 
+    @Override
+    public void setUp() {
+        httpclient = new HttpClient();
+    }
+
     /**
      * Test that the HttpHeaders.getCookies() method returns correct cookies and
      * information
@@ -56,7 +61,6 @@ public class CookieFieldsTest extends TestCase {
      * @throws Exception
      */
     public void testHttpHeadersGetCookie() throws Exception {
-        httpclient = new HttpClient();
         setCookies();
         // call get to exercise HttpHeaders.getCookies()
         GetMethod getHttpMethod = new GetMethod();
@@ -123,7 +127,6 @@ public class CookieFieldsTest extends TestCase {
      * @throws Exception
      */
     public void testCookieParamPrivateVar() throws Exception {
-        httpclient = new HttpClient();
         setCookies();
         GetMethod getHttpMethod = new GetMethod();
         getHttpMethod.getParams().setCookiePolicy(CookiePolicy.RFC_2965);
