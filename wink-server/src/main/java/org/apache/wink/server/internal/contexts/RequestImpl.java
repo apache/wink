@@ -38,9 +38,11 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.ext.RuntimeDelegate;
 import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 
+import org.apache.wink.common.internal.http.AcceptCharset;
 import org.apache.wink.common.internal.http.AcceptEncoding;
 import org.apache.wink.common.internal.http.AcceptLanguage;
 import org.apache.wink.common.internal.http.EntityTagMatchHeader;
+import org.apache.wink.common.utils.ProviderUtils;
 import org.apache.wink.server.handlers.MessageContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -282,6 +284,20 @@ public class RequestImpl implements Request {
             encodings = AcceptEncoding.valueOf(acceptEncodings);
         }
 
+        List<String> acceptableCharsets =
+            msgContext.getHttpHeaders().getRequestHeader(HttpHeaders.ACCEPT_CHARSET);
+        AcceptCharset charsets = null;
+        if (acceptableCharsets != null) {
+            StringBuilder acceptCharsetsTemp = new StringBuilder();
+            acceptCharsetsTemp.append(acceptableCharsets.get(0));
+            for (int c = 1; c < acceptableCharsets.size(); ++c) {
+                acceptCharsetsTemp.append(",");
+                acceptCharsetsTemp.append(acceptableCharsets.get(c));
+            }
+            String acceptCharsets = acceptCharsetsTemp.toString();
+            charsets = AcceptCharset.valueOf(acceptCharsets);
+        }
+
         VariantQChecked bestVariant = null;
         boolean isIdentityEncodingChecked = false;
 
@@ -325,7 +341,6 @@ public class RequestImpl implements Request {
                         logger.debug("Accept Media Type: {} is compatible with q-factor {}",
                                      mt,
                                      acceptQFactor);
-                        break;
                     }
                 }
                 if (!isCompatible || !isAcceptable) {
@@ -377,6 +392,52 @@ public class RequestImpl implements Request {
                         .debug("Best variant's language {} q-factor {} is greater than current variant {} q-factor {}",
                                new Object[] {bestVariant.variant,
                                    bestVariant.acceptLanguageQFactor, v, acceptLanguageQFactor});
+                    continue;
+                }
+            }
+
+            double acceptCharsetQFactor = -1.0d;
+            String vCharset = ProviderUtils.getCharsetOrNull(v.getMediaType());
+            boolean hasCharSet = true;
+
+            if (vCharset == null) {
+                hasCharSet = false;
+            } else if (vCharset != null && charsets != null) {
+                boolean isCompatible = false;
+                logger.debug("Checking variant charset: {}", vCharset);
+                if (charsets.getBannedCharsets().contains(vCharset)) {
+                    logger.debug("Variant charset {} was in unacceptable charsets", vCharset);
+                    continue;
+                }
+                for (AcceptCharset.ValuedCharset charset : charsets.getValuedCharsets()) {
+                    logger
+                        .debug("Checking against Accept-Charset charset {} with quality factor {}",
+                               charset.charset,
+                               charset.qValue);
+                    if (charset.isWildcard() || vCharset.equalsIgnoreCase(charset.charset)) {
+                        logger.debug("Charset is compatible with {}", charset.charset);
+                        isCompatible = true;
+                        acceptCharsetQFactor = charset.qValue;
+                        break;
+                    }
+                }
+
+                if (!isCompatible) {
+                    logger.debug("Variant charset is not compatible {}", vCharset);
+                    /*
+                     * do not remove this from the acceptable list even if not
+                     * compatible but set to -1.0d for now. according to HTTP
+                     * spec, it is "ok" to send
+                     */
+                }
+            }
+
+            if (bestVariant != null) {
+                if (acceptCharsetQFactor < bestVariant.acceptCharsetQFactor && hasCharSet) {
+                    logger
+                        .debug("Best variant's charset {} q-factor {} is greater than current variant {} q-factor {}",
+                               new Object[] {bestVariant.variant, bestVariant.acceptCharsetQFactor,
+                                   v, acceptCharsetQFactor});
                     continue;
                 }
             }
@@ -441,8 +502,13 @@ public class RequestImpl implements Request {
                 }
             }
 
-            bestVariant =
-                new VariantQChecked(v, acceptQFactor, acceptLanguageQFactor, acceptEncodingQFactor);
+            if (bestVariant == null || (acceptQFactor > bestVariant.acceptMediaTypeQFactor || acceptLanguageQFactor > bestVariant.acceptLanguageQFactor
+                || acceptEncodingQFactor > bestVariant.acceptEncodingQFactor
+                || (hasCharSet && acceptCharsetQFactor > bestVariant.acceptCharsetQFactor) || (hasCharSet && !bestVariant.hasCharset))) {
+                bestVariant =
+                    new VariantQChecked(v, acceptQFactor, acceptLanguageQFactor,
+                                        acceptEncodingQFactor, acceptCharsetQFactor, hasCharSet);
+            }
         }
 
         if (bestVariant == null) {
@@ -469,6 +535,13 @@ public class RequestImpl implements Request {
             varyHeaderValue.append(HttpHeaders.ACCEPT_ENCODING);
             isValueWritten = true;
         }
+        if (bestVariant.acceptCharsetQFactor > 0) {
+            if (isValueWritten) {
+                varyHeaderValue.append(", ");
+            }
+            varyHeaderValue.append(HttpHeaders.ACCEPT_CHARSET);
+            isValueWritten = true;
+        }
         String varyHeaderValueStr = varyHeaderValue.toString().trim();
         logger.debug("Vary Header value should be set to {}", varyHeaderValueStr);
         msgContext.setAttribute(RequestImpl.VaryHeader.class, new VaryHeader(varyHeaderValueStr));
@@ -480,15 +553,21 @@ public class RequestImpl implements Request {
         final double  acceptMediaTypeQFactor;
         final double  acceptLanguageQFactor;
         final double  acceptEncodingQFactor;
+        final double  acceptCharsetQFactor;
+        final boolean hasCharset;
 
         public VariantQChecked(Variant v,
                                double acceptMediaType,
                                double acceptLanguage,
-                               double acceptEncoding) {
+                               double acceptEncoding,
+                               double acceptCharset,
+                               boolean hasCharset) {
             this.variant = v;
             this.acceptMediaTypeQFactor = acceptMediaType;
             this.acceptLanguageQFactor = acceptLanguage;
             this.acceptEncodingQFactor = acceptEncoding;
+            this.acceptCharsetQFactor = acceptCharset;
+            this.hasCharset = hasCharset;
         }
     }
 

@@ -41,7 +41,6 @@ import javax.ws.rs.ext.Providers;
 import org.apache.wink.common.internal.contexts.ProvidersImpl;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.common.internal.runtime.AbstractRuntimeContext;
-import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.server.handlers.MessageContext;
 import org.apache.wink.server.internal.DeploymentConfiguration;
 import org.apache.wink.server.internal.MediaTypeMapper;

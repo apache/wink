@@ -99,12 +99,48 @@ public class RequestsTest extends MockServletInvocationTest {
         }
 
         @GET
+        @Path("charset")
+        public Response getOnlyCharset(@Context Request request) {
+            List<Variant> responseVariants =
+                Variant.mediaTypes(MediaType.valueOf(MediaType.TEXT_PLAIN + ";charset=iso-8859-1"),
+                                   MediaType.valueOf(MediaType.TEXT_PLAIN + ";charset=UTF-8"),
+                                   MediaType.valueOf(MediaType.TEXT_PLAIN + ";charset=shift_jis"))
+                    .add().build();
+            Variant bestResponseVariant = request.selectVariant(responseVariants);
+            if (bestResponseVariant != null) {
+                return Response.ok("Hello world!").variant(bestResponseVariant).build();
+            }
+            return Response.notAcceptable(responseVariants).build();
+        }
+
+        @GET
         @Path("multipleheaders")
         public Response getMultipleAcceptHeaders(@Context Request request) {
             List<Variant> responseVariants =
                 Collections.unmodifiableList(Variant.mediaTypes(MediaType.APPLICATION_XML_TYPE,
                                                                 MediaType.APPLICATION_JSON_TYPE,
                                                                 MediaType.TEXT_PLAIN_TYPE)
+                    .encodings("gzip", "identity", "deflate").languages(Locale.ENGLISH,
+                                                                        Locale.FRENCH,
+                                                                        Locale.US).add().build());
+            Variant bestResponseVariant = request.selectVariant(responseVariants);
+            if (bestResponseVariant != null) {
+                return Response.ok("Hello world!").variant(bestResponseVariant).build();
+            }
+            return Response.notAcceptable(responseVariants).build();
+        }
+
+        @GET
+        @Path("moremultipleheaders")
+        public Response getMoreMultipleAcceptHeaders(@Context Request request) {
+            List<Variant> responseVariants =
+                Collections.unmodifiableList(Variant
+                    .mediaTypes(MediaType.valueOf(MediaType.APPLICATION_JSON + ";charset=utf-8"),
+                                MediaType.valueOf(MediaType.TEXT_PLAIN + ";charset=shift_jis"),
+                                MediaType.valueOf(MediaType.APPLICATION_XML),
+                                MediaType
+                                    .valueOf(MediaType.APPLICATION_JSON + ";charset=iso-8859-1"),
+                                MediaType.valueOf(MediaType.TEXT_PLAIN + ";charset=iso-8859-1"))
                     .encodings("gzip", "identity", "deflate").languages(Locale.ENGLISH,
                                                                         Locale.FRENCH,
                                                                         Locale.US).add().build());
@@ -361,6 +397,78 @@ public class RequestsTest extends MockServletInvocationTest {
         assertEquals(HttpHeaders.ACCEPT_ENCODING, response.getHeader(HttpHeaders.VARY));
     }
 
+    public void testCharset() throws Exception {
+        // test that a null Accept-Charset means iso-8859-1 is automatically
+        // chosen
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/root/charset",
+                                                        MediaType.TEXT_PLAIN);
+        MockHttpServletResponse response = invoke(request);
+        assertEquals(200, response.getStatus());
+        assertEquals(MediaType.TEXT_PLAIN + ";charset=iso-8859-1", response.getContentType());
+        assertEquals(HttpHeaders.ACCEPT, response.getHeader(HttpHeaders.VARY));
+
+        /*
+         * due to not mentioning of iso-8859-1 and no wildcard, iso-8859-1 is
+         * given a q-factor of 1.0 and since it is the first in the list of
+         * variants, should get chosen
+         */
+        request =
+            MockRequestConstructor.constructMockRequest("GET", "/root/charset", MediaType.WILDCARD);
+        request.addHeader(HttpHeaders.ACCEPT_CHARSET, "shift_jis");
+        response = invoke(request);
+        assertEquals(200, response.getStatus());
+        assertEquals(MediaType.TEXT_PLAIN + ";charset=iso-8859-1", response.getContentType());
+        assertEquals("Accept, Accept-Charset", response.getHeader(HttpHeaders.VARY));
+
+        request =
+            MockRequestConstructor.constructMockRequest("GET", "/root/charset", MediaType.WILDCARD);
+        request.addHeader(HttpHeaders.ACCEPT_CHARSET, "shift_jis, *;q=0.5");
+        response = invoke(request);
+        assertEquals(200, response.getStatus());
+        assertEquals(MediaType.TEXT_PLAIN + ";charset=shift_jis", response.getContentType());
+        assertEquals("Accept, Accept-Charset", response.getHeader(HttpHeaders.VARY));
+
+        request =
+            MockRequestConstructor.constructMockRequest("GET", "/root/charset", MediaType.WILDCARD);
+        request.addHeader(HttpHeaders.ACCEPT_CHARSET, "SHIFT_jis, *;q=0.5");
+        response = invoke(request);
+        assertEquals(200, response.getStatus());
+        assertEquals(MediaType.TEXT_PLAIN + ";charset=shift_jis", response.getContentType());
+        assertEquals("Accept, Accept-Charset", response.getHeader(HttpHeaders.VARY));
+
+        request =
+            MockRequestConstructor.constructMockRequest("GET", "/root/charset", MediaType.WILDCARD);
+        request.addHeader(HttpHeaders.ACCEPT_CHARSET, "shift_jis, iso-8859-1;q=0.5");
+        response = invoke(request);
+        assertEquals(200, response.getStatus());
+        assertEquals(MediaType.TEXT_PLAIN + ";charset=shift_jis", response.getContentType());
+        assertEquals("Accept, Accept-Charset", response.getHeader(HttpHeaders.VARY));
+
+        request =
+            MockRequestConstructor.constructMockRequest("GET", "/root/charset", MediaType.WILDCARD);
+        request.addHeader(HttpHeaders.ACCEPT_CHARSET, "iso-8859-1");
+        response = invoke(request);
+        assertEquals(200, response.getStatus());
+        assertEquals(MediaType.TEXT_PLAIN + ";charset=iso-8859-1", response.getContentType());
+        assertEquals("Accept, Accept-Charset", response.getHeader(HttpHeaders.VARY));
+
+        /*
+         * due to not mentioning of iso-8859-1 and no wildcard, iso-8859-1 is
+         * given a q-factor of 1.0
+         */
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/root/charset",
+                                                        MediaType.TEXT_PLAIN);
+        request.addHeader(HttpHeaders.ACCEPT_CHARSET, "abcd");
+        response = invoke(request);
+        assertEquals(200, response.getStatus());
+        assertEquals(MediaType.TEXT_PLAIN + ";charset=iso-8859-1", response.getContentType());
+        assertEquals("Accept, Accept-Charset", response.getHeader(HttpHeaders.VARY));
+    }
+
     public void testSimpleMultipleAcceptHeaders() throws Exception {
         MockHttpServletRequest request =
             MockRequestConstructor.constructMockRequest("GET",
@@ -413,4 +521,114 @@ public class RequestsTest extends MockServletInvocationTest {
             + ", "
             + HttpHeaders.ACCEPT_ENCODING, response.getHeader(HttpHeaders.VARY));
     }
+
+    public void testMoreSimpleMultipleAcceptHeaders() throws Exception {
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/root/moremultipleheaders",
+                                                        MediaType.TEXT_PLAIN + ";q=1.0,"
+                                                            + MediaType.APPLICATION_XML
+                                                            + ";q=0.8");
+        request.addHeader(HttpHeaders.ACCEPT_ENCODING, "gzip;q=0.8,deflate;q=0.7");
+        request.addHeader(HttpHeaders.ACCEPT_LANGUAGE, "en-us");
+        MockHttpServletResponse response = invoke(request);
+        assertEquals(200, response.getStatus());
+        assertEquals(MediaType.TEXT_PLAIN + ";charset=shift_jis", response.getContentType());
+        assertEquals("gzip", response.getHeader(HttpHeaders.CONTENT_ENCODING));
+        assertEquals("en_US", response.getHeader(HttpHeaders.CONTENT_LANGUAGE));
+        assertEquals(HttpHeaders.ACCEPT + ", "
+            + HttpHeaders.ACCEPT_LANGUAGE
+            + ", "
+            + HttpHeaders.ACCEPT_ENCODING, response.getHeader(HttpHeaders.VARY));
+
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/root/moremultipleheaders",
+                                                        MediaType.TEXT_PLAIN + ";q=0.9,"
+                                                            + MediaType.APPLICATION_XML
+                                                            + ";q=1.0");
+        request.addHeader(HttpHeaders.ACCEPT_ENCODING, "deflate;q=0.8,gzip;q=0.7");
+        request.addHeader(HttpHeaders.ACCEPT_LANGUAGE, "en-us;q=0.9,fr;q=1.0");
+        response = invoke(request);
+        assertEquals(200, response.getStatus());
+        assertEquals(MediaType.APPLICATION_XML, response.getContentType());
+        assertEquals("deflate", response.getHeader(HttpHeaders.CONTENT_ENCODING));
+        assertEquals("fr", response.getHeader(HttpHeaders.CONTENT_LANGUAGE));
+        assertEquals(HttpHeaders.ACCEPT + ", "
+            + HttpHeaders.ACCEPT_LANGUAGE
+            + ", "
+            + HttpHeaders.ACCEPT_ENCODING, response.getHeader(HttpHeaders.VARY));
+
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/root/moremultipleheaders",
+                                                        "text/*" + ";q=0.9,"
+                                                            + MediaType.APPLICATION_XML
+                                                            + ";q=1.0");
+        request.addHeader(HttpHeaders.ACCEPT_LANGUAGE, "fr;q=1.0, en-us;q=0.9");
+        response = invoke(request);
+        assertEquals(200, response.getStatus());
+        assertEquals(MediaType.APPLICATION_XML, response.getContentType());
+        assertEquals("fr", response.getHeader(HttpHeaders.CONTENT_LANGUAGE));
+        assertEquals(HttpHeaders.ACCEPT + ", "
+            + HttpHeaders.ACCEPT_LANGUAGE
+            + ", "
+            + HttpHeaders.ACCEPT_ENCODING, response.getHeader(HttpHeaders.VARY));
+
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/root/moremultipleheaders",
+                                                        "text/*" + ";q=0.9,"
+                                                            + MediaType.APPLICATION_XML
+                                                            + ";q=1.0");
+        request.addHeader(HttpHeaders.ACCEPT_LANGUAGE, "fr;q=1.0, en-us;q=0.9");
+        request.addHeader(HttpHeaders.ACCEPT_CHARSET, "shift_jis, *;q=0.8");
+        response = invoke(request);
+        assertEquals(200, response.getStatus());
+        assertEquals(MediaType.APPLICATION_XML, response.getContentType());
+        assertEquals("fr", response.getHeader(HttpHeaders.CONTENT_LANGUAGE));
+        assertEquals(HttpHeaders.ACCEPT + ", "
+            + HttpHeaders.ACCEPT_LANGUAGE
+            + ", "
+            + HttpHeaders.ACCEPT_ENCODING, response.getHeader(HttpHeaders.VARY));
+
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/root/moremultipleheaders",
+                                                        "text/*" + ";q=0.9,"
+                                                            + MediaType.APPLICATION_XML
+                                                            + ";q=0.8");
+        request.addHeader(HttpHeaders.ACCEPT_LANGUAGE, "fr;q=1.0, en-us;q=0.9");
+        request.addHeader(HttpHeaders.ACCEPT_CHARSET, "shift_jis, *;q=0.8");
+        response = invoke(request);
+        assertEquals(200, response.getStatus());
+        assertEquals(MediaType.TEXT_PLAIN + ";charset=shift_jis", response.getContentType());
+        assertEquals("fr", response.getHeader(HttpHeaders.CONTENT_LANGUAGE));
+        assertEquals(HttpHeaders.ACCEPT + ", "
+            + HttpHeaders.ACCEPT_LANGUAGE
+            + ", "
+            + HttpHeaders.ACCEPT_ENCODING
+            + ", "
+            + HttpHeaders.ACCEPT_CHARSET, response.getHeader(HttpHeaders.VARY));
+
+        request =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/root/moremultipleheaders",
+                                                        "text/*" + ";q=0.9,"
+                                                            + MediaType.APPLICATION_XML
+                                                            + ";q=0.8");
+        request.addHeader(HttpHeaders.ACCEPT_LANGUAGE, "fr;q=1.0, en-us;q=0.9");
+        request.addHeader(HttpHeaders.ACCEPT_CHARSET, "shift_jis;q=0.7");
+        response = invoke(request);
+        assertEquals(200, response.getStatus());
+        assertEquals(MediaType.TEXT_PLAIN + ";charset=iso-8859-1", response.getContentType());
+        assertEquals("fr", response.getHeader(HttpHeaders.CONTENT_LANGUAGE));
+        assertEquals(HttpHeaders.ACCEPT + ", "
+            + HttpHeaders.ACCEPT_LANGUAGE
+            + ", "
+            + HttpHeaders.ACCEPT_ENCODING
+            + ", "
+            + HttpHeaders.ACCEPT_CHARSET, response.getHeader(HttpHeaders.VARY));
+    }
+
 }
