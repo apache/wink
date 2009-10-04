@@ -95,24 +95,24 @@ public class UsersResource {
     }
 
     /**
-     * Get a list of all the existing users as xml or as json
+     * Get a list of all the existing users as xml
      * 
      * @return an instance of Users
      */
     @GET
-    @Produces( {MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces( {MediaType.APPLICATION_XML})
     public Users getUsers() {
         return new Users(users.values());
     }
 
     /**
-     * Create a new user by receiving it as xml, and returning it as xml or json
+     * Create a new user by receiving it as xml, and returning it as xml
      * 
      * @return the created user
      */
     @POST
     @Consumes( {MediaType.APPLICATION_XML})
-    @Produces( {MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces( {MediaType.APPLICATION_XML})
     public User putUser(User user) {
         maxUserID++;
         user.setId(maxUserID);
@@ -121,7 +121,7 @@ public class UsersResource {
     }
 
     /**
-     * Get a user as xml or json
+     * Get a user as xml
      * 
      * @param id the id of the user to get
      * @return the user as specified by the id
@@ -131,7 +131,7 @@ public class UsersResource {
      */
     @Path("{id}")
     @GET
-    @Produces( {MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces( {MediaType.APPLICATION_XML})
     public User getUser(@PathParam("id") int id) throws UserNotExistException {
         User u = users.get(id);
         if (u == null) {
