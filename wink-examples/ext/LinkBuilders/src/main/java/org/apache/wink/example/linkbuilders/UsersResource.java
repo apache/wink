@@ -85,13 +85,13 @@ public class UsersResource {
     /**
      * Get a list of all the existing users. The method returns SyndFeed as a
      * response. That is, Client will be able to request a users collection
-     * information as an XML or JSON
+     * information as an XML.
      * 
      * @param linkBuilders reference to LinkBuilders instance
      * @return an instance of SyndFeed
      */
     @GET
-    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
+    @Produces( {MediaType.APPLICATION_ATOM_XML})
     public SyndFeed getUsers(@Context LinkBuilders linkBuilders) {
 
         // Build SyndFeed that holds users collection.
@@ -148,8 +148,7 @@ public class UsersResource {
 
     /**
      * Get a single user by user id. The method returns SyndEntry as a response.
-     * That is, Client will be able to request a user information as an XML or
-     * JSON
+     * That is, Client will be able to request a user information as an XML.
      * 
      * @param userId an id of a user that is to be retrieved
      * @param linkBuilders reference to LinkBuilders instance
@@ -158,7 +157,7 @@ public class UsersResource {
      */
     @Path(USER_INFO)
     @GET
-    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
+    @Produces( {MediaType.APPLICATION_ATOM_XML})
     public SyndEntry getUserInfo(@PathParam(USER_ID) Integer userId,
                                  @Context LinkBuilders linkBuilders) throws URISyntaxException {
 
