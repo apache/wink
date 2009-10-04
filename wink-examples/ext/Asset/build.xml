@@ -19,64 +19,71 @@
 -->
 
 <project name="Asset" default="dist" basedir=".">
-	<description>
+    <description>
         Ant build file for Wink example Asset
     </description>
 
-	<property name="final.war.name" value="Asset.war" />
-	<property name="sdk.jar.name" value="@SDK_JAR_NAME@" />
+    <property name="final.war.name" value="Asset.war" />
+    <property name="sdk.jar.name" value="@SDK_JAR_NAME@" />
 
 
-	<!-- set global properties for this build -->
-	<property name="build" location="build" />
-	<property name="build.classes" location="${build}/classes" />
-	<property name="sdk.base" location="${basedir}/../../.." />
-	<property name="sdk.lib" location="${sdk.base}/lib" />
-	<property name="sdk.dist" location="${sdk.base}/dist" />
-	<property name="sdk.jar" location="${sdk.dist}/${sdk.jar.name}" />
-	<property name="final.war" location="${basedir}/${final.war.name}" />
-	<property name="main" location="${basedir}/src/main" />
-	<property name="webapp" location="${main}/webapp" />
+    <!-- set global properties for this build -->
+    <property name="build" location="build" />
+    <property name="build.classes" location="${build}/classes" />
+    <property name="build.lib" location="${build}/lib" />
+    <property name="sdk.base" location="${basedir}/../../.." />
+    <property name="sdk.lib" location="${sdk.base}/lib" />
+    <property name="sdk.dist" location="${sdk.base}/dist" />
+    <property name="sdk.json" location="${sdk.base}/ext/wink-json-provider" />
+    <property name="sdk.jar" location="${sdk.dist}/${sdk.jar.name}" />
+    <property name="final.war" location="${basedir}/${final.war.name}" />
+    <property name="main" location="${basedir}/src/main" />
+    <property name="webapp" location="${main}/webapp" />
 
 
-	<target name="init">
-		<!-- Create the time stamp -->
-		<tstamp />
-		<!-- Create the build directory structure used by compile -->
-		<mkdir dir="${build.classes}" />
-	</target>
+    <target name="init">
+        <!-- Create the build directory structure used by compile -->
+        <mkdir dir="${build.classes}" />
+        <mkdir dir="${build.lib}" />
+    </target>
 
 
-	<target name="compile" depends="init" description="compile the source ">
-		<!-- Set classpath for SDK lib -->
-		<path id="sdk.classpath">
-			<fileset dir="${sdk.lib}" includes="**/*.jar" />
-			<pathelement path="${sdk.jar}" />
-		</path>
+    <target name="compile" depends="init" description="compile the source ">
+        <!-- Set classpath for SDK lib -->
+        <path id="sdk.classpath">
+            <fileset dir="${sdk.lib}" includes="**/*.jar" />
+            <pathelement path="${sdk.jar}" />
+            <fileset dir="${sdk.json}" includes="**/*.jar" />
+        </path>
 
-		<!-- Compile the java code -->
-		<javac srcdir="${main}/java" destdir="${build.classes}">
-			<classpath refid="sdk.classpath" />
-		</javac>
-	</target>
+        <copy todir="${build.lib}" flatten="true">
+            <fileset dir="${sdk.lib}" includes="**/*.jar" />
+            <fileset file="${sdk.jar}"> </fileset>
+            <fileset dir="${sdk.json}" includes="**/*.jar" />
+        </copy>
 
-
-	<target name="dist" depends="compile" description="generate the distribution">
-
-		<!-- Create the war file -->
-		<war destfile="${final.war}" webxml="${webapp}/WEB-INF/web.xml">
-			<webinf dir="${webapp}/WEB-INF" includes="**/*" />
-			<classes dir="${build.classes}" includes="**/*" />
-			<lib dir="${sdk.lib}" includes="*.jar" excludes="spring*.jar"/>
-			<lib file="${sdk.jar}" />
-		</war>
-	</target>
+        <!-- Compile the java code -->
+        <javac srcdir="${main}/java" destdir="${build.classes}">
+            <classpath refid="sdk.classpath" />
+        </javac>
+    </target>
 
 
-	<target name="clean" description="clean up">
-		<!-- Delete the ${build} and ${dist} directory trees -->
-		<delete dir="${build}" />
-		<delete file="${final.war}" />
-	</target>
+    <target name="dist" depends="compile" description="generate the distribution">
+
+        <!-- Create the war file -->
+        <war destfile="${final.war}" webxml="${webapp}/WEB-INF/web.xml">
+            <webinf dir="${webapp}/WEB-INF" includes="**/*" />
+            <classes dir="${build.classes}" includes="**/*" />
+            <lib dir="${build.lib}" includes="*.jar" />
+        </war>
+    </target>
+
+
+    <target name="clean" description="clean up">
+        <!-- Delete the ${build} and ${dist} directory trees -->
+        <delete dir="${build}" />
+        <delete file="${final.war}" />
+    </target>
 
 </project>
