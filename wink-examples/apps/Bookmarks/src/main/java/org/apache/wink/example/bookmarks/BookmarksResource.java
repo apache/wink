@@ -56,17 +56,16 @@ public class BookmarksResource {
     /**
      * This method is invoked when the HTTP GET method is issued by the client.
      * This occurs only when the requested representation (Http Accept header)
-     * is Atom (application/atom+xml) or Json (application/json). The feed is
-     * created with the mandatory fields. The feed will also contain the entries
-     * found in the BookmarksStore. Links are generated for the feed and for the
-     * entries.
+     * is Atom (application/atom+xml). The feed is created with the mandatory
+     * fields. The feed will also contain the entries found in the
+     * BookmarksStore. Links are generated for the feed and for the entries.
      * 
      * @param linksBuilders
      * @param uriInfo
      * @return syndFeed
      */
     @GET
-    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
+    @Produces( {MediaType.APPLICATION_ATOM_XML})
     public SyndFeed getBookmarks(@Context LinkBuilders linksBuilders, @Context UriInfo uriInfo) {
         SyndFeed feed = new SyndFeed();
         feed.setId("urn:collection:bookmarks");
@@ -102,11 +101,11 @@ public class BookmarksResource {
     /**
      * This method is invoked when the HTTP POST method is issued by the client.
      * This occurs only when the requested representation (Http Accept header)
-     * is Atom (application/atom+xml) or Json (application/json) and plain text
-     * is provided in the HTTP request message body of content MIME type
-     * "text/plain" (header "Content-Type" must be "text/plain"). This method
-     * creates a new Bookmark resource based on the data in the request and puts
-     * the new Bookmark into the BookmarkStore.
+     * is Atom (application/atom+xml) and plain text is provided in the HTTP
+     * request message body of content MIME type "text/plain" (header
+     * "Content-Type" must be "text/plain"). This method creates a new Bookmark
+     * resource based on the data in the request and puts the new Bookmark into
+     * the BookmarkStore.
      * 
      * @param bookmark to create
      * @param uriInfo object
@@ -115,7 +114,7 @@ public class BookmarksResource {
      */
     @POST
     @Consumes( {MediaType.TEXT_PLAIN})
-    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
+    @Produces( {MediaType.APPLICATION_ATOM_XML})
     public Response createBookmark(String bookmark,
                                    @Context UriInfo uriInfo,
                                    @Context LinkBuilders linksBuilders) {
@@ -139,10 +138,10 @@ public class BookmarksResource {
     /**
      * This method is invoked when the HTTP GET method is issued by the client.
      * This occurs only when the requested representation (Http Accept header)
-     * is Atom (application/atom+xml) or Json (application/json). In the case
-     * that the requested bookmark is found in the BookmarkStore a synd entry is
-     * created with mandatory metadata fields and with metadata content that is
-     * taken from the BookmarkStore.
+     * is Atom (application/atom+xml). In the case that the requested bookmark
+     * is found in the BookmarkStore a synd entry is created with mandatory
+     * metadata fields and with metadata content that is taken from the
+     * BookmarkStore.
      * 
      * @param linksBuilders
      * @param uriInfo
@@ -151,7 +150,7 @@ public class BookmarksResource {
      */
     @Path(SUB_RESOURCE_PATH)
     @GET
-    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
+    @Produces( {MediaType.APPLICATION_ATOM_XML})
     public SyndEntry getBookmark(@Context LinkBuilders linksBuilders,
                                  @Context UriInfo uriInfo,
                                  @PathParam(BOOKMARK) String bookmarkId) {
@@ -173,11 +172,11 @@ public class BookmarksResource {
     /**
      * This method is invoked when the HTTP PUT method is issued by the client.
      * This occurs only when the requested representation (Http Accept header)
-     * is Atom (application/atom+xml) or Json (application/json) and plain text
-     * is provided in the HTTP request message body of content MIME type
-     * "text/plain" (header "Content-Type" must be "text/plain"). This method
-     * will update the requested bookmark in the BookmarkStore with new content
-     * taken from the request message body.
+     * is Atom (application/atom+xml) and plain text is provided in the HTTP
+     * request message body of content MIME type "text/plain" (header
+     * "Content-Type" must be "text/plain"). This method will update the
+     * requested bookmark in the BookmarkStore with new content taken from the
+     * request message body.
      * 
      * @param bookmarkId the bookmark id to update as it appears on the request
      *            uri
@@ -187,7 +186,7 @@ public class BookmarksResource {
     @Path(SUB_RESOURCE_PATH)
     @PUT
     @Consumes(MediaType.TEXT_PLAIN)
-    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
+    @Produces( {MediaType.APPLICATION_ATOM_XML})
     public SyndEntry updateBookmark(String bookmark,
                                     @Context LinkBuilders linksBuilders,
                                     @Context UriInfo uriInfo,
@@ -213,9 +212,8 @@ public class BookmarksResource {
     /**
      * This method is invoked when the HTTP DELETE method is issued by the
      * client. This occurs only when the requested representation (Http Accept
-     * header) is Atom (application/atom+xml) or Json (application/json). This
-     * method deletes the bookmark from the BookmarkStore and returns the
-     * deleted bookmark.
+     * header) is Atom (application/atom+xml). This method deletes the bookmark
+     * from the BookmarkStore and returns the deleted bookmark.
      * 
      * @param linksBuilders
      * @param uriInfo
@@ -225,7 +223,7 @@ public class BookmarksResource {
      */
     @Path(SUB_RESOURCE_PATH)
     @DELETE
-    @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON})
+    @Produces( {MediaType.APPLICATION_ATOM_XML})
     public SyndEntry deleteBookmark(@Context LinkBuilders linksBuilders,
                                     @Context UriInfo uriInfo,
                                     @PathParam(BOOKMARK) String bookmarkId) {

@@ -41,8 +41,6 @@
 
 
 	<target name="init">
-		<!-- Create the time stamp -->
-		<tstamp />
 		<!-- Create the build directory structure used by compile -->
 		<mkdir dir="${build.classes}" />
 	</target>
@@ -68,7 +66,7 @@
 		<war destfile="${final.war}" webxml="${webapp}/WEB-INF/web.xml">
 			<webinf dir="${webapp}/WEB-INF" includes="**/*" />
 			<classes dir="${build.classes}" includes="**/*" />
-			<lib dir="${sdk.lib}" includes="*.jar" excludes="spring*.jar"/>
+			<lib dir="${sdk.lib}" includes="*.jar" />
 			<lib file="${sdk.jar}" />
 		</war>
 	</target>
