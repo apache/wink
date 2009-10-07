@@ -45,6 +45,12 @@
             <version>4.0</version>
         </dependency>
         <dependency>
+            <!--
+                This is a workaround the problem described here
+                https://issues.apache.org/jira/browse/HTTPCLIENT-866 The
+                dependency should be removed after 4.0.1 or later
+                version of HttpClient is released.
+            -->
             <groupId>net.jcip</groupId>
             <artifactId>jcip-annotations</artifactId>
             <version>1.0</version>
