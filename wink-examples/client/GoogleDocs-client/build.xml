@@ -34,6 +34,7 @@
 	<property name="build.classes" location="${build}/classes" />
 	<property name="client.base" location="${basedir}/../../.." />
 	<property name="client.lib" location="${client.base}/lib" />
+	<property name="examples.lib" location="${client.base}/examples/lib" />
 	<property name="client.dist" location="${client.base}/dist" />
 	<property name="client.jar" location="${client.dist}/${client.jar.name}" />
 	<property name="common.jar" location="${client.dist}/${common.jar.name}" />
@@ -43,8 +44,6 @@
 
 
 	<target name="init">
-		<!-- Create the time stamp -->
-		<tstamp />
 		<!-- Create the build directory structure used by compile -->
 		<mkdir dir="${build.classes}" />
 	</target>
@@ -54,6 +53,7 @@
 		<!-- Set classpath for client lib -->
 		<path id="client.classpath">
 			<fileset dir="${client.lib}" includes="**/*.jar" />
+			<fileset dir="${examples.lib}" includes="commons-cli-1.2.jar" />
 			<pathelement path="${common.jar}" />
 			<pathelement path="${client.jar}" />
 		</path>
@@ -67,6 +67,7 @@
 	<target name="dist" depends="compile" description="generate the distribution">
 		<manifestclasspath property="jar.classpath" jarfile="${example.jar}" maxParentLevels="10">
 			<classpath>
+				<fileset dir="${examples.lib}" includes="commons-cli-1.2.jar" />
 				<fileset dir="${client.lib}" includes="*.jar" />
 				<fileset dir="${client.lib}/examples" includes="*.jar" />
 				<fileset dir="${client.dist}">
