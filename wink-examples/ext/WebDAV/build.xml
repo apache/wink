@@ -33,6 +33,7 @@
 	<property name="sdk.base" location="${basedir}/../../.." />
 	<property name="sdk.lib" location="${sdk.base}/lib" />
 	<property name="sdk.dist" location="${sdk.base}/dist" />
+    <property name="examples.lib" location="${sdk.base}/examples/lib" />
 	<property name="sdk.jar" location="${sdk.dist}/${sdk.jar.name}" />
 	<property name="final.war" location="${basedir}/${final.war.name}" />
 	<property name="main" location="${basedir}/src/main" />
@@ -45,8 +46,6 @@
 
 
 	<target name="init">
-		<!-- Create the time stamp -->
-		<tstamp />
 		<!-- Create the build directory structure used by compile -->
 		<mkdir dir="${build.classes}" />
 	</target>
@@ -58,6 +57,7 @@
 		<path id="sdk.classpath">
 			<fileset dir="${sdk.lib}" includes="**/*.jar" />
 			<pathelement path="${sdk.jar}" />
+            <fileset dir="${examples.lib}" includes="geronimo-j2ee_1.4_spec-1.1.jar" />
 		</path>
 
 		<!-- Compile the java code -->
@@ -65,7 +65,6 @@
 			<src path="${main}/java" />
 			<src path="${qadefect.main}/java" />
 			<classpath refid="sdk.classpath" />
-
 		</javac>
 	</target>
 
@@ -80,7 +79,7 @@
 			<fileset dir="${qadefect.webapp}" includes="**/*" />
 			<classes dir="${build.classes}" includes="**/*" />
             <classes dir="${qadefect.resources}" includes="**/*" />
-			<lib dir="${sdk.lib}" includes="*.jar" excludes="spring*.jar"/>
+			<lib dir="${sdk.lib}" includes="*.jar" />
 			<lib file="${sdk.jar}" />
 		</war>
 	</target>

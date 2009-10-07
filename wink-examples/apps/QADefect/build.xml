@@ -78,8 +78,9 @@
 
         <!-- Create the war file -->
         <war destfile="${final.war}" webxml="${webapp}/WEB-INF/web.xml">
-            <fileset dir="${webapp}/WEB-INF">
+            <fileset dir="${webapp}" includes="**/*">
                 <exclude name="WEB-INF" />
+                <exclude name="META-INF" />
             </fileset>
             <webinf dir="${webapp}/WEB-INF" includes="**/*" />
             <classes dir="${build.classes}" includes="**/*" />
