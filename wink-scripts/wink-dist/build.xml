@@ -122,14 +122,17 @@
         <ant target="copy.pom.dependencies">
             <property name="pom.file" value="${project.root}/wink-common/pom.xml" />
             <property name="dependency.target" value="${dist.lib}" />
+            <property name="dependency.scope" value="runtime" />
         </ant>
         <ant target="copy.pom.dependencies">
             <property name="pom.file" value="${project.root}/wink-client/pom.xml" />
             <property name="dependency.target" value="${dist.lib}" />
+            <property name="dependency.scope" value="runtime" />
         </ant>
         <ant target="copy.pom.dependencies">
             <property name="pom.file" value="${project.root}/wink-server/pom.xml" />
             <property name="dependency.target" value="${dist.lib}" />
+            <property name="dependency.scope" value="runtime" />
         </ant>
 
         <!-- Delete files that already appear in the distribution -->
@@ -173,6 +176,7 @@
         <ant target="copy.pom.dependencies">
             <property name="pom.file" value="${extension.folder}/pom.xml" />
             <property name="dependency.target" value="${dist.ext}/${extension.name}/lib" />
+            <property name="dependency.scope" value="runtime" />
         </ant>
 
         <!-- Delete files that already appear in distribution or main lib -->
@@ -204,7 +208,7 @@
     <target name="copy.pom.dependencies">
         <echo>"${pom.file}"</echo>
         <pom id="maven.project" file="${pom.file}" />
-        <dependencies filesetId="dependency.fileset" useScope="runtime">
+        <dependencies filesetId="dependency.fileset" useScope="${dependency.scope}">
             <pom refid="maven.project" />
         </dependencies>
 
@@ -306,6 +310,7 @@
         <!-- Collect all dependencies -->
         <foreach target="copy.pom.dependencies" param="pom.file" delimiter=";">
             <param name="dependency.target" value="${dist.examples}/lib" />
+            <param name="dependency.scope" value="compile" />
             <path>
                 <fileset dir="${dist.examples}" id="example.poms">
                     <include name="**/pom.xml" />
