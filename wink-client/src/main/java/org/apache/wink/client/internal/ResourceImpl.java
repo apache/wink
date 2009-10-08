@@ -43,10 +43,12 @@ import org.apache.wink.client.Resource;
 import org.apache.wink.client.handlers.HandlerContext;
 import org.apache.wink.client.internal.handlers.ClientRequestImpl;
 import org.apache.wink.client.internal.handlers.HandlerContextImpl;
+import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.http.HttpMethodEx;
 import org.apache.wink.common.internal.CaseInsensitiveMultivaluedMap;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
+import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.common.internal.utils.HeaderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -200,9 +202,16 @@ public class ResourceImpl implements Resource {
                                   Class<?> responseEntity,
                                   Type responseEntityType,
                                   Object requestEntity) {
+
         ClientRequest request =
             createClientRequest(method, responseEntity, responseEntityType, requestEntity);
         HandlerContext context = createHandlerContext();
+
+        ProvidersRegistry providersRegistry = request.getAttribute(ProvidersRegistry.class);
+        ClientRuntimeContext runtimeContext = new ClientRuntimeContext(providersRegistry);
+        RuntimeContext saved = RuntimeContextTLS.getRuntimeContext();
+        RuntimeContextTLS.setRuntimeContext(runtimeContext);
+
         try {
             ClientResponse response = context.doChain(request);
             int statusCode = response.getStatusCode();
@@ -217,6 +226,8 @@ public class ResourceImpl implements Resource {
             throw e;
         } catch (Exception e) {
             throw new ClientRuntimeException(e);
+        } finally {
+            RuntimeContextTLS.setRuntimeContext(saved);
         }
     }
 
