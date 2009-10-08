@@ -23,8 +23,13 @@ package org.apache.wink.server.handlers;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public abstract class AbstractHandlersChain<T extends Handler> implements HandlersChain, Cloneable {
 
+    private static Logger logger = LoggerFactory.getLogger(AbstractHandlersChain.class);
+    
     private LinkedList<T>   list     = new LinkedList<T>();
     private ListIterator<T> iterator = null;
 
@@ -52,6 +57,7 @@ public abstract class AbstractHandlersChain<T extends Handler> implements Handle
             // get the next handler from the chain to handle
             T handler = iterator.next();
             // invoke the handler
+            logger.debug("Invoking handler: {}", handler.getClass().getName());
             handle(handler, context);
         } finally {
             // set the iterator back one handler on the chain so the same

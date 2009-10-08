@@ -60,7 +60,7 @@ public class FindResourceMethodHandler implements RequestHandler {
 
         // resource method
         if (resource.isExactMatch()) {
-            logger.debug("Root resource @Path matches exactly so finding root resource method");
+            logger.debug("Root resource @Path matches exactly so finding root resource method in {}", resource.getResourceClass().getName());
             handleResourceMethod(context, chain);
             return;
         }
