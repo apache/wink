@@ -52,8 +52,7 @@ import org.slf4j.LoggerFactory;
 @Provider
 @Consumes( {MediaType.APPLICATION_JSON, MediaTypeUtils.JAVASCRIPT})
 @Produces( {MediaType.APPLICATION_JSON, MediaTypeUtils.JAVASCRIPT})
-public class JsonProvider implements MessageBodyWriter<JSONObject>,
-    MessageBodyReader<JSONObject> {
+public class JsonProvider implements MessageBodyWriter<JSONObject>, MessageBodyReader<JSONObject> {
 
     private static final Logger logger = LoggerFactory.getLogger(JsonProvider.class);
 
@@ -90,8 +89,13 @@ public class JsonProvider implements MessageBodyWriter<JSONObject>,
             throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
         }
 
-        String callbackParam =
-            uriInfo.getQueryParameters().getFirst(RestConstants.REST_PARAM_JSON_CALLBACK);
+        String callbackParam = null;
+        try {
+            callbackParam =
+                uriInfo.getQueryParameters().getFirst(RestConstants.REST_PARAM_JSON_CALLBACK);
+        } catch (Exception e) {
+            logger.debug("Could not get the URI callback param", e);
+        }
         OutputStreamWriter writer =
             new OutputStreamWriter(entityStream, ProviderUtils.getCharset(mediaType));
         if (callbackParam != null) {

@@ -135,8 +135,13 @@ public class NoAcceptHeaderHandlerTest extends TestCase {
      */
     public void testAcceptHeaderForJAXB() {
         try {
-            client.resource(getBaseURI() + "/echoaccept").get(Echo.class);
+            Echo e  = client.resource(getBaseURI() + "/echoaccept").get(Echo.class);
             fail();
+//            String value = e.getValue();
+//            assertTrue(value, value.contains(MediaType.APPLICATION_JSON));
+//            assertTrue(value, value.contains(MediaType.APPLICATION_XML));
+//            assertTrue(value, value.contains(MediaType.TEXT_XML));
+//            assertTrue(value, value.contains("application/javascript"));
         } catch (RuntimeException e) {
             assertEquals(e.getMessage(), String
                 .format("No reader for type class %s and media type %s",
@@ -151,8 +156,11 @@ public class NoAcceptHeaderHandlerTest extends TestCase {
      */
     public void testAcceptHeaderForJSON() throws JSONException {
         try {
-            client.resource(getBaseURI() + "/echoaccept").get(JSONObject.class);
+            JSONObject j = client.resource(getBaseURI() + "/echoaccept").get(JSONObject.class);
             fail();
+            // String value = j.getString("value");
+            // assertTrue(value, value.contains(MediaType.APPLICATION_JSON));
+            // assertTrue(value, value.contains("application/javascript"));
         } catch (RuntimeException e) {
             assertEquals(e.getMessage(), String
                 .format("No reader for type class %s and media type %s",

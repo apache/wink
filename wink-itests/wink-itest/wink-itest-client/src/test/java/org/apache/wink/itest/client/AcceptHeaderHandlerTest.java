@@ -58,7 +58,7 @@ public class AcceptHeaderHandlerTest extends TestCase {
         super.setUp();
 
         ClientConfig config = new ApacheHttpClientConfig();
-        config.setLoadWinkApplications(false);
+//        config.setLoadWinkApplications(false);
         config.applications(new Application() {
 
             @Override

@@ -37,7 +37,7 @@ public class AcceptHeaderHandlerApacheHTTPCoreTest extends AcceptHeaderHandlerTe
     public void setUp() throws Exception {
         super.setUp();
         ClientConfig config = new ApacheHttpClientConfig();
-        config.setLoadWinkApplications(false);
+//        config.setLoadWinkApplications(false);
         config.applications(new Application() {
 
             @Override
