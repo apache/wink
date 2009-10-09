@@ -253,7 +253,7 @@
             <fileset dir="${project.webdav}" includes="target/**${project.version}.jar" />
             <fileset dir="${project.spring}" includes="target/**${project.version}.jar" />
         </unzip>
-        <jar destfile="${aggregator.jar.name}" basedir="${tmp.unzip}">
+        <jar destfile="${aggregator.jar.name}" basedir="${tmp.unzip}" excludes="**/NOTICE,**/DISCLAIMER,**/DEPENDENCIES">
             <manifest>
                 <attribute name="Created-By" value="Wink Distribution Script" />
                 <attribute name="Built-By" value="${user.name}" />
