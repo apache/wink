@@ -66,7 +66,7 @@
                     <aggregate>true</aggregate>
                     <includes>
                         <include>**/src/**</include>
-                        <include>**/*.xml</include>
+                        <include>**/pom.xml</include>
                     </includes>
                     <excludes>
                         <exclude>**/*.txt</exclude>
