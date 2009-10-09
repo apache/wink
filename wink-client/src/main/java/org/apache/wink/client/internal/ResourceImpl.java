@@ -55,7 +55,7 @@ import org.slf4j.LoggerFactory;
 
 public class ResourceImpl implements Resource {
 
-    private static final String            USER_AGENT = "Wink Client v0.1";
+    private static final String            USER_AGENT = "Wink Client v1.0";
 
     private ProvidersRegistry              providersRegistry;
     private ClientConfig                   config;
