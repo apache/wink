@@ -50,10 +50,6 @@
                     <artifactId>geronimo-stax-api_1.0_spec</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.codehaus.woodstox</groupId>
-                    <artifactId>wstx-asl</artifactId>
-                </exclusion>
-                <exclusion>
                     <groupId>javax.servlet</groupId>
                     <artifactId>servlet-api</artifactId>
                 </exclusion>
