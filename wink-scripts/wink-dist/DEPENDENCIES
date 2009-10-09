@@ -17,11 +17,6 @@ From: 'an unknown organization'
     License: GNU General Public Library  (http://www.gnu.org/licenses/gpl.txt)    License: COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0  (http://www.sun.com/cddl/cddl.html)
   - Unnamed - xerces:xercesImpl:jar:2.6.2  xerces:xercesImpl:jar:2.6.2
 
-
-From: 'JSON' (http://json.org/)
-  - JSON (JavaScript Object Notation) (http://www.json.org/java/index.html) org.json:json:jar:20080701
-    License: provided without support or warranty  (http://www.json.org/license.html)
-
 From: 'QOS.ch' (http://www.qos.ch)
   - SLF4J API Module (http://www.slf4j.org) org.slf4j:slf4j-api:jar:1.5.8
 

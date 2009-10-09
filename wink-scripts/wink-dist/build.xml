@@ -269,11 +269,11 @@
                 <attribute name="X-Compile-Target-JDK" value="${maven.compile.target}" />
             </manifest>
 
-            <!--zipfileset dir="${basedir}" prefix="META-INF">
+            <zipfileset dir="${basedir}" prefix="META-INF">
                 <include name="NOTICE" />
                 <include name="DISCLAIMER" />
                 <include name="DEPENDENCIES" />
-            </zipfileset -->
+            </zipfileset>
         </jar>
         <delete dir="${tmp.unzip}" />
     </target>
