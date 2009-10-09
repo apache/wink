@@ -4,7 +4,7 @@ Copyright 2009 The Apache Software Foundation
 This product includes software developed at
 The Apache Software Foundation (http://www.apache.org/).
 
-This product includes software developed by the JSON.org distributed under jason license  
+This product includes software developed by the JSON.org distributed under json license  
 
 This product includes software, StAX API (http://stax.codehaus.org/) distributed under Apache-2.0 license
 
@@ -17,3 +17,7 @@ This product includes software, JavaBeans Activation Framework (http://java.sun.
 This product includes software, SLF4J (http://www.slf4j.org/) distributed under slf4j license
 
 This product includes software, Spring (http://www.springsource.org/) distributed under Apache-2.0 license
+
+This product includes software, htmlparser (http://about.validator.nu/htmlparser/) distributed under MIT license
+
+This product includes software, Jaxen (http://jaxen.codehaus.org/) distributed under Jaxen license
