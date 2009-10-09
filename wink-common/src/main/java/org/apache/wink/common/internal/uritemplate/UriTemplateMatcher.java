@@ -442,6 +442,11 @@ public class UriTemplateMatcher {
                         }
                         break L1; // found all the segments of this variable
                                   // value
+                    } else if (variableValueStartIndex == pathLength) {
+                        // no PathParam was provided... only matrix params or empty
+                        // just use what we have
+                        variableSegments.add(segments.get(segmentIndex));
+                        break L1;
                     } else {
                         pathLength += 1; // to count for the '/' between the
                                          // segments
