@@ -121,7 +121,7 @@ public class SearchResult {
          * Used for providing the info for the {@link UriInfo#getMatchedURIs()}
          * method.
          * 
-         * @param uri the uri that was used for the matching is is stripped from
+         * @param uri the uri that was used for the matching is stripped from
          *            any matrix parameters
          * @return the number of segments of the input uri
          */
@@ -129,11 +129,25 @@ public class SearchResult {
             // get all the segments of the original request (which include the
             // matrix parameters)
             List<PathSegment> segments = uriInfo.getPathSegments(false);
-            
+
             // count the number of segments in input uri
             int count = uri.equals("") ? 0 : UriHelper.parsePath(uri).size();
 
             // get the offset of the provided uri from the complete request path
+            int offset = calculateUriOffset();
+
+            // add the uri segments (including any matrix parameters) by
+            // obtaining a sub list from the the complete request segments
+            addMatchedURI(segments, offset, count);
+            return count;
+        }
+
+        /**
+         * Used to calculate the number of URI segments already matched.
+         * 
+         * @return the offset past the URI segments already matched
+         */
+        public int calculateUriOffset() {
             int offset = 0;
             if (getMatchedURIs().size() > 0) {
                 // the first uri in the "matched uri's" list always reflects all
@@ -142,8 +156,10 @@ public class SearchResult {
                 // complete request uri
                 List<PathSegment> firstMatchedUri = getMatchedURIs().getFirst();
                 offset = firstMatchedUri.size();
-                // we need to skip all empty string as path segments that were added 
-                // because of matches to @Path("") and @Path("/"), so decrease the 
+                // we need to skip all empty string as path segments that were
+                // added
+                // because of matches to @Path("") and @Path("/"), so decrease
+                // the
                 // offset by the number of empty segments
                 for (PathSegment segment : firstMatchedUri) {
                     if (segment.getPath().equals("")) {
@@ -151,10 +167,7 @@ public class SearchResult {
                     }
                 }
             }
-            // add the uri segments (including any matrix parameters) by
-            // obtaining a sub list from the the complete request segments
-            addMatchedURI(segments, offset, count);
-            return count;
+            return offset;
         }
 
         private void addMatchedURI(List<PathSegment> segments, int offset, int count) {
@@ -165,10 +178,11 @@ public class SearchResult {
             if (subListSegments.isEmpty()) {
                 // the sublist may be empty if the count is 0. this can happen
                 // if the given uri was an empty string (which itself can happen
-                // if the resource/sub-resource are annotated with @Path("") or @Path("/").
+                // if the resource/sub-resource are annotated with @Path("") or
+                // @Path("/").
                 subListSegments = UriHelper.parsePath("");
             }
-            
+
             LinkedList<List<PathSegment>> matchedURIs = getMatchedURIs();
             if (matchedURIs.size() == 0) {
                 // if it's the first uri, simply add it

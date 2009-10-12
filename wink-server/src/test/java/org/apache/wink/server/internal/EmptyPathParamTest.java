@@ -39,7 +39,7 @@ public class EmptyPathParamTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] {PathResource.class};
+        return new Class[] {PathResource.class, PathResource2.class, PathResource3.class};
     }
 
     @Path("/p")
@@ -48,7 +48,8 @@ public class EmptyPathParamTest extends MockServletInvocationTest {
         @GET
         @Path("/first{firstParams:.*}/second{secondParams:.*}")
         @Produces(MediaType.TEXT_PLAIN)
-        public String findTestRuns(@PathParam("firstParams") final PathSegment firstParams, @PathParam("secondParams") final PathSegment secondParams) {
+        public String findTestRuns(@PathParam("firstParams") final PathSegment firstParams,
+                                   @PathParam("secondParams") final PathSegment secondParams) {
 
             assertEquals("first", firstParams.getPath());
             assertEquals("bob", firstParams.getMatrixParameters().get("name").get(0));
@@ -59,14 +60,74 @@ public class EmptyPathParamTest extends MockServletInvocationTest {
         }
 
     }
-    
-    public void testMatrixParamsOnly() throws Exception {
-        MockHttpServletRequest getRequest =
-            MockRequestConstructor.constructMockRequest("GET", "/p/first;name=bob/second;eyes=blue", "*/*");
-        MockHttpServletResponse getResponse = invoke(getRequest);
-        assertEquals(getResponse.getContentAsString(), "hi");
+
+    @Path("/p2")
+    public static class PathResource2 {
+
+        @GET
+        @Path("/first/{firstParams:.*}/second/{secondParams:.*}")
+        @Produces(MediaType.TEXT_PLAIN)
+        public String findTestRuns(@PathParam("firstParams") final PathSegment firstParams,
+                                   @PathParam("secondParams") final PathSegment secondParams) {
+
+            assertEquals("first", firstParams.getPath());
+            assertEquals("bob", firstParams.getMatrixParameters().get("name").get(0));
+            assertEquals("second", secondParams.getPath());
+            assertEquals("blue", secondParams.getMatrixParameters().get("eyes").get(0));
+            return "hi2";
+
+        }
+
     }
 
+    @Path("")
+    // "" is the essence of this test
+    public static class PathResource3 {
+        @GET
+        @Path("/first{firstParams:.*}/second{secondParams:.*}")
+        @Produces(MediaType.TEXT_PLAIN)
+        public String findTestRuns(@PathParam("firstParams") final PathSegment firstParams,
+                                   @PathParam("secondParams") final PathSegment secondParams) {
 
+            assertEquals("first", firstParams.getPath());
+            assertEquals("bob", firstParams.getMatrixParameters().get("name").get(0));
+            assertEquals("second", secondParams.getPath());
+            assertEquals("blue", secondParams.getMatrixParameters().get("eyes").get(0));
+            return "hi3";
 
+        }
+    }
+
+    public void testEmptyPathParam() throws Exception {
+        MockHttpServletRequest getRequest =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/p/first;name=bob/second;eyes=blue",
+                                                        MediaType.TEXT_PLAIN);
+        MockHttpServletResponse getResponse = invoke(getRequest);
+        assertEquals(200, getResponse.getStatus());
+        assertEquals("hi", getResponse.getContentAsString());
+    }
+
+    public void _testEmptyPathParam2() throws Exception { // TODO: see WINK-216
+                                                          // - need to enable
+                                                          // this test AND fix
+                                                          // production code
+        MockHttpServletRequest getRequest =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/p2/first/;name=bob/second/;eyes=blue",
+                                                        MediaType.TEXT_PLAIN);
+        MockHttpServletResponse getResponse = invoke(getRequest);
+        assertEquals(200, getResponse.getStatus());
+        assertEquals("hi2", getResponse.getContentAsString());
+    }
+
+    public void testEmptyPathParam3() throws Exception {
+        MockHttpServletRequest getRequest =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "/first;name=bob/second;eyes=blue",
+                                                        MediaType.TEXT_PLAIN);
+        MockHttpServletResponse getResponse = invoke(getRequest);
+        assertEquals(200, getResponse.getStatus());
+        assertEquals("hi3", getResponse.getContentAsString());
+    }
 }

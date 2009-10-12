@@ -60,7 +60,9 @@ public class FindResourceMethodHandler implements RequestHandler {
 
         // resource method
         if (resource.isExactMatch()) {
-            logger.debug("Root resource @Path matches exactly so finding root resource method in {}", resource.getResourceClass().getName());
+            logger
+                .debug("Root resource @Path matches exactly so finding root resource method in {}",
+                       resource.getResourceClass().getName());
             handleResourceMethod(context, chain);
             return;
         }
@@ -272,7 +274,8 @@ public class FindResourceMethodHandler implements RequestHandler {
         // 1. get the number of segments that were matched up until the current
         // match. this will be used as
         // the offset into the full path segments list
-        int offset = result.getData().getMatchedURIs().getFirst().size();
+        int offset = result.getData().calculateUriOffset();
+
         // 2. save the current matched uri - it is added as the first uri in the
         // list of matched uri's
         int headSegmentsCount = result.getData().addMatchedURI(matcher.getHead(false));
