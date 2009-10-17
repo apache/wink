@@ -30,8 +30,10 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Set;
 
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -48,7 +50,16 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.wink.common.RestException;
 import org.apache.wink.common.RuntimeContext;
+import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.internal.MultivaluedMapImpl;
+import org.apache.wink.common.internal.application.ApplicationFileLoader;
+import org.apache.wink.common.internal.application.ApplicationValidator;
+import org.apache.wink.common.internal.contexts.ProvidersImpl;
+import org.apache.wink.common.internal.i18n.Messages;
+import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
+import org.apache.wink.common.internal.lifecycle.ScopeLifecycleManager;
+import org.apache.wink.common.internal.registry.ProvidersRegistry;
+import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.common.internal.utils.UnmodifiableMultivaluedMap;
 import org.apache.wink.common.model.atom.AtomContent;
@@ -64,18 +75,22 @@ import org.xml.sax.ext.LexicalHandler;
 
 public class ModelUtils {
 
-    public static final MultivaluedMap<String, Object> EMPTY_OBJECT_MAP =
-                                                                            new UnmodifiableMultivaluedMap<String, Object>(
-                                                                                                                           new MultivaluedMapImpl<String, Object>());
-    public static final MultivaluedMap<String, String> EMPTY_STRING_MAP =
-                                                                            new UnmodifiableMultivaluedMap<String, String>(
-                                                                                                                           new MultivaluedMapImpl<String, String>());
-    public static final Annotation[]                   EMPTY_ARRAY      = new Annotation[0];
+    public static final MultivaluedMap<String, Object> EMPTY_OBJECT_MAP         =
+                                                                                    new UnmodifiableMultivaluedMap<String, Object>(
+                                                                                                                                   new MultivaluedMapImpl<String, Object>());
+    public static final MultivaluedMap<String, String> EMPTY_STRING_MAP         =
+                                                                                    new UnmodifiableMultivaluedMap<String, String>(
+                                                                                                                                   new MultivaluedMapImpl<String, String>());
+    public static final Annotation[]                   EMPTY_ARRAY              = new Annotation[0];
     private final static SAXParserFactory              spf;
     private final static DatatypeFactory               datatypeFactory;
-    private static final Logger                        logger           =
-                                                                            LoggerFactory
-                                                                                .getLogger(ModelUtils.class);
+    private static final Logger                        logger                   =
+                                                                                    LoggerFactory
+                                                                                        .getLogger(ModelUtils.class);
+
+    private final static String                        CLASS_NOT_A_PROVIDER_MSG =
+                                                                                    Messages
+                                                                                        .getMessage("classNotAProvider");
 
     static {
         try {
@@ -254,6 +269,29 @@ public class ModelUtils {
                 if (runtimeContext != null) {
                     providers = runtimeContext.getProviders();
                 }
+
+                if (providers == null) {
+                    LifecycleManagersRegistry ofFactoryRegistry = new LifecycleManagersRegistry();
+                    ofFactoryRegistry.addFactoryFactory(new ScopeLifecycleManager<Object>());
+                    ProvidersRegistry providersRegistry =
+                        new ProvidersRegistry(ofFactoryRegistry, new ApplicationValidator());
+
+                    final Set<Class<?>> classes = new ApplicationFileLoader(true).getClasses();
+
+                    processApplication(providersRegistry, new WinkApplication() {
+                        @Override
+                        public Set<Class<?>> getClasses() {
+                            return classes;
+                        }
+
+                        @Override
+                        public double getPriority() {
+                            return WinkApplication.SYSTEM_PRIORITY;
+                        }
+                    });
+
+                    providers = new ProvidersImpl(providersRegistry, runtimeContext);
+                }
             }
             MessageBodyReader<T> reader =
                 providers.getMessageBodyReader(type, type, EMPTY_ARRAY, mediaType);
@@ -324,6 +362,69 @@ public class ModelUtils {
             // wrapping with XmlWrapper will cause the Providers code to run
             // xml content won't be escaped
             any.set(0, new XmlWrapper(value, type));
+        }
+    }
+
+    private static void processApplication(ProvidersRegistry providersRegistry,
+                                           Application application) {
+        if (application == null) {
+            return;
+        }
+
+        // process singletons
+        Set<Object> singletons = application.getSingletons();
+        if (singletons != null && singletons.size() > 0) {
+            processSingletons(providersRegistry, singletons);
+        }
+
+        // process classes
+        Set<Class<?>> classes = application.getClasses();
+        if (classes != null && classes.size() > 0) {
+            processClasses(providersRegistry, classes);
+        }
+
+        if (application instanceof WinkApplication) {
+            processWinkApplication(providersRegistry, (WinkApplication)application);
+        }
+    }
+
+    private static void processClasses(ProvidersRegistry providersRegistry, Set<Class<?>> classes) {
+        for (Class<?> cls : classes) {
+            if (ProviderMetadataCollector.isProvider(cls)) {
+                providersRegistry.addProvider(cls);
+            } else {
+                logger.warn(CLASS_NOT_A_PROVIDER_MSG, cls);
+            }
+        }
+    }
+
+    private static void processSingletons(ProvidersRegistry providersRegistry,
+                                          Set<Object> singletons) {
+        for (Object obj : singletons) {
+            Class<?> cls = obj.getClass();
+            if (ProviderMetadataCollector.isProvider(cls)) {
+                providersRegistry.addProvider(obj);
+            } else {
+                logger.warn(CLASS_NOT_A_PROVIDER_MSG, obj);
+            }
+        }
+    }
+
+    private static void processWinkApplication(ProvidersRegistry providersRegistry,
+                                               WinkApplication sApplication) {
+        Set<Object> instances = sApplication.getInstances();
+        double priority = sApplication.getPriority();
+        if (instances == null) {
+            return;
+        }
+
+        for (Object obj : instances) {
+            Class<?> cls = obj.getClass();
+            if (ProviderMetadataCollector.isProvider(cls)) {
+                providersRegistry.addProvider(obj, priority);
+            } else {
+                logger.warn(CLASS_NOT_A_PROVIDER_MSG, obj);
+            }
         }
     }
 }
