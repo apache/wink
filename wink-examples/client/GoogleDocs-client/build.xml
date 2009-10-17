@@ -18,7 +18,7 @@
     under the License.
 -->
 
-<project name="QADefectsClient" default="dist" basedir=".">
+<project name="GoogleDocs-Client" default="dist" basedir=".">
 	<description>
         Ant build file for Wink Client example GoogleDocs-client
     </description>
@@ -69,7 +69,6 @@
 			<classpath>
 				<fileset dir="${examples.lib}" includes="commons-cli-1.2.jar" />
 				<fileset dir="${client.lib}" includes="*.jar" />
-				<fileset dir="${client.lib}/examples" includes="*.jar" />
 				<fileset dir="${client.dist}">
                     <include name="${common.jar.name}"/>
                     <include name="${client.jar.name}"/>
