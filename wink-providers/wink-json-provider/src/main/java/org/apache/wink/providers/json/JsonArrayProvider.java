@@ -89,8 +89,13 @@ public class JsonArrayProvider implements MessageBodyWriter<JSONArray>,
             throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
         }
 
-        String callbackParam =
-            uriInfo.getQueryParameters().getFirst(RestConstants.REST_PARAM_JSON_CALLBACK);
+        String callbackParam = null;
+        try {
+            callbackParam =
+                uriInfo.getQueryParameters().getFirst(RestConstants.REST_PARAM_JSON_CALLBACK);
+        } catch (Exception e) {
+            logger.debug("Could not get the URI callback param", e);
+        }
         OutputStreamWriter writer =
             new OutputStreamWriter(entityStream, ProviderUtils.getCharset(mediaType));
         if (callbackParam != null) {
