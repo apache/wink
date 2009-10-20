@@ -49,7 +49,6 @@ import org.apache.wink.common.internal.registry.metadata.MethodMetadata;
 import org.apache.wink.common.internal.uritemplate.UriTemplateMatcher;
 import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
-import org.apache.wink.common.internal.utils.SimpleMap;
 import org.apache.wink.common.internal.utils.SoftConcurrentMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,20 +59,20 @@ import org.slf4j.LoggerFactory;
  */
 public class ResourceRegistry {
 
-    private static final Logger                                   logger             =
-                                                                                         LoggerFactory
-                                                                                             .getLogger(ResourceRegistry.class);
+    private static final Logger                                                    logger             =
+                                                                                                          LoggerFactory
+                                                                                                              .getLogger(ResourceRegistry.class);
 
-    private List<ResourceRecord>                                  rootResources;
+    private List<ResourceRecord>                                                   rootResources;
 
-    private ResourceRecordFactory                                 resourceRecordsFactory;
+    private ResourceRecordFactory                                                  resourceRecordsFactory;
 
-    private Lock                                                  readersLock;
-    private Lock                                                  writersLock;
-    private final ApplicationValidator                            applicationValidator;
+    private Lock                                                                   readersLock;
+    private Lock                                                                   writersLock;
+    private final ApplicationValidator                                             applicationValidator;
 
-    private Map<Boolean, SimpleMap<String, List<ResourceRecord>>> uriToResourceCache =
-                                                                                         new HashMap<Boolean, SimpleMap<String, List<ResourceRecord>>>();
+    private HashMap<Boolean, SoftConcurrentMap<String, ArrayList<ResourceRecord>>> uriToResourceCache =
+                                                                                                          new HashMap<Boolean, SoftConcurrentMap<String, ArrayList<ResourceRecord>>>();
 
     public ResourceRegistry(LifecycleManagersRegistry factoryRegistry,
                             ApplicationValidator applicationValidator) {
@@ -83,9 +82,10 @@ public class ResourceRegistry {
         ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
         readersLock = readWriteLock.readLock();
         writersLock = readWriteLock.writeLock();
-        uriToResourceCache.put(Boolean.TRUE, new SoftConcurrentMap<String, List<ResourceRecord>>());
-        uriToResourceCache
-            .put(Boolean.FALSE, new SoftConcurrentMap<String, List<ResourceRecord>>());
+        uriToResourceCache.put(Boolean.TRUE,
+                               new SoftConcurrentMap<String, ArrayList<ResourceRecord>>());
+        uriToResourceCache.put(Boolean.FALSE,
+                               new SoftConcurrentMap<String, ArrayList<ResourceRecord>>());
     }
 
     /**
@@ -255,27 +255,29 @@ public class ResourceRegistry {
      */
     public List<ResourceInstance> getMatchingRootResources(String uri,
                                                            boolean isContinuedSearchPolicy) {
-        List<ResourceInstance> found = new ArrayList<ResourceInstance>();
+        ArrayList<ResourceInstance> found = new ArrayList<ResourceInstance>(1);
         uri = UriTemplateProcessor.normalizeUri(uri);
+
+        ArrayList<ResourceRecord> previousMatched = null;
+        /*
+         * the previous matches are cached so if a previous URI used is still in
+         * the cache, this will find the resources that matched skipping the
+         * expensive UriTemplateMatcher.matches()
+         */
+        previousMatched = uriToResourceCache.get(isContinuedSearchPolicy).get(uri);
+        if (previousMatched != null) {
+            for (ResourceRecord record : previousMatched) {
+                UriTemplateMatcher matcher = record.getTemplateProcessor().matcher();
+                if (matcher.matches(uri)) {
+                    found.add(new ResourceInstance(record, matcher));
+                }
+            }
+            return found;
+        }
 
         readersLock.lock();
         try {
-            List<ResourceRecord> previousMatched = null;
-            /*
-             * the previous matches are cached so if a previous URI used is
-             * still in the cache, this will find the resources that matched
-             * skipping the expensive UriTemplateMatcher.matches()
-             */
-            previousMatched = uriToResourceCache.get(isContinuedSearchPolicy).get(uri);
-            if (previousMatched != null) {
-                for (ResourceRecord record : previousMatched) {
-                    UriTemplateMatcher matcher = record.getTemplateProcessor().matcher();
-                    if (matcher.matches(uri)) {
-                        found.add(new ResourceInstance(record, matcher));
-                    }
-                }
-                return found;
-            }
+
             previousMatched = new ArrayList<ResourceRecord>();
 
             // the list of root resource records is already sorted
