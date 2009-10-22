@@ -47,6 +47,7 @@
         <module>wink-providers</module>
         <module>wink-examples</module>
         <module>wink-scripts</module>
+        <module>wink-assembly</module>
     </modules>
     <scm>
         <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/wink/trunk</connection>
@@ -372,6 +373,26 @@
             <dependency>
                 <groupId>org.apache.wink</groupId>
                 <artifactId>wink-json-provider</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.wink</groupId>
+                <artifactId>wink-client-apache-httpclient</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.wink</groupId>
+                <artifactId>wink-abdera-provider</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.wink</groupId>
+                <artifactId>wink-jettison-provider</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.wink</groupId>
+                <artifactId>wink-webdav</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
