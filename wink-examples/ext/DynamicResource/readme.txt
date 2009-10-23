@@ -7,7 +7,7 @@ Description
   The Path and Workspace information is defined using the DynamicResource interface and not 
   by annotation as in regular resources.
   MyApplication class implements a WinkApplication and return the dynamic resource 
-  in it’s getInstances method. It is also in charge in this example for setting the Path, 
+  in its getInstances method. It is also in charge in this example for setting the Path, 
   WorkspaceTitle and CollectionTitle information to the resource. 
   Functionality wise, this example is the same as the Bookmarks example. 
 - A list of predefined bookmarks is returned as an Atom feed on this URI:
