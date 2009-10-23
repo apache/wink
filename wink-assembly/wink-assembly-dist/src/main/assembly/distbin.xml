@@ -215,8 +215,6 @@
             <useStrictFiltering>true</useStrictFiltering>
             <includes>
                 <include>**/pom.xml</include>
-                <include>**/src/**</include>
-                <include>**/readme.txt</include>
                 <include>**/build.xml</include>
             </includes>
             <excludes>
@@ -224,6 +222,19 @@
                 <exclude>**/QADefectWithSpring/**</exclude>
             </excludes>
             <filtered>true</filtered>
+        </fileSet>
+	<fileSet>
+            <directory>../../wink-examples</directory>
+            <outputDirectory>examples</outputDirectory>
+            <useStrictFiltering>true</useStrictFiltering>
+            <includes>
+                <include>**/readme.txt</include>
+                <include>**/src/**</include>
+            </includes>
+            <excludes>
+                <exclude>**/target/**</exclude>
+                <exclude>**/QADefectWithSpring/**</exclude>
+            </excludes>
         </fileSet>
     </fileSets>
 </assembly>
