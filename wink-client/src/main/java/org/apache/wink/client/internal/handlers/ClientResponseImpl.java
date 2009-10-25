@@ -39,9 +39,10 @@ import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 
 public class ClientResponseImpl extends BaseRequestResponseImpl implements ClientResponse {
 
-    private Object entity;
-    private String message;
-    private int    status;
+    private Object   entity;
+    private String   message;
+    private int      status;
+    private Runnable contentConsumer;
 
     public <T> T getEntity(Class<T> type) {
         return getEntity(type, type);
@@ -127,7 +128,22 @@ public class ClientResponseImpl extends BaseRequestResponseImpl implements Clien
             throw new ClientRuntimeException(e);
         } finally {
             RuntimeContextTLS.setRuntimeContext(saved);
+            consumeContent();
         }
+    }
+
+    public void consumeContent() {
+        if (contentConsumer != null) {
+            contentConsumer.run();
+        }
+    }
+
+    public void setContentConsumer(Runnable contentConsumer) {
+        this.contentConsumer = contentConsumer;
+    }
+
+    public Runnable getContentConsumer() {
+        return contentConsumer;
     }
 
 }

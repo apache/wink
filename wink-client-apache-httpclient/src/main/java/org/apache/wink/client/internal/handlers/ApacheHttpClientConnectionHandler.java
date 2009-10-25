@@ -63,8 +63,9 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
     }
 
     public ClientResponse handle(ClientRequest request, HandlerContext context) throws Exception {
+        HttpResponse response = null;
         try {
-            HttpResponse response = processRequest(request, context);
+            response = processRequest(request, context);
             return processResponse(request, context, response);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -174,12 +175,25 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
         return response;
     }
 
-    private ClientResponse createResponse(ClientRequest request, HttpResponse httpResponse) {
-        ClientResponse response = new ClientResponseImpl();
+    private ClientResponse createResponse(ClientRequest request, final HttpResponse httpResponse) {
+        final ClientResponseImpl response = new ClientResponseImpl();
         StatusLine statusLine = httpResponse.getStatusLine();
         response.setStatusCode(statusLine.getStatusCode());
         response.setMessage(statusLine.getReasonPhrase());
         response.getAttributes().putAll(request.getAttributes());
+        response.setContentConsumer(new Runnable() {
+            
+            public void run() {
+              HttpEntity entity = httpResponse.getEntity();
+              if (entity != null) {
+                  try {
+                    entity.consumeContent();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+              }
+            }
+        });
         processResponseHeaders(response, httpResponse);
         return response;
     }
