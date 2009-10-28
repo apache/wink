@@ -48,6 +48,7 @@
         <module>wink-examples</module>
         <module>wink-scripts</module>
         <module>wink-assembly</module>
+        <module>wink-itests</module>
     </modules>
     <scm>
         <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/wink/trunk</connection>
