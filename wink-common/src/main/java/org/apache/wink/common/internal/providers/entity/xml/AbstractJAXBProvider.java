@@ -20,7 +20,6 @@
 package org.apache.wink.common.internal.providers.entity.xml;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import javax.ws.rs.WebApplicationException;
@@ -121,7 +120,7 @@ public abstract class AbstractJAXBProvider {
     }
 
     public static boolean isJAXBElement(Class<?> type, Type genericType) {
-        return (type == JAXBElement.class && genericType instanceof ParameterizedType);
+        return (type == JAXBElement.class);
     }
 
     private JAXBContext getContext(Class<?> type, MediaType mediaType) throws JAXBException {
