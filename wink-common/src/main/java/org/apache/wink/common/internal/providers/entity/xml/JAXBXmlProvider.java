@@ -34,6 +34,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
@@ -65,17 +66,18 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
                            MediaType mediaType,
                            MultivaluedMap<String, String> httpHeaders,
                            InputStream entityStream) throws IOException, WebApplicationException {
-
         Unmarshaller unmarshaller = null;
         Object unmarshaledResource = null;
         try {
-            unmarshaller = getUnmarshaller(type, mediaType);
+            JAXBContext context = getContext(type, mediaType);
+            unmarshaller = getJAXBUnmarshaller(context);
             if (type.isAnnotationPresent(XmlRootElement.class))
                 unmarshaledResource = unmarshaller.unmarshal(entityStream);
             else
                 unmarshaledResource =
                     unmarshaller.unmarshal(new StreamSource(entityStream), type).getValue();
 
+            releaseJAXBUnmarshaller(context, unmarshaller);
         } catch (JAXBException e) {
             logger.error(Messages.getMessage("jaxbFailToUnmarshal"), type.getName());
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
@@ -106,11 +108,14 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
                         MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException, WebApplicationException {
         try {
-            Marshaller marshaller = getMarshaller(type, mediaType);
+            JAXBContext context = getContext(type, mediaType);
+            Marshaller marshaller = getJAXBMarshaller(type, context, mediaType);
             Object entityToMarshal = getEntityToMarshal(t, type);
 
             // Use an OutputStream directly instead of a Writer for performance.
             marshaller.marshal(entityToMarshal, entityStream);
+
+            releaseJAXBMarshaller(context, marshaller);
         } catch (JAXBException e) {
             logger.error(Messages.getMessage("jaxbFailToMarshal"), type.getName());
             throw new WebApplicationException(e);

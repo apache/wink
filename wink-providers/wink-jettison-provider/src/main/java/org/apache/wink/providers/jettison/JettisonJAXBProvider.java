@@ -37,6 +37,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
@@ -127,7 +128,8 @@ public class JettisonJAXBProvider extends AbstractJAXBProvider implements
         Unmarshaller unmarshaller = null;
         Object unmarshaledResource = null;
         try {
-            unmarshaller = getUnmarshaller(type, mediaType);
+            JAXBContext context = getContext(type, mediaType);
+            unmarshaller = getJAXBUnmarshaller(context);
 
             XMLStreamReader xsr = null;
             if (type.isAnnotationPresent(XmlRootElement.class)) {
@@ -182,7 +184,8 @@ public class JettisonJAXBProvider extends AbstractJAXBProvider implements
                         MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException, WebApplicationException {
         try {
-            Marshaller marshaller = getMarshaller(type, mediaType);
+            JAXBContext context = getContext(type, mediaType);
+            Marshaller marshaller = getJAXBMarshaller(type, context, mediaType);
             Object entityToMarshal = getEntityToMarshal(t, type);
 
             // Use an OutputStream directly instead of a Writer for performance.
