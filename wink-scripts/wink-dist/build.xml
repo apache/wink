@@ -222,8 +222,8 @@
         <echo>Making root documents</echo>
         <copy todir="${dist.root}" flatten="true" includeemptydirs="false">
             <fileset dir="${project.root}" includes="DISCLAIMER*" />
-            <fileset dir="${project.root}" includes="LICENSE*" />
-            <fileset dir="${project.root}" includes="NOTICE*" />
+            <fileset dir="${project.root}/wink-scripts/wink-dist/binarydist" includes="LICENSE*" />
+            <fileset dir="${project.root}/wink-scripts/wink-dist/binarydist" includes="NOTICE*" />
             <fileset dir="${project.root}" includes="release_notes.txt" />
         </copy>
         <!-- Copy PDF Developer Guide that exists under trunk/src/doc/DeveloperGuide into doc directory -->
@@ -269,7 +269,7 @@
                 <attribute name="X-Compile-Target-JDK" value="${maven.compile.target}" />
             </manifest>
 
-            <zipfileset dir="${basedir}" prefix="META-INF">
+            <zipfileset dir="${basedir}/aggregatejar" prefix="META-INF">
                 <include name="NOTICE" />
                 <include name="DISCLAIMER" />
                 <include name="DEPENDENCIES" />
