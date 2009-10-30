@@ -14,14 +14,14 @@ This product includes software, JSR-311 (https://jsr311.dev.java.net/) distribut
  
 This product includes software, JavaBeans Activation Framework (http://java.sun.com/javase/technologies/desktop/javabeans/jaf/) distributed under CDDL Version 1.0 license
  
-This product includes software, SLF4J (http://www.slf4j.org/) distributed under slf4j license
-
 This product includes software, Spring (http://www.springsource.org/) distributed under Apache-2.0 license
-
-This product includes software, htmlparser (http://about.validator.nu/htmlparser/) distributed under MIT license
-
-This product includes software, Jaxen (http://jaxen.codehaus.org/) distributed under Jaxen license
 
 This product includes software, Jettison (http://jettison.codehaus.org/) distributed under Apache-2.0 license
 
 This product includes software, Woodstox (http://woodstox.codehaus.org/) distributed under Apache-2.0 license
+
+Portions of the included Apache Axiom library are Copyright 2006 International Business Machines Corp.
+
+jcip-annotations is Copyright (c) 2005 Brian Goetz and Tim Peierls and is released under the Creative
+Commons Attribution License (http://creativecommons.org/licenses/by/2.5).
+
