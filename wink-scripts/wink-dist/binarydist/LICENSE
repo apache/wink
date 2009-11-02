@@ -234,10 +234,10 @@ Copyright (c) 2002 JSON.org
     SOFTWARE.
 
 --------------------------------------------------------------------------------
-JSR 311 API (https://jsr311.dev.java.net/) javax.ws.rs:jsr311-api:jar:1.0:compile
-JAXB Reference Implementation project (https://jaxb.dev.java.net/) javax.xml.bind:jaxb-api:jar:2.1:compile 
-Sun JAXB Reference Implementation Runtime com.sun.xml.bind:jaxb-impl:jar:2.1.4:compile
-JavaBeans Activation Framework (http://java.sun.com/javase/technologies/desktop/javabeans/jaf/) javax.activation:activation:1.1:compile
+JSR 311 API (https://jsr311.dev.java.net/) javax.ws.rs:jsr311-api:jar:1.0
+JAXB Reference Implementation project (https://jaxb.dev.java.net/) javax.xml.bind:jaxb-api:jar:2.1 
+Sun JAXB Reference Implementation Runtime com.sun.xml.bind:jaxb-impl:jar:2.1.4
+JavaBeans Activation Framework (http://java.sun.com/javase/technologies/desktop/javabeans/jaf/) javax.activation:activation:1.1
 
     COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
 
@@ -621,8 +621,9 @@ JavaBeans Activation Framework (http://java.sun.com/javase/technologies/desktop/
     of liability.
 
 --------------------------------------------------------------------------------
-SLF4J (http://www.slf4j.org/) org.slf4j:slf4j-api:jar:1.5.8:runtime
-SLF4J (http://www.slf4j.org/) org.slf4j:slf4j-simple:jar:1.5.8:runtime
+SLF4J (http://www.slf4j.org/) org.slf4j:slf4j-api:jar:1.5.8
+SLF4J (http://www.slf4j.org/) org.slf4j:slf4j-simple:jar:1.5.8
+SLF4J (http://www.slf4j.org/) org.slf4j:jcl-over-slf4j:jar:1.5.8
 
      Copyright (c) 2004-2008 QOS.ch
      All rights reserved.
