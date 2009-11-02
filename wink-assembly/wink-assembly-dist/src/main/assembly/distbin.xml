@@ -197,7 +197,7 @@
             <useStrictFiltering>true</useStrictFiltering>
         </fileSet>
         <fileSet>
-            <directory>../../</directory>
+            <directory>../../wink-scripts/wink-dist/binarydist</directory>
             <outputDirectory>.</outputDirectory>
             <includes>
                 <include>NOTICE</include>
