@@ -213,6 +213,7 @@ Spring Framework (http://www.springsource.org/) org.springframework:spring:jar:2
 Apache Jakarta Commons Lang (http://commons.apache.org/lang/) commons-lang:commons-lang:jar:2.3
 Apache Commons CLI (http://commons.apache.org/cli/) commons-cli:commons-cli:jar:1.2
 org.apache.geronimo.specs:geronimo-j2ee_1.4_spec:jar:1.1
+Jettison (http://jettison.codehaus.org/) org.codehaus.jettison:jettison:jar:1.1
 
 The above are distributed under the terms of the Apache License, Version 2.0
 which is included at the start of this file.
@@ -247,6 +248,7 @@ JSR 311 API (https://jsr311.dev.java.net/) javax.ws.rs:jsr311-api:jar:1.0
 JAXB Reference Implementation project (https://jaxb.dev.java.net/) javax.xml.bind:jaxb-api:jar:2.1 
 Sun JAXB Reference Implementation Runtime com.sun.xml.bind:jaxb-impl:jar:2.1.4
 JavaBeans Activation Framework (http://java.sun.com/javase/technologies/desktop/javabeans/jaf/) javax.activation:activation:1.1
+Streaming API for XML javax.xml.stream:stax-api:jar:1.0-2:compile
 
     COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
 
