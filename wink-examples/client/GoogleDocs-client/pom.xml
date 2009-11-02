@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.apache.wink.example</groupId>
 		<artifactId>client</artifactId>
-		<version>1.0-incubating</version>
+		<version>1.0-incubating-SNAPSHOT</version>
 	</parent>
 	<build>
 		<finalName>GoogleDocs-client</finalName>
