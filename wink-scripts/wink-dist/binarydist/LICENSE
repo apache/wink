@@ -209,6 +209,16 @@ copyright notices and license terms. Your use of those components are
 subject to the terms and conditions of the following licenses. 
 
 --------------------------------------------------------------------------------
+Spring Framework (http://www.springsource.org/) org.springframework:spring:jar:2.5
+JavaBeans Activation Framework javax.activation:activation:jar:1.1
+Apache Jakarta Commons Lang (http://commons.apache.org/lang/) commons-lang:commons-lang:jar:2.3
+Apache Commons CLI (http://commons.apache.org/cli/) commons-cli:commons-cli:jar:1.2
+org.apache.geronimo.specs:geronimo-j2ee_1.4_spec:jar:1.1
+
+The above are distributed under the terms of the Apache License, Version 2.0
+which is included at the start of this file.
+
+--------------------------------------------------------------------------------
 JSON (http://json.org/) org.json:json:20080701
 
 Copyright (c) 2002 JSON.org
