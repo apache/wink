@@ -38,6 +38,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -99,7 +100,8 @@ public class JettisonJAXBElementProvider extends AbstractJAXBProvider implements
         } else {
             this.outputConfiguration = new Configuration(new HashMap<String, String>());
         }
-        // see http://jira.codehaus.org/browse/JETTISON-74 . reading disabled for now
+        // see http://jira.codehaus.org/browse/JETTISON-74 . reading disabled
+        // for now
         isReadable = false;
         isWritable = true;
     }
@@ -132,7 +134,8 @@ public class JettisonJAXBElementProvider extends AbstractJAXBProvider implements
         Unmarshaller unmarshaller = null;
 
         try {
-            unmarshaller = getUnmarshaller(classToFill, mediaType);
+            JAXBContext context = getContext(classToFill, mediaType);
+            unmarshaller = getJAXBUnmarshaller(context);
 
             XMLStreamReader xsr = null;
             if (isBadgerFishConventionUsed) {
@@ -177,7 +180,9 @@ public class JettisonJAXBElementProvider extends AbstractJAXBProvider implements
                         MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException, WebApplicationException {
         try {
-            Marshaller marshaller = getMarshaller(t.getDeclaredType(), mediaType);
+            Class<?> declaredType = t.getDeclaredType();
+            JAXBContext context = getContext(declaredType, mediaType);
+            Marshaller marshaller = getJAXBMarshaller(declaredType, context, mediaType);
             OutputStreamWriter writer =
                 new OutputStreamWriter(entityStream, ProviderUtils.getCharset(mediaType));
 

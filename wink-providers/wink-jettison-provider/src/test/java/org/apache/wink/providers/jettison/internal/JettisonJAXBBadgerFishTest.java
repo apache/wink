@@ -206,68 +206,117 @@ public class JettisonJAXBBadgerFishTest extends MockServletInvocationTest {
     }
 
     public void testPostAtomEntry() throws Exception {
-        MockHttpServletRequest request =
-            MockRequestConstructor.constructMockRequest("POST",
-                                                        "/test/atomentry",
-                                                        "application/json");
-        request.setContentType("application/json");
-        request.setContent(ENTRY_JSON_POST.getBytes());
-        MockHttpServletResponse response = invoke(request);
-        assertEquals(200, response.getStatus());
+        try {
+            MockHttpServletRequest request =
+                MockRequestConstructor.constructMockRequest("POST",
+                                                            "/test/atomentry",
+                                                            "application/json");
+            request.setContentType("application/json");
+            request.setContent(ENTRY_JSON_POST.getBytes());
+            MockHttpServletResponse response = invoke(request);
+            assertEquals(200, response.getStatus());
 
-        assertTrue(response.getContentAsString(), JSONUtils.equals(JSONUtils
-            .objectForString(ENTRY_JSON_POST), JSONUtils.objectForString(response
-            .getContentAsString())));
+            assertTrue(response.getContentAsString(), JSONUtils.equals(JSONUtils
+                .objectForString(ENTRY_JSON_POST), JSONUtils.objectForString(response
+                .getContentAsString())) || JSONUtils.equals(JSONUtils
+                .objectForString(ENTRY_JSON_POST2), JSONUtils.objectForString(response
+                .getContentAsString())));
+        } catch (Exception e) {
+            // the Jettison code differs due to a JAXB version implementation difference
+            MockHttpServletRequest request =
+                MockRequestConstructor.constructMockRequest("POST",
+                                                            "/test/atomentry",
+                                                            "application/json");
+            request.setContentType("application/json");
+            request.setContent(ENTRY_JSON_POST2.getBytes());
+
+            MockHttpServletResponse response = invoke(request);
+            assertEquals(200, response.getStatus());
+
+            assertTrue(response.getContentAsString(), JSONUtils.equals(JSONUtils
+                .objectForString(ENTRY_JSON_POST2), JSONUtils.objectForString(response
+                .getContentAsString())) || JSONUtils.equals(JSONUtils
+                .objectForString(ENTRY_JSON_POST3), JSONUtils.objectForString(response
+                .getContentAsString())));
+        }
     }
 
     public void testPostAtomEntryElement() throws Exception {
-        MockHttpServletRequest request =
-            MockRequestConstructor.constructMockRequest("POST",
-                                                        "/test/atomentryelement",
-                                                        "application/json");
-        request.setContentType("application/json");
-        request.setContent(ENTRY_JSON_POST.getBytes());
-        MockHttpServletResponse response = invoke(request);
-        assertEquals(200, response.getStatus());
-        System.out.println(response.getContentAsString());
-        System.out.println(ENTRY_JSON_POST);
-        assertTrue(response.getContentAsString(), JSONUtils.equals(JSONUtils
-            .objectForString(ENTRY_JSON_POST), JSONUtils.objectForString(response
-            .getContentAsString())));
+        try {
+            MockHttpServletRequest request =
+                MockRequestConstructor.constructMockRequest("POST",
+                                                            "/test/atomentryelement",
+                                                            "application/json");
+            request.setContentType("application/json");
+            request.setContent(ENTRY_JSON_POST.getBytes());
+            MockHttpServletResponse response = invoke(request);
+            assertEquals(200, response.getStatus());
+            assertTrue(response.getContentAsString(), JSONUtils.equals(JSONUtils
+                .objectForString(ENTRY_JSON_POST), JSONUtils.objectForString(response
+                .getContentAsString())) || JSONUtils.equals(JSONUtils
+                .objectForString(ENTRY_JSON_POST2), JSONUtils.objectForString(response
+                .getContentAsString())));
+        } catch (Exception e) {
+            // the Jettison code differs due to a JAXB version implementation difference
+            MockHttpServletRequest request =
+                MockRequestConstructor.constructMockRequest("POST",
+                                                            "/test/atomentryelement",
+                                                            "application/json");
+            request.setContentType("application/json");
+            request.setContent(ENTRY_JSON_POST2.getBytes());
+            MockHttpServletResponse response = invoke(request);
+            assertEquals(200, response.getStatus());
+
+            assertTrue(response.getContentAsString(), JSONUtils.equals(JSONUtils
+                .objectForString(ENTRY_JSON_POST2), JSONUtils.objectForString(response
+                .getContentAsString())) || JSONUtils.equals(JSONUtils
+                .objectForString(ENTRY_JSON_POST3), JSONUtils.objectForString(response
+                .getContentAsString())));
+        }
     }
 
-    private static final String ENTRY_STR      =
-                                                   "<entry xml:base=\"http://b216:8080/reporting/reports\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + "    <id>toptenvalidators</id>\n"
-                                                       + "    <updated>@TIME@</updated>\n"
-                                                       + "    <title type=\"text\" xml:lang=\"en\">top ten validators</title>\n"
-                                                       + "    <published>@TIME@</published>\n"
-                                                       + "    <link href=\"http://b216:8080/reporting/reports/toptenvalidators?alt=application/json\" type=\"application/json\" rel=\"alternate\"/>\n"
-                                                       + "    <author>\n"
-                                                       + "        <name>admin</name>\n"
-                                                       + "    </author>\n"
-                                                       + "    <category label=\"report definition\" scheme=\"urn:com:systinet:reporting:kind\" term=\"urn:com:systinet:reporting:kind:definition\"/>\n"
-                                                       + "</entry>\n";
+    private static final String ENTRY_STR       =
+                                                    "<entry xml:base=\"http://b216:8080/reporting/reports\" xmlns=\"http://www.w3.org/2005/Atom\">\n" + "    <id>toptenvalidators</id>\n"
+                                                        + "    <updated>@TIME@</updated>\n"
+                                                        + "    <title type=\"text\" xml:lang=\"en\">top ten validators</title>\n"
+                                                        + "    <published>@TIME@</published>\n"
+                                                        + "    <link href=\"http://b216:8080/reporting/reports/toptenvalidators?alt=application/json\" type=\"application/json\" rel=\"alternate\"/>\n"
+                                                        + "    <author>\n"
+                                                        + "        <name>admin</name>\n"
+                                                        + "    </author>\n"
+                                                        + "    <category label=\"report definition\" scheme=\"urn:com:systinet:reporting:kind\" term=\"urn:com:systinet:reporting:kind:definition\"/>\n"
+                                                        + "</entry>\n";
 
-    private static String       ENTRY_STR_JSON =
-                                                   "{\"entry\":{\"@xmlns\":{\"ns3\":\"http:\\/\\/www.w3.org\\/1999\\/xhtml\",\"ns2\":\"http:\\/\\/a9.com\\/-\\/spec\\/opensearch\\/1.1\\/\",\"$\":\"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\"@xml:base\":\"http:\\/\\/b216:8080\\/reporting\\/reports\",\"id\":{\"$\":\"toptenvalidators\"},\"updated\":{\"$\":\"@TIME@\"},\"title\":{\"@type\":\"text\",\"@xml:lang\":\"en\",\"$\":\"top ten validators\"},\"published\":{\"$\":\"@TIME@\"},\"link\":{\"@href\":\"http:\\/\\/b216:8080\\/reporting\\/reports\\/toptenvalidators?alt=application\\/json\",\"@type\":\"application\\/json\",\"@rel\":\"alternate\"},\"author\":{\"name\":{\"$\":\"admin\"}},\"category\":{\"@label\":\"report definition\",\"@scheme\":\"urn:com:systinet:reporting:kind\",\"@term\":\"urn:com:systinet:reporting:kind:definition\"}}}";
+    private static String       ENTRY_STR_JSON  =
+                                                    "{\"entry\":{\"@xmlns\":{\"ns3\":\"http:\\/\\/www.w3.org\\/1999\\/xhtml\",\"ns2\":\"http:\\/\\/a9.com\\/-\\/spec\\/opensearch\\/1.1\\/\",\"$\":\"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\"@xml:base\":\"http:\\/\\/b216:8080\\/reporting\\/reports\",\"id\":{\"$\":\"toptenvalidators\"},\"updated\":{\"$\":\"@TIME@\"},\"title\":{\"@type\":\"text\",\"@xml:lang\":\"en\",\"$\":\"top ten validators\"},\"published\":{\"$\":\"@TIME@\"},\"link\":{\"@href\":\"http:\\/\\/b216:8080\\/reporting\\/reports\\/toptenvalidators?alt=application\\/json\",\"@type\":\"application\\/json\",\"@rel\":\"alternate\"},\"author\":{\"name\":{\"$\":\"admin\"}},\"category\":{\"@label\":\"report definition\",\"@scheme\":\"urn:com:systinet:reporting:kind\",\"@term\":\"urn:com:systinet:reporting:kind:definition\"}}}";
 
-    private static String       ENTRY_STR_POST =
-                                                   "{\"entry\":" + "{\"@xmlns\":"
-                                                       + "{\"ns3\":\"http:\\/\\/www.w3.org\\/1999\\/xhtml\","
-                                                       + "\"ns2\":\"http:\\/\\/a9.com\\/-\\/spec\\/opensearch\\/1.1\\/\",\"$\":\"http:\\/\\/www.w3.org\\/2005\\/Atom\"},"
-                                                       + "\"id\":{\"$\":\"toptenvalidators\"},"
-                                                       + "\"updated\":{\"$\":\"@TIME@\"},"
-                                                       + "\"title\":{"
-                                                       + "\"$\":\"top ten validators\"},"
-                                                       + "\"published\":{\"$\":\"@TIME@\"},"
-                                                       + "\"author\":{\"name\":{\"$\":\"admin\"}},"
-                                                       + "}}";
+    private static String       ENTRY_STR_POST  =
+                                                    "{\"entry\":" + "{\"@xmlns\":"
+                                                        + "{\"ns3\":\"http:\\/\\/www.w3.org\\/1999\\/xhtml\","
+                                                        + "\"ns2\":\"http:\\/\\/a9.com\\/-\\/spec\\/opensearch\\/1.1\\/\",\"$\":\"http:\\/\\/www.w3.org\\/2005\\/Atom\"},"
+                                                        + "\"id\":{\"$\":\"toptenvalidators\"},"
+                                                        + "\"updated\":{\"$\":\"@TIME@\"},"
+                                                        + "\"title\":{"
+                                                        + "\"$\":\"top ten validators\"},"
+                                                        + "\"published\":{\"$\":\"@TIME@\"},"
+                                                        + "\"author\":{\"name\":{\"$\":\"admin\"}},"
+                                                        + "}}";
+
+    private static String       ENTRY_STR_POST2 =
+                                                    "{\"entry\":{\"@xmlns\":{\"ns3\":\"http:\\/\\/www.w3.org\\/1999\\/xhtml\",\"ns2\":\"http:\\/\\/a9.com\\/-\\/spec\\/opensearch\\/1.1\\/\",\"$\":\"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\"id\":{\"@xmlns\":{\"$\":\"\",\"ns4\":\"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\"$\":\"toptenvalidators\"},\"updated\":{\"@xmlns\":{\"$\":\"\",\"ns4\":\"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\"$\":\"@TIME@\"},\"title\":{\"@xmlns\":{\"$\":\"\",\"ns4\":\"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\"$\":\"top ten validators\"},\"published\":{\"@xmlns\":{\"$\":\"\",\"ns4\":\"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\"$\":\"@TIME@\"},\"author\":{\"@xmlns\":{\"$\":\"\",\"ns4\":\"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\"name\":{\"@xmlns\":{\"$\":\"\",\"ns7\":\"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\"$\":\"admin\"}}}}";
+
+    private static String       ENTRY_STR_POST3 =
+                                                    "{\"entry\":{\"@xmlns\":{\"ns3\":\"http:\\/\\/www.w3.org\\/1999\\/xhtml\",\"ns2\":\"http:\\/\\/a9.com\\/-\\/spec\\/opensearch\\/1.1\\/\",\"$\":\"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\"id\":{\"@xmlns\":{\"$\":\"\",\"ns4\":\"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\"$\":\"toptenvalidators\"},\"updated\":{\"@xmlns\":{\"$\":\"\",\"ns4\":\"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\"$\":\"@TIME@\"},\"title\":{\"@xmlns\":{\"$\":\"\",\"ns4\":\"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\"$\":\"top ten validators\"},\"published\":{\"@xmlns\":{\"$\":\"\",\"ns4\":\"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\"$\":\"@TIME@\"},\"author\":{\"@xmlns\":{\"$\":\"\",\"ns4\":\"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\"name\":{\"@xmlns\":{\"ns7\":\"http:\\/\\/www.w3.org\\/2005\\/Atom\"},\"$\":\"admin\"}}}}";
 
     private static final String ENTRY;
 
     private static final String ENTRY_JSON;
 
     private static final String ENTRY_JSON_POST;
+
+    private static final String ENTRY_JSON_POST2;
+
+    private static final String ENTRY_JSON_POST3;
 
     static {
         try {
@@ -278,6 +327,8 @@ public class JettisonJAXBBadgerFishTest extends MockServletInvocationTest {
             ENTRY = ENTRY_STR.replaceAll("@TIME@", xmlGregCal.toString());
             ENTRY_JSON = ENTRY_STR_JSON.replaceAll("@TIME@", xmlGregCal.toString());
             ENTRY_JSON_POST = ENTRY_STR_POST.replaceAll("@TIME@", xmlGregCal.toString());
+            ENTRY_JSON_POST2 = ENTRY_STR_POST2.replaceAll("@TIME@", xmlGregCal.toString());
+            ENTRY_JSON_POST3 = ENTRY_STR_POST3.replaceAll("@TIME@", xmlGregCal.toString());
         } catch (DatatypeConfigurationException e) {
             throw new RuntimeException(e);
         }

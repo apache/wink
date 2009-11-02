@@ -107,4 +107,15 @@ public interface ClientResponse extends BaseRequestResponse {
      * @param entity response entity to set
      */
     public void setEntity(Object entity);
+
+    /**
+     * Consumes entity content. The real behavior of this method depends on the
+     * actual implementation. It's needed to call this method, if the calling
+     * code decides not to handle content.
+     * <p>
+     * There is no need to call this method, if getEntity() was invoked.
+     * <p>
+     * Calling this method multiple times will not cause an error.
+     */
+    public void consumeContent();
 }
