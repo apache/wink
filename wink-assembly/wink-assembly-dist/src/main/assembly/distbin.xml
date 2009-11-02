@@ -83,7 +83,7 @@
         </dependencySet>
         <dependencySet>
             <includes>
-                <include>commons-logging:commons-logging</include>
+                <include>org.slf4j:jcl-over-slf4j</include>
                 <include>commons-codec:commons-codec</include>
                 <include>org.apache.httpcomponents:httpcore</include>
                 <include>org.apache.httpcomponents:httpclient</include>
