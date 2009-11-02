@@ -39,6 +39,7 @@
                     <artifactId>geronimo-activation_1.0.2_spec</artifactId>
                 </exclusion>
             </exclusions>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.abdera</groupId>
@@ -70,6 +71,7 @@
                     <artifactId>xercesImpl</artifactId>
                 </exclusion>
             </exclusions>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.wink</groupId>

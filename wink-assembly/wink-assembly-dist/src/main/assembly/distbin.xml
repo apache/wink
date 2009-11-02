@@ -69,14 +69,6 @@
             <useStrictFiltering>true</useStrictFiltering>
         </dependencySet>
         <dependencySet>
-            <includes>
-                <include>org.apache.abdera:*</include>
-                <include>org.apache.ws.commons.axiom:*</include>
-                <include>commons-codec:commons-codec</include>
-                <include>nu.validator.htmlparser:htmlparser</include>
-                <include>jaxen:jaxen</include>
-                <include>org.codehaus.woodstox:wstx-asl</include>
-            </includes>
             <useProjectArtifact>false</useProjectArtifact>
             <outputDirectory>ext/wink-abdera-provider/lib</outputDirectory>
             <useStrictFiltering>true</useStrictFiltering>
