@@ -76,7 +76,6 @@
                 <include>nu.validator.htmlparser:htmlparser</include>
                 <include>jaxen:jaxen</include>
                 <include>org.codehaus.woodstox:wstx-asl</include>
-                <include>xerces:xercesImpl</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
             <outputDirectory>ext/wink-abdera-provider/lib</outputDirectory>
