@@ -188,14 +188,19 @@ public class RequestProcessor {
             if (statusCode >= 500) {
                 logger.error(String.format(messageFormat, exceptionName), t);
             } else {
-                logger.info(String.format(messageFormat, exceptionName), t);
+                // don't log the whole call stack for sub-500 return codes unless debugging
+                if (logger.isDebugEnabled()) {
+                    logger.debug(String.format(messageFormat, exceptionName), t);
+                } else {
+                    logger.info(String.format(messageFormat, exceptionName));
+                }
             }
         } else {
             logger.error(String.format(messageFormat, exceptionName), t);
         }
     }
 
-    private ServerMessageContext createMessageContext(HttpServletRequest request,
+    private ServerMessageContext createMessageContext(HttpServletRequest request,   
                                                       HttpServletResponse response) {
         ServerMessageContext messageContext =
             new ServerMessageContext(request, response, configuration);
