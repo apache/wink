@@ -20,7 +20,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.wink</groupId>
     <artifactId>wink</artifactId>
-    <version>1.0-incubating</version>
+    <version>1.0-incubating-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Apache Wink</name>
     <parent>
