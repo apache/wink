@@ -38,6 +38,7 @@
                     <artifactId>geronimo-activation_1.0.2_spec</artifactId>
                 </exclusion>
             </exclusions>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.abdera</groupId>
@@ -60,7 +61,16 @@
                     <groupId>commons-httpclient</groupId>
                     <artifactId>commons-httpclient</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>xml-apis</groupId>
+                    <artifactId>xml-apis</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>xerces</groupId>
+                    <artifactId>xercesImpl</artifactId>
+                </exclusion>
             </exclusions>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.wink</groupId>
