@@ -36,6 +36,7 @@ import javax.servlet.ServletContext;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Application;
 
+import org.apache.commons.lang.ClassUtils;
 import org.apache.wink.common.internal.application.ApplicationValidator;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
@@ -360,8 +361,9 @@ public class DeploymentConfiguration {
         if (handlersFactoryClassName != null) {
             try {
                 logger.debug("Handlers Factory Class is: {}", handlersFactoryClassName);
+                // use ClassUtils.getClass instead of Class.forName so we have classloader visibility into the Web module in J2EE environments
                 Class<HandlersFactory> handlerFactoryClass =
-                    (Class<HandlersFactory>)Class.forName(handlersFactoryClassName);
+                    (Class<HandlersFactory>)ClassUtils.getClass(handlersFactoryClassName);
                 HandlersFactory handlersFactory = handlerFactoryClass.newInstance();
                 if (requestUserHandlers == null) {
                     requestUserHandlers =
