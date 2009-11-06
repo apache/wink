@@ -35,6 +35,7 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
@@ -71,11 +72,21 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
         try {
             JAXBContext context = getContext(type, mediaType);
             unmarshaller = getJAXBUnmarshaller(context);
-            if (type.isAnnotationPresent(XmlRootElement.class))
+            if (type.isAnnotationPresent(XmlRootElement.class)) {
                 unmarshaledResource = unmarshaller.unmarshal(entityStream);
-            else
+                if (unmarshaledResource instanceof JAXBElement) {
+                    // this can happen if the JAXBContext object used to create the unmarshaller
+                    // was created using the package name string instead of a class object and the
+                    // ObjectFactory has a creator method for the desired object that returns
+                    // JAXBElement.  But we know better; the 'type' param passed in here had the
+                    // XmlRootElement on it, so we know the desired return object type is NOT
+                    // JAXBElement, thus:
+                    unmarshaledResource = ((JAXBElement)unmarshaledResource).getValue();
+                }
+            } else {
                 unmarshaledResource =
                     unmarshaller.unmarshal(new StreamSource(entityStream), type).getValue();
+            }
 
             releaseJAXBUnmarshaller(context, unmarshaller);
         } catch (JAXBException e) {
