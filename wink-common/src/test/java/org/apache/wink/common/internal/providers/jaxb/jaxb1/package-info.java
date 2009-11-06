@@ -25,5 +25,5 @@
 // Generated on: 2009.08.20 at 04:05:47 PM CDT 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://org/apache/wink/common/internal/providers/jaxb", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://org/apache/wink/common/internal/providers/jaxb/jaxb1", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package org.apache.wink.common.internal.providers.jaxb.jaxb1;
