@@ -29,10 +29,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Application;
 
-import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.i18n.Messages;
+import org.apache.wink.common.internal.utils.ClassUtils;
 import org.apache.wink.server.internal.DeploymentConfiguration;
 import org.apache.wink.server.internal.RequestProcessor;
 import org.apache.wink.server.internal.application.ServletWinkApplication;
@@ -146,8 +146,8 @@ public class RestServlet extends AbstractRestServlet {
             logger.info(Messages.getMessage("restServletUseDeploymentConfigurationParam"),
                         initParameter,
                         DEPLYMENT_CONF_PARAM);
-            // use ClassUtils.getClass instead of Class.forName so we have classloader visibility into the Web module in J2EE environments
-            Class<?> confClass = ClassUtils.getClass(initParameter);
+            // use ClassUtils.loadClass instead of Class.forName so we have classloader visibility into the Web module in J2EE environments
+            Class<?> confClass = ClassUtils.loadClass(initParameter);
             return (DeploymentConfiguration)confClass.newInstance();
         }
         return new DeploymentConfiguration();
@@ -162,8 +162,8 @@ public class RestServlet extends AbstractRestServlet {
             logger.info(Messages.getMessage("restServletJAXRSApplicationInitParam"),
                         initParameter,
                         APPLICATION_INIT_PARAM);
-            // use ClassUtils.getClass instead of Class.forName so we have classloader visibility into the Web module in J2EE environments
-            appClass = (Class<Application>)ClassUtils.getClass(initParameter);
+            // use ClassUtils.loadClass instead of Class.forName so we have classloader visibility into the Web module in J2EE environments
+            appClass = (Class<? extends Application>)ClassUtils.loadClass(initParameter);
             return appClass.newInstance();
         }
         String appLocationParameter = getInitParameter(APP_LOCATION_PARAM);

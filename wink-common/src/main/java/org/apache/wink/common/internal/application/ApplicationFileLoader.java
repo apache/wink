@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
+import org.apache.wink.common.internal.utils.ClassUtils;
 import org.apache.wink.common.internal.utils.FileLoader;
 
 /**
@@ -119,7 +120,8 @@ public class ApplicationFileLoader {
 
                 Class<?> cls = null;
                 try {
-                    cls = Class.forName(line);
+                    // use ClassUtils.loadClass instead of Class.forName so we have classloader visibility into the Web module in J2EE environments
+                    cls = ClassUtils.loadClass(line);
                     if (ResourceMetadataCollector.isStaticResource(cls) || ProviderMetadataCollector
                         .isProvider(cls)) {
                         logger.debug(Messages.getMessage("loadingClassToApplication"), line);

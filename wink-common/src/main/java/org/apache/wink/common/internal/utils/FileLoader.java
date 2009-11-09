@@ -117,6 +117,11 @@ public class FileLoader {
      * @throws IOException
      */
     public static Enumeration<URL> loadFileUsingClassLoaders(String filename) throws IOException {
+        
+        /*
+         * TODO: perhaps desirable to move this code to org.apache.wink.common.internal.utils.ClassUtils?
+         */
+        
         logger.debug("Searching for {} using thread context classloader.", filename);
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         Enumeration<URL> resources = loadFileUsingClassLoader(classLoader, filename);
