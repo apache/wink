@@ -38,6 +38,7 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
@@ -132,23 +133,27 @@ public class JettisonJAXBProvider extends AbstractJAXBProvider implements
             unmarshaller = getJAXBUnmarshaller(context);
 
             XMLStreamReader xsr = null;
-            if (type.isAnnotationPresent(XmlRootElement.class)) {
-                if (isBadgerFishConventionUsed) {
-                    xsr = new BadgerFishXMLInputFactory().createXMLStreamReader(entityStream);
-                } else {
-                    xsr =
-                        new MappedXMLInputFactory(inputConfiguration)
-                            .createXMLStreamReader(entityStream);
-                }
-                unmarshaledResource = unmarshaller.unmarshal(xsr);
+
+            if (isBadgerFishConventionUsed) {
+                xsr = new BadgerFishXMLInputFactory().createXMLStreamReader(entityStream);
             } else {
-                if (isBadgerFishConventionUsed) {
-                    xsr = new BadgerFishXMLInputFactory().createXMLStreamReader(entityStream);
-                } else {
-                    xsr =
-                        new MappedXMLInputFactory(inputConfiguration)
-                            .createXMLStreamReader(entityStream);
+                xsr =
+                    new MappedXMLInputFactory(inputConfiguration)
+                .createXMLStreamReader(entityStream);
+            }
+
+            if (type.isAnnotationPresent(XmlRootElement.class)) {
+                unmarshaledResource = unmarshaller.unmarshal(xsr);
+                if (unmarshaledResource instanceof JAXBElement) {
+                    // this can happen if the JAXBContext object used to create the unmarshaller
+                    // was created using the package name string instead of a class object and the
+                    // ObjectFactory has a creator method for the desired object that returns
+                    // JAXBElement.  But we know better; the 'type' param passed in here had the
+                    // XmlRootElement on it, so we know the desired return object type is NOT
+                    // JAXBElement, thus:
+                    unmarshaledResource = ((JAXBElement)unmarshaledResource).getValue();
                 }
+            } else {
                 unmarshaledResource = unmarshaller.unmarshal(xsr, type).getValue();
             }
         } catch (JAXBException e) {
