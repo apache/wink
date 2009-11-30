@@ -33,6 +33,8 @@ import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Variant;
 
+import org.apache.wink.common.internal.utils.HeaderUtils;
+
 public class ResponseImpl extends Response {
 
     private static final int               DEFAULT_STATUS = -1;
@@ -144,7 +146,8 @@ public class ResponseImpl extends Response {
 
         @Override
         public ResponseBuilder language(Locale language) {
-            return singleHeader(HttpHeaders.CONTENT_LANGUAGE, language);
+            return singleHeader(HttpHeaders.CONTENT_LANGUAGE, language == null ? null : HeaderUtils
+                .localeToLanguage(language));
         }
 
         @Override

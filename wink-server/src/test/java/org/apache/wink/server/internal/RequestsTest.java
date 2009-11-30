@@ -482,7 +482,7 @@ public class RequestsTest extends MockServletInvocationTest {
         assertEquals(200, response.getStatus());
         assertEquals(MediaType.TEXT_PLAIN, response.getContentType());
         assertEquals("gzip", response.getHeader(HttpHeaders.CONTENT_ENCODING));
-        assertEquals("en_US", response.getHeader(HttpHeaders.CONTENT_LANGUAGE));
+        assertEquals("en-US", response.getHeader(HttpHeaders.CONTENT_LANGUAGE));
         assertEquals(HttpHeaders.ACCEPT + ", "
             + HttpHeaders.ACCEPT_LANGUAGE
             + ", "
@@ -535,7 +535,7 @@ public class RequestsTest extends MockServletInvocationTest {
         assertEquals(200, response.getStatus());
         assertEquals(MediaType.TEXT_PLAIN + ";charset=shift_jis", response.getContentType());
         assertEquals("gzip", response.getHeader(HttpHeaders.CONTENT_ENCODING));
-        assertEquals("en_US", response.getHeader(HttpHeaders.CONTENT_LANGUAGE));
+        assertEquals("en-US", response.getHeader(HttpHeaders.CONTENT_LANGUAGE));
         assertEquals(HttpHeaders.ACCEPT + ", "
             + HttpHeaders.ACCEPT_LANGUAGE
             + ", "
