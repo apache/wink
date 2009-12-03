@@ -50,6 +50,14 @@ import org.apache.wink.common.model.multipart.OutMultiPart;
 import org.apache.wink.common.model.multipart.OutPart;
 
 public class TestMultiPartProvider extends TestCase {
+	 public void testBufferdMultiPartNoContentType() throws IOException {
+		 runTestBufferdMultiPart(null);
+		 
+	 }
+	 public void testBufferdMultiPart() throws IOException {
+		 runTestBufferdMultiPart(MediaType.TEXT_PLAIN);
+		 
+	 }
 
     /**
      * create A BufferdMultipart ,serialized it, un serilized it using providers
@@ -57,7 +65,7 @@ public class TestMultiPartProvider extends TestCase {
      * 
      * @throws IOException
      */
-    public void testBufferdMultiPart() throws IOException {
+    public void runTestBufferdMultiPart(String contentType) throws IOException {
         String bounary = "1267h27";
         String body = "This is the Body String";
         BufferedOutMultiPart bomp = new BufferedOutMultiPart();
@@ -67,7 +75,8 @@ public class TestMultiPartProvider extends TestCase {
 
         op.addHeader("nAme", "value");
         assertEquals(op.getHeaders().getFirst("NaMe"), "value");
-        op.setContentType(MediaType.TEXT_PLAIN);
+        if(contentType!= null)
+        	op.setContentType(contentType);
         op.setBody(body);
         bomp.addPart(op);
 
@@ -90,6 +99,9 @@ public class TestMultiPartProvider extends TestCase {
         // bomp.write(os, null);
 
     }
+    
+    
+    
 
     /**
      * extends the OutMultiPart (FileOutMultiPart) pass a file, serialized

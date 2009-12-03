@@ -65,7 +65,11 @@ public class OutPart {
     }
 
     public String getContentType() {
-        return getHeaders().getFirst(HttpHeaders.CONTENT_TYPE);
+    	String res = getHeaders().getFirst(HttpHeaders.CONTENT_TYPE);
+        if(res == null)
+        	res = MediaType.TEXT_PLAIN;
+        return res;
+        //return getHeaders().getFirst(HttpHeaders.CONTENT_TYPE);
     }
 
     /**
