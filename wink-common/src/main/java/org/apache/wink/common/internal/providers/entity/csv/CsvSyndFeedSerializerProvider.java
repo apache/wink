@@ -47,7 +47,7 @@ import org.apache.wink.common.model.synd.SyndFeed;
 @Provider
 @Produces("text/csv")
 public class CsvSyndFeedSerializerProvider implements MessageBodyWriter<SyndFeed> {
-
+    
     private final static String[] EMPTY_ARRAY = new String[0];
 
     @Context
@@ -65,7 +65,12 @@ public class CsvSyndFeedSerializerProvider implements MessageBodyWriter<SyndFeed
                                Type genericType,
                                Annotation[] annotations,
                                MediaType mediaType) {
-        return SyndFeed.class.isAssignableFrom(type);
+        MessageBodyWriter<SyndFeedSerializer> messageBodyWriter =
+            providers.getMessageBodyWriter(SyndFeedSerializer.class,
+                                           genericType,
+                                           annotations,
+                                           mediaType);
+        return ((SyndFeed.class.isAssignableFrom(type)) && (messageBodyWriter != null));
     }
 
     public void writeTo(SyndFeed t,
@@ -81,6 +86,9 @@ public class CsvSyndFeedSerializerProvider implements MessageBodyWriter<SyndFeed
                                            genericType,
                                            annotations,
                                            mediaType);
+        
+        // already checked for non-null writer in isWriteable
+        
         messageBodyWriter.writeTo(new SyndFeedSerializer(t),
                                   type,
                                   genericType,

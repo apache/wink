@@ -408,18 +408,24 @@ public class ProvidersRegistry {
             MessageBodyWriter<?> writer = factory.getInstance(runtimeContext);
             if (logger.isDebugEnabled()) {
                 List<Annotation> anns = (annotations == null) ? null : Arrays.asList(annotations);
-                logger.debug("Calling {}.isWritable( {}, {}, {}, {} )", new Object[] {writer, type,
+                logger.debug("Calling {}.isWriteable( {}, {}, {}, {} )", new Object[] {writer, type,
                     genericType, anns, mediaType});
             }
             if (writer.isWriteable(type, genericType, annotations, mediaType)) {
                 if (logger.isDebugEnabled()) {
                     List<Annotation> anns =
                         (annotations == null) ? null : Arrays.asList(annotations);
-                    logger.debug("{}.isWritable( {}, {}, {}, {} ) returned true", new Object[] {
+                    logger.debug("{}.isWriteable( {}, {}, {}, {} ) returned true", new Object[] {
                         writer, type, genericType, anns, mediaType});
                 }
                 return (MessageBodyWriter<T>)writer;
             }
+        }
+        if (logger.isDebugEnabled()) {
+            List<Annotation> anns =
+                (annotations == null) ? null : Arrays.asList(annotations);
+            logger.debug("No MessageBodyWriter returned true for isWriteable( {}, {}, {}, {} )", new Object[] {
+                type, genericType, anns, mediaType});
         }
         return null;
     }

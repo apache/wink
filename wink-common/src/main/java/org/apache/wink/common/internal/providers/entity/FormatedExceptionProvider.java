@@ -65,6 +65,7 @@ public class FormatedExceptionProvider implements MessageBodyWriter<Throwable> {
                                Type genericType,
                                Annotation[] annotations,
                                MediaType mediaType) {
+        // do not check for non-null writer here; writeTo will handle this situation
         return Throwable.class.isAssignableFrom(type);
     }
 

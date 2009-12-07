@@ -79,7 +79,9 @@ public class AtomEntrySyndEntryProvider implements MessageBodyReader<SyndEntry>,
                                Type genericType,
                                Annotation[] annotations,
                                MediaType mediaType) {
-        return type == SyndEntry.class;
+        MessageBodyWriter<AtomEntry> writer =
+            providers.getMessageBodyWriter(AtomEntry.class, genericType, annotations, mediaType);
+        return ((type.isAssignableFrom(SyndEntry.class)) && (writer != null));
     }
 
     public void writeTo(SyndEntry t,
@@ -93,6 +95,8 @@ public class AtomEntrySyndEntryProvider implements MessageBodyReader<SyndEntry>,
         MessageBodyWriter<AtomEntry> writer =
             providers.getMessageBodyWriter(AtomEntry.class, genericType, annotations, mediaType);
 
+        // already checked for non-null writer in isWriteable
+        
         writer.writeTo(entry,
                        AtomEntry.class,
                        genericType,

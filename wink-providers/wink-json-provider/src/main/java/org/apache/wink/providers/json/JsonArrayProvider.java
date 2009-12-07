@@ -71,6 +71,7 @@ public class JsonArrayProvider implements MessageBodyWriter<JSONArray>,
                                Type genericType,
                                Annotation[] annotations,
                                MediaType mediaType) {
+        // TODO: use isAssignableFrom instead of == ?
         return type == JSONArray.class;
     }
 

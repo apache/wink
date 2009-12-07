@@ -46,7 +46,7 @@ import org.apache.wink.common.model.synd.SyndFeed;
 @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON, MediaTypeUtils.JAVASCRIPT})
 public class AtomFeedSyndFeedProvider implements MessageBodyReader<SyndFeed>,
     MessageBodyWriter<SyndFeed> {
-
+    
     @Context
     private Providers providers;
 
@@ -80,7 +80,9 @@ public class AtomFeedSyndFeedProvider implements MessageBodyReader<SyndFeed>,
                                Type genericType,
                                Annotation[] annotations,
                                MediaType mediaType) {
-        return type == SyndFeed.class;
+        MessageBodyWriter<AtomFeed> writer =
+            providers.getMessageBodyWriter(AtomFeed.class, genericType, annotations, mediaType);
+        return ((type.isAssignableFrom(SyndFeed.class)) && (writer != null));
     }
 
     public void writeTo(SyndFeed t,
@@ -93,6 +95,9 @@ public class AtomFeedSyndFeedProvider implements MessageBodyReader<SyndFeed>,
         AtomFeed feed = new AtomFeed(t);
         MessageBodyWriter<AtomFeed> writer =
             providers.getMessageBodyWriter(AtomFeed.class, genericType, annotations, mediaType);
+
+        // already checked for non-null writer in isWriteable
+        
         writer.writeTo(feed,
                        AtomFeed.class,
                        genericType,

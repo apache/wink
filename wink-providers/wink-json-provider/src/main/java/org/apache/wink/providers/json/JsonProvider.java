@@ -71,6 +71,7 @@ public class JsonProvider implements MessageBodyWriter<JSONObject>, MessageBodyR
                                Type genericType,
                                Annotation[] annotations,
                                MediaType mediaType) {
+        // TODO: use isAssignableFrom instead of == ?
         return type == JSONObject.class;
     }
 

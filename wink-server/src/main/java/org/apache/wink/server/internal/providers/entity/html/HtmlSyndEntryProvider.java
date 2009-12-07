@@ -54,7 +54,12 @@ public class HtmlSyndEntryProvider implements MessageBodyWriter<SyndEntry> {
                                Type genericType,
                                Annotation[] annotations,
                                MediaType mediaType) {
-        return SyndEntry.class.isAssignableFrom(type);
+        MessageBodyWriter<HtmlDescriptor> writer =
+            providers.getMessageBodyWriter(HtmlDescriptor.class,
+                                           HtmlDescriptor.class,
+                                           annotations,
+                                           mediaType);
+        return ((SyndEntry.class.isAssignableFrom(type)) && (writer != null));
     }
 
     public void writeTo(SyndEntry t,
@@ -71,6 +76,8 @@ public class HtmlSyndEntryProvider implements MessageBodyWriter<SyndEntry> {
                                            annotations,
                                            mediaType);
 
+        // already checked for non-null writer in isWriteable
+        
         writer.writeTo(new HtmlDescriptor(t),
                        HtmlDescriptor.class,
                        HtmlDescriptor.class,
