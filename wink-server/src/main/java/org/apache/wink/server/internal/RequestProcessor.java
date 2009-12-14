@@ -133,7 +133,11 @@ public class RequestProcessor {
             handleRequestWithoutFaultBarrier(request, response);
         } catch (Throwable t) {
             // exception was not handled properly
-            logger.error(Messages.getMessage("unhandledExceptionToContainer"), t);
+            if (logger.isDebugEnabled()) {
+                logger.debug(Messages.getMessage("unhandledExceptionToContainer"), t);
+            } else {
+                logger.info(Messages.getMessage("unhandledExceptionToContainer"));
+            }
             if (t instanceof RuntimeException) {
                 // let the servlet container to handle the runtime exception
                 throw (RuntimeException)t;
@@ -186,7 +190,11 @@ public class RequestProcessor {
             exceptionName =
                 String.format("%s (%d%s%s)", exceptionName, statusCode, statusSep, statusMessage);
             if (statusCode >= 500) {
-                logger.error(String.format(messageFormat, exceptionName), t);
+                if (logger.isDebugEnabled()) {
+                    logger.debug(String.format(messageFormat, exceptionName), t);
+                } else {
+                    logger.info(String.format(messageFormat, exceptionName));
+                }
             } else {
                 // don't log the whole call stack for sub-500 return codes unless debugging
                 if (logger.isDebugEnabled()) {
@@ -196,7 +204,11 @@ public class RequestProcessor {
                 }
             }
         } else {
-            logger.error(String.format(messageFormat, exceptionName), t);
+            if (logger.isDebugEnabled()) {
+                logger.debug(String.format(messageFormat, exceptionName), t);
+            } else {
+                logger.info(String.format(messageFormat, exceptionName));
+            }
         }
     }
 
