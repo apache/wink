@@ -143,12 +143,18 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
                 writeStartTag(qname, entityStream, mediaType);
             }
 
+            Marshaller marshaller = null;
+            JAXBContext context = null;
             for (Object o : elementArray) {
-                Class<?> oType =
-                    isJAXBElement ? ((JAXBElement<?>)o).getDeclaredType() : o.getClass();
-                JAXBContext context = getContext(oType, mediaType);
-                Marshaller marshaller = getJAXBMarshaller(oType, context, mediaType);
-                marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
+                if(marshaller == null) {
+                    Class<?> oType =
+                        isJAXBElement ? ((JAXBElement<?>)o).getDeclaredType() : o.getClass();
+                        context = getContext(oType, mediaType);
+                        marshaller = getJAXBMarshaller(oType, context, mediaType);
+                        marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
+                        Charset charSet = getCharSet(mediaType);
+                        marshaller.setProperty(Marshaller.JAXB_ENCODING, charSet.name());
+                }
                 Object entityToMarshal = getEntityToMarshal(o, theType);
                 if (qname == null) {
                     if (entityToMarshal instanceof JAXBElement<?>)
@@ -159,8 +165,6 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
                                       entityToMarshal.getClass().getSimpleName());
                     writeStartTag(qname, entityStream, mediaType);
                 }
-                Charset charSet = getCharSet(mediaType);
-                marshaller.setProperty(Marshaller.JAXB_ENCODING, charSet.name());
                 marshaller.marshal(entityToMarshal, entityStream);
                 releaseJAXBMarshaller(context, marshaller);
             }
