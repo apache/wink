@@ -22,6 +22,7 @@ package org.apache.wink.common.internal.model;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.lang.annotation.Annotation;
@@ -39,6 +40,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.Providers;
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -60,6 +62,7 @@ import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.lifecycle.ScopeLifecycleManager;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
+import org.apache.wink.common.internal.runtime.AbstractRuntimeContext;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.common.internal.utils.UnmodifiableMultivaluedMap;
 import org.apache.wink.common.model.atom.AtomContent;
@@ -215,6 +218,7 @@ public class ModelUtils {
                                   Annotation[] annotations,
                                   MultivaluedMap<String, String> httpHeaders,
                                   MediaType mediaType) throws IOException {
+        
         if (list == null || list.isEmpty()) {
             return null;
         }
@@ -293,10 +297,37 @@ public class ModelUtils {
                     providers = new ProvidersImpl(providersRegistry, runtimeContext);
                 }
             }
+            
+            /*
+             * Need to set a temporary RuntimeContextTLS just in case we're already outside of the runtime context.
+             * This may occur when a client app is retrieving the AtomContent value, expecting it to be unmarshalled
+             * automatically, but we are already outside of the client-server thread, and thus no longer have a
+             * RuntimeContextTLS from which to retrieve or inject providers.
+             */
+            
+            RuntimeContext tempRuntimeContext = RuntimeContextTLS.getRuntimeContext();
+            if (tempRuntimeContext == null) {
+                final Providers p = providers;
+                RuntimeContextTLS.setRuntimeContext(new AbstractRuntimeContext() {
+                    {
+                        setAttribute(Providers.class, p);
+                    }
+
+                    public OutputStream getOutputStream() throws IOException {
+                        return null;
+                    }
+
+                    public InputStream getInputStream() throws IOException {
+                        return null;
+                    }
+                });
+            }
+            
             MessageBodyReader<T> reader =
                 providers.getMessageBodyReader(type, type, EMPTY_ARRAY, mediaType);
             if (reader == null)
                 throw new WebApplicationException(Response.Status.UNSUPPORTED_MEDIA_TYPE);
+
             T read =
                 reader.readFrom(type,
                                 type,
@@ -304,6 +335,10 @@ public class ModelUtils {
                                 mediaType,
                                 httpHeaders,
                                 new ByteArrayInputStream((byte[])value));
+            
+            // Reset RuntimeContext from temporary above.  tempRuntimeContext may be null here, which is ok.
+            RuntimeContextTLS.setRuntimeContext(tempRuntimeContext);
+            
             return read;
         }
         throw new ClassCastException("Cannot cast " + value.getClass().getName()

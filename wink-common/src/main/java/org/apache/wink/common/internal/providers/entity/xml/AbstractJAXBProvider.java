@@ -63,7 +63,7 @@ public abstract class AbstractJAXBProvider {
                                                                                                 new SoftConcurrentMap<Class<?>, JAXBContext>();
 
     @Context
-    private Providers                                             providers;
+    protected Providers                                           providers;
 
     private static final SoftConcurrentMap<Class<?>, Boolean>     jaxbIsXMLRootElementCache =
                                                                                                 new SoftConcurrentMap<Class<?>, Boolean>();

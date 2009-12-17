@@ -22,59 +22,46 @@ package org.apache.wink.common.internal.providers.entity.atom;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.ext.MessageBodyReader;
-import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 import javax.ws.rs.ext.Providers;
 
+import org.apache.wink.common.internal.providers.entity.xml.JAXBXmlProvider;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.model.atom.AtomContent;
 import org.apache.wink.common.model.atom.AtomEntry;
-import org.apache.wink.common.model.synd.SyndEntry;
 
 @Provider
 @Consumes( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON, MediaTypeUtils.JAVASCRIPT})
 @Produces( {MediaType.APPLICATION_ATOM_XML, MediaType.APPLICATION_JSON, MediaTypeUtils.JAVASCRIPT})
-public class AtomEntrySyndEntryProvider implements MessageBodyReader<SyndEntry>,
-    MessageBodyWriter<SyndEntry> {
+public class AtomEntryProvider extends JAXBXmlProvider {
 
-    @Context
-    private Providers providers;
-
+    @Override
     public boolean isReadable(Class<?> type,
                               Type genericType,
                               Annotation[] annotations,
                               MediaType mediaType) {
-        return type == SyndEntry.class;
+        return type == AtomEntry.class;
     }
 
-    public SyndEntry readFrom(Class<SyndEntry> type,
-                              Type genericType,
-                              Annotation[] annotations,
-                              MediaType mediaType,
-                              MultivaluedMap<String, String> httpHeaders,
-                              InputStream entityStream) throws IOException, WebApplicationException {
-        MessageBodyReader<AtomEntry> reader =
-            providers.getMessageBodyReader(AtomEntry.class, genericType, annotations, mediaType);
-        AtomEntry entry =
-            reader.readFrom(AtomEntry.class,
-                            genericType,
-                            annotations,
-                            mediaType,
-                            httpHeaders,
-                            entityStream);
-        
+    @Override
+    public Object readFrom(Class<Object> type, Type genericType,
+            Annotation[] annotations, MediaType mediaType,
+            MultivaluedMap<String, String> httpHeaders, InputStream entityStream)
+            throws IOException, WebApplicationException {
+
+
+        AtomEntry atomEntry = (AtomEntry) super.readFrom(type, genericType, annotations, mediaType, httpHeaders,
+                entityStream);
+
         /*
          * The value in the AtomContent object is arbitrary, set by the server.  We want to use the
          * built-in AND client application supplied providers.  Because these providers are collected
@@ -90,50 +77,18 @@ public class AtomEntrySyndEntryProvider implements MessageBodyReader<SyndEntry>,
          * providers, and could cause an infinite loop when ModelUtils.readValue calls back through
          * the providers.
          */
-        AtomContent content = entry.getContent();
+        AtomContent content = atomEntry.getContent();
         if (content != null) {
             content.setProviders(RuntimeContextTLS.getRuntimeContext().getAttribute(Providers.class));
         }
-        
-        return entry.toSynd(new SyndEntry());
+
+        return atomEntry;
     }
 
-    public boolean isWriteable(Class<?> type,
-                               Type genericType,
-                               Annotation[] annotations,
-                               MediaType mediaType) {
-        MessageBodyWriter<AtomEntry> writer =
-            providers.getMessageBodyWriter(AtomEntry.class, genericType, annotations, mediaType);
-        return ((type.isAssignableFrom(SyndEntry.class)) && (writer != null));
+    @Override
+    public boolean isWriteable(Class<?> type, Type genericType,
+            Annotation[] annotations, MediaType mediaType) {
+        return false;  // so JAXBXmlProvider will do the write
     }
 
-    public void writeTo(SyndEntry t,
-                        Class<?> type,
-                        Type genericType,
-                        Annotation[] annotations,
-                        MediaType mediaType,
-                        MultivaluedMap<String, Object> httpHeaders,
-                        OutputStream entityStream) throws IOException, WebApplicationException {
-        AtomEntry entry = new AtomEntry(t);
-        MessageBodyWriter<AtomEntry> writer =
-            providers.getMessageBodyWriter(AtomEntry.class, genericType, annotations, mediaType);
-
-        // already checked for non-null writer in isWriteable
-        
-        writer.writeTo(entry,
-                       AtomEntry.class,
-                       genericType,
-                       annotations,
-                       mediaType,
-                       httpHeaders,
-                       entityStream);
-    }
-
-    public long getSize(SyndEntry t,
-                        Class<?> type,
-                        Type genericType,
-                        Annotation[] annotations,
-                        MediaType mediaType) {
-        return -1;
-    }
 }

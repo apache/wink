@@ -199,6 +199,9 @@ public class AtomContent extends AtomCommonAttributes {
     @XmlTransient
     private Object       savedValue = null;
 
+    @XmlTransient
+    private Providers providers;
+    
     public AtomContent() {
     }
 
@@ -223,6 +226,18 @@ public class AtomContent extends AtomCommonAttributes {
         // copies the value AS IS without invoking providers
         value.setValue(getValue(Object.class));
         return value;
+    }
+    
+    /**
+     * Sets the Providers on a local field so that the registry of custom and system
+     * providers is available when a client application retrieves the value, expecting
+     * it to be seamlessly unmarshalled or converted to the expected type declared in
+     * getValue(Class).
+     * 
+     * Client applications should NOT call this method.
+     */
+    public void setProviders(Providers _providers) {
+        providers = _providers;
     }
 
     /**
@@ -339,7 +354,7 @@ public class AtomContent extends AtomCommonAttributes {
         try {
             return getValue(cls,
                             cls,
-                            null,
+                            providers,
                             ModelUtils.EMPTY_ARRAY,
                             ModelUtils.EMPTY_STRING_MAP,
                             ModelUtils.determineMediaType(type));

@@ -38,12 +38,12 @@ org.apache.wink.common.internal.providers.entity.SourceProvider$SAXSourceProvide
 org.apache.wink.common.internal.providers.entity.SourceProvider$DOMSourceProvider
 org.apache.wink.common.internal.providers.entity.StreamingOutputProvider
 
-
 # JAXB Providers
 org.apache.wink.common.internal.providers.entity.xml.JAXBElementXmlProvider
 org.apache.wink.common.internal.providers.entity.xml.JAXBXmlProvider
 
 # Atom 
+org.apache.wink.common.internal.providers.entity.atom.AtomEntryProvider
 org.apache.wink.common.internal.providers.entity.atom.AtomFeedSyndFeedProvider
 org.apache.wink.common.internal.providers.entity.atom.AtomEntrySyndEntryProvider
 
