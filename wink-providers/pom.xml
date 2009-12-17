@@ -34,6 +34,7 @@
 		<module>wink-jettison-provider</module>
 		<module>wink-abdera-provider</module>
 		<module>wink-jackson-provider</module>
+        <module>wink-jaxbcollection-provider</module>
 	</modules>
 	<dependencies>
         <dependency>
