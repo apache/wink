@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.wink.jaxrs.test.atom.BlogService;
+import org.apache.wink.jaxrs.test.jaxb.JAXBResource;
 
 public class Application extends javax.ws.rs.core.Application {
 
@@ -30,6 +31,7 @@ public class Application extends javax.ws.rs.core.Application {
     public Set<Class<?>> getClasses() {
         Set<Class<?>> classes = new HashSet<Class<?>>();
         classes.add(BlogService.class);
+        classes.add(JAXBResource.class);
         return classes;
     }
 
