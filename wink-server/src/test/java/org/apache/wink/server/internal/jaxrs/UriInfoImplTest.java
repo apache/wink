@@ -29,16 +29,19 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.PathSegment;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 
 public class UriInfoImplTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class[] {FooResource.class, TestResource.class};
+        return new Class[] {FooResource.class, TestResource.class,
+            ResourceForCustomContextAttr.class};
     }
 
     @Path("/te st/{id}")
@@ -236,6 +239,43 @@ public class UriInfoImplTest extends MockServletInvocationTest {
         }
     }
 
+    @Path("customcontext")
+    public static class ResourceForCustomContextAttr {
+        private @Context
+        CustomServerContextAttribute mycontextattribute;
+
+        @Path("injectaftersub")
+        public SubResForCustomContextAttr getHeadersAgain(@Context UriInfo uriInfo) {
+            return new SubResForCustomContextAttr();
+        }
+    }
+
+    public static interface CustomServerContextAttribute {
+        public String doSomething();
+    }
+
+    public static class SubResForCustomContextAttr {
+        public SubResForCustomContextAttr() {
+            /*
+             * for test simplicity, going to change the server context here
+             */
+            RuntimeContextTLS.getRuntimeContext().setAttribute(CustomServerContextAttribute.class,
+                                                               new CustomServerContextAttribute() {
+
+                                                                   public String doSomething() {
+                                                                       return "Hello world!";
+                                                                   }
+                                                               });
+        }
+
+        @GET
+        public String getHeadersAgain(@Context UriInfo uriInfo) {
+            ResourceForCustomContextAttr r =
+                (ResourceForCustomContextAttr)uriInfo.getMatchedResources().get(1);
+            return r.mycontextattribute.doSomething();
+        }
+    }
+
     @Test
     public void testUriInfoMatchedResourcesAndURIs() throws Exception {
 
@@ -286,6 +326,22 @@ public class UriInfoImplTest extends MockServletInvocationTest {
                                       "/foo/../foo/bar/../bar/level3/../level3/nonsense/..",
                                       "text/plain");
         invoke(servletRequest);
+    }
+
+    @Test
+    public void testCustomContextAttrInjectionAfterInstantiation() throws Exception {
+        /*
+         * Order of operations could be that 1) a root resource is instantiated,
+         * 2) fields are injected normally but there is something missing on the
+         * context, 3) later, the developer adds the missing context attribute
+         */
+        MockHttpServletRequest servletRequest =
+            MockRequestConstructor.constructMockRequest("GET",
+                                                        "customcontext/injectaftersub",
+                                                        "text/plain");
+        MockHttpServletResponse response = invoke(servletRequest);
+        assertEquals(200, response.getStatus());
+        assertEquals("Hello world!", response.getContentAsString());
     }
 
 }

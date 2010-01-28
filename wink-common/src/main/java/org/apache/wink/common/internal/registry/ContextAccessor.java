@@ -36,7 +36,6 @@ import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 
 public class ContextAccessor {
 
-
     public <T> T getContext(Class<T> contextClass, RuntimeContext runtimeContext) {
 
         // try to get a context from a ContextResolver
@@ -73,7 +72,16 @@ public class ContextAccessor {
         // return context directly
         if (runtimeContext != null) {
             try {
-                return runtimeContext.getAttribute(contextClass);
+                T instance = runtimeContext.getAttribute(contextClass);
+                if (instance != null) {
+                    return instance;
+                }
+                /*
+                 * if the instance isn't directly available from the
+                 * runtimecontext at this time, inject a proxy instead. This
+                 * allows context attributes to be added after a class is
+                 * instantiated
+                 */
             } catch (Exception e) {
                 if (e instanceof InvocationTargetException) {
                     Throwable ite = ((InvocationTargetException)e).getTargetException();
