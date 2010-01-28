@@ -146,7 +146,8 @@ public class RestServlet extends AbstractRestServlet {
             logger.info(Messages.getMessage("restServletUseDeploymentConfigurationParam"),
                         initParameter,
                         DEPLYMENT_CONF_PARAM);
-            // use ClassUtils.loadClass instead of Class.forName so we have classloader visibility into the Web module in J2EE environments
+            // use ClassUtils.loadClass instead of Class.forName so we have
+            // classloader visibility into the Web module in J2EE environments
             Class<?> confClass = ClassUtils.loadClass(initParameter);
             return (DeploymentConfiguration)confClass.newInstance();
         }
@@ -162,17 +163,19 @@ public class RestServlet extends AbstractRestServlet {
             logger.info(Messages.getMessage("restServletJAXRSApplicationInitParam"),
                         initParameter,
                         APPLICATION_INIT_PARAM);
-            // use ClassUtils.loadClass instead of Class.forName so we have classloader visibility into the Web module in J2EE environments
+            // use ClassUtils.loadClass instead of Class.forName so we have
+            // classloader visibility into the Web module in J2EE environments
             appClass = (Class<? extends Application>)ClassUtils.loadClass(initParameter);
             return appClass.newInstance();
         }
         String appLocationParameter = getInitParameter(APP_LOCATION_PARAM);
         if (appLocationParameter == null) {
             logger.warn(Messages.getMessage("propertyNotDefined"), APP_LOCATION_PARAM);
+        } else {
+            logger.info(Messages.getMessage("restServletWinkApplicationInitParam"),
+                        appLocationParameter,
+                        APP_LOCATION_PARAM);
         }
-        logger.info(Messages.getMessage("restServletWinkApplicationInitParam"),
-                    initParameter,
-                    APP_LOCATION_PARAM);
         return new ServletWinkApplication(getServletContext(), appLocationParameter);
     }
 
