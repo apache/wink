@@ -37,9 +37,11 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.WinkApplication;
+import org.apache.wink.common.http.HttpHeadersEx;
 import org.apache.wink.common.http.HttpStatus;
 import org.apache.wink.common.internal.application.ApplicationValidator;
 import org.apache.wink.common.internal.i18n.Messages;
@@ -48,6 +50,7 @@ import org.apache.wink.common.internal.registry.Injectable;
 import org.apache.wink.common.internal.registry.metadata.MethodMetadata;
 import org.apache.wink.common.internal.uritemplate.UriTemplateMatcher;
 import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor;
+import org.apache.wink.common.internal.utils.HeaderUtils;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.internal.utils.SoftConcurrentMap;
 import org.slf4j.Logger;
@@ -415,7 +418,12 @@ public class ResourceRegistry {
         if (methodRecords.size() == 0) {
             logger.info(Messages.getMessage("noMethodInClassSupportsHTTPMethod"), resource
                 .getResourceClass().getName(), context.getRequest().getMethod());
-            throw new WebApplicationException(HttpStatus.METHOD_NOT_ALLOWED.getCode());
+            Set<String> httpMethods = getOptions(resource);
+            ResponseBuilder builder = Response.status(HttpStatus.METHOD_NOT_ALLOWED.getCode());
+            // add 'Allow' header to the response
+            String allowHeader = HeaderUtils.buildOptionsHeader(httpMethods);
+            builder.header(HttpHeadersEx.ALLOW, allowHeader);
+            throw new WebApplicationException(builder.build());
         }
 
         // filter by consumes

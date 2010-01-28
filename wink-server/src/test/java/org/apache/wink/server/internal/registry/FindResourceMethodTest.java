@@ -952,6 +952,10 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
             MockRequestConstructor.constructMockRequest("DELETE", "/mixed/1", "application/xml");
         response = invoke(request);
         assertEquals(HttpStatus.METHOD_NOT_ALLOWED.getCode(), response.getStatus());
+        assertTrue(response.getHeader("allow").toString().contains("HEAD"));
+        assertTrue(response.getHeader("allow").toString().contains("OPTIONS"));
+        assertTrue(response.getHeader("allow").toString().contains("GET"));
+        assertTrue(response.getHeader("allow").toString().contains("POST"));
 
         request =
             MockRequestConstructor.constructMockRequest("POST",
@@ -1001,6 +1005,7 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
         request = MockRequestConstructor.constructMockRequest("GET", "/noHttpMethod", "text/plain");
         response = invoke(request);
         assertEquals(HttpStatus.METHOD_NOT_ALLOWED.getCode(), response.getStatus());
+        assertEquals(response.getHeader("allow"), "OPTIONS");
     }
 
     // // -- Helpers --
