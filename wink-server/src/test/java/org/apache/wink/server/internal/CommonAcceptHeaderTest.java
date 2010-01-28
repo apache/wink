@@ -92,47 +92,28 @@ public class CommonAcceptHeaderTest extends MockServletInvocationTest {
     public void testEmptyStringAcceptHeader() throws Exception {
         MockHttpServletRequest request =
             MockRequestConstructor.constructMockRequest("GET", "/countaccepttypes", "");
-        try {
-            invoke(request);
-            fail();
-        } catch (WebApplicationException e) {
-            assertEquals(400, e.getResponse().getStatus());
-        }
+        MockHttpServletResponse response = invoke(request);
+        assertEquals(400, response.getStatus());
+        
         request = MockRequestConstructor.constructMockRequest("GET", "/countaccepttypes", "      ");
-        try {
-            invoke(request);
-            fail();
-        } catch (WebApplicationException e) {
-            assertEquals(400, e.getResponse().getStatus());
-        }
+        response = invoke(request);
+        assertEquals(400, response.getStatus());
     }
 
     public void testIllegalStringAcceptHeader() throws Exception {
         MockHttpServletRequest request =
             MockRequestConstructor.constructMockRequest("GET", "/countaccepttypes", "text/");
-        try {
-            invoke(request);
-            fail();
-        } catch (WebApplicationException e) {
-            assertEquals(400, e.getResponse().getStatus());
-        }
+        MockHttpServletResponse response = invoke(request);
+        assertEquals(400, response.getStatus());
 
         request =
             MockRequestConstructor.constructMockRequest("GET", "/countaccepttypes", "application/");
-        try {
-            invoke(request);
-            fail();
-        } catch (WebApplicationException e) {
-            assertEquals(400, e.getResponse().getStatus());
-        }
+        response = invoke(request);
+        assertEquals(400, response.getStatus());
 
-        try {
-            request =
-                MockRequestConstructor.constructMockRequest("GET", "/countaccepttypes", "/xml");
-            invoke(request);
-        } catch (WebApplicationException e) {
-            assertEquals(400, e.getResponse().getStatus());
-        }
+        request = MockRequestConstructor.constructMockRequest("GET", "/countaccepttypes", "/xml");
+        response = invoke(request);
+        assertEquals(400, response.getStatus());
 
         /*
          * while the response type isn't there
@@ -142,7 +123,7 @@ public class CommonAcceptHeaderTest extends MockServletInvocationTest {
                 .constructMockRequest("GET",
                                       "/onlytext",
                                       "         text              / plain                   ");
-        MockHttpServletResponse response = invoke(request);
+        response = invoke(request);
         assertEquals(406, response.getStatus());
         assertEquals("", response.getContentAsString());
 

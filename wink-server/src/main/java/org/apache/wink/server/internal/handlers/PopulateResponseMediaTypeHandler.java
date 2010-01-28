@@ -59,6 +59,10 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
 
         if (result instanceof Response) {
             Response response = (Response)result;
+            if (response.getEntity() == null) {
+                // no entity so no need to set Content-Type
+                return;
+            }
 
             Object first = response.getMetadata().getFirst(HttpHeaders.CONTENT_TYPE);
 
@@ -81,9 +85,16 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
                 logger.debug("Determining Content-Type from @Produces on method: {}", producedMime);
             }
             if (producedMime == null || producedMime.isEmpty()) {
-                producedMime =
-                    context.getAttribute(ProvidersRegistry.class)
-                        .getMessageBodyWriterMediaTypes(result.getClass());
+                if (result instanceof Response) {
+                    Response response = (Response)result;
+                    producedMime =
+                        context.getAttribute(ProvidersRegistry.class)
+                            .getMessageBodyWriterMediaTypes(response.getEntity().getClass());
+                } else {
+                    producedMime =
+                        context.getAttribute(ProvidersRegistry.class)
+                            .getMessageBodyWriterMediaTypes(result.getClass());
+                }
                 /*
                  * This is to inform the application developer that they should
                  * specify the Content-Type.
