@@ -399,6 +399,10 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
 
     @Override
     public UriBuilder host(String host) throws IllegalArgumentException {
+        // null unsets the host so don't check that
+        if ("".equals(host)) {
+            throw new IllegalArgumentException();
+        }
         this.host = host;
         return this;
     }
@@ -509,6 +513,10 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
 
     @Override
     public UriBuilder port(int port) throws IllegalArgumentException {
+        // -1 unsets the port so don't worry about that
+        if (port < -1) {
+            throw new IllegalArgumentException();
+        }
         this.port = port;
         return this;
     }

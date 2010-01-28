@@ -314,4 +314,34 @@ public class UriBuilderImplTest extends TestCase {
             assertTrue(uri.toString().equals(uris));
         }
     }
+
+    public void testInvalidPort() {
+        UriBuilder builder = UriBuilder.fromUri("http://localhost/");
+        try {
+            builder.port(-2);
+        } catch (IllegalArgumentException e) {
+            /* expected */
+        }
+        builder.port(1);
+        builder.port(-1);
+        URI uri = builder.build();
+        assertEquals("http://localhost/", uri.toASCIIString());
+    }
+
+    public void testInvalidHost() {
+        UriBuilder builder = UriBuilder.fromUri("http://localhost/");
+        builder.host("abcd");
+        try {
+            builder.host("");
+        } catch (IllegalArgumentException e) {
+            /* expected */
+        }
+        URI uri = builder.build();
+        assertEquals("http://abcd/", uri.toASCIIString());
+       
+        builder = UriBuilder.fromUri("http://localhost");
+        builder.host(null);
+        uri = builder.build();
+        assertEquals("http:/", uri.toASCIIString());
+    }
 }
