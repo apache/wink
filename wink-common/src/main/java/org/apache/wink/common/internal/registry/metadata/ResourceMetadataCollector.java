@@ -271,6 +271,11 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
         // method/sub-resource locator,
         // since there is at least one JAX-RS annotation on the method
         if (metadata.getHttpMethod() == null && metadata.getPath() == null) {
+            if(metadata.isEncoded() || defaultValue != null) {
+                // property methods may have @Encoded or @DefaultValue but
+                // are not HTTP methods/paths
+                return null;
+            }
             logger
                 .warn(Messages.getMessage("methodNotAnnotatedCorrectly"),
                       method.getName(),
