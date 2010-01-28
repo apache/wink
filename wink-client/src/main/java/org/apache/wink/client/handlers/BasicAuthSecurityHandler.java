@@ -17,7 +17,7 @@
  *  under the License.
  *  
  */
-package org.apache.wink.client.internal.handlers;
+package org.apache.wink.client.handlers;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,8 +27,6 @@ import java.util.Properties;
 import org.apache.wink.client.ClientAuthenticationException;
 import org.apache.wink.client.ClientRequest;
 import org.apache.wink.client.ClientResponse;
-import org.apache.wink.client.handlers.ClientHandler;
-import org.apache.wink.client.handlers.HandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
