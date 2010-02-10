@@ -26,18 +26,60 @@ import java.lang.reflect.Type;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.registry.Injectable;
 import org.apache.wink.common.internal.registry.InjectableFactory;
 import org.apache.wink.common.internal.utils.GenericsUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ProviderMetadataCollector extends AbstractMetadataCollector {
+
+    private static final Logger logger = LoggerFactory.getLogger(ProviderMetadataCollector.class);
 
     private ProviderMetadataCollector(Class<?> clazz) {
         super(clazz);
     }
 
     public static boolean isProvider(Class<?> cls) {
-        return cls.getAnnotation(Provider.class) != null;
+        /*
+         * look for the Provider annotation on super classes (even though
+         * @Provider does not have @java.lang.annotation.Inherited) in order to
+         * promote better compatibility with expected behavior
+         */
+        // return cls.getAnnotation(Provider.class) != null;
+        if (cls == Object.class) {
+            return false;
+        }
+
+        if (cls.getAnnotation(Provider.class) != null) {
+            return true;
+        }
+
+        Class<?> declaringClass = cls;
+
+        while (!declaringClass.equals(Object.class)) {
+            // try a superclass
+            Class<?> superclass = declaringClass.getSuperclass();
+            if (superclass.getAnnotation(Provider.class) != null) {
+                // issue warning
+                logger.warn(Messages.getMessage("providerShouldBeAnnotatedDirectly", cls));
+                return true;
+            }
+
+            // try interfaces
+            Class<?>[] interfaces = declaringClass.getInterfaces();
+            for (Class<?> interfaceClass : interfaces) {
+                if (interfaceClass.getAnnotation(Provider.class) != null) {
+                    // issue warning
+                    logger.warn(Messages.getMessage("providerShouldBeAnnotatedDirectly", cls));
+                    return true;
+                }
+            }
+            declaringClass = declaringClass.getSuperclass();
+        }
+
+        return false;
     }
 
     public static ClassMetadata collectMetadata(Class<?> clazz) {

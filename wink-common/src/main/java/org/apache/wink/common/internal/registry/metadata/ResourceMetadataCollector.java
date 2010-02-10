@@ -62,7 +62,33 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
     }
 
     public static boolean isStaticResource(Class<?> cls) {
-        return cls.getAnnotation(Path.class) != null;
+        if (cls.getAnnotation(Path.class) != null) {
+            return true;
+        }
+
+        Class<?> declaringClass = cls;
+
+        while (!declaringClass.equals(Object.class)) {
+            // try a superclass
+            Class<?> superclass = declaringClass.getSuperclass();
+            if (superclass.getAnnotation(Path.class) != null) {
+                // issue warning
+                logger.warn(Messages.getMessage("rootResourceShouldBeAnnotatedDirectly", cls));
+                return true;
+            }
+
+            // try interfaces
+            Class<?>[] interfaces = declaringClass.getInterfaces();
+            for (Class<?> interfaceClass : interfaces) {
+                if (interfaceClass.getAnnotation(Path.class) != null) {
+                    // issue warning
+                    logger.warn(Messages.getMessage("rootResourceShouldBeAnnotatedDirectly", cls));
+                    return true;
+                }
+            }
+            declaringClass = declaringClass.getSuperclass();
+        }
+        return false;
     }
 
     public static boolean isDynamicResource(Class<?> cls) {
@@ -137,6 +163,30 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             getMetadata().addPath(path.value());
             return true;
         }
+
+        Class<?> declaringClass = cls;
+
+        while (!declaringClass.equals(Object.class)) {
+            // try a superclass
+            Class<?> superclass = declaringClass.getSuperclass();
+            path = superclass.getAnnotation(Path.class);
+            if (path != null) {
+                getMetadata().addPath(path.value());
+                return true;
+            }
+
+            // try interfaces
+            Class<?>[] interfaces = declaringClass.getInterfaces();
+            for (Class<?> interfaceClass : interfaces) {
+                path = interfaceClass.getAnnotation(Path.class);
+                if (path != null) {
+                    getMetadata().addPath(path.value());
+                    return true;
+                }
+            }
+            declaringClass = declaringClass.getSuperclass();
+        }
+
         return false;
     }
 
@@ -164,7 +214,8 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                         for (Injectable id : methodMetadata.getFormalParameters()) {
                             if (id.getParamType() == Injectable.ParamType.ENTITY) {
                                 logger
-                                    .warn(Messages.getMessage("subresourceLocatorIllegalEntityParameter"),
+                                    .warn(Messages
+                                              .getMessage("subresourceLocatorIllegalEntityParameter"),
                                           methodName);
                                 continue F1;
                             }
@@ -174,7 +225,8 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                         if (!methodMetadata.getConsumes().isEmpty() || !methodMetadata
                             .getProduces().isEmpty()) {
                             logger
-                                .warn(Messages.getMessage("subresourceLocatorAnnotatedConsumesProduces"),
+                                .warn(Messages
+                                          .getMessage("subresourceLocatorAnnotatedConsumesProduces"),
                                       methodName);
                         }
                         getMetadata().getSubResourceLocators().add(methodMetadata);
@@ -271,15 +323,14 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
         // method/sub-resource locator,
         // since there is at least one JAX-RS annotation on the method
         if (metadata.getHttpMethod() == null && metadata.getPath() == null) {
-            if(metadata.isEncoded() || defaultValue != null) {
+            if (metadata.isEncoded() || defaultValue != null) {
                 // property methods may have @Encoded or @DefaultValue but
                 // are not HTTP methods/paths
                 return null;
             }
-            logger
-                .warn(Messages.getMessage("methodNotAnnotatedCorrectly"),
-                      method.getName(),
-                      method.getDeclaringClass().getCanonicalName());
+            logger.warn(Messages.getMessage("methodNotAnnotatedCorrectly"),
+                        method.getName(),
+                        method.getDeclaringClass().getCanonicalName());
             return null;
         }
 

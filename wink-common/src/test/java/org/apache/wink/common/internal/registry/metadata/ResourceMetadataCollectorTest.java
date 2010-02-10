@@ -22,7 +22,6 @@ package org.apache.wink.common.internal.registry.metadata;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -31,9 +30,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import junit.framework.TestCase;
-
-import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
-import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
 
 public class ResourceMetadataCollectorTest extends TestCase {
 
@@ -48,6 +44,56 @@ public class ResourceMetadataCollectorTest extends TestCase {
         public String getString() {
             return "blahblah";
         }
+    }
+
+    @Path("superclassvalue")
+    public static class SuperResource {
+
+    }
+
+    public static class MySubclassResource extends SuperResource {
+
+    }
+
+    @Path("interfacevalue")
+    public static interface MyInterface {
+
+    }
+
+    public static class MyInterfaceImpl implements MyInterface {
+
+    }
+
+    public static class MySuperInterfaceImpl extends SuperResource implements MyInterface {
+
+    }
+
+    /**
+     * Tests that @Path is inheritable. This may not follow the JAX-RS
+     * specification so a warning will be issued.
+     * 
+     * @throws Exception
+     */
+    public void testPathInheritance() throws Exception {
+        ClassMetadata classMetadata =
+            ResourceMetadataCollector.collectMetadata(MySubclassResource.class);
+        assertTrue(ResourceMetadataCollector.isResource(MySubclassResource.class));
+        assertFalse(ResourceMetadataCollector.isDynamicResource(MySubclassResource.class));
+        assertTrue(ResourceMetadataCollector.isStaticResource(MySubclassResource.class));
+        assertEquals("superclassvalue", classMetadata.getPath());
+
+        classMetadata = ResourceMetadataCollector.collectMetadata(MyInterfaceImpl.class);
+        assertTrue(ResourceMetadataCollector.isResource(MyInterfaceImpl.class));
+        assertFalse(ResourceMetadataCollector.isDynamicResource(MyInterfaceImpl.class));
+        assertTrue(ResourceMetadataCollector.isStaticResource(MyInterfaceImpl.class));
+        assertEquals("interfacevalue", classMetadata.getPath());
+
+        // superclass will take precedence over interface
+        classMetadata = ResourceMetadataCollector.collectMetadata(MySuperInterfaceImpl.class);
+        assertTrue(ResourceMetadataCollector.isResource(MySuperInterfaceImpl.class));
+        assertFalse(ResourceMetadataCollector.isDynamicResource(MySuperInterfaceImpl.class));
+        assertTrue(ResourceMetadataCollector.isStaticResource(MySuperInterfaceImpl.class));
+        assertEquals("superclassvalue", classMetadata.getPath());
     }
 
     /**
@@ -69,7 +115,7 @@ public class ResourceMetadataCollectorTest extends TestCase {
         HashSet<MediaType> expected = new HashSet<MediaType>(3);
         expected.add(new MediaType("abcd", "efg"));
         expected.add(new MediaType("hijk", "lmn")); // make sure whitespace is
-                                                    // ignored
+        // ignored
         expected.add(new MediaType("opqr", "stu"));
 
         assertEquals(expected, values);
