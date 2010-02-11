@@ -19,6 +19,7 @@
  *******************************************************************************/
 package org.apache.wink.server.internal.servlet;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -179,6 +180,21 @@ public class RestServlet extends AbstractRestServlet {
         return new ServletWinkApplication(getServletContext(), appLocationParameter);
     }
 
+    /**
+     * loadProperties will try to load the properties in the following order.
+     * <ol>
+     * <li>Custom configuration file (defined in init parameter)</li>
+     * <li>The default properties file</li>
+     * <li>System properties (reads the keys defined in the properties to do the
+     * specific lookups and does a lookup for properties that have empty values)
+     * </li>
+     * </ol>
+     * 
+     * @param resourceName
+     * @param defaultProperties
+     * @return
+     * @throws IOException
+     */
     private Properties loadProperties(String resourceName, Properties defaultProperties)
         throws IOException {
         Properties properties =
@@ -188,6 +204,8 @@ public class RestServlet extends AbstractRestServlet {
         try {
             is = ServletFileLoader.loadFileAsStream(getServletContext(), resourceName);
             properties.load(is);
+        } catch (FileNotFoundException e) {
+            logger.debug("FileNotFoundException for {}", resourceName);
         } finally {
             try {
                 if (is != null) {

@@ -53,7 +53,7 @@ public class HistoryTest extends MockServletInvocationTest {
 
     @Override
     protected String getPropertiesFile() {
-        return TestUtils.packageToPath(getClass().getPackage().getName()) + "\\history.properties";
+        return TestUtils.packageToPath(getClass().getPackage().getName()) + "/history.properties";
     }
 
     public void testAll() throws Exception {

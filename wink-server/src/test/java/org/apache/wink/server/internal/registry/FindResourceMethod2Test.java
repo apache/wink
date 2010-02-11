@@ -35,7 +35,7 @@ public class FindResourceMethod2Test extends MockServletInvocationTest {
 
     @Override
     protected String getPropertiesFile() {
-        return TestUtils.packageToPath(FindResourceMethod2Test.class.getPackage().getName()) + "\\FindResourceMethodTest2.properties";
+        return TestUtils.packageToPath(FindResourceMethod2Test.class.getPackage().getName()) + "/FindResourceMethodTest2.properties";
     }
 
     public void testContinuedSearch_1_2() throws Exception {
