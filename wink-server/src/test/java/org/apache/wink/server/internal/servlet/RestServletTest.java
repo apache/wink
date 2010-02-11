@@ -35,8 +35,14 @@ public class RestServletTest extends TestCase {
         Field field = servlet.getClass().getDeclaredField("PROPERTIES_DEFAULT_FILE");
         field.setAccessible(true);
         String value = (String) field.get(String.class);
-        
-        assertTrue(value.startsWith("/"));
+       
+        // TODO: review.  Some containers require a '/' on a relative path, some don't.
+        // See WebSphere vs. Geronimo Tomcat 
+        //
+        // Tomcat appears to not be honoring its own javadoc:
+        // http://tomcat.apache.org/tomcat-5.5-doc/servletapi/index.html
+        //   -- see ServletContext.getResource
+        assertFalse(value.startsWith("/"));
     }
 
     

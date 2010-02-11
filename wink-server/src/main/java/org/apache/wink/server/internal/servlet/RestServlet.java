@@ -66,7 +66,7 @@ public class RestServlet extends AbstractRestServlet {
                                                             LoggerFactory
                                                                 .getLogger(RestServlet.class);
     private static final String APPLICATION_INIT_PARAM  = "javax.ws.rs.Application";
-    private static final String PROPERTIES_DEFAULT_FILE = "/META-INF/wink-default.properties";
+    private static final String PROPERTIES_DEFAULT_FILE = "META-INF/wink-default.properties";
     private static final String PROPERTIES_INIT_PARAM   = "propertiesLocation";
     private static final String APP_LOCATION_PARAM      = "applicationConfigLocation";
     private static final String DEPLYMENT_CONF_PARAM    = "deploymentConfiguration";
