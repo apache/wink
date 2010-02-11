@@ -36,6 +36,7 @@ public abstract class SyndSimpleContent extends SyndCommonAttributes {
 
     private Object   value;
     protected String type;
+    protected Providers providers;
 
     public SyndSimpleContent() {
     }
@@ -63,7 +64,7 @@ public abstract class SyndSimpleContent extends SyndCommonAttributes {
         try {
             return getValue(cls,
                             cls,
-                            null,
+                            providers,
                             ModelUtils.EMPTY_ARRAY,
                             ModelUtils.EMPTY_STRING_MAP,
                             ModelUtils.determineMediaType(type));

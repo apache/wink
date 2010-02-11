@@ -31,17 +31,15 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Application;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.Provider;
-import javax.ws.rs.ext.Providers;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.wink.common.internal.providers.entity.xml.JAXBXmlProvider;
 import org.apache.wink.common.model.atom.AtomEntry;
+import org.apache.wink.common.model.synd.SyndEntry;
 
 public class ClientAtomTest extends BaseTest {
     
@@ -139,7 +137,7 @@ public class ClientAtomTest extends BaseTest {
     "</content>" +
     "</entry>";
     
-    public void testAtomContentRetrieval() {
+    public void testAtomContentRetrievalFromAtomEntry() {
         server.setMockResponseCode(200);
         server.setMockResponseContentType(MediaType.APPLICATION_ATOM_XML);
         server.setMockResponseContent(responseString);
@@ -150,6 +148,27 @@ public class ClientAtomTest extends BaseTest {
         ClientResponse clientResponse = resource.get();
         // unwrap the AtomEntry, AtomContent value
         MyPojo myPojo = (MyPojo)clientResponse.getEntity(AtomEntry.class).getContent().getValue(MyPojo.class);
+        
+        // Confirm that the custom MyProvider is used during AtomContent.getValue(MyPojo.class) call.
+        // Custom providers are stored on the client-server transaction's thread local store.  This assertion
+        // ensures that the custom providers are held long enough for a client application to use them during
+        // retrieval of the value from the AtomContent object, which occurs in its own thread.
+        
+        assertEquals("wheeee!!! -- MyProvider was here.", myPojo.getTitle());
+
+    }
+    
+    public void testAtomContentRetrievalFromSyndEntry() {
+        server.setMockResponseCode(200);
+        server.setMockResponseContentType(MediaType.APPLICATION_ATOM_XML);
+        server.setMockResponseContent(responseString);
+        RestClient client = getRestClient();
+        Resource resource = client.resource(serviceURL + "/atomresource/entry");
+        
+        // do get with response
+        ClientResponse clientResponse = resource.get();
+        // unwrap the AtomEntry, AtomContent value
+        MyPojo myPojo = (MyPojo)clientResponse.getEntity(SyndEntry.class).getContent().getValue(MyPojo.class);
         
         // Confirm that the custom MyProvider is used during AtomContent.getValue(MyPojo.class) call.
         // Custom providers are stored on the client-server transaction's thread local store.  This assertion

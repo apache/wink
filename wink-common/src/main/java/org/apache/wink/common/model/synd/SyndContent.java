@@ -20,6 +20,8 @@
 
 package org.apache.wink.common.model.synd;
 
+import javax.ws.rs.ext.Providers;
+
 public class SyndContent extends SyndSimpleContent {
 
     private String src;
@@ -106,6 +108,18 @@ public class SyndContent extends SyndSimpleContent {
         } else if (!type.equals(other.type))
             return false;
         return true;
+    }
+
+    /**
+     * Sets the Providers on a local field so that the registry of custom and system
+     * providers is available when a client application retrieves the value, expecting
+     * it to be seamlessly unmarshalled or converted to the expected type declared in
+     * getValue(Class).
+     * 
+     * Client applications should NOT call this method.
+     */
+    public void setProviders(Providers _providers) {
+        providers = _providers;
     }
 
 }

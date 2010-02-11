@@ -39,8 +39,8 @@ import javax.ws.rs.ext.Providers;
 
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
-import org.apache.wink.common.model.atom.AtomContent;
 import org.apache.wink.common.model.atom.AtomEntry;
+import org.apache.wink.common.model.synd.SyndContent;
 import org.apache.wink.common.model.synd.SyndEntry;
 
 @Provider
@@ -90,12 +90,13 @@ public class AtomEntrySyndEntryProvider implements MessageBodyReader<SyndEntry>,
          * providers, and could cause an infinite loop when ModelUtils.readValue calls back through
          * the providers.
          */
-        AtomContent content = entry.getContent();
+        SyndEntry returnVal = entry.toSynd(new SyndEntry());
+        SyndContent content = returnVal.getContent();
         if (content != null) {
             content.setProviders(RuntimeContextTLS.getRuntimeContext().getAttribute(Providers.class));
         }
         
-        return entry.toSynd(new SyndEntry());
+        return returnVal;
     }
 
     public boolean isWriteable(Class<?> type,
