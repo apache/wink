@@ -20,6 +20,7 @@
 
 package org.apache.wink.common.internal;
 
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
@@ -151,7 +152,7 @@ public class UriBuilderImplTest extends TestCase {
         builder = new UriBuilderImpl();
         builder.segment("path1").segment("{var1}");
         uri = builder.build("/s1,s2");
-        assertEquals("path1/%2Fs1,s2", uri.toString());
+        assertEquals("path1//s1,s2", uri.toString());
 
         builder.replacePath("/r1/{v1}");
         uri = builder.build("r2");
@@ -277,7 +278,7 @@ public class UriBuilderImplTest extends TestCase {
         assertEquals("//localhost:8080/some/path/pathEx/a+b/a+bc%2Bd#frag", uriString);
     }
 
-    public void testUri() {
+    public void testUri() throws Exception {
         UriBuilder builder = new UriBuilderImpl();
         builder.scheme("http").host("localhost").port(80).segment("path1", "path2");
         builder.matrixParam("mat1", "{var1}", "v2");
@@ -286,6 +287,58 @@ public class UriBuilderImplTest extends TestCase {
         builder.uri(uri);
         String uriStr = builder.build().toString();
         assertEquals("http://iamlegend@remotehost:90/path3;mat2=v1/path4#this%20fragment", uriStr);
+
+        UriBuilder uriBuilder =
+            UriBuilder.fromUri(new URI("ftp://ftp.ftpsite.site/files/file.txt"));
+        uriBuilder = uriBuilder.uri(new URI("//%2F%2Fftp.ftpsite.site/files/file.txt"));
+        assertEquals("ftp://ftp.ftpsite.site/files/file.txt", uriBuilder.build().toString());
+
+        uriBuilder = UriBuilder.fromUri(new URI("ftp.ftpsite.site/files/file.txt"));
+        uriBuilder = uriBuilder.scheme("ftp");
+        uriBuilder = uriBuilder.uri(new URI("//%2F%2Fftp.ftpsite.site/files/file.txt"));
+        assertEquals("ftp://ftp.ftpsite.site/files/file.txt", uriBuilder.build().toString());
+
+        uriBuilder = UriBuilder.fromUri(new URI("mailto:ibmuser@ibm.com"));
+        uriBuilder = uriBuilder.uri(new URI("ibmuser@ibm.com"));
+        assertEquals("mailto:ibmuser@ibm.com", uriBuilder.build().toString());
+
+        uriBuilder = UriBuilder.fromUri(new URI("ibmuser@ibm.com"));
+        uriBuilder.scheme("mailto");
+        uriBuilder = uriBuilder.uri(new URI("ibmuser@ibm.com"));
+        assertEquals("mailto:ibmuser@ibm.com", uriBuilder.build().toString());
+
+        uriBuilder = UriBuilder.fromUri(new URI("news:ibm.com"));
+        uriBuilder = uriBuilder.uri(new URI("http://ibm.com"));
+        assertEquals("http://ibm.com", uriBuilder.build().toString());
+
+        uriBuilder = UriBuilder.fromUri(new URI("news:ibm.com"));
+        uriBuilder = uriBuilder.uri(new URI("us.ibm.com"));
+        assertEquals("news:us.ibm.com", uriBuilder.build().toString());
+
+        uriBuilder = UriBuilder.fromUri(new URI("http://ww.httpsite.site/files/file.txt"));
+        uriBuilder = uriBuilder.uri(new URI("//www.httpsite.site/files/file.txt"));
+        assertEquals("http://www.httpsite.site/files/file.txt", uriBuilder.build().toString());
+
+        uriBuilder = UriBuilder.fromUri(new URI("http://www.httpsite.site/files/file.txt"));
+        uriBuilder = uriBuilder.uri(new URI("//%2F%2Fwww.httpsite.site/files/file.txt"));
+        assertEquals("http://www.httpsite.site/files/file.txt", uriBuilder.build().toString());
+
+        uriBuilder = UriBuilder.fromUri(new URI("tel:+1-234-567-8901"));
+        uriBuilder = uriBuilder.uri(new URI("+1-234-567-8901"));
+        assertEquals("tel:+1-234-567-8901", uriBuilder.build().toString());
+
+        uriBuilder = UriBuilder.fromUri(new URI("telnet://192.168.0.1/"));
+        uriBuilder = uriBuilder.uri(new URI("//192.168.0.2/"));
+        assertEquals("telnet://192.168.0.2/", uriBuilder.build().toString());
+
+        uriBuilder = UriBuilder.fromUri(new URI("foo://localhost:8080/com/ibm?name=myname#first"));
+        uriBuilder = uriBuilder.uri(new URI("http://localhost:8080/com/ibm?name=myname#first"));
+        assertEquals("http://localhost:8080/com/ibm?name=myname#first", uriBuilder.build()
+            .toString());
+
+        uriBuilder = UriBuilder.fromUri(new URI("foo://localhost:8080/com/ibm?name=myname#first"));
+        uriBuilder = uriBuilder.uri(new URI("//localhost:8080/com/ibm?name=myname#last"));
+        assertEquals("foo://localhost:8080/com/ibm?name=myname#last", uriBuilder.build().toString());
     }
 
     public void testClone() {
@@ -301,47 +354,199 @@ public class UriBuilderImplTest extends TestCase {
         assertEquals(uri1, uri2);
     }
 
-    public void testFromUri() {
+    public void testFromUri() throws Exception {
 
         String[] urisArray =
             {"ftp://ftp.is.co.za/rfc/rfc1808.txt", "http://www.ietf.org/rfc/rfc2396.txt",
-                "ldap://[2001:db8::7]/c=GB?objectClass?one", "mailto:John.Doe@example.com",
+                "ldap://[2001:db8::7]/c=GB?objectClass?one=two", "mailto:John.Doe@example.com",
                 "news:comp.infosystems.www.servers.unix", "tel:+1-816-555-1212",
                 "telnet://192.0.2.16:80/", "urn:oasis:names:specification:docbook:dtd:xml:4.1.2"};
 
         for (String uris : urisArray) {
             URI uri = UriBuilder.fromUri(uris).build();
-            assertTrue(uri.toString().equals(uris));
+            assertTrue(uri.toString(), uri.toString().equals(uris));
+        }
+
+        for (String uris : urisArray) {
+            URI uri = UriBuilder.fromUri(new URI(uris)).build();
+            assertTrue(uri.toString(), uri.toString().equals(uris));
         }
     }
 
-    public void testInvalidPort() {
-        UriBuilder builder = UriBuilder.fromUri("http://localhost/");
-        try {
-            builder.port(-2);
-        } catch (IllegalArgumentException e) {
-            /* expected */
-        }
-        builder.port(1);
-        builder.port(-1);
-        URI uri = builder.build();
-        assertEquals("http://localhost/", uri.toASCIIString());
+    /**
+     * Tests that only '%' are encoded when calling from build...Encoded
+     * methods.
+     */
+    public void testBuildEncoded() {
+        UriBuilder uriBuilder = UriBuilder.fromPath("{a}");
+        Map<String, String> values = new HashMap<String, String>();
+        values.put("a", "/%test%/");
+        assertEquals("/%25test%25/", uriBuilder.buildFromEncodedMap(values).toASCIIString());
+
+        uriBuilder = UriBuilder.fromPath("{a}");
+        assertEquals("/%25test%25/", uriBuilder.buildFromMap(values).toASCIIString());
+
+        uriBuilder = UriBuilder.fromPath("{a}");
+        assertEquals("/%25test%25/", uriBuilder.buildFromEncoded("/%test%/").toASCIIString());
+
+        uriBuilder = UriBuilder.fromPath("{a}");
+        assertEquals("/%25test%25/", uriBuilder.build("/%test%/").toASCIIString());
     }
 
-    public void testInvalidHost() {
-        UriBuilder builder = UriBuilder.fromUri("http://localhost/");
-        builder.host("abcd");
+    public void testRootless() {
+        UriBuilder uriBuilder = UriBuilder.fromPath("");
+        uriBuilder.path("{w}");
+        Map<String, String> values = new HashMap<String, String>();
+        values.put("w", "somerootlesspath");
+        URI uri = uriBuilder.buildFromEncodedMap(values);
+        assertEquals("somerootlesspath", uri.toASCIIString());
+
+        uriBuilder = UriBuilder.fromPath("{w}");
+        values = new HashMap<String, String>();
+        values.put("w", "somerootlesspath");
+        uri = uriBuilder.buildFromEncodedMap(values);
+        assertEquals("somerootlesspath", uri.toASCIIString());
+    }
+
+    public void testQueryIllegal() {
+        UriBuilder uriBuilder = UriBuilder.fromPath("");
         try {
-            builder.host("");
+            uriBuilder.queryParam("a", null);
+            fail();
         } catch (IllegalArgumentException e) {
-            /* expected */
+            // expected
         }
-        URI uri = builder.build();
-        assertEquals("http://abcd/", uri.toASCIIString());
-       
-        builder = UriBuilder.fromUri("http://localhost");
-        builder.host(null);
-        uri = builder.build();
-        assertEquals("http:/", uri.toASCIIString());
+
+        uriBuilder = UriBuilder.fromPath("");
+        try {
+            uriBuilder.queryParam("a", "abcd", null);
+            fail();
+        } catch (IllegalArgumentException e) {
+            // expected
+        }
+    }
+
+    public void testURIPath() throws Exception {
+        UriBuilder uriBuilder = UriBuilder.fromPath("http://localhost");
+        uriBuilder.path("/{v}");
+        URI uri = uriBuilder.buildFromEncoded("a");
+        assertEquals(uri.toString(), "http://localhost/a");
+    }
+
+    public void testBuildWithPathValues() {
+        /*
+         * by the docs of UriBuilder build() a "/" character in a path is
+         * unreserved in a regular path. it should only be encoded when called
+         * via a segment.
+         */
+        UriBuilder uriBuilder = UriBuilder.fromPath("{w}");
+        Map<String, Object> values = new HashMap<String, Object>();
+        values.put("w", "pathwithslash/test2");
+
+        URI uri = uriBuilder.buildFromMap(values);
+        assertEquals("pathwithslash/test2", uri.toString());
+    }
+
+    public void testBuildWithEmptyString() {
+        URI uri =
+            UriBuilder.fromPath("http://localhost:8080").path("/{a}/{b}/{c}")
+                .buildFromEncoded("xy", " ", "%");
+
+        assertEquals("http://localhost:8080/xy/%20/%25", uri.toString());
+    }
+
+    public void testNullReplacePath() {
+        UriBuilder uriBuilder = UriBuilder.fromPath("/path").replacePath(null);
+        assertEquals("", uriBuilder.build().toString());
+    }
+
+    public void testNullHost() {
+        UriBuilder uriBuilder = UriBuilder.fromPath("/path");
+        uriBuilder = uriBuilder.host("localhost");
+        assertEquals("//localhost/path", uriBuilder.build().toString());
+
+        uriBuilder = uriBuilder.host(null);
+        assertEquals("/path", uriBuilder.build().toString());
+    }
+
+    public void testBuildWithQueryParam() {
+        URI uri = UriBuilder.fromPath("http://localhost:8080").queryParam("a", "b").build();
+        // note the missing "/"
+        assertEquals("http://localhost:8080?a=b", uri.toString());
+    }
+
+    public void testBuildWithSpaceInValue() {
+        URI uri = UriBuilder.fromPath("http://localhost:8080").queryParam("a", "b c").build();
+        assertEquals("http://localhost:8080?a=b+c", uri.toString());
+
+        String name = "abcd";
+        uri =
+            UriBuilder.fromPath("http://localhost:8080").replaceQuery("key=value1 value2").build();
+        assertEquals("http://localhost:8080?key=value1%20value2", uri.toString());
+    }
+
+    public void testNullPathCall() throws SecurityException, NoSuchMethodException {
+        try {
+            UriBuilder.fromPath(null);
+            fail();
+        } catch (IllegalArgumentException e) {
+            // expected
+        }
+
+        // these should work
+        UriBuilder.fromPath("/blah").replacePath("hello");
+        UriBuilder.fromPath("/blah").replacePath(null);
+
+        try {
+            UriBuilder.fromPath("/test").path((String)null);
+            fail();
+        } catch (IllegalArgumentException e) {
+            // expected
+        }
+
+        try {
+            UriBuilder.fromPath("/test").path((Class)null);
+            fail();
+        } catch (IllegalArgumentException e) {
+            // expected
+        }
+
+        try {
+            UriBuilder.fromPath("/test").path(UriBuilderImplTest.class);
+            fail();
+        } catch (IllegalArgumentException e) {
+            // expected
+        }
+
+        try {
+            Method m = UriBuilderImplTest.class.getMethod("testNullPathCall", (Class<?>[])null);
+            UriBuilder.fromPath("/test").path(m);
+            fail();
+        } catch (IllegalArgumentException e) {
+            // expected
+        }
+
+        try {
+            Method m = UriBuilderImplTest.class.getMethod("testNullPathCall", (Class<?>[])null);
+            UriBuilder.fromPath("/test").path(UriBuilderImplTest.class, "testNullPathCall");
+            fail();
+        } catch (IllegalArgumentException e) {
+            // expected
+        }
+
+        try {
+            Method m = UriBuilderImplTest.class.getMethod("testNullPathCall", (Class<?>[])null);
+            UriBuilder.fromPath("/test").path(m);
+            fail();
+        } catch (IllegalArgumentException e) {
+            // expected
+        }
+    }
+
+    public void testQueryParamWithEmptyValue() {
+        assertEquals("http://localhost/?something", UriBuilder
+            .fromUri("http://localhost/?something").build().toString());
+        assertEquals("http://localhost?something", UriBuilder.fromUri("http://localhost?something")
+            .build().toString());
     }
 }

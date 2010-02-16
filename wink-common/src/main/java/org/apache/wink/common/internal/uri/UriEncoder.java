@@ -261,7 +261,45 @@ public final class UriEncoder {
      * @return encoded query parameter string
      */
     public static String encodeQueryParam(String queryParam, boolean relax) {
-        return encode(queryParam, relax, queryParamChars);
+        boolean[] unreserved = queryParamChars;
+        String string = queryParam;
+
+        if (queryParam == null) {
+            return null;
+        }
+
+        if (!needsEncoding(queryParam, false, unreserved)) {
+            return string;
+        }
+
+        // Encode to UTF-8
+        ByteBuffer buffer = CHARSET_UTF_8.encode(string);
+        // Prepare string buffer
+        StringBuilder sb = new StringBuilder(buffer.remaining());
+        // Now encode the characters
+        while (buffer.hasRemaining()) {
+            int c = buffer.get();
+
+            if ((c == '%') && relax && (buffer.remaining() >= 2)) {
+                int position = buffer.position();
+                if (isHex(buffer.get(position)) && isHex(buffer.get(position + 1))) {
+                    sb.append((char)c);
+                    continue;
+                }
+            }
+
+            if ((c >= ' ' && unreserved[c])) {
+                sb.append((char)c);
+            } else if ((c == ' ')) {
+                sb.append('+');
+            } else {
+                sb.append('%');
+                sb.append(hexDigits[(c & 0xf0) >> 4]);
+                sb.append(hexDigits[c & 0xf]);
+            }
+        }
+
+        return sb.toString();
     }
 
     /**
@@ -361,7 +399,7 @@ public final class UriEncoder {
                 }
             }
 
-            if (c >= ' ' && unreserved[c]) {
+            if ((c >= ' ' && unreserved[c])) {
                 sb.append((char)c);
             } else {
                 sb.append('%');

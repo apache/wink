@@ -72,9 +72,9 @@ public class UriEncoderTest extends TestCase {
     }
 
     public void testEncodeQueryParam() {
-        assertEquals("abcxyzABCXYZ0189-._~!$%26'()*+,;%3D:/?%23%5B%5D@%7B%7D%20%50", UriEncoder
+        assertEquals("abcxyzABCXYZ0189-._~!$%26'()*+,;%3D:/?%23%5B%5D@%7B%7D+%50", UriEncoder
             .encodeQueryParam(TEST_STRING, true));
-        assertEquals("abcxyzABCXYZ0189-._~!$%26'()*+,;%3D:/?%23%5B%5D@%7B%7D%20%2550", UriEncoder
+        assertEquals("abcxyzABCXYZ0189-._~!$%26'()*+,;%3D:/?%23%5B%5D@%7B%7D+%2550", UriEncoder
             .encodeQueryParam(TEST_STRING, false));
     }
 
