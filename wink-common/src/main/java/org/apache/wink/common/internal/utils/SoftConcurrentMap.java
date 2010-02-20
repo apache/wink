@@ -19,6 +19,7 @@
 package org.apache.wink.common.internal.utils;
 
 import java.lang.ref.SoftReference;
+import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -74,7 +75,26 @@ public class SoftConcurrentMap<K, V> implements SimpleMap<K, V> {
      * @return val - the current value.
      */
     public synchronized V put(K key, V val) {
-        WeakHashMap<K, SoftReference<V>> copyOfMap = new WeakHashMap<K, SoftReference<V>>(map);
+        /*
+         * under the WeakHashMap(Map) constructor, java.util.AbstractMap.putAll is called, which uses
+         * an iterator.  Iterators, as we all know, are not thread-safe; they are susceptible
+         * to ConcurrentModificationExceptions.  Note that this method is already 'synchronized'.
+         * However, that does not protect this.map from the silent garbage collector thread, which
+         * may remove something at any time due to the internal values being "SoftReferences".
+         * Instead of synchronizing on this.map, let's just catch ConcurrentModificationException
+         * ignore it, and retry in the while loop.
+         */
+        // non-null to avoid NPE when the timing of multi-threaded runs conspire against us
+        WeakHashMap<K, SoftReference<V>> copyOfMap = new WeakHashMap<K, SoftReference<V>>();
+        boolean complete = false;
+        while (!complete) {
+            try {
+                copyOfMap = new WeakHashMap<K, SoftReference<V>>(map);
+                complete = true;
+            } catch (ConcurrentModificationException e) {
+                // ignored
+            }
+        }
         copyOfMap.put(key, new SoftReference<V>(val));
         map = copyOfMap;
         return val;
