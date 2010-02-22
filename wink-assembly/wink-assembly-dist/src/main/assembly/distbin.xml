@@ -69,17 +69,19 @@
             <useStrictFiltering>true</useStrictFiltering>
         </dependencySet>
         <dependencySet>
-            <useProjectArtifact>false</useProjectArtifact>
-            <outputDirectory>ext/wink-abdera-provider/lib</outputDirectory>
-            <useStrictFiltering>true</useStrictFiltering>
-        </dependencySet>
-        <dependencySet>
             <includes>
                 <include>org.apache.wink:wink-client-apache-httpclient</include>
             </includes>
+            <excludes>
+                <exclude>commons-codec:commons-codec</exclude>
+                <exclude>org.apache.httpcomponents:httpcore</exclude>
+                <exclude>org.apache.httpcomponents:httpclient</exclude>
+                <exclude>net.jcip:jcip-annotations</exclude>
+            </excludes>
             <useProjectArtifact>false</useProjectArtifact>
             <outputDirectory>ext/wink-client-apache-httpclient</outputDirectory>
             <useStrictFiltering>true</useStrictFiltering>
+            <useTransitiveFiltering>true</useTransitiveFiltering>
         </dependencySet>
         <dependencySet>
             <includes>
@@ -90,7 +92,7 @@
                 <include>net.jcip:jcip-annotations</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
-            <outputDirectory>ext/wink-client-apache-httpclient</outputDirectory>
+            <outputDirectory>ext/wink-client-apache-httpclient/lib</outputDirectory>
             <useStrictFiltering>true</useStrictFiltering>
         </dependencySet>
         <dependencySet>
@@ -189,23 +191,29 @@
             <useStrictFiltering>true</useStrictFiltering>
         </fileSet>
         <fileSet>
-            <directory>../../wink-scripts/wink-dist/binarydist</directory>
+            <directory>binarydist</directory>
             <outputDirectory>.</outputDirectory>
             <includes>
                 <include>NOTICE</include>
                 <include>LICENSE</include>
+            </includes>
+            <useStrictFiltering>true</useStrictFiltering>
+        </fileSet>
+        <fileSet>
+            <directory>../../</directory>
+            <outputDirectory>.</outputDirectory>
+            <includes>
                 <include>DISCLAIMER</include>
                 <include>release_notes.txt</include>
             </includes>
             <useStrictFiltering>true</useStrictFiltering>
         </fileSet>
-        <fileSet>
+         <fileSet>
             <directory>../../wink-examples</directory>
             <outputDirectory>examples</outputDirectory>
             <useStrictFiltering>true</useStrictFiltering>
             <includes>
-                <include>**/pom.xml</include>
-                <include>**/build.xml</include>
+                <include>**/build.properties</include>
             </includes>
             <excludes>
                 <exclude>**/target/**</exclude>
@@ -213,13 +221,15 @@
             </excludes>
             <filtered>true</filtered>
         </fileSet>
-	<fileSet>
+        <fileSet>
             <directory>../../wink-examples</directory>
             <outputDirectory>examples</outputDirectory>
             <useStrictFiltering>true</useStrictFiltering>
             <includes>
                 <include>**/readme.txt</include>
                 <include>**/src/**</include>
+                <include>**/pom.xml</include>
+                <include>**/build.xml</include>
             </includes>
             <excludes>
                 <exclude>**/target/**</exclude>

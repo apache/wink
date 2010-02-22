@@ -80,6 +80,16 @@
                             <descriptors>
                                 <descriptor>src/main/assembly/aggregatejar.xml</descriptor>
                             </descriptors>
+                            <archive>
+                                <manifest>
+                                    <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                                    <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                </manifest>
+                                <manifest-entries>
+                                    <X-Compile-Source-JDK>${maven.compile.source}</X-Compile-Source-JDK>
+                                    <X-Compile-Target-JDK>${maven.compile.target}</X-Compile-Target-JDK>
+                                </manifest-entries>
+                            </archive>
                         </configuration>
                         <executions>
                             <execution>
