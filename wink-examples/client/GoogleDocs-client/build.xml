@@ -24,9 +24,7 @@
     </description>
 
 	<property name="example.jar.name" value="GoogleDocs-client.jar" />
-	<property name="common.jar.name" value="@SDK_COMMON_JAR_NAME@" />
-	<property name="client.jar.name" value="@SDK_CLIENT_JAR_NAME@" />
-
+	<property file="build.properties" />
 
 	<!-- set global properties for this build -->
 	<property name="src" location="src" />

@@ -284,6 +284,7 @@
         <copy todir="${dist.examples}" includeemptydirs="false">
             <fileset dir="${project.root}/wink-examples">
                 <include name="**/build.xml" />
+                <include name="**/build.properties" />
                 <exclude name="**/GoogleServices-client/**" />
                 <exclude name="**/target/**" />
             </fileset>

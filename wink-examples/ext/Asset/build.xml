@@ -24,7 +24,7 @@
     </description>
 
     <property name="final.war.name" value="Asset.war" />
-    <property name="sdk.jar.name" value="@SDK_JAR_NAME@" />
+    <property file="build.properties" />
 
 
     <!-- set global properties for this build -->
