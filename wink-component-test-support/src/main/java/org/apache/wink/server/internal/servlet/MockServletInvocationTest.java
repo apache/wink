@@ -137,5 +137,15 @@ public abstract class MockServletInvocationTest extends TestCase {
 
         return response;
     }
+    
+    /**
+     * Return the servlet object.  Users of MockServletInvocationTest do not need to manipulate the servlet object directly.
+     * This method is intended to allow users to inspect the servlet if their test class needs to do so.
+     * 
+     * @return the HttpServlet object
+     */
+    public HttpServlet getServlet() {
+        return servlet;
+    }
 
 }

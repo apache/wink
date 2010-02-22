@@ -37,6 +37,7 @@ import org.apache.wink.common.internal.utils.ClassUtils;
 import org.apache.wink.server.internal.DeploymentConfiguration;
 import org.apache.wink.server.internal.RequestProcessor;
 import org.apache.wink.server.internal.application.ServletWinkApplication;
+import org.apache.wink.server.internal.properties.WinkSystemProperties;
 import org.apache.wink.server.internal.utils.ServletFileLoader;
 
 /**
@@ -134,9 +135,19 @@ public class RestServlet extends AbstractRestServlet {
             logger.info(Messages.getMessage("restServletUsePropertiesFileAtLocation"),
                         propertiesLocation,
                         PROPERTIES_INIT_PARAM);
-            return loadProperties(propertiesLocation, defaultProperties);
+
+            // Load properties set on JVM. These should not override
+            // the ones set in the configuration file.
+            Properties properties = loadProperties(propertiesLocation, defaultProperties);
+            properties.putAll(WinkSystemProperties.loadSystemProperties(properties));
+            return properties;
         }
         logger.debug("Final properties {} used in RestServlet {}", defaultProperties, this);
+
+        // Load properties set on JVM. These should not override
+        // the ones set in the configuration file.
+        defaultProperties.putAll(WinkSystemProperties.loadSystemProperties(defaultProperties));
+
         return defaultProperties;
     }
 
@@ -215,7 +226,7 @@ public class RestServlet extends AbstractRestServlet {
                 logger.warn(Messages.getMessage("exceptionClosingFile") + ": " + resourceName, e);
             }
         }
+
         return properties;
     }
-
 }
