@@ -150,7 +150,16 @@ public class RestClient {
     private void processClasses(Set<Class<?>> classes) {
         for (Class<?> cls : classes) {
             if (ProviderMetadataCollector.isProvider(cls)) {
-                providersRegistry.addProvider(cls);
+                try {
+                    providersRegistry.addProvider(cls);
+                } catch (Exception e) {
+                    logger.warn(Messages.getMessage("exceptionOccurredDuringClassProcessing"), cls);
+                    logger.warn(Messages.getMessage("listExceptionDuringClassProcessing"), e);
+                } catch (NoClassDefFoundError e) {
+                    logger.warn(Messages.getMessage("exceptionOccurredDuringClassProcessing"), cls
+                        .getCanonicalName());
+                    logger.warn(Messages.getMessage("listExceptionDuringClassProcessing"), e);
+                }
             } else {
                 logger.warn(CLASS_NOT_A_PROVIDER_MSG, cls);
             }
@@ -161,7 +170,17 @@ public class RestClient {
         for (Object obj : singletons) {
             Class<?> cls = obj.getClass();
             if (ProviderMetadataCollector.isProvider(cls)) {
-                providersRegistry.addProvider(obj);
+                try {
+                    providersRegistry.addProvider(obj);
+                } catch (Exception e) {
+                    logger.warn(Messages.getMessage("exceptionOccurredDuringSingletonProcessing"),
+                                obj.getClass().getCanonicalName());
+                    logger.warn(Messages.getMessage("listExceptionDuringSingletonProcessing"), e);
+                } catch (NoClassDefFoundError e) {
+                    logger.warn(Messages.getMessage("exceptionOccurredDuringSingletonProcessing"),
+                                obj.getClass().getCanonicalName());
+                    logger.warn(Messages.getMessage("listExceptionDuringSingletonProcessing"), e);
+                }
             } else {
                 logger.warn(CLASS_NOT_A_PROVIDER_MSG, obj);
             }
@@ -178,7 +197,17 @@ public class RestClient {
         for (Object obj : instances) {
             Class<?> cls = obj.getClass();
             if (ProviderMetadataCollector.isProvider(cls)) {
-                providersRegistry.addProvider(obj, priority);
+                try {
+                    providersRegistry.addProvider(obj, priority);
+                } catch (Exception e) {
+                    logger.warn(Messages.getMessage("exceptionOccurredDuringInstanceProcessing"),
+                                obj.getClass().getCanonicalName());
+                    logger.warn(Messages.getMessage("listExceptionDuringInstanceProcessing"), e);
+                } catch (NoClassDefFoundError e) {
+                    logger.warn(Messages.getMessage("exceptionOccurredDuringInstanceProcessing"),
+                                obj.getClass().getCanonicalName());
+                    logger.warn(Messages.getMessage("listExceptionDuringInstanceProcessing"), e);
+                }
             } else {
                 logger.warn(CLASS_NOT_A_PROVIDER_MSG, obj);
             }

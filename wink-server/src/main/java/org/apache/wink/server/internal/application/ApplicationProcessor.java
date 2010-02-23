@@ -123,6 +123,10 @@ public class ApplicationProcessor {
                 logger.warn(Messages.getMessage("exceptionOccurredDuringInstanceProcessing"), obj
                     .getClass().getCanonicalName());
                 logger.warn(Messages.getMessage("listExceptionDuringInstanceProcessing"), e);
+            } catch (NoClassDefFoundError e) {
+                logger.warn(Messages.getMessage("exceptionOccurredDuringInstanceProcessing"), obj
+                    .getClass().getCanonicalName());
+                logger.warn(Messages.getMessage("listExceptionDuringInstanceProcessing"), e);
             }
         }
     }
@@ -145,6 +149,10 @@ public class ApplicationProcessor {
             } catch (Exception e) {
                 logger.warn(Messages.getMessage("exceptionOccurredDuringClassProcessing"), cls);
                 logger.warn(Messages.getMessage("listExceptionDuringClassProcessing"), e);
+            } catch (NoClassDefFoundError e) {
+                logger.warn(Messages.getMessage("exceptionOccurredDuringClassProcessing"), cls
+                    .getCanonicalName());
+                logger.warn(Messages.getMessage("listExceptionDuringClassProcessing"), e);
             }
         }
     }
@@ -166,6 +174,10 @@ public class ApplicationProcessor {
                     logger.warn(Messages.getMessage("classNotAResourceNorProvider"), obj);
                 }
             } catch (Exception e) {
+                logger.warn(Messages.getMessage("exceptionOccurredDuringSingletonProcessing"), obj
+                    .getClass().getCanonicalName());
+                logger.warn(Messages.getMessage("listExceptionDuringSingletonProcessing"), e);
+            } catch (NoClassDefFoundError e) {
                 logger.warn(Messages.getMessage("exceptionOccurredDuringSingletonProcessing"), obj
                     .getClass().getCanonicalName());
                 logger.warn(Messages.getMessage("listExceptionDuringSingletonProcessing"), e);
