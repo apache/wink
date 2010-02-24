@@ -88,7 +88,7 @@ public class ApplicationFileLoader {
      * @throws FileNotFoundException - if file is not found
      */
     public ApplicationFileLoader(String appConfigFile) throws FileNotFoundException {
-        logger.info(Messages.getMessage("loadingApplication"), appConfigFile);
+        logger.debug(Messages.getMessage("loadingApplication"), appConfigFile); //$NON-NLS-1$
         loadClasses(FileLoader.loadFileAsStream(appConfigFile));
     }
 
@@ -120,7 +120,9 @@ public class ApplicationFileLoader {
 
                 Class<?> cls = null;
                 try {
-                    // use ClassUtils.loadClass instead of Class.forName so we have classloader visibility into the Web module in J2EE environments
+                    // use ClassUtils.loadClass instead of Class.forName so we
+                    // have classloader visibility into the Web module in J2EE
+                    // environments
                     cls = ClassUtils.loadClass(line);
                     if (ResourceMetadataCollector.isStaticResource(cls) || ProviderMetadataCollector
                         .isProvider(cls)) {
@@ -130,7 +132,9 @@ public class ApplicationFileLoader {
                         logger.warn(Messages.getMessage("classNotAResourceNorProvider"), cls);
                     }
                 } catch (ClassNotFoundException e) {
-                    logger.error(Messages.getMessage("isNotAClass"), line);
+                    logger.debug("ClassNotFoundException while loading class", e); //$NON-NLS-1$
+                } catch (NoClassDefFoundError e) {
+                    logger.debug(Messages.getMessage("classInstantiationExceptionWithMsgFormat", e), e); //$NON-NLS-1$
                 }
             }
         } catch (IOException e) {
