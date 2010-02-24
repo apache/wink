@@ -241,10 +241,10 @@ public class ResourceImpl implements Resource {
         request.setURI(requestURI);
         request.setMethod(method);
         request.getHeaders().putAll(headers);
-        if (logger.isInfoEnabled()) {
-            Class<?> requestEntityClass = (requestEntity == null) ? null : requestEntity.getClass();
-            logger.info(Messages.getMessage("clientIssueRequest"), new Object[] {method,
-                requestURI, requestEntityClass, headers});
+        if (logger.isDebugEnabled()) {
+            Integer requestEntityInfo = (requestEntity == null) ? null : System.identityHashCode(requestEntity);
+            logger.debug(Messages.getMessage("clientIssueRequest"), new Object[] {method,
+                requestURI, requestEntityInfo, headers.keySet()});
         }
         if (headers.getFirst(HttpHeaders.USER_AGENT) == null) {
             request.getHeaders().add(HttpHeaders.USER_AGENT, USER_AGENT);
