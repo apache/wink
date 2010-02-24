@@ -68,6 +68,7 @@ public class OptionsMethodHandler implements RequestHandler {
                 context.getAttribute(SearchResult.class).setError(null);
                 // set result to no-content
                 context.setResponseStatusCode(Response.Status.NO_CONTENT.getStatusCode());
+                context.setResponseEntity(null);
             }
         }
     }

@@ -29,6 +29,7 @@ public class Application extends javax.ws.rs.core.Application {
         classes.add(HeadersResource.class);
         classes.add(HeadersAllowResource.class);
         classes.add(HeadersAllowResource2.class);
+        classes.add(HeadersAllowResource3.class);
         return classes;
     }
 

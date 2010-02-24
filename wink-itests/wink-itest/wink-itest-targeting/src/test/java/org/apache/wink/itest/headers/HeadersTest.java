@@ -301,5 +301,32 @@ public class HeadersTest extends TestCase {
             e.printStackTrace();
             fail(e.getMessage());
         }
+
+        try {
+            OptionsMethod httpMethod = new OptionsMethod();
+            httpMethod.setURI(new URI(getBaseURI() + "/headersallow3/sublocator", false));
+            httpClient = new HttpClient();
+            try {
+                int result = httpClient.executeMethod(httpMethod);
+                assertEquals(204, result);
+                assertNotNull(httpMethod.getResponseHeader("Allow"));
+                List<String> allowedMethods =
+                    Arrays.asList(httpMethod.getResponseHeader("Allow").getValue().split(", "));
+                System.out.println(allowedMethods);
+                assertEquals(3, allowedMethods.size());
+                assertTrue(allowedMethods.contains("HEAD"));
+                assertTrue(allowedMethods.contains("OPTIONS"));
+                assertTrue(allowedMethods.contains("GET"));
+                assertEquals(null, httpMethod.getResponseBodyAsString());
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+                fail(ioe.getMessage());
+            } finally {
+                httpMethod.releaseConnection();
+            }
+        } catch (URIException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
     }
 }

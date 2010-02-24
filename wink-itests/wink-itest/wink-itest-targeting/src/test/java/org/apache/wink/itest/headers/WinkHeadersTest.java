@@ -56,8 +56,8 @@ public class WinkHeadersTest extends TestCase {
 
     public void testGetWithLanguage() throws Exception {
         ClientResponse response =
-            client.resource(new URI(getBaseURI() + "/headers/language"))
-                .header("Content-Language", "en-us").get();
+            client.resource(new URI(getBaseURI() + "/headers/language")).header("Content-Language",
+                                                                                "en-us").get();
         assertEquals(200, response.getStatusCode());
         assertEquals("en:US", response.getHeaders().getFirst("language"));
     }
@@ -95,8 +95,8 @@ public class WinkHeadersTest extends TestCase {
 
     public void testGetHeadersWithCase() throws Exception {
         ClientResponse response =
-            client.resource(new URI(getBaseURI() + "/headers/headercase"))
-                .header("Custom-Header", "MyValue").get();
+            client.resource(new URI(getBaseURI() + "/headers/headercase")).header("Custom-Header",
+                                                                                  "MyValue").get();
         assertEquals(200, response.getStatusCode());
         assertEquals("MyValue", response.getHeaders().getFirst("Custom-Header"));
     }
@@ -143,5 +143,16 @@ public class WinkHeadersTest extends TestCase {
         assertTrue(allowedMethods.contains("PUT"));
         assertTrue(allowedMethods.contains("POST"));
         assertTrue(allowedMethods.contains("DELETE"));
+
+        response = client.resource(new URI(getBaseURI() + "/headersallow3/sublocator")).options();
+        assertEquals(204, response.getStatusCode());
+
+        allowedMethods = Arrays.asList(response.getHeaders().getFirst("Allow").split(", "));
+        System.out.println(allowedMethods);
+        assertEquals(3, allowedMethods.size());
+        assertTrue(allowedMethods.contains("HEAD"));
+        assertTrue(allowedMethods.contains("OPTIONS"));
+        assertTrue(allowedMethods.contains("GET"));
+        assertEquals("", response.getEntity(String.class));
     }
 }
