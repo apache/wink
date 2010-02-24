@@ -76,7 +76,6 @@
                 <exclude>commons-codec:commons-codec</exclude>
                 <exclude>org.apache.httpcomponents:httpcore</exclude>
                 <exclude>org.apache.httpcomponents:httpclient</exclude>
-                <exclude>net.jcip:jcip-annotations</exclude>
             </excludes>
             <useProjectArtifact>false</useProjectArtifact>
             <outputDirectory>ext/wink-client-apache-httpclient</outputDirectory>
@@ -89,7 +88,6 @@
                 <include>commons-codec:commons-codec</include>
                 <include>org.apache.httpcomponents:httpcore</include>
                 <include>org.apache.httpcomponents:httpclient</include>
-                <include>net.jcip:jcip-annotations</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
             <outputDirectory>ext/wink-client-apache-httpclient/lib</outputDirectory>
