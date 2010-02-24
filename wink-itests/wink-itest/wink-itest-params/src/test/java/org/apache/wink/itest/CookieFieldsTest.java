@@ -41,11 +41,11 @@ public class CookieFieldsTest extends TestCase {
     protected HttpClient  httpclient;
 
     private static String BASE_URI   =
-                                         ServerEnvironmentInfo.getBaseURI() + "/newcookies/cookiestests";
+                                         (ServerEnvironmentInfo.getBaseURI() + "/newcookies/cookiestests").toLowerCase();
 
     static {
         if (ServerEnvironmentInfo.isRestFilterUsed()) {
-            BASE_URI = ServerEnvironmentInfo.getBaseURI() + "/cookiestests";
+            BASE_URI = (ServerEnvironmentInfo.getBaseURI() + "/cookiestests").toLowerCase();
         }
     }
 
@@ -92,22 +92,25 @@ public class CookieFieldsTest extends TestCase {
             while (t.hasMoreTokens()) {
                 next = t.nextToken();
                 if (next.startsWith("name3")) {
+                    System.out.println("name3: " + next);
                     assertEquals("name3,value3," + contextRoot
                         + servletPath
                         + "/cookiestests,"
-                        + ServerEnvironmentInfo.getHostname(), next);
+                        + ServerEnvironmentInfo.getHostname().toLowerCase(), next);
                     name3Found = true;
                 } else if (next.startsWith("name2")) {
+                    System.out.println("name2: " + next);
                     assertEquals("name2,value2," + contextRoot
                         + servletPath
                         + "/cookiestests,"
-                        + ServerEnvironmentInfo.getHostname(), next);
+                        + ServerEnvironmentInfo.getHostname().toLowerCase(), next);
                     name2Found = true;
                 } else if (next.startsWith("name")) {
+                    System.out.println("name: " + next);
                     assertEquals("name,value," + contextRoot
                         + servletPath
                         + "/cookiestests,"
-                        + ServerEnvironmentInfo.getHostname(), next);
+                        + ServerEnvironmentInfo.getHostname().toLowerCase(), next);
                     nameFound = true;
                 } else
                     fail("Received an unexpected cookie: " + next);

@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -55,6 +56,12 @@ public class RequestResource {
                                                             new SimpleDateFormat(
                                                                                  "EEE, dd MMM yyyy HH:mm:ss zzz",
                                                                                  Locale.ENGLISH);
+    
+    @GET
+    @Path("timezone")
+    public String getTimeZone() {
+        return TimeZone.getDefault().getDisplayName(false, TimeZone.SHORT);
+    }
 
     @GET
     @Path("date")

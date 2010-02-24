@@ -125,11 +125,26 @@ public class RequestMethodsTest extends TestCase {
     private void checkIfModifiedSinceUsingSuppliedDateFormat(SimpleDateFormat formatter)
         throws IOException, HttpException {
         HttpClient client = new HttpClient();
+        
+        /*
+         * get the time zone for the server
+         */
+        GetMethod getMethod = new GetMethod(getBaseURI() + "/context/request/timezone");
+        String serverTimeZone = null;
+        try {
+            client.executeMethod(getMethod);
+            assertEquals(200, getMethod.getStatusCode());
+            serverTimeZone = getMethod.getResponseBodyAsString();
+        } finally {
+            getMethod.releaseConnection();
+        }
 
         PutMethod putMethod = new PutMethod(getBaseURI() + "/context/request/date");
         Date d2 = new Date(System.currentTimeMillis() - 120000);
         Date d = new Date(System.currentTimeMillis() - 60000);
-        String date = DateFormat.getDateTimeInstance().format(d);
+        DateFormat dateFormat = DateFormat.getDateTimeInstance();
+        dateFormat.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
+        String date = dateFormat.format(d);
         putMethod.setRequestEntity(new StringRequestEntity(date, "text/string", "UTF-8"));
         try {
             /*
@@ -141,7 +156,8 @@ public class RequestMethodsTest extends TestCase {
             putMethod.releaseConnection();
         }
 
-        GetMethod getMethod = new GetMethod(getBaseURI() + "/context/request/date");
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+        getMethod = new GetMethod(getBaseURI() + "/context/request/date");
         getMethod.setRequestHeader("If-Modified-Since", formatter.format(d));
         try {
             /*
@@ -164,8 +180,10 @@ public class RequestMethodsTest extends TestCase {
              */
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());
+            rfc1123Format.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
             assertEquals("the date: " + rfc1123Format.format(d), getMethod
                 .getResponseBodyAsString());
+            rfc1123Format.setTimeZone(TimeZone.getDefault());
 
             rfc1123Format.setTimeZone(TimeZone.getTimeZone("GMT"));
             assertEquals(rfc1123Format.format(d), getMethod.getResponseHeader("Last-Modified")
@@ -190,6 +208,7 @@ public class RequestMethodsTest extends TestCase {
             getMethod.releaseConnection();
         }
 
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
         getMethod = new GetMethod(getBaseURI() + "/context/request/date");
         getMethod.setRequestHeader("If-Modified-Since", formatter.format(d2));
         try {
@@ -200,8 +219,10 @@ public class RequestMethodsTest extends TestCase {
              */
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());
+            rfc1123Format.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
             assertEquals("the date: " + rfc1123Format.format(d), getMethod
                 .getResponseBodyAsString());
+            rfc1123Format.setTimeZone(TimeZone.getDefault());
 
             rfc1123Format.setTimeZone(TimeZone.getTimeZone("GMT"));
             assertEquals(rfc1123Format.format(d), getMethod.getResponseHeader("Last-Modified")
@@ -211,6 +232,7 @@ public class RequestMethodsTest extends TestCase {
             getMethod.releaseConnection();
         }
 
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
         getMethod = new GetMethod(getBaseURI() + "/context/request/date");
         getMethod.setRequestHeader("If-Modified-Since", formatter.format(new Date()));
         try {
@@ -265,11 +287,26 @@ public class RequestMethodsTest extends TestCase {
     private void checkIfUnmodifiedSinceUsingSuppliedDateFormat(SimpleDateFormat formatter)
         throws IOException, HttpException {
         HttpClient client = new HttpClient();
+        
+        /*
+         * get the time zone for the server
+         */
+        GetMethod getMethod = new GetMethod(getBaseURI() + "/context/request/timezone");
+        String serverTimeZone = null;
+        try {
+            client.executeMethod(getMethod);
+            assertEquals(200, getMethod.getStatusCode());
+            serverTimeZone = getMethod.getResponseBodyAsString();
+        } finally {
+            getMethod.releaseConnection();
+        }
 
         PutMethod putMethod = new PutMethod(getBaseURI() + "/context/request/date");
         Date d2 = new Date(System.currentTimeMillis() - 120000);
         Date d = new Date(System.currentTimeMillis() - 60000);
-        String date = DateFormat.getDateTimeInstance().format(d);
+        DateFormat dateFormat = DateFormat.getDateTimeInstance();
+        dateFormat.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
+        String date = dateFormat.format(d);
         putMethod.setRequestEntity(new StringRequestEntity(date, "text/string", "UTF-8"));
         try {
             /*
@@ -281,7 +318,8 @@ public class RequestMethodsTest extends TestCase {
             putMethod.releaseConnection();
         }
 
-        GetMethod getMethod = new GetMethod(getBaseURI() + "/context/request/date");
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+        getMethod = new GetMethod(getBaseURI() + "/context/request/date");
         getMethod.setRequestHeader("If-Unmodified-Since", formatter.format(d));
         try {
             /*
@@ -291,8 +329,10 @@ public class RequestMethodsTest extends TestCase {
              */
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());
+            rfc1123Format.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
             assertEquals("the date: " + rfc1123Format.format(d), getMethod
                 .getResponseBodyAsString());
+            rfc1123Format.setTimeZone(TimeZone.getDefault());
 
             rfc1123Format.setTimeZone(TimeZone.getTimeZone("GMT"));
             assertEquals(rfc1123Format.format(d), getMethod.getResponseHeader("Last-Modified")
@@ -311,8 +351,10 @@ public class RequestMethodsTest extends TestCase {
              */
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());
+            rfc1123Format.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
             assertEquals("the date: " + rfc1123Format.format(d), getMethod
                 .getResponseBodyAsString());
+            rfc1123Format.setTimeZone(TimeZone.getDefault());
 
             rfc1123Format.setTimeZone(TimeZone.getTimeZone("GMT"));
             assertEquals(rfc1123Format.format(d), getMethod.getResponseHeader("Last-Modified")
@@ -334,8 +376,10 @@ public class RequestMethodsTest extends TestCase {
              */
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());
+            rfc1123Format.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
             assertEquals("the date: " + rfc1123Format.format(d), getMethod
                 .getResponseBodyAsString());
+            rfc1123Format.setTimeZone(TimeZone.getDefault());
 
             rfc1123Format.setTimeZone(TimeZone.getTimeZone("GMT"));
             assertEquals(rfc1123Format.format(d), getMethod.getResponseHeader("Last-Modified")
@@ -345,6 +389,7 @@ public class RequestMethodsTest extends TestCase {
             getMethod.releaseConnection();
         }
 
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
         getMethod = new GetMethod(getBaseURI() + "/context/request/date");
         getMethod.setRequestHeader("If-Unmodified-Since", formatter.format(d2));
         try {
@@ -359,6 +404,7 @@ public class RequestMethodsTest extends TestCase {
             getMethod.releaseConnection();
         }
 
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
         getMethod = new GetMethod(getBaseURI() + "/context/request/date");
         getMethod.setRequestHeader("If-Unmodified-Since", formatter.format(new Date()));
         try {
@@ -369,8 +415,10 @@ public class RequestMethodsTest extends TestCase {
              */
             client.executeMethod(getMethod);
             assertEquals(200, getMethod.getStatusCode());
+            rfc1123Format.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
             assertEquals("the date: " + rfc1123Format.format(d), getMethod
                 .getResponseBodyAsString());
+            rfc1123Format.setTimeZone(TimeZone.getDefault());
 
             rfc1123Format.setTimeZone(TimeZone.getTimeZone("GMT"));
             assertEquals(rfc1123Format.format(d), getMethod.getResponseHeader("Last-Modified")

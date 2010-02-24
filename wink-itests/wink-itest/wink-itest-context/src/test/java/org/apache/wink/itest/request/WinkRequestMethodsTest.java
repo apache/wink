@@ -129,14 +129,25 @@ public class WinkRequestMethodsTest extends TestCase {
         throws IOException, HttpException {
         Date d2 = new Date(System.currentTimeMillis() - 120000);
         Date d = new Date(System.currentTimeMillis() - 60000);
-        String date = DateFormat.getDateTimeInstance().format(d);
+       
+        /*
+         * get the time zone for the server
+         */
+        Resource dateResource = client.resource(getBaseURI() + "/context/request/timezone");
+        ClientResponse response = dateResource.get();
+        assertEquals(200, response.getStatusCode());
+        String serverTimeZone = response.getEntity(String.class);
+        
         /*
          * sets a last modified date
          */
-        Resource dateResource = client.resource(getBaseURI() + "/context/request/date");
-        ClientResponse response = dateResource.contentType("text/string").put(date);
+        dateResource = client.resource(getBaseURI() + "/context/request/date");
+        DateFormat dateFormat = DateFormat.getDateTimeInstance();
+        dateFormat.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
+        response = dateResource.contentType("text/string").put(dateFormat.format(d));
         assertEquals(204, response.getStatusCode());
 
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
         response = dateResource.header(HttpHeaders.IF_MODIFIED_SINCE, formatter.format(d)).get();
         /*
          * verifies that if the exact date is sent in and used in
@@ -152,7 +163,9 @@ public class WinkRequestMethodsTest extends TestCase {
         dateResource = client.resource(getBaseURI() + "/context/request/date");
         response = dateResource.get();
         assertEquals(200, response.getStatusCode());
+        rfc1123Format.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
         assertEquals("the date: " + rfc1123Format.format(d), response.getEntity(String.class));
+        rfc1123Format.setTimeZone(TimeZone.getDefault());
 
         rfc1123Format.setTimeZone(TimeZone.getTimeZone("GMT"));
         assertEquals(rfc1123Format.format(d), response.getHeaders()
@@ -173,10 +186,13 @@ public class WinkRequestMethodsTest extends TestCase {
          * Last-Modified response header sent by server then the server will
          * return a 200 with entity
          */
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
         dateResource = client.resource(getBaseURI() + "/context/request/date");
         response = dateResource.header(HttpHeaders.IF_MODIFIED_SINCE, formatter.format(d2)).get();
         assertEquals(200, response.getStatusCode());
+        rfc1123Format.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
         assertEquals("the date: " + rfc1123Format.format(d), response.getEntity(String.class));
+        rfc1123Format.setTimeZone(TimeZone.getDefault());
 
         rfc1123Format.setTimeZone(TimeZone.getTimeZone("GMT"));
         assertEquals(rfc1123Format.format(d), response.getHeaders()
@@ -187,6 +203,7 @@ public class WinkRequestMethodsTest extends TestCase {
          * verifies that using a If-Modified-Since later than the Last-Modified
          * response header sent by server, then the server will return a 304
          */
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
         dateResource = client.resource(getBaseURI() + "/context/request/date");
         response =
             dateResource.header(HttpHeaders.IF_MODIFIED_SINCE, formatter.format(new Date())).get();
@@ -233,10 +250,19 @@ public class WinkRequestMethodsTest extends TestCase {
         throws IOException, HttpException {
         Date d2 = new Date(System.currentTimeMillis() - 120000);
         Date d = new Date(System.currentTimeMillis() - 60000);
-        String date = DateFormat.getDateTimeInstance().format(d);
-        ClientResponse response =
+        
+        /*
+         * get the time zone for the server
+         */
+        ClientResponse response = client.resource(getBaseURI() + "/context/request/timezone").get();
+        assertEquals(200, response.getStatusCode());
+        String serverTimeZone = response.getEntity(String.class);
+        
+        DateFormat dateFormat = DateFormat.getDateTimeInstance();
+        dateFormat.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
+        response =
             client.resource(getBaseURI() + "/context/request/date").contentType("text/string")
-                .put(date);
+                .put(dateFormat.format(d));
         assertEquals(204, response.getStatusCode());
 
         /*
@@ -244,11 +270,14 @@ public class WinkRequestMethodsTest extends TestCase {
          * If-Unmodified-Since header, then the server will be ok and that it
          * will return 200
          */
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
         response =
             client.resource(getBaseURI() + "/context/request/date")
                 .header(HttpHeaders.IF_UNMODIFIED_SINCE, formatter.format(d)).get();
         assertEquals(200, response.getStatusCode());
+        rfc1123Format.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
         assertEquals("the date: " + rfc1123Format.format(d), response.getEntity(String.class));
+        rfc1123Format.setTimeZone(TimeZone.getDefault());
 
         rfc1123Format.setTimeZone(TimeZone.getTimeZone("GMT"));
         assertEquals(rfc1123Format.format(d), response.getHeaders().getFirst("Last-Modified"));
@@ -261,7 +290,9 @@ public class WinkRequestMethodsTest extends TestCase {
         response = client.resource(getBaseURI() + "/context/request/date").get();
 
         assertEquals(200, response.getStatusCode());
+        rfc1123Format.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
         assertEquals("the date: " + rfc1123Format.format(d), response.getEntity(String.class));
+        rfc1123Format.setTimeZone(TimeZone.getDefault());
 
         rfc1123Format.setTimeZone(TimeZone.getTimeZone("GMT"));
         assertEquals(rfc1123Format.format(d), response.getHeaders()
@@ -279,7 +310,9 @@ public class WinkRequestMethodsTest extends TestCase {
                 .header(HttpHeaders.IF_UNMODIFIED_SINCE, lastModified).get();
 
         assertEquals(200, response.getStatusCode());
+        rfc1123Format.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
         assertEquals("the date: " + rfc1123Format.format(d), response.getEntity(String.class));
+        rfc1123Format.setTimeZone(TimeZone.getDefault());
 
         rfc1123Format.setTimeZone(TimeZone.getTimeZone("GMT"));
         assertEquals(rfc1123Format.format(d), response.getHeaders()
@@ -291,11 +324,13 @@ public class WinkRequestMethodsTest extends TestCase {
          * Last-Modified response header sent by server then the server will
          * return a 412
          */
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
         response =
             client.resource(getBaseURI() + "/context/request/date")
                 .header(HttpHeaders.IF_UNMODIFIED_SINCE, formatter.format(d2)).get();
         assertEquals(412, response.getStatusCode());
 
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
         response =
             client.resource(getBaseURI() + "/context/request/date")
                 .header(HttpHeaders.IF_UNMODIFIED_SINCE, formatter.format(new Date())).get();
@@ -305,7 +340,9 @@ public class WinkRequestMethodsTest extends TestCase {
          * return 200 and the entity
          */
         assertEquals(200, response.getStatusCode());
+        rfc1123Format.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
         assertEquals("the date: " + rfc1123Format.format(d), response.getEntity(String.class));
+        rfc1123Format.setTimeZone(TimeZone.getDefault());
 
         rfc1123Format.setTimeZone(TimeZone.getTimeZone("GMT"));
         assertEquals(rfc1123Format.format(d), response.getHeaders()

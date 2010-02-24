@@ -67,6 +67,7 @@ public class WinkURIInfoNormalizationTest extends TestCase {
      * @throws Exception
      */
     public void testRemoveResourcePathThenAddItBack() throws Exception {
+        
         ClientResponse response =
             client.resource(getBaseURI() + "/uriinfo/../uriinfo" + "?info=path").get();
         assertEquals(200, response.getStatusCode());
@@ -106,6 +107,7 @@ public class WinkURIInfoNormalizationTest extends TestCase {
      * @throws Exception
      */
     public void testAddPathThenRemoveIt() throws Exception {
+        
         ClientResponse response =
             client.resource(getBaseURI() + "/uriinfo/something/../" + "?info=path").get();
         assertEquals(200, response.getStatusCode());
@@ -134,6 +136,7 @@ public class WinkURIInfoNormalizationTest extends TestCase {
      * @throws Exception
      */
     public void testCapitalization() throws Exception {
+        
         String contextRoot = ServerEnvironmentInfo.getContextRoot();
         if (!"".equals(contextRoot)) {
             contextRoot = "/" + contextRoot;
@@ -196,6 +199,7 @@ public class WinkURIInfoNormalizationTest extends TestCase {
      * @throws Exception
      */
     public void testPercentEncoding() throws Exception {
+        
         /*
          * regular query
          */

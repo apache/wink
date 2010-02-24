@@ -64,7 +64,7 @@ public class CookieResource {
                         + ","
                         + c.getPath()
                         + ","
-                        + c.getDomain()
+                        + c.getDomain().toLowerCase()
                         + "\r";
             }
         }
@@ -102,11 +102,11 @@ public class CookieResource {
     public Response setCookies() {
         ResponseBuilder rb = Response.ok();
         rb.cookie(new NewCookie("name", "value", uri.getBaseUri().getPath() + uri.getPath(), uri
-            .getBaseUri().getHost(), "comment", 10, false));
+            .getBaseUri().getHost().toLowerCase(), "comment", 10, false));
         rb.cookie(new NewCookie("name2", "value2", uri.getBaseUri().getPath() + uri.getPath(), uri
-            .getBaseUri().getHost(), "comment2", 10, false));
+            .getBaseUri().getHost().toLowerCase(), "comment2", 10, false));
         rb.cookie(new NewCookie("name3", "value3", uri.getBaseUri().getPath() + uri.getPath(), uri
-            .getBaseUri().getHost(), "comment2", 10, false));
+            .getBaseUri().getHost().toLowerCase(), "comment2", 10, false));
         return rb.build();
     }
 
