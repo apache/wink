@@ -338,12 +338,12 @@ public class DeploymentConfiguration {
                     mediaTypeMapper.addMappings(handlersFactory.getMediaTypeMappings());
                 } catch (ClassNotFoundException e) {
                     logger.error(Messages
-                        .getMessage("isNotAClass", mediaTypeMapperFactoryClassName), e);
+                        .getMessage("isNotAClassWithMsgFormat", mediaTypeMapperFactoryClassName), e);
                 } catch (InstantiationException e) {
-                    logger.error(Messages.getMessage("classInstantiationException",
+                    logger.error(Messages.getMessage("classInstantiationExceptionWithMsgFormat",
                                                      mediaTypeMapperFactoryClassName), e);
                 } catch (IllegalAccessException e) {
-                    logger.error(Messages.getMessage("classIllegalAccess",
+                    logger.error(Messages.getMessage("classIllegalAccessWithMsgFormat",
                                                      mediaTypeMapperFactoryClassName), e);
                 }
             }
@@ -377,13 +377,13 @@ public class DeploymentConfiguration {
                     errorUserHandlers = (List<ResponseHandler>)handlersFactory.getErrorHandlers();
                 }
             } catch (ClassNotFoundException e) {
-                logger.error(Messages.getMessage("isNotAClass", handlersFactoryClassName), e);
+                logger.error(Messages.getMessage("isNotAClassWithMsgFormat", handlersFactoryClassName), e);
             } catch (InstantiationException e) {
-                logger.error(Messages.getMessage("classInstantiationException",
+                logger.error(Messages.getMessage("classInstantiationExceptionWithMsgFormat",
                                                  handlersFactoryClassName), e);
             } catch (IllegalAccessException e) {
                 logger
-                    .error(Messages.getMessage("classIllegalAccess", handlersFactoryClassName), e);
+                    .error(Messages.getMessage("classIllegalAccessWithMsgFormat", handlersFactoryClassName), e);
             }
         }
 
