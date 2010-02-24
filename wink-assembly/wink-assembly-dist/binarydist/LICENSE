@@ -635,9 +635,9 @@ Streaming API for XML javax.xml.stream:stax-api:jar:1.0-2:compile
     of liability.
 
 --------------------------------------------------------------------------------
-SLF4J (http://www.slf4j.org/) org.slf4j:slf4j-api:jar:1.5.8
-SLF4J (http://www.slf4j.org/) org.slf4j:slf4j-simple:jar:1.5.8
-SLF4J (http://www.slf4j.org/) org.slf4j:jcl-over-slf4j:jar:1.5.8
+SLF4J (http://www.slf4j.org/) org.slf4j:slf4j-api:jar:1.5.10
+SLF4J (http://www.slf4j.org/) org.slf4j:slf4j-simple:jar:1.5.10
+SLF4J (http://www.slf4j.org/) org.slf4j:jcl-over-slf4j:jar:1.5.10
 
      Copyright (c) 2004-2008 QOS.ch
      All rights reserved.
