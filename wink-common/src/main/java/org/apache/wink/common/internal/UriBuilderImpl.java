@@ -376,7 +376,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         }
         for (; i < values.length; ++i) {
             if (values[i] == null) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("value argument at " + i + "index is null");
             }
         }
         return buildInternal(valuesMap);
