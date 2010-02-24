@@ -489,7 +489,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
     public UriBuilder host(String host) throws IllegalArgumentException {
         logger.debug("host({}) entry", host); //$NON-NLS-1$
         if ("".equals(host)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("host is empty");
         }
         this.host = host;
         logger.debug("host() exit"); //$NON-NLS-1$
@@ -646,7 +646,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
             logger.debug("port({}) entry", port); //$NON-NLS-1$
         }
         if (port < -1) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("port is not valid");
         }
         this.port = port;
         logger.debug("port() exit"); //$NON-NLS-1$
