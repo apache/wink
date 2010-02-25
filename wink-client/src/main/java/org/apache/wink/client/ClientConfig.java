@@ -34,6 +34,7 @@ import org.apache.wink.client.internal.handlers.AcceptHeaderHandler;
 import org.apache.wink.client.internal.handlers.HttpURLConnectionHandler;
 import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.internal.application.ApplicationFileLoader;
+import org.apache.wink.common.internal.i18n.Messages;
 
 /**
  * Provides client configuration. The ClientConfig is implemented using the
@@ -143,7 +144,7 @@ public class ClientConfig implements Cloneable {
      */
     public final ClientConfig proxyPort(int proxyPort) {
         if (!modifiable) {
-            throw new ClientConfigException("configuration is unmodifiable");
+            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable"));
         }
         if (proxyPort <= 0) {
             proxyPort = 80;
@@ -170,7 +171,7 @@ public class ClientConfig implements Cloneable {
      */
     public final ClientConfig connectTimeout(int connectTimeout) {
         if (!modifiable) {
-            throw new ClientConfigException("configuration is unmodifiable");
+            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable"));
         }
         this.connectTimeout = connectTimeout;
         return this;
@@ -194,7 +195,7 @@ public class ClientConfig implements Cloneable {
      */
     public final ClientConfig readTimeout(int readTimeout) {
         if (!modifiable) {
-            throw new ClientConfigException("configuration is unmodifiable");
+            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable"));
         }
         this.readTimeout = readTimeout;
         return this;
@@ -220,7 +221,7 @@ public class ClientConfig implements Cloneable {
      */
     public final ClientConfig followRedirects(boolean followRedirects) {
         if (!modifiable) {
-            throw new ClientConfigException("configuration is unmodifiable");
+            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable"));
         }
         this.followRedirects = followRedirects;
         return this;
@@ -247,7 +248,7 @@ public class ClientConfig implements Cloneable {
      */
     public final ClientConfig acceptHeaderAutoSet(boolean isAcceptHeaderAutoSet) {
         if (!modifiable) {
-            throw new ClientConfigException("configuration is unmodifiable");
+            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable"));
         }
         this.isAcceptHeaderAutoSet = isAcceptHeaderAutoSet;
         return this;
@@ -271,7 +272,7 @@ public class ClientConfig implements Cloneable {
      */
     public final ClientConfig handlers(ClientHandler... handlers) {
         if (!modifiable) {
-            throw new ClientConfigException("configuration is unmodifiable");
+            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable"));
         }
         for (ClientHandler handler : handlers) {
             this.handlers.add(handler);
@@ -323,7 +324,7 @@ public class ClientConfig implements Cloneable {
      */
     public final ClientConfig applications(Application... applications) {
         if (!modifiable) {
-            throw new ClientConfigException("configuration is unmodifiable");
+            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable"));
         }
         if (this.applications == null) {
             initDefaultApplication();

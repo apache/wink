@@ -34,6 +34,7 @@ import org.apache.wink.client.ClientRuntimeException;
 import org.apache.wink.client.EntityType;
 import org.apache.wink.client.internal.ClientRuntimeContext;
 import org.apache.wink.common.RuntimeContext;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 
@@ -66,7 +67,7 @@ public class ClientResponseImpl extends BaseRequestResponseImpl implements Clien
             return null;
         }
         throw new ClassCastException(String
-            .format("entity of type %s cannot be retrieved as type %s",
+            .format(Messages.getMessage("clientCannotConvertEntity"),
                     entity.getClass().getName(),
                     type.getName()));
     }
@@ -116,7 +117,7 @@ public class ClientResponseImpl extends BaseRequestResponseImpl implements Clien
                                                        contentMediaType,
                                                        runtimeContext);
             if (reader == null) {
-                throw new RuntimeException(String.format("No reader for type %s and media type %s",
+                throw new RuntimeException(String.format(Messages.getMessage("clientNoReaderForTypeAndMediaType"),
                                                          String.valueOf(type),
                                                          contentType));
             }

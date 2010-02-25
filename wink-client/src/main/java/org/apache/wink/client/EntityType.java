@@ -23,6 +23,7 @@ package org.apache.wink.client;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.utils.GenericsUtils;
 
 /**
@@ -57,7 +58,7 @@ public class EntityType<T> {
     protected EntityType() {
         Type superclass = this.getClass().getGenericSuperclass();
         if (!(superclass instanceof ParameterizedType)) {
-            throw new ClientRuntimeException("EntityType must be parameterized");
+            throw new ClientRuntimeException(Messages.getMessage("entityTypeMustBeParameterized"));
         }
         this.type = ((ParameterizedType)superclass).getActualTypeArguments()[0];
         this.cls = (Class<T>)GenericsUtils.getClassType(type);

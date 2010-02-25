@@ -39,6 +39,7 @@ import org.apache.wink.client.handlers.InputStreamAdapter;
 import org.apache.wink.client.handlers.OutputStreamAdapter;
 import org.apache.wink.client.internal.ClientRuntimeContext;
 import org.apache.wink.common.RuntimeContext;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 
@@ -97,7 +98,7 @@ public abstract class AbstractConnectionHandler implements ConnectionHandler {
                                                        contentMediaType,
                                                        runtimeContext);
             if (writer == null) {
-                throw new RuntimeException(String.format("No writer for type %s and media type %s",
+                throw new RuntimeException(String.format(Messages.getMessage("clientNoWriterForTypeAndMediaType"),
                                                          String.valueOf(type),
                                                          contentType));
             }
