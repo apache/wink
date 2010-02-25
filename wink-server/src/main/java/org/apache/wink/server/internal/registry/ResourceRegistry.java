@@ -435,7 +435,7 @@ public class ResourceRegistry {
             }
         }
         if (methodRecords.size() == 0) {
-            logger.info("Could not find any method in class {} that consumes {}", resource
+            logger.info(Messages.getMessage("noMethodInClassConsumesHTTPMethod"), resource
                 .getResourceClass().getName(), context.getHttpHeaders().getMediaType());
             throw new WebApplicationException(Response.Status.UNSUPPORTED_MEDIA_TYPE);
         }
@@ -449,7 +449,7 @@ public class ResourceRegistry {
             }
         }
         if (methodRecords.size() == 0) {
-            logger.info("Could not find any method in class {} capable of producing {}", resource
+            logger.info(Messages.getMessage("noMethodInClassProducesHTTPMethod"), resource
                 .getResourceClass().getName(), context.getHttpHeaders()
                 .getRequestHeader(HttpHeaders.ACCEPT));
             throw new WebApplicationException(Response.Status.NOT_ACCEPTABLE);
