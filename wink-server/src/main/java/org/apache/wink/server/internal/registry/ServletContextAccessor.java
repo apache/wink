@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.WebApplicationException;
 
 import org.apache.wink.common.RuntimeContext;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.registry.ContextAccessor;
 import org.apache.wink.server.internal.contexts.HttpServletRequestWrapperImpl;
 import org.apache.wink.server.internal.contexts.HttpServletResponseWrapperImpl;
@@ -69,6 +70,6 @@ public class ServletContextAccessor extends ContextAccessor {
         }
 
         throw new IllegalArgumentException(String
-            .format("%s must be HttpServletRequest or HttpServletResponse", contextClass));
+            .format(Messages.getMessage("invalidServletContextAccessor"), contextClass));
     }
 }

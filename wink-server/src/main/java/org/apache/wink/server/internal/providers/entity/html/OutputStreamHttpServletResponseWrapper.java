@@ -29,6 +29,8 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
+import org.apache.wink.common.internal.i18n.Messages;
+
 /**
  * This class represents the response wrapper that will wrap the
  * HttpServletResponse. We need to wrap the HttpServletResponse because in HTML
@@ -68,8 +70,8 @@ class OutputStreamHttpServletResponseWrapper extends HttpServletResponseWrapper 
         // if printer writer was already requested than output stream cannot be
         // retrieved.
         if (printWriter != null) {
-            throw new IllegalStateException(
-                                            "Cannot get Output Stream since Writer was already requested");
+            throw new IllegalStateException(Messages
+                .getMessage("cannotGetOutputStreamSinceWriterRequested"));
         }
         // indicates that output stream was requested.
         isOutputStream = true;
@@ -88,8 +90,8 @@ class OutputStreamHttpServletResponseWrapper extends HttpServletResponseWrapper 
         // if output stream was already requested than print writer cannot be
         // retrieved.
         if (isOutputStream) {
-            throw new IllegalStateException(
-                                            "Cannot get Writer since Output Stream was already requested.");
+            throw new IllegalStateException(Messages
+                .getMessage("writerCannotGetWriterSinceOutputStreamRequested"));
         }
 
         // gets the printWriter if exists

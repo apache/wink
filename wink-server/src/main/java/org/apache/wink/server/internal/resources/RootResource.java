@@ -32,6 +32,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.wink.common.categories.Categories;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.internal.utils.UriHelper;
 import org.apache.wink.common.model.app.AppAccept;
@@ -79,7 +80,7 @@ public class RootResource {
                                        UriInfo uriInfo) {
         if (collectionList == null) {
             // this should never happen
-            throw new NullPointerException("collectionList");
+            throw new NullPointerException(Messages.getMessage("rootResourceCollectionListIsNull"));
         }
 
         // Map of all APP workspaces

@@ -120,7 +120,7 @@ public class ClientConfig implements Cloneable {
      */
     public final ClientConfig proxyHost(String proxyHost) {
         if (!modifiable) {
-            throw new ClientConfigException("configuration is unmodifiable");
+            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable"));
         }
         this.proxyHost = proxyHost;
         return this;

@@ -81,7 +81,8 @@ public class AdminServlet extends AbstractRestServlet {
                     .newInstance(org.apache.wink.common.internal.model.admin.ObjectFactory.class
                         .getPackage().getName());
         } catch (JAXBException e) {
-            throw new RuntimeException("Failed to create JAXBContext for AdminServlet", e);
+            throw new RuntimeException(Messages
+                .getMessage("adminServletFailCreateJAXBForAdminServlet"), e);
         }
     }
 
@@ -418,9 +419,8 @@ public class AdminServlet extends AbstractRestServlet {
             Marshaller marshaller = JAXBUtils.createMarshaller(resourceCtx);
             marshaller.marshal(jaxbObject, writer);
         } catch (JAXBException e) {
-            throw new ServletException("Failed to marshal object (" + jaxbObject.getClass()
-                .getName()
-                + ")", e);
+            throw new ServletException(String.format(Messages
+                .getMessage("adminServletFailMarshalObject"), jaxbObject.getClass().getName()), e);
 
         }
 

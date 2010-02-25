@@ -36,6 +36,7 @@ import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.wink.common.RestException;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.webdav.WebDAVConstants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -56,7 +57,7 @@ public class WebDAVModelHelper {
             dateFormat = new SimpleDateFormat(XML_DATE_FORMAT);
             dateFormat.setLenient(false);
         } catch (Exception e) {
-            throw new RestException(("failed to setup PropertyHelper"), e);
+            throw new RestException(Messages.getMessage("webDAVFailSetupPropertyHelper"), e);
         }
     }
 
@@ -67,7 +68,7 @@ public class WebDAVModelHelper {
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             return marshaller;
         } catch (JAXBException e) {
-            throw new RestException(("failed to create WebDAV marshaller"), e);
+            throw new RestException(Messages.getMessage("webDAVFailCreateMarshaller"), e);
         }
     }
 
@@ -76,7 +77,7 @@ public class WebDAVModelHelper {
             Unmarshaller unmarshaller = context.createUnmarshaller();
             return unmarshaller;
         } catch (JAXBException e) {
-            throw new RestException(("failed to create WebDAV unmarshaller"), e);
+            throw new RestException(Messages.getMessage("webDAVFailCreateUnmarshaller"), e);
         }
     }
 
@@ -84,8 +85,8 @@ public class WebDAVModelHelper {
         try {
             m.marshal(element, writer);
         } catch (JAXBException e) {
-            throw new RestException(String.format("Unable to marshal the WebDAV \"%s\" element",
-                                                  elementName), e);
+            throw new RestException(String.format(Messages
+                .getMessage("webDAVUnableToMarshalElement"), elementName), e);
         }
     }
 
@@ -100,17 +101,14 @@ public class WebDAVModelHelper {
                 object = ((JAXBElement<?>)object).getValue();
             }
             if (!(elementClass.equals(object.getClass()))) {
-                throw new RestException(
-                                        String
-                                            .format("Incompatible type in the WebDAV \"%s\" element: received %s but the requested is %s",
-                                                    elementName,
-                                                    object.getClass().getName(),
-                                                    elementClass.getName()));
+                throw new RestException(String.format(Messages
+                    .getMessage("webDAVIncompatibleTypeInRequest"), elementName, object.getClass()
+                    .getName(), elementClass.getName()));
             }
             return (T)object;
         } catch (JAXBException e) {
-            throw new RestException(String.format("Unable to parse the WebDAV \"%s\" element",
-                                                  elementName), e);
+            throw new RestException(String
+                .format(Messages.getMessage("webDAVUnableToParseElement"), elementName), e);
         }
     }
 

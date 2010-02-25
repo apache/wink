@@ -201,7 +201,8 @@ public class UriInfoImpl implements UriInfo {
             pathParameters = new MultivaluedMapImpl<String, String>();
             SearchResult searchResult = messageContext.getAttribute(SearchResult.class);
             if (searchResult == null) {
-                throw new IllegalStateException("outside the scope of a request");
+                throw new IllegalStateException(Messages
+                    .getMessage("methodCallOutsideScopeOfRequestContext"));
             }
             MultivaluedMapImpl.copy(searchResult.getData().getMatchedVariables(), pathParameters);
             logger.debug("getPathParameters({}) encoded path parameters are: {}",
@@ -309,10 +310,12 @@ public class UriInfoImpl implements UriInfo {
         String httpsURI = getURI(properties, "wink.https.uri");
         if (httpURI != null || httpsURI != null) {
             if (httpsURI == null) {
-                throw new IllegalStateException("Parameter httpsURI is empty or not initialized");
+                throw new IllegalStateException(Messages
+                    .getMessage("parameterHttpsIsEmptyOrNotInitialized"));
             }
             if (httpURI == null) {
-                throw new IllegalStateException("Parameter httpsURI is empty or not initialized");
+                throw new IllegalStateException(Messages
+                    .getMessage("parameterHttpIsEmptyOrNotInitialized"));
             }
         } else {
             logger.debug("Endpoint is not set up in the configuration; using request detection");
@@ -341,7 +344,7 @@ public class UriInfoImpl implements UriInfo {
                     uriParsed});
                 return uriParsed.toString();
             } catch (URISyntaxException e) {
-                throw new IllegalArgumentException("invalid URI", e);
+                throw new IllegalArgumentException(Messages.getMessage("uriInfoInvalidURI"), e);
             }
         }
         logger.debug("getURI({}, {}) returning null", properties, propertyName);

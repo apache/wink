@@ -28,6 +28,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.wink.common.DynamicResource;
 import org.apache.wink.common.RuntimeContext;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.lifecycle.ObjectFactory;
 import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
@@ -50,7 +51,7 @@ public class ResourceRecordFactory {
 
     public ResourceRecordFactory(LifecycleManagersRegistry lifecycleManagerRegistry) {
         if (lifecycleManagerRegistry == null) {
-            throw new NullPointerException("lifecycleManagerRegistry");
+            throw new NullPointerException();
         }
         this.lifecycleManagerRegistry = lifecycleManagerRegistry;
         this.cacheByClass = new HashMap<Class<?>, ResourceRecord>();
@@ -137,7 +138,7 @@ public class ResourceRecordFactory {
                     }
                 } else {
                     throw new IllegalArgumentException(String
-                        .format("Root resource %s instance is an invalid resource", instance
+                        .format(Messages.getMessage("rootResourceInstanceIsAnInvalidResource"), instance
                             .getClass().getCanonicalName()));
                 }
             } else {

@@ -89,7 +89,8 @@ public class RestServlet extends AbstractRestServlet {
                 // create the request processor
                 requestProcessor = createRequestProcessor();
                 if (requestProcessor == null) {
-                    throw new IllegalStateException("Request processor could not be created.");
+                    throw new IllegalStateException(Messages
+                        .getMessage("restServletRequestProcessorCouldNotBeCreated"));
                 }
                 storeRequestProcessorOnServletContext(requestProcessor);
             }
