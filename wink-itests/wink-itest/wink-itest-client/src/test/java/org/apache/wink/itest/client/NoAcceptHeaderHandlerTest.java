@@ -135,18 +135,19 @@ public class NoAcceptHeaderHandlerTest extends TestCase {
      */
     public void testAcceptHeaderForJAXB() {
         try {
-            Echo e  = client.resource(getBaseURI() + "/echoaccept").get(Echo.class);
+            Echo e = client.resource(getBaseURI() + "/echoaccept").get(Echo.class);
             fail();
-//            String value = e.getValue();
-//            assertTrue(value, value.contains(MediaType.APPLICATION_JSON));
-//            assertTrue(value, value.contains(MediaType.APPLICATION_XML));
-//            assertTrue(value, value.contains(MediaType.TEXT_XML));
-//            assertTrue(value, value.contains("application/javascript"));
+            // String value = e.getValue();
+            // assertTrue(value, value.contains(MediaType.APPLICATION_JSON));
+            // assertTrue(value, value.contains(MediaType.APPLICATION_XML));
+            // assertTrue(value, value.contains(MediaType.TEXT_XML));
+            // assertTrue(value, value.contains("application/javascript"));
         } catch (RuntimeException e) {
-            assertEquals(e.getMessage(), String
-                .format("No reader for type class %s and media type %s",
-                        Echo.class.getName(),
-                        MediaType.TEXT_PLAIN));
+            assertEquals(e.getMessage(),
+                         String
+                             .format("No javax.ws.rs.ext.MessageBodyReader found for type class %s and media type %s .  Verify that all entity providers are correctly registered.",
+                                     Echo.class.getName(),
+                                     MediaType.TEXT_PLAIN));
         }
     }
 
@@ -162,10 +163,11 @@ public class NoAcceptHeaderHandlerTest extends TestCase {
             // assertTrue(value, value.contains(MediaType.APPLICATION_JSON));
             // assertTrue(value, value.contains("application/javascript"));
         } catch (RuntimeException e) {
-            assertEquals(e.getMessage(), String
-                .format("No reader for type class %s and media type %s",
-                        JSONObject.class.getName(),
-                        MediaType.TEXT_PLAIN));
+            assertEquals(e.getMessage(),
+                         String
+                             .format("No javax.ws.rs.ext.MessageBodyReader found for type class %s and media type %s .  Verify that all entity providers are correctly registered.",
+                                     JSONObject.class.getName(),
+                                     MediaType.TEXT_PLAIN));
         }
     }
 }
