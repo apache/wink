@@ -22,6 +22,7 @@ package org.apache.wink.server.internal.handlers;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.Properties;
 
 import javax.servlet.FilterConfig;
@@ -31,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
@@ -85,6 +87,10 @@ public class ServerMessageContext extends AbstractRuntimeContext implements Mess
         setAttribute(ProvidersRegistry.class, configuration.getProvidersRegistry());
 
         initContexts();
+        List<Application> apps = configuration.getApplications();
+        if (apps != null && !apps.isEmpty()) {
+            setAttribute(Application.class, apps.get(0));
+        }
     }
 
     private void initContexts() {

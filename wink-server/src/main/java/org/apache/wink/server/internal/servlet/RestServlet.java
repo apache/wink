@@ -112,9 +112,9 @@ public class RestServlet extends AbstractRestServlet {
     protected RequestProcessor createRequestProcessor() throws ClassNotFoundException,
         InstantiationException, IllegalAccessException, IOException {
         DeploymentConfiguration deploymentConfiguration = getDeploymentConfiguration();
+        deploymentConfiguration.addApplication(getApplication(), false);
         RequestProcessor requestProcessor = new RequestProcessor(deploymentConfiguration);
         logger.debug("Creating request processor {} for servlet {}", requestProcessor, this);
-        deploymentConfiguration.addApplication(getApplication(), false);
         return requestProcessor;
     }
 

@@ -62,13 +62,6 @@ public class ContextAccessor {
     @SuppressWarnings("unchecked")
     public <T> T getContextFromAccessor(final Class<T> contextClass, RuntimeContext runtimeContext) {
 
-        // the context class must be an interface.
-        // we do this check just so we can throw a nice exception.
-        if (contextClass.isInterface() == false) {
-            throw new IllegalArgumentException(String.format("%s must be an interface",
-                                                             contextClass));
-        }
-
         // return context directly
         if (runtimeContext != null) {
             try {

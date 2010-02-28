@@ -118,6 +118,9 @@ public class DeploymentConfiguration {
     private ServletContext            servletContext;
     private FilterConfig              filterConfig;
 
+    // jax-rs application subclass
+    private List<Application>         applications;
+
     private String[]                  httpMethodOverrideHeaders;
 
     /**
@@ -259,8 +262,16 @@ public class DeploymentConfiguration {
     }
 
     public void addApplication(Application application, boolean isSystemApplication) {
+        if (applications == null) {
+            applications = new ArrayList<Application>(1);
+        }
         new ApplicationProcessor(application, resourceRegistry, providersRegistry,
                                  isSystemApplication).process();
+        applications.add(application);
+    }
+
+    public List<Application> getApplications() {
+        return applications;
     }
 
     // init methods
@@ -337,8 +348,8 @@ public class DeploymentConfiguration {
                     MediaTypeMapperFactory handlersFactory = handlerFactoryClass.newInstance();
                     mediaTypeMapper.addMappings(handlersFactory.getMediaTypeMappings());
                 } catch (ClassNotFoundException e) {
-                    logger.error(Messages
-                        .getMessage("isNotAClassWithMsgFormat", mediaTypeMapperFactoryClassName), e);
+                    logger.error(Messages.getMessage("isNotAClassWithMsgFormat",
+                                                     mediaTypeMapperFactoryClassName), e);
                 } catch (InstantiationException e) {
                     logger.error(Messages.getMessage("classInstantiationExceptionWithMsgFormat",
                                                      mediaTypeMapperFactoryClassName), e);
@@ -361,7 +372,9 @@ public class DeploymentConfiguration {
         if (handlersFactoryClassName != null) {
             try {
                 logger.debug("Handlers Factory Class is: {}", handlersFactoryClassName);
-                // use ClassUtils.getClass instead of Class.forName so we have classloader visibility into the Web module in J2EE environments
+                // use ClassUtils.getClass instead of Class.forName so we have
+                // classloader visibility into the Web module in J2EE
+                // environments
                 Class<HandlersFactory> handlerFactoryClass =
                     (Class<HandlersFactory>)ClassUtils.getClass(handlersFactoryClassName);
                 HandlersFactory handlersFactory = handlerFactoryClass.newInstance();
@@ -377,13 +390,14 @@ public class DeploymentConfiguration {
                     errorUserHandlers = (List<ResponseHandler>)handlersFactory.getErrorHandlers();
                 }
             } catch (ClassNotFoundException e) {
-                logger.error(Messages.getMessage("isNotAClassWithMsgFormat", handlersFactoryClassName), e);
+                logger.error(Messages.getMessage("isNotAClassWithMsgFormat",
+                                                 handlersFactoryClassName), e);
             } catch (InstantiationException e) {
                 logger.error(Messages.getMessage("classInstantiationExceptionWithMsgFormat",
                                                  handlersFactoryClassName), e);
             } catch (IllegalAccessException e) {
-                logger
-                    .error(Messages.getMessage("classIllegalAccessWithMsgFormat", handlersFactoryClassName), e);
+                logger.error(Messages.getMessage("classIllegalAccessWithMsgFormat",
+                                                 handlersFactoryClassName), e);
             }
         }
 
