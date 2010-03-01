@@ -150,8 +150,7 @@ public class ResponseImpl extends Response {
 
         @Override
         public ResponseBuilder language(Locale language) {
-            return singleHeader(HttpHeaders.CONTENT_LANGUAGE, language == null ? null : HeaderUtils
-                .localeToLanguage(language));
+            return singleHeader(HttpHeaders.CONTENT_LANGUAGE, language);
         }
 
         @Override
