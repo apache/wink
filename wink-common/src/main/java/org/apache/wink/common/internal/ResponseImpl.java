@@ -31,8 +31,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Variant;
 
+import org.apache.wink.common.RuntimeContext;
+import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.common.internal.utils.HeaderUtils;
 
 public class ResponseImpl extends Response {
@@ -157,6 +161,19 @@ public class ResponseImpl extends Response {
 
         @Override
         public ResponseBuilder location(URI location) {
+            if (location != null && !location.isAbsolute()) {
+                RuntimeContext rtContext = RuntimeContextTLS.getRuntimeContext();
+                if (rtContext != null) {
+                    UriInfo info =
+                        RuntimeContextTLS.getRuntimeContext().getAttribute(UriInfo.class);
+                    if (info != null) {
+                        location =
+                            UriBuilder.fromUri(info.getBaseUri()).path(location.getPath())
+                                .fragment(location.getFragment()).build();
+                    }
+                }
+            }
+
             return singleHeader(HttpHeaders.LOCATION, location);
         }
 
