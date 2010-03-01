@@ -81,7 +81,11 @@ public class InputStreamProvider implements MessageBodyReader<InputStream>,
                         MediaType mediaType,
                         MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException, WebApplicationException {
-        ProviderUtils.copyStream(t, entityStream);
+        try {
+            ProviderUtils.copyStream(t, entityStream);
+        } finally {
+            t.close();
+        }
     }
 
 }

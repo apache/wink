@@ -75,13 +75,15 @@ public class FileProvider implements MessageBodyWriter<File>, MessageBodyReader<
                         MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException, WebApplicationException {
         if (!t.canRead() || t.isDirectory()) {
-            logger.warn(Messages.getMessage("cannotUseFileAsResponse"),
-                        t.getAbsoluteFile());
+            logger.warn(Messages.getMessage("cannotUseFileAsResponse"), t.getAbsoluteFile());
             throw new WebApplicationException();
         } else {
             FileInputStream fis = new FileInputStream(t);
-            pipe(fis, entityStream);
-            fis.close();
+            try {
+                pipe(fis, entityStream);
+            } finally {
+                fis.close();
+            }
         }
 
     }
@@ -112,9 +114,13 @@ public class FileProvider implements MessageBodyWriter<File>, MessageBodyReader<
             }
         }
         File f = File.createTempFile(prefix, suffix, dir);
+
         FileOutputStream fos = new FileOutputStream(f);
-        pipe(entityStream, fos);
-        fos.close();
+        try {
+            pipe(entityStream, fos);
+        } finally {
+            fos.close();
+        }
         return f;
     }
 

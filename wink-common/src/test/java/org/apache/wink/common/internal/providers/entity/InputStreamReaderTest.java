@@ -17,55 +17,58 @@
  *  under the License.
  *  
  *******************************************************************************/
+
 package org.apache.wink.common.internal.providers.entity;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
 import javax.ws.rs.core.MediaType;
-import static org.junit.Assert.*;
 
-import org.apache.wink.common.internal.providers.entity.ReaderProvider;
 import org.junit.Test;
 
-public class ReaderProviderTest {
+public class InputStreamReaderTest {
 
     private static String message =
                                       "The two most common elements in the world are hydrogen and stupidity";
 
     @Test
-    public void testMessageReader() {
+    public void testMessageInputStream() {
 
         // Entity Input Stream
         ByteArrayInputStream bais = new ByteArrayInputStream(message.getBytes());
 
         // Entity Stream to be read with ReaderProvider
-        ReaderProvider rp = new ReaderProvider();
+        InputStreamProvider ip = new InputStreamProvider();
 
         // Check if readable - assert true
-        assertTrue(rp.isReadable(Reader.class, null, null, null));
-        assertTrue(rp.isReadable(Object.class, null, null, null));
+        assertTrue(ip.isReadable(InputStream.class, null, null, null));
+        assertTrue(ip.isReadable(Object.class, null, null, null));
         // Check if readable - assert false
-        assertFalse(rp.isReadable(StringReader.class, null, null, null));
-        assertFalse(" Reading from String.class is not supported", rp.isReadable(String.class,
+        assertFalse(ip.isReadable(ByteArrayInputStream.class, null, null, null));
+        assertFalse(" Reading from String.class is not supported", ip.isReadable(String.class,
                                                                                  null,
                                                                                  null,
                                                                                  null));
 
-        Reader reader = null;
+        InputStream istream = null;
         try {
             // Read Entity
-            reader = rp.readFrom(null, null, null, MediaType.WILDCARD_TYPE, null, bais);
+            istream = ip.readFrom(null, null, null, MediaType.WILDCARD_TYPE, null, bais);
         } catch (IOException e) {
             assertFalse(" Failed to read Entity", true);
         }
 
-        BufferedReader sr = new BufferedReader(reader);
+        BufferedReader sr = new BufferedReader(new InputStreamReader(istream));
         char[] cbuf = new char[message.length()];
         try {
             sr.read(cbuf);
@@ -83,20 +86,24 @@ public class ReaderProviderTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         // Entity Stream to be read with ReaderProvider
-        ReaderProvider rp = new ReaderProvider();
+        InputStreamProvider ip = new InputStreamProvider();
 
         // Check if writable
-        assertTrue(rp.isWriteable(StringReader.class, null, null, null));
+        assertTrue(ip.isWriteable(ByteArrayInputStream.class, null, null, null));
         // Check if readable - assert false
-        assertFalse(" Writting from String.class is not supported", rp.isWriteable(String.class,
+        assertFalse(" Writting from String.class is not supported", ip.isWriteable(String.class,
                                                                                    null,
                                                                                    null,
                                                                                    null));
 
-        StringReader reader = new StringReader(message);
-
         try {
-            rp.writeTo(reader, null, null, null, MediaType.WILDCARD_TYPE, null, baos);
+            ip.writeTo(new ByteArrayInputStream(message.getBytes()),
+                       null,
+                       null,
+                       null,
+                       MediaType.WILDCARD_TYPE,
+                       null,
+                       baos);
         } catch (IOException e) {
             assertFalse(" Failed to write Entity", true);
         }
@@ -104,28 +111,28 @@ public class ReaderProviderTest {
         assertEquals(message, new String(baos.toByteArray()));
     }
 
-    public static class MyReader extends Reader {
+    public static class MyStream extends InputStream {
 
-        public MyReader(StringReader reader) {
-            this.reader = reader;
+        public MyStream(ByteArrayInputStream istream) {
+            this.istream = istream;
         }
 
-        final private Reader reader;
-        private boolean      closed = false;
+        final private InputStream istream;
+        private boolean           closed = false;
 
         @Override
         public void close() throws IOException {
             closed = true;
-            reader.close();
-        }
-
-        @Override
-        public int read(char[] cbuf, int off, int len) throws IOException {
-            return reader.read(cbuf, off, len);
+            istream.close();
         }
 
         public boolean calledClose() {
             return closed;
+        }
+
+        @Override
+        public int read() throws IOException {
+            return istream.read();
         }
     }
 
@@ -134,26 +141,26 @@ public class ReaderProviderTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         // Entity Stream to be read with ReaderProvider
-        ReaderProvider rp = new ReaderProvider();
+        InputStreamProvider ip = new InputStreamProvider();
 
         // Check if writable
-        assertTrue(rp.isWriteable(MyReader.class, null, null, null));
+        assertTrue(ip.isWriteable(MyStream.class, null, null, null));
         // Check if readable - assert false
-        assertFalse(" Writting from String.class is not supported", rp.isWriteable(String.class,
+        assertFalse(" Writting from String.class is not supported", ip.isWriteable(String.class,
                                                                                    null,
                                                                                    null,
                                                                                    null));
 
-        MyReader reader = new MyReader(new StringReader(message));
+        MyStream istream = new MyStream(new ByteArrayInputStream(message.getBytes()));
 
         try {
-            rp.writeTo(reader, null, null, null, MediaType.WILDCARD_TYPE, null, baos);
+            ip.writeTo(istream, null, null, null, MediaType.WILDCARD_TYPE, null, baos);
         } catch (IOException e) {
             assertFalse(" Failed to write Entity", true);
         }
 
         assertEquals(message, new String(baos.toByteArray()));
-        assertTrue(reader.calledClose());
+        assertTrue(istream.calledClose());
     }
 
 }
