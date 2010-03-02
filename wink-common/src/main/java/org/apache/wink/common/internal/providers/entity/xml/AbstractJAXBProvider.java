@@ -73,9 +73,13 @@ public abstract class AbstractJAXBProvider {
 
     // the Pool code for the pooling of unmarshallers is from Axis2 Java
     // http://svn.apache.org/repos/asf/webservices/axis2/trunk/java/modules/jaxws/src/org/apache/axis2/jaxws/message/databinding/JAXBUtils.java
-    private static Pool<JAXBContext, Marshaller>                  mpool                     =
+    //
+    // These pools should *not* be static in Wink, however, because the (un)marshallers are unique per JAXBContext instance, each
+    // of which is unique per class object being (un)marshalled.  In Axis2, the JAXBContext instances cover the entire application space, thus
+    // it was safe to cache them in a static field.
+    private Pool<JAXBContext, Marshaller>                  mpool                     =
                                                                                                 new Pool<JAXBContext, Marshaller>();
-    private static Pool<JAXBContext, Unmarshaller>                upool                     =
+    private Pool<JAXBContext, Unmarshaller>                upool                     =
                                                                                                 new Pool<JAXBContext, Unmarshaller>();
 
 /**
