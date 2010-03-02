@@ -112,6 +112,7 @@ public class RestServlet extends AbstractRestServlet {
     protected RequestProcessor createRequestProcessor() throws ClassNotFoundException,
         InstantiationException, IllegalAccessException, IOException {
         DeploymentConfiguration deploymentConfiguration = getDeploymentConfiguration();
+        // order of next two lines is important to allow Application to have control over priority order of Providers
         deploymentConfiguration.addApplication(getApplication(), false);
         RequestProcessor requestProcessor = new RequestProcessor(deploymentConfiguration);
         logger.debug("Creating request processor {} for servlet {}", requestProcessor, this);

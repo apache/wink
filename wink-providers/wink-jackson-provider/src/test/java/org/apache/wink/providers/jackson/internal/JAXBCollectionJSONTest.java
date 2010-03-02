@@ -41,10 +41,7 @@ import org.apache.wink.providers.jackson.internal.jaxb.Person;
 import org.apache.wink.providers.json.JSONUtils;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig.Feature;
-import org.codehaus.jackson.xc.JaxbAnnotationIntrospector;
+import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.json.JSONArray;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -77,9 +74,9 @@ public class JAXBCollectionJSONTest extends MockServletInvocationTest {
     private static final String ENTRY_STR_JSON_1    =
                                                         "{\"base\":\"http://b216:8080/reporting/reports\"," + "\"otherAttributes\":{},"
                                                             + "\"id\":\"toptenvalidators\","
-                                                            + "\"updated\":{\"year\":2009,\"month\":8,\"day\":31,\"timezone\":0,\"hour\":18,\"minute\":30,\"second\":2,\"millisecond\":-2147483648},"
+                                                            + "\"updated\":\"2009-08-31T18:30:02Z\","
                                                             + "\"title\":{\"lang\":\"en\",\"otherAttributes\":{},\"type\":\"text\"},"
-                                                            + "\"published\":{\"year\":2009,\"month\":8,\"day\":31,\"timezone\":0,\"hour\":18,\"minute\":30,\"second\":2,\"millisecond\":-2147483648},"
+                                                            + "\"published\":\"2009-08-31T18:30:02Z\","
                                                             + "\"link\":[{\"otherAttributes\":{},\"rel\":\"alternate\",\"type\":\"application/json\",\"href\":\"http://b216:8080/reporting/reports/toptenvalidators?alt=application/json\"}],"
                                                             + "\"author\":[{\"name\":\"admin 1\"}],"
                                                             + "\"category\":[{\"otherAttributes\":{},\"term\":\"urn:com:systinet:reporting:kind:definition\",\"scheme\":\"urn:com:systinet:reporting:kind\",\"label\":\"report definition\"}]"
@@ -87,26 +84,25 @@ public class JAXBCollectionJSONTest extends MockServletInvocationTest {
     private static final String ENTRY_STR_JSON_2    =
                                                         "{\"base\":\"http://b216:8080/reporting/reports\"," + "\"otherAttributes\":{},"
                                                             + "\"id\":\"toptenvalidators\","
-                                                            + "\"updated\":{\"year\":2009,\"month\":8,\"day\":31,\"timezone\":0,\"hour\":18,\"minute\":30,\"second\":2,\"millisecond\":-2147483648},"
+                                                            + "\"updated\":\"2009-08-31T18:30:02Z\","
                                                             + "\"title\":{\"lang\":\"en\",\"otherAttributes\":{},\"type\":\"text\"},"
-                                                            + "\"published\":{\"year\":2009,\"month\":8,\"day\":31,\"timezone\":0,\"hour\":18,\"minute\":30,\"second\":2,\"millisecond\":-2147483648},"
+                                                            + "\"published\":\"2009-08-31T18:30:02Z\","
                                                             + "\"link\":[{\"otherAttributes\":{},\"rel\":\"alternate\",\"type\":\"application/json\",\"href\":\"http://b216:8080/reporting/reports/toptenvalidators?alt=application/json\"}],"
                                                             + "\"author\":[{\"name\":\"admin 2\"}],"
                                                             + "\"category\":[{\"otherAttributes\":{},\"term\":\"urn:com:systinet:reporting:kind:definition\",\"scheme\":\"urn:com:systinet:reporting:kind\",\"label\":\"report definition\"}]"
                                                             + "}";
 
     private static final String ENTRY_STR_JSON_GET  =
-                                                        "[{\"name\":{\"namespaceURI\":\"http://www.w3.org/2005/Atom\",\"localPart\":\"entry\",\"prefix\":\"\"}," + "\"declaredType\":\"org.apache.wink.common.model.atom.AtomEntry\","
+                                                        "[{\"name\":\"{http://www.w3.org/2005/Atom}entry\"," + "\"declaredType\":\"org.apache.wink.common.model.atom.AtomEntry\","
                                                             + "\"scope\":\"javax.xml.bind.JAXBElement$GlobalScope\","
                                                             + "\"value\":"
                                                             + ENTRY_STR_JSON_1
-                                                            + ",\"nil\":false},"
-                                                            + "{\"name\":{\"namespaceURI\":\"http://www.w3.org/2005/Atom\",\"localPart\":\"entry\",\"prefix\":\"\"},"
-                                                            + "\"declaredType\":\"org.apache.wink.common.model.atom.AtomEntry\","
+                                                            + ",\"nil\":false, \"typeSubstituted\":false,\"globalScope\":true},"
+                                                            + "{\"name\":\"{http://www.w3.org/2005/Atom}entry\"," + "\"declaredType\":\"org.apache.wink.common.model.atom.AtomEntry\","
                                                             + "\"scope\":\"javax.xml.bind.JAXBElement$GlobalScope\","
                                                             + "\"value\":"
                                                             + ENTRY_STR_JSON_2
-                                                            + ",\"nil\":false}]";
+                                                            + ",\"nil\":false, \"typeSubstituted\":false,\"globalScope\":true}]";
 
     private static final String ENTRY_JSON_1;
     private static final String ENTRY_JSON_2;
@@ -157,12 +153,7 @@ public class JAXBCollectionJSONTest extends MockServletInvocationTest {
 
     @Override
     protected Object[] getSingletons() {
-        ObjectMapper mapper = new ObjectMapper();
-        JaxbAnnotationIntrospector jaxbIntrospector = new JaxbAnnotationIntrospector();
-        mapper.getSerializationConfig().setAnnotationIntrospector(jaxbIntrospector);
-        mapper.getSerializationConfig().set(Feature.WRITE_DATES_AS_TIMESTAMPS, true);
-        mapper.getDeserializationConfig().setAnnotationIntrospector(jaxbIntrospector);
-        JacksonJsonProvider jacksonProvider = new JacksonJsonProvider(mapper);
+    	JacksonJaxbJsonProvider jacksonProvider = new JacksonJaxbJsonProvider();
         return new Object[] {jacksonProvider};
     }
 
@@ -288,7 +279,7 @@ public class JAXBCollectionJSONTest extends MockServletInvocationTest {
 
         assertTrue(JSONUtils
             .equals(new JSONArray(
-                                  "[{\"name\":{\"namespaceURI\":\"\",\"localPart\":\"person\",\"prefix\":\"\"},\"declaredType\":\"org.apache.wink.providers.jackson.internal.jaxb.Person\",\"scope\":\"javax.xml.bind.JAXBElement$GlobalScope\",\"value\":{\"name\":\"My Name\",\"desc\":\"My desc\"},\"nil\":false},{\"name\":{\"namespaceURI\":\"\",\"localPart\":\"person\",\"prefix\":\"\"},\"declaredType\":\"org.apache.wink.providers.jackson.internal.jaxb.Person\",\"scope\":\"javax.xml.bind.JAXBElement$GlobalScope\",\"value\":{\"name\":\"My Name 2\",\"desc\":\"My desc 2\"},\"nil\":false}]"),
+                                  "[{\"name\":\"person\",\"declaredType\":\"org.apache.wink.providers.jackson.internal.jaxb.Person\",\"scope\":\"javax.xml.bind.JAXBElement$GlobalScope\",\"value\":{\"name\":\"My Name\",\"desc\":\"My desc\"},\"nil\":false, \"typeSubstituted\":false,\"globalScope\":true},{\"name\":\"person\",\"declaredType\":\"org.apache.wink.providers.jackson.internal.jaxb.Person\",\"scope\":\"javax.xml.bind.JAXBElement$GlobalScope\",\"value\":{\"name\":\"My Name 2\",\"desc\":\"My desc 2\"},\"nil\":false, \"typeSubstituted\":false,\"globalScope\":true}]"),
                     new JSONArray(response.getContentAsString())));
     }
 

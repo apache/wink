@@ -43,31 +43,6 @@ import org.apache.wink.common.model.synd.SyndEntry;
 
 public class ClientAtomTest extends BaseTest {
     
-//    @Path("atomresource")
-//    private class MyAtomResource {
-//        @Path("entry")
-//        @GET
-//        @Produces("application/atom+xml")
-//        public Response getEntry() {
-//            MyPojo myPojo = new MyPojo();
-//            myPojo.setTitle("wheeee!!!");
-//            // wrap POJO (JAXB object) in AtomContent, AtomEntry
-//            return Response.status(Status.OK).entity(wrapInAtom(myPojo)).build();
-//        }
-//        
-//        /*
-//         * utility method to wrap responses in AtomEntry
-//         */
-//        private AtomEntry wrapInAtom(Object obj) {
-//            AtomContent atomContent = new AtomContent();
-//            atomContent.setType(MediaType.APPLICATION_XML);
-//            atomContent.setValue(obj);
-//            AtomEntry retAtomEntry = new AtomEntry();
-//            retAtomEntry.setContent(atomContent);
-//            return retAtomEntry;
-//        }
-//    }
-    
     @XmlRootElement(name = "mypojo", namespace = "http://mypojons/")
     @XmlType(name = "mypojo", propOrder = {"title"})
     protected static class MyPojo {
@@ -110,7 +85,7 @@ public class ClientAtomTest extends BaseTest {
         @Override
         public boolean isReadable(Class<?> type, Type genericType,
                 Annotation[] annotations, MediaType mediaType) {
-            return true;
+            return type.getName().equals("org.apache.wink.client.ClientAtomTest$MyPojo");
         }
 
         @Override

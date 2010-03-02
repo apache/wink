@@ -19,7 +19,20 @@
  *******************************************************************************/
 package org.apache.wink.common.internal.registry;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
+
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.ext.MessageBodyReader;
+import javax.ws.rs.ext.Provider;
 
 import junit.framework.TestCase;
 
@@ -50,7 +63,6 @@ public class ProvidersRegistryTest extends TestCase {
         Field field = providersRegistry.getClass().getDeclaredField("messageBodyReaders");
         field.setAccessible(true);
         Object messageBodyReaders = field.get(providersRegistry);
-        System.out.println(messageBodyReaders.getClass().getSuperclass().getName());
         Field field2 = messageBodyReaders.getClass().getSuperclass().getDeclaredField("providersCache");
         field2.setAccessible(true);
         Object providersCache = field2.get(messageBodyReaders);
@@ -58,8 +70,75 @@ public class ProvidersRegistryTest extends TestCase {
         assertTrue(providersCache instanceof SoftConcurrentMap);    
     }
     
+    /**
+     * Application subclass methods .getClasses and .getSingletons may list provider class or instance that is the same
+     * as a default Wink provider to override it to establish a new priority order.
+     * 
+     * The order that the Wink runtime loads providers is:
+     * Application.getSingletons
+     * Application.getClasses
+     * system (through wink-providers file)
+     * extra jars (through each wink-application file)
+     */
+    @SuppressWarnings("unchecked")
+    public void testOverrideSystemProvider() throws Exception {
+        ProvidersRegistry providersRegistry = createProvidersRegistryImpl();
+        assertTrue(providersRegistry.addProvider(StringReader.class, 0.5, false));  // registered as a user provider
+        MessageBodyReader<String> reader1 = providersRegistry.getMessageBodyReader(String.class, null, null, MediaType.TEXT_PLAIN_TYPE, null);
+
+        // registered twice as a custom user provider with higher priority
+        // See javadoc for Application.getSingletons to see why we ignore the attempt to add a second StringReader
+        assertFalse(providersRegistry.addProvider(StringReader.class, 0.6, false));
+        MessageBodyReader<String> reader2 = providersRegistry.getMessageBodyReader(String.class, null, null, MediaType.TEXT_PLAIN_TYPE, null);
+        assertTrue(reader1 == reader2);  // object compare to make sure reader2 has been silently ignored
+        
+        // registered as a system provider
+        assertFalse(providersRegistry.addProvider(StringReader.class, 0.1, false));
+        MessageBodyReader<String> reader3 = providersRegistry.getMessageBodyReader(String.class, null, null, MediaType.TEXT_PLAIN_TYPE, null);
+        assertTrue(reader1 == reader3);  // object compare to make sure reader3 has been silently ignored
+        assertTrue(reader2 == reader3);  // object compare to make sure reader3 has been silently ignored
+        
+        // to confirm that the ignores are indeed happening, I need to get the private field
+        // "messageBodyReaders" object, then it's superclass "data" object and inspect it:
+        Field field = providersRegistry.getClass().getDeclaredField("messageBodyReaders");
+        field.setAccessible(true);
+        Object messageBodyReaders = field.get(providersRegistry);
+        Field field2 = messageBodyReaders.getClass().getSuperclass().getDeclaredField("data");
+        field2.setAccessible(true);
+        HashMap data = (HashMap)field2.get(messageBodyReaders);
+        Set readers = (Set)data.get(MediaType.WILDCARD_TYPE);
+        
+        // make there is only one provider in the list to conform to JAX-RS 4.1 first sentence
+        assertEquals(1, readers.size());
+    }
+    
     // TODO:  perhaps future tests should be added to actually exercise the providersCache code, but it would be an involved,
     // multi-threaded test that dynamically adds providers at just the right time to ensure no problems with
     // concurrent writes.
+    
+    // Utility:
+    private ProvidersRegistry createProvidersRegistryImpl() {
+        ProvidersRegistry providers =
+            new ProvidersRegistry(new LifecycleManagersRegistry(), new ApplicationValidator());
+        ;
+        return providers;
+    }
+    
+    @Provider
+    @Produces( {MediaType.WILDCARD})
+    public static class StringReader implements MessageBodyReader<String> {
+
+        public boolean isReadable(Class<?> type, Type genericType,
+                Annotation[] annotations, MediaType mediaType) {
+            return true;
+        }
+
+        public String readFrom(Class<String> type, Type genericType,
+                Annotation[] annotations, MediaType mediaType,
+                MultivaluedMap<String, String> httpHeaders,
+                InputStream entityStream) throws IOException {
+            return "STRING";
+        }
+    }
     
 }
