@@ -55,7 +55,7 @@ import org.slf4j.LoggerFactory;
 
 public class ResourceImpl implements Resource {
 
-    private static final String            USER_AGENT = "Wink Client v1.0"; //$NON-NLS-1$
+    private static final String            USER_AGENT = "Wink Client v1.0";                         //$NON-NLS-1$
 
     private ProvidersRegistry              providersRegistry;
     private ClientConfig                   config;
@@ -242,7 +242,8 @@ public class ResourceImpl implements Resource {
         request.setMethod(method);
         request.getHeaders().putAll(headers);
         if (logger.isDebugEnabled()) {
-            Integer requestEntityInfo = (requestEntity == null) ? null : System.identityHashCode(requestEntity);
+            Integer requestEntityInfo =
+                (requestEntity == null) ? null : System.identityHashCode(requestEntity);
             logger.debug(Messages.getMessage("clientIssueRequest", new Object[] {method, //$NON-NLS-1$
                 requestURI, requestEntityInfo, headers.keySet()}));
         }

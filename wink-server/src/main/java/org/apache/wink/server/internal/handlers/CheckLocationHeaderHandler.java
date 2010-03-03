@@ -41,7 +41,7 @@ public class CheckLocationHeaderHandler extends AbstractHandler {
             Response clientResponse = (Response)result;
             if (!clientResponse.getMetadata().containsKey(HttpHeaders.LOCATION)) {
                 throw new IllegalStateException(Messages
-                    .getMessage("checkLocationHeaderHandlerIllegalArg", statusCode)); //$NON-NLS-1$
+                    .getMessage("checkLocationHeaderHandlerIllegalArg", String.valueOf(statusCode))); //$NON-NLS-1$
             }
         }
     }
