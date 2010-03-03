@@ -32,8 +32,22 @@ Building
    all located in your local maven repository. It usually takes some time for 
    maven to download required dependencies in the first build.
 
+Building (optional itests)
+-------------------
+
+After building, you may wish to run the wink-itests, which is not automatically run under a regular maven build.
+
+1) Change to wink-itests directory
+2) Run
+	$> mvn -DassemblyId=tomcat install
+   This will run the itests against tomcat.  The available assemblyId values are:
+
+     jetty
+     tomcat
+
 Building distribution archives
-------------
+------------------------------
+
 1) From top level, run
          $> mvn install -PCIBuild
    This will build an Apache Wink distribution archives under "wink-scripts/wink-dist/target"
