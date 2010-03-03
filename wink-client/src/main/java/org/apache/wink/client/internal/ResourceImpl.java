@@ -243,8 +243,8 @@ public class ResourceImpl implements Resource {
         request.getHeaders().putAll(headers);
         if (logger.isDebugEnabled()) {
             Integer requestEntityInfo = (requestEntity == null) ? null : System.identityHashCode(requestEntity);
-            logger.debug(Messages.getMessage("clientIssueRequest"), new Object[] {method,
-                requestURI, requestEntityInfo, headers.keySet()});
+            logger.debug(Messages.getMessage("clientIssueRequest", new Object[] {method,
+                requestURI, requestEntityInfo, headers.keySet()}));
         }
         if (headers.getFirst(HttpHeaders.USER_AGENT) == null) {
             request.getHeaders().add(HttpHeaders.USER_AGENT, USER_AGENT);

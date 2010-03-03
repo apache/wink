@@ -82,7 +82,7 @@ public class AnyContentHandler implements DomHandler<XmlWrapper, StreamResult> {
             (MessageBodyWriter<Object>)providers.getMessageBodyWriter(cls, cls, null, type);
 
         if (writer == null) {
-            logger.error(Messages.getMessage("noWriterFound"), cls.getName(), type.toString());
+            logger.error(Messages.getMessage("noWriterFound", cls.getName(), type.toString()));
             throw new WebApplicationException(500);
         }
 

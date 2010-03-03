@@ -205,8 +205,8 @@ public class FlushResultHandler extends AbstractHandler {
                 .createDataContentHandler(responseMediaType.toString());
 
         if (dataContentHandler == null) {
-            logger.error(Messages.getMessage("noWriterOrDataSourceProvider"), entity.getClass()
-                .getName(), responseMediaType);
+            logger.error(Messages.getMessage("noWriterOrDataSourceProvider", entity.getClass()
+                .getName(), responseMediaType));
             throw new WebApplicationException(500);
         }
 

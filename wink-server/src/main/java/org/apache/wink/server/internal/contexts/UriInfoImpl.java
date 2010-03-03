@@ -103,7 +103,7 @@ public class UriInfoImpl implements UriInfo {
             try {
                 baseUri = new URI(baseUriString);
             } catch (URISyntaxException e) {
-                logger.error(Messages.getMessage("uriBadBaseURI") + baseUriString, e);
+                logger.error(Messages.getMessage("uriBadBaseURI", baseUriString), e);
             }
         }
         logger.debug("getBaseUri() returning: {}", baseUri);

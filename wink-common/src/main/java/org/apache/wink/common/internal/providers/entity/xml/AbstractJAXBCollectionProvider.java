@@ -108,12 +108,12 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
             releaseJAXBUnmarshaller(context, unmarshaller);
             return ret;
         } catch (XMLStreamException e) {
-            logger.error(Messages.getMessage("jaxbFailToUnmarshal"), type.getName()); // TODO
+            logger.error(Messages.getMessage("jaxbFailToUnmarshal", type.getName()), e); // TODO
             // change
             // message
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         } catch (JAXBException e) {
-            logger.error(Messages.getMessage("jaxbFailToUnmarshal"), type.getName());
+            logger.error(Messages.getMessage("jaxbFailToUnmarshal", type.getName()), e);
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         }
     }
@@ -170,7 +170,7 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
 
             writeEndTag(qname, entityStream);
         } catch (JAXBException e) {
-            logger.error(Messages.getMessage("jaxbFailToMarshal"), type.getName());
+            logger.error(Messages.getMessage("jaxbFailToMarshal", type.getName()), e);
             throw new WebApplicationException(e);
         }
     }

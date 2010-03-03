@@ -81,7 +81,7 @@ public class ApplicationValidator {
     private boolean classUnique(Class<? extends Object> cls) {
         if (!singletonClasses.add(cls)) {
             // the singleton of this class already exists
-            logger.warn(Messages.getMessage("classAlreadyAdded"), cls);
+            logger.warn(Messages.getMessage("classAlreadyAdded", cls));
             return false;
         }
         return true;
@@ -108,9 +108,9 @@ public class ApplicationValidator {
         boolean valid = counter <= 1;
 
         if (!valid) {
-            logger.warn(Messages.getMessage("classNotValid"),
+            logger.warn(Messages.getMessage("classNotValid",
                         new Object[] {cls, Path.class.getName(), DynamicResource.class.getName(),
-                            Provider.class.getName()});
+                            Provider.class.getName()}));
         }
 
         return valid;

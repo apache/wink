@@ -93,7 +93,7 @@ public class JAXBElementXmlProvider extends AbstractJAXBProvider implements
 
             releaseJAXBUnmarshaller(context, unmarshaller);
         } catch (JAXBException e) {
-            logger.error(Messages.getMessage("jaxbFailToUnmarshal"), type.getName());
+            logger.error(Messages.getMessage("jaxbFailToUnmarshal", type.getName()), e);
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         }
         return unmarshaledResource;
@@ -131,7 +131,7 @@ public class JAXBElementXmlProvider extends AbstractJAXBProvider implements
 
             releaseJAXBMarshaller(context, marshaller);
         } catch (JAXBException e) {
-            logger.error(Messages.getMessage("jaxbFailToMarshal"), t.getName());
+            logger.error(Messages.getMessage("jaxbFailToMarshal", t.getName()), e);
             throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
         }
     }

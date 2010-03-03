@@ -85,8 +85,8 @@ public class WebDAVModelHelper {
         try {
             m.marshal(element, writer);
         } catch (JAXBException e) {
-            throw new RestException(String.format(Messages
-                .getMessage("webDAVUnableToMarshalElement"), elementName), e);
+            throw new RestException(Messages
+                .getMessage("webDAVUnableToMarshalElement", elementName), e);
         }
     }
 
@@ -101,14 +101,14 @@ public class WebDAVModelHelper {
                 object = ((JAXBElement<?>)object).getValue();
             }
             if (!(elementClass.equals(object.getClass()))) {
-                throw new RestException(String.format(Messages
-                    .getMessage("webDAVIncompatibleTypeInRequest"), elementName, object.getClass()
+                throw new RestException(Messages
+                    .getMessage("webDAVIncompatibleTypeInRequest", elementName, object.getClass()
                     .getName(), elementClass.getName()));
             }
             return (T)object;
         } catch (JAXBException e) {
-            throw new RestException(String
-                .format(Messages.getMessage("webDAVUnableToParseElement"), elementName), e);
+            throw new RestException(Messages.getMessage("webDAVUnableToParseElement", elementName),
+                                    e);
         }
     }
 

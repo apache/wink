@@ -134,9 +134,9 @@ public class RestServlet extends AbstractRestServlet {
         logger.debug("Default properties {} used in RestServlet {}", defaultProperties, this);
         String propertiesLocation = getInitParameter(PROPERTIES_INIT_PARAM);
         if (propertiesLocation != null) {
-            logger.info(Messages.getMessage("restServletUsePropertiesFileAtLocation"),
+            logger.info(Messages.getMessage("restServletUsePropertiesFileAtLocation",
                         propertiesLocation,
-                        PROPERTIES_INIT_PARAM);
+                        PROPERTIES_INIT_PARAM));
 
             // Load properties set on JVM. These should not override
             // the ones set in the configuration file.
@@ -157,9 +157,9 @@ public class RestServlet extends AbstractRestServlet {
         throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         String initParameter = getInitParameter(DEPLYMENT_CONF_PARAM);
         if (initParameter != null) {
-            logger.info(Messages.getMessage("restServletUseDeploymentConfigurationParam"),
+            logger.info(Messages.getMessage("restServletUseDeploymentConfigurationParam",
                         initParameter,
-                        DEPLYMENT_CONF_PARAM);
+                        DEPLYMENT_CONF_PARAM));
             // use ClassUtils.loadClass instead of Class.forName so we have
             // classloader visibility into the Web module in J2EE environments
             Class<?> confClass = ClassUtils.loadClass(initParameter);
@@ -174,9 +174,9 @@ public class RestServlet extends AbstractRestServlet {
         Class<? extends Application> appClass = null;
         String initParameter = getInitParameter(APPLICATION_INIT_PARAM);
         if (initParameter != null) {
-            logger.info(Messages.getMessage("restServletJAXRSApplicationInitParam"),
+            logger.info(Messages.getMessage("restServletJAXRSApplicationInitParam",
                         initParameter,
-                        APPLICATION_INIT_PARAM);
+                        APPLICATION_INIT_PARAM));
             // use ClassUtils.loadClass instead of Class.forName so we have
             // classloader visibility into the Web module in J2EE environments
             appClass = (Class<? extends Application>)ClassUtils.loadClass(initParameter);

@@ -40,7 +40,6 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.Providers;
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -78,22 +77,18 @@ import org.xml.sax.ext.LexicalHandler;
 
 public class ModelUtils {
 
-    public static final MultivaluedMap<String, Object> EMPTY_OBJECT_MAP         =
-                                                                                    new UnmodifiableMultivaluedMap<String, Object>(
-                                                                                                                                   new MultivaluedMapImpl<String, Object>());
-    public static final MultivaluedMap<String, String> EMPTY_STRING_MAP         =
-                                                                                    new UnmodifiableMultivaluedMap<String, String>(
-                                                                                                                                   new MultivaluedMapImpl<String, String>());
-    public static final Annotation[]                   EMPTY_ARRAY              = new Annotation[0];
+    public static final MultivaluedMap<String, Object> EMPTY_OBJECT_MAP =
+                                                                            new UnmodifiableMultivaluedMap<String, Object>(
+                                                                                                                           new MultivaluedMapImpl<String, Object>());
+    public static final MultivaluedMap<String, String> EMPTY_STRING_MAP =
+                                                                            new UnmodifiableMultivaluedMap<String, String>(
+                                                                                                                           new MultivaluedMapImpl<String, String>());
+    public static final Annotation[]                   EMPTY_ARRAY      = new Annotation[0];
     private final static SAXParserFactory              spf;
     private final static DatatypeFactory               datatypeFactory;
-    private static final Logger                        logger                   =
-                                                                                    LoggerFactory
-                                                                                        .getLogger(ModelUtils.class);
-
-    private final static String                        CLASS_NOT_A_PROVIDER_MSG =
-                                                                                    Messages
-                                                                                        .getMessage("classNotAProvider");
+    private static final Logger                        logger           =
+                                                                            LoggerFactory
+                                                                                .getLogger(ModelUtils.class);
 
     static {
         try {
@@ -218,7 +213,7 @@ public class ModelUtils {
                                   Annotation[] annotations,
                                   MultivaluedMap<String, String> httpHeaders,
                                   MediaType mediaType) throws IOException {
-        
+
         if (list == null || list.isEmpty()) {
             return null;
         }
@@ -297,14 +292,16 @@ public class ModelUtils {
                     providers = new ProvidersImpl(providersRegistry, runtimeContext);
                 }
             }
-            
+
             /*
-             * Need to set a temporary RuntimeContextTLS just in case we're already outside of the runtime context.
-             * This may occur when a client app is retrieving the AtomContent value, expecting it to be unmarshalled
-             * automatically, but we are already outside of the client-server thread, and thus no longer have a
-             * RuntimeContextTLS from which to retrieve or inject providers.
+             * Need to set a temporary RuntimeContextTLS just in case we're
+             * already outside of the runtime context. This may occur when a
+             * client app is retrieving the AtomContent value, expecting it to
+             * be unmarshalled automatically, but we are already outside of the
+             * client-server thread, and thus no longer have a RuntimeContextTLS
+             * from which to retrieve or inject providers.
              */
-            
+
             RuntimeContext tempRuntimeContext = RuntimeContextTLS.getRuntimeContext();
             if (tempRuntimeContext == null) {
                 final Providers p = providers;
@@ -322,7 +319,7 @@ public class ModelUtils {
                     }
                 });
             }
-            
+
             MessageBodyReader<T> reader =
                 providers.getMessageBodyReader(type, type, EMPTY_ARRAY, mediaType);
             if (reader == null)
@@ -428,7 +425,7 @@ public class ModelUtils {
             if (ProviderMetadataCollector.isProvider(cls)) {
                 providersRegistry.addProvider(cls);
             } else {
-                logger.warn(CLASS_NOT_A_PROVIDER_MSG, cls);
+                logger.warn(Messages.getMessage("classNotAProvider", cls));
             }
         }
     }
@@ -440,7 +437,7 @@ public class ModelUtils {
             if (ProviderMetadataCollector.isProvider(cls)) {
                 providersRegistry.addProvider(obj);
             } else {
-                logger.warn(CLASS_NOT_A_PROVIDER_MSG, obj);
+                logger.warn(Messages.getMessage("classNotAProvider", obj.getClass()));
             }
         }
     }
@@ -458,7 +455,7 @@ public class ModelUtils {
             if (ProviderMetadataCollector.isProvider(cls)) {
                 providersRegistry.addProvider(obj, priority);
             } else {
-                logger.warn(CLASS_NOT_A_PROVIDER_MSG, obj);
+                logger.warn(Messages.getMessage("classNotAProvider", obj.getClass()));
             }
         }
     }

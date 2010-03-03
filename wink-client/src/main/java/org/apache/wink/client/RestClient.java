@@ -57,14 +57,10 @@ import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollect
  */
 public class RestClient {
 
-    private static final Logger logger                   =
-                                                             LoggerFactory
-                                                                 .getLogger(RestClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(RestClient.class);
 
     private ProvidersRegistry   providersRegistry;
     private ClientConfig        config;
-
-    private final static String CLASS_NOT_A_PROVIDER_MSG = Messages.getMessage("classNotAProvider");
 
     /**
      * Construct a new RestClient using the default client configuration
@@ -153,15 +149,16 @@ public class RestClient {
                 try {
                     providersRegistry.addProvider(cls);
                 } catch (Exception e) {
-                    logger.warn(Messages.getMessage("exceptionOccurredDuringClassProcessing"), cls);
+                    logger.warn(Messages.getMessage("exceptionOccurredDuringClassProcessing", //$NON-NLS-1$
+                                                    cls));
                     logger.warn(Messages.getMessage("listExceptionDuringClassProcessing"), e);
                 } catch (NoClassDefFoundError e) {
-                    logger.warn(Messages.getMessage("exceptionOccurredDuringClassProcessing"), cls
-                        .getCanonicalName());
+                    logger.warn(Messages.getMessage("exceptionOccurredDuringClassProcessing", //$NON-NLS-1$
+                                                    cls.getCanonicalName()));
                     logger.warn(Messages.getMessage("listExceptionDuringClassProcessing"), e);
                 }
             } else {
-                logger.warn(CLASS_NOT_A_PROVIDER_MSG, cls);
+                logger.warn(Messages.getMessage("classNotAProvider", cls)); //$NON-NLS-1$
             }
         }
     }
@@ -173,16 +170,16 @@ public class RestClient {
                 try {
                     providersRegistry.addProvider(obj);
                 } catch (Exception e) {
-                    logger.warn(Messages.getMessage("exceptionOccurredDuringSingletonProcessing"),
-                                obj.getClass().getCanonicalName());
+                    logger.warn(Messages.getMessage("exceptionOccurredDuringSingletonProcessing",
+                                                    obj.getClass().getCanonicalName()));
                     logger.warn(Messages.getMessage("listExceptionDuringSingletonProcessing"), e);
                 } catch (NoClassDefFoundError e) {
-                    logger.warn(Messages.getMessage("exceptionOccurredDuringSingletonProcessing"),
-                                obj.getClass().getCanonicalName());
+                    logger.warn(Messages.getMessage("exceptionOccurredDuringSingletonProcessing",
+                                                    obj.getClass().getCanonicalName()));
                     logger.warn(Messages.getMessage("listExceptionDuringSingletonProcessing"), e);
                 }
             } else {
-                logger.warn(CLASS_NOT_A_PROVIDER_MSG, obj);
+                logger.warn(Messages.getMessage("classNotAProvider", obj));
             }
         }
     }
@@ -200,16 +197,16 @@ public class RestClient {
                 try {
                     providersRegistry.addProvider(obj, priority);
                 } catch (Exception e) {
-                    logger.warn(Messages.getMessage("exceptionOccurredDuringInstanceProcessing"),
-                                obj.getClass().getCanonicalName());
+                    logger.warn(Messages.getMessage("exceptionOccurredDuringInstanceProcessing",
+                                                    obj.getClass().getCanonicalName()));
                     logger.warn(Messages.getMessage("listExceptionDuringInstanceProcessing"), e);
                 } catch (NoClassDefFoundError e) {
-                    logger.warn(Messages.getMessage("exceptionOccurredDuringInstanceProcessing"),
-                                obj.getClass().getCanonicalName());
+                    logger.warn(Messages.getMessage("exceptionOccurredDuringInstanceProcessing",
+                                                    obj.getClass().getCanonicalName()));
                     logger.warn(Messages.getMessage("listExceptionDuringInstanceProcessing"), e);
                 }
             } else {
-                logger.warn(CLASS_NOT_A_PROVIDER_MSG, obj);
+                logger.warn(Messages.getMessage("classNotAProvider", cls));
             }
         }
     }

@@ -376,7 +376,7 @@ public class WebDAVResponseBuilder {
         }
         if (link == null) {
             // no link in the resource
-            logger.error(Messages.getMessage("webDAVNoEditOrSelfLink"), synd.getId());
+            logger.error(Messages.getMessage("webDAVNoEditOrSelfLink", synd.getId()));
             throw new WebApplicationException();
         }
 

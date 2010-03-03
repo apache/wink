@@ -68,8 +68,8 @@ public class AcceptHeaderHandler implements ClientHandler {
                 if (acceptHeader.length() > 0) {
                     String acceptValue = acceptHeader.toString();
                     requestHeaders.add(HttpHeaders.ACCEPT, acceptValue);
-                    logger.info(Messages.getMessage("clientAcceptHeaderHandlerSetAccept"),
-                                acceptValue);
+                    logger.info(Messages.getMessage("clientAcceptHeaderHandlerSetAccept",
+                                acceptValue));
                 }
             }
         }

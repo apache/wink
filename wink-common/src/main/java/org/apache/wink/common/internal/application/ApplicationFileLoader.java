@@ -72,7 +72,7 @@ public class ApplicationFileLoader {
                     FileLoader.loadFileUsingClassLoaders(WINK_APPLICATION);
                 while (applications.hasMoreElements()) {
                     URL url = applications.nextElement();
-                    logger.info(Messages.getMessage("loadingApplication"), url.toExternalForm());
+                    logger.info(Messages.getMessage("loadingApplication", url.toExternalForm()));
                     loadClasses(url.openStream());
                 }
             }

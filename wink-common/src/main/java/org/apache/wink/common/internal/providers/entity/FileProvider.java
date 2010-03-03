@@ -108,7 +108,7 @@ public class FileProvider implements MessageBodyWriter<File>, MessageBodyReader<
             dir = new File(uploadDir);
             if (!dir.exists() || !dir.isDirectory()) {
                 dir = null;
-                logger.warn(Messages.getMessage("uploadDirDoesNotExist"), uploadDir);
+                logger.warn(Messages.getMessage("uploadDirDoesNotExist", uploadDir));
                 throw new WebApplicationException();
 
             }

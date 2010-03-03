@@ -143,7 +143,7 @@ public class AppTest extends TestCase {
         try {
             cats.setScheme("scheme");
         } catch (RestException e) {
-            assertEquals("cannot mix inline and out-of-line categories attributes", e.getMessage());
+            assertEquals("Cannot mix inline and out-of-line categories attributes", e.getMessage());
         }
 
         cats = new AppCategories();
@@ -151,7 +151,7 @@ public class AppTest extends TestCase {
         try {
             cats.setFixed(AppYesNo.YES);
         } catch (RestException e) {
-            assertEquals("cannot mix inline and out-of-line categories attributes", e.getMessage());
+            assertEquals("Cannot mix inline and out-of-line categories attributes", e.getMessage());
         }
 
         cats = new AppCategories();
@@ -160,7 +160,7 @@ public class AppTest extends TestCase {
         try {
             cats.setHref("scheme");
         } catch (RestException e) {
-            assertEquals("cannot mix inline and out-of-line categories attributes", e.getMessage());
+            assertEquals("Cannot mix inline and out-of-line categories attributes", e.getMessage());
         }
 
         cats = new AppCategories();

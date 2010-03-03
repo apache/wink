@@ -121,7 +121,7 @@ public class ResourceRegistry {
         writersLock.lock();
         try {
             if (!applicationValidator.isValidResource(instance.getClass())) {
-                logger.warn(Messages.getMessage("resourceClassNotValid"), instance);
+                logger.warn(Messages.getMessage("resourceClassNotValid", instance.getClass()));
                 return;
             }
 
@@ -146,7 +146,7 @@ public class ResourceRegistry {
         writersLock.lock();
         try {
             if (!applicationValidator.isValidResource(clazz)) {
-                logger.warn(Messages.getMessage("resourceClassNotValid"), clazz);
+                logger.warn(Messages.getMessage("resourceClassNotValid", clazz));
                 return;
             }
             ResourceRecord record = getRecord(clazz);
@@ -435,8 +435,8 @@ public class ResourceRegistry {
             }
         }
         if (methodRecords.size() == 0) {
-            logger.info(Messages.getMessage("noMethodInClassConsumesHTTPMethod"), resource
-                .getResourceClass().getName(), context.getHttpHeaders().getMediaType());
+            logger.info(Messages.getMessage("noMethodInClassConsumesHTTPMethod", resource
+                .getResourceClass().getName(), context.getHttpHeaders().getMediaType()));
             throw new WebApplicationException(Response.Status.UNSUPPORTED_MEDIA_TYPE);
         }
 
@@ -449,9 +449,9 @@ public class ResourceRegistry {
             }
         }
         if (methodRecords.size() == 0) {
-            logger.info(Messages.getMessage("noMethodInClassProducesHTTPMethod"), resource
+            logger.info(Messages.getMessage("noMethodInClassProducesHTTPMethod", resource
                 .getResourceClass().getName(), context.getHttpHeaders()
-                .getRequestHeader(HttpHeaders.ACCEPT));
+                .getRequestHeader(HttpHeaders.ACCEPT)));
             throw new WebApplicationException(Response.Status.NOT_ACCEPTABLE);
         }
     }

@@ -42,10 +42,10 @@ public class LifecycleManagerUtils {
             CreationUtils.injectFields(object, classMetadata, null);
             return new SingletonObjectFactory<T>(object);
         } catch (IOException e) {
-            logger.error(Messages.getMessage("injectionFailureSingleton"), cls);
+            logger.error(Messages.getMessage("injectionFailureSingleton", cls));
             throw new ObjectCreationException(e);
         } catch (PrivilegedActionException e) {
-            logger.error(Messages.getMessage("injectionFailureSingleton"), cls);
+            logger.error(Messages.getMessage("injectionFailureSingleton", cls));
             throw new ObjectCreationException(e);
         }
     }

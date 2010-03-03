@@ -113,20 +113,20 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
                            httpHeaders,
                            entityStream);
         } catch (IllegalArgumentException e) {
-            logger.error(Messages.getMessage("assetMethodInvokeError"), method.getMethod()
-                .getName());
+            logger.error(Messages
+                .getMessage("assetMethodInvokeError", method.getMethod().getName()));
             throw new WebApplicationException(e);
         } catch (IllegalAccessException e) {
-            logger.error(Messages.getMessage("assetMethodInvokeError"), method.getMethod()
-                .getName());
+            logger.error(Messages
+                .getMessage("assetMethodInvokeError", method.getMethod().getName()));
             throw new WebApplicationException(e);
         } catch (InvocationTargetException e) {
             Throwable targetException = e.getTargetException();
             if (targetException instanceof RuntimeException) {
                 throw (RuntimeException)targetException;
             }
-            logger.error(Messages.getMessage("assetMethodInvokeError"), method.getMethod()
-                .getName());
+            logger.error(Messages
+                .getMessage("assetMethodInvokeError", method.getMethod().getName()));
             throw new WebApplicationException(targetException);
         }
     }
@@ -171,16 +171,16 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
             if (targetException instanceof RuntimeException) {
                 throw (RuntimeException)targetException;
             }
-            logger.error(Messages.getMessage("assetMethodInvokeError"), method.getMethod()
-                .getName());
+            logger.error(Messages
+                .getMessage("assetMethodInvokeError", method.getMethod().getName()));
             throw new WebApplicationException(e);
         } catch (InstantiationException e) {
-            logger.error(Messages.getMessage("assetMustHavePublicConstructor"), type.getName());
+            logger.error(Messages.getMessage("assetMustHavePublicConstructor", type.getName()));
             throw new WebApplicationException(e);
 
         } catch (Exception e) {
-            logger.error(Messages.getMessage("assetMethodInvokeError"), method.getMethod()
-                .getName());
+            logger.error(Messages
+                .getMessage("assetMethodInvokeError", method.getMethod().getName()));
             throw new WebApplicationException(e);
         }
     }
@@ -228,14 +228,14 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
         // verify that the asset has a default public constructor
         try {
             if (assetType.getConstructor() == null) {
-                logger.info(Messages.getMessage("assetCannotInstantiate"), assetType.getName());
+                logger.info(Messages.getMessage("assetCannotInstantiate", assetType.getName()));
                 return false;
             }
         } catch (SecurityException e) {
-            logger.info(Messages.getMessage("assetCannotInstantiate"), assetType.getName());
+            logger.info(Messages.getMessage("assetCannotInstantiate", assetType.getName()));
             return false;
         } catch (NoSuchMethodException e) {
-            logger.info(Messages.getMessage("assetCannotInstantiate"), assetType.getName());
+            logger.info(Messages.getMessage("assetCannotInstantiate", assetType.getName()));
             return false;
         }
 
@@ -416,7 +416,7 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
                         String methodName =
                             method.getDeclaringClass().getName() + "." + method.getName();
                         logger.error(Messages
-                            .getMessage("assetLocatorMethodMoreThanOneEntityParam"), methodName);
+                            .getMessage("assetLocatorMethodMoreThanOneEntityParam", methodName));
                         throw new WebApplicationException();
                     }
                     type = fp.getGenericType();

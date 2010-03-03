@@ -157,7 +157,7 @@ public class ProvidersRegistry {
             retValue = true;
         }
         if (retValue == false) {
-            logger.warn(Messages.getMessage("classIsUnknownProvider"), cls);
+            logger.warn(Messages.getMessage("classIsUnknownProvider", cls));
         }
         return retValue;
 
@@ -640,7 +640,7 @@ public class ProvidersRegistry {
             }
             copyOfMap.put(key, set);
             if (!set.add(objectFactory)) {
-                logger.warn(Messages.getMessage("mediaTypeSetAlreadyContains"), objectFactory);
+                logger.warn(Messages.getMessage("mediaTypeSetAlreadyContains", objectFactory));
             } else {
 
                 // need to resort the entry set

@@ -279,7 +279,7 @@ public abstract class AbstractJAXBProvider {
         if (!isXMLRootElement(type) && isXMLType(type)) {
             JAXBElement<?> wrappedJAXBElement = wrapInJAXBElement(jaxbObject, type);
             if (wrappedJAXBElement == null) {
-                logger.error(Messages.getMessage("jaxbObjectFactoryNotFound"), type.getName());
+                logger.error(Messages.getMessage("jaxbObjectFactoryNotFound", type.getName()));
                 throw new WebApplicationException();
             }
             return wrappedJAXBElement;
@@ -311,10 +311,10 @@ public abstract class AbstractJAXBProvider {
                 }
                 return null;
             }
-            logger.warn(Messages.getMessage("jaxbObjectFactoryInstantiate"), type.getName());
+            logger.warn(Messages.getMessage("jaxbObjectFactoryInstantiate", type.getName()));
             return defaultWrapInJAXBElement(jaxbObject, type);
         } catch (Exception e) {
-            logger.error(Messages.getMessage("jaxbElementFailToBuild"), type.getName());
+            logger.error(Messages.getMessage("jaxbElementFailToBuild", type.getName()));
             return null;
         }
 
@@ -334,13 +334,13 @@ public abstract class AbstractJAXBProvider {
         try {
             factoryClass = Thread.currentThread().getContextClassLoader().loadClass(b.toString());
         } catch (ClassNotFoundException e) {
-            logger.error(Messages.getMessage("jaxbObjectFactoryNotFound"), type.getName());
+            logger.error(Messages.getMessage("jaxbObjectFactoryNotFound", type.getName()));
             return null;
         }
 
         if (!factoryClass.isAnnotationPresent(XmlRegistry.class)) {
-            logger.error(Messages.getMessage("jaxbObjectFactoryNotAnnotatedXMLRegistry"), type
-                .getName());
+            logger.error(Messages.getMessage("jaxbObjectFactoryNotAnnotatedXMLRegistry", type
+                .getName()));
             return null;
         }
 
@@ -349,7 +349,7 @@ public abstract class AbstractJAXBProvider {
 
     @SuppressWarnings("unchecked")
     private JAXBElement<?> defaultWrapInJAXBElement(Object jaxbObject, Class<?> type) {
-        logger.info(Messages.getMessage("jaxbCreateDefaultJAXBElement"), type.getName());
+        logger.info(Messages.getMessage("jaxbCreateDefaultJAXBElement", type.getName()));
         String typeStr = type.getAnnotation(XmlType.class).name();
         return new JAXBElement(new QName(typeStr), type, jaxbObject);
     }

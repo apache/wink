@@ -79,7 +79,7 @@ public class SimpleWinkApplication extends WinkApplication {
                         .addAll(getApplicationFileLoader(getFileStream(applicationConfigFile))
                             .getClasses());
                 } catch (FileNotFoundException e) {
-                    logger.warn(Messages.getMessage("configNotFound"), applicationConfigFile);
+                    logger.warn(Messages.getMessage("configNotFound", applicationConfigFile));
                 }
             }
         }
