@@ -49,46 +49,46 @@ public class HtmlServiceDocumentResource extends RootResource {
                                                               MediaTypeUtils
                                                                   .toEncodedString(MediaTypeUtils.ATOM_SERVICE_DOCUMENT_TYPE);
 
-    private static final String TEXT_CSS                  = "text/css";
+    private static final String TEXT_CSS                  = "text/css"; //$NON-NLS-1$
 
     private String              serviceDocumentCssPath;
 
-    private static final String START_HTML                = "<html>";
-    private static final String END_HTML                  = "</html>";
-    private static final String START_HEAD                = "<head>";
+    private static final String START_HTML                = "<html>"; //$NON-NLS-1$
+    private static final String END_HTML                  = "</html>"; //$NON-NLS-1$
+    private static final String START_HEAD                = "<head>"; //$NON-NLS-1$
     private static final String CSS                       =
-                                                              "<style type=\"text/css\" media=\"all\">  h1 {  padding: 4px 4px 4px 24px;  color: #333333;  background-color: #C8C8C8;  font-weight: bold;  font-size: 24px;} h2 {  padding: 4px 4px 4px 24px;  color: #F8F8F8;  background-color: #686868;  font-weight: bold;  font-size: 16px;}    </style>";
-    private static final String END_HEAD                  = "</head>";
-    private static final String START_TITLE               = "<title>";
-    private static final String END_TITLE                 = "</title>";
-    private static final String START_LINK                = "<link rel=";
-    private static final String END_TAG                   = "/>";
-    private static final String CLOSE_TAG                 = ">";
-    private static final String START_BODY                = "<body>";
-    private static final String END_BODY                  = "</body>";
-    private static final String START_HEAD_1              = "<h1>";
-    private static final String END_HEAD_1                = "</h1>";
-    private static final String START_PARAGRAPH           = "<p>";
-    private static final String END_PARAGRAPH             = "</p>";
-    private static final String START_A_HREF              = "<a ";
-    private static final String END_A_HREF                = "</a>";
-    private static final String START_HEAD_2              = "<h2>";
-    private static final String END_HEAD_2                = "</h2>";
-    private static final String START_TABLE               = "<table>";
-    private static final String END_TABLE                 = "</table>";
-    private static final String START_T_BODY              = "<tbody>";
-    private static final String END_T_BODY                = "</tbody>";
-    private static final String START_TR                  = "<tr>";
-    private static final String END_TR                    = "</tr>";
-    private static final String START_TD                  = "<td>";
-    private static final String END_TD                    = "</td>";
-    private static final String TYPE                      = "type=";
-    private static final String HREF                      = "href=";
-    private static final String TITLE                     = "title=";
-    private static final String SPACE                     = " ";
-    private static final String APOSTROPHE                = "\"";
-    private static final String CSS_REL                   = "stylesheet";
-    private static final String OPEN_SEARCH_REL           = "search";
+                                                              "<style type=\"text/css\" media=\"all\">  h1 {  padding: 4px 4px 4px 24px;  color: #333333;  background-color: #C8C8C8;  font-weight: bold;  font-size: 24px;} h2 {  padding: 4px 4px 4px 24px;  color: #F8F8F8;  background-color: #686868;  font-weight: bold;  font-size: 16px;}    </style>"; //$NON-NLS-1$
+    private static final String END_HEAD                  = "</head>"; //$NON-NLS-1$
+    private static final String START_TITLE               = "<title>"; //$NON-NLS-1$
+    private static final String END_TITLE                 = "</title>"; //$NON-NLS-1$
+    private static final String START_LINK                = "<link rel="; //$NON-NLS-1$
+    private static final String END_TAG                   = "/>"; //$NON-NLS-1$
+    private static final String CLOSE_TAG                 = ">"; //$NON-NLS-1$
+    private static final String START_BODY                = "<body>"; //$NON-NLS-1$
+    private static final String END_BODY                  = "</body>"; //$NON-NLS-1$
+    private static final String START_HEAD_1              = "<h1>"; //$NON-NLS-1$
+    private static final String END_HEAD_1                = "</h1>"; //$NON-NLS-1$
+    private static final String START_PARAGRAPH           = "<p>"; //$NON-NLS-1$
+    private static final String END_PARAGRAPH             = "</p>"; //$NON-NLS-1$
+    private static final String START_A_HREF              = "<a "; //$NON-NLS-1$
+    private static final String END_A_HREF                = "</a>"; //$NON-NLS-1$
+    private static final String START_HEAD_2              = "<h2>"; //$NON-NLS-1$
+    private static final String END_HEAD_2                = "</h2>"; //$NON-NLS-1$
+    private static final String START_TABLE               = "<table>"; //$NON-NLS-1$
+    private static final String END_TABLE                 = "</table>"; //$NON-NLS-1$
+    private static final String START_T_BODY              = "<tbody>"; //$NON-NLS-1$
+    private static final String END_T_BODY                = "</tbody>"; //$NON-NLS-1$
+    private static final String START_TR                  = "<tr>"; //$NON-NLS-1$
+    private static final String END_TR                    = "</tr>"; //$NON-NLS-1$
+    private static final String START_TD                  = "<td>"; //$NON-NLS-1$
+    private static final String END_TD                    = "</td>"; //$NON-NLS-1$
+    private static final String TYPE                      = "type="; //$NON-NLS-1$
+    private static final String HREF                      = "href="; //$NON-NLS-1$
+    private static final String TITLE                     = "title="; //$NON-NLS-1$
+    private static final String SPACE                     = " "; //$NON-NLS-1$
+    private static final String APOSTROPHE                = "\""; //$NON-NLS-1$
+    private static final String CSS_REL                   = "stylesheet"; //$NON-NLS-1$
+    private static final String OPEN_SEARCH_REL           = "search"; //$NON-NLS-1$
 
     /**
      * Sets the service document CSS path for HTML representation.
@@ -117,7 +117,7 @@ public class HtmlServiceDocumentResource extends RootResource {
     @Produces(MediaType.TEXT_HTML)
     public String getServiceDocumentHtml(@Context UriInfo uriInfo) {
         final String baseUri = uriInfo.getBaseUri().toString();
-        final String titleValue = "Service Document"; // use
+        final String titleValue = "Service Document"; // use //$NON-NLS-1$
         // Accept-Langugage
         StringBuilder htmlDocStrBldr = new StringBuilder(START_HTML);
 
@@ -140,7 +140,7 @@ public class HtmlServiceDocumentResource extends RootResource {
                 .toString();
         htmlDocStrBldr.append(START_PARAGRAPH).append(START_A_HREF).append(HREF).append(APOSTROPHE)
             .append(linkToAdd).append(APOSTROPHE).append(CLOSE_TAG)
-            .append("View Service Document in XML format").append(END_A_HREF).append(END_PARAGRAPH);
+            .append("View Service Document in XML format").append(END_A_HREF).append(END_PARAGRAPH); //$NON-NLS-1$
 
         // go over each workspace and print its collections
         Map<String, List<ServiceDocumentCollectionData>> workspaces =
@@ -189,17 +189,17 @@ public class HtmlServiceDocumentResource extends RootResource {
                     boolean isParameterOnUri = collectionHasTemplateHref(template);
 
                     htmlDocStrBldr.append(START_TR).append(START_TD).append(collectionName)
-                        .append(":").append(END_TD);
+                        .append(":").append(END_TD); //$NON-NLS-1$
                     htmlDocStrBldr.append(START_TD);
                     if (!isParameterOnUri) { // only if parameter isn't
                                              // included, display the path
                         // as link
-                        htmlDocStrBldr.append("&nbsp;&nbsp;").append(START_A_HREF).append(HREF)
+                        htmlDocStrBldr.append("&nbsp;&nbsp;").append(START_A_HREF).append(HREF) //$NON-NLS-1$
                             .append(APOSTROPHE).append(colUri).append(APOSTROPHE).append(CLOSE_TAG)
                             .append(UriEncoder.decodeString(colUri)).append(END_A_HREF);
 
                     } else {
-                        htmlDocStrBldr.append("&nbsp;&nbsp;").append(UriEncoder
+                        htmlDocStrBldr.append("&nbsp;&nbsp;").append(UriEncoder //$NON-NLS-1$
                             .decodeString(colUri));
                     }
                     htmlDocStrBldr.append(END_TD).append(END_TR);
@@ -218,7 +218,7 @@ public class HtmlServiceDocumentResource extends RootResource {
     }
 
     private void addCssLink(StringBuilder htmlDocStrBldr) {
-        if (serviceDocumentCssPath != null && !serviceDocumentCssPath.equals("")) {
+        if (serviceDocumentCssPath != null && !serviceDocumentCssPath.equals("")) { //$NON-NLS-1$
             htmlDocStrBldr.append(START_LINK).append(APOSTROPHE).append(CSS_REL).append(APOSTROPHE)
                 .append(SPACE).append(TYPE).append(APOSTROPHE).append(TEXT_CSS).append(APOSTROPHE)
                 .append(SPACE).append(HREF).append(APOSTROPHE).append(serviceDocumentCssPath)
@@ -256,7 +256,7 @@ public class HtmlServiceDocumentResource extends RootResource {
                                      MediaTypeUtils.OPENSEARCH_TYPE)).append(APOSTROPHE);
 
                 htmlDocStrBldr.append(SPACE).append(TITLE).append(APOSTROPHE).append(record
-                    .getMetadata().getCollectionTitle()).append(SPACE).append("Search")
+                    .getMetadata().getCollectionTitle()).append(SPACE).append("Search") //$NON-NLS-1$
                     .append(APOSTROPHE).append(END_TAG);
             }
         }

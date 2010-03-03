@@ -75,19 +75,19 @@ public class AcceptCharset {
         this.banned = Collections.unmodifiableList(bannedCharsets);
         boolean isISO8859Explicit = false;
         for (ValuedCharset vCharset : valuedCharsets) {
-            if ("ISO-8859-1".equalsIgnoreCase(vCharset.charset)) {
+            if ("ISO-8859-1".equalsIgnoreCase(vCharset.charset)) { //$NON-NLS-1$
                 isISO8859Explicit = true;
                 break;
             }
         }
         if (!isISO8859Explicit && !anyAllowed) {
             ArrayList<String> acceptableCharsetsTemp = new ArrayList<String>(acceptableCharsets);
-            acceptableCharsetsTemp.add("ISO-8859-1");
+            acceptableCharsetsTemp.add("ISO-8859-1"); //$NON-NLS-1$
             this.acceptable = Collections.unmodifiableList(acceptableCharsetsTemp);
 
             ArrayList<AcceptCharset.ValuedCharset> valuedCharsetsTemp =
                 new ArrayList<ValuedCharset>(valuedCharsets);
-            valuedCharsetsTemp.add(new AcceptCharset.ValuedCharset(1.0d, "ISO-8859-1"));
+            valuedCharsetsTemp.add(new AcceptCharset.ValuedCharset(1.0d, "ISO-8859-1")); //$NON-NLS-1$
             this.valuedCharsets = Collections.unmodifiableList(valuedCharsetsTemp);
         } else {
             this.acceptable = Collections.unmodifiableList(acceptableCharsets);

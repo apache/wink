@@ -60,15 +60,15 @@ public class AdminServlet extends AbstractRestServlet {
     private static final long                                                      serialVersionUID       =
                                                                                                               -5972412568762942420L;
     private static final String                                                    APPLICATION_XML        =
-                                                                                                              "application/xml";
+                                                                                                              "application/xml"; //$NON-NLS-1$
     private static final String                                                    DOCUMENT_TYPE          =
-                                                                                                              "doc";
+                                                                                                              "doc"; //$NON-NLS-1$
     private static final String                                                    DOCUMENT_TYPE_REGISTRY =
-                                                                                                              "registry";
+                                                                                                              "registry"; //$NON-NLS-1$
     private static final String                                                    DOCUMENT_TYPE_RESOURCE =
-                                                                                                              "resources";
+                                                                                                              "resources"; //$NON-NLS-1$
     private static final String                                                    SLASH                  =
-                                                                                                              "/";
+                                                                                                              "/"; //$NON-NLS-1$
 
     private static final JAXBContext                                               resourceCtx;
     private static final org.apache.wink.common.internal.model.admin.ObjectFactory resourcesObjectFactory;
@@ -82,7 +82,7 @@ public class AdminServlet extends AbstractRestServlet {
                         .getPackage().getName());
         } catch (JAXBException e) {
             throw new RuntimeException(Messages
-                .getMessage("adminServletFailCreateJAXBForAdminServlet"), e);
+                .getMessage("adminServletFailCreateJAXBForAdminServlet"), e); //$NON-NLS-1$
         }
     }
 
@@ -93,7 +93,7 @@ public class AdminServlet extends AbstractRestServlet {
         RequestProcessor requestProcessor = getRequestProcessor();
         if (requestProcessor == null) {
             throw new ServletException(Messages
-                .getMessage("adminServletRequestProcessorInitBeforeAdmin"));
+                .getMessage("adminServletRequestProcessorInitBeforeAdmin")); //$NON-NLS-1$
         }
         ResourceRegistry registry = requestProcessor.getConfiguration().getResourceRegistry();
 
@@ -168,9 +168,9 @@ public class AdminServlet extends AbstractRestServlet {
             UriTemplateProcessor uriTemplate = record.getTemplateProcessor();
             subResource.setUri(SLASH + uriTemplate.getTemplate() + subResourceLocator.getPath());
             if (isLocator) {
-                subResource.setType("Locator");
+                subResource.setType("Locator"); //$NON-NLS-1$
             } else {
-                subResource.setType("Method");
+                subResource.setType("Method"); //$NON-NLS-1$
                 subResource.setMethod(subResourceLocator.getHttpMethod().toString());
             }
 
@@ -288,7 +288,7 @@ public class AdminServlet extends AbstractRestServlet {
         org.apache.wink.common.internal.model.admin.Methods.Method httpMethod =
             resourcesObjectFactory.createMethodsMethod();
 
-        httpMethod.setName("Dynamic");
+        httpMethod.setName("Dynamic"); //$NON-NLS-1$
         // Add consume mime types
         org.apache.wink.common.internal.model.admin.AcceptMediaTypes acceptMediaTypes =
             resourcesObjectFactory.createAcceptMediaTypes();
@@ -438,30 +438,30 @@ public class AdminServlet extends AbstractRestServlet {
     private void buildAdminHome(HttpServletResponse response) throws IOException {
         PrintWriter writer = response.getWriter();
         writer
-            .write("<html>\r\n" + "<head>\r\n"
-                + "<title>Admin Console</title>\r\n"
-                + "<style type=\"text/css\" media=\"all\">  h2 {  padding: 4px 4px 4px 24px;  color: #333333;  background-color: #D8D8D8;  font-weight: bold;  font-size: 16px;} h1 {  padding: 4px 4px 4px 24px;  color: #F8F8F8;  background-color: #909090;  font-weight: bold;  font-size: 24px;}    </style>"
-                + "</head>\r\n"
-                + "<body>\r\n"
-                + "<form name=\"AdministrationPage\"  method=\"POST\">\r\n"
-                + "<div align=\"left\">\r\n"
-                + "</br>\r\n"
-                + "<h1>Wink Admin Console</h1>\r\n"
-                + "</br>\r\n"
-                + "</div>\r\n"
-                + "<h2>\r\n"
-                + "<a href=\"?doc="
+            .write("<html>\r\n" + "<head>\r\n" //$NON-NLS-1$ //$NON-NLS-2$
+                + "<title>Admin Console</title>\r\n" //$NON-NLS-1$
+                + "<style type=\"text/css\" media=\"all\">  h2 {  padding: 4px 4px 4px 24px;  color: #333333;  background-color: #D8D8D8;  font-weight: bold;  font-size: 16px;} h1 {  padding: 4px 4px 4px 24px;  color: #F8F8F8;  background-color: #909090;  font-weight: bold;  font-size: 24px;}    </style>" //$NON-NLS-1$
+                + "</head>\r\n" //$NON-NLS-1$
+                + "<body>\r\n" //$NON-NLS-1$
+                + "<form name=\"AdministrationPage\"  method=\"POST\">\r\n" //$NON-NLS-1$
+                + "<div align=\"left\">\r\n" //$NON-NLS-1$
+                + "</br>\r\n" //$NON-NLS-1$
+                + "<h1>Wink Admin Console</h1>\r\n" //$NON-NLS-1$
+                + "</br>\r\n" //$NON-NLS-1$
+                + "</div>\r\n" //$NON-NLS-1$
+                + "<h2>\r\n" //$NON-NLS-1$
+                + "<a href=\"?doc=" //$NON-NLS-1$
                 + DOCUMENT_TYPE_RESOURCE
-                + "\"> Application resources xml view</a>&#45&#62\r\n"
-                + "</h2>\r\n"
-                + "<h2>\r\n"
-                + "<a href=\"?doc="
+                + "\"> Application resources xml view</a>&#45&#62\r\n" //$NON-NLS-1$
+                + "</h2>\r\n" //$NON-NLS-1$
+                + "<h2>\r\n" //$NON-NLS-1$
+                + "<a href=\"?doc=" //$NON-NLS-1$
                 + DOCUMENT_TYPE_REGISTRY
-                + "\"> Wink Resource registry xml view</a>&#45&#62\r\n"
-                + "</h2>\r\n"
-                + "</form>\r\n"
-                + "</body>\r\n"
-                + "</html>");
+                + "\"> Wink Resource registry xml view</a>&#45&#62\r\n" //$NON-NLS-1$
+                + "</h2>\r\n" //$NON-NLS-1$
+                + "</form>\r\n" //$NON-NLS-1$
+                + "</body>\r\n" //$NON-NLS-1$
+                + "</html>"); //$NON-NLS-1$
         response.setStatus(HttpStatus.BAD_REQUEST.getCode());
         writer.close();
         return;

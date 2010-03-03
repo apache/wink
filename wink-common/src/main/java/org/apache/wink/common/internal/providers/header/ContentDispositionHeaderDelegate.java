@@ -29,13 +29,13 @@ import org.apache.wink.common.internal.http.ContentDispositionHeader;
  */
 public class ContentDispositionHeaderDelegate implements HeaderDelegate<ContentDispositionHeader> {
 
-    private static final String INLINE_DISPOSITION_TYPE     = "inline";    // disposition
+    private static final String INLINE_DISPOSITION_TYPE     = "inline";    // disposition //$NON-NLS-1$
                                                                             // type
                                                                             // values
                                                                             // are
                                                                             // case
                                                                             // insensitive
-    private static final String ATTACHMENT_DISPOSITION_TYPE = "attachment";
+    private static final String ATTACHMENT_DISPOSITION_TYPE = "attachment"; //$NON-NLS-1$
 
     public ContentDispositionHeader fromString(String value) throws IllegalArgumentException {
         // TODO: implement according to spec
@@ -47,7 +47,7 @@ public class ContentDispositionHeaderDelegate implements HeaderDelegate<ContentD
         StringBuilder value = new StringBuilder();
         value.append(header.isAttachment() ? ATTACHMENT_DISPOSITION_TYPE : INLINE_DISPOSITION_TYPE);
         if (fileName != null) {
-            value.append("; filename=\"");
+            value.append("; filename=\""); //$NON-NLS-1$
             value.append(fileName);
             String defaultExtension = header.getDefaultExtension();
             if (defaultExtension != null) {

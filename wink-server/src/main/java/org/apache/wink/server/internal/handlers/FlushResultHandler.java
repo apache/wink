@@ -65,19 +65,19 @@ public class FlushResultHandler extends AbstractHandler {
         // assert status code is valid
         int statusCode = context.getResponseStatusCode();
         if (statusCode < 0) {
-            logger.debug("Status code was not set. Nothing to do.");
+            logger.debug("Status code was not set. Nothing to do."); //$NON-NLS-1$
             return;
         }
 
         // assert response is not committed
         final HttpServletResponse httpResponse = context.getAttribute(HttpServletResponse.class);
         if (httpResponse.isCommitted()) {
-            logger.debug("The response is already committed. Nothing to do.");
+            logger.debug("The response is already committed. Nothing to do."); //$NON-NLS-1$
             return;
         }
 
         // set the status code
-        logger.debug("Response status code set to: {}", statusCode);
+        logger.debug("Response status code set to: {}", statusCode); //$NON-NLS-1$
         httpResponse.setStatus(statusCode);
 
         // get the entity
@@ -128,7 +128,7 @@ public class FlushResultHandler extends AbstractHandler {
 
         // we're done if the actual entity is null
         if (entity == null) {
-            logger.debug("No entity so writing only the headers");
+            logger.debug("No entity so writing only the headers"); //$NON-NLS-1$
             flushHeaders(httpResponse, httpHeaders);
             return;
         }
@@ -136,7 +136,7 @@ public class FlushResultHandler extends AbstractHandler {
         // we have an entity, set the response media type
         MediaType responseMediaType = context.getResponseMediaType();
         if (responseMediaType != null) {
-            logger.debug("Set response Content-Type to: {} ", responseMediaType);
+            logger.debug("Set response Content-Type to: {} ", responseMediaType); //$NON-NLS-1$
             httpResponse.setContentType(responseMediaType.toString());
         }
 
@@ -150,7 +150,7 @@ public class FlushResultHandler extends AbstractHandler {
 
         // use the provider to write the entity
         if (messageBodyWriter != null) {
-            logger.debug("Serialization using provider {}", messageBodyWriter.getClass().getName());
+            logger.debug("Serialization using provider {}", messageBodyWriter.getClass().getName()); //$NON-NLS-1$
 
             final MultivaluedMap<String, Object> headers = httpHeaders;
 
@@ -161,7 +161,7 @@ public class FlushResultHandler extends AbstractHandler {
                                           declaredAnnotations,
                                           responseMediaType);
             if (logger.isDebugEnabled()) {
-                logger.debug("{}@{}.getSize({}, {}, {}, {}, {}) returned {}", new Object[] {
+                logger.debug("{}@{}.getSize({}, {}, {}, {}, {}) returned {}", new Object[] { //$NON-NLS-1$
                     messageBodyWriter.getClass().getName(), Integer.toHexString(System.identityHashCode(messageBodyWriter)), entity,
                     rawType, genericType, declaredAnnotations, responseMediaType, size});
             }
@@ -172,7 +172,7 @@ public class FlushResultHandler extends AbstractHandler {
             FlushHeadersOutputStream outputStream =
                 new FlushHeadersOutputStream(httpResponse, headers);
             if (logger.isDebugEnabled()) {
-                logger.debug("{}@{}.writeTo({}, {}, {}, {}, {}, {}, {}) being called", new Object[] {
+                logger.debug("{}@{}.writeTo({}, {}, {}, {}, {}, {}, {}) being called", new Object[] { //$NON-NLS-1$
                     messageBodyWriter.getClass().getName(), Integer.toHexString(System.identityHashCode(messageBodyWriter)), entity,
                     rawType, genericType, declaredAnnotations, responseMediaType, httpHeaders,
                     outputStream});
@@ -184,13 +184,13 @@ public class FlushResultHandler extends AbstractHandler {
                                       responseMediaType,
                                       httpHeaders,
                                       outputStream);
-            logger.debug("Flushing headers if not written");
+            logger.debug("Flushing headers if not written"); //$NON-NLS-1$
             outputStream.flushHeaders();
             return;
 
         } else {
             logger
-                .debug("Could not find a writer for {} and {}. Try to find JAF DataSourceProvider",
+                .debug("Could not find a writer for {} and {}. Try to find JAF DataSourceProvider", //$NON-NLS-1$
                        entity.getClass().getName(),
                        responseMediaType);
         }
@@ -205,23 +205,23 @@ public class FlushResultHandler extends AbstractHandler {
                 .createDataContentHandler(responseMediaType.toString());
 
         if (dataContentHandler == null) {
-            logger.error(Messages.getMessage("noWriterOrDataSourceProvider", entity.getClass()
+            logger.error(Messages.getMessage("noWriterOrDataSourceProvider", entity.getClass() //$NON-NLS-1$
                 .getName(), responseMediaType));
             throw new WebApplicationException(500);
         }
 
-        logger.debug("Serialization using data content handler {}", dataContentHandler.getClass()
+        logger.debug("Serialization using data content handler {}", dataContentHandler.getClass() //$NON-NLS-1$
             .getName());
 
         FlushHeadersOutputStream outputStream =
             new FlushHeadersOutputStream(httpResponse, httpHeaders);
         if (logger.isDebugEnabled()) {
-            logger.debug("{}.writeTo({}, {}, {}) being called", new Object[] {
+            logger.debug("{}.writeTo({}, {}, {}) being called", new Object[] { //$NON-NLS-1$
                 Integer.toHexString(System.identityHashCode(dataContentHandler)), entity, rawType,
                 responseMediaType.toString(), outputStream});
         }
         dataContentHandler.writeTo(entity, responseMediaType.toString(), outputStream);
-        logger.debug("Flushing headers if not written");
+        logger.debug("Flushing headers if not written"); //$NON-NLS-1$
         outputStream.flushHeaders();
     }
 
@@ -232,12 +232,12 @@ public class FlushResultHandler extends AbstractHandler {
             RequestImpl.VaryHeader varyHeader =
                 RuntimeContextTLS.getRuntimeContext().getAttribute(RequestImpl.VaryHeader.class);
             if (varyHeader != null) {
-                logger.debug("Vary header automatically set by a call to RequestImpl");
+                logger.debug("Vary header automatically set by a call to RequestImpl"); //$NON-NLS-1$
                 headers.putSingle(HttpHeaders.VARY, varyHeader.getVaryHeaderValue());
             }
         }
 
-        logger.debug("Flushing headers: {}", headers);
+        logger.debug("Flushing headers: {}", headers); //$NON-NLS-1$
 
         for (Entry<String, List<Object>> entry : headers.entrySet()) {
             String key = entry.getKey();

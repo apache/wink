@@ -74,7 +74,7 @@ public class WebDAVRootResource extends HtmlServiceDocumentResource {
 
     protected SyndFeed getSyndFeed(String path) {
         SyndFeed feed = new SyndFeed();
-        feed.setTitle(new SyndText(""));
+        feed.setTitle(new SyndText("")); //$NON-NLS-1$
         feed.addLink(new SyndLink(AtomConstants.ATOM_REL_EDIT, null, path));
         return feed;
     }

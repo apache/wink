@@ -26,6 +26,7 @@ import java.io.InputStream;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.wink.common.internal.CaseInsensitiveMultivaluedMap;
+import org.apache.wink.common.internal.i18n.Messages;
 
 /*
  * TODO: Add the option to get the preamble
@@ -34,11 +35,11 @@ import org.apache.wink.common.internal.CaseInsensitiveMultivaluedMap;
  */
 
 public class MultiPartParser {
-    public final static String             SEP                 = "\n";
-    
+    public final static String             SEP                 = "\n";           //$NON-NLS-1$
+
     private InputStream                    is;
     private byte[]                         boundaryBA;
-    static private byte[]                  boundaryDelimiterBA = "--".getBytes();
+    static private byte[]                  boundaryDelimiterBA = "--".getBytes(); //$NON-NLS-1$
 
     private MultivaluedMap<String, String> partHeaders;
     private PartInputStream                partIS;
@@ -63,7 +64,7 @@ public class MultiPartParser {
 
     public MultiPartParser(InputStream is, String boundary) {
         this.is = is;
-        boundaryBA = ("--" + boundary).getBytes();
+        boundaryBA = ("--" + boundary).getBytes(); //$NON-NLS-1$
         // make sure to allocate a buffer that is at least double then the
         // boundary length
         int buffLength = Math.max(8192, boundaryBA.length * 2);
@@ -253,13 +254,13 @@ public class MultiPartParser {
     private MultivaluedMap<String, String> parseHeaders() throws IOException {
 
         MultivaluedMap<String, String> headers = new CaseInsensitiveMultivaluedMap<String>();
-        
+
         String line;
         do {
             line = readLine();
-            if (line == null || line.equals(""))
+            if (line == null || line.equals("")) //$NON-NLS-1$
                 break;
-            int semIdx = line.indexOf(":");
+            int semIdx = line.indexOf(":"); //$NON-NLS-1$
             headers.add(line.substring(0, semIdx).trim(), line.substring(semIdx + 1).trim());
 
         } while (true);
@@ -317,8 +318,7 @@ public class MultiPartParser {
         @Override
         public int read(byte[] b, int off, int len) throws IOException {
             if (state == STATE_NOT_ACTIVE) {
-                throw new IOException(
-                                      "Stream allready closed: the PartInputStream is not accesable after moving to the next part");
+                throw new IOException(Messages.getMessage("multiPartStreamAlreadyClosed")); //$NON-NLS-1$
             }
             int available = verifyNumOfByteToReadB4Boundary(len);
             if (available < 1) {
@@ -333,8 +333,7 @@ public class MultiPartParser {
         @Override
         public int read() throws IOException {
             if (state == STATE_NOT_ACTIVE) {
-                throw new IOException(
-                                      "Stream allready closed: the PartInputStream is not accesable after moving to the next part");
+                throw new IOException(Messages.getMessage("multiPartStreamAlreadyClosed")); //$NON-NLS-1$
             }
             int i = verifyNumOfByteToReadB4Boundary(1);
             if (i < 1)

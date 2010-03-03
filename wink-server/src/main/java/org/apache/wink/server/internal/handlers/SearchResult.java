@@ -131,7 +131,7 @@ public class SearchResult {
             List<PathSegment> segments = uriInfo.getPathSegments(false);
 
             // count the number of segments in input uri
-            int count = uri.equals("") ? 0 : UriHelper.parsePath(uri).size();
+            int count = uri.equals("") ? 0 : UriHelper.parsePath(uri).size(); //$NON-NLS-1$
 
             // get the offset of the provided uri from the complete request path
             int offset = calculateUriOffset();
@@ -162,7 +162,7 @@ public class SearchResult {
                 // the
                 // offset by the number of empty segments
                 for (PathSegment segment : firstMatchedUri) {
-                    if (segment.getPath().equals("")) {
+                    if (segment.getPath().equals("")) { //$NON-NLS-1$
                         --offset;
                     }
                 }
@@ -180,7 +180,7 @@ public class SearchResult {
                 // if the given uri was an empty string (which itself can happen
                 // if the resource/sub-resource are annotated with @Path("") or
                 // @Path("/").
-                subListSegments = UriHelper.parsePath("");
+                subListSegments = UriHelper.parsePath(""); //$NON-NLS-1$
             }
 
             LinkedList<List<PathSegment>> matchedURIs = getMatchedURIs();
@@ -212,7 +212,7 @@ public class SearchResult {
 
     @Override
     public String toString() {
-        return String.format("Found: %s, Resource: %s, Method: %s, Error: %s", String
+        return String.format("Found: %s, Resource: %s, Method: %s, Error: %s", String //$NON-NLS-1$
             .valueOf(found), String.valueOf(resource), String.valueOf(method), String
             .valueOf(error));
     }

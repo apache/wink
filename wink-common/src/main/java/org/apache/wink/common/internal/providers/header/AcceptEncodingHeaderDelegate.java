@@ -64,7 +64,7 @@ public class AcceptEncodingHeaderDelegate implements HeaderDelegate<AcceptEncodi
             return qEncodings;
         }
 
-        for (String encodingRange : acceptableEncodingValue.split(",")) {
+        for (String encodingRange : acceptableEncodingValue.split(",")) { //$NON-NLS-1$
             int semicolonIndex = encodingRange.indexOf(';');
             double qValue;
             String encodingSpec;
@@ -88,7 +88,7 @@ public class AcceptEncodingHeaderDelegate implements HeaderDelegate<AcceptEncodi
             if (encodingSpec.length() == 0) {
                 // ignore empty encoding specifications
                 continue;
-            } else if (encodingSpec.equals("*")) {
+            } else if (encodingSpec.equals("*")) { //$NON-NLS-1$
                 qEncodings.add(new AcceptEncoding.ValuedEncoding(qValue, null));
             } else {
                 qEncodings.add(new AcceptEncoding.ValuedEncoding(qValue, encodingSpec));

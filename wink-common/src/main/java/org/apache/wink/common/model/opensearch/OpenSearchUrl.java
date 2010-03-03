@@ -100,10 +100,10 @@ public class OpenSearchUrl {
     private List<OpenSearchParameter> openSearchParameters;
     // Parameter delimiter
     @XmlTransient
-    private static final String       paramDelimiter  = "&";
+    private static final String       paramDelimiter  = "&"; //$NON-NLS-1$
     // Search parameters delimiter
     @XmlTransient
-    private static final String       searchDelimiter = "?";
+    private static final String       searchDelimiter = "?"; //$NON-NLS-1$
     // Base URI
     @XmlTransient
     private String                    baseUri;
@@ -190,14 +190,14 @@ public class OpenSearchUrl {
 
         String paramList = searchDelimiter;
         if (openSearchParameters == null)
-            return "";
+            return ""; //$NON-NLS-1$
 
         // Use Iterator to avoid redundant & in the end of search parameters
         // list
         Iterator<OpenSearchParameter> itr = openSearchParameters.iterator();
 
         if (!itr.hasNext())
-            return "";
+            return ""; //$NON-NLS-1$
 
         OpenSearchParameter openSearchParameter = itr.next();
         paramList = paramList + openSearchParameter.getURLParameter();

@@ -94,12 +94,12 @@ public abstract class AbstractJAXBProvider {
         Unmarshaller unm = upool.get(context);
         if (unm == null) {
             if (logger.isDebugEnabled()) {
-                logger.debug("Unmarshaller created [not in pool]");
+                logger.debug("Unmarshaller created [not in pool]"); //$NON-NLS-1$
             }
             unm = internalCreateUnmarshaller(context);
         } else {
             if (logger.isDebugEnabled()) {
-                logger.debug("Unmarshaller obtained [from  pool]");
+                logger.debug("Unmarshaller obtained [from  pool]"); //$NON-NLS-1$
             }
         }
         return unm;
@@ -129,7 +129,7 @@ public abstract class AbstractJAXBProvider {
      */
     protected void releaseJAXBUnmarshaller(JAXBContext context, Unmarshaller unmarshaller) {
         if (logger.isDebugEnabled()) {
-            logger.debug("Unmarshaller placed back into pool");
+            logger.debug("Unmarshaller placed back into pool"); //$NON-NLS-1$
         }
         unmarshaller.setAttachmentUnmarshaller(null);
         upool.put(context, unmarshaller);
@@ -164,12 +164,12 @@ public abstract class AbstractJAXBProvider {
 
         if (m == null) {
             if (logger.isDebugEnabled()) {
-                logger.debug("Marshaller created [not in pool]");
+                logger.debug("Marshaller created [not in pool]"); //$NON-NLS-1$
             }
             m = internalCreateMarshaller(context);
         } else {
             if (logger.isDebugEnabled()) {
-                logger.debug("Marshaller obtained [from  pool]");
+                logger.debug("Marshaller obtained [from  pool]"); //$NON-NLS-1$
             }
         }
 
@@ -198,7 +198,7 @@ public abstract class AbstractJAXBProvider {
      */
     protected void releaseJAXBMarshaller(JAXBContext context, Marshaller marshaller) {
         if (logger.isDebugEnabled()) {
-            logger.debug("Marshaller placed back into pool");
+            logger.debug("Marshaller placed back into pool"); //$NON-NLS-1$
         }
 
         marshaller.setAttachmentMarshaller(null);
@@ -279,7 +279,7 @@ public abstract class AbstractJAXBProvider {
         if (!isXMLRootElement(type) && isXMLType(type)) {
             JAXBElement<?> wrappedJAXBElement = wrapInJAXBElement(jaxbObject, type);
             if (wrappedJAXBElement == null) {
-                logger.error(Messages.getMessage("jaxbObjectFactoryNotFound", type.getName()));
+                logger.error(Messages.getMessage("jaxbObjectFactoryNotFound", type.getName())); //$NON-NLS-1$
                 throw new WebApplicationException();
             }
             return wrappedJAXBElement;
@@ -304,17 +304,17 @@ public abstract class AbstractJAXBProvider {
                     Method current = method[i];
                     if (current.getParameterTypes().length == 1 && current.getParameterTypes()[0]
                         .equals(type)
-                        && current.getName().startsWith("create")) {
+                        && current.getName().startsWith("create")) { //$NON-NLS-1$
                         Object result = current.invoke(factory, new Object[] {jaxbObject});
                         return JAXBElement.class.cast(result);
                     }
                 }
                 return null;
             }
-            logger.warn(Messages.getMessage("jaxbObjectFactoryInstantiate", type.getName()));
+            logger.warn(Messages.getMessage("jaxbObjectFactoryInstantiate", type.getName())); //$NON-NLS-1$
             return defaultWrapInJAXBElement(jaxbObject, type);
         } catch (Exception e) {
-            logger.error(Messages.getMessage("jaxbElementFailToBuild", type.getName()));
+            logger.error(Messages.getMessage("jaxbElementFailToBuild", type.getName())); //$NON-NLS-1$
             return null;
         }
 
@@ -329,17 +329,17 @@ public abstract class AbstractJAXBProvider {
         // }
         // Search for Factory
         StringBuilder b = new StringBuilder(type.getPackage().getName());
-        b.append(".ObjectFactory");
+        b.append(".ObjectFactory"); //$NON-NLS-1$
         Class<?> factoryClass = null;
         try {
             factoryClass = Thread.currentThread().getContextClassLoader().loadClass(b.toString());
         } catch (ClassNotFoundException e) {
-            logger.error(Messages.getMessage("jaxbObjectFactoryNotFound", type.getName()));
+            logger.error(Messages.getMessage("jaxbObjectFactoryNotFound", type.getName())); //$NON-NLS-1$
             return null;
         }
 
         if (!factoryClass.isAnnotationPresent(XmlRegistry.class)) {
-            logger.error(Messages.getMessage("jaxbObjectFactoryNotAnnotatedXMLRegistry", type
+            logger.error(Messages.getMessage("jaxbObjectFactoryNotAnnotatedXMLRegistry", type //$NON-NLS-1$
                 .getName()));
             return null;
         }
@@ -349,7 +349,7 @@ public abstract class AbstractJAXBProvider {
 
     @SuppressWarnings("unchecked")
     private JAXBElement<?> defaultWrapInJAXBElement(Object jaxbObject, Class<?> type) {
-        logger.info(Messages.getMessage("jaxbCreateDefaultJAXBElement", type.getName()));
+        logger.info(Messages.getMessage("jaxbCreateDefaultJAXBElement", type.getName())); //$NON-NLS-1$
         String typeStr = type.getAnnotation(XmlType.class).name();
         return new JAXBElement(new QName(typeStr), type, jaxbObject);
     }

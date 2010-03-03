@@ -55,8 +55,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvider {
-    private static final String JAXB_DEFAULT_NAMESPACE = "##default";
-    private static final String JAXB_DEFAULT_NAME      = "##default";
+    private static final String JAXB_DEFAULT_NAMESPACE = "##default"; //$NON-NLS-1$
+    private static final String JAXB_DEFAULT_NAME      = "##default"; //$NON-NLS-1$
     private static final Logger logger                 =
                                                            LoggerFactory
                                                                .getLogger(AbstractJAXBCollectionProvider.class);
@@ -108,12 +108,12 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
             releaseJAXBUnmarshaller(context, unmarshaller);
             return ret;
         } catch (XMLStreamException e) {
-            logger.error(Messages.getMessage("jaxbFailToUnmarshal", type.getName()), e); // TODO
+            logger.error(Messages.getMessage("jaxbFailToUnmarshal", type.getName()), e); // TODO //$NON-NLS-1$
             // change
             // message
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         } catch (JAXBException e) {
-            logger.error(Messages.getMessage("jaxbFailToUnmarshal", type.getName()), e);
+            logger.error(Messages.getMessage("jaxbFailToUnmarshal", type.getName()), e); //$NON-NLS-1$
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         }
     }
@@ -170,7 +170,7 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
 
             writeEndTag(qname, entityStream);
         } catch (JAXBException e) {
-            logger.error(Messages.getMessage("jaxbFailToMarshal", type.getName()), e);
+            logger.error(Messages.getMessage("jaxbFailToMarshal", type.getName()), e); //$NON-NLS-1$
             throw new WebApplicationException(e);
         }
     }
@@ -187,29 +187,29 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
         throws IOException {
         String startTag = null;
         Charset charSet = getCharSet(m);
-        startTag = "<?xml version=\"1.0\" encoding=\"" + charSet.name() + "\" standalone=\"yes\"?>";
+        startTag = "<?xml version=\"1.0\" encoding=\"" + charSet.name() + "\" standalone=\"yes\"?>"; //$NON-NLS-1$ //$NON-NLS-2$
         entityStream.write(startTag.getBytes());
         // if (qname.getNamespaceURI().length() > 0)
         // startTag = "<" + qname.getLocalPart() + "s xmlns=\"" +
         // qname.getNamespaceURI() + "\">";
         // else
-        startTag = "<" + qname.getLocalPart() + "s>";
+        startTag = "<" + qname.getLocalPart() + "s>"; //$NON-NLS-1$ //$NON-NLS-2$
         entityStream.write(startTag.getBytes());
     }
 
     protected static Charset getCharSet(MediaType m) {
-        String charSetString = m.getParameters().get("charset");
+        String charSetString = m.getParameters().get("charset"); //$NON-NLS-1$
         Charset charSet =
-            charSetString == null ? Charset.forName("UTF-8") : Charset.forName(charSetString);
+            charSetString == null ? Charset.forName("UTF-8") : Charset.forName(charSetString); //$NON-NLS-1$
         return charSet;
     }
 
     protected static void writeEndTag(QName qname, OutputStream entityStream) throws IOException {
         String endTag = null;
         if (qname.getNamespaceURI().length() > 0)
-            endTag = "</" + qname.getLocalPart() + "s>";
+            endTag = "</" + qname.getLocalPart() + "s>"; //$NON-NLS-1$ //$NON-NLS-2$
         else
-            endTag = "</" + qname.getLocalPart() + "s>";
+            endTag = "</" + qname.getLocalPart() + "s>"; //$NON-NLS-1$ //$NON-NLS-2$
         entityStream.write(endTag.getBytes());
     }
 
@@ -262,7 +262,7 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
 
     protected static String getNamespace(String namespace) {
         if (JAXB_DEFAULT_NAMESPACE.equals(namespace)) {
-            return "";
+            return ""; //$NON-NLS-1$
         }
         return namespace;
     }

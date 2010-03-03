@@ -48,7 +48,7 @@ import org.apache.wink.common.internal.providers.multipart.MultiPartParser;
  * }<br>
  */
 public class InMultiPart implements Iterator<InPart> {
-    public final static String SEP            = "\n";
+    public final static String SEP            = "\n"; //$NON-NLS-1$
     //private String             boundary       = "simple boundary";
     private MultiPartParser    MPParser;
     int                        index          = -1;

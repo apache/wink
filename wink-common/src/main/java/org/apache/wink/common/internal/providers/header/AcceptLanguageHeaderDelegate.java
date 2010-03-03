@@ -65,7 +65,7 @@ public class AcceptLanguageHeaderDelegate implements HeaderDelegate<AcceptLangua
             return qLocales;
         }
 
-        for (String languageRange : acceptLanguageValue.split(",")) {
+        for (String languageRange : acceptLanguageValue.split(",")) { //$NON-NLS-1$
             int semicolonIndex = languageRange.indexOf(';');
             double qValue;
             String languageSpec;
@@ -89,7 +89,7 @@ public class AcceptLanguageHeaderDelegate implements HeaderDelegate<AcceptLangua
             if (languageSpec.length() == 0) {
                 // ignore empty language specifications
                 continue;
-            } else if (languageSpec.equals("*")) {
+            } else if (languageSpec.equals("*")) { //$NON-NLS-1$
                qLocales.add(new AcceptLanguage.ValuedLocale(qValue, null));
             } else {
                 Locale newLocale = HeaderUtils.languageToLocale(languageSpec);

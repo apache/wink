@@ -52,7 +52,7 @@ public class InMultiPartProvider implements MessageBodyReader<InMultiPart>  {
 			MultivaluedMap<String, String> httpHeaders, InputStream entityStream)
 			throws IOException, WebApplicationException {
 
-		String boundary = mediaType.getParameters().get("boundary");
+		String boundary = mediaType.getParameters().get("boundary"); //$NON-NLS-1$
 		MultiPartParser mpParser = new MultiPartParser(entityStream,boundary);
 		InMultiPart imp = new InMultiPart(mpParser);
 		imp.setProviders(providers);

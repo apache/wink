@@ -176,7 +176,7 @@ public class Multistatus {
     public static Multistatus unmarshal(Reader reader) throws IOException {
         Unmarshaller unmarshaller = WebDAVModelHelper.createUnmarshaller();
         Multistatus instance =
-            WebDAVModelHelper.unmarshal(unmarshaller, reader, Multistatus.class, "multistatus");
+            WebDAVModelHelper.unmarshal(unmarshaller, reader, Multistatus.class, "multistatus"); //$NON-NLS-1$
         return instance;
     }
 
@@ -189,7 +189,7 @@ public class Multistatus {
      */
     public static void marshal(Multistatus instance, Writer writer) throws IOException {
         Marshaller marshaller = WebDAVModelHelper.createMarshaller();
-        WebDAVModelHelper.marshal(marshaller, instance, writer, "multistatus");
+        WebDAVModelHelper.marshal(marshaller, instance, writer, "multistatus"); //$NON-NLS-1$
     }
 
 }

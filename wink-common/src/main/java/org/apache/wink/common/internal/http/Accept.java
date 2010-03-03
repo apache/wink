@@ -159,7 +159,7 @@ public class Accept {
 
         public ValuedMediaType(MediaType mediaType) {
             double q = 1;
-            String qStr = mediaType.getParameters().get("q");
+            String qStr = mediaType.getParameters().get("q"); //$NON-NLS-1$
             if (qStr != null) {
                 q = Double.parseDouble(qStr);
             }
@@ -172,7 +172,7 @@ public class Accept {
 
         private void init(MediaType mediaType, double q) {
             if (mediaType == null) {
-                throw new NullPointerException("mediaType");
+                throw new NullPointerException("mediaType"); //$NON-NLS-1$
             }
             if (q < 0 || q > 1) {
                 throw new IllegalArgumentException(String.valueOf(q));
@@ -186,7 +186,7 @@ public class Accept {
             if (this.q != q) {
                 Map<String, String> parameters = new LinkedHashMap<String, String>();
                 parameters.putAll(mediaType.getParameters());
-                parameters.put("q", Double.toString(this.q));
+                parameters.put("q", Double.toString(this.q)); //$NON-NLS-1$
                 this.mediaType =
                     new MediaType(mediaType.getType(), mediaType.getSubtype(), parameters);
             }

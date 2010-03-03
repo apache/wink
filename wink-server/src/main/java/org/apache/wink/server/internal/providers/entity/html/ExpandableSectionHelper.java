@@ -44,33 +44,33 @@ public final class ExpandableSectionHelper {
      */
     public static String getFormHeaderHtml(String title, String id, boolean isStateCollapsed) {
         StringBuilder stringBuilder = new StringBuilder();
-        String collapseStr = "-";
-        String expandStr = "+";
+        String collapseStr = "-"; //$NON-NLS-1$
+        String expandStr = "+"; //$NON-NLS-1$
 
-        stringBuilder.append("<script type='text/javascript' >").append('\n')
-            .append("var collapseExpand").append(id).append(" = new CollapseExpand('").append(id)
-            .append("');").append('\n').append("</script>").append("\n");
+        stringBuilder.append("<script type='text/javascript' >").append('\n') //$NON-NLS-1$
+            .append("var collapseExpand").append(id).append(" = new CollapseExpand('").append(id) //$NON-NLS-1$ //$NON-NLS-2$
+            .append("');").append('\n').append("</script>").append("\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
         // the section header
         stringBuilder
-            .append("<table class='wide-table")
-            .append("' margin-top='0' cellpadding='0' cellspacing='0'>\n")
-            .append("<tr>\n")
-            .append("<td >\n")
-            .append("<table class='wide-table expandable-form-header'>\n")
-            .append("<tr>\n")
-            .append("<td style='{CURSOR: pointer};' class='portlet-expand-button minimum-icon-size'>")
-            .append("<div id='").append(id).append("_div' onclick=\"collapseExpand").append(id)
-            .append(".collapseExpand();\">").append(isStateCollapsed ? expandStr : collapseStr)
-            .append("</div>").append("</td>\n").append("<td>&nbsp;&nbsp;").append(title)
-            .append("</td>\n").append("</tr>").append("</table>\n").append("</td>\n")
-            .append("</tr>\n").append("</table>\n");
+            .append("<table class='wide-table") //$NON-NLS-1$
+            .append("' margin-top='0' cellpadding='0' cellspacing='0'>\n") //$NON-NLS-1$
+            .append("<tr>\n") //$NON-NLS-1$
+            .append("<td >\n") //$NON-NLS-1$
+            .append("<table class='wide-table expandable-form-header'>\n") //$NON-NLS-1$
+            .append("<tr>\n") //$NON-NLS-1$
+            .append("<td style='{CURSOR: pointer};' class='portlet-expand-button minimum-icon-size'>") //$NON-NLS-1$
+            .append("<div id='").append(id).append("_div' onclick=\"collapseExpand").append(id) //$NON-NLS-1$ //$NON-NLS-2$
+            .append(".collapseExpand();\">").append(isStateCollapsed ? expandStr : collapseStr) //$NON-NLS-1$
+            .append("</div>").append("</td>\n").append("<td>&nbsp;&nbsp;").append(title) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            .append("</td>\n").append("</tr>").append("</table>\n").append("</td>\n") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+            .append("</tr>\n").append("</table>\n"); //$NON-NLS-1$ //$NON-NLS-2$
 
         // the collapsed/expanded table
-        stringBuilder.append("<table id='").append(id).append("' style='").append(isStateCollapsed
-            ? "display: none" : "display: block")
-            .append("' class='wide-table' cellpadding=0 cellspacing=0>\n")
-            .append("<td class='form-area-width'>\n");
+        stringBuilder.append("<table id='").append(id).append("' style='").append(isStateCollapsed //$NON-NLS-1$ //$NON-NLS-2$
+            ? "display: none" : "display: block") //$NON-NLS-1$ //$NON-NLS-2$
+            .append("' class='wide-table' cellpadding=0 cellspacing=0>\n") //$NON-NLS-1$
+            .append("<td class='form-area-width'>\n"); //$NON-NLS-1$
 
         return stringBuilder.toString();
     }
@@ -89,12 +89,12 @@ public final class ExpandableSectionHelper {
         StringBuilder stringBuilder = new StringBuilder();
 
         // end of collapsed/expended table
-        stringBuilder.append("</td>\n").append("</table>\n");
+        stringBuilder.append("</td>\n").append("</table>\n"); //$NON-NLS-1$ //$NON-NLS-2$
 
         // collapse if needed
         if (isStateCollapsed) {
-            stringBuilder.append("<script type='text/javascript' >\n").append("collapseExpand")
-                .append(id).append(".collapse();\n").append("</script>\n");
+            stringBuilder.append("<script type='text/javascript' >\n").append("collapseExpand") //$NON-NLS-1$ //$NON-NLS-2$
+                .append(id).append(".collapse();\n").append("</script>\n"); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         return stringBuilder.toString();

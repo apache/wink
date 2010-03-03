@@ -83,12 +83,12 @@ public class MethodMetadata extends AbstractMetadata {
 
     @Override
     public String toString() {
-        return "MethodMetadata [" + super.toString()
-            + (formalParameters != null ? "formalParameters=" + formalParameters + ", " : "")
-            + (httpMethod != null ? "httpMethod=" + httpMethod + ", " : "")
-            + (parent != null ? "parent=" + parent + ", " : "")
-            + (reflectionMethod != null ? "reflectionMethod=" + reflectionMethod : "")
-            + "]";
+        return "MethodMetadata [" + super.toString() //$NON-NLS-1$
+            + (formalParameters != null ? "formalParameters=" + formalParameters + ", " : "") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            + (httpMethod != null ? "httpMethod=" + httpMethod + ", " : "") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            + (parent != null ? "parent=" + parent + ", " : "") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            + (reflectionMethod != null ? "reflectionMethod=" + reflectionMethod : "") //$NON-NLS-1$ //$NON-NLS-2$
+            + "]"; //$NON-NLS-1$
     }
 
 }

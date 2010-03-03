@@ -30,9 +30,9 @@ import org.apache.wink.common.http.HttpMethodEx;
 public class HeaderUtils {
 
     public static Locale languageToLocale(String language) {
-        String[] languageSplit = language.split("-", 3);
+        String[] languageSplit = language.split("-", 3); //$NON-NLS-1$
         return new Locale(languageSplit[0].trim(), languageSplit.length > 1 ? languageSplit[1]
-            .trim() : "", languageSplit.length > 2 ? languageSplit[2].trim() : "");
+            .trim() : "", languageSplit.length > 2 ? languageSplit[2].trim() : ""); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     public static String localeToLanguage(Locale locale) {
@@ -41,11 +41,11 @@ public class HeaderUtils {
         String variant = locale.getVariant();
         StringBuffer result = new StringBuffer(language);
         if (country != null && country.length() > 0) {
-            result.append("-");
+            result.append("-"); //$NON-NLS-1$
             result.append(country);
         }
         if (variant != null && variant.length() > 0) {
-            result.append("-");
+            result.append("-"); //$NON-NLS-1$
             result.append(variant);
         }
         return result.toString();
@@ -61,12 +61,12 @@ public class HeaderUtils {
 
         // build 'Allow' header for the response
         StringBuilder builder = new StringBuilder(30);
-        String delimit = "";
+        String delimit = ""; //$NON-NLS-1$
         for (String httpMethod : httpMethods) {
 
             builder.append(delimit);
             builder.append(httpMethod);
-            delimit = ", ";
+            delimit = ", "; //$NON-NLS-1$
         }
         return builder.toString();
     }

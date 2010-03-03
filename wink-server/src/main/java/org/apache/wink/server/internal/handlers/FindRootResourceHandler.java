@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 public class FindRootResourceHandler implements RequestHandler {
 
     public static final String  SEARCH_POLICY_CONTINUED_SEARCH_KEY =
-                                                                       "wink.searchPolicyContinuedSearch";
+                                                                       "wink.searchPolicyContinuedSearch"; //$NON-NLS-1$
     private static final Logger logger                             =
                                                                        LoggerFactory
                                                                            .getLogger(FindRootResourceHandler.class);
@@ -50,9 +50,9 @@ public class FindRootResourceHandler implements RequestHandler {
 
         // create a path stripped from all matrix parameters to use for matching
         List<PathSegment> segments = context.getUriInfo().getPathSegments(false);
-        logger.debug("Getting URI Info path segments: {}", segments);
+        logger.debug("Getting URI Info path segments: {}", segments); //$NON-NLS-1$
         String strippedPath = buildPathForMatching(segments);
-        logger.debug("Getting stripped path from segments: {}", strippedPath);
+        logger.debug("Getting stripped path from segments: {}", strippedPath); //$NON-NLS-1$
         // get a list of root resources that can handle the request
 
         // JAX-RS specification requires to search only the first matching
@@ -61,9 +61,9 @@ public class FindRootResourceHandler implements RequestHandler {
         // matching resources
         List<ResourceInstance> matchedResources =
             registry.getMatchingRootResources(strippedPath, isContinuedSearchPolicy);
-        logger.debug("Found resource instances: {}", matchedResources);
+        logger.debug("Found resource instances: {}", matchedResources); //$NON-NLS-1$
         if (matchedResources.size() == 0) {
-            logger.debug("No resource found matching {}", context.getUriInfo().getPath(false));
+            logger.debug("No resource found matching {}", context.getUriInfo().getPath(false)); //$NON-NLS-1$
             SearchResult result =
                 new SearchResult(new WebApplicationException(Response.Status.NOT_FOUND));
             context.setAttribute(SearchResult.class, result);
@@ -84,7 +84,7 @@ public class FindRootResourceHandler implements RequestHandler {
                                             headSegmentsCount,
                                             result.getData().getMatchedVariablesPathSegments());
 
-            logger.debug("Using SearchResult: {}", result);
+            logger.debug("Using SearchResult: {}", result); //$NON-NLS-1$
 
             // continue that chain to find the actual resource that will handle
             // the request.
@@ -101,11 +101,11 @@ public class FindRootResourceHandler implements RequestHandler {
 
     private String buildPathForMatching(List<PathSegment> segments) {
         StringBuilder strippedPathBuilder = new StringBuilder();
-        String delim = "";
+        String delim = ""; //$NON-NLS-1$
         for (PathSegment segment : segments) {
             strippedPathBuilder.append(delim);
             strippedPathBuilder.append(segment.getPath());
-            delim = "/";
+            delim = "/"; //$NON-NLS-1$
         }
         String strippedPath = strippedPathBuilder.toString();
         return strippedPath;

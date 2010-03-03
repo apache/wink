@@ -52,16 +52,16 @@ public class RequestProcessor {
     private static final Logger           logger                           =
                                                                                LoggerFactory
                                                                                    .getLogger(RequestProcessor.class);
-    private static final String           PROPERTY_ROOT_RESOURCE_NONE      = "none";
-    private static final String           PROPERTY_ROOT_RESOURCE_ATOM      = "atom";
-    private static final String           PROPERTY_ROOT_RESOURCE_ATOM_HTML = "atom+html";
+    private static final String           PROPERTY_ROOT_RESOURCE_NONE      = "none"; //$NON-NLS-1$
+    private static final String           PROPERTY_ROOT_RESOURCE_ATOM      = "atom"; //$NON-NLS-1$
+    private static final String           PROPERTY_ROOT_RESOURCE_ATOM_HTML = "atom+html"; //$NON-NLS-1$
     private static final String           PROPERTY_ROOT_RESOURCE_DEFAULT   =
                                                                                PROPERTY_ROOT_RESOURCE_ATOM_HTML;
-    private static final String           PROPERTY_ROOT_RESOURCE           = "wink.rootResource";
+    private static final String           PROPERTY_ROOT_RESOURCE           = "wink.rootResource"; //$NON-NLS-1$
     private static final String           PROPERTY_ROOT_RESOURCE_CSS       =
-                                                                               "wink.serviceDocumentCssPath";
+                                                                               "wink.serviceDocumentCssPath"; //$NON-NLS-1$
     private static final String           PROPERTY_LOAD_WINK_APPLICATIONS  =
-                                                                               "wink.loadApplications";
+                                                                               "wink.loadApplications"; //$NON-NLS-1$
 
     private final DeploymentConfiguration configuration;
 
@@ -76,7 +76,7 @@ public class RequestProcessor {
             String loadWinkApplicationsProperty =
                 configuration.getProperties().getProperty(PROPERTY_LOAD_WINK_APPLICATIONS,
                                                           Boolean.toString(true));
-            logger.debug("{} property is set to: {}",
+            logger.debug("{} property is set to: {}", //$NON-NLS-1$
                          PROPERTY_LOAD_WINK_APPLICATIONS,
                          loadWinkApplicationsProperty);
             final Set<Class<?>> classes =
@@ -95,7 +95,7 @@ public class RequestProcessor {
         Properties properties = configuration.getProperties();
         String registerRootResource =
             properties.getProperty(PROPERTY_ROOT_RESOURCE, PROPERTY_ROOT_RESOURCE_DEFAULT);
-        logger.debug("{} property is set to: {}", PROPERTY_ROOT_RESOURCE, registerRootResource);
+        logger.debug("{} property is set to: {}", PROPERTY_ROOT_RESOURCE, registerRootResource); //$NON-NLS-1$
         if (registerRootResource.equals(PROPERTY_ROOT_RESOURCE_ATOM)) {
             RegistrationUtils.InnerApplication application =
                 new RegistrationUtils.InnerApplication(RootResource.class);
@@ -105,7 +105,7 @@ public class RequestProcessor {
             // do nothing
         } else {
             String css = properties.getProperty(PROPERTY_ROOT_RESOURCE_CSS);
-            logger.debug("{} property is set to: {}", PROPERTY_ROOT_RESOURCE_CSS, css);
+            logger.debug("{} property is set to: {}", PROPERTY_ROOT_RESOURCE_CSS, css); //$NON-NLS-1$
             HtmlServiceDocumentResource instance = new HtmlServiceDocumentResource();
             if (css != null) {
                 instance.setServiceDocumentCssPath(css);
@@ -134,9 +134,9 @@ public class RequestProcessor {
         } catch (Throwable t) {
             // exception was not handled properly
             if (logger.isDebugEnabled()) {
-                logger.debug(Messages.getMessage("unhandledExceptionToContainer"), t);
+                logger.debug(Messages.getMessage("unhandledExceptionToContainer"), t); //$NON-NLS-1$
             } else {
-                logger.info(Messages.getMessage("unhandledExceptionToContainer"));
+                logger.info(Messages.getMessage("unhandledExceptionToContainer")); //$NON-NLS-1$
             }
             if (t instanceof RuntimeException) {
                 // let the servlet container to handle the runtime exception
@@ -152,11 +152,11 @@ public class RequestProcessor {
         try {
             ServerMessageContext msgContext = createMessageContext(request, response);
             RuntimeContextTLS.setRuntimeContext(msgContext);
-            logger.debug("Set message context and starting request handlers chain: {}", msgContext);
+            logger.debug("Set message context and starting request handlers chain: {}", msgContext); //$NON-NLS-1$
             // run the request handler chain
             configuration.getRequestHandlersChain().run(msgContext);
             logger
-                .debug("Finished request handlers chain and starting response handlers chain: {}",
+                .debug("Finished request handlers chain and starting response handlers chain: {}", //$NON-NLS-1$
                        msgContext);
             // run the response handler chain
             configuration.getResponseHandlersChain().run(msgContext);
@@ -166,10 +166,10 @@ public class RequestProcessor {
             RuntimeContextTLS.setRuntimeContext(msgContext);
             msgContext.setResponseEntity(t);
             // run the error handler chain
-            logger.debug("Exception occured, starting error handlers chain: {}", msgContext);
+            logger.debug("Exception occured, starting error handlers chain: {}", msgContext); //$NON-NLS-1$
             configuration.getErrorHandlersChain().run(msgContext);
         } finally {
-            logger.debug("Finished response handlers chain");
+            logger.debug("Finished response handlers chain"); //$NON-NLS-1$
             RuntimeContextTLS.setRuntimeContext(null);
         }
     }
@@ -231,7 +231,7 @@ public class RequestProcessor {
         RequestProcessor requestProcessor =
             (RequestProcessor)servletContext.getAttribute(attributeName);
         logger
-            .debug("Retrieving request processor {} using attribute name {} in servlet context {}",
+            .debug("Retrieving request processor {} using attribute name {} in servlet context {}", //$NON-NLS-1$
                    new Object[] {requestProcessor, attributeName, servletContext});
         return requestProcessor;
     }
@@ -241,7 +241,7 @@ public class RequestProcessor {
         if (attributeName == null || attributeName.length() == 0) {
             attributeName = RequestProcessor.class.getName();
         }
-        logger.debug("Storing request processor {} using attribute name {} in servlet context {}",
+        logger.debug("Storing request processor {} using attribute name {} in servlet context {}", //$NON-NLS-1$
                      new Object[] {this, attributeName, servletContext});
         servletContext.setAttribute(attributeName, this);
     }

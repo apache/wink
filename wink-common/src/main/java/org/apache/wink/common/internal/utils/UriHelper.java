@@ -196,17 +196,17 @@ public class UriHelper {
      */
     public static String relativize(String basePath, String pathToRelativize) {
         String normalizeBasePath = removeStartSlash(UriPathNormalizer.normalize(basePath));
-        String[] splitBase = StringUtils.fastSplit(normalizeBasePath, "/", false);
+        String[] splitBase = StringUtils.fastSplit(normalizeBasePath, "/", false); //$NON-NLS-1$
         String normalizedPathToRelativize =
             removeStartSlash(UriPathNormalizer.normalize(pathToRelativize));
-        String[] splitPath = StringUtils.fastSplit(normalizedPathToRelativize, "/", false);
+        String[] splitPath = StringUtils.fastSplit(normalizedPathToRelativize, "/", false); //$NON-NLS-1$
         int pos = 0;
         while (pos < splitBase.length && pos < splitPath.length
             && splitBase[pos].equals(splitPath[pos])) {
             pos++;
         }
         StringBuilder result = new StringBuilder();
-        if (pos == splitBase.length && !normalizeBasePath.endsWith("/")) { // at
+        if (pos == splitBase.length && !normalizeBasePath.endsWith("/")) { // at //$NON-NLS-1$
                                                                            // the
                                                                            // end
                                                                            // of
@@ -229,12 +229,12 @@ public class UriHelper {
             for (int posBase = pos; posBase < splitBase.length - 1; posBase++) {
                 if (result.length() != 0)
                     result.append('/');
-                result.append("..");
+                result.append(".."); //$NON-NLS-1$
             }
-            if (normalizeBasePath.endsWith("/")) {
+            if (normalizeBasePath.endsWith("/")) { //$NON-NLS-1$
                 if (result.length() != 0)
                     result.append('/');
-                result.append("..");
+                result.append(".."); //$NON-NLS-1$
             }
             for (; pos < splitPath.length; pos++) {
                 if (result.length() != 0)
@@ -253,7 +253,7 @@ public class UriHelper {
      * @return s value with optional first character '/' removed
      */
     public static String removeStartSlash(String s) {
-        if (s.startsWith("/")) {
+        if (s.startsWith("/")) { //$NON-NLS-1$
             return s.substring(1);
         } else {
             return s;
@@ -273,7 +273,7 @@ public class UriHelper {
             throw new NullPointerException("baseUri"); //$NON-NLS-1$
         if (path == null || path.length() == 0)
             return baseUri;
-        boolean endSlash = baseUri.endsWith("/");
+        boolean endSlash = baseUri.endsWith("/"); //$NON-NLS-1$
         boolean startSlash = path.charAt(0) == '/';
         if (startSlash && endSlash) {
             return baseUri + path.substring(1);
@@ -336,28 +336,28 @@ public class UriHelper {
         StringBuilder buffer = new StringBuilder();
         if (scheme != null) {
             buffer.append(scheme);
-            buffer.append("://");
+            buffer.append("://"); //$NON-NLS-1$
         }
         if (userInfo != null) {
             buffer.append(userInfo);
-            buffer.append("@");
+            buffer.append("@"); //$NON-NLS-1$
         }
         if (host != null) {
             buffer.append(host);
         }
         if (port != -1) {
-            buffer.append(":");
+            buffer.append(":"); //$NON-NLS-1$
             buffer.append(port);
         }
         if (path != null) {
             buffer.append(path);
         }
         if (query != null) {
-            buffer.append("?");
+            buffer.append("?"); //$NON-NLS-1$
             buffer.append(query);
         }
         if (fragment != null) {
-            buffer.append("#");
+            buffer.append("#"); //$NON-NLS-1$
             buffer.append(fragment);
         }
         return buffer.toString();
@@ -374,12 +374,12 @@ public class UriHelper {
      */
     public static String getQueryParamsStr(Map<String, String[]> queryParams, boolean escapeKeyParam) {
         if (queryParams == null || queryParams.size() < 1) {
-            return "";
+            return ""; //$NON-NLS-1$
         }
         StringBuilder queryParamsStr = new StringBuilder();
         Set<String> queryParamsKey = queryParams.keySet();
         String[] params;
-        String appendStr = "";
+        String appendStr = ""; //$NON-NLS-1$
         for (String key : queryParamsKey) {
             params = queryParams.get(key);
             if (params == null) {
@@ -388,9 +388,9 @@ public class UriHelper {
             for (String paramInArray : params) {
                 queryParamsStr.append(appendStr);
                 queryParamsStr.append(escapeKeyParam ? UriEncoder.encodeString(key) : key)
-                    .append("=").append(escapeKeyParam ? UriEncoder.encodeString(paramInArray)
+                    .append("=").append(escapeKeyParam ? UriEncoder.encodeString(paramInArray) //$NON-NLS-1$
                         : paramInArray);
-                appendStr = "&";
+                appendStr = "&"; //$NON-NLS-1$
             }
 
         }
@@ -434,7 +434,7 @@ public class UriHelper {
      * @return list of PathSegement instances
      */
     public static List<PathSegment> parsePath(String path) {
-        String[] segmentsArray = StringUtils.fastSplitTemplate(path, "/", true);
+        String[] segmentsArray = StringUtils.fastSplitTemplate(path, "/", true); //$NON-NLS-1$
         List<PathSegment> pathSegments = new ArrayList<PathSegment>(segmentsArray.length);
         // go over all the segments and add them
         for (String segment : segmentsArray) {
@@ -455,7 +455,7 @@ public class UriHelper {
         if (queryStr == null || queryStr.length() == 0) {
             return query;
         }
-        String[] paramsArray = StringUtils.fastSplit(queryStr, "&");
+        String[] paramsArray = StringUtils.fastSplit(queryStr, "&"); //$NON-NLS-1$
         for (String param : paramsArray) {
             int index = param.indexOf('=');
             String name = param;

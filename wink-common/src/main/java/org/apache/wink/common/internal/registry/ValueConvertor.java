@@ -180,7 +180,7 @@ public abstract class ValueConvertor {
         }
 
         try {
-            Method valueOf = classType.getDeclaredMethod("valueOf", String.class);
+            Method valueOf = classType.getDeclaredMethod("valueOf", String.class); //$NON-NLS-1$
             return new ValueOfConvertor(valueOf);
         } catch (SecurityException e) {
         } catch (NoSuchMethodException e) {

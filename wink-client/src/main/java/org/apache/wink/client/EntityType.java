@@ -58,7 +58,7 @@ public class EntityType<T> {
     protected EntityType() {
         Type superclass = this.getClass().getGenericSuperclass();
         if (!(superclass instanceof ParameterizedType)) {
-            throw new ClientRuntimeException(Messages.getMessage("entityTypeMustBeParameterized"));
+            throw new ClientRuntimeException(Messages.getMessage("entityTypeMustBeParameterized")); //$NON-NLS-1$
         }
         this.type = ((ParameterizedType)superclass).getActualTypeArguments()[0];
         this.cls = (Class<T>)GenericsUtils.getClassType(type);

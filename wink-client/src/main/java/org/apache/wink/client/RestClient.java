@@ -170,16 +170,16 @@ public class RestClient {
                 try {
                     providersRegistry.addProvider(obj);
                 } catch (Exception e) {
-                    logger.warn(Messages.getMessage("exceptionOccurredDuringSingletonProcessing",
+                    logger.warn(Messages.getMessage("exceptionOccurredDuringSingletonProcessing", //$NON-NLS-1$
                                                     obj.getClass().getCanonicalName()));
-                    logger.warn(Messages.getMessage("listExceptionDuringSingletonProcessing"), e);
+                    logger.warn(Messages.getMessage("listExceptionDuringSingletonProcessing"), e); //$NON-NLS-1$
                 } catch (NoClassDefFoundError e) {
-                    logger.warn(Messages.getMessage("exceptionOccurredDuringSingletonProcessing",
+                    logger.warn(Messages.getMessage("exceptionOccurredDuringSingletonProcessing", //$NON-NLS-1$
                                                     obj.getClass().getCanonicalName()));
-                    logger.warn(Messages.getMessage("listExceptionDuringSingletonProcessing"), e);
+                    logger.warn(Messages.getMessage("listExceptionDuringSingletonProcessing"), e); //$NON-NLS-1$
                 }
             } else {
-                logger.warn(Messages.getMessage("classNotAProvider", obj));
+                logger.warn(Messages.getMessage("classNotAProvider", obj)); //$NON-NLS-1$
             }
         }
     }

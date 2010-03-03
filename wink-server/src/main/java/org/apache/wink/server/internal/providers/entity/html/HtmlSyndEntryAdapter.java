@@ -64,7 +64,7 @@ public class HtmlSyndEntryAdapter {
         if (id != null) {
             return id;
         }
-        return "";
+        return ""; //$NON-NLS-1$
     }
 
     /**
@@ -76,7 +76,7 @@ public class HtmlSyndEntryAdapter {
         if (syndEntry.getUpdated() != null) {
             return simpleDateFormat.format(syndEntry.getUpdated());
         }
-        return "";
+        return ""; //$NON-NLS-1$
     }
 
     /**
@@ -89,7 +89,7 @@ public class HtmlSyndEntryAdapter {
         if (title != null) {
             return title.getValue();
         }
-        return "";
+        return ""; //$NON-NLS-1$
     }
 
     /**
@@ -123,7 +123,7 @@ public class HtmlSyndEntryAdapter {
                 return name;
             }
         }
-        return "";
+        return ""; //$NON-NLS-1$
     }
 
     /**
@@ -135,7 +135,7 @@ public class HtmlSyndEntryAdapter {
         if (syndEntry.getPublished() != null) {
             return simpleDateFormat.format(syndEntry.getPublished());
         }
-        return "";
+        return ""; //$NON-NLS-1$
     }
 
     /**
@@ -144,7 +144,7 @@ public class HtmlSyndEntryAdapter {
      * @return the summary
      */
     public String getSummary() {
-        String summary = "";
+        String summary = ""; //$NON-NLS-1$
         if (syndEntry.getSummary() != null) {
             summary = syndEntry.getSummary().getValue();
         }
@@ -170,7 +170,7 @@ public class HtmlSyndEntryAdapter {
             String type = content.getType();
             // TODO: get content using type?
             String value = String.valueOf(content.getValue());
-            value = value != null ? value : "";
+            value = value != null ? value : ""; //$NON-NLS-1$
             if (type != null && (SyndTextType.xhtml.name().equals(type) || ModelUtils
                 .isTypeXml(type))) {
                 return StringEscapeUtils.escapeXml(value);
@@ -178,7 +178,7 @@ public class HtmlSyndEntryAdapter {
             return value;
         }
 
-        return "";
+        return ""; //$NON-NLS-1$
     }
 
     /**

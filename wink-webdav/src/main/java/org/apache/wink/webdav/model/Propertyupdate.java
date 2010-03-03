@@ -159,7 +159,7 @@ public class Propertyupdate {
             WebDAVModelHelper.unmarshal(unmarshaller,
                                         reader,
                                         Propertyupdate.class,
-                                        "propertyupdate");
+                                        "propertyupdate"); //$NON-NLS-1$
         return instance;
     }
 
@@ -172,7 +172,7 @@ public class Propertyupdate {
      */
     public static void marshal(Propertyupdate instance, Writer writer) throws IOException {
         Marshaller marshaller = WebDAVModelHelper.createMarshaller();
-        WebDAVModelHelper.marshal(marshaller, instance, writer, "propertyupdate");
+        WebDAVModelHelper.marshal(marshaller, instance, writer, "propertyupdate"); //$NON-NLS-1$
     }
 
 }

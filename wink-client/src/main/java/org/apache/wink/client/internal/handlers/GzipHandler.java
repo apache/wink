@@ -39,7 +39,7 @@ import org.apache.wink.client.handlers.OutputStreamAdapter;
 public class GzipHandler implements ClientHandler {
 
     public ClientResponse handle(ClientRequest request, HandlerContext context) throws Exception {
-        request.getHeaders().add("Accept-Encoding", "gzip");
+        request.getHeaders().add("Accept-Encoding", "gzip"); //$NON-NLS-1$ //$NON-NLS-2$
         context.addInputStreamAdapter(new GzipAdapter());
         context.addOutputStreamAdapter(new GzipAdapter());
         return context.doChain(request);
@@ -48,13 +48,13 @@ public class GzipHandler implements ClientHandler {
     private static class GzipAdapter implements InputStreamAdapter, OutputStreamAdapter {
 
         public OutputStream adapt(OutputStream os, ClientRequest request) throws IOException {
-            request.getHeaders().add("Content-Encoding", "gzip");
+            request.getHeaders().add("Content-Encoding", "gzip"); //$NON-NLS-1$ //$NON-NLS-2$
             return new GZIPOutputStream(os);
         }
 
         public InputStream adapt(InputStream is, ClientResponse response) throws IOException {
-            String header = response.getHeaders().getFirst("Content-Encoding");
-            if (header != null && header.equalsIgnoreCase("gzip")) {
+            String header = response.getHeaders().getFirst("Content-Encoding"); //$NON-NLS-1$
+            if (header != null && header.equalsIgnoreCase("gzip")) { //$NON-NLS-1$
                 return new GZIPInputStream(is);
             }
             return is;

@@ -21,8 +21,8 @@ package org.apache.wink.common.http;
 
 public class HttpMethodEx {
 
-    public static final String OPTIONS = "OPTIONS";
-    public static final String TRACE   = "TRACE";
-    public static final String CONNECT = "CONNECT";
+    public static final String OPTIONS = "OPTIONS"; //$NON-NLS-1$
+    public static final String TRACE   = "TRACE"; //$NON-NLS-1$
+    public static final String CONNECT = "CONNECT"; //$NON-NLS-1$
 
 }

@@ -40,9 +40,9 @@ public class CreateInvocationParametersHandler implements RequestHandler {
 
         // create and save the invocation parameters for the found method
         List<Injectable> formal = result.getMethod().getMetadata().getFormalParameters();
-        logger.debug("Formal Injectable parameters list is: {}", formal);
+        logger.debug("Formal Injectable parameters list is: {}", formal); //$NON-NLS-1$
         Object[] parameters = InjectableFactory.getInstance().instantiate(formal, context);
-        logger.debug("Actual parameters list to inject is: {}", parameters);
+        logger.debug("Actual parameters list to inject is: {}", parameters); //$NON-NLS-1$
         result.setInvocationParameters(parameters);
 
         chain.doChain(context);

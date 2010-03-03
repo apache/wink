@@ -55,7 +55,7 @@ import org.slf4j.LoggerFactory;
 
 public class ResourceImpl implements Resource {
 
-    private static final String            USER_AGENT = "Wink Client v1.0";
+    private static final String            USER_AGENT = "Wink Client v1.0"; //$NON-NLS-1$
 
     private ProvidersRegistry              providersRegistry;
     private ClientConfig                   config;
@@ -243,7 +243,7 @@ public class ResourceImpl implements Resource {
         request.getHeaders().putAll(headers);
         if (logger.isDebugEnabled()) {
             Integer requestEntityInfo = (requestEntity == null) ? null : System.identityHashCode(requestEntity);
-            logger.debug(Messages.getMessage("clientIssueRequest", new Object[] {method,
+            logger.debug(Messages.getMessage("clientIssueRequest", new Object[] {method, //$NON-NLS-1$
                 requestURI, requestEntityInfo, headers.keySet()}));
         }
         if (headers.getFirst(HttpHeaders.USER_AGENT) == null) {
@@ -321,19 +321,19 @@ public class ResourceImpl implements Resource {
     }
 
     private <T> String toHeaderString(T[] objects) {
-        String delim = "";
+        String delim = ""; //$NON-NLS-1$
         StringBuilder sb = new StringBuilder();
         for (T t : objects) {
             sb.append(delim);
             sb.append(t.toString());
-            delim = ", ";
+            delim = ", "; //$NON-NLS-1$
         }
         return sb.toString();
     }
 
     private <T> String appendHeaderValues(String value, T[] objects) {
-        StringBuilder builder = new StringBuilder(value != null ? value : "");
-        builder.append(value != null ? ", " : "");
+        StringBuilder builder = new StringBuilder(value != null ? value : ""); //$NON-NLS-1$
+        builder.append(value != null ? ", " : ""); //$NON-NLS-1$ //$NON-NLS-2$
         builder.append(toHeaderString(objects));
         return builder.toString();
     }

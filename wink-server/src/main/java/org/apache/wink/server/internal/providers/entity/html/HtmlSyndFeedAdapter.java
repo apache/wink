@@ -39,7 +39,7 @@ public class HtmlSyndFeedAdapter {
 
     private final SyndFeed         syndFeed;
 
-    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy"); //$NON-NLS-1$
 
     /**
      * This constructor sets the resource.
@@ -60,7 +60,7 @@ public class HtmlSyndFeedAdapter {
         if (id != null) {
             return id;
         }
-        return "";
+        return ""; //$NON-NLS-1$
     }
 
     /**
@@ -72,7 +72,7 @@ public class HtmlSyndFeedAdapter {
         if (syndFeed.getUpdated() != null) {
             return simpleDateFormat.format(syndFeed.getUpdated());
         }
-        return "";
+        return ""; //$NON-NLS-1$
     }
 
     /**
@@ -85,7 +85,7 @@ public class HtmlSyndFeedAdapter {
         if (textBean != null) {
             return textBean.getValue();
         }
-        return "";
+        return ""; //$NON-NLS-1$
     }
 
     /**
@@ -119,7 +119,7 @@ public class HtmlSyndFeedAdapter {
                 return name;
             }
         }
-        return "";
+        return ""; //$NON-NLS-1$
     }
 
     /**
@@ -132,7 +132,7 @@ public class HtmlSyndFeedAdapter {
         if (textBean != null) {
             return textBean.getValue();
         }
-        return "";
+        return ""; //$NON-NLS-1$
     }
 
     /**

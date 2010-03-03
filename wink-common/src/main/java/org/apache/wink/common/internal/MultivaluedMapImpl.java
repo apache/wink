@@ -122,18 +122,18 @@ public class MultivaluedMapImpl<K, V> // extends LinkedHashMap<K,List<V>>
 
     @Override
     public String toString() {
-        return "[" + toString(this, ",") + "]";
+        return "[" + toString(this, ",") + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 
     public static String toString(MultivaluedMap<?, ?> map, String delimiter) {
         StringBuilder result = new StringBuilder();
         MultivaluedMap<?, ?> params = map;
-        String delim = "";
+        String delim = ""; //$NON-NLS-1$
         for (Object name : params.keySet()) {
             for (Object value : params.get(name)) {
                 result.append(delim);
                 if(name == null) {
-                    result.append("null");
+                    result.append("null"); //$NON-NLS-1$
                 } else {
                     result.append(name.toString());
                 }

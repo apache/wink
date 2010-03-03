@@ -157,10 +157,10 @@ public class JettisonJAXBProvider extends AbstractJAXBProvider implements
                 unmarshaledResource = unmarshaller.unmarshal(xsr, type).getValue();
             }
         } catch (JAXBException e) {
-            logger.error(Messages.getMessage("jaxbFailToUnmarshal"), type.getName());
+            logger.error(Messages.getMessage("jaxbFailToUnmarshal"), type.getName()); //$NON-NLS-1$
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         } catch (XMLStreamException e) {
-            logger.error(Messages.getMessage("jaxbFailToUnmarshal"), type.getName());
+            logger.error(Messages.getMessage("jaxbFailToUnmarshal"), type.getName()); //$NON-NLS-1$
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         }
         return unmarshaledResource;
@@ -203,7 +203,7 @@ public class JettisonJAXBProvider extends AbstractJAXBProvider implements
             }
             marshaller.marshal(entityToMarshal, xsw);
         } catch (JAXBException e) {
-            logger.error(Messages.getMessage("jaxbFailToMarshal"), type.getName());
+            logger.error(Messages.getMessage("jaxbFailToMarshal"), type.getName()); //$NON-NLS-1$
             throw new WebApplicationException(e);
         }
     }

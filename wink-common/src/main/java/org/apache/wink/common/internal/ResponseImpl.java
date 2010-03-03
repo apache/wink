@@ -263,7 +263,7 @@ public class ResponseImpl extends Response {
         private void conditionalAppend(StringBuilder sb, boolean b, String s) {
             if (b) {
                 if (sb.length() > 0)
-                    sb.append(",");
+                    sb.append(","); //$NON-NLS-1$
                 sb.append(s);
             }
         }

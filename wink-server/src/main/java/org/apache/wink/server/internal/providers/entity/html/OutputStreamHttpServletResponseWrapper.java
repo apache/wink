@@ -71,7 +71,7 @@ class OutputStreamHttpServletResponseWrapper extends HttpServletResponseWrapper 
         // retrieved.
         if (printWriter != null) {
             throw new IllegalStateException(Messages
-                .getMessage("cannotGetOutputStreamSinceWriterRequested"));
+                .getMessage("cannotGetOutputStreamSinceWriterRequested")); //$NON-NLS-1$
         }
         // indicates that output stream was requested.
         isOutputStream = true;
@@ -91,7 +91,7 @@ class OutputStreamHttpServletResponseWrapper extends HttpServletResponseWrapper 
         // retrieved.
         if (isOutputStream) {
             throw new IllegalStateException(Messages
-                .getMessage("writerCannotGetWriterSinceOutputStreamRequested"));
+                .getMessage("writerCannotGetWriterSinceOutputStreamRequested")); //$NON-NLS-1$
         }
 
         // gets the printWriter if exists

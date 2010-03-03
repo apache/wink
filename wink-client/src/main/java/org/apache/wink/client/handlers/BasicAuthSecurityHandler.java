@@ -47,7 +47,7 @@ public class BasicAuthSecurityHandler implements ClientHandler {
     
     private static Logger logger = LoggerFactory.getLogger(BasicAuthSecurityHandler.class);
 
-    final static String      PROPS_FILE_NAME = "wink.client.props";
+    final static String      PROPS_FILE_NAME = "wink.client.props"; //$NON-NLS-1$
     private Properties       clientProps     = null;
     private volatile boolean propsLoaded     = false;
     private volatile String  handlerUsername = null;
@@ -59,7 +59,7 @@ public class BasicAuthSecurityHandler implements ClientHandler {
      * @param aUserName the user name
      */
     public void setUserName(String aUserName) {
-        logger.debug("Setting the username to {}", aUserName);
+        logger.debug("Setting the username to {}", aUserName); //$NON-NLS-1$
         this.handlerUsername = aUserName;
     }
 
@@ -69,7 +69,7 @@ public class BasicAuthSecurityHandler implements ClientHandler {
      * @param aPassword the password to use
      */
     public void setPassword(String aPassword) {
-        logger.debug("Setting the password");
+        logger.debug("Setting the password"); //$NON-NLS-1$
         this.handlerPassword = aPassword;
     }
 
@@ -82,65 +82,65 @@ public class BasicAuthSecurityHandler implements ClientHandler {
      *         header
      */
     public ClientResponse handle(ClientRequest request, HandlerContext context) throws Exception {
-        logger.debug("Entering BasicAuthSecurityHandler.doChain()");
+        logger.debug("Entering BasicAuthSecurityHandler.doChain()"); //$NON-NLS-1$
         ClientResponse response = context.doChain(request);
 
         int statusCode = response.getStatusCode();
-        logger.debug("Response status code was {}", statusCode);
+        logger.debug("Response status code was {}", statusCode); //$NON-NLS-1$
         if (statusCode != 401) {
-            logger.debug("Status code was not 401 so no need to re-issue request.");
+            logger.debug("Status code was not 401 so no need to re-issue request."); //$NON-NLS-1$
             return response;
         } else {
             // read user id and password from a property
             // as a start we use java a command line property
-            String userid = System.getProperty("user");
-            String password = System.getProperty("password");
+            String userid = System.getProperty("user"); //$NON-NLS-1$
+            String password = System.getProperty("password"); //$NON-NLS-1$
             if(logger.isDebugEnabled()) {
-                logger.debug("The 'user' system property was set to: {}", userid);
-                logger.debug("The 'password' system property was set: {}", password != null);
+                logger.debug("The 'user' system property was set to: {}", userid); //$NON-NLS-1$
+                logger.debug("The 'password' system property was set: {}", password != null); //$NON-NLS-1$
             }
 
-            if (userid == null || userid.equals("") || password == null || password.equals("")) {
+            if (userid == null || userid.equals("") || password == null || password.equals("")) { //$NON-NLS-1$ //$NON-NLS-2$
                 // see if we can load credentials from a properties file
-                String propsFileDir = System.getProperty("wink.client.props.dir");
-                logger.debug("Could NOT get userid and password from system properties so attempting to look at properties file in {}", propsFileDir);
-                if (propsFileDir != null && !propsFileDir.equals("")) {
+                String propsFileDir = System.getProperty("wink.client.props.dir"); //$NON-NLS-1$
+                logger.debug("Could NOT get userid and password from system properties so attempting to look at properties file in {}", propsFileDir); //$NON-NLS-1$
+                if (propsFileDir != null && !propsFileDir.equals("")) { //$NON-NLS-1$
                     if (!propsLoaded) {
                         clientProps = loadProps(propsFileDir + File.separator + PROPS_FILE_NAME);
                     }
-                    userid = clientProps.getProperty("user");
-                    password = clientProps.getProperty("password");
+                    userid = clientProps.getProperty("user"); //$NON-NLS-1$
+                    password = clientProps.getProperty("password"); //$NON-NLS-1$
                 } else {
-                    logger.debug("Could NOT find properties file so checking variables assigned to handler itself", propsFileDir);
+                    logger.debug("Could NOT find properties file so checking variables assigned to handler itself", propsFileDir); //$NON-NLS-1$
                     userid = handlerUsername;
                     password = handlerPassword;
                 }
             }
 
-            if (!(userid == null || userid.equals("") || password == null || password.equals(""))) {
-                logger.debug("userid and password set so setting Authorization header");
+            if (!(userid == null || userid.equals("") || password == null || password.equals(""))) { //$NON-NLS-1$ //$NON-NLS-2$
+                logger.debug("userid and password set so setting Authorization header"); //$NON-NLS-1$
                 // we have a user credential
-                String credential = userid + ":" + password;
+                String credential = userid + ":" + password; //$NON-NLS-1$
                 byte[] credBytes = credential.getBytes();
                 byte[] encodedCredBytes =
                     org.apache.commons.codec.binary.Base64.encodeBase64(credBytes, false);
                 // id and password needs to be base64 encoded
-                String credEncodedString = "Basic " + new String(encodedCredBytes);
-                request.getHeaders().putSingle("Authorization", credEncodedString);
-                logger.debug("Issuing request again with Authorization header");
+                String credEncodedString = "Basic " + new String(encodedCredBytes); //$NON-NLS-1$
+                request.getHeaders().putSingle("Authorization", credEncodedString); //$NON-NLS-1$
+                logger.debug("Issuing request again with Authorization header"); //$NON-NLS-1$
                 response = context.doChain(request);
                 if (response.getStatusCode() == 401) {
-                    logger.debug("After sending request with Authorization header, still got 401 response");
-                    throw new ClientAuthenticationException("Service failed to authenticate user: " + userid);
+                    logger.debug("After sending request with Authorization header, still got 401 response"); //$NON-NLS-1$
+                    throw new ClientAuthenticationException("Service failed to authenticate user: " + userid); //$NON-NLS-1$
                 } else {
-                    logger.debug("Got a non-401 response, so returning response");
+                    logger.debug("Got a non-401 response, so returning response"); //$NON-NLS-1$
                     return response;
                 }
             } else {
-                logger.debug("userid and/or password were not set so throwing exception");
+                logger.debug("userid and/or password were not set so throwing exception"); //$NON-NLS-1$
                 // no user credential available
                 throw new ClientAuthenticationException(
-                                               "Missing client authentication credential for user: " + userid);
+                                               "Missing client authentication credential for user: " + userid); //$NON-NLS-1$
             }
 
         } // end if block

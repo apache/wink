@@ -96,15 +96,15 @@ public class JAXBArrayJSONProvider extends AbstractJAXBCollectionProvider implem
                                                        theType,
                                                        annotations,
                                                        mediaType);
-            logger.debug("readerProvider was {} of type {}", System.identityHashCode(readerProvider), readerProvider.getClass().getName());
+            logger.debug("readerProvider was {} of type {}", System.identityHashCode(readerProvider), readerProvider.getClass().getName()); //$NON-NLS-1$
         }
         Queue<String> queue = new LinkedList<String>();
         List<Object> collection = new ArrayList<Object>();
-        Pattern p = Pattern.compile("\\S");
+        Pattern p = Pattern.compile("\\S"); //$NON-NLS-1$
         Matcher m = null;
         int next = entityStream.read();
         while (next != -1) {
-            m = p.matcher("" + (char)next);
+            m = p.matcher("" + (char)next); //$NON-NLS-1$
             if (m.matches() && (char)next != '[')
                 throw new WebApplicationException(500);
             else if (!m.matches())
@@ -118,12 +118,12 @@ public class JAXBArrayJSONProvider extends AbstractJAXBCollectionProvider implem
         }
 
         // parse the content and deserialize the JSON Object one by one
-        String objectString = "";
+        String objectString = ""; //$NON-NLS-1$
         while (next != -1) {
             if (((char)next != ',') || ((char)next == ',' && !queue.isEmpty()))
                 objectString += (char)next;
             if ((char)next == '{')
-                queue.offer("" + (char)next);
+                queue.offer("" + (char)next); //$NON-NLS-1$
             else if ((char)next == '}') {
                 queue.poll();
                 if (queue.isEmpty()) {
@@ -134,7 +134,7 @@ public class JAXBArrayJSONProvider extends AbstractJAXBCollectionProvider implem
                                   mediaType,
                                   httpHeaders,
                                   new ByteArrayInputStream(objectString.getBytes())));
-                    objectString = "";
+                    objectString = ""; //$NON-NLS-1$
                 }
             }
             next = entityStream.read();
@@ -167,9 +167,9 @@ public class JAXBArrayJSONProvider extends AbstractJAXBCollectionProvider implem
                                                        theType,
                                                        annotations,
                                                        mediaType);
-            logger.debug("writerProvider was {} of type {}", System.identityHashCode(writerProvider), writerProvider.getClass().getName());
+            logger.debug("writerProvider was {} of type {}", System.identityHashCode(writerProvider), writerProvider.getClass().getName()); //$NON-NLS-1$
         }
-        entityStream.write("[".getBytes());
+        entityStream.write("[".getBytes()); //$NON-NLS-1$
         int i = 0;
         for (Object o : t) {
             this.writerProvider.writeTo(o,
@@ -180,9 +180,9 @@ public class JAXBArrayJSONProvider extends AbstractJAXBCollectionProvider implem
                                         httpHeaders,
                                         entityStream);
             if ((++i) != t.length)
-                entityStream.write(",".getBytes());
+                entityStream.write(",".getBytes()); //$NON-NLS-1$
         }
-        entityStream.write("]".getBytes());
+        entityStream.write("]".getBytes()); //$NON-NLS-1$
     }
 
     public boolean isWriteable(Class<?> type,

@@ -21,12 +21,12 @@ package org.apache.wink.server.internal.providers.entity.html;
 
 public final class HtmlConstants {
     public static final String DEFAULT_JSP_ENTRY_PATH               =
-                                                                        "/HtmlDefaultRepresentation/defaultHtmlEntry.jsp";
+                                                                        "/HtmlDefaultRepresentation/defaultHtmlEntry.jsp"; //$NON-NLS-1$
     public static final String DEFAULT_JSP_COLLECTION_PATH          =
-                                                                        "/HtmlDefaultRepresentation/defaultHtmlCollection.jsp";
-    public static final String RESOURCE_ATTRIBUTE_NAME_REQUEST      = "HtmlRepresentationResource";
+                                                                        "/HtmlDefaultRepresentation/defaultHtmlCollection.jsp"; //$NON-NLS-1$
+    public static final String RESOURCE_ATTRIBUTE_NAME_REQUEST      = "HtmlRepresentationResource"; //$NON-NLS-1$
     public static final String SERVICE_DOCUMENT_URL                 =
-                                                                        "/HtmlDefaultRepresentation/defaultHtmlServiceDocument.jsp";
-    public static final String RESOURCES_MAP_ATTRIBUTE_NAME_REQUEST = "resourcesMap";
-    public static final String BASE_URI_ATTRIBUTE_NAME_REQUEST      = "baseUri";
+                                                                        "/HtmlDefaultRepresentation/defaultHtmlServiceDocument.jsp"; //$NON-NLS-1$
+    public static final String RESOURCES_MAP_ATTRIBUTE_NAME_REQUEST = "resourcesMap"; //$NON-NLS-1$
+    public static final String BASE_URI_ATTRIBUTE_NAME_REQUEST      = "baseUri"; //$NON-NLS-1$
 }

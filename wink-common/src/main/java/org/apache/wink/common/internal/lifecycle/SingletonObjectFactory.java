@@ -47,6 +47,6 @@ class SingletonObjectFactory<T> implements ObjectFactory<T> {
 
     @Override
     public String toString() {
-        return String.format("SingletonOF: %s", objectClass);
+        return String.format("SingletonOF: %s", objectClass); //$NON-NLS-1$
     }
 }

@@ -57,7 +57,7 @@ public abstract class AbstractHandlersChain<T extends Handler> implements Handle
             // get the next handler from the chain to handle
             T handler = iterator.next();
             // invoke the handler
-            logger.debug("Invoking handler: {}", handler.getClass().getName());
+            logger.debug("Invoking handler: {}", handler.getClass().getName()); //$NON-NLS-1$
             handle(handler, context);
         } finally {
             // set the iterator back one handler on the chain so the same
@@ -78,6 +78,6 @@ public abstract class AbstractHandlersChain<T extends Handler> implements Handle
 
     @Override
     public String toString() {
-        return String.format("Handlers chain is %1$s", list);
+        return String.format("Handlers chain is %1$s", list); //$NON-NLS-1$
     }
 }

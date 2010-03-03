@@ -93,7 +93,7 @@ public class ResourceInstance {
 
     @Override
     public String toString() {
-        return String.format("ResourceRecord: %s; UriTemplateMatcher: %s",
+        return String.format("ResourceRecord: %s; UriTemplateMatcher: %s", //$NON-NLS-1$
                              String.valueOf(record),
                              String.valueOf(matcher));
     }

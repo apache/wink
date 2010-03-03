@@ -24,6 +24,7 @@ import java.math.BigInteger;
 
 import javax.ws.rs.core.MediaType;
 
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.model.opensearch.OpenSearchImage;
 
 public class OpenSearchUtils {

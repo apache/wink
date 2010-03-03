@@ -44,17 +44,17 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _SkipDays_QNAME  = new QName("", "skipDays");
-    private final static QName _SkipHours_QNAME = new QName("", "skipHours");
-    private final static QName _Source_QNAME    = new QName("", "source");
-    private final static QName _Cloud_QNAME     = new QName("", "cloud");
-    private final static QName _Enclosure_QNAME = new QName("", "enclosure");
-    private final static QName _Channel_QNAME   = new QName("", "channel");
-    private final static QName _Guid_QNAME      = new QName("", "guid");
-    private final static QName _TextInput_QNAME = new QName("", "textInput");
-    private final static QName _Item_QNAME      = new QName("", "item");
-    private final static QName _Image_QNAME     = new QName("", "image");
-    private final static QName _Category_QNAME  = new QName("", "category");
+    private final static QName _SkipDays_QNAME  = new QName("", "skipDays"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _SkipHours_QNAME = new QName("", "skipHours"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _Source_QNAME    = new QName("", "source"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _Cloud_QNAME     = new QName("", "cloud"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _Enclosure_QNAME = new QName("", "enclosure"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _Channel_QNAME   = new QName("", "channel"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _Guid_QNAME      = new QName("", "guid"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _TextInput_QNAME = new QName("", "textInput"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _Item_QNAME      = new QName("", "item"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _Image_QNAME     = new QName("", "image"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _Category_QNAME  = new QName("", "category"); //$NON-NLS-1$ //$NON-NLS-2$
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of

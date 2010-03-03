@@ -64,7 +64,7 @@ public class AnyContentHandler implements DomHandler<XmlWrapper, StreamResult> {
         if (contentType == null) {
             // should never happen
             type = MediaType.APPLICATION_OCTET_STREAM_TYPE;
-        } else if (contentType.equals("xhtml")) {
+        } else if (contentType.equals("xhtml")) { //$NON-NLS-1$
             type = MediaType.APPLICATION_XML_TYPE;
         } else {
             type = MediaType.valueOf(contentType);
@@ -82,7 +82,7 @@ public class AnyContentHandler implements DomHandler<XmlWrapper, StreamResult> {
             (MessageBodyWriter<Object>)providers.getMessageBodyWriter(cls, cls, null, type);
 
         if (writer == null) {
-            logger.error(Messages.getMessage("noWriterFound", cls.getName(), type.toString()));
+            logger.error(Messages.getMessage("noWriterFound", cls.getName(), type.toString())); //$NON-NLS-1$
             throw new WebApplicationException(500);
         }
 
@@ -99,12 +99,12 @@ public class AnyContentHandler implements DomHandler<XmlWrapper, StreamResult> {
             throw new WebApplicationException(e);
         }
         byte[] result;
-        if (contentType.equals("xhtml")) {
+        if (contentType.equals("xhtml")) { //$NON-NLS-1$
             try {
                 result =
-                    new StringBuilder().append("<div xmlns=\"")
-                        .append(RestConstants.NAMESPACE_XHTML).append("\">").append(os
-                            .toString(ProviderUtils.getCharset(type))).append("</div>").toString()
+                    new StringBuilder().append("<div xmlns=\"") //$NON-NLS-1$
+                        .append(RestConstants.NAMESPACE_XHTML).append("\">").append(os //$NON-NLS-1$
+                            .toString(ProviderUtils.getCharset(type))).append("</div>").toString() //$NON-NLS-1$
                         .getBytes();
             } catch (UnsupportedEncodingException e) {
                 throw new WebApplicationException(e);

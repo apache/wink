@@ -46,9 +46,9 @@ import org.slf4j.LoggerFactory;
 @Consumes("*/*")
 public class FileProvider implements MessageBodyWriter<File>, MessageBodyReader<File> {
     private static final Logger logger    = LoggerFactory.getLogger(FileProvider.class);
-    private String              prefix    = "FP_PRE";
+    private String              prefix    = "FP_PRE"; //$NON-NLS-1$
     private String              uploadDir = null;
-    private String              suffix    = "FP_SUF";
+    private String              suffix    = "FP_SUF"; //$NON-NLS-1$
 
     /********************** Writer **************************************/
 
@@ -108,7 +108,7 @@ public class FileProvider implements MessageBodyWriter<File>, MessageBodyReader<
             dir = new File(uploadDir);
             if (!dir.exists() || !dir.isDirectory()) {
                 dir = null;
-                logger.warn(Messages.getMessage("uploadDirDoesNotExist", uploadDir));
+                logger.warn(Messages.getMessage("uploadDirDoesNotExist", uploadDir)); //$NON-NLS-1$
                 throw new WebApplicationException();
 
             }

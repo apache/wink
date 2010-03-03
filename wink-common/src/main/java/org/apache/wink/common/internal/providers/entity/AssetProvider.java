@@ -114,11 +114,11 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
                            entityStream);
         } catch (IllegalArgumentException e) {
             logger.error(Messages
-                .getMessage("assetMethodInvokeError", method.getMethod().getName()));
+                .getMessage("assetMethodInvokeError", method.getMethod().getName())); //$NON-NLS-1$
             throw new WebApplicationException(e);
         } catch (IllegalAccessException e) {
             logger.error(Messages
-                .getMessage("assetMethodInvokeError", method.getMethod().getName()));
+                .getMessage("assetMethodInvokeError", method.getMethod().getName())); //$NON-NLS-1$
             throw new WebApplicationException(e);
         } catch (InvocationTargetException e) {
             Throwable targetException = e.getTargetException();
@@ -126,7 +126,7 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
                 throw (RuntimeException)targetException;
             }
             logger.error(Messages
-                .getMessage("assetMethodInvokeError", method.getMethod().getName()));
+                .getMessage("assetMethodInvokeError", method.getMethod().getName())); //$NON-NLS-1$
             throw new WebApplicationException(targetException);
         }
     }
@@ -172,15 +172,15 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
                 throw (RuntimeException)targetException;
             }
             logger.error(Messages
-                .getMessage("assetMethodInvokeError", method.getMethod().getName()));
+                .getMessage("assetMethodInvokeError", method.getMethod().getName())); //$NON-NLS-1$
             throw new WebApplicationException(e);
         } catch (InstantiationException e) {
-            logger.error(Messages.getMessage("assetMustHavePublicConstructor", type.getName()));
+            logger.error(Messages.getMessage("assetMustHavePublicConstructor", type.getName())); //$NON-NLS-1$
             throw new WebApplicationException(e);
 
         } catch (Exception e) {
             logger.error(Messages
-                .getMessage("assetMethodInvokeError", method.getMethod().getName()));
+                .getMessage("assetMethodInvokeError", method.getMethod().getName())); //$NON-NLS-1$
             throw new WebApplicationException(e);
         }
     }
@@ -228,14 +228,14 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
         // verify that the asset has a default public constructor
         try {
             if (assetType.getConstructor() == null) {
-                logger.info(Messages.getMessage("assetCannotInstantiate", assetType.getName()));
+                logger.info(Messages.getMessage("assetCannotInstantiate", assetType.getName())); //$NON-NLS-1$
                 return false;
             }
         } catch (SecurityException e) {
-            logger.info(Messages.getMessage("assetCannotInstantiate", assetType.getName()));
+            logger.info(Messages.getMessage("assetCannotInstantiate", assetType.getName())); //$NON-NLS-1$
             return false;
         } catch (NoSuchMethodException e) {
-            logger.info(Messages.getMessage("assetCannotInstantiate", assetType.getName()));
+            logger.info(Messages.getMessage("assetCannotInstantiate", assetType.getName())); //$NON-NLS-1$
             return false;
         }
 
@@ -414,9 +414,9 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
                     if (type != null) {
                         // we allow to have only one entity parameter
                         String methodName =
-                            method.getDeclaringClass().getName() + "." + method.getName();
+                            method.getDeclaringClass().getName() + "." + method.getName(); //$NON-NLS-1$
                         logger.error(Messages
-                            .getMessage("assetLocatorMethodMoreThanOneEntityParam", methodName));
+                            .getMessage("assetLocatorMethodMoreThanOneEntityParam", methodName)); //$NON-NLS-1$
                         throw new WebApplicationException();
                     }
                     type = fp.getGenericType();

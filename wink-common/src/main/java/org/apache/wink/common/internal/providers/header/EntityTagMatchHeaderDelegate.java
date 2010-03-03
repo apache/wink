@@ -35,7 +35,7 @@ public class EntityTagMatchHeaderDelegate implements HeaderDelegate<EntityTagMat
                                                                                       .createHeaderDelegate(EntityTag.class);
 
     public EntityTagMatchHeader fromString(String value) throws IllegalArgumentException {
-        String[] valueTokens = value.split(",");
+        String[] valueTokens = value.split(","); //$NON-NLS-1$
         EntityTagMatchHeader ifMatchHeader = new EntityTagMatchHeader();
         for (String token : valueTokens) {
             ifMatchHeader.addETag(ENTITY_TAG_HEADER_DELEGATE.fromString(token));

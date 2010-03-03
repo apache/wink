@@ -35,7 +35,7 @@ public abstract class AbstractRestServlet extends HttpServlet {
                                                                 LoggerFactory
                                                                     .getLogger(AbstractRestServlet.class);
 
-    private static final String REQUEST_PROCESSOR_ATTRIBUTE = "requestProcessorAttribute";
+    private static final String REQUEST_PROCESSOR_ATTRIBUTE = "requestProcessorAttribute"; //$NON-NLS-1$
     private static final long   serialVersionUID            = 7721777326714438571L;
     private String              requestProcessorAttribute;
 
@@ -43,7 +43,7 @@ public abstract class AbstractRestServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         requestProcessorAttribute = getInitParameter(REQUEST_PROCESSOR_ATTRIBUTE);
-        logger.debug("Request processor attribute is {} for {}", requestProcessorAttribute, this);
+        logger.debug("Request processor attribute is {} for {}", requestProcessorAttribute, this); //$NON-NLS-1$
     }
 
     protected RequestProcessor getRequestProcessor() {

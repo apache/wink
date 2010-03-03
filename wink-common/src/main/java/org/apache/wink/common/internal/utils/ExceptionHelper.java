@@ -45,7 +45,7 @@ public final class ExceptionHelper {
     public static String toString(Throwable t) {
         String s = stackTraceToString(t);
         if (s == null)
-            s = "Exception " + t.getClass().getName() + " : " + t.getMessage();
+            s = "Exception " + t.getClass().getName() + " : " + t.getMessage(); //$NON-NLS-1$ //$NON-NLS-2$
         return s;
     }
 
@@ -82,7 +82,7 @@ public final class ExceptionHelper {
 
                 private boolean canWrite() {
                     if (writeOK && this.getBuffer().length() > MAX_CHARS) {
-                        super.write(" ... [ too long - truncated ]");
+                        super.write(" ... [ too long - truncated ]"); //$NON-NLS-1$
                         writeOK = false;
                     }
                     return writeOK;

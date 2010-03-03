@@ -209,8 +209,8 @@ public class ResourceRecordFactory {
             appendPathWithParent(parentMetadata, pathStr);
         }
         String path = UriTemplateProcessor.normalizeUri(metadata.getPath());
-        if (!path.endsWith("/")) {
-            pathStr.append("/");
+        if (!path.endsWith("/")) { //$NON-NLS-1$
+            pathStr.append("/"); //$NON-NLS-1$
         }
         pathStr.append(path);
     }
@@ -241,7 +241,7 @@ public class ResourceRecordFactory {
         if (path != null) {
             classMetadata.addPath(path);
             if (logger.isDebugEnabled()) {
-                logger.debug("Adding dispatched path from instance: {}", path);
+                logger.debug("Adding dispatched path from instance: {}", path); //$NON-NLS-1$
             }
         }
 
@@ -249,7 +249,7 @@ public class ResourceRecordFactory {
         if (parent != null) {
             classMetadata.getParentInstances().add(parent);
             if (logger.isDebugEnabled()) {
-                logger.debug("Adding parent beans from instance: {}", parent);
+                logger.debug("Adding parent beans from instance: {}", parent); //$NON-NLS-1$
             }
         }
 
@@ -284,7 +284,7 @@ public class ResourceRecordFactory {
 
         @Override
         public String toString() {
-            return String.format("InstanceObjectFactory: %s", getInstanceClass());
+            return String.format("InstanceObjectFactory: %s", getInstanceClass()); //$NON-NLS-1$
         }
     }
 

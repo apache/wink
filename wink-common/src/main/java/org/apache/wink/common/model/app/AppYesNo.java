@@ -39,8 +39,8 @@ import javax.xml.bind.annotation.XmlType;
 public enum AppYesNo {
 
     @XmlEnumValue("yes")
-    YES("yes"), @XmlEnumValue("no")
-    NO("no");
+    YES("yes"), @XmlEnumValue("no") //$NON-NLS-1$
+    NO("no"); //$NON-NLS-1$
     private final String value;
 
     AppYesNo(String v) {

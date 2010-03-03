@@ -126,8 +126,8 @@ public abstract class AbstractLinksBuilderImpl<T> implements BaseLinksBuilder<T>
 
     private void initRelativize() {
         relativize =
-            Boolean.parseBoolean(context.getProperties().getProperty("wink.defaultUrisRelative",
-                                                                     "true"));
+            Boolean.parseBoolean(context.getProperties().getProperty("wink.defaultUrisRelative", //$NON-NLS-1$
+                                                                     "true")); //$NON-NLS-1$
         String relative =
             context.getUriInfo().getQueryParameters(false)
                 .getFirst(RestConstants.REST_PARAM_RELATIVE_URLS);
@@ -138,7 +138,7 @@ public abstract class AbstractLinksBuilderImpl<T> implements BaseLinksBuilder<T>
 
     private void initAddAltParam() {
         addAltParam =
-            Boolean.parseBoolean(context.getProperties().getProperty("wink.addAltParam", "true"));
+            Boolean.parseBoolean(context.getProperties().getProperty("wink.addAltParam", "true")); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     @SuppressWarnings("unchecked")
@@ -214,7 +214,7 @@ public abstract class AbstractLinksBuilderImpl<T> implements BaseLinksBuilder<T>
             builder = UriBuilder.fromUri(baseUri);
             // special treatment if the path resulting from the base uri equals
             // "/"
-            if (baseUri.getPath() != null && baseUri.getPath().equals("/")) {
+            if (baseUri.getPath() != null && baseUri.getPath().equals("/")) { //$NON-NLS-1$
                 builder.replacePath(path);
             } else {
                 builder.path(path);

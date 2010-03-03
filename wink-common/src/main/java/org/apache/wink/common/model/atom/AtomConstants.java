@@ -28,24 +28,24 @@ public final class AtomConstants {
     private AtomConstants() {
     } // no instances
 
-    public static final String ATOM_REL_SELF       = "self";
-    public static final String ATOM_REL_ALT        = "alternate";
-    public static final String ATOM_REL_RELATED    = "related";
-    public static final String ATOM_REL_ENCLOSURE  = "enclosure";
-    public static final String ATOM_REL_VIA        = "via";
-    public static final String ATOM_REL_EDIT       = "edit";
-    public static final String ATOM_REL_EDIT_MEDIA = "edit-media";
-    public static final String ATOM_REL_SEARCH     = "search";
-    public static final String ATOM_REL_HISTORY    = "history";
+    public static final String ATOM_REL_SELF       = "self"; //$NON-NLS-1$
+    public static final String ATOM_REL_ALT        = "alternate"; //$NON-NLS-1$
+    public static final String ATOM_REL_RELATED    = "related"; //$NON-NLS-1$
+    public static final String ATOM_REL_ENCLOSURE  = "enclosure"; //$NON-NLS-1$
+    public static final String ATOM_REL_VIA        = "via"; //$NON-NLS-1$
+    public static final String ATOM_REL_EDIT       = "edit"; //$NON-NLS-1$
+    public static final String ATOM_REL_EDIT_MEDIA = "edit-media"; //$NON-NLS-1$
+    public static final String ATOM_REL_SEARCH     = "search"; //$NON-NLS-1$
+    public static final String ATOM_REL_HISTORY    = "history"; //$NON-NLS-1$
 
     // type
-    public static final String ATOM_XHTML          = "xhtml";
-    public static final String ATOM_HTML           = "html";
-    public static final String ATOM_TXT            = "text";
+    public static final String ATOM_XHTML          = "xhtml"; //$NON-NLS-1$
+    public static final String ATOM_HTML           = "html"; //$NON-NLS-1$
+    public static final String ATOM_TXT            = "text"; //$NON-NLS-1$
 
     // paging
-    public static final String ATOM_REL_FIRST      = "first";
-    public static final String ATOM_REL_LAST       = "last";
-    public static final String ATOM_REL_PREVIOUS   = "previous";
-    public static final String ATOM_REL_NEXT       = "next";
+    public static final String ATOM_REL_FIRST      = "first"; //$NON-NLS-1$
+    public static final String ATOM_REL_LAST       = "last"; //$NON-NLS-1$
+    public static final String ATOM_REL_PREVIOUS   = "previous"; //$NON-NLS-1$
+    public static final String ATOM_REL_NEXT       = "next"; //$NON-NLS-1$
 }

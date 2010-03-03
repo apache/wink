@@ -130,15 +130,15 @@ public class CsvSyndFeedSerializerProvider implements MessageBodyWriter<SyndFeed
 
             // pay attention that the order of header must math the order of
             // elements (see next() method below)
-            header.add("id");
-            header.add("title");
-            header.add("content");
-            header.add("authors");
-            header.add("published");
-            header.add("summary");
-            header.add("updated");
-            header.add("base");
-            header.add("lang");
+            header.add("id"); //$NON-NLS-1$
+            header.add("title"); //$NON-NLS-1$
+            header.add("content"); //$NON-NLS-1$
+            header.add("authors"); //$NON-NLS-1$
+            header.add("published"); //$NON-NLS-1$
+            header.add("summary"); //$NON-NLS-1$
+            header.add("updated"); //$NON-NLS-1$
+            header.add("base"); //$NON-NLS-1$
+            header.add("lang"); //$NON-NLS-1$
             for (String categoryName : categoriesNames) {
                 header.add(categoryName);
             }
@@ -168,13 +168,13 @@ public class CsvSyndFeedSerializerProvider implements MessageBodyWriter<SyndFeed
 
             String authors =
                 entry.getAuthors() != null && !entry.getAuthors().isEmpty() ? entry.getAuthors()
-                    .get(0).getName() : "";
-            String title = entry.getTitle() != null ? entry.getTitle().getValue() : "";
-            String content = entry.getContent() != null ? entry.getContent().getValue() : "";
+                    .get(0).getName() : ""; //$NON-NLS-1$
+            String title = entry.getTitle() != null ? entry.getTitle().getValue() : ""; //$NON-NLS-1$
+            String content = entry.getContent() != null ? entry.getContent().getValue() : ""; //$NON-NLS-1$
             String published =
-                entry.getPublished() != null ? String.valueOf(entry.getPublished()) : "";
-            String updated = entry.getUpdated() != null ? String.valueOf(entry.getUpdated()) : "";
-            String summary = entry.getSummary() != null ? entry.getSummary().getValue() : "";
+                entry.getPublished() != null ? String.valueOf(entry.getPublished()) : ""; //$NON-NLS-1$
+            String updated = entry.getUpdated() != null ? String.valueOf(entry.getUpdated()) : ""; //$NON-NLS-1$
+            String summary = entry.getSummary() != null ? entry.getSummary().getValue() : ""; //$NON-NLS-1$
 
             // to improve the search, convert categories to Map
             Map<String, String> categoriesMap = new HashMap<String, String>();
@@ -202,7 +202,7 @@ public class CsvSyndFeedSerializerProvider implements MessageBodyWriter<SyndFeed
             // add categories to the end of the row
             for (String categoryName : categoriesNames) {
                 String category = categoriesMap.get(categoryName);
-                row[index++] = category != null ? category : "";
+                row[index++] = category != null ? category : ""; //$NON-NLS-1$
             }
             return row;
         }

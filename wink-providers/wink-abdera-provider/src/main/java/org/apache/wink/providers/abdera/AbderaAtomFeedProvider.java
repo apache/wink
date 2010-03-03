@@ -68,7 +68,7 @@ public class AbderaAtomFeedProvider implements MessageBodyWriter<Feed>, MessageB
                         MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException {
         if (MediaType.APPLICATION_JSON_TYPE.isCompatible(mediaType)) {
-            Writer w = ATOM_ENGINE.getWriterFactory().getWriter("json");
+            Writer w = ATOM_ENGINE.getWriterFactory().getWriter("json"); //$NON-NLS-1$
             feed.writeTo(w, entityStream);
         } else {
             feed.writeTo(entityStream);

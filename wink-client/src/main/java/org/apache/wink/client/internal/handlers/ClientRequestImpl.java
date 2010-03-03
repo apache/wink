@@ -26,8 +26,8 @@ import org.apache.wink.client.ClientRequest;
 
 public class ClientRequestImpl extends BaseRequestResponseImpl implements ClientRequest {
 
-    public static final String RESPONSE_ENTITY_GENERIC_TYPE = "response.entity.generic.type";
-    public static final String RESPONSE_ENTITY_CLASS_TYPE   = "response.entity.class.type";
+    public static final String RESPONSE_ENTITY_GENERIC_TYPE = "response.entity.generic.type"; //$NON-NLS-1$
+    public static final String RESPONSE_ENTITY_CLASS_TYPE   = "response.entity.class.type"; //$NON-NLS-1$
 
     private Object             entity;
     private String             method;

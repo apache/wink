@@ -82,10 +82,10 @@ public abstract class AbstractMetadata {
 
     @Override
     public String toString() {
-        return "[" + (consumes != null ? "consumes=" + consumes + ", " : "")
-            + (paths != null ? "paths=" + paths + ", " : "")
-            + (produces != null ? "produces=" + produces : "")
-            + "]";
+        return "[" + (consumes != null ? "consumes=" + consumes + ", " : "") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+            + (paths != null ? "paths=" + paths + ", " : "") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            + (produces != null ? "produces=" + produces : "") //$NON-NLS-1$ //$NON-NLS-2$
+            + "]"; //$NON-NLS-1$
     }
 
     public void setEncoded(boolean encoded) {

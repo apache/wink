@@ -36,7 +36,7 @@ import java.util.TreeMap;
 
 public final class DomHelper {
 
-    private static final String XMLNS_PREFIX              = "xmlns";
+    private static final String XMLNS_PREFIX              = "xmlns"; //$NON-NLS-1$
     private static final String XMLNS_PREFIX_COLON        = XMLNS_PREFIX + ':';
     private static final int    XMLNS_PREFIX_COLON_LENGTH = XMLNS_PREFIX_COLON.length();
 
@@ -128,7 +128,7 @@ public final class DomHelper {
 
         // default namespace
         if (element.getNamespaceURI() != null) {
-            ret.put("", element.getNamespaceURI());
+            ret.put("", element.getNamespaceURI()); //$NON-NLS-1$
         }
 
         // other namespaces

@@ -33,15 +33,15 @@ public class ClassUtils {
     // Class.forName does not support primitives, so we have to account for that
     private static HashMap<String, Class<?>> loadClassMap = new HashMap<String, Class<?>>();
     static {
-        loadClassMap.put("byte", byte.class);
-        loadClassMap.put("int", int.class);
-        loadClassMap.put("short", short.class);
-        loadClassMap.put("long", long.class);
-        loadClassMap.put("float", float.class);
-        loadClassMap.put("double", double.class);
-        loadClassMap.put("boolean", boolean.class);
-        loadClassMap.put("char", char.class);
-        loadClassMap.put("void", void.class);
+        loadClassMap.put("byte", byte.class); //$NON-NLS-1$
+        loadClassMap.put("int", int.class); //$NON-NLS-1$
+        loadClassMap.put("short", short.class); //$NON-NLS-1$
+        loadClassMap.put("long", long.class); //$NON-NLS-1$
+        loadClassMap.put("float", float.class); //$NON-NLS-1$
+        loadClassMap.put("double", double.class); //$NON-NLS-1$
+        loadClassMap.put("boolean", boolean.class); //$NON-NLS-1$
+        loadClassMap.put("char", char.class); //$NON-NLS-1$
+        loadClassMap.put("void", void.class); //$NON-NLS-1$
     }
     
     /**
@@ -69,20 +69,20 @@ public class ClassUtils {
 
                             try {
                                 // try context class loader first
-                                logger.debug("Loading class {} using thread context classloader.", className);
+                                logger.debug("Loading class {} using thread context classloader.", className); //$NON-NLS-1$
                                 return Class.forName(className,
                                         true,
                                         Thread.currentThread().getContextClassLoader());
                             } catch (ClassNotFoundException cnfe) {
                                 try {
                                     // fallback to current classloader
-                                    logger.debug("Loading class {} using current classloader.", className);
+                                    logger.debug("Loading class {} using current classloader.", className); //$NON-NLS-1$
                                     return Class.forName(className,
                                                          true,
                                                          ClassUtils.class.getClassLoader());
                                 } catch (ClassNotFoundException cnfe2) {
                                     // fallback to system classloader
-                                    logger.debug("Loading class {} using system classloader.", className);
+                                    logger.debug("Loading class {} using system classloader.", className); //$NON-NLS-1$
                                     try {
                                         return Class.forName(className);
                                     } catch (ClassNotFoundException cnfe3) {
@@ -105,7 +105,7 @@ public class ClassUtils {
             // Class.forName does not support primitives, so do a last check:
             Class cls = (Class) loadClassMap.get(className);
             if (cls != null) {
-                logger.debug("Returning class {}", className);
+                logger.debug("Returning class {}", className); //$NON-NLS-1$
                 return cls;
             }
             throw (ClassNotFoundException) ret;

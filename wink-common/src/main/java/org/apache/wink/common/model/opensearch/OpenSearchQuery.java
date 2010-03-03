@@ -221,7 +221,7 @@ public class OpenSearchQuery {
      */
     public String getRole() {
         if (role == null) {
-            return "example";
+            return "example"; //$NON-NLS-1$
         } else {
             return role;
         }

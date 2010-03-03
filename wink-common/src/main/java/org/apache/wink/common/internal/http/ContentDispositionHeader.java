@@ -40,8 +40,8 @@ public class ContentDispositionHeader implements Cloneable {
     private static Map<MediaType, ContentDispositionHeader> contructMediaType2ContentDisposition() {
         Map<MediaType, ContentDispositionHeader> result =
             new HashMap<MediaType, ContentDispositionHeader>();
-        putContentDispositionRecord(result, MediaTypeUtils.CSV, true, "csv");
-        putContentDispositionRecord(result, MediaTypeUtils.PDF_TYPE, false, "pdf");
+        putContentDispositionRecord(result, MediaTypeUtils.CSV, true, "csv"); //$NON-NLS-1$
+        putContentDispositionRecord(result, MediaTypeUtils.PDF_TYPE, false, "pdf"); //$NON-NLS-1$
         return Collections.unmodifiableMap(result);
     }
 

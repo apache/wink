@@ -31,10 +31,10 @@ import java.util.TimeZone;
  */
 public final class HttpDateParser {
 
-    private static final String   RFC_1123_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
-    private static final String   RFC_1036_DATE_FORMAT = "EEEE, dd-MMM-yy HH:mm:ss zzz";
-    private static final String   ANSIC_DATE_FORMAT    = "EEE MMM d HH:mm:ss yyyy";
-    private static final TimeZone tz                   = TimeZone.getTimeZone("GMT");
+    private static final String   RFC_1123_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz"; //$NON-NLS-1$
+    private static final String   RFC_1036_DATE_FORMAT = "EEEE, dd-MMM-yy HH:mm:ss zzz"; //$NON-NLS-1$
+    private static final String   ANSIC_DATE_FORMAT    = "EEE MMM d HH:mm:ss yyyy"; //$NON-NLS-1$
+    private static final TimeZone tz                   = TimeZone.getTimeZone("GMT"); //$NON-NLS-1$
 
     // no instances
     private HttpDateParser() {

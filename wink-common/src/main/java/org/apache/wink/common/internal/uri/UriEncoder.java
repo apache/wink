@@ -34,7 +34,7 @@ import org.apache.wink.common.internal.MultivaluedMapImpl;
  */
 public final class UriEncoder {
 
-    private static final Charset CHARSET_UTF_8 = Charset.forName("UTF-8");
+    private static final Charset CHARSET_UTF_8 = Charset.forName("UTF-8"); //$NON-NLS-1$
 
     private UriEncoder() {
         // no instances

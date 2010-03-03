@@ -42,10 +42,10 @@ public final class MediaTypeMapper {
 
     public void addMappings(List<? extends MediaTypeMappingRecord> records) {
         if (records == null) {
-            logger.debug("No media type mapping records to add");
+            logger.debug("No media type mapping records to add"); //$NON-NLS-1$
             return;
         }
-        logger.debug("Media type mapping records to add: {}", records);
+        logger.debug("Media type mapping records to add: {}", records); //$NON-NLS-1$
         this.mappings.addAll(records);
     }
 
@@ -59,16 +59,16 @@ public final class MediaTypeMapper {
      */
     public MediaType mapOutputMediaType(MediaType responseMediaType, HttpHeaders requestHeaders) {
         for (MediaTypeMappingRecord mappingRecord : mappings) {
-            logger.debug("Attempting to map media type using mapping record: {}", mappingRecord);
+            logger.debug("Attempting to map media type using mapping record: {}", mappingRecord); //$NON-NLS-1$
             MediaType replacement = mappingRecord.match(requestHeaders, responseMediaType);
             if (replacement != null) {
-                logger.debug("Mapped user media type to: {} using mapping record: {}",
+                logger.debug("Mapped user media type to: {} using mapping record: {}", //$NON-NLS-1$
                              replacement,
                              mappingRecord);
                 return replacement;
             }
         }
-        logger.debug("Did not find a mapping record so returning original response media type: {}",
+        logger.debug("Did not find a mapping record so returning original response media type: {}", //$NON-NLS-1$
                      responseMediaType);
         return responseMediaType; // returning the same
     }

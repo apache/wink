@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 
 import javax.ws.rs.core.MultivaluedMap;
 
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.uri.UriEncoder;
 import org.apache.wink.common.internal.utils.StringUtils;
 
@@ -43,48 +44,42 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
      * pct-encoded) var = varname [ "=" vardefault ] vars = var [("," var) ]
      * operator = "-" op "|" arg "|" vars expansion = "{" ( var / operator ) "}"
      */
-    private static final String  HEX                         = "[0-9A-Fa-f]";
-    private static final String  RESERVED                    = "[;/?:@&=+$,]";
-    private static final String  UNRESERVED                  = "[\\w\\.!~*'()-]";
-    private static final String  PCT_ENCONDED                = "(?:%" + HEX + HEX + ")";
-    private static final String  ALPHA                       = "[a-zA-Z]";
+    private static final String  HEX                         = "[0-9A-Fa-f]";                       //$NON-NLS-1$
+    private static final String  RESERVED                    = "[;/?:@&=+$,]";                      //$NON-NLS-1$
+    private static final String  UNRESERVED                  = "[\\w\\.!~*'()-]";                   //$NON-NLS-1$
+    private static final String  PCT_ENCONDED                = "(?:%" + HEX + HEX + ")";            //$NON-NLS-1$ //$NON-NLS-2$
+    private static final String  ALPHA                       = "[a-zA-Z]";                          //$NON-NLS-1$
 
-    private static final String  BITWORKING_OP               = "(" + ALPHA + "+)";
-    private static final String  BITWORKING_ARG              =
-                                                                 "((?:" + RESERVED
-                                                                     + "|"
-                                                                     + UNRESERVED
-                                                                     + "|"
-                                                                     + PCT_ENCONDED
-                                                                     + ")*)";
-    private static final String  BITWORKING_VARNAME          = "\\w[\\w\\.-]*";
-    private static final String  BITWORKING_VARDEFAULT       =
-                                                                 "((?:" + UNRESERVED
-                                                                     + "|"
-                                                                     + PCT_ENCONDED
-                                                                     + ")*)";
-    private static final String  BITWORKING_VAR              =
-                                                                 "(" + BITWORKING_VARNAME
-                                                                     + ")(?:="
-                                                                     + BITWORKING_VARDEFAULT
-                                                                     + ")?";
-    private static final String  BITWORKING_VARS             =
-                                                                 "(" + BITWORKING_VAR
-                                                                     + "(?:,"
-                                                                     + BITWORKING_VAR
-                                                                     + ")*)";
-    private static final String  BITWORKING_OPERATOR         =
-                                                                 "(?:-" + BITWORKING_OP
-                                                                     + "[|]"
-                                                                     + BITWORKING_ARG
-                                                                     + "[|]"
-                                                                     + BITWORKING_VARS
-                                                                     + ")";
-    private static final String  BITWORKING_EXPANSION        =
-                                                                 "\\{(?:" + BITWORKING_VAR
-                                                                     + "|"
-                                                                     + BITWORKING_OPERATOR
-                                                                     + ")\\}";
+    private static final String  BITWORKING_OP               = "(" + ALPHA + "+)";                  //$NON-NLS-1$ //$NON-NLS-2$
+    private static final String  BITWORKING_ARG              = "((?:" + RESERVED //$NON-NLS-1$
+                                                                 + "|" //$NON-NLS-1$
+                                                                 + UNRESERVED
+                                                                 + "|" //$NON-NLS-1$
+                                                                 + PCT_ENCONDED
+                                                                 + ")*)";                           //$NON-NLS-1$
+    private static final String  BITWORKING_VARNAME          = "\\w[\\w\\.-]*";                     //$NON-NLS-1$
+    private static final String  BITWORKING_VARDEFAULT       = "((?:" + UNRESERVED //$NON-NLS-1$
+                                                                 + "|" //$NON-NLS-1$
+                                                                 + PCT_ENCONDED
+                                                                 + ")*)";                           //$NON-NLS-1$
+    private static final String  BITWORKING_VAR              = "(" + BITWORKING_VARNAME //$NON-NLS-1$
+                                                                 + ")(?:=" //$NON-NLS-1$
+                                                                 + BITWORKING_VARDEFAULT
+                                                                 + ")?";                            //$NON-NLS-1$
+    private static final String  BITWORKING_VARS             = "(" + BITWORKING_VAR //$NON-NLS-1$
+                                                                 + "(?:," //$NON-NLS-1$
+                                                                 + BITWORKING_VAR
+                                                                 + ")*)";                           //$NON-NLS-1$
+    private static final String  BITWORKING_OPERATOR         = "(?:-" + BITWORKING_OP //$NON-NLS-1$
+                                                                 + "[|]" //$NON-NLS-1$
+                                                                 + BITWORKING_ARG
+                                                                 + "[|]" //$NON-NLS-1$
+                                                                 + BITWORKING_VARS
+                                                                 + ")";                             //$NON-NLS-1$
+    private static final String  BITWORKING_EXPANSION        = "\\{(?:" + BITWORKING_VAR //$NON-NLS-1$
+                                                                 + "|" //$NON-NLS-1$
+                                                                 + BITWORKING_OPERATOR
+                                                                 + ")\\}";                          //$NON-NLS-1$
     private static final Pattern BITWORKING_VARIABLE_PATTERN =
                                                                  Pattern
                                                                      .compile(BITWORKING_EXPANSION);
@@ -122,14 +117,14 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
      */
     public static void compile(String template, BitWorkingCompilationHandler handler) {
         if (template == null) {
-            throw new NullPointerException("uriTemplate");
+            throw new NullPointerException(Messages.getMessage("variableIsNull", "template")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         if (handler == null) {
-            throw new NullPointerException("handler");
+            throw new NullPointerException(Messages.getMessage("variableIsNull", "handler")); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         int start = 0;
-        String literal = "";
+        String literal = ""; //$NON-NLS-1$
 
         // fire start
         handler.startCompile(template);
@@ -167,7 +162,7 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
                 String vars = matcher.group(5);
 
                 // extract the variable names of the operator
-                String[] arrayVars = StringUtils.fastSplit(vars, ",");
+                String[] arrayVars = StringUtils.fastSplit(vars, ","); //$NON-NLS-1$
                 Map<String, String> varsMap = new LinkedHashMap<String, String>();
                 for (String var : arrayVars) {
                     String defaultValue = null;
@@ -291,7 +286,7 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
             // get a new operator
             BitWorkingOperator operator = BitWorkingOperator.forName(name);
             if (operator == null) {
-                throw new IllegalArgumentException("unsupported operator '" + name + "'");
+                throw new IllegalArgumentException(Messages.getMessage("unsupportedOperator", name)); //$NON-NLS-1$
             }
             // set the arg and vars of the operator
             operator.setArg(arg);
@@ -357,22 +352,22 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
             if (name == null) {
                 return null;
             }
-            if (name.equals("neg")) {
+            if (name.equals("neg")) { //$NON-NLS-1$
                 return new Neg();
             }
-            if (name.equals("opt")) {
+            if (name.equals("opt")) { //$NON-NLS-1$
                 return new Opt();
             }
-            if (name.equals("prefix")) {
+            if (name.equals("prefix")) { //$NON-NLS-1$
                 return new Prefix();
             }
-            if (name.equals("suffix")) {
+            if (name.equals("suffix")) { //$NON-NLS-1$
                 return new Suffix();
             }
-            if (name.equals("list")) {
+            if (name.equals("list")) { //$NON-NLS-1$
                 return new List();
             }
-            if (name.equals("join")) {
+            if (name.equals("join")) { //$NON-NLS-1$
                 return new Join();
             }
             return null;
@@ -383,13 +378,13 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
          */
         private static class Neg extends BitWorkingOperator {
             public Neg() {
-                super("neg");
+                super("neg"); //$NON-NLS-1$
             }
 
             public void build(StringBuilder builder) {
-                builder.append("(");
+                builder.append("("); //$NON-NLS-1$
                 builder.append(Pattern.quote(arg));
-                builder.append(")?");
+                builder.append(")?"); //$NON-NLS-1$
             }
 
             @Override
@@ -417,13 +412,13 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
          */
         private static class Opt extends BitWorkingOperator {
             public Opt() {
-                super("opt");
+                super("opt"); //$NON-NLS-1$
             }
 
             public void build(StringBuilder builder) {
-                builder.append("(");
+                builder.append("("); //$NON-NLS-1$
                 builder.append(Pattern.quote(arg));
-                builder.append(")?");
+                builder.append(")?"); //$NON-NLS-1$
             }
 
             @Override
@@ -451,19 +446,19 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
          */
         private static class Prefix extends BitWorkingOperator {
             public Prefix() {
-                super("prefix");
+                super("prefix"); //$NON-NLS-1$
             }
 
             public void build(StringBuilder builder) {
                 if (vars.size() != 1) {
-                    throw new IllegalArgumentException(
-                                                       "The prefix operator MUST only have one variable");
+                    throw new IllegalArgumentException(Messages
+                        .getMessage("prefixOperatorMustHaveOnlyOneVariable")); //$NON-NLS-1$
                 }
 
-                builder.append("((?:");
+                builder.append("((?:"); //$NON-NLS-1$
                 builder.append(Pattern.quote(arg));
                 builder.append(REGEX0);
-                builder.append(")*)");
+                builder.append(")*)"); //$NON-NLS-1$
             }
 
             @Override
@@ -479,8 +474,8 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
                 }
 
                 if (!matched.startsWith(arg)) {
-                    throw new IllegalArgumentException("The matched prefix must start with '" + arg
-                        + "'");
+                    throw new IllegalArgumentException(Messages
+                        .getMessage("matchedSuffixMustStartWith", arg)); //$NON-NLS-1$
                 }
 
                 // clear the previous values
@@ -516,18 +511,18 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
          */
         private static class Suffix extends BitWorkingOperator {
             public Suffix() {
-                super("suffix");
+                super("suffix"); //$NON-NLS-1$
             }
 
             public void build(StringBuilder builder) {
                 if (vars.size() != 1) {
-                    throw new IllegalArgumentException(
-                                                       "The suffix operator MUST only have one variable");
+                    throw new IllegalArgumentException(Messages
+                        .getMessage("suffixOperatorMustOnlyHaveOneVariable")); //$NON-NLS-1$
                 }
-                builder.append("((?:");
+                builder.append("((?:"); //$NON-NLS-1$
                 builder.append(REGEX0);
                 builder.append(Pattern.quote(arg));
-                builder.append(")*)");
+                builder.append(")*)"); //$NON-NLS-1$
             }
 
             @Override
@@ -543,8 +538,8 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
                 }
 
                 if (!matched.endsWith(arg)) {
-                    throw new IllegalArgumentException("The matched suffix must end with '" + arg
-                        + "'");
+                    throw new IllegalArgumentException(Messages
+                        .getMessage("matchedSuffixMustEndWith", arg)); //$NON-NLS-1$
                 }
 
                 // clear the previous values
@@ -581,20 +576,20 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
          */
         private static class List extends BitWorkingOperator {
             public List() {
-                super("list");
+                super("list"); //$NON-NLS-1$
             }
 
             public void build(StringBuilder builder) {
                 if (vars.size() != 1) {
-                    throw new IllegalArgumentException(
-                                                       "The list operator MUST only have one variable");
+                    throw new IllegalArgumentException(Messages
+                        .getMessage("listOperatorMustHaveOnlyOneVariable")); //$NON-NLS-1$
                 }
-                builder.append("(");
+                builder.append("("); //$NON-NLS-1$
                 builder.append(REGEX0);
-                builder.append("(?:");
+                builder.append("(?:"); //$NON-NLS-1$
                 builder.append(Pattern.quote(arg));
                 builder.append(REGEX0);
-                builder.append(")*)");
+                builder.append(")*)"); //$NON-NLS-1$
             }
 
             @Override
@@ -605,7 +600,7 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
                 String var = vars.keySet().iterator().next();
 
                 if (matched == null || matched.length() == 0) {
-                    values.putSingle(var, "");
+                    values.putSingle(var, ""); //$NON-NLS-1$
                     indices.putSingle(var, startIndex);
                     return;
                 }
@@ -624,7 +619,7 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
                                StringBuilder builder) {
                 // we have only one var
                 String var = vars.keySet().iterator().next();
-                String delim = "";
+                String delim = ""; //$NON-NLS-1$
                 java.util.List<String> varValues = values.get(var);
                 if (varValues != null) {
                     for (String value : varValues) {
@@ -644,31 +639,31 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
          */
         private static class Join extends BitWorkingOperator {
             public Join() {
-                super("join");
+                super("join"); //$NON-NLS-1$
             }
 
             public void build(StringBuilder builder) {
-                String orSign = "";
+                String orSign = ""; //$NON-NLS-1$
                 StringBuilder keysAndValuesPattern = new StringBuilder();
-                keysAndValuesPattern.append("(?:");
+                keysAndValuesPattern.append("(?:"); //$NON-NLS-1$
                 for (String var : vars.keySet()) {
                     keysAndValuesPattern.append(orSign);
-                    keysAndValuesPattern.append("(?:");
+                    keysAndValuesPattern.append("(?:"); //$NON-NLS-1$
                     keysAndValuesPattern.append(var);
-                    keysAndValuesPattern.append("=");
+                    keysAndValuesPattern.append("="); //$NON-NLS-1$
                     keysAndValuesPattern.append(REGEX0);
-                    keysAndValuesPattern.append(")");
-                    orSign = "|";
+                    keysAndValuesPattern.append(")"); //$NON-NLS-1$
+                    orSign = "|"; //$NON-NLS-1$
                 }
-                keysAndValuesPattern.append(")");
+                keysAndValuesPattern.append(")"); //$NON-NLS-1$
 
                 // with a capturing group
-                builder.append("(");
+                builder.append("("); //$NON-NLS-1$
                 builder.append(keysAndValuesPattern.toString());
-                builder.append("(?:");
+                builder.append("(?:"); //$NON-NLS-1$
                 builder.append(Pattern.quote(arg));
                 builder.append(keysAndValuesPattern.toString());
-                builder.append(")*)?");
+                builder.append(")*)?"); //$NON-NLS-1$
             }
 
             @Override
@@ -682,7 +677,7 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
                     String[] array = StringUtils.fastSplit(matched, arg);
                     for (int i = 0; i < array.length; ++i) {
                         String var = array[i];
-                        String value = "";
+                        String value = ""; //$NON-NLS-1$
                         int index = var.indexOf('=');
                         if (index != -1) {
                             value = var.substring(index + 1);
@@ -703,14 +698,14 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
             public void expand(MultivaluedMap<String, String> values,
                                boolean encode,
                                StringBuilder builder) {
-                String delim = "";
+                String delim = ""; //$NON-NLS-1$
                 for (String var : vars.keySet()) {
                     java.util.List<String> varValues = values.get(var);
-                    String value = "";
+                    String value = ""; //$NON-NLS-1$
                     if (varValues != null) {
                         if (varValues.size() > 1) {
-                            throw new IllegalArgumentException("variable '" + var
-                                + "' contains more than one value for join operator");
+                            throw new IllegalArgumentException(Messages
+                                .getMessage("variableContainsMoreThanOneValueForJoinOperator", var)); //$NON-NLS-1$
                         }
                         if (varValues.size() == 1) {
                             value = varValues.get(0);
@@ -719,7 +714,7 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
                             }
                             builder.append(delim);
                             builder.append(var);
-                            builder.append("=");
+                            builder.append("="); //$NON-NLS-1$
                             if (encode) {
                                 value = UriEncoder.encodeString(value);
                             }
@@ -745,7 +740,7 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
 
         public void variable(String name, String defaultValue) {
             if (values == null) {
-                throw new NullPointerException("variable '" + name + "' was not supplied a value");
+                throw new NullPointerException(Messages.getMessage("variableIsNull", name)); //$NON-NLS-1$
             }
             Variable expander = new Variable(name, null, defaultValue);
             expander.expand(values, false, out);
@@ -753,11 +748,11 @@ public class BitWorkingUriTemplateProcessor extends UriTemplateProcessor {
 
         public void operator(String name, String arg, Map<String, String> vars) {
             if (values == null) {
-                throw new NullPointerException("variable '" + name + "' was not supplied a value");
+                throw new NullPointerException(Messages.getMessage("variableIsNull", name)); //$NON-NLS-1$
             }
             BitWorkingOperator expander = BitWorkingOperator.forName(name);
             if (expander == null) {
-                throw new IllegalArgumentException("unsupported operator '" + name + "'");
+                throw new IllegalArgumentException(Messages.getMessage("unsupportedOperator", name)); //$NON-NLS-1$
             }
             expander.expand(values, false, out);
         }

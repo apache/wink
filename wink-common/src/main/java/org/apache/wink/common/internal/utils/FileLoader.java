@@ -29,6 +29,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Enumeration;
 
+import org.apache.wink.common.internal.i18n.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,16 +77,16 @@ public class FileLoader {
      */
     public static InputStream loadFileAsStream(String fileName) throws FileNotFoundException {
 
-        if (fileName == null || fileName.trim().equals("")) {
-            throw new NullPointerException("fileName");
+        if (fileName == null || fileName.trim().equals("")) { //$NON-NLS-1$
+            throw new NullPointerException(Messages.getMessage("variableIsNull", "fileName")); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
-        logger.debug("Searching for {} in file system.", fileName);
+        logger.debug("Searching for {} in file system.", fileName); //$NON-NLS-1$
 
         File file = new File(fileName);
         if (file.isFile()) {
             // since file is a normal file, return it
-            logger.debug("File {} found in file system.", fileName);
+            logger.debug("File {} found in file system.", fileName); //$NON-NLS-1$
             return new FileInputStream(file);
         }
 
@@ -117,26 +118,27 @@ public class FileLoader {
      * @throws IOException
      */
     public static Enumeration<URL> loadFileUsingClassLoaders(String filename) throws IOException {
-        
+
         /*
-         * TODO: perhaps desirable to move this code to org.apache.wink.common.internal.utils.ClassUtils?
+         * TODO: perhaps desirable to move this code to
+         * org.apache.wink.common.internal.utils.ClassUtils?
          */
-        
-        logger.debug("Searching for {} using thread context classloader.", filename);
+
+        logger.debug("Searching for {} using thread context classloader.", filename); //$NON-NLS-1$
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         Enumeration<URL> resources = loadFileUsingClassLoader(classLoader, filename);
         if (resources.hasMoreElements()) {
             return resources;
         }
 
-        logger.debug("Searching for {} using current classloader.", filename);
+        logger.debug("Searching for {} using current classloader.", filename); //$NON-NLS-1$
         classLoader = FileLoader.class.getClassLoader();
         resources = loadFileUsingClassLoader(classLoader, filename);
         if (resources.hasMoreElements()) {
             return resources;
         }
 
-        logger.debug("Searching for {} using system classloader.", filename);
+        logger.debug("Searching for {} using system classloader.", filename); //$NON-NLS-1$
         return ClassLoader.getSystemResources(filename);
     }
 

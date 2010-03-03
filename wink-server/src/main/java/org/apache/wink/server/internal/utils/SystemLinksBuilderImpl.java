@@ -57,7 +57,7 @@ public class SystemLinksBuilderImpl extends AbstractLinksBuilderImpl<SystemLinks
 
     protected boolean isContinuedSearchMode() {
         return Boolean.valueOf(context.getProperties()
-            .getProperty(FindRootResourceHandler.SEARCH_POLICY_CONTINUED_SEARCH_KEY, "false"));
+            .getProperty(FindRootResourceHandler.SEARCH_POLICY_CONTINUED_SEARCH_KEY, "false")); //$NON-NLS-1$
     }
 
     public SystemLinksBuilder types(LinkType... types) {

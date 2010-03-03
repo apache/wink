@@ -78,7 +78,7 @@ public class OutPart {
      * @param location
      */
     public void setLocationHeader(String location) {
-        getHeaders().putSingle("location", location);
+        getHeaders().putSingle("location", location); //$NON-NLS-1$
     }
 
     /**
@@ -120,7 +120,7 @@ public class OutPart {
             List<String> values = getHeaders().get(name);
             for (String value : values) {
                 String header =
-                    new StringBuilder().append(name).append(": ").append(value)
+                    new StringBuilder().append(name).append(": ").append(value) //$NON-NLS-1$
                         .append(OutMultiPart.SEP).toString();
                 os.write(header.getBytes());
             }

@@ -369,14 +369,14 @@ public class WebDAVResponseBuilder {
      */
     private String getResourceLink(SyndBase synd) {
         // try 'edit' link
-        SyndLink link = synd.getLink("edit");
+        SyndLink link = synd.getLink("edit"); //$NON-NLS-1$
         if (link == null) {
             // try 'self' link
-            link = synd.getLink("self");
+            link = synd.getLink("self"); //$NON-NLS-1$
         }
         if (link == null) {
             // no link in the resource
-            logger.error(Messages.getMessage("webDAVNoEditOrSelfLink", synd.getId()));
+            logger.error(Messages.getMessage("webDAVNoEditOrSelfLink", synd.getId())); //$NON-NLS-1$
             throw new WebApplicationException();
         }
 

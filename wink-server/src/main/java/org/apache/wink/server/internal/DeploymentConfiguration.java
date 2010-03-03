@@ -83,15 +83,15 @@ public class DeploymentConfiguration {
                                                                               LoggerFactory
                                                                                   .getLogger(DeploymentConfiguration.class);
     private static final String       ALTERNATIVE_SHORTCUTS               =
-                                                                              "META-INF/wink-alternate-shortcuts.properties";
+                                                                              "META-INF/wink-alternate-shortcuts.properties"; //$NON-NLS-1$
     private static final String       HTTP_METHOD_OVERRIDE_HEADERS_PROP   =
-                                                                              "wink.httpMethodOverrideHeaders";
+                                                                              "wink.httpMethodOverrideHeaders"; //$NON-NLS-1$
     private static final String       HANDLERS_FACTORY_CLASS_PROP         =
-                                                                              "wink.handlersFactoryClass";
+                                                                              "wink.handlersFactoryClass"; //$NON-NLS-1$
     private static final String       MEDIATYPE_MAPPER_FACTORY_CLASS_PROP =
-                                                                              "wink.mediaTypeMapperFactoryClass";
+                                                                              "wink.mediaTypeMapperFactoryClass"; //$NON-NLS-1$
     private static final String       VALIDATE_LOCATION_HEADER            =
-                                                                              "wink.validateLocationHeader";
+                                                                              "wink.validateLocationHeader"; //$NON-NLS-1$
     // handler chains
     private RequestHandlersChain      requestHandlersChain;
     private ResponseHandlersChain     responseHandlersChain;
@@ -132,7 +132,7 @@ public class DeploymentConfiguration {
             properties = new Properties();
         }
 
-        logger.debug("Deployment configuration properties: {}", properties);
+        logger.debug("Deployment configuration properties: {}", properties); //$NON-NLS-1$
 
         // check to see if an override property was specified. if so, then
         // configure
@@ -141,7 +141,7 @@ public class DeploymentConfiguration {
             properties.getProperty(HTTP_METHOD_OVERRIDE_HEADERS_PROP);
         httpMethodOverrideHeaders =
             (httpMethodOverrideHeadersProperty != null && httpMethodOverrideHeadersProperty
-                .length() > 0) ? httpMethodOverrideHeadersProperty.split(",") : null;
+                .length() > 0) ? httpMethodOverrideHeadersProperty.split(",") : null; //$NON-NLS-1$
 
         initRegistries();
         initAlternateShortcutMap();
@@ -304,14 +304,14 @@ public class DeploymentConfiguration {
                 Properties lproperties = new Properties();
 
                 lproperties.load(is);
-                logger.debug("Alternative shortcuts properties: {}", lproperties);
+                logger.debug("Alternative shortcuts properties: {}", lproperties); //$NON-NLS-1$
                 alternateShortcutMap = new HashMap<String, String>();
                 for (Entry<Object, Object> entry : lproperties.entrySet()) {
                     alternateShortcutMap.put((String)entry.getKey(), (String)entry.getValue());
                 }
-                logger.debug("Alternative shortcuts map: {}", alternateShortcutMap);
+                logger.debug("Alternative shortcuts map: {}", alternateShortcutMap); //$NON-NLS-1$
             } catch (IOException e) {
-                logger.error(Messages.getMessage("alternateShortcutMapLoadFailure"), e);
+                logger.error(Messages.getMessage("alternateShortcutMapLoadFailure"), e); //$NON-NLS-1$
                 throw new WebApplicationException(e);
             } finally {
                 try {
@@ -320,7 +320,7 @@ public class DeploymentConfiguration {
                     }
                 } catch (IOException e) {
                     logger
-                        .info(Messages.getMessage("alternateShortcutMapCloseFailure") + ALTERNATIVE_SHORTCUTS,
+                        .info(Messages.getMessage("alternateShortcutMapCloseFailure") + ALTERNATIVE_SHORTCUTS, //$NON-NLS-1$
                               e);
                 }
             }
@@ -340,7 +340,7 @@ public class DeploymentConfiguration {
                 properties.getProperty(MEDIATYPE_MAPPER_FACTORY_CLASS_PROP);
             if (mediaTypeMapperFactoryClassName != null) {
                 try {
-                    logger.debug("MediaTypeMappingFactory Class is: {}",
+                    logger.debug("MediaTypeMappingFactory Class is: {}", //$NON-NLS-1$
                                  mediaTypeMapperFactoryClassName);
                     Class<MediaTypeMapperFactory> handlerFactoryClass =
                         (Class<MediaTypeMapperFactory>)Class
@@ -444,7 +444,7 @@ public class DeploymentConfiguration {
             }
         }
         handlersChain.addHandler(createHandler(InvokeMethodHandler.class));
-        logger.debug("Request handlers chain is: {}", handlersChain);
+        logger.debug("Request handlers chain is: {}", handlersChain); //$NON-NLS-1$
         return handlersChain;
     }
 
@@ -503,7 +503,7 @@ public class DeploymentConfiguration {
         }
         handlersChain.addHandler(createHandler(FlushResultHandler.class));
         handlersChain.addHandler(createHandler(HeadMethodHandler.class));
-        logger.debug("Response handlers chain is: {}", handlersChain);
+        logger.debug("Response handlers chain is: {}", handlersChain); //$NON-NLS-1$
         return handlersChain;
     }
 
@@ -527,14 +527,14 @@ public class DeploymentConfiguration {
             }
         }
         handlersChain.addHandler(createHandler(FlushResultHandler.class));
-        logger.debug("Error handlers chain is: {}", handlersChain);
+        logger.debug("Error handlers chain is: {}", handlersChain); //$NON-NLS-1$
         return handlersChain;
     }
 
     private <T extends Handler> T createHandler(Class<T> cls) {
         try {
             T handler = cls.newInstance();
-            logger.debug("Calling {}.init(Properties)", cls);
+            logger.debug("Calling {}.init(Properties)", cls); //$NON-NLS-1$
             handler.init(getProperties());
             return handler;
         } catch (InstantiationException e) {
@@ -550,7 +550,7 @@ public class DeploymentConfiguration {
             List<String> overrideHeaders =
                 (httpMethodOverrideHeaders == null) ? null : Arrays
                     .asList(httpMethodOverrideHeaders);
-            logger.debug("Setting HTTP Method override headers: {}", overrideHeaders);
+            logger.debug("Setting HTTP Method override headers: {}", overrideHeaders); //$NON-NLS-1$
         }
     }
 

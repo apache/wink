@@ -48,76 +48,76 @@ public class ObjectFactory {
 
     private final static QName _Image_QNAME                 =
                                                                 new QName(
-                                                                          "http://a9.com/-/spec/opensearch/1.1/",
-                                                                          "Image");
+                                                                          "http://a9.com/-/spec/opensearch/1.1/", //$NON-NLS-1$
+                                                                          "Image"); //$NON-NLS-1$
     private final static QName _ItemsPerPage_QNAME          =
                                                                 new QName(
-                                                                          "http://a9.com/-/spec/opensearch/1.1/",
-                                                                          "itemsPerPage");
+                                                                          "http://a9.com/-/spec/opensearch/1.1/", //$NON-NLS-1$
+                                                                          "itemsPerPage"); //$NON-NLS-1$
     private final static QName _ShortName_QNAME             =
                                                                 new QName(
-                                                                          "http://a9.com/-/spec/opensearch/1.1/",
-                                                                          "ShortName");
+                                                                          "http://a9.com/-/spec/opensearch/1.1/", //$NON-NLS-1$
+                                                                          "ShortName"); //$NON-NLS-1$
     private final static QName _TotalResults_QNAME          =
                                                                 new QName(
-                                                                          "http://a9.com/-/spec/opensearch/1.1/",
-                                                                          "totalResults");
+                                                                          "http://a9.com/-/spec/opensearch/1.1/", //$NON-NLS-1$
+                                                                          "totalResults"); //$NON-NLS-1$
     private final static QName _Query_QNAME                 =
                                                                 new QName(
-                                                                          "http://a9.com/-/spec/opensearch/1.1/",
-                                                                          "Query");
+                                                                          "http://a9.com/-/spec/opensearch/1.1/", //$NON-NLS-1$
+                                                                          "Query"); //$NON-NLS-1$
     private final static QName _Developer_QNAME             =
                                                                 new QName(
-                                                                          "http://a9.com/-/spec/opensearch/1.1/",
-                                                                          "Developer");
+                                                                          "http://a9.com/-/spec/opensearch/1.1/", //$NON-NLS-1$
+                                                                          "Developer"); //$NON-NLS-1$
     private final static QName _OpenSearchDescription_QNAME =
                                                                 new QName(
-                                                                          "http://a9.com/-/spec/opensearch/1.1/",
-                                                                          "OpenSearchDescription");
+                                                                          "http://a9.com/-/spec/opensearch/1.1/", //$NON-NLS-1$
+                                                                          "OpenSearchDescription"); //$NON-NLS-1$
     private final static QName _Contact_QNAME               =
                                                                 new QName(
-                                                                          "http://a9.com/-/spec/opensearch/1.1/",
-                                                                          "Contact");
+                                                                          "http://a9.com/-/spec/opensearch/1.1/", //$NON-NLS-1$
+                                                                          "Contact"); //$NON-NLS-1$
     private final static QName _Attribution_QNAME           =
                                                                 new QName(
-                                                                          "http://a9.com/-/spec/opensearch/1.1/",
-                                                                          "Attribution");
+                                                                          "http://a9.com/-/spec/opensearch/1.1/", //$NON-NLS-1$
+                                                                          "Attribution"); //$NON-NLS-1$
     private final static QName _SyndicationRight_QNAME      =
                                                                 new QName(
-                                                                          "http://a9.com/-/spec/opensearch/1.1/",
-                                                                          "SyndicationRight");
+                                                                          "http://a9.com/-/spec/opensearch/1.1/", //$NON-NLS-1$
+                                                                          "SyndicationRight"); //$NON-NLS-1$
     private final static QName _Tags_QNAME                  =
                                                                 new QName(
-                                                                          "http://a9.com/-/spec/opensearch/1.1/",
-                                                                          "Tags");
+                                                                          "http://a9.com/-/spec/opensearch/1.1/", //$NON-NLS-1$
+                                                                          "Tags"); //$NON-NLS-1$
     private final static QName _Language_QNAME              =
                                                                 new QName(
-                                                                          "http://a9.com/-/spec/opensearch/1.1/",
-                                                                          "Language");
+                                                                          "http://a9.com/-/spec/opensearch/1.1/", //$NON-NLS-1$
+                                                                          "Language"); //$NON-NLS-1$
     private final static QName _OutputEncoding_QNAME        =
                                                                 new QName(
-                                                                          "http://a9.com/-/spec/opensearch/1.1/",
-                                                                          "OutputEncoding");
+                                                                          "http://a9.com/-/spec/opensearch/1.1/", //$NON-NLS-1$
+                                                                          "OutputEncoding"); //$NON-NLS-1$
     private final static QName _InputEncoding_QNAME         =
                                                                 new QName(
-                                                                          "http://a9.com/-/spec/opensearch/1.1/",
-                                                                          "InputEncoding");
+                                                                          "http://a9.com/-/spec/opensearch/1.1/", //$NON-NLS-1$
+                                                                          "InputEncoding"); //$NON-NLS-1$
     private final static QName _Url_QNAME                   =
                                                                 new QName(
-                                                                          "http://a9.com/-/spec/opensearch/1.1/",
-                                                                          "Url");
+                                                                          "http://a9.com/-/spec/opensearch/1.1/", //$NON-NLS-1$
+                                                                          "Url"); //$NON-NLS-1$
     private final static QName _StartIndex_QNAME            =
                                                                 new QName(
-                                                                          "http://a9.com/-/spec/opensearch/1.1/",
-                                                                          "startIndex");
+                                                                          "http://a9.com/-/spec/opensearch/1.1/", //$NON-NLS-1$
+                                                                          "startIndex"); //$NON-NLS-1$
     private final static QName _LongName_QNAME              =
                                                                 new QName(
-                                                                          "http://a9.com/-/spec/opensearch/1.1/",
-                                                                          "LongName");
+                                                                          "http://a9.com/-/spec/opensearch/1.1/", //$NON-NLS-1$
+                                                                          "LongName"); //$NON-NLS-1$
     private final static QName _Description_QNAME           =
                                                                 new QName(
-                                                                          "http://a9.com/-/spec/opensearch/1.1/",
-                                                                          "Description");
+                                                                          "http://a9.com/-/spec/opensearch/1.1/", //$NON-NLS-1$
+                                                                          "Description"); //$NON-NLS-1$
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of

@@ -86,7 +86,7 @@ public class JsonProvider implements MessageBodyWriter<JSONObject>, MessageBodyR
         try {
             jsonString = t.toString(2);
         } catch (JSONException e) {
-            logger.error(Messages.getMessage("jsonFailWriteJSONObject"));
+            logger.error(Messages.getMessage("jsonFailWriteJSONObject")); //$NON-NLS-1$
             throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
         }
 
@@ -95,17 +95,17 @@ public class JsonProvider implements MessageBodyWriter<JSONObject>, MessageBodyR
             callbackParam =
                 uriInfo.getQueryParameters().getFirst(RestConstants.REST_PARAM_JSON_CALLBACK);
         } catch (Exception e) {
-            logger.debug("Could not get the URI callback param", e);
+            logger.debug("Could not get the URI callback param", e); //$NON-NLS-1$
         }
         OutputStreamWriter writer =
             new OutputStreamWriter(entityStream, ProviderUtils.getCharset(mediaType));
         if (callbackParam != null) {
             writer.write(callbackParam);
-            writer.write("(");
+            writer.write("("); //$NON-NLS-1$
         }
         writer.write(jsonString);
         if (callbackParam != null) {
-            writer.write(")");
+            writer.write(")"); //$NON-NLS-1$
         }
         writer.flush();
     }
@@ -128,7 +128,7 @@ public class JsonProvider implements MessageBodyWriter<JSONObject>, MessageBodyR
             return new JSONObject(new JSONTokener(ProviderUtils.createReader(entityStream,
                                                                              mediaType)));
         } catch (JSONException e) {
-            logger.error(Messages.getMessage("jsonFailReadJSONObject"));
+            logger.error(Messages.getMessage("jsonFailReadJSONObject")); //$NON-NLS-1$
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         }
     }

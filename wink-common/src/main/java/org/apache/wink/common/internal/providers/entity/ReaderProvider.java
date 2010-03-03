@@ -44,10 +44,10 @@ import javax.ws.rs.ext.Provider;
 @Consumes("*/*")
 public final class ReaderProvider implements MessageBodyReader<Reader>, MessageBodyWriter<Reader> {
 
-    public static final Charset UTF8 = Charset.forName("UTF-8");
+    public static final Charset UTF8 = Charset.forName("UTF-8"); //$NON-NLS-1$
 
     public static final Charset getCharset(MediaType m) {
-        String name = (m == null) ? null : m.getParameters().get("charset");
+        String name = (m == null) ? null : m.getParameters().get("charset"); //$NON-NLS-1$
         return (name == null) ? UTF8 : Charset.forName(name);
     }
 

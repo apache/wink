@@ -47,7 +47,7 @@ import org.apache.wink.common.utils.ProviderUtils;
 public class CsvSerializerProvider implements MessageBodyWriter<CsvSerializer> {
 
     public static final String                                    CONTENT_DISPOSITION_HEADER =
-                                                                                                 "Content-Disposition";
+                                                                                                 "Content-Disposition"; //$NON-NLS-1$
     private final static HeaderDelegate<ContentDispositionHeader> header                     =
                                                                                                  RuntimeDelegate
                                                                                                      .getInstance()
@@ -79,7 +79,7 @@ public class CsvSerializerProvider implements MessageBodyWriter<CsvSerializer> {
         // set content disposition. This will enable browsers to open excel
         ContentDispositionHeader contentDispositionHeader =
             ContentDispositionHeader.createContentDispositionHeader(MediaTypeUtils.CSV);
-        contentDispositionHeader.setFileName("representation");
+        contentDispositionHeader.setFileName("representation"); //$NON-NLS-1$
         httpHeaders
             .putSingle(CONTENT_DISPOSITION_HEADER, header.toString(contentDispositionHeader));
 

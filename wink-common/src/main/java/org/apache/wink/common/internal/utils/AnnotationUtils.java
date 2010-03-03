@@ -39,7 +39,7 @@ public class AnnotationUtils {
     public static String[] parseConsumesProducesValues(String[] values) {
         ArrayList<String> strings = new ArrayList<String>();
         for (String v : values) {
-            StringTokenizer tokenizer = new StringTokenizer(v, ",");
+            StringTokenizer tokenizer = new StringTokenizer(v, ","); //$NON-NLS-1$
             while (tokenizer.hasMoreTokens()) {
                 strings.add(tokenizer.nextToken().trim());
             }

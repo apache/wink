@@ -20,6 +20,7 @@
 package org.apache.wink.common.internal.lifecycle;
 
 import org.apache.wink.common.RuntimeContext;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
 
 /**
@@ -35,7 +36,7 @@ class PrototypeObjectFactory<T> implements ObjectFactory<T> {
     public PrototypeObjectFactory(ClassMetadata metadata) {
         this.metadata = metadata;
         if (metadata == null) {
-            throw new NullPointerException("metadata");
+            throw new NullPointerException(Messages.getMessage("variableIsNull", "metadata")); //$NON-NLS-1$ //$NON-NLS-2$
         }
     }
 
@@ -51,6 +52,6 @@ class PrototypeObjectFactory<T> implements ObjectFactory<T> {
 
     @Override
     public String toString() {
-        return String.format("ClassMetadataPrototypeOF %s", String.valueOf(metadata));
+        return String.format("ClassMetadataPrototypeOF %s", String.valueOf(metadata)); //$NON-NLS-1$
     }
 }

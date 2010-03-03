@@ -48,8 +48,8 @@ public class MessageBundle {
         String msg = resourceBundle.getString(key);
 
         if (msg == null) {
-            throw new MissingResourceException("Cannot find resource key \"" + key
-                + "\" in base name "
+            throw new MissingResourceException("Cannot find resource key \"" + key //$NON-NLS-1$
+                + "\" in base name " //$NON-NLS-1$
                 + className, className, key);
         }
         return msg;

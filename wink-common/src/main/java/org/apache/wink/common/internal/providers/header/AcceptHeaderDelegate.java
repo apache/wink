@@ -46,7 +46,7 @@ public class AcceptHeaderDelegate implements HeaderDelegate<Accept> {
             value = MediaType.WILDCARD;
         }
         List<MediaType> list = new LinkedList<MediaType>();
-        String[] mediaTypes = StringUtils.fastSplit(value, ",");
+        String[] mediaTypes = StringUtils.fastSplit(value, ","); //$NON-NLS-1$
         for (String mediaRange : mediaTypes) {
             mediaRange = mediaRange.trim();
             if (mediaRange.length() == 0) {
@@ -61,7 +61,7 @@ public class AcceptHeaderDelegate implements HeaderDelegate<Accept> {
         StringBuilder result = new StringBuilder();
         for (MediaType valuedMediaType : value.getMediaTypes()) {
             if (result.length() != 0)
-                result.append(", ");
+                result.append(", "); //$NON-NLS-1$
             result.append(valuedMediaType.toString());
         }
         return result.toString();

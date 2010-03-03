@@ -44,14 +44,14 @@ import org.apache.wink.common.internal.MultivaluedMapImpl;
 public class ProviderUtils {
 
     public static String getCharsetOrNull(MediaType m) {
-        String name = (m == null) ? null : m.getParameters().get("charset");
+        String name = (m == null) ? null : m.getParameters().get("charset"); //$NON-NLS-1$
         return (name == null) ? null : name;
     }
 
     
     public static String getCharset(MediaType m) {
-        String name = (m == null) ? null : m.getParameters().get("charset");
-        return (name == null) ? "UTF-8" : name;
+        String name = (m == null) ? null : m.getParameters().get("charset"); //$NON-NLS-1$
+        return (name == null) ? "UTF-8" : name; //$NON-NLS-1$
     }
 
     public static Reader createReader(InputStream stream, MediaType mediaType) {

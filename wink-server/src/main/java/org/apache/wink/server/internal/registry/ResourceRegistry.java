@@ -116,12 +116,12 @@ public class ResourceRegistry {
      * @param priority priority of the resource
      */
     public void addResource(Object instance, double priority) {
-        logger.debug("Adding resource instance: {} with priority: {}", instance, priority);
+        logger.debug("Adding resource instance: {} with priority: {}", instance, priority); //$NON-NLS-1$
 
         writersLock.lock();
         try {
             if (!applicationValidator.isValidResource(instance.getClass())) {
-                logger.warn(Messages.getMessage("resourceClassNotValid", instance.getClass()));
+                logger.warn(Messages.getMessage("resourceClassNotValid", instance.getClass())); //$NON-NLS-1$
                 return;
             }
 
@@ -141,12 +141,12 @@ public class ResourceRegistry {
      * @param priority priority of the resource
      */
     public void addResource(Class<?> clazz, double priority) {
-        logger.debug("Adding resource class: {} with priority: {}", clazz, priority);
+        logger.debug("Adding resource class: {} with priority: {}", clazz, priority); //$NON-NLS-1$
 
         writersLock.lock();
         try {
             if (!applicationValidator.isValidResource(clazz)) {
-                logger.warn(Messages.getMessage("resourceClassNotValid", clazz));
+                logger.warn(Messages.getMessage("resourceClassNotValid", clazz)); //$NON-NLS-1$
                 return;
             }
             ResourceRecord record = getRecord(clazz);
@@ -435,7 +435,7 @@ public class ResourceRegistry {
             }
         }
         if (methodRecords.size() == 0) {
-            logger.info(Messages.getMessage("noMethodInClassConsumesHTTPMethod", resource
+            logger.info(Messages.getMessage("noMethodInClassConsumesHTTPMethod", resource //$NON-NLS-1$
                 .getResourceClass().getName(), context.getHttpHeaders().getMediaType()));
             throw new WebApplicationException(Response.Status.UNSUPPORTED_MEDIA_TYPE);
         }
@@ -449,7 +449,7 @@ public class ResourceRegistry {
             }
         }
         if (methodRecords.size() == 0) {
-            logger.info(Messages.getMessage("noMethodInClassProducesHTTPMethod", resource
+            logger.info(Messages.getMessage("noMethodInClassProducesHTTPMethod", resource //$NON-NLS-1$
                 .getResourceClass().getName(), context.getHttpHeaders()
                 .getRequestHeader(HttpHeaders.ACCEPT)));
             throw new WebApplicationException(Response.Status.NOT_ACCEPTABLE);
@@ -529,7 +529,7 @@ public class ResourceRegistry {
         List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
 
         for (MediaType received : receivedMediaTypes) {
-            String q = received.getParameters().get("q");
+            String q = received.getParameters().get("q"); //$NON-NLS-1$
             if (q != null && Double.valueOf(q).equals(0.0)) {
                 deniableMediaTypes.add(received);
             } else {

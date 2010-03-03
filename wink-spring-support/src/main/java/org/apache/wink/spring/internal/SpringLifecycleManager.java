@@ -90,10 +90,10 @@ public class SpringLifecycleManager<T> implements LifecycleManager<T> {
             .isProvider(cls)) {
             SpringObjectFactory old = class2factory.put(cls, objectFactory);
             if (old != null) {
-                logger.warn(Messages.getMessage("springClassReplaceNewerObjectFactory", cls));
+                logger.warn(Messages.getMessage("springClassReplaceNewerObjectFactory", cls)); //$NON-NLS-1$
             }
         } else {
-            logger.warn(Messages.getMessage("springBeanNotResourceNorProvider", beanName, cls));
+            logger.warn(Messages.getMessage("springBeanNotResourceNorProvider", beanName, cls)); //$NON-NLS-1$
         }
     }
 
@@ -104,10 +104,10 @@ public class SpringLifecycleManager<T> implements LifecycleManager<T> {
             dynResource.setBeanName(beanName);
             SpringObjectFactory old = id2factory.put(beanName, objectFactory);
             if (old != null) {
-                logger.warn(Messages.getMessage("springClassReplaceNewerObjectFactory", beanName));
+                logger.warn(Messages.getMessage("springClassReplaceNewerObjectFactory", beanName)); //$NON-NLS-1$
             }
         } else {
-            logger.warn(Messages.getMessage("springBeanClassNotDynamicResource", beanName, cls));
+            logger.warn(Messages.getMessage("springBeanClassNotDynamicResource", beanName, cls)); //$NON-NLS-1$
         }
     }
 

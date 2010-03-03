@@ -120,7 +120,7 @@ public class CaseInsensitiveMultivaluedMap<V> implements MultivaluedMap<String, 
 
     @Override
     public String toString() {
-        return "CaseInsensitiveMultivaluedMap [map=" + map + "]";
+        return "CaseInsensitiveMultivaluedMap [map=" + map + "]"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
 }

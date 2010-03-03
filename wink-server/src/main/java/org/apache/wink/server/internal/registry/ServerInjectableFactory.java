@@ -300,14 +300,14 @@ public class ServerInjectableFactory extends InjectableFactory {
     public static class FormParamBinding extends BoundInjectable {
 
         static final String                                FORM_PARAMATERS             =
-                                                                                           "wink.formParameters";
+                                                                                           "wink.formParameters"; //$NON-NLS-1$
         public final static MultivaluedMap<String, String> dummyMultivaluedMap         = null;
         private static Type                                MULTIVALUED_MAP_STRING_TYPE = null;
 
         static {
             try {
                 MULTIVALUED_MAP_STRING_TYPE =
-                    FormParamBinding.class.getField("dummyMultivaluedMap").getGenericType();
+                    FormParamBinding.class.getField("dummyMultivaluedMap").getGenericType(); //$NON-NLS-1$
             } catch (SecurityException e) {
                 throw new WebApplicationException(e);
             } catch (NoSuchFieldException e) {
@@ -473,7 +473,7 @@ public class ServerInjectableFactory extends InjectableFactory {
                 // into separate segments, otherwise, pass the default value
                 // as-is.
                 if (isTypeOf(PathSegment.class) || isTypeCollectionOf(PathSegment.class)) {
-                    String[] segmentsArray = StringUtils.fastSplit(defaultValue, "/", true);
+                    String[] segmentsArray = StringUtils.fastSplit(defaultValue, "/", true); //$NON-NLS-1$
                     values.addAll(Arrays.asList(segmentsArray));
                 } else {
                     values.add(defaultValue);

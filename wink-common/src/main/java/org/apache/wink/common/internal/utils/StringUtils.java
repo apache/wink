@@ -32,7 +32,7 @@ import java.util.Map.Entry;
  */
 public class StringUtils {
 
-    public final static String lineSeparator = System.getProperty("line.separator");
+    public final static String lineSeparator = System.getProperty("line.separator"); //$NON-NLS-1$
 
     private StringUtils() {
         // this class should never be created
@@ -40,35 +40,35 @@ public class StringUtils {
 
     public static String valueOf(Map<?, ?> map) {
         if (map == null) {
-            return "null";
+            return "null"; //$NON-NLS-1$
         }
         StringBuilder builder = new StringBuilder();
-        builder.append("{");
+        builder.append("{"); //$NON-NLS-1$
         builder.append(lineSeparator);
         for (Iterator<?> iterator = map.entrySet().iterator(); iterator.hasNext();) {
             Entry<?, ?> entry = (Entry<?, ?>)iterator.next();
             builder.append(String.valueOf(entry.getKey()));
-            builder.append("=");
+            builder.append("="); //$NON-NLS-1$
             builder.append(String.valueOf(entry.getValue()));
             builder.append(lineSeparator);
         }
-        builder.append("}");
+        builder.append("}"); //$NON-NLS-1$
         return builder.toString();
     }
 
     public static String valueOf(List<?> list) {
         if (list == null) {
-            return "null";
+            return "null"; //$NON-NLS-1$
         }
         StringBuilder builder = new StringBuilder();
-        builder.append("[");
+        builder.append("["); //$NON-NLS-1$
         builder.append(lineSeparator);
         for (Iterator<?> iterator = list.iterator(); iterator.hasNext();) {
             Object object = iterator.next();
             builder.append(String.valueOf(object));
             builder.append(lineSeparator);
         }
-        builder.append("]");
+        builder.append("]"); //$NON-NLS-1$
         return builder.toString();
     }
 
@@ -96,8 +96,8 @@ public class StringUtils {
             return new String[0];
         }
 
-        if (string.equals("")) {
-            return new String[] {""};
+        if (string.equals("")) { //$NON-NLS-1$
+            return new String[] {""}; //$NON-NLS-1$
         }
 
         List<String> tmpResults = new ArrayList<String>();
@@ -113,7 +113,7 @@ public class StringUtils {
             // if the delimiter is at the end of the string
             if (fromIndex >= string.length()) {
                 if (strict) {
-                    tmpResults.add("");
+                    tmpResults.add(""); //$NON-NLS-1$
                 }
                 break;
             }

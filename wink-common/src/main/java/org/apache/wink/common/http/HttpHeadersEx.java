@@ -29,13 +29,13 @@ public final class HttpHeadersEx {
         // no instances
     }
 
-    public static final String ALLOW                  = "Allow";
+    public static final String ALLOW                  = "Allow"; //$NON-NLS-1$
 
     // public static final String ACCEPT = "Accept";
     // public static final String ACCEPT_LANGUAGE = "Accept-Language";
     // public static final String ACCEPT_ENCODING = "Accept-Encoding";
-    public static final String ACCEPT_RANGES          = "Accept-Ranges";
-    public static final String CONTENT_DISPOSITION    = "Content-Disposition";
+    public static final String ACCEPT_RANGES          = "Accept-Ranges"; //$NON-NLS-1$
+    public static final String CONTENT_DISPOSITION    = "Content-Disposition"; //$NON-NLS-1$
     // public static final String CONTENT_LANG = "Content-Language";
     // public static final String CONTENT_TYPE = "Content-Type";
     // public static final String ETAG = "ETag";
@@ -54,16 +54,16 @@ public final class HttpHeadersEx {
     /**
      * Non RFC 2616 - Atom Publishing Protocol
      */
-    public static final String SLUG                   = "Slug";
+    public static final String SLUG                   = "Slug"; //$NON-NLS-1$
 
     /**
      * Non RFC 2616 - Google Doc convention
      */
-    public static final String X_HTTP_METHOD_OVERRIDE = "X-HTTP-Method-Override";
+    public static final String X_HTTP_METHOD_OVERRIDE = "X-HTTP-Method-Override"; //$NON-NLS-1$
 
     /**
      * Non RFC 2616 - Some client implementing Google Doc
      */
-    public static final String X_METHOD_OVERRIDE      = "X-Method-Override";
+    public static final String X_METHOD_OVERRIDE      = "X-Method-Override"; //$NON-NLS-1$
 
 }

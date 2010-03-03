@@ -29,6 +29,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.PathSegment;
 
 import org.apache.wink.common.internal.MultivaluedMapImpl;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.uri.UriEncoder;
 import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor.CapturingGroup;
 
@@ -44,7 +45,7 @@ public class UriTemplateMatcher {
 
     @Override
     public String toString() {
-        return String.format("Parent: %s; URI: %s; Matcher: %s; Matches: %b", String
+        return String.format("Parent: %s; URI: %s; Matcher: %s; Matches: %b", String //$NON-NLS-1$
             .valueOf(parent), uri, String.valueOf(matcher), matches);
     }
 
@@ -104,7 +105,7 @@ public class UriTemplateMatcher {
      */
     public boolean matches(String uri) {
         if (uri == null) {
-            throw new NullPointerException("uri");
+            throw new NullPointerException(Messages.getMessage("variableIsNull", "uri")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         this.uri = uri;
         this.variables = null;
@@ -123,7 +124,7 @@ public class UriTemplateMatcher {
     public boolean isExactMatch() {
         assertMatchState();
         String tail = getTail();
-        return (tail == null || tail.length() == 0 || tail.equals("/"));
+        return (tail == null || tail.length() == 0 || tail.equals("/")); //$NON-NLS-1$
     }
 
     /**
@@ -149,7 +150,7 @@ public class UriTemplateMatcher {
     public String getTail(boolean decode) {
         assertMatchState();
         if (parent.tail == null) {
-            return "";
+            return ""; //$NON-NLS-1$
         }
 
         String value = matcher.group(parent.tail.getCapturingGroupId());
@@ -191,7 +192,7 @@ public class UriTemplateMatcher {
         // then add it to the head because the tail has caught it but it
         // should be part of the head
         String tail = getTail(false);
-        if (parent.template.endsWith("/") && tail != null && tail.equals("/")) {
+        if (parent.template.endsWith("/") && tail != null && tail.equals("/")) { //$NON-NLS-1$ //$NON-NLS-2$
             head += tail;
         }
         return head;
@@ -441,15 +442,16 @@ public class UriTemplateMatcher {
                             variableSegments.add(segments.get(segmentIndex));
                         }
                         break L1; // found all the segments of this variable
-                                  // value
+                        // value
                     } else if (variableValueStartIndex == pathLength) {
-                        // no PathParam was provided... only matrix params or empty
+                        // no PathParam was provided... only matrix params or
+                        // empty
                         // just use what we have
                         variableSegments.add(segments.get(segmentIndex));
                         break L1;
                     } else {
                         pathLength += 1; // to count for the '/' between the
-                                         // segments
+                        // segments
                     }
                 }
                 variablesPathSegments.add(name, variableSegments);
@@ -485,7 +487,7 @@ public class UriTemplateMatcher {
 
     protected void assertMatchState() {
         if (!matches) {
-            throw new IllegalStateException("last match was unsuccessful");
+            throw new IllegalStateException(Messages.getMessage("lastMatchWasUnsuccessful")); //$NON-NLS-1$
         }
     }
 

@@ -39,23 +39,23 @@ public class JaxRsUriTemplateProcessor extends UriTemplateProcessor {
      * "-" ) ; \w[\w\.-] regex =( nonbrace / "{" nonbrace "}" ) ; where nonbrace
      * is any char other than "{" and "}"
      */
-    private static final String  JAXRS_VARIABLE_PATTERN_WSP      = "[ \\t]*";
-    private static final String  JAXRS_VARIABLE_PATTERN_NAME     = "(\\w[\\w\\.-]*)";
-    private static final String  JAXRS_VARIABLE_PATTERN_NONBRACE = "[^{}]";
+    private static final String  JAXRS_VARIABLE_PATTERN_WSP      = "[ \\t]*"; //$NON-NLS-1$
+    private static final String  JAXRS_VARIABLE_PATTERN_NAME     = "(\\w[\\w\\.-]*)"; //$NON-NLS-1$
+    private static final String  JAXRS_VARIABLE_PATTERN_NONBRACE = "[^{}]"; //$NON-NLS-1$
     private static final String  JAXRS_VARIABLE_PATTERN_REGEX    =
-                                                                     "((?:(?:" + JAXRS_VARIABLE_PATTERN_NONBRACE
-                                                                         + ")|(?:\\{"
+                                                                     "((?:(?:" + JAXRS_VARIABLE_PATTERN_NONBRACE //$NON-NLS-1$
+                                                                         + ")|(?:\\{" //$NON-NLS-1$
                                                                          + JAXRS_VARIABLE_PATTERN_NONBRACE
-                                                                         + "*\\}))*)";
+                                                                         + "*\\}))*)"; //$NON-NLS-1$
     private static final String  JAXRS_VARIABLE_PATTERN_PARAM    =
-                                                                     "\\{" + JAXRS_VARIABLE_PATTERN_WSP
+                                                                     "\\{" + JAXRS_VARIABLE_PATTERN_WSP //$NON-NLS-1$
                                                                          + JAXRS_VARIABLE_PATTERN_NAME
                                                                          + JAXRS_VARIABLE_PATTERN_WSP
-                                                                         + "(?::"
+                                                                         + "(?::" //$NON-NLS-1$
                                                                          + JAXRS_VARIABLE_PATTERN_WSP
                                                                          + JAXRS_VARIABLE_PATTERN_REGEX
                                                                          + JAXRS_VARIABLE_PATTERN_WSP
-                                                                         + ")?\\}";
+                                                                         + ")?\\}"; //$NON-NLS-1$
     private static final Pattern JAXRS_VARIABLE_PATTERN          =
                                                                      Pattern
                                                                          .compile(JAXRS_VARIABLE_PATTERN_PARAM);
@@ -102,14 +102,14 @@ public class JaxRsUriTemplateProcessor extends UriTemplateProcessor {
      */
     public static void compile(String template, JaxRsCompilationHandler handler) {
         if (template == null) {
-            throw new NullPointerException("uriTemplate");
+            throw new NullPointerException("uriTemplate"); //$NON-NLS-1$
         }
         if (handler == null) {
-            throw new NullPointerException("handler");
+            throw new NullPointerException("handler"); //$NON-NLS-1$
         }
 
         int start = 0;
-        String literal = "";
+        String literal = ""; //$NON-NLS-1$
 
         // fire start
         handler.startCompile(template);
@@ -261,9 +261,9 @@ public class JaxRsUriTemplateProcessor extends UriTemplateProcessor {
             // if we don't do this and there's a resource with @Path("/") and a 
             // sub-resource @Path("hello"), then a request to "/hello" will not
             // be picked up becuase the default tail is "(/.*)?"
-            if (processor.template.equals("")) {
+            if (processor.template.equals("")) { //$NON-NLS-1$
                 // let the tail catch all characters, whether there is a / or not
-                processor.tail = createVariable(TEMPLATE_TAIL_NAME, "(.*)?", null);
+                processor.tail = createVariable(TEMPLATE_TAIL_NAME, "(.*)?", null); //$NON-NLS-1$
             } else {
                 // normal behavior
                 super.createTail();

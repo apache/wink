@@ -48,11 +48,11 @@ import org.apache.wink.common.internal.utils.FileLoader;
  */
 public class ApplicationFileLoader {
 
-    private static final String WINK_APPLICATION = "META-INF/wink-application";
+    private static final String WINK_APPLICATION = "META-INF/wink-application"; //$NON-NLS-1$
     private static final Logger logger           =
                                                      LoggerFactory
                                                          .getLogger(ApplicationFileLoader.class);
-    private static final String CORE_APPLICATION = "META-INF/core/wink-providers";
+    private static final String CORE_APPLICATION = "META-INF/core/wink-providers"; //$NON-NLS-1$
     private final Set<Class<?>> classes          = new LinkedHashSet<Class<?>>();
 
     /**
@@ -72,7 +72,7 @@ public class ApplicationFileLoader {
                     FileLoader.loadFileUsingClassLoaders(WINK_APPLICATION);
                 while (applications.hasMoreElements()) {
                     URL url = applications.nextElement();
-                    logger.info(Messages.getMessage("loadingApplication", url.toExternalForm()));
+                    logger.info(Messages.getMessage("loadingApplication", url.toExternalForm())); //$NON-NLS-1$
                     loadClasses(url.openStream());
                 }
             }
@@ -143,7 +143,7 @@ public class ApplicationFileLoader {
             try {
                 is.close();
             } catch (IOException e) {
-                logger.info(Messages.getMessage("exceptionClosingFile"), e);
+                logger.info(Messages.getMessage("exceptionClosingFile"), e); //$NON-NLS-1$
             }
         }
     }

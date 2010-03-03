@@ -38,7 +38,7 @@ public class EntityTagMatchHeader {
         if (isWildcard) {
             return true;
         }
-        if (eTag.getValue().equals("*")) {
+        if (eTag.getValue().equals("*")) { //$NON-NLS-1$
             isWildcard = true;
             eTags.clear();
             return true;
@@ -69,7 +69,7 @@ public class EntityTagMatchHeader {
     @Override
     public String toString() {
         if (isWildcard) {
-            return "*";
+            return "*"; //$NON-NLS-1$
         }
         return eTags.toString();
     }

@@ -101,25 +101,25 @@ public class NewCookieHeaderDelegate implements HeaderDelegate<NewCookie> {
                                int maxAge,
                                boolean secure) {
         StringBuilder sb = new StringBuilder();
-        sb.append(name).append("=");
+        sb.append(name).append("="); //$NON-NLS-1$
         if (value == null || value.length() == 0)
-            sb.append("\"\"");
+            sb.append("\"\""); //$NON-NLS-1$
         else
             sb.append(value);
 
         // Path=path
-        sb.append(";").append("Version=").append(version);
+        sb.append(";").append("Version=").append(version); //$NON-NLS-1$ //$NON-NLS-2$
         if (path != null)
-            sb.append(";Path=").append(path);
+            sb.append(";Path=").append(path); //$NON-NLS-1$
         if (domain != null)
-            sb.append(";Domain=").append(domain);
+            sb.append(";Domain=").append(domain); //$NON-NLS-1$
         if (comment != null)
-            sb.append(";Comment=").append(comment);
+            sb.append(";Comment=").append(comment); //$NON-NLS-1$
         if (maxAge >= 0) {
-            sb.append(";Max-Age=").append(maxAge);
+            sb.append(";Max-Age=").append(maxAge); //$NON-NLS-1$
         }
         if (secure)
-            sb.append(";Secure");
+            sb.append(";Secure"); //$NON-NLS-1$
 
         return sb.toString();
     }

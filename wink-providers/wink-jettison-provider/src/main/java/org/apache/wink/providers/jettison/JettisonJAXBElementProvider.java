@@ -148,10 +148,10 @@ public class JettisonJAXBElementProvider extends AbstractJAXBProvider implements
 
             unmarshaledResource = unmarshaller.unmarshal(xsr, classToFill);
         } catch (JAXBException e) {
-            logger.error(Messages.getMessage("jaxbFailToUnmarshal"), type.getName());
+            logger.error(Messages.getMessage("jaxbFailToUnmarshal"), type.getName()); //$NON-NLS-1$
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         } catch (XMLStreamException e) {
-            logger.error(Messages.getMessage("jaxbFailToUnmarshal"), type.getName());
+            logger.error(Messages.getMessage("jaxbFailToUnmarshal"), type.getName()); //$NON-NLS-1$
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         }
         return unmarshaledResource;
@@ -195,7 +195,7 @@ public class JettisonJAXBElementProvider extends AbstractJAXBProvider implements
                         new MappedXMLOutputFactory(outputConfiguration)
                             .createXMLStreamWriter(writer);
                 } catch (XMLStreamException e) {
-                    logger.error(Messages.getMessage("jaxbFailToMarshal"), t.getName());
+                    logger.error(Messages.getMessage("jaxbFailToMarshal"), t.getName()); //$NON-NLS-1$
                     throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
                 }
             }
@@ -203,7 +203,7 @@ public class JettisonJAXBElementProvider extends AbstractJAXBProvider implements
             marshaller.marshal(t, xsw);
             writer.flush();
         } catch (JAXBException e) {
-            logger.error(Messages.getMessage("jaxbFailToMarshal"), t.getName());
+            logger.error(Messages.getMessage("jaxbFailToMarshal"), t.getName()); //$NON-NLS-1$
             throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
         }
 

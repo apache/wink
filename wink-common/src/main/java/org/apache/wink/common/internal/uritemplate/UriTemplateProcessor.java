@@ -41,9 +41,9 @@ import org.apache.wink.common.internal.utils.UriHelper;
  */
 public abstract class UriTemplateProcessor implements Comparable<UriTemplateProcessor>, Cloneable {
 
-    protected static final String                    TEMPLATE_TAIL_NAME    = "wink.TemplateTail";
-    protected static final String                    TEMPLATE_HEAD_NAME    = "wink.TemplateHead";
-    protected static final String                    TEMPLATE_TAIL_PATTERN = "(/.*)?";
+    protected static final String                    TEMPLATE_TAIL_NAME    = "wink.TemplateTail"; //$NON-NLS-1$
+    protected static final String                    TEMPLATE_HEAD_NAME    = "wink.TemplateHead"; //$NON-NLS-1$
+    protected static final String                    TEMPLATE_TAIL_PATTERN = "(/.*)?"; //$NON-NLS-1$
 
     protected String                                 template;
     protected Pattern                                pattern;
@@ -290,9 +290,9 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
         if (uri != null) {
             normalizedUri = UriHelper.normalize(uri);
         } else {
-            normalizedUri = "";
+            normalizedUri = ""; //$NON-NLS-1$
         }
-        if (normalizedUri.startsWith("/")) {
+        if (normalizedUri.startsWith("/")) { //$NON-NLS-1$
             normalizedUri = normalizedUri.substring(1);
         }
 
@@ -397,8 +397,8 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
      * template uri.
      */
     protected abstract static class CapturingGroup implements TemplateElement {
-        protected static final String REGEX0           = "[^/]*?";
-        protected static final String REGEX1           = "[^/]+?";
+        protected static final String REGEX0           = "[^/]*?"; //$NON-NLS-1$
+        protected static final String REGEX1           = "[^/]+?"; //$NON-NLS-1$
 
         protected int                 capturingGroupId = -1;
 
@@ -482,9 +482,9 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
             // are building,
             // so we convert all the capturing groups into non-capturing groups
             regex = convertAllGroupsToNonCapturing(regex);
-            builder.append("(");
+            builder.append("("); //$NON-NLS-1$
             builder.append(regex);
-            builder.append(")");
+            builder.append(")"); //$NON-NLS-1$
         }
 
         @Override
@@ -530,7 +530,7 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
                 // then this is a capturing group, so replace it with
                 // a non-capturing group
                 if ((ch == '(') && (i + 1 < regexLen) && (regex.charAt(i + 1) != '?')) {
-                    sb.append("?:");
+                    sb.append("?:"); //$NON-NLS-1$
                 }
             }
             return sb.toString();

@@ -120,7 +120,7 @@ public class ClientConfig implements Cloneable {
      */
     public final ClientConfig proxyHost(String proxyHost) {
         if (!modifiable) {
-            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable"));
+            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable")); //$NON-NLS-1$
         }
         this.proxyHost = proxyHost;
         return this;
@@ -144,7 +144,7 @@ public class ClientConfig implements Cloneable {
      */
     public final ClientConfig proxyPort(int proxyPort) {
         if (!modifiable) {
-            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable"));
+            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable")); //$NON-NLS-1$
         }
         if (proxyPort <= 0) {
             proxyPort = 80;
@@ -171,7 +171,7 @@ public class ClientConfig implements Cloneable {
      */
     public final ClientConfig connectTimeout(int connectTimeout) {
         if (!modifiable) {
-            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable"));
+            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable")); //$NON-NLS-1$
         }
         this.connectTimeout = connectTimeout;
         return this;
@@ -195,7 +195,7 @@ public class ClientConfig implements Cloneable {
      */
     public final ClientConfig readTimeout(int readTimeout) {
         if (!modifiable) {
-            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable"));
+            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable")); //$NON-NLS-1$
         }
         this.readTimeout = readTimeout;
         return this;
@@ -221,7 +221,7 @@ public class ClientConfig implements Cloneable {
      */
     public final ClientConfig followRedirects(boolean followRedirects) {
         if (!modifiable) {
-            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable"));
+            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable")); //$NON-NLS-1$
         }
         this.followRedirects = followRedirects;
         return this;
@@ -248,7 +248,7 @@ public class ClientConfig implements Cloneable {
      */
     public final ClientConfig acceptHeaderAutoSet(boolean isAcceptHeaderAutoSet) {
         if (!modifiable) {
-            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable"));
+            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable")); //$NON-NLS-1$
         }
         this.isAcceptHeaderAutoSet = isAcceptHeaderAutoSet;
         return this;
@@ -272,7 +272,7 @@ public class ClientConfig implements Cloneable {
      */
     public final ClientConfig handlers(ClientHandler... handlers) {
         if (!modifiable) {
-            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable"));
+            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable")); //$NON-NLS-1$
         }
         for (ClientHandler handler : handlers) {
             this.handlers.add(handler);
@@ -324,7 +324,7 @@ public class ClientConfig implements Cloneable {
      */
     public final ClientConfig applications(Application... applications) {
         if (!modifiable) {
-            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable"));
+            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable")); //$NON-NLS-1$
         }
         if (this.applications == null) {
             initDefaultApplication();

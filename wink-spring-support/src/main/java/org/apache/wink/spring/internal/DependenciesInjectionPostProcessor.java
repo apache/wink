@@ -47,7 +47,7 @@ public class DependenciesInjectionPostProcessor implements BeanPostProcessor {
                 CreationUtils.injectFields(bean, classMetadata, RuntimeContextTLS
                     .getRuntimeContext());
             } catch (Exception e) {
-                logger.error(Messages.getMessage("springExceptionOccurredDuringFieldInject"),
+                logger.error(Messages.getMessage("springExceptionOccurredDuringFieldInject"), //$NON-NLS-1$
                              e);
                 throw new WebApplicationException(e);
             }

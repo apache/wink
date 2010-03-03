@@ -67,16 +67,16 @@ public class RestServlet extends AbstractRestServlet {
     private static final Logger logger                  =
                                                             LoggerFactory
                                                                 .getLogger(RestServlet.class);
-    private static final String APPLICATION_INIT_PARAM  = "javax.ws.rs.Application";
-    private static final String PROPERTIES_DEFAULT_FILE = "META-INF/wink-default.properties";
-    private static final String PROPERTIES_INIT_PARAM   = "propertiesLocation";
-    private static final String APP_LOCATION_PARAM      = "applicationConfigLocation";
-    private static final String DEPLYMENT_CONF_PARAM    = "deploymentConfiguration";
+    private static final String APPLICATION_INIT_PARAM  = "javax.ws.rs.Application"; //$NON-NLS-1$
+    private static final String PROPERTIES_DEFAULT_FILE = "META-INF/wink-default.properties"; //$NON-NLS-1$
+    private static final String PROPERTIES_INIT_PARAM   = "propertiesLocation"; //$NON-NLS-1$
+    private static final String APP_LOCATION_PARAM      = "applicationConfigLocation"; //$NON-NLS-1$
+    private static final String DEPLYMENT_CONF_PARAM    = "deploymentConfiguration"; //$NON-NLS-1$
 
     @Override
     public void init() throws ServletException {
 
-        logger.debug("Initializing {} servlet", this);
+        logger.debug("Initializing {} servlet", this); //$NON-NLS-1$
 
         try {
             super.init();
@@ -90,7 +90,7 @@ public class RestServlet extends AbstractRestServlet {
                 requestProcessor = createRequestProcessor();
                 if (requestProcessor == null) {
                     throw new IllegalStateException(Messages
-                        .getMessage("restServletRequestProcessorCouldNotBeCreated"));
+                        .getMessage("restServletRequestProcessorCouldNotBeCreated")); //$NON-NLS-1$
                 }
                 storeRequestProcessorOnServletContext(requestProcessor);
             }
@@ -131,10 +131,10 @@ public class RestServlet extends AbstractRestServlet {
 
     protected Properties getProperties() throws IOException {
         Properties defaultProperties = loadProperties(PROPERTIES_DEFAULT_FILE, null);
-        logger.debug("Default properties {} used in RestServlet {}", defaultProperties, this);
+        logger.debug("Default properties {} used in RestServlet {}", defaultProperties, this); //$NON-NLS-1$
         String propertiesLocation = getInitParameter(PROPERTIES_INIT_PARAM);
         if (propertiesLocation != null) {
-            logger.info(Messages.getMessage("restServletUsePropertiesFileAtLocation",
+            logger.info(Messages.getMessage("restServletUsePropertiesFileAtLocation", //$NON-NLS-1$
                         propertiesLocation,
                         PROPERTIES_INIT_PARAM));
 
@@ -144,7 +144,7 @@ public class RestServlet extends AbstractRestServlet {
             properties.putAll(WinkSystemProperties.loadSystemProperties(properties));
             return properties;
         }
-        logger.debug("Final properties {} used in RestServlet {}", defaultProperties, this);
+        logger.debug("Final properties {} used in RestServlet {}", defaultProperties, this); //$NON-NLS-1$
 
         // Load properties set on JVM. These should not override
         // the ones set in the configuration file.
@@ -157,7 +157,7 @@ public class RestServlet extends AbstractRestServlet {
         throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         String initParameter = getInitParameter(DEPLYMENT_CONF_PARAM);
         if (initParameter != null) {
-            logger.info(Messages.getMessage("restServletUseDeploymentConfigurationParam",
+            logger.info(Messages.getMessage("restServletUseDeploymentConfigurationParam", //$NON-NLS-1$
                         initParameter,
                         DEPLYMENT_CONF_PARAM));
             // use ClassUtils.loadClass instead of Class.forName so we have
@@ -174,7 +174,7 @@ public class RestServlet extends AbstractRestServlet {
         Class<? extends Application> appClass = null;
         String initParameter = getInitParameter(APPLICATION_INIT_PARAM);
         if (initParameter != null) {
-            logger.info(Messages.getMessage("restServletJAXRSApplicationInitParam",
+            logger.info(Messages.getMessage("restServletJAXRSApplicationInitParam", //$NON-NLS-1$
                         initParameter,
                         APPLICATION_INIT_PARAM));
             // use ClassUtils.loadClass instead of Class.forName so we have
@@ -225,7 +225,7 @@ public class RestServlet extends AbstractRestServlet {
                     is.close();
                 }
             } catch (IOException e) {
-                logger.warn(Messages.getMessage("exceptionClosingFile") + ": " + resourceName, e);
+                logger.warn(Messages.getMessage("exceptionClosingFile") + ": " + resourceName, e); //$NON-NLS-1$ //$NON-NLS-2$
             }
         }
 

@@ -46,7 +46,7 @@ public class WebDAVModelHelper {
     private static final JAXBContext            context;
     private static final DocumentBuilderFactory documentBuilderFactory;
     private static final Document               document;
-    private static final String                 XML_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+    private static final String                 XML_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"; //$NON-NLS-1$
     private static final SimpleDateFormat       dateFormat;
 
     static {
@@ -57,7 +57,7 @@ public class WebDAVModelHelper {
             dateFormat = new SimpleDateFormat(XML_DATE_FORMAT);
             dateFormat.setLenient(false);
         } catch (Exception e) {
-            throw new RestException(Messages.getMessage("webDAVFailSetupPropertyHelper"), e);
+            throw new RestException(Messages.getMessage("webDAVFailSetupPropertyHelper"), e); //$NON-NLS-1$
         }
     }
 
@@ -68,7 +68,7 @@ public class WebDAVModelHelper {
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             return marshaller;
         } catch (JAXBException e) {
-            throw new RestException(Messages.getMessage("webDAVFailCreateMarshaller"), e);
+            throw new RestException(Messages.getMessage("webDAVFailCreateMarshaller"), e); //$NON-NLS-1$
         }
     }
 
@@ -77,7 +77,7 @@ public class WebDAVModelHelper {
             Unmarshaller unmarshaller = context.createUnmarshaller();
             return unmarshaller;
         } catch (JAXBException e) {
-            throw new RestException(Messages.getMessage("webDAVFailCreateUnmarshaller"), e);
+            throw new RestException(Messages.getMessage("webDAVFailCreateUnmarshaller"), e); //$NON-NLS-1$
         }
     }
 
@@ -86,7 +86,7 @@ public class WebDAVModelHelper {
             m.marshal(element, writer);
         } catch (JAXBException e) {
             throw new RestException(Messages
-                .getMessage("webDAVUnableToMarshalElement", elementName), e);
+                .getMessage("webDAVUnableToMarshalElement", elementName), e); //$NON-NLS-1$
         }
     }
 
@@ -102,12 +102,12 @@ public class WebDAVModelHelper {
             }
             if (!(elementClass.equals(object.getClass()))) {
                 throw new RestException(Messages
-                    .getMessage("webDAVIncompatibleTypeInRequest", elementName, object.getClass()
+                    .getMessage("webDAVIncompatibleTypeInRequest", elementName, object.getClass() //$NON-NLS-1$
                     .getName(), elementClass.getName()));
             }
             return (T)object;
         } catch (JAXBException e) {
-            throw new RestException(Messages.getMessage("webDAVUnableToParseElement", elementName),
+            throw new RestException(Messages.getMessage("webDAVUnableToParseElement", elementName), //$NON-NLS-1$
                                     e);
         }
     }
@@ -169,7 +169,7 @@ public class WebDAVModelHelper {
         String name = qname.getLocalPart();
         String prefix = qname.getPrefix();
         if (prefix != null && prefix.length() > 0) {
-            name = qname.getPrefix() + ":" + name;
+            name = qname.getPrefix() + ":" + name; //$NON-NLS-1$
         }
         return name;
     }

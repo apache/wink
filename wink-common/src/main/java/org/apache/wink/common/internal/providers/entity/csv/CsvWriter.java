@@ -41,7 +41,7 @@ public final class CsvWriter {
 
         for (int i = 0; i < row.length; i++) {
             if (i != 0) {
-                buf.append(",");
+                buf.append(","); //$NON-NLS-1$
             }
             buf.append(row[i]);
         }
@@ -57,7 +57,7 @@ public final class CsvWriter {
     static void escape(String[] array) {
         for (int i = array.length - 1; i >= 0; --i) {
             if (array[i] == null) {
-                array[i] = "";
+                array[i] = ""; //$NON-NLS-1$
             } else {
                 StringBuilder buf = new StringBuilder(array[i]);
                 boolean surroundElementWithDoubleQuotes = false;

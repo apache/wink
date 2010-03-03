@@ -45,20 +45,20 @@ import javax.xml.namespace.QName;
 public class ObjectFactory {
 
     private final static QName _Accept_QNAME     =
-                                                     new QName("http://www.w3.org/2007/app",
-                                                               "accept");
+                                                     new QName("http://www.w3.org/2007/app", //$NON-NLS-1$
+                                                               "accept"); //$NON-NLS-1$
     private final static QName _Workspace_QNAME  =
-                                                     new QName("http://www.w3.org/2007/app",
-                                                               "workspace");
+                                                     new QName("http://www.w3.org/2007/app", //$NON-NLS-1$
+                                                               "workspace"); //$NON-NLS-1$
     private final static QName _Categories_QNAME =
-                                                     new QName("http://www.w3.org/2007/app",
-                                                               "categories");
+                                                     new QName("http://www.w3.org/2007/app", //$NON-NLS-1$
+                                                               "categories"); //$NON-NLS-1$
     private final static QName _Service_QNAME    =
-                                                     new QName("http://www.w3.org/2007/app",
-                                                               "service");
+                                                     new QName("http://www.w3.org/2007/app", //$NON-NLS-1$
+                                                               "service"); //$NON-NLS-1$
     private final static QName _Collection_QNAME =
-                                                     new QName("http://www.w3.org/2007/app",
-                                                               "collection");
+                                                     new QName("http://www.w3.org/2007/app", //$NON-NLS-1$
+                                                               "collection"); //$NON-NLS-1$
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of

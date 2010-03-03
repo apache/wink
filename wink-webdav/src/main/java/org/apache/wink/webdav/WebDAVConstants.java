@@ -33,38 +33,38 @@ public final class WebDAVConstants {
     private WebDAVConstants() {
     } // no instances
 
-    public static final String     NAMESPACE_DAV               = "DAV:";
+    public static final String     NAMESPACE_DAV               = "DAV:"; //$NON-NLS-1$
 
     public static final QName      PROPERTY_CREATIONDATE       =
                                                                    new QName(NAMESPACE_DAV,
-                                                                             "creationdate");
+                                                                             "creationdate"); //$NON-NLS-1$
     public static final QName      PROPERTY_DISPLAYNAME        =
                                                                    new QName(NAMESPACE_DAV,
-                                                                             "displayname");
+                                                                             "displayname"); //$NON-NLS-1$
     public static final QName      PROPERTY_GETCONTENTLANGUAGE =
                                                                    new QName(NAMESPACE_DAV,
-                                                                             "getcontentlanguage");
+                                                                             "getcontentlanguage"); //$NON-NLS-1$
     public static final QName      PROPERTY_GETCONTENTLENGTH   =
                                                                    new QName(NAMESPACE_DAV,
-                                                                             "getcontentlength");
+                                                                             "getcontentlength"); //$NON-NLS-1$
     public static final QName      PROPERTY_GETCONTENTTYPE     =
                                                                    new QName(NAMESPACE_DAV,
-                                                                             "getcontenttype");
+                                                                             "getcontenttype"); //$NON-NLS-1$
     public static final QName      PROPERTY_GETETAG            =
                                                                    new QName(NAMESPACE_DAV,
-                                                                             "getetag");
+                                                                             "getetag"); //$NON-NLS-1$
     public static final QName      PROPERTY_GETLASTMODIFIED    =
                                                                    new QName(NAMESPACE_DAV,
-                                                                             "getlastmodified");
+                                                                             "getlastmodified"); //$NON-NLS-1$
     public static final QName      PROPERTY_LOCKDISCOVERY      =
                                                                    new QName(NAMESPACE_DAV,
-                                                                             "lockdiscovery");
+                                                                             "lockdiscovery"); //$NON-NLS-1$
     public static final QName      PROPERTY_RESOURCETYPE       =
                                                                    new QName(NAMESPACE_DAV,
-                                                                             "resourcetype");
+                                                                             "resourcetype"); //$NON-NLS-1$
     public static final QName      PROPERTY_SUPPORTEDLOCK      =
                                                                    new QName(NAMESPACE_DAV,
-                                                                             "supportedlock");
+                                                                             "supportedlock"); //$NON-NLS-1$
 
     public static final Set<QName> PROPERTIES_SET              = new HashSet<QName>();
 

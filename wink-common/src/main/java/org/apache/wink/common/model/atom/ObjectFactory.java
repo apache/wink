@@ -48,14 +48,14 @@ import org.apache.wink.common.internal.model.AtomXhtml;
 public class ObjectFactory {
 
     private final static QName _Content_QNAME  =
-                                                   new QName("http://www.w3.org/2005/Atom",
-                                                             "content");
-    private final static QName _Title_QNAME    = new QName("http://www.w3.org/2005/Atom", "title");
-    private final static QName _Feed_QNAME     = new QName("http://www.w3.org/2005/Atom", "feed");
+                                                   new QName("http://www.w3.org/2005/Atom", //$NON-NLS-1$
+                                                             "content"); //$NON-NLS-1$
+    private final static QName _Title_QNAME    = new QName("http://www.w3.org/2005/Atom", "title"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _Feed_QNAME     = new QName("http://www.w3.org/2005/Atom", "feed"); //$NON-NLS-1$ //$NON-NLS-2$
     private final static QName _Category_QNAME =
-                                                   new QName("http://www.w3.org/2005/Atom",
-                                                             "category");
-    private final static QName _Entry_QNAME    = new QName("http://www.w3.org/2005/Atom", "entry");
+                                                   new QName("http://www.w3.org/2005/Atom", //$NON-NLS-1$
+                                                             "category"); //$NON-NLS-1$
+    private final static QName _Entry_QNAME    = new QName("http://www.w3.org/2005/Atom", "entry"); //$NON-NLS-1$ //$NON-NLS-2$
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of
@@ -149,7 +149,7 @@ public class ObjectFactory {
 
     @XmlElementDecl(namespace = RestConstants.NAMESPACE_XHTML, name = "div")
     public JAXBElement<AtomXhtml> createAtomXhtml(AtomXhtml value) {
-        return new JAXBElement<AtomXhtml>(new QName(RestConstants.NAMESPACE_XHTML, "div"),
+        return new JAXBElement<AtomXhtml>(new QName(RestConstants.NAMESPACE_XHTML, "div"), //$NON-NLS-1$
                                           AtomXhtml.class, null, value);
     }
 

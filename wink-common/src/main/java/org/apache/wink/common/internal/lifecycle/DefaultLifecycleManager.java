@@ -21,6 +21,7 @@ package org.apache.wink.common.internal.lifecycle;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
 
@@ -54,10 +55,10 @@ class DefaultLifecycleManager<T> implements LifecycleManager<T> {
      */
     public ObjectFactory<T> createObjectFactory(T object) {
         if (object == null) {
-            throw new NullPointerException("object");
+            throw new NullPointerException(Messages.getMessage("variableIsNull", "object")); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
-        logger.debug("Creating a {} for {}", SingletonObjectFactory.class, object);
+        logger.debug("Creating a {} for {}", SingletonObjectFactory.class, object); //$NON-NLS-1$
 
         return LifecycleManagerUtils.createSingletonObjectFactory(object);
     }
@@ -65,14 +66,13 @@ class DefaultLifecycleManager<T> implements LifecycleManager<T> {
     public ObjectFactory<T> createObjectFactory(final Class<T> cls) {
 
         if (cls == null) {
-            throw new NullPointerException("cls");
+            throw new NullPointerException(Messages.getMessage("variableIsNull", "cls")); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         if (ResourceMetadataCollector.isDynamicResource(cls)) {
             // default factory cannot create instance of DynamicResource
-            throw new IllegalArgumentException(String
-                .format("Cannot create default factory for DynamicResource: %s", String
-                    .valueOf(cls)));
+            throw new IllegalArgumentException(Messages
+                .getMessage("cannotCreateDefaultFactoryForDR", String.valueOf(cls))); //$NON-NLS-1$
         }
 
         if (ProviderMetadataCollector.isProvider(cls)) {
@@ -86,8 +86,8 @@ class DefaultLifecycleManager<T> implements LifecycleManager<T> {
         }
 
         // unknown object, should never reach this code
-        throw new IllegalArgumentException(String
-            .format("Cannot create default factory for class: %s", String.valueOf(cls)));
+        throw new IllegalArgumentException(Messages
+            .getMessage("cannotCreateDefaultFactoryFor", String.valueOf(cls))); //$NON-NLS-1$
     }
 
 }

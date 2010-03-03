@@ -48,7 +48,7 @@ import org.apache.wink.common.utils.ProviderUtils;
 @Produces(MediaType.WILDCARD)
 public class FormatedExceptionProvider implements MessageBodyWriter<Throwable> {
 
-    private static final String ID_PREFIX = "urn:uuid:";
+    private static final String ID_PREFIX = "urn:uuid:"; //$NON-NLS-1$
 
     @Context
     private Providers           providers;
@@ -110,7 +110,7 @@ public class FormatedExceptionProvider implements MessageBodyWriter<Throwable> {
                                       httpHeaders,
                                       entityStream);
         } else {
-            localizedMessage = "<error>" + localizedMessage + "</error>";
+            localizedMessage = "<error>" + localizedMessage + "</error>"; //$NON-NLS-1$ //$NON-NLS-2$
             entityStream.write(localizedMessage.getBytes(ProviderUtils.getCharset(mediaType)));
         }
     }

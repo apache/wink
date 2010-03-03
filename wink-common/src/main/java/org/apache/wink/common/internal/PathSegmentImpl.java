@@ -31,7 +31,7 @@ import org.apache.wink.common.internal.utils.StringUtils;
 
 public class PathSegmentImpl implements PathSegment, Cloneable, Comparable<PathSegment> {
 
-    private static final String            MATRIX_DELIMITER = ";";
+    private static final String            MATRIX_DELIMITER = ";"; //$NON-NLS-1$
     private String                         path;
     private MultivaluedMap<String, String> matrixParams;
 
@@ -42,14 +42,14 @@ public class PathSegmentImpl implements PathSegment, Cloneable, Comparable<PathS
 
     public PathSegmentImpl(String path) {
         if (path == null) {
-            throw new NullPointerException("path");
+            throw new NullPointerException("path"); //$NON-NLS-1$
         }
         constructParts(path);
     }
 
     public PathSegmentImpl(String path, String matrix) {
         if (path == null) {
-            throw new NullPointerException("path");
+            throw new NullPointerException("path"); //$NON-NLS-1$
         }
         this.path = path;
         constructMatrixParams(extractMatrixParams(matrix));
@@ -57,7 +57,7 @@ public class PathSegmentImpl implements PathSegment, Cloneable, Comparable<PathS
 
     public PathSegmentImpl(String path, MultivaluedMap<String, String> matrixParams) {
         if (path == null) {
-            throw new NullPointerException("path");
+            throw new NullPointerException("path"); //$NON-NLS-1$
         }
         this.path = path;
         this.matrixParams = matrixParams;
@@ -143,19 +143,19 @@ public class PathSegmentImpl implements PathSegment, Cloneable, Comparable<PathS
     @Override
     public String toString() {
         MultivaluedMap<String, String> matrixParameters = getMatrixParameters();
-        String parameters = MultivaluedMapImpl.toString(matrixParameters, ";");
-        String delim = (matrixParameters.isEmpty() ? "" : ";");
+        String parameters = MultivaluedMapImpl.toString(matrixParameters, ";"); //$NON-NLS-1$
+        String delim = (matrixParameters.isEmpty() ? "" : ";"); //$NON-NLS-1$ //$NON-NLS-2$
         String result = getPath() + delim + parameters;
         return result;
     }
 
     public static String toString(List<PathSegment> segments) {
         StringBuilder builder = new StringBuilder();
-        String delim = "";
+        String delim = ""; //$NON-NLS-1$
         for (PathSegment segment : segments) {
             builder.append(delim);
             builder.append(segment.toString());
-            delim = "/";
+            delim = "/"; //$NON-NLS-1$
         }
         return builder.toString();
     }

@@ -68,14 +68,14 @@ public class RestFilter implements Filter {
         public void setStatus(int statusCode) {
             super.setStatus(statusCode);
             this.statusCode = statusCode;
-            logger.debug("FilteredHttpServletResponse set status code to {}", statusCode);
+            logger.debug("FilteredHttpServletResponse set status code to {}", statusCode); //$NON-NLS-1$
         }
 
         @Override
         public void setStatus(int statusCode, String msg) {
             super.setStatus(statusCode, msg);
             this.statusCode = statusCode;
-            logger.debug("FilteredHttpServletResponse set status code to {}", statusCode);
+            logger.debug("FilteredHttpServletResponse set status code to {}", statusCode); //$NON-NLS-1$
         }
 
         int getStatusCode() {
@@ -102,7 +102,7 @@ public class RestFilter implements Filter {
                  * invoked
                  */
                 logger
-                    .debug("Filter {} did not match a resource so letting request continue on FilterChain {}",
+                    .debug("Filter {} did not match a resource so letting request continue on FilterChain {}", //$NON-NLS-1$
                            this,
                            chain);
                 httpServletResponse.setStatus(HttpServletResponse.SC_OK);
@@ -110,7 +110,7 @@ public class RestFilter implements Filter {
             }
         } else {
             logger
-                .debug("Filter {} did not expect a non-HttpServletRequest and/or non-HttpServletResponse but letting chain continue");
+                .debug("Filter {} did not expect a non-HttpServletRequest and/or non-HttpServletResponse but letting chain continue"); //$NON-NLS-1$
             chain.doFilter(servletRequest, servletResponse);
         }
     }
@@ -138,7 +138,7 @@ public class RestFilter implements Filter {
     public void init(final FilterConfig filterConfig) throws ServletException {
         restServlet = new RestServletForFilter(filterConfig);
 
-        logger.debug("Initializing RestFilter {} with {} config and {} servlet", new Object[] {
+        logger.debug("Initializing RestFilter {} with {} config and {} servlet", new Object[] { //$NON-NLS-1$
             this, filterConfig, restServlet});
         restServlet.init(new ServletConfig() {
 
@@ -161,7 +161,7 @@ public class RestFilter implements Filter {
     }
 
     public void destroy() {
-        logger.debug("Destroying RestFilter {}", this);
+        logger.debug("Destroying RestFilter {}", this); //$NON-NLS-1$
         restServlet.destroy();
     }
 }

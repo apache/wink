@@ -93,8 +93,8 @@ public class OpenSearchParameter {
      * Default constructor
      */
     public OpenSearchParameter() {
-        parameterKey = "key";
-        parameter = "value";
+        parameterKey = "key"; //$NON-NLS-1$
+        parameter = "value"; //$NON-NLS-1$
         mandatory = false;
     }
 
@@ -129,7 +129,7 @@ public class OpenSearchParameter {
     }
 
     public String getURLParameter() {
-        return parameterKey + "={" + parameter + (mandatory ? "" : "?") + "}";
+        return parameterKey + "={" + parameter + (mandatory ? "" : "?") + "}"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
     }
 
 }

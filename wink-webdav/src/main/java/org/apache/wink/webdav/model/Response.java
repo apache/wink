@@ -356,7 +356,7 @@ public class Response {
         } else if (property instanceof Element) {
             prop.getAny().add((Element)property);
         } else {
-            throw new IllegalArgumentException("property");
+            throw new IllegalArgumentException("property"); //$NON-NLS-1$
         }
     }
 

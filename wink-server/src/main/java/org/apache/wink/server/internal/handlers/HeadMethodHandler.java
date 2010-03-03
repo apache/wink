@@ -45,7 +45,7 @@ public class HeadMethodHandler implements RequestHandler, ResponseHandler {
                                                                    .getLogger(HeadMethodHandler.class);
 
     private static final String ORIGINAL_RESPONSE_ATT_NAME =
-                                                               HeadMethodHandler.class.getName() + "_original_response";
+                                                               HeadMethodHandler.class.getName() + "_original_response"; //$NON-NLS-1$
 
     public void handleRequest(MessageContext context, HandlersChain chain) throws Throwable {
 
@@ -61,7 +61,7 @@ public class HeadMethodHandler implements RequestHandler, ResponseHandler {
             .getCode()
             && context.getHttpMethod().equalsIgnoreCase(HttpMethod.HEAD)) {
             logger
-                .debug("No HEAD method so trying GET method while not sending the response entity");
+                .debug("No HEAD method so trying GET method while not sending the response entity"); //$NON-NLS-1$
             context.setHttpMethod(HttpMethod.GET);
             HttpServletResponse originalResponse = context.getAttribute(HttpServletResponse.class);
             NoBodyResponse noBodyResponse = new NoBodyResponse(originalResponse);

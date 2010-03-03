@@ -47,7 +47,7 @@ public class WebDAVUtils {
 
     // 1000 years ~ infinite timeout ("Infinite" constant is not accepted by MS
     // client)
-    private static final String LOCK_TIMEOUT = "Second-31536000000";
+    private static final String LOCK_TIMEOUT = "Second-31536000000"; //$NON-NLS-1$
 
     /**
      * Provides a default response with two additional headers for WebDAV and MS
@@ -63,9 +63,9 @@ public class WebDAVUtils {
         Set<String> options = resourceRegistry.getOptions(matchedResourceInstances.get(0));
         String allowHeader = HeaderUtils.buildOptionsHeader(options);
         Response response =
-            RuntimeDelegate.getInstance().createResponseBuilder().header(WebDAVHeaders.DAV, "1")
-                .header(WebDAVHeaders.MS_AUTHOR_VIA, "DAV")
-                .header(HttpHeadersEx.ALLOW, allowHeader).entity("").build();
+            RuntimeDelegate.getInstance().createResponseBuilder().header(WebDAVHeaders.DAV, "1") //$NON-NLS-1$
+                .header(WebDAVHeaders.MS_AUTHOR_VIA, "DAV") //$NON-NLS-1$
+                .header(HttpHeadersEx.ALLOW, allowHeader).entity("").build(); //$NON-NLS-1$
         return response;
     }
 
@@ -93,7 +93,7 @@ public class WebDAVUtils {
             WebDAVModelHelper.unmarshal(unmarshaller,
                                         new StringReader(body),
                                         Lockinfo.class,
-                                        "lockinfo");
+                                        "lockinfo"); //$NON-NLS-1$
 
         // make a response
         Activelock activelock = new Activelock();
@@ -102,7 +102,7 @@ public class WebDAVUtils {
         // set lock scope from the request
         activelock.setLockscope(lockinfo.getLockscope());
         // set 0 depth
-        activelock.setDepth("0");
+        activelock.setDepth("0"); //$NON-NLS-1$
         // set owner from the request
         activelock.setOwner(lockinfo.getOwner());
         // set infinite timeout

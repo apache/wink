@@ -158,7 +158,7 @@ public class Propfind {
     public static Propfind unmarshal(Reader reader) throws IOException {
         Unmarshaller unmarshaller = WebDAVModelHelper.createUnmarshaller();
         Propfind instance =
-            WebDAVModelHelper.unmarshal(unmarshaller, reader, Propfind.class, "propfind");
+            WebDAVModelHelper.unmarshal(unmarshaller, reader, Propfind.class, "propfind"); //$NON-NLS-1$
         return instance;
     }
 
@@ -171,7 +171,7 @@ public class Propfind {
      */
     public static void marshal(Propfind instance, Writer writer) throws IOException {
         Marshaller marshaller = WebDAVModelHelper.createMarshaller();
-        WebDAVModelHelper.marshal(marshaller, instance, writer, "propfind");
+        WebDAVModelHelper.marshal(marshaller, instance, writer, "propfind"); //$NON-NLS-1$
     }
 
 }

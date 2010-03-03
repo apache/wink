@@ -111,11 +111,11 @@ public class ModelUtils {
 
         // as per RFC3023 and Atom specification
         type = type.toLowerCase();
-        if (type.endsWith("/xml") || type.endsWith("+xml")
-            || type.equals("xhtml")
-            || type.equals("text/xml-external-parsed-entity")
-            || type.equals("application/xml-external-parsed-entity")
-            || type.equals("application/xml-dtd")) {
+        if (type.endsWith("/xml") || type.endsWith("+xml") //$NON-NLS-1$ //$NON-NLS-2$
+            || type.equals("xhtml") //$NON-NLS-1$
+            || type.equals("text/xml-external-parsed-entity") //$NON-NLS-1$
+            || type.equals("application/xml-external-parsed-entity") //$NON-NLS-1$
+            || type.equals("application/xml-dtd")) { //$NON-NLS-1$
             return true;
         }
 
@@ -147,7 +147,7 @@ public class ModelUtils {
             // setting this property will cause the handler to get lexical
             // events as well
             if (handler instanceof LexicalHandler) {
-                xmlReader.setProperty("http://xml.org/sax/properties/lexical-handler", handler);
+                xmlReader.setProperty("http://xml.org/sax/properties/lexical-handler", handler); //$NON-NLS-1$
             }
             xmlReader.parse(new InputSource(reader));
         } catch (SAXException e) {
@@ -346,9 +346,9 @@ public class ModelUtils {
 
     public static MediaType determineMediaType(String type) {
         MediaType mediaType;
-        if (type == null || type.equals("text") || type.equals("html")) {
+        if (type == null || type.equals("text") || type.equals("html")) { //$NON-NLS-1$ //$NON-NLS-2$
             mediaType = MediaType.TEXT_PLAIN_TYPE;
-        } else if (type.equals("xhtml")) {
+        } else if (type.equals("xhtml")) { //$NON-NLS-1$
             mediaType = MediaType.APPLICATION_XML_TYPE;
         } else {
             mediaType = MediaType.valueOf(type);
@@ -425,7 +425,7 @@ public class ModelUtils {
             if (ProviderMetadataCollector.isProvider(cls)) {
                 providersRegistry.addProvider(cls);
             } else {
-                logger.warn(Messages.getMessage("classNotAProvider", cls));
+                logger.warn(Messages.getMessage("classNotAProvider", cls)); //$NON-NLS-1$
             }
         }
     }
@@ -437,7 +437,7 @@ public class ModelUtils {
             if (ProviderMetadataCollector.isProvider(cls)) {
                 providersRegistry.addProvider(obj);
             } else {
-                logger.warn(Messages.getMessage("classNotAProvider", obj.getClass()));
+                logger.warn(Messages.getMessage("classNotAProvider", obj.getClass())); //$NON-NLS-1$
             }
         }
     }
@@ -455,7 +455,7 @@ public class ModelUtils {
             if (ProviderMetadataCollector.isProvider(cls)) {
                 providersRegistry.addProvider(obj, priority);
             } else {
-                logger.warn(Messages.getMessage("classNotAProvider", obj.getClass()));
+                logger.warn(Messages.getMessage("classNotAProvider", obj.getClass())); //$NON-NLS-1$
             }
         }
     }

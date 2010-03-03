@@ -44,15 +44,15 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _Status_QNAME              = new QName("DAV:", "status");
-    private final static QName _Depth_QNAME               = new QName("DAV:", "depth");
-    private final static QName _Dst_QNAME                 = new QName("DAV:", "dst");
+    private final static QName _Status_QNAME              = new QName("DAV:", "status"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _Depth_QNAME               = new QName("DAV:", "depth"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _Dst_QNAME                 = new QName("DAV:", "dst"); //$NON-NLS-1$ //$NON-NLS-2$
     private final static QName _Responsedescription_QNAME =
-                                                              new QName("DAV:",
-                                                                        "responsedescription");
-    private final static QName _Timeout_QNAME             = new QName("DAV:", "timeout");
-    private final static QName _Src_QNAME                 = new QName("DAV:", "src");
-    private final static QName _Href_QNAME                = new QName("DAV:", "href");
+                                                              new QName("DAV:", //$NON-NLS-1$
+                                                                        "responsedescription"); //$NON-NLS-1$
+    private final static QName _Timeout_QNAME             = new QName("DAV:", "timeout"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _Src_QNAME                 = new QName("DAV:", "src"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _Href_QNAME                = new QName("DAV:", "href"); //$NON-NLS-1$ //$NON-NLS-2$
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of

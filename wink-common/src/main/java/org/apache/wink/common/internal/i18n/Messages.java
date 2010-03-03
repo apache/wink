@@ -24,7 +24,7 @@ import java.util.MissingResourceException;
 
 public class Messages {
 
-    private static final String        resourceName = "resource";
+    private static final String        resourceName = "resource"; //$NON-NLS-1$
     private static final MessageBundle messageBundle;
 
     static {

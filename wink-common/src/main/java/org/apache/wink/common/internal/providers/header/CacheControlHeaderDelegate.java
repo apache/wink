@@ -91,7 +91,7 @@ public class CacheControlHeaderDelegate implements HeaderDelegate<CacheControl> 
 
     private void appendDirective(StringBuffer cacheControlHeader, String directive) {
         if (cacheControlHeader.length() > 0) {
-            cacheControlHeader.append(", ");
+            cacheControlHeader.append(", "); //$NON-NLS-1$
         }
         cacheControlHeader.append(directive);
 
@@ -108,7 +108,7 @@ public class CacheControlHeaderDelegate implements HeaderDelegate<CacheControl> 
         StringBuffer stringBuffer = new StringBuffer();
         for (String value : values) {
             if (stringBuffer.length() > 0)
-                stringBuffer.append(", ");
+                stringBuffer.append(", "); //$NON-NLS-1$
             stringBuffer.append(value);
         }
         return stringBuffer.toString();
@@ -125,9 +125,9 @@ public class CacheControlHeaderDelegate implements HeaderDelegate<CacheControl> 
                                            String directiveValue) {
         appendDirective(cacheControlHeader, directive);
         if (directiveValue != null && directiveValue.length() > 0) {
-            cacheControlHeader.append("=\"");
+            cacheControlHeader.append("=\""); //$NON-NLS-1$
             cacheControlHeader.append(directiveValue);
-            cacheControlHeader.append("\"");
+            cacheControlHeader.append("\""); //$NON-NLS-1$
         }
     }
 
@@ -143,7 +143,7 @@ public class CacheControlHeaderDelegate implements HeaderDelegate<CacheControl> 
                                           String value) {
         appendDirective(cacheControlHeader, directive);
         if (value != null && value.length() > 0) {
-            cacheControlHeader.append("=");
+            cacheControlHeader.append("="); //$NON-NLS-1$
             cacheControlHeader.append(value);
         }
     }
@@ -157,7 +157,7 @@ public class CacheControlHeaderDelegate implements HeaderDelegate<CacheControl> 
      */
     private void appendDirective(StringBuffer cacheControlHeader, String directive, int value) {
         appendDirective(cacheControlHeader, directive);
-        cacheControlHeader.append("=");
+        cacheControlHeader.append("="); //$NON-NLS-1$
         cacheControlHeader.append(value);
     }
 
@@ -171,8 +171,8 @@ public class CacheControlHeaderDelegate implements HeaderDelegate<CacheControl> 
         if (value == null) {
             return null;
         }
-        if (value.replaceAll("\\s+", "").length() < value.length()) {
-            return "\"" + value + "\"";
+        if (value.replaceAll("\\s+", "").length() < value.length()) { //$NON-NLS-1$ //$NON-NLS-2$
+            return "\"" + value + "\""; //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         return value;

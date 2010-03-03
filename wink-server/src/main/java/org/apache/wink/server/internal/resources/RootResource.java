@@ -80,7 +80,7 @@ public class RootResource {
                                        UriInfo uriInfo) {
         if (collectionList == null) {
             // this should never happen
-            throw new NullPointerException(Messages.getMessage("rootResourceCollectionListIsNull"));
+            throw new NullPointerException(Messages.getMessage("rootResourceCollectionListIsNull")); //$NON-NLS-1$
         }
 
         // Map of all APP workspaces

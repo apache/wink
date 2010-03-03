@@ -301,7 +301,7 @@ public class Prop {
             String elementName = element.getLocalName();
             String elementNamespaceURI = element.getNamespaceURI();
             if (elementNamespaceURI == null) {
-                elementNamespaceURI = "";
+                elementNamespaceURI = ""; //$NON-NLS-1$
             }
             if (elementNamespaceURI.equals(namespaceURI) && elementName.equals(name)) {
                 return element;

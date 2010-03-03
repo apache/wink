@@ -41,7 +41,7 @@ public final class UriPathNormalizer {
      * @return normalize path
      */
     public static String normalize(String path) {
-        if ((path != null) && (path.indexOf(".") == -1) && (path.indexOf("//") == -1)) {
+        if ((path != null) && (path.indexOf(".") == -1) && (path.indexOf("//") == -1)) { //$NON-NLS-1$ //$NON-NLS-2$
             return path;
         }
 

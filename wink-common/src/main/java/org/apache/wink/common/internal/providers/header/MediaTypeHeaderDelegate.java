@@ -52,8 +52,8 @@ public class MediaTypeHeaderDelegate implements HeaderDelegate<MediaType> {
             return cached;
         }
 
-        String type = "*";
-        String subType = "*";
+        String type = "*"; //$NON-NLS-1$
+        String subType = "*"; //$NON-NLS-1$
         Map<String, String> paramsMap = null;
         String[] all = SEMICOLON.split(value);
 

@@ -61,7 +61,7 @@ public class FindResourceMethodHandler implements RequestHandler {
         // resource method
         if (resource.isExactMatch()) {
             logger
-                .debug("Root resource @Path matches exactly so finding root resource method in {}",
+                .debug("Root resource @Path matches exactly so finding root resource method in {}", //$NON-NLS-1$
                        resource.getResourceClass().getName());
             handleResourceMethod(context, chain);
             return;
@@ -70,11 +70,11 @@ public class FindResourceMethodHandler implements RequestHandler {
         // sub-resource method or locator
         UriTemplateMatcher templateMatcher = resource.getMatcher();
         String tail = UriTemplateProcessor.normalizeUri(templateMatcher.getTail(false));
-        logger.debug("Unmatched tail to the URI: {}", tail);
+        logger.debug("Unmatched tail to the URI: {}", tail); //$NON-NLS-1$
 
         // get a sorted list of all the sub-resources (methods and locators)
         List<SubResourceInstance> subResources = resource.getRecord().getMatchingSubResources(tail);
-        logger.debug("Possible subresources found: {}", subResources);
+        logger.debug("Possible subresources found: {}", subResources); //$NON-NLS-1$
         if (subResources.size() == 0) {
             result.setError(new WebApplicationException(Response.Status.NOT_FOUND));
             return;
@@ -82,7 +82,7 @@ public class FindResourceMethodHandler implements RequestHandler {
 
         // get all the searchable sub-resources
         List<SubResourceInstance> searchableSubResources = getSearchableSubResources(subResources);
-        logger.debug("Possible searchable subresources found: {}", searchableSubResources);
+        logger.debug("Possible searchable subresources found: {}", searchableSubResources); //$NON-NLS-1$
         // save the current data in case we need to role back the information if
         // the search fails and we will need to continue to the next
         // sub-resource
@@ -141,7 +141,7 @@ public class FindResourceMethodHandler implements RequestHandler {
         // continue the chain to invoke the method
         if (logger.isDebugEnabled()) {
             MethodMetadata metadata = (method == null) ? null : method.getMetadata();
-            logger.debug("Found root resource method to invoke: {} ", metadata);
+            logger.debug("Found root resource method to invoke: {} ", metadata); //$NON-NLS-1$
         }
         chain.doChain(context);
     }
@@ -173,7 +173,7 @@ public class FindResourceMethodHandler implements RequestHandler {
         // continue the chain to invoke the method
         if (logger.isDebugEnabled()) {
             MethodMetadata metadata = (method == null) ? null : method.getMetadata();
-            logger.debug("Found subresource method to invoke: {} ", metadata);
+            logger.debug("Found subresource method to invoke: {} ", metadata); //$NON-NLS-1$
         }
         chain.doChain(context);
     }
@@ -200,7 +200,7 @@ public class FindResourceMethodHandler implements RequestHandler {
         if (logger.isDebugEnabled()) {
             MethodMetadata metadata =
                 (subResourceInstance == null) ? null : subResourceInstance.getMetadata();
-            logger.debug("Found subresource locator to invoke: {} ", metadata);
+            logger.debug("Found subresource locator to invoke: {} ", metadata); //$NON-NLS-1$
         }
         chain.doChain(context);
 
@@ -208,7 +208,7 @@ public class FindResourceMethodHandler implements RequestHandler {
         // continue the search in it
         Object subResource = context.getResponseEntity();
         if (subResource == null) {
-            logger.debug("Subresource returned was null so returning a 404 Not Found");
+            logger.debug("Subresource returned was null so returning a 404 Not Found"); //$NON-NLS-1$
             result.setError(new WebApplicationException(Status.NOT_FOUND));
             return;
         }
@@ -220,7 +220,7 @@ public class FindResourceMethodHandler implements RequestHandler {
         // call recursively to search in the sub-resource
         result.setFound(false);
         logger
-            .debug("Re-invoking the chain (due to hitting a subresource locator method) with the new subresource instance {}",
+            .debug("Re-invoking the chain (due to hitting a subresource locator method) with the new subresource instance {}", //$NON-NLS-1$
                    resourceInstance);
         handleRequest(context, chain);
     }

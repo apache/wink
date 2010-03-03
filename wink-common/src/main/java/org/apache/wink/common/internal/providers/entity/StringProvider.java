@@ -69,11 +69,11 @@ public class StringProvider implements MessageBodyReader<String>, MessageBodyWri
                         Annotation[] annotations,
                         MediaType mediaType) {
         String charSet = ProviderUtils.getCharset(mediaType);
-        if (charSet != null && !"UTF-8".equals(charSet)) {
+        if (charSet != null && !"UTF-8".equals(charSet)) { //$NON-NLS-1$
             try {
                 return t.getBytes(charSet).length;
             } catch (UnsupportedEncodingException e) {
-                logger.debug("Unsupported character encoding exception: {}", e);
+                logger.debug("Unsupported character encoding exception: {}", e); //$NON-NLS-1$
                 throw new WebApplicationException(e, 500);
             }
         }
@@ -95,7 +95,7 @@ public class StringProvider implements MessageBodyReader<String>, MessageBodyWri
                         MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException, WebApplicationException {
 
-        logger.debug("Writing {} to stream using {}", t, getClass().getName());
+        logger.debug("Writing {} to stream using {}", t, getClass().getName()); //$NON-NLS-1$
 
         entityStream.write(t.getBytes(ProviderUtils.getCharset(mediaType)));
     }

@@ -49,6 +49,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.wink.common.RestException;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.model.ModelUtils;
 import org.apache.wink.common.internal.utils.JAXBUtils;
 import org.apache.wink.common.model.synd.SyndCategory;
@@ -138,7 +139,7 @@ import org.w3c.dom.Element;
                                           "author", "contributor", "category", "any", "content"})
 public class AtomEntry extends AtomCommonAttributes {
 
-    private static final String      MATCH_ANY_PATTERN = ".*";
+    private static final String      MATCH_ANY_PATTERN = ".*"; //$NON-NLS-1$
 
     @XmlElement(required = true)
     protected String                 id;
@@ -163,7 +164,7 @@ public class AtomEntry extends AtomCommonAttributes {
         try {
             atomContext = JAXBContext.newInstance(AtomEntry.class.getPackage().getName());
         } catch (JAXBException e) {
-            throw new RestException("Failed to create JAXBContext for AtomEntry", e);
+            throw new RestException(Messages.getMessage("failedToCreateJAXBContextFor", "AtomEntry"), e); //$NON-NLS-1$ //$NON-NLS-2$
         }
     }
 
@@ -449,7 +450,7 @@ public class AtomEntry extends AtomCommonAttributes {
      */
     public List<AtomLink> getLinks(String relationPattern, String typePattern) {
         if (relationPattern == null || typePattern == null) {
-            throw new NullPointerException("pattern");
+            throw new NullPointerException(Messages.getMessage("variableIsNull", "pattern")); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         List<AtomLink> matchingLinks = new ArrayList<AtomLink>();
@@ -458,10 +459,10 @@ public class AtomEntry extends AtomCommonAttributes {
             String rel = link.getRel();
             String type = link.getType();
             if (rel == null) {
-                rel = "";
+                rel = ""; //$NON-NLS-1$
             }
             if (type == null) {
-                type = "";
+                type = ""; //$NON-NLS-1$
             }
             if (rel.matches(relationPattern) && type.matches(typePattern)) {
                 matchingLinks.add(link);

@@ -22,18 +22,18 @@ package org.apache.wink.webdav;
 
 public final class WebDAVHeaders {
 
-    public static final String DAV           = "DAV";
-    public static final String DEPTH         = "Depth";
-    public static final String OVERWRITE     = "Overwrite";
-    public static final String DESTINATION   = "Destination";
-    public static final String IF            = "If";
-    public static final String LOCK_TOKEN    = "Lock-Token";
-    public static final String TIMEOUT       = "Timeout";
+    public static final String DAV           = "DAV"; //$NON-NLS-1$
+    public static final String DEPTH         = "Depth"; //$NON-NLS-1$
+    public static final String OVERWRITE     = "Overwrite"; //$NON-NLS-1$
+    public static final String DESTINATION   = "Destination"; //$NON-NLS-1$
+    public static final String IF            = "If"; //$NON-NLS-1$
+    public static final String LOCK_TOKEN    = "Lock-Token"; //$NON-NLS-1$
+    public static final String TIMEOUT       = "Timeout"; //$NON-NLS-1$
 
     /**
      * Microsoft <a
      * href="http://msdn.microsoft.com/en-us/library/cc250217.aspx">
      * authorization header</a>
      */
-    public static final String MS_AUTHOR_VIA = "MS-Author-Via";
+    public static final String MS_AUTHOR_VIA = "MS-Author-Via"; //$NON-NLS-1$
 }

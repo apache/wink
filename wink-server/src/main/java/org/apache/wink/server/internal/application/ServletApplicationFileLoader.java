@@ -28,7 +28,7 @@ import org.apache.wink.server.internal.utils.ServletFileLoader;
 
 public class ServletApplicationFileLoader extends ApplicationFileLoader {
 
-    private static final String SERVER_CORE_APPLICATION = "META-INF/server/wink-providers";
+    private static final String SERVER_CORE_APPLICATION = "META-INF/server/wink-providers"; //$NON-NLS-1$
 
     public ServletApplicationFileLoader(boolean loadWinkApplication) throws FileNotFoundException {
         super(loadWinkApplication);

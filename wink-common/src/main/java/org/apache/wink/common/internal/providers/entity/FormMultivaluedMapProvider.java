@@ -85,7 +85,7 @@ public class FormMultivaluedMapProvider implements
         // delim = "&";
         // }
         // }
-        String string = MultivaluedMapImpl.toString(t, "&");
+        String string = MultivaluedMapImpl.toString(t, "&"); //$NON-NLS-1$
         string = UriEncoder.encodeQuery(string, true);
         ProviderUtils.writeToStream(string, entityStream, mediaType);
     }

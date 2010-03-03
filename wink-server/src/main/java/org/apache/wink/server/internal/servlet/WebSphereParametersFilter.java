@@ -50,7 +50,7 @@ import java.util.StringTokenizer;
 public class WebSphereParametersFilter implements Filter {
 
     public static final String CONTENT_TYPE_WWW_FORM_URLENCODED =
-                                                                    "application/x-www-form-urlencoded";
+                                                                    "application/x-www-form-urlencoded"; //$NON-NLS-1$
 
     public void init(FilterConfig filterConfig) throws ServletException {
     }
@@ -110,7 +110,7 @@ public class WebSphereParametersFilter implements Filter {
      */
     private static void parseQuery(Map<String, List<String>> paramMap, String query) {
 
-        StringTokenizer tokenizer = new StringTokenizer(query, "&");
+        StringTokenizer tokenizer = new StringTokenizer(query, "&"); //$NON-NLS-1$
         while (tokenizer.hasMoreTokens()) {
 
             String name;
@@ -123,7 +123,7 @@ public class WebSphereParametersFilter implements Filter {
                 value = UriEncoder.decodeString(token.substring(equal + 1));
             } else {
                 name = UriEncoder.decodeString(token);
-                value = "";
+                value = ""; //$NON-NLS-1$
             }
 
             List<String> values = paramMap.get(name);

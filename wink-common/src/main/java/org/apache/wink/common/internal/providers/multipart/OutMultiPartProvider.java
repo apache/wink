@@ -61,11 +61,11 @@ public class OutMultiPartProvider implements MessageBodyWriter<OutMultiPart> {
 
 		// Sync between the boundary of the MediaType (if exist) and the one 
 		// in the MultiPart object. priority to the one on the MediaType  
-		String boundary = mediaType.getParameters().get("boundary");
+		String boundary = mediaType.getParameters().get("boundary"); //$NON-NLS-1$
 	    if (boundary != null){
 	        multiPart.setBoundary(boundary);
 	    }else{
-			httpHeaders.putSingle(HttpHeaders.CONTENT_TYPE, mediaType.toString() + "; boundary=" + multiPart.getBoundary());
+			httpHeaders.putSingle(HttpHeaders.CONTENT_TYPE, mediaType.toString() + "; boundary=" + multiPart.getBoundary()); //$NON-NLS-1$
 	    }
 	    
 		multiPart.write(entityStream,providers);		

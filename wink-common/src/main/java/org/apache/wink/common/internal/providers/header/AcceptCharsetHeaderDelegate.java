@@ -62,7 +62,7 @@ public class AcceptCharsetHeaderDelegate implements HeaderDelegate<AcceptCharset
             return qCharsets;
         }
 
-        for (String charsetRange : acceptableCharsetValue.split(",")) {
+        for (String charsetRange : acceptableCharsetValue.split(",")) { //$NON-NLS-1$
             int semicolonIndex = charsetRange.indexOf(';');
             double qValue;
             String charsetSpec;
@@ -86,7 +86,7 @@ public class AcceptCharsetHeaderDelegate implements HeaderDelegate<AcceptCharset
             if (charsetSpec.length() == 0) {
                 // ignore empty encoding specifications
                 continue;
-            } else if (charsetSpec.equals("*")) {
+            } else if (charsetSpec.equals("*")) { //$NON-NLS-1$
                 qCharsets.add(new AcceptCharset.ValuedCharset(qValue, null));
             } else {
                 qCharsets.add(new AcceptCharset.ValuedCharset(qValue, charsetSpec));
