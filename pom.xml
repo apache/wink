@@ -48,7 +48,6 @@
         <module>wink-examples</module>
         <module>wink-scripts</module>
         <module>wink-assembly</module>
-    <!--    <module>wink-itests</module> -->
     </modules>
     <scm>
         <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/wink/trunk</connection>
@@ -583,6 +582,19 @@
                 <distribution.deploy.directory>ast</distribution.deploy.directory>
                 </properties
             -->
+        </profile>
+        <profile>
+            <id>wink-itests</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>wink.itests</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <modules>
+                <module>wink-itests</module> 
+            </modules>
         </profile>
     </profiles>
     <inceptionYear>2009</inceptionYear>
