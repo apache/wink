@@ -546,6 +546,32 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
             return this;
         }
 
+        if (isFirstCall) {
+            if (path.indexOf(":") != -1) {
+                // we need to parse this as scheme:scheme-specific-part#fragment
+                // for
+                // a hierarchical URI
+                // if a non-valid URI is passed in, the path is parsed as normal
+                String[] segments = path.split(":", 2);
+                if (segments.length == 2 && segments[0].length() > 0) {
+                    String scheme = segments[0];
+                    segments = segments[1].split("#", 2);
+                    if (segments[0].length() > 0) {
+                        String schemeSpecificPart = segments[0];
+                        String fragment = null;
+                        if (segments.length == 2)
+                            fragment = segments[1];
+                        scheme(scheme);
+                        schemeSpecificPart(schemeSpecificPart);
+                        fragment(fragment);
+                        logger.debug("replacePath() exit");
+                        return this;
+                    }
+                }
+            }
+            isFirstCall = false;
+        }
+
         // strip off the authority prefix if present
         String _path = path;
         if (path.startsWith("//")) {

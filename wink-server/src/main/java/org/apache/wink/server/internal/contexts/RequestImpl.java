@@ -75,6 +75,38 @@ public class RequestImpl implements Request {
         return null;
     }
 
+    // a call into this method is an indicator that the resource does not exist
+    // see C007
+    // http://jcp.org/aboutJava/communityprocess/maintenance/jsr311/311ChangeLog.html
+    public ResponseBuilder evaluatePreconditions() {
+        logger.debug("evaluatePreconditions() called");
+
+        // the resource does not exist yet so any If-Match header would result
+        // in a precondition failed
+        String ifMatch = getHeaderValue(HttpHeaders.IF_MATCH);
+        if (ifMatch != null) {
+            try {
+                EntityTagMatchHeader ifMatchHeader = null;
+                ifMatchHeader = ifMatchHeaderDelegate.fromString(ifMatch);
+                logger.debug("ifMatchHeaderDelegate returned {}", ifMatchHeader);
+            } catch (IllegalArgumentException e) {
+                throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
+            }
+            // we won't find a match. To be consistent with evaluateIfMatch, we
+            // return a built response
+            ResponseBuilder responseBuilder = delegate.createResponseBuilder();
+            responseBuilder.status(HttpServletResponse.SC_PRECONDITION_FAILED);
+            logger
+                .debug("evaluatePreconditions() returning built response because there was no match due to no entity tag");
+            return responseBuilder;
+        }
+
+        // since the resource does not exist yet if there is a If-None-Match
+        // header, then this should return null. if there is no If-None-Match
+        // header, this should still return null
+        return null;
+    }
+
     public ResponseBuilder evaluatePreconditions(EntityTag tag) {
         logger.debug("evaluatePreconditions({}) called", tag); //$NON-NLS-1$
         String ifMatch = getHeaderValue(HttpHeaders.IF_MATCH);

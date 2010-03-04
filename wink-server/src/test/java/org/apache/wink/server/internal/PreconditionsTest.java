@@ -150,6 +150,16 @@ public class PreconditionsTest extends MockServletInvocationTest {
             return THE_CONTENT;
         }
 
+        @GET
+        @Produces("text/plain")
+        @Path("nonexistyet")
+        public Object getResourceDoesNotExistYet(@Context Request request) {
+            ResponseBuilder evaluatePreconditions = request.evaluatePreconditions();
+            if (evaluatePreconditions != null) {
+                return evaluatePreconditions.build();
+            }
+            return THE_CONTENT;
+        }
     } // 
 
     public void testNormalGet() throws Exception {
@@ -476,6 +486,42 @@ public class PreconditionsTest extends MockServletInvocationTest {
             .toHttpDate(modified_since));
         response = invoke(request);
         assertEquals("status", 412, response.getStatus());
+    }
+
+    public void testConditionalIfNotExistYet() throws Exception {
+        // no headers yet
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("GET", "get/abcd/nonexistyet", "*/*");
+        MockHttpServletResponse response = invoke(request);
+        assertEquals("status", 200, response.getStatus());
+        assertEquals("content", THE_CONTENT, response.getContentAsString());
+
+        // GET
+        // If-Match
+        request = MockRequestConstructor.constructMockRequest("GET", "get/abcd/nonexistyet", "*/*");
+        request.addHeader(HttpHeaders.IF_MATCH, "*");
+        response = invoke(request);
+        assertEquals("status", 412, response.getStatus());
+
+        // If-Match
+        request = MockRequestConstructor.constructMockRequest("GET", "get/abcd/nonexistyet", "*/*");
+        request.addHeader(HttpHeaders.IF_MATCH, "\"randomEntityTag\"");
+        response = invoke(request);
+        assertEquals("status", 412, response.getStatus());
+
+        // If-None-Match
+        request = MockRequestConstructor.constructMockRequest("GET", "get/abcd/nonexistyet", "*/*");
+        request.addHeader(HttpHeaders.IF_NONE_MATCH, "\"randomEntityTag\"");
+        response = invoke(request);
+        assertEquals("status", 200, response.getStatus());
+        assertEquals("content", THE_CONTENT, response.getContentAsString());
+
+        // If-None-Match
+        request = MockRequestConstructor.constructMockRequest("GET", "get/abcd/nonexistyet", "*/*");
+        request.addHeader(HttpHeaders.IF_NONE_MATCH, "*");
+        response = invoke(request);
+        assertEquals("status", 200, response.getStatus());
+        assertEquals("content", THE_CONTENT, response.getContentAsString());
     }
 
 }
