@@ -42,6 +42,9 @@ public class EntityTagHeaderDelegate implements HeaderDelegate<EntityTag> {
 
         // Check that e-tag is quoted-string
         if (!eTag.startsWith("\"") || !eTag.endsWith("\"")) {
+            if ("*".equals(eTag)) {
+                return new EntityTag("*");
+            }
             throw new IllegalArgumentException("Entity Tag " + eTag + " is not quoted properly");
         }
 
