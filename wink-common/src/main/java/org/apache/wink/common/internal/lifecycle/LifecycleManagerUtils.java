@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.security.PrivilegedActionException;
 
 import org.apache.wink.common.internal.i18n.Messages;
+import org.apache.wink.common.internal.registry.metadata.ApplicationMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
@@ -69,6 +70,8 @@ public class LifecycleManagerUtils {
             classMetadata = ProviderMetadataCollector.collectMetadata(cls);
         } else if (ResourceMetadataCollector.isResource(cls)) {
             classMetadata = ResourceMetadataCollector.collectMetadata(cls);
+        } else if (ApplicationMetadataCollector.isApplication(cls)) {
+            classMetadata = ApplicationMetadataCollector.collectMetadata(cls);
         } else {
             throw new IllegalArgumentException("Cannot create factory for class " + cls);
         }

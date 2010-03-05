@@ -30,15 +30,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Application;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.i18n.Messages;
+import org.apache.wink.common.internal.lifecycle.LifecycleManagerUtils;
+import org.apache.wink.common.internal.lifecycle.ObjectFactory;
 import org.apache.wink.common.internal.utils.ClassUtils;
 import org.apache.wink.server.internal.DeploymentConfiguration;
 import org.apache.wink.server.internal.RequestProcessor;
 import org.apache.wink.server.internal.application.ServletWinkApplication;
 import org.apache.wink.server.internal.properties.WinkSystemProperties;
 import org.apache.wink.server.internal.utils.ServletFileLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -180,7 +182,11 @@ public class RestServlet extends AbstractRestServlet {
             // use ClassUtils.loadClass instead of Class.forName so we have
             // classloader visibility into the Web module in J2EE environments
             appClass = (Class<? extends Application>)ClassUtils.loadClass(initParameter);
-            return appClass.newInstance();
+            
+            // let the lifecycle manager create the instance and process fields for injection
+            ObjectFactory of = LifecycleManagerUtils.createSingletonObjectFactory(appClass);
+            
+            return (Application)of.getInstance(null);
         }
         String appLocationParameter = getInitParameter(APP_LOCATION_PARAM);
         if (appLocationParameter == null) {
