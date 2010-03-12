@@ -449,6 +449,11 @@
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-jdk14</artifactId>
+                <version>1.5.11</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
                 <artifactId>jcl-over-slf4j</artifactId>
                 <version>1.5.11</version>
             </dependency>
@@ -595,6 +600,35 @@
             <modules>
                 <module>wink-itests</module> 
             </modules>
+        </profile>
+        <profile>
+            <!-- users can specify -Dlogfile=/full/path/to/logging.properties to turn on
+                 logging for any given maven build in any project.  There is a default
+                 logging.properties in wink-component-test-support/src/main/resources. -->
+            <id>Log</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>java.util.logging.config.file</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                            <systemProperties>
+                                <property>
+                                    <name>java.util.logging.config.file</name>
+                                    <value>${java.util.logging.config.file}</value>
+                                </property>
+                            </systemProperties>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
     <inceptionYear>2009</inceptionYear>
