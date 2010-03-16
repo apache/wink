@@ -35,6 +35,8 @@ import org.apache.wink.client.internal.handlers.HttpURLConnectionHandler;
 import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.internal.application.ApplicationFileLoader;
 import org.apache.wink.common.internal.i18n.Messages;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Provides client configuration. The ClientConfig is implemented using the
@@ -53,7 +55,39 @@ public class ClientConfig implements Cloneable {
     private LinkedList<Application>   applications;
     private boolean                   modifiable;
     private boolean                   isAcceptHeaderAutoSet;
-    private boolean                   loadWinkApplications = true;
+    private boolean                   loadWinkApplications               = true;
+
+    private static final String       WINK_CLIENT_CONNECTTIMEOUT         =
+                                                                             "wink.client.connectTimeout";
+    private static final String       WINK_CLIENT_READTIMEOUT            =
+                                                                             "wink.client.readTimeout";
+    private static final Logger       logger                             =
+                                                                             LoggerFactory
+                                                                                 .getLogger(ClientConfig.class);
+
+    private static int                WINK_CLIENT_CONNECTTIMEOUT_DEFAULT = 60000;
+    private static int                WINK_CLIENT_READTIMEOUT_DEFAULT    = 60000;
+
+    static {
+        try {
+            String connectTimeoutString = System.getProperty(WINK_CLIENT_CONNECTTIMEOUT);
+            if (connectTimeoutString != null)
+                WINK_CLIENT_CONNECTTIMEOUT_DEFAULT = Integer.parseInt(connectTimeoutString);
+            logger.debug("Wink client connectTimeout default value is {}.",
+                         WINK_CLIENT_CONNECTTIMEOUT_DEFAULT);
+        } catch (Exception e) {
+            logger.debug("Error processing {} system property: {}", WINK_CLIENT_CONNECTTIMEOUT, e);
+        }
+        try {
+            String readTimeoutString = System.getProperty(WINK_CLIENT_READTIMEOUT);
+            if (readTimeoutString != null)
+                WINK_CLIENT_READTIMEOUT_DEFAULT = Integer.parseInt(readTimeoutString);
+            logger.debug("Wink client readTimeout default value is {}.",
+                         +WINK_CLIENT_READTIMEOUT_DEFAULT);
+        } catch (Exception e) {
+            logger.debug("Error processing {} system property: {}", WINK_CLIENT_READTIMEOUT, e);
+        }
+    }
 
     /**
      * Construct a new ClientConfig with the following default settings:
@@ -68,8 +102,8 @@ public class ClientConfig implements Cloneable {
         modifiable = true;
         proxyHost = null;
         proxyPort = 80;
-        connectTimeout = 60000;
-        readTimeout = 60000;
+        connectTimeout = WINK_CLIENT_CONNECTTIMEOUT_DEFAULT;
+        readTimeout = WINK_CLIENT_READTIMEOUT_DEFAULT;
         followRedirects = true;
         isAcceptHeaderAutoSet = true;
         handlers = new LinkedList<ClientHandler>();
