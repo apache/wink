@@ -553,7 +553,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                 // a hierarchical URI
                 // if a non-valid URI is passed in, the path is parsed as normal
                 String[] segments = path.split(":", 2);
-                if (segments.length == 2 && segments[0].length() > 0) {
+                if (segments.length == 2 && segments[0].length() > 0 && segments[0].indexOf("{") == -1) {
                     String scheme = segments[0];
                     segments = segments[1].split("#", 2);
                     if (segments[0].length() > 0) {
@@ -767,7 +767,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
             // a hierarchical URI
             // if a non-valid URI is passed in, the path is parsed as normal
             String[] segments = path.split(":", 2);
-            if (segments.length == 2 && segments[0].length() > 0) {
+            if (segments.length == 2 && segments[0].length() > 0 && segments[0].indexOf("{") == -1) {
                 String scheme = segments[0];
                 segments = segments[1].split("#", 2);
                 if (segments[0].length() > 0) {

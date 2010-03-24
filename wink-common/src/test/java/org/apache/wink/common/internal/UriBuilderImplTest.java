@@ -549,4 +549,14 @@ public class UriBuilderImplTest extends TestCase {
         assertEquals("http://localhost?something", UriBuilder.fromUri("http://localhost?something")
             .build().toString());
     }
+    
+
+    public void testWithPathTemplate() {
+        UriBuilder builder = UriBuilder.fromPath("/myResource/{entity_id: [0-9]+}");
+        assertEquals("/myResource/3", builder.build("3").toString());
+        
+        builder = UriBuilder.fromPath("http://localhost:8080/myResource");
+        builder.path("{entity_id: [0-9]+}");
+        assertEquals("http://localhost:8080/myResource/3", builder.build("3").toString());
+    }
 }
