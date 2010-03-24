@@ -82,7 +82,74 @@ public abstract class AbstractJAXBProvider {
     private Pool<JAXBContext, Unmarshaller>                upool                     =
                                                                                                 new Pool<JAXBContext, Unmarshaller>();
 
-/**
+    /**
+     * This class is the key to the JAXBContext cache.  It must be based on the ContextResolver instance who created
+     * the JAXBContext and the type passed to it.  The only way this cache becomes invalid is if the ContextResolver does
+     * something crazy like create JAXBContexts based on time -- it only creates contexts between noon and 5:00pm.  So, uhhh,
+     * don't do that.
+     */
+    private static class JAXBContextResolverKey {
+        protected ContextResolver<JAXBContext> _resolver;
+        protected Type _type;
+        private int hashCode = -1;
+        public JAXBContextResolverKey(ContextResolver<JAXBContext> resolver, Type type) {
+            // resolver may be null, which is ok; we'll protect against NPEs in equals and hashCode overrides
+            _resolver = resolver;
+            _type = type;
+        }
+        
+        @Override
+        public boolean equals(Object o) {
+            if ((o == null) || (!(o instanceof JAXBContextResolverKey))) {
+                return false;
+            }
+            JAXBContextResolverKey obj = (JAXBContextResolverKey)o;
+            // check for both null or both NOT null
+            boolean result = ((obj._resolver == null) && (_resolver == null)) || ((obj._resolver != null) && (_resolver != null));
+            // we can use hashCode() to compare _resolver
+            return result && (obj.hashCode() == hashCode()) && (obj._type.equals(_type));
+        }
+
+        @Override
+        public int hashCode() {
+            if (hashCode != -1) {
+                return hashCode;
+            }
+            if (_resolver == null) {
+                // allow the key to be based entirely on the _type object equality from equals method.  Only YOU can prevent NPEs.
+                hashCode = 0;  // don't use _type's hashCode, as the instances may differ between JAXBContextResolverKey instances
+                return hashCode;
+            }
+            // Resolver instances may be unique due to the way we proxy the call to get the instances in the ProvidersRegistry.
+            // Therefore, we'll get better performance if we calculate the hashCode from the package.classname of the ContextResolver.
+            // However, this means we need to make sure the map that uses this key is non-static, so it remains scoped at the
+            // transaction level, rather than at the application, or worse, JVM level.
+            String resolverName = _resolver.getClass().getName();
+            byte[] bytes = resolverName.getBytes();
+            for (int i = 0; i < bytes.length; i++) {
+                hashCode += bytes[i];
+            }
+            return hashCode;
+        }
+        
+    }
+    
+    /*
+     * TODO: in my small, uncontrolled test, the JVM (garbage collector?) was cleaning about 10% of the time.  It may be worth
+     * considering the use of LRU cache or something more directly under our control to gain more of that.
+     * 
+     * To observe this behavior, set the "loop" int in JAXBCustomContextResolverCacheTest.testCustomResolverCacheOn to a high
+     * number, and see the System.out for cacheMisses.  In my checking, it was about 10% of "loop".
+     */
+    // do not make static, as the key is based on the classname of the ContextResolver
+    private final SoftConcurrentMap<JAXBContextResolverKey, JAXBContext> jaxbContextCache = new SoftConcurrentMap<JAXBContextResolverKey, JAXBContext>();
+    
+    // JAXBContext cache can be turned off through system property
+    static private final String propVal = System.getProperty("org.apache.wink.jaxbcontextcache");
+    // non-final, protected only to make it unittestable
+    static protected boolean contextCacheOn = !((propVal != null) && (propVal.equalsIgnoreCase("off")));
+    
+    /**
      * Get the unmarshaller. You must call {@link #releaseJAXBUnmarshaller(JAXBContext, Unmarshaller) to put it back
      * into the pool.
      * 
@@ -242,10 +309,22 @@ public abstract class AbstractJAXBProvider {
     }
 
     protected JAXBContext getContext(Class<?> type, MediaType mediaType) throws JAXBException {
+        
         ContextResolver<JAXBContext> contextResolver =
             providers.getContextResolver(JAXBContext.class, mediaType);
+        
         JAXBContext context = null;
-
+        
+        JAXBContextResolverKey key = null;
+        if (contextCacheOn) {
+            // it's ok and safe for contextResolver to be null at this point.  JAXBContextResolverKey can handle it
+            key = new JAXBContextResolverKey(contextResolver, type);
+            context = jaxbContextCache.get(key);
+            if (context != null) {
+                return context;
+            }
+        }
+        
         if (contextResolver != null) {
             context = contextResolver.getContext(type);
         }
@@ -253,6 +332,11 @@ public abstract class AbstractJAXBProvider {
         if (context == null) {
             context = getDefaultContext(type);
         }
+        
+        if (contextCacheOn) {
+            jaxbContextCache.put(key, context);
+        }
+        
         return context;
     }
 
