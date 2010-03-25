@@ -23,6 +23,9 @@ package org.apache.wink.server.internal.providers.entity;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -532,15 +535,23 @@ public class JAXBCollectionXMLProviderTest extends MockServletInvocationTest {
                                                         SOURCE_REQUEST_BYTES);
         MockHttpServletResponse invoke = invoke(request);
         assertEquals(200, invoke.getStatus());
-
+        
+        // nested elements may or may not have a namespace prefix, so...
+        String xml = invoke.getContentAsString();
+        Pattern myPattern = Pattern.compile("feeds><\\w*?:?feed");
+        Matcher matcher = myPattern.matcher(xml);
+        matcher.find();
+        // +6 to skip the "feeds>"
+        String feedString = xml.substring(matcher.start() + 6, matcher.end());
+        
         String[] elements =
-            getElementsFromList("<feeds>", "</feeds>", "<feed", invoke.getContentAsString());
+            getElementsFromList("<feeds>", "</feeds>", feedString, invoke.getContentAsString());
         assertEquals(4, elements.length);
 
         AtomFeed feed = null;
         for (int i = 1; i < elements.length; ++i) {
             feed =
-                (AtomFeed)((JAXBElement<?>)unmarshallElement(AtomFeed.class, "<feed" + elements[i]))
+                (AtomFeed)((JAXBElement<?>)unmarshallElement(AtomFeed.class, feedString + elements[i]))
                     .getValue();
             assertEquals("" + (i - 1) + "10", feed.getId());
         }
@@ -556,15 +567,23 @@ public class JAXBCollectionXMLProviderTest extends MockServletInvocationTest {
                                       SOURCE_REQUEST_BYTES);
         MockHttpServletResponse invoke = invoke(request);
         assertEquals(200, invoke.getStatus());
+        
+        // nested elements may or may not have a namespace prefix, so...
+        String xml = invoke.getContentAsString();
+        Pattern myPattern = Pattern.compile("feeds><\\w*?:?feed");
+        Matcher matcher = myPattern.matcher(xml);
+        matcher.find();
+        // +6 to skip the "feeds>"
+        String feedString = xml.substring(matcher.start() + 6, matcher.end());
 
         String[] elements =
-            getElementsFromList("<feeds>", "</feeds>", "<feed", invoke.getContentAsString());
+            getElementsFromList("<feeds>", "</feeds>", feedString, invoke.getContentAsString());
         assertEquals(4, elements.length);
 
         AtomFeed feed = null;
         for (int i = 1; i < elements.length; ++i) {
             feed =
-                (AtomFeed)((JAXBElement<?>)unmarshallElement(AtomFeed.class, "<feed" + elements[i]))
+                (AtomFeed)((JAXBElement<?>)unmarshallElement(AtomFeed.class, feedString + elements[i]))
                     .getValue();
             assertEquals("" + (i - 1) + "10", feed.getId());
         }
@@ -580,14 +599,22 @@ public class JAXBCollectionXMLProviderTest extends MockServletInvocationTest {
         MockHttpServletResponse invoke = invoke(request);
         assertEquals(200, invoke.getStatus());
 
+        // nested elements may or may not have a namespace prefix, so...
+        String xml = invoke.getContentAsString();
+        Pattern myPattern = Pattern.compile("feeds><\\w*?:?feed");
+        Matcher matcher = myPattern.matcher(xml);
+        matcher.find();
+        // +6 to skip the "feeds>"
+        String feedString = xml.substring(matcher.start() + 6, matcher.end());
+        
         String[] elements =
-            getElementsFromList("<feeds>", "</feeds>", "<feed", invoke.getContentAsString());
+            getElementsFromList("<feeds>", "</feeds>", feedString, invoke.getContentAsString());
         assertEquals(4, elements.length);
 
         AtomFeed feed = null;
         for (int i = 1; i < elements.length; ++i) {
             feed =
-                (AtomFeed)((JAXBElement<?>)unmarshallElement(AtomFeed.class, "<feed" + elements[i]))
+                (AtomFeed)((JAXBElement<?>)unmarshallElement(AtomFeed.class, feedString + elements[i]))
                     .getValue();
             assertEquals("" + (i - 1) + "10", feed.getId());
         }

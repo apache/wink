@@ -119,14 +119,26 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
                         MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException, WebApplicationException {
         try {
-            JAXBContext context = getContext(type, mediaType);
-            Marshaller marshaller = getJAXBMarshaller(type, context, mediaType);
-            Object entityToMarshal = getEntityToMarshal(t, type);
+            if (isJAXBObject(type)) {
+                JAXBContext context = getContext(type, genericType, mediaType);
+                Marshaller marshaller = getJAXBMarshaller(type, context, mediaType);
+                Object entityToMarshal = getEntityToMarshal(t, type);
 
             // Use an OutputStream directly instead of a Writer for performance.
-            marshaller.marshal(entityToMarshal, entityStream);
+                marshaller.marshal(entityToMarshal, entityStream);
 
-            releaseJAXBMarshaller(context, marshaller);
+                releaseJAXBMarshaller(context, marshaller);
+            } else if (genericType instanceof Class<?>) {
+                JAXBContext context = getContext((Class<?>)genericType, genericType, mediaType);
+                Marshaller marshaller = getJAXBMarshaller((Class<?>)genericType, context, mediaType);
+                Object entityToMarshal = getEntityToMarshal(t, (Class<?>)genericType);
+
+                // Use an OutputStream directly instead of a Writer for
+                // performance.
+                marshaller.marshal(entityToMarshal, entityStream);
+
+                releaseJAXBMarshaller(context, marshaller);
+            }
         } catch (JAXBException e) {
             logger.error(Messages.getMessage("jaxbFailToMarshal", type.getName()), e); //$NON-NLS-1$
             throw new WebApplicationException(e);

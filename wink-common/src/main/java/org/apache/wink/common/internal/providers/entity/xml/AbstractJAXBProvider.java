@@ -277,6 +277,15 @@ public abstract class AbstractJAXBProvider {
     }
 
     public static boolean isJAXBObject(Class<?> type, Type genericType) {
+        if (isJAXBObject(type)) {
+            return true;
+        } else if (genericType instanceof Class<?>) {
+            return isJAXBObject((Class<?>)genericType);
+        }
+        return false;
+    }
+
+    public static boolean isJAXBObject(Class<?> type) {
         return isXMLRootElement(type) || isXMLType(type);
     }
 
@@ -309,6 +318,10 @@ public abstract class AbstractJAXBProvider {
     }
 
     protected JAXBContext getContext(Class<?> type, MediaType mediaType) throws JAXBException {
+        return getContext(type, type, mediaType);
+    }
+
+    protected JAXBContext getContext(Class<?> type, Type genericType, MediaType mediaType) throws JAXBException {
         
         ContextResolver<JAXBContext> contextResolver =
             providers.getContextResolver(JAXBContext.class, mediaType);
@@ -330,7 +343,7 @@ public abstract class AbstractJAXBProvider {
         }
 
         if (context == null) {
-            context = getDefaultContext(type);
+            context = getDefaultContext(type, genericType);
         }
         
         if (contextCacheOn) {
@@ -340,10 +353,20 @@ public abstract class AbstractJAXBProvider {
         return context;
     }
 
-    private JAXBContext getDefaultContext(Class<?> type) throws JAXBException {
+    private JAXBContext getDefaultContext(Class<?> type, Type genericType) throws JAXBException {
         JAXBContext context = jaxbDefaultContexts.get(type);
         if (context == null) {
-            context = JAXBContext.newInstance(type);
+            
+            // CAUTION: be careful with this.  Adding a second or more classes to the JAXBContext has the side
+            // effect of putting a namespace prefix and the namespace decl on the subelements of the 
+            // desired type, thus degrading performance.
+            
+            if(!isXMLRootElement(type) && !isXMLType(type)) {  // use genericType. If that fails, we'll know soon enough
+                context = JAXBContext.newInstance((Class<?>)genericType);
+            } else {
+                context = JAXBContext.newInstance(type);
+            }
+
             jaxbDefaultContexts.put(type, context);
         }
         return context;
