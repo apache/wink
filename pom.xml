@@ -45,6 +45,7 @@
         <module>wink-spring-support</module>
         <module>wink-webdav</module>
         <module>wink-providers</module>
+        <module>wink-guice-server</module>
         <module>wink-examples</module>
         <module>wink-scripts</module>
         <module>wink-assembly</module>
