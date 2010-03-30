@@ -32,7 +32,10 @@ import java.io.Writer;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyReader;
@@ -40,8 +43,12 @@ import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Providers;
 
 import org.apache.wink.common.internal.MultivaluedMapImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ProviderUtils {
+    
+    private static final Logger logger = LoggerFactory.getLogger(ProviderUtils.class);
 
     public static String getCharsetOrNull(MediaType m) {
         String name = (m == null) ? null : m.getParameters().get("charset"); //$NON-NLS-1$
@@ -170,5 +177,24 @@ public class ProviderUtils {
             return null;
         }
         return reader.readFrom(type, genericType, new Annotation[0], mediaType, httpHeaders, is);
+    }
+    
+    public static void setDefaultCharsetOnMediaTypeHeader(MultivaluedMap<String, Object> httpHeaders, MediaType mediaType) {
+        if (httpHeaders != null && httpHeaders.get(HttpHeaders.CONTENT_TYPE) == null) {
+            // only correct the MediaType if the MediaType was not explicitly set
+            logger.debug("Media Type not explicitly set on Response so going to correct charset parameter if necessary"); //$NON-NLS-1$
+            if (getCharsetOrNull(mediaType) == null) { //$NON-NLS-1$
+                try {
+                    Map<String, String> params = new HashMap<String, String>(mediaType.getParameters());
+                    params.put("charset", "UTF-8"); //$NON-NLS-1$ $NON-NLS-2$
+                    httpHeaders.putSingle(HttpHeaders.CONTENT_TYPE, new MediaType(mediaType
+                            .getType(), mediaType.getSubtype(), params)); //$NON-NLS-1$
+                    logger.debug("Added charset=UTF-8 parameter to Content-Type HttpHeader"); //$NON-NLS-1$
+                } catch (Exception e) {
+                    logger.debug("Caught exception while trying to set the charset", e); //$NON-NLS-1$
+                }
+            }
+        }
+
     }
 }
