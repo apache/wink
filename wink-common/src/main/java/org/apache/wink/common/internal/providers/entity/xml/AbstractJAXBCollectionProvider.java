@@ -30,11 +30,14 @@ import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -125,6 +128,30 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
                       MediaType mediaType,
                       MultivaluedMap<String, Object> httpHeaders,
                       OutputStream entityStream) throws IOException, WebApplicationException {
+        if (httpHeaders != null && httpHeaders.get(HttpHeaders.CONTENT_TYPE) == null) {
+            // only correct the MediaType if the MediaType was not explicitly
+            // set
+            logger
+                .debug("Media Type not explicitly set on Response so going to correct charset parameter if necessary");//$NON-NLS-1$
+            Map<String, String> parameters = mediaType.getParameters();
+            if (parameters != null) {
+                if (parameters.get("charset") == null) { //$NON-NLS-1$
+                    try {
+                        Map<String, String> params =
+                            new HashMap<String, String>(mediaType.getParameters());
+                        params.put("charset", "UTF-8"); //$NON-NLS-1$ $NON-NLS-2$
+                        httpHeaders.putSingle(HttpHeaders.CONTENT_TYPE, new MediaType(mediaType
+                            .getType(), mediaType.getSubtype(), params)); //$NON-NLS-1$
+                        logger.debug("Added charset=UTF-8 parameter to Content-Type HttpHeader"); //$NON-NLS-1$
+                    } catch (Exception e) {
+                        // this can happen in the Atom Model since we pass in an
+                        // unmodifiable set
+                        logger.debug("Caught exception while trying to set the charset", e); //$NON-NLS-1$
+                    }
+                }
+            }
+        }
+
         try {
             Class<?> theType = getParameterizedTypeClass(type, genericType, false);
             Object[] elementArray = type.isArray() ? (Object[])t : ((Collection<?>)t).toArray();

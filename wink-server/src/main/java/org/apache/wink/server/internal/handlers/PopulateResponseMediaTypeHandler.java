@@ -19,6 +19,7 @@
  *******************************************************************************/
 package org.apache.wink.server.internal.handlers;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -60,7 +61,7 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
         if (result instanceof Response) {
             Response response = (Response)result;
             if (response.getEntity() == null) {
-                // no entity so no need to set Content-Type
+                logger.debug("No entity so no Content-Type needs to be set"); //$NON-NLS-1$
                 return;
             }
 
@@ -72,8 +73,8 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
                 } else {
                     responseMediaType = MediaType.valueOf(first.toString());
                 }
+                logger.debug("Content-Type was set by application to {}", responseMediaType); //$NON-NLS-1$
             }
-            logger.debug("Content-Type was set by application to {}", responseMediaType); //$NON-NLS-1$
         }
 
         if (responseMediaType == null) {
@@ -82,7 +83,7 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
             if (searchResult != null && searchResult.isFound()) {
                 MethodMetadata methodMetadata = searchResult.getMethod().getMetadata();
                 producedMime = methodMetadata.getProduces();
-                logger.debug("Determining Content-Type from @Produces on method: {}", producedMime);
+                logger.debug("Determining Content-Type from @Produces on method: {}", producedMime); //$NON-NLS-1$
             }
             if (producedMime == null || producedMime.isEmpty()) {
                 if (result instanceof Response) {

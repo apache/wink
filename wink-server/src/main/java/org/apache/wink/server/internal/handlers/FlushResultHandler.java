@@ -202,7 +202,7 @@ public class FlushResultHandler extends AbstractHandler {
         // found use DataSourceProvider
         dataContentHandler =
             CommandMap.getDefaultCommandMap()
-                .createDataContentHandler(responseMediaType.toString());
+                .createDataContentHandler(responseMediaType.getType() + "/" + responseMediaType.getSubtype()); //$NON-NLS-1$
 
         if (dataContentHandler == null) {
             logger.error(Messages.getMessage("noWriterOrDataSourceProvider", entity.getClass() //$NON-NLS-1$
@@ -220,7 +220,8 @@ public class FlushResultHandler extends AbstractHandler {
                 Integer.toHexString(System.identityHashCode(dataContentHandler)), entity, rawType,
                 responseMediaType.toString(), outputStream});
         }
-        dataContentHandler.writeTo(entity, responseMediaType.toString(), outputStream);
+
+        dataContentHandler.writeTo(entity, responseMediaType.getType() + "/" + responseMediaType.getSubtype(), outputStream); //$NON-NLS-1$
         logger.debug("Flushing headers if not written"); //$NON-NLS-1$
         outputStream.flushHeaders();
     }

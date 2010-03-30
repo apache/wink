@@ -24,10 +24,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -118,19 +121,45 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
                         MediaType mediaType,
                         MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException, WebApplicationException {
+        if (httpHeaders != null && httpHeaders.get(HttpHeaders.CONTENT_TYPE) == null) {
+            // only correct the MediaType if the MediaType was not explicitly
+            // set
+            logger
+                .debug("Media Type not explicitly set on Response so going to correct charset parameter if necessary");//$NON-NLS-1$
+            Map<String, String> parameters = mediaType.getParameters();
+            if (parameters != null) {
+                if (parameters.get("charset") == null) { //$NON-NLS-1$
+                    try {
+                        Map<String, String> params =
+                            new HashMap<String, String>(mediaType.getParameters());
+                        params.put("charset", "UTF-8"); //$NON-NLS-1$ $NON-NLS-2$
+                        httpHeaders.putSingle(HttpHeaders.CONTENT_TYPE, new MediaType(mediaType
+                            .getType(), mediaType.getSubtype(), params)); //$NON-NLS-1$
+                        logger.debug("Added charset=UTF-8 parameter to Content-Type HttpHeader"); //$NON-NLS-1$
+                    } catch (Exception e) {
+                        // this can happen in the Atom Model since we pass in an
+                        // unmodifiable set
+                        logger.debug("Caught exception while trying to set the charset", e); //$NON-NLS-1$
+                    }
+                }
+            }
+        }
+
         try {
             if (isJAXBObject(type)) {
                 JAXBContext context = getContext(type, genericType, mediaType);
                 Marshaller marshaller = getJAXBMarshaller(type, context, mediaType);
                 Object entityToMarshal = getEntityToMarshal(t, type);
 
-            // Use an OutputStream directly instead of a Writer for performance.
+                // Use an OutputStream directly instead of a Writer for
+                // performance.
                 marshaller.marshal(entityToMarshal, entityStream);
 
                 releaseJAXBMarshaller(context, marshaller);
             } else if (genericType instanceof Class<?>) {
                 JAXBContext context = getContext((Class<?>)genericType, genericType, mediaType);
-                Marshaller marshaller = getJAXBMarshaller((Class<?>)genericType, context, mediaType);
+                Marshaller marshaller =
+                    getJAXBMarshaller((Class<?>)genericType, context, mediaType);
                 Object entityToMarshal = getEntityToMarshal(t, (Class<?>)genericType);
 
                 // Use an OutputStream directly instead of a Writer for

@@ -33,6 +33,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
@@ -1014,6 +1015,18 @@ public class FindResourceMethodTest extends MockServletInvocationTest {
                                   Class<?> expectedResource,
                                   String expectedMethod) throws UnsupportedEncodingException {
         assertEquals(200, response.getStatus());
+
+        /*
+         * avoid a bug in the MockServletResponse#setContentType where it tries
+         * to parse the charset there could be a
+         * "text/plain;charset=UTF-8;otherParam=otherValue" but
+         * MockServletResponse will treat charset as
+         * "UTF-8;otherParam=otherValue" instead of just "UTF-8"
+         */
+        String charset =
+            MediaType.valueOf(response.getContentType()).getParameters().get("charset");
+        response.setCharacterEncoding(charset);
+
         String expected = expectedResource.getSimpleName() + "." + expectedMethod;
         assertEquals(expected, response.getContentAsString());
     }

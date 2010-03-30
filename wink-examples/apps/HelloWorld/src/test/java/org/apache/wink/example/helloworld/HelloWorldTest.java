@@ -24,6 +24,8 @@ import java.io.FileNotFoundException;
 import java.io.StringReader;
 import java.util.Set;
 
+import javax.ws.rs.core.MediaType;
+
 import org.apache.wink.common.http.HttpStatus;
 import org.apache.wink.common.internal.application.ApplicationFileLoader;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
@@ -56,6 +58,17 @@ public class HelloWorldTest extends MockServletInvocationTest {
 
         // check resulting mock response
         assertEquals("HTTP status", HttpStatus.OK.getCode(), response.getStatus());
+        /*
+         * avoid a bug in the MockServletResponse#setContentType where it tries
+         * to parse the charset there could be a
+         * "text/plain;charset=UTF-8;otherParam=otherValue" but
+         * MockServletResponse will treat charset as
+         * "UTF-8;otherParam=otherValue" instead of just "UTF-8"
+         */
+        String charset =
+            MediaType.valueOf(response.getContentType()).getParameters().get("charset");
+        response.setCharacterEncoding(charset);
+
         AtomEntry entry = AtomEntry.unmarshal(new StringReader(response.getContentAsString()));
         String id = entry.getId();
         assertEquals("entry id", HelloWorld.ID, id);
