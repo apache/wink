@@ -21,11 +21,16 @@ package org.apache.wink.server.internal.servlet;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Map.Entry;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletException;
+
 
 
 public class RestServletTest extends MockServletInvocationTest {
@@ -117,6 +122,14 @@ public class RestServletTest extends MockServletInvocationTest {
     @Override
     protected String getPropertiesFile() {
         return propFileCustom.getPath();
+    }
+
+    // dummy compiler check to confirm service method from RestServlet can be overridden
+    public class MyRestServlet extends RestServlet {
+        @Override
+        public void service(HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse) throws ServletException, IOException {
+        }
     }
 
     public void testConfirmPublic() throws Exception {

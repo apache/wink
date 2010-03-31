@@ -105,7 +105,7 @@ public class RestServlet extends AbstractRestServlet {
     }
 
     @Override
-    protected final void service(HttpServletRequest httpServletRequest,
+    protected void service(HttpServletRequest httpServletRequest,
                                  HttpServletResponse httpServletResponse) throws ServletException,
         IOException {
         getRequestProcessor().handleRequest(httpServletRequest, httpServletResponse);
