@@ -69,11 +69,11 @@ public class RestServlet extends AbstractRestServlet {
     private static final Logger logger                  =
                                                             LoggerFactory
                                                                 .getLogger(RestServlet.class);
-    private static final String APPLICATION_INIT_PARAM  = "javax.ws.rs.Application"; //$NON-NLS-1$
-    private static final String PROPERTIES_DEFAULT_FILE = "META-INF/wink-default.properties"; //$NON-NLS-1$
-    private static final String PROPERTIES_INIT_PARAM   = "propertiesLocation"; //$NON-NLS-1$
-    private static final String APP_LOCATION_PARAM      = "applicationConfigLocation"; //$NON-NLS-1$
-    private static final String DEPLYMENT_CONF_PARAM    = "deploymentConfiguration"; //$NON-NLS-1$
+    public static final String APPLICATION_INIT_PARAM  = "javax.ws.rs.Application";          //$NON-NLS-1$
+    public static final String PROPERTIES_DEFAULT_FILE = "META-INF/wink-default.properties"; //$NON-NLS-1$
+    public static final String PROPERTIES_INIT_PARAM   = "propertiesLocation";               //$NON-NLS-1$
+    public static final String APP_LOCATION_PARAM      = "applicationConfigLocation";        //$NON-NLS-1$
+    public static final String DEPLOYMENT_CONF_PARAM    = "deploymentConfiguration";          //$NON-NLS-1$
 
     @Override
     public void init() throws ServletException {
@@ -117,7 +117,7 @@ public class RestServlet extends AbstractRestServlet {
         // order of next two lines is important to allow Application to have control over priority order of Providers
         deploymentConfiguration.addApplication(getApplication(), false);
         RequestProcessor requestProcessor = new RequestProcessor(deploymentConfiguration);
-        logger.debug("Creating request processor {} for servlet {}", requestProcessor, this);
+        logger.debug("Creating request processor {} for servlet {}", requestProcessor, this); //$NON-NLS-1$
         return requestProcessor;
     }
 
@@ -157,11 +157,11 @@ public class RestServlet extends AbstractRestServlet {
 
     protected DeploymentConfiguration createDeploymentConfiguration()
         throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        String initParameter = getInitParameter(DEPLYMENT_CONF_PARAM);
+        String initParameter = getInitParameter(DEPLOYMENT_CONF_PARAM);
         if (initParameter != null) {
             logger.info(Messages.getMessage("restServletUseDeploymentConfigurationParam", //$NON-NLS-1$
-                        initParameter,
-                        DEPLYMENT_CONF_PARAM));
+                                            initParameter,
+                                            DEPLOYMENT_CONF_PARAM));
             // use ClassUtils.loadClass instead of Class.forName so we have
             // classloader visibility into the Web module in J2EE environments
             Class<?> confClass = ClassUtils.loadClass(initParameter);
@@ -190,12 +190,11 @@ public class RestServlet extends AbstractRestServlet {
         }
         String appLocationParameter = getInitParameter(APP_LOCATION_PARAM);
         if (appLocationParameter == null) {
-            logger.warn(Messages.getMessage("propertyNotDefined"), APP_LOCATION_PARAM);
-        } else {
-            logger.info(Messages.getMessage("restServletWinkApplicationInitParam"),
-                        appLocationParameter,
-                        APP_LOCATION_PARAM);
+            logger.warn(Messages.getMessage("propertyNotDefined", APP_LOCATION_PARAM)); //$NON-NLS-1$
         }
+        logger.info(Messages.getMessage("restServletWinkApplicationInitParam", //$NON-NLS-1$
+                                        appLocationParameter,
+                                        APP_LOCATION_PARAM));
         return new ServletWinkApplication(getServletContext(), appLocationParameter);
     }
 
@@ -224,7 +223,7 @@ public class RestServlet extends AbstractRestServlet {
             is = ServletFileLoader.loadFileAsStream(getServletContext(), resourceName);
             properties.load(is);
         } catch (FileNotFoundException e) {
-            logger.debug("FileNotFoundException for {}", resourceName);
+            logger.debug("FileNotFoundException for {}", resourceName); //$NON-NLS-1$
         } finally {
             try {
                 if (is != null) {

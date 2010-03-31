@@ -52,9 +52,7 @@ public class RestServletTest extends MockServletInvocationTest {
     
     @Override
     protected void setUp() throws Exception {
-        Field defaultFileField = RestServlet.class.getDeclaredField("PROPERTIES_DEFAULT_FILE");
-        defaultFileField.setAccessible(true);
-        String filePath = (String)defaultFileField.get(null);
+        String filePath = RestServlet.PROPERTIES_DEFAULT_FILE;
         if (!filePath.startsWith("/")) {
             filePath = "/" + filePath;
         }
@@ -119,6 +117,15 @@ public class RestServletTest extends MockServletInvocationTest {
     @Override
     protected String getPropertiesFile() {
         return propFileCustom.getPath();
+    }
+
+    public void testConfirmPublic() throws Exception {
+        // confirm these fields are public
+        String a = RestServlet.APPLICATION_INIT_PARAM;
+        String b = RestServlet.PROPERTIES_DEFAULT_FILE;
+        String c = RestServlet.PROPERTIES_INIT_PARAM;
+        String d = RestServlet.APP_LOCATION_PARAM;
+        String e = RestServlet.DEPLOYMENT_CONF_PARAM;
     }
 
     public void testProperties() throws Exception {
