@@ -20,6 +20,8 @@
 
 package org.apache.wink.client;
 
+import javax.ws.rs.core.Response.StatusType;
+
 import org.apache.wink.client.internal.BaseRequestResponse;
 
 /**
@@ -29,6 +31,13 @@ import org.apache.wink.client.internal.BaseRequestResponse;
  * is returned from every handler on the chain.
  */
 public interface ClientResponse extends BaseRequestResponse {
+
+    /**
+     * Gets the response status as a status type
+     * 
+     * @return the response status
+     */
+    public StatusType getStatusType();
 
     /**
      * Get the response status code

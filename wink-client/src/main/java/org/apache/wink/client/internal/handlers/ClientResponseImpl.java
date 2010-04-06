@@ -27,6 +27,8 @@ import java.lang.reflect.Type;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response.StatusType;
+import javax.ws.rs.core.Response.Status.Family;
 import javax.ws.rs.ext.MessageBodyReader;
 
 import org.apache.wink.client.ClientResponse;
@@ -147,4 +149,34 @@ public class ClientResponseImpl extends BaseRequestResponseImpl implements Clien
         return contentConsumer;
     }
 
+    public StatusType getStatusType() {
+        final int statusCode = status;
+        final String reasonPhrase = message;
+        return new StatusType() {
+
+            public int getStatusCode() {
+                return statusCode;
+            }
+
+            public String getReasonPhrase() {
+                return reasonPhrase;
+            }
+
+            public Family getFamily() {
+                int family = statusCode / 100;
+                if(family == 1) {
+                    return Family.INFORMATIONAL;
+                } else if (family == 2) {
+                    return Family.SUCCESSFUL;
+                } else if (family == 3) {
+                    return Family.REDIRECTION;
+                } else if (family == 4) {
+                    return Family.CLIENT_ERROR;
+                } else if (family == 5) {
+                    return Family.SERVER_ERROR;
+                }
+                return Family.OTHER;
+            }
+        };
+    }
 }

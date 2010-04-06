@@ -34,6 +34,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response.Status.Family;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
@@ -148,6 +149,9 @@ public class ClientTest extends BaseTest {
         TestGenerics<String> tg = resource.get(new EntityType<TestGenerics<String>>() {
         });
         assertEquals(RECEIVED_MESSAGE, tg.getT());
+        assertEquals(200, clientResponse.getStatusType().getStatusCode());
+        assertEquals(Family.SUCCESSFUL, clientResponse.getStatusType().getFamily());
+        assertEquals("OK", clientResponse.getStatusType().getReasonPhrase());
     }
 
     public void testResourcePut() throws IOException {
@@ -168,6 +172,9 @@ public class ClientTest extends BaseTest {
         }, SENT_MESSAGE);
         assertEquals(RECEIVED_MESSAGE, tg.getT());
 
+        assertEquals(200, clientResponse.getStatusType().getStatusCode());
+        assertEquals(Family.SUCCESSFUL, clientResponse.getStatusType().getFamily());
+        assertEquals("OK", clientResponse.getStatusType().getReasonPhrase());
     }
 
     public void testResourcePost() throws IOException {
@@ -188,6 +195,10 @@ public class ClientTest extends BaseTest {
         TestGenerics<String> tg = resource.post(new EntityType<TestGenerics<String>>() {
         }, SENT_MESSAGE);
         assertEquals(RECEIVED_MESSAGE, tg.getT());
+
+        assertEquals(200, clientResponse.getStatusType().getStatusCode());
+        assertEquals(Family.SUCCESSFUL, clientResponse.getStatusType().getFamily());
+        assertEquals("OK", clientResponse.getStatusType().getReasonPhrase());
     }
 
     public void testResourceDelete() {
@@ -205,6 +216,10 @@ public class ClientTest extends BaseTest {
         TestGenerics<String> tg = resource.delete(new EntityType<TestGenerics<String>>() {
         });
         assertEquals(RECEIVED_MESSAGE, tg.getT());
+
+        assertEquals(200, clientResponse.getStatusType().getStatusCode());
+        assertEquals(Family.SUCCESSFUL, clientResponse.getStatusType().getFamily());
+        assertEquals("OK", clientResponse.getStatusType().getReasonPhrase());
     }
 
     public void testInvoke() {
@@ -240,6 +255,10 @@ public class ClientTest extends BaseTest {
         try {
             ClientResponse res = resource.accept("text/plain").get();
             assertTrue(res.getStatusCode() == 400);
+
+            assertEquals(400, res.getStatusType().getStatusCode());
+            assertEquals(Family.CLIENT_ERROR, res.getStatusType().getFamily());
+            assertEquals("Bad Request", res.getStatusType().getReasonPhrase());
         } catch (Exception e) {
             fail("Exception must not be thrown");
         }
