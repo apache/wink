@@ -19,12 +19,15 @@
  *******************************************************************************/
 package org.apache.wink.common.internal.providers.entity;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.nio.charset.Charset;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -94,12 +97,16 @@ public class StringProvider implements MessageBodyReader<String>, MessageBodyWri
                         MediaType mediaType,
                         MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException, WebApplicationException {
-        
+
         ProviderUtils.setDefaultCharsetOnMediaTypeHeader(httpHeaders, mediaType);
 
         logger.debug("Writing {} to stream using {}", t, getClass().getName()); //$NON-NLS-1$
 
-        entityStream.write(t.getBytes(ProviderUtils.getCharset(mediaType)));
+        Charset charset = Charset.forName(ProviderUtils.getCharset(mediaType));
+        OutputStreamWriter writer = new OutputStreamWriter(entityStream, charset);
+        BufferedWriter bw = new BufferedWriter(writer);
+        bw.write(t, 0, t.length());
+        bw.flush();
     }
 
 }
