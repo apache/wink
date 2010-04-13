@@ -451,7 +451,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         uriBuilder.segments(this.segments);
         uriBuilder.query(this.query);
         logger.debug("clone() exit"); //$NON-NLS-1$
-        return this;
+        return uriBuilder;
     }
 
     private void query(MultivaluedMap<String, String> query) {

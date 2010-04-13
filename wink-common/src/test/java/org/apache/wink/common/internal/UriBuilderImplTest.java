@@ -352,6 +352,7 @@ public class UriBuilderImplTest extends TestCase {
         String uri1 = builder1.build("v1").toString();
         String uri2 = builder2.build("v1").toString();
         assertEquals(uri1, uri2);
+        assertNotSame(builder1, builder2);
     }
 
     public void testFromUri() throws Exception {
