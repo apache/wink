@@ -119,7 +119,7 @@ public class ClientResponseImpl extends BaseRequestResponseImpl implements Clien
                                                        contentMediaType,
                                                        runtimeContext);
             if (reader == null) {
-                throw new RuntimeException(String.format(Messages.getMessage("clientNoReaderForTypeAndMediaType"),
+                throw new RuntimeException(Messages.getMessage("clientNoReaderForTypeAndMediaType",
                                                          String.valueOf(type),
                                                          contentType));
             }
