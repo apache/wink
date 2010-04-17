@@ -26,6 +26,7 @@ import org.apache.wink.server.internal.DeploymentConfiguration;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 
 public class GuiceDeploymentConfiguration extends DeploymentConfiguration {
 
@@ -33,7 +34,11 @@ public class GuiceDeploymentConfiguration extends DeploymentConfiguration {
     public GuiceDeploymentConfiguration() {
         LifecycleManagersRegistry lifecycleManagersRegistry = new LifecycleManagersRegistry();
         setOfFactoryRegistry(lifecycleManagersRegistry);
-        Injector injector = Guice.createInjector(new WinkGuiceModule());
+        Injector injector = Guice.createInjector(createModules());
         lifecycleManagersRegistry.addFactoryFactory(new GuiceInjectorLifeCycleManager(injector));
+    }
+
+    public Module[] createModules() {
+        return new Module[] {new WinkGuiceModule()};
     }
 }
