@@ -80,7 +80,7 @@
         <dependency>
             <groupId>javax.ws.rs</groupId>
             <artifactId>jsr311-api</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
         </dependency>
 
         <dependency>
@@ -181,6 +181,41 @@
                     <value>jetty</value>
                 </property>
             </activation>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.wink</groupId>
+                        <artifactId>wink-common</artifactId>
+                        <version>${project.version}</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>org.slf4j</groupId>
+                                <artifactId>slf4j-api</artifactId>
+                            </exclusion>
+                            <exclusion>
+                                <groupId>org.slf4j</groupId>
+                                <artifactId>slf4j-simple</artifactId>
+                            </exclusion>
+                            <exclusion>
+                                <groupId>org.slf4j</groupId>
+                                <artifactId>slf4j-jdk14</artifactId>
+                            </exclusion>
+                            <exclusion>
+                                <groupId>javax.xml.bind</groupId>
+                                <artifactId>jaxb-api</artifactId>
+                            </exclusion>
+                            <exclusion>
+                                <groupId>com.sun.xml.bind</groupId>
+                                <artifactId>jaxb-impl</artifactId>
+                            </exclusion>
+                            <exclusion>
+                                <groupId>commons-lang</groupId>
+                                <artifactId>commons-lang</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
             <dependencies>
                 <dependency>
                     <groupId>org.apache.wink</groupId>
@@ -193,6 +228,10 @@
                         <exclusion>
                             <groupId>org.slf4j</groupId>
                             <artifactId>slf4j-simple</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.slf4j</groupId>
+                            <artifactId>slf4j-jdk14</artifactId>
                         </exclusion>
                         <exclusion>
                             <groupId>javax.xml.bind</groupId>
@@ -259,6 +298,42 @@
                 </property>
                 <activeByDefault>true</activeByDefault>
             </activation>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.wink</groupId>
+                        <artifactId>wink-common</artifactId>
+                        <version>${project.version}</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>org.slf4j</groupId>
+                                <artifactId>slf4j-api</artifactId>
+                            </exclusion>
+                            <exclusion>
+                                <groupId>org.slf4j</groupId>
+                                <artifactId>slf4j-simple</artifactId>
+                            </exclusion>
+                            <exclusion>
+                                <groupId>org.slf4j</groupId>
+                                <artifactId>slf4j-jdk14</artifactId>
+                            </exclusion>
+                            <exclusion>
+                                <groupId>javax.xml.bind</groupId>
+                                <artifactId>jaxb-api</artifactId>
+                            </exclusion>
+                            <exclusion>
+                                <groupId>com.sun.xml.bind</groupId>
+                                <artifactId>jaxb-impl</artifactId>
+                            </exclusion>
+                            <exclusion>
+                                <groupId>commons-lang</groupId>
+                                <artifactId>commons-lang</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+
             <dependencies>
                 <dependency>
                     <groupId>org.apache.wink</groupId>
@@ -271,6 +346,10 @@
                         <exclusion>
                             <groupId>org.slf4j</groupId>
                             <artifactId>slf4j-simple</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.slf4j</groupId>
+                            <artifactId>slf4j-jdk14</artifactId>
                         </exclusion>
                         <exclusion>
                             <groupId>javax.xml.bind</groupId>
