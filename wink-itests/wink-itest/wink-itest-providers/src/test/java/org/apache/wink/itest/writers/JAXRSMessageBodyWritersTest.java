@@ -349,7 +349,8 @@ public class JAXRSMessageBodyWritersTest extends TestCase {
 
             assertEquals(200, getMethod.getStatusCode());
             assertEquals("Hello there", getMethod.getResponseBodyAsString());
-            assertEquals("text/plain", getMethod.getResponseHeader("Content-Type").getValue());
+            assertEquals("text/plain" + ";charset=UTF-8", getMethod
+                .getResponseHeader("Content-Type").getValue());
         } finally {
             getMethod.releaseConnection();
         }
@@ -362,7 +363,7 @@ public class JAXRSMessageBodyWritersTest extends TestCase {
 
             assertEquals(200, getMethod.getStatusCode());
             assertEquals("Hello there", getMethod.getResponseBodyAsString());
-            assertEquals("text/xml", getMethod.getResponseHeader("Content-Type").getValue());
+            assertEquals("text/xml" + ";charset=UTF-8", getMethod.getResponseHeader("Content-Type").getValue());
         } finally {
             getMethod.releaseConnection();
         }

@@ -55,7 +55,7 @@ public class PersonAppTest extends TestCase {
         try {
             client.executeMethod(postMethod);
             assertEquals(200, postMethod.getStatusCode());
-            assertEquals(MediaType.TEXT_PLAIN, postMethod
+            assertEquals(MediaType.TEXT_PLAIN + ";charset=UTF-8", postMethod
                 .getResponseHeader(HttpHeaders.CONTENT_TYPE).getValue());
             assertEquals("Person: abcd query parameter: defaultQuery matrix parameter: defaultMatrix entity: Hello",
                          postMethod.getResponseBodyAsString());
@@ -70,7 +70,7 @@ public class PersonAppTest extends TestCase {
         try {
             client.executeMethod(postMethod);
             assertEquals(200, postMethod.getStatusCode());
-            assertEquals(MediaType.TEXT_XML, postMethod.getResponseHeader(HttpHeaders.CONTENT_TYPE)
+            assertEquals(MediaType.TEXT_XML + ";charset=UTF-8", postMethod.getResponseHeader(HttpHeaders.CONTENT_TYPE)
                 .getValue());
             assertEquals("Person: abcd query parameter: defaultQuery matrix parameter: defaultMatrix entity: Hello",
                          postMethod.getResponseBodyAsString());

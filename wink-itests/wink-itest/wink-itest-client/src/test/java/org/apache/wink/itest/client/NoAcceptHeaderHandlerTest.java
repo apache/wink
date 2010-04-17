@@ -33,6 +33,7 @@ import org.apache.wink.client.ClientConfig;
 import org.apache.wink.client.ClientResponse;
 import org.apache.wink.client.RestClient;
 import org.apache.wink.client.internal.handlers.AcceptHeaderHandler;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.itest.client.jaxb.Echo;
 import org.apache.wink.providers.json.JsonProvider;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
@@ -145,7 +146,7 @@ public class NoAcceptHeaderHandlerTest extends TestCase {
         } catch (RuntimeException e) {
             assertEquals(e.getMessage(),
                          String
-                             .format("No javax.ws.rs.ext.MessageBodyReader found for type class %s and media type %s .  Verify that all entity providers are correctly registered.",
+                             .format("No javax.ws.rs.ext.MessageBodyReader found for type class %s and media type %s.  Verify that all entity providers are correctly registered.",
                                      Echo.class.getName(),
                                      MediaType.TEXT_PLAIN));
         }
@@ -163,9 +164,10 @@ public class NoAcceptHeaderHandlerTest extends TestCase {
             // assertTrue(value, value.contains(MediaType.APPLICATION_JSON));
             // assertTrue(value, value.contains("application/javascript"));
         } catch (RuntimeException e) {
+            e.printStackTrace();
             assertEquals(e.getMessage(),
                          String
-                             .format("No javax.ws.rs.ext.MessageBodyReader found for type class %s and media type %s .  Verify that all entity providers are correctly registered.",
+                             .format("No javax.ws.rs.ext.MessageBodyReader found for type class %s and media type %s.  Verify that all entity providers are correctly registered.",
                                      JSONObject.class.getName(),
                                      MediaType.TEXT_PLAIN));
         }

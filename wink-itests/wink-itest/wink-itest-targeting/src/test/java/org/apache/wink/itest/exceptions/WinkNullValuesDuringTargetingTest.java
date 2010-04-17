@@ -226,7 +226,8 @@ public class WinkNullValuesDuringTargetingTest extends TestCase {
                 .accept("custom/type; q=0.8").post(null);
         assertEquals(200, response.getStatusCode());
         assertEquals("calledWithProduces", response.getEntity(String.class));
-        assertEquals("custom/type;q=0.8", response.getHeaders().getFirst("Content-Type"));
+        assertEquals("custom/type;q=0.8" + ";charset=UTF-8", response.getHeaders()
+            .getFirst("Content-Type"));
     }
 
     /**
@@ -241,7 +242,8 @@ public class WinkNullValuesDuringTargetingTest extends TestCase {
                 .accept("custom/type2; q=0.8").post(null);
         assertEquals(200, response.getStatusCode());
         assertEquals("calledWithoutProduces", response.getEntity(String.class));
-        assertEquals("custom/type2;q=0.8", response.getHeaders().getFirst("Content-Type"));
+        assertEquals("custom/type2;q=0.8" + ";charset=UTF-8", response.getHeaders()
+            .getFirst("Content-Type"));
     }
 
     /**
@@ -255,7 +257,8 @@ public class WinkNullValuesDuringTargetingTest extends TestCase {
             client.resource(getBaseURI() + "/targeting/nullresource/withproduces").post(null);
         assertEquals(200, response.getStatusCode());
         assertEquals("calledWithProduces", response.getEntity(String.class));
-        assertEquals("custom/type", response.getHeaders().getFirst("Content-Type"));
+        assertEquals("custom/type" + ";charset=UTF-8", response.getHeaders()
+            .getFirst("Content-Type"));
     }
 
     /**

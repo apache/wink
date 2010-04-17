@@ -57,14 +57,16 @@ public class WinkValidationDuringTargetingTest extends TestCase {
                 .accept(MediaType.APPLICATION_JSON).get();
         assertEquals(200, response.getStatusCode());
         assertEquals("Hello JSON Produces", response.getEntity(String.class));
-        assertEquals("application/json", response.getHeaders().getFirst("Content-Type"));
+        assertEquals("application/json" + ";charset=UTF-8", response.getHeaders()
+            .getFirst("Content-Type"));
 
         response =
             client.resource(getBaseURI() + "/targeting/resourceonlyproduces")
                 .accept(MediaType.APPLICATION_XML).get();
         assertEquals(200, response.getStatusCode());
         assertEquals("Hello XML Produces", response.getEntity(String.class));
-        assertEquals("application/xml", response.getHeaders().getFirst("Content-Type"));
+        assertEquals("application/xml" + ";charset=UTF-8", response.getHeaders()
+            .getFirst("Content-Type"));
 
         response =
             client.resource(getBaseURI() + "/targeting/resourceonlyproduces")
@@ -108,14 +110,16 @@ public class WinkValidationDuringTargetingTest extends TestCase {
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get();
         assertEquals(200, response.getStatusCode());
         assertEquals("Hello JSON Consumes And Produces", response.getEntity(String.class));
-        assertEquals("application/json", response.getHeaders().getFirst("Content-Type"));
+        assertEquals("application/json" + ";charset=UTF-8", response.getHeaders()
+            .getFirst("Content-Type"));
 
         response =
             client.resource(getBaseURI() + "/targeting/resourceconsumesandproduces")
                 .contentType(MediaType.APPLICATION_JSON).get();
         assertEquals(200, response.getStatusCode());
         assertEquals("Hello JSON Consumes And Produces", response.getEntity(String.class));
-        assertEquals("application/json", response.getHeaders().getFirst("Content-Type"));
+        assertEquals("application/json" + ";charset=UTF-8", response.getHeaders()
+            .getFirst("Content-Type"));
 
         /*
          * due to no request Accept header, this is actually undefined behavior
@@ -125,14 +129,17 @@ public class WinkValidationDuringTargetingTest extends TestCase {
             client.resource(getBaseURI() + "/targeting/resourceconsumesandproduces")
                 .contentType(MediaType.APPLICATION_XML).get();
         assertEquals(200, response.getStatusCode());
-        if ("application/json".equals(response.getHeaders().getFirst("Content-Type"))) {
+        if (MediaType.APPLICATION_JSON_TYPE.isCompatible(MediaType.valueOf(response.getHeaders()
+            .getFirst("Content-Type")))) {
             assertEquals(200, response.getStatusCode());
             assertEquals("Hello XML Consumes And JSON Produces", response.getEntity(String.class));
-            assertEquals("application/json", response.getHeaders().getFirst("Content-Type"));
+            assertEquals("application/json" + ";charset=UTF-8", response.getHeaders()
+                .getFirst("Content-Type"));
         } else {
             assertEquals(200, response.getStatusCode());
             assertEquals("Hello XML Consumes And Produces", response.getEntity(String.class));
-            assertEquals("application/xml", response.getHeaders().getFirst("Content-Type"));
+            assertEquals("application/xml" + ";charset=UTF-8", response.getHeaders()
+                .getFirst("Content-Type"));
         }
 
         response =
@@ -140,13 +147,15 @@ public class WinkValidationDuringTargetingTest extends TestCase {
                 .contentType(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML).get();
         assertEquals(200, response.getStatusCode());
         assertEquals("Hello XML Consumes And Produces", response.getEntity(String.class));
-        assertEquals("application/xml", response.getHeaders().getFirst("Content-Type"));
+        assertEquals("application/xml" + ";charset=UTF-8", response.getHeaders()
+            .getFirst("Content-Type"));
 
         response =
             client.resource(getBaseURI() + "/targeting/resourceconsumesandproduces")
                 .contentType(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_JSON).get();
         assertEquals(200, response.getStatusCode());
         assertEquals("Hello XML Consumes And JSON Produces", response.getEntity(String.class));
-        assertEquals("application/json", response.getHeaders().getFirst("Content-Type"));
+        assertEquals("application/json" + ";charset=UTF-8", response.getHeaders()
+            .getFirst("Content-Type"));
     }
 }

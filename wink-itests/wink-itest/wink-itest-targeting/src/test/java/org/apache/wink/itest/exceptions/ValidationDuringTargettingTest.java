@@ -21,6 +21,7 @@ package org.apache.wink.itest.exceptions;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import junit.framework.TestCase;
 
@@ -59,7 +60,8 @@ public class ValidationDuringTargettingTest extends TestCase {
 
             assertEquals(200, getMethod.getStatusCode());
             assertEquals("Hello JSON Produces", getMethod.getResponseBodyAsString());
-            assertEquals("application/json", getMethod.getResponseHeader("Content-Type").getValue());
+            assertEquals("application/json" + ";charset=UTF-8", getMethod
+                .getResponseHeader("Content-Type").getValue());
         } finally {
             getMethod.releaseConnection();
         }
@@ -72,7 +74,8 @@ public class ValidationDuringTargettingTest extends TestCase {
 
             assertEquals(200, getMethod.getStatusCode());
             assertEquals("Hello XML Produces", getMethod.getResponseBodyAsString());
-            assertEquals("application/xml", getMethod.getResponseHeader("Content-Type").getValue());
+            assertEquals("application/xml" + ";charset=UTF-8", getMethod
+                .getResponseHeader("Content-Type").getValue());
         } finally {
             getMethod.releaseConnection();
         }
@@ -105,7 +108,8 @@ public class ValidationDuringTargettingTest extends TestCase {
 
             assertEquals(200, getMethod.getStatusCode());
             assertEquals("Hello JSON Consumes", getMethod.getResponseBodyAsString());
-            assertEquals("text/plain", getMethod.getResponseHeader("Content-Type").getValue());
+            assertEquals("text/plain", getMethod
+                .getResponseHeader("Content-Type").getValue());
         } finally {
             getMethod.releaseConnection();
         }
@@ -140,7 +144,8 @@ public class ValidationDuringTargettingTest extends TestCase {
 
             assertEquals(200, getMethod.getStatusCode());
             assertEquals("Hello JSON Consumes And Produces", getMethod.getResponseBodyAsString());
-            assertEquals("application/json", getMethod.getResponseHeader("Content-Type").getValue());
+            assertEquals("application/json" + ";charset=UTF-8", getMethod
+                .getResponseHeader("Content-Type").getValue());
         } finally {
             getMethod.releaseConnection();
         }
@@ -152,7 +157,8 @@ public class ValidationDuringTargettingTest extends TestCase {
 
             assertEquals(200, getMethod.getStatusCode());
             assertEquals("Hello JSON Consumes And Produces", getMethod.getResponseBodyAsString());
-            assertEquals("application/json", getMethod.getResponseHeader("Content-Type").getValue());
+            assertEquals("application/json" + ";charset=UTF-8", getMethod
+                .getResponseHeader("Content-Type").getValue());
         } finally {
             getMethod.releaseConnection();
         }
@@ -165,18 +171,18 @@ public class ValidationDuringTargettingTest extends TestCase {
         getMethod.setRequestHeader("Content-Type", "application/xml");
         try {
             client.executeMethod(getMethod);
-
-            if ("application/json".equals(getMethod.getResponseHeader("Content-Type").getValue())) {
+            if (MediaType.APPLICATION_JSON_TYPE.isCompatible(MediaType.valueOf(getMethod
+                .getResponseHeader("Content-Type").getValue()))) {
                 assertEquals(200, getMethod.getStatusCode());
                 assertEquals("Hello XML Consumes And JSON Produces", getMethod
                     .getResponseBodyAsString());
-                assertEquals("application/json", getMethod.getResponseHeader("Content-Type")
-                    .getValue());
+                assertEquals("application/json" + ";charset=UTF-8", getMethod
+                    .getResponseHeader("Content-Type").getValue());
             } else {
                 assertEquals(200, getMethod.getStatusCode());
                 assertEquals("Hello XML Consumes And Produces", getMethod.getResponseBodyAsString());
-                assertEquals("application/xml", getMethod.getResponseHeader("Content-Type")
-                    .getValue());
+                assertEquals("application/xml" + ";charset=UTF-8", getMethod
+                    .getResponseHeader("Content-Type").getValue());
             }
         } finally {
             getMethod.releaseConnection();
@@ -190,7 +196,8 @@ public class ValidationDuringTargettingTest extends TestCase {
 
             assertEquals(200, getMethod.getStatusCode());
             assertEquals("Hello XML Consumes And Produces", getMethod.getResponseBodyAsString());
-            assertEquals("application/xml", getMethod.getResponseHeader("Content-Type").getValue());
+            assertEquals("application/xml" + ";charset=UTF-8", getMethod
+                .getResponseHeader("Content-Type").getValue());
         } finally {
             getMethod.releaseConnection();
         }
@@ -204,7 +211,8 @@ public class ValidationDuringTargettingTest extends TestCase {
             assertEquals(200, getMethod.getStatusCode());
             assertEquals("Hello XML Consumes And JSON Produces", getMethod
                 .getResponseBodyAsString());
-            assertEquals("application/json", getMethod.getResponseHeader("Content-Type").getValue());
+            assertEquals("application/json" + ";charset=UTF-8", getMethod
+                .getResponseHeader("Content-Type").getValue());
         } finally {
             getMethod.releaseConnection();
         }
