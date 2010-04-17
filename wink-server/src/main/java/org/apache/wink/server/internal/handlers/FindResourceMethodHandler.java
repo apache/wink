@@ -31,7 +31,6 @@ import javax.ws.rs.core.Response.Status;
 
 import org.apache.wink.common.internal.registry.metadata.MethodMetadata;
 import org.apache.wink.common.internal.uritemplate.UriTemplateMatcher;
-import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor;
 import org.apache.wink.server.handlers.HandlersChain;
 import org.apache.wink.server.handlers.MessageContext;
 import org.apache.wink.server.handlers.RequestHandler;
@@ -69,7 +68,13 @@ public class FindResourceMethodHandler implements RequestHandler {
 
         // sub-resource method or locator
         UriTemplateMatcher templateMatcher = resource.getMatcher();
-        String tail = UriTemplateProcessor.normalizeUri(templateMatcher.getTail(false));
+        String tail = templateMatcher.getTail(false);
+        if (tail == null) {
+            tail = ""; //$NON-NLS-1$
+        }
+        if (tail.startsWith("/")) { //$NON-NLS-1$
+            tail = tail.substring(1);
+        }
         logger.debug("Unmatched tail to the URI: {}", tail); //$NON-NLS-1$
 
         // get a sorted list of all the sub-resources (methods and locators)

@@ -258,9 +258,14 @@ public class ResourceRegistry {
      */
     public List<ResourceInstance> getMatchingRootResources(String uri,
                                                            boolean isContinuedSearchPolicy) {
-        ArrayList<ResourceInstance> found = new ArrayList<ResourceInstance>(1);
-        uri = UriTemplateProcessor.normalizeUri(uri);
+        if (uri == null) {
+            uri = ""; //$NON-NLS-1$
+        }
+        if (uri.startsWith("/")) { //$NON-NLS-1$
+            uri = uri.substring(1);
+        }
 
+        ArrayList<ResourceInstance> found = new ArrayList<ResourceInstance>(1);
         ArrayList<ResourceRecord> previousMatched = null;
         /*
          * the previous matches are cached so if a previous URI used is still in
