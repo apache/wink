@@ -82,10 +82,10 @@
                                     <classpath refid="maven.dependency.classpath" />
                                 </typedef>
                                 <property name="file.separator" value="${file.separator}" />
-                                <property name="project.name" value="${parent.artifactId}-${parent.version}" />
+                                <property name="project.name" value="${project.parent.artifactId}-${project.parent.version}" />
                                 <property name="project.version" value="${project.version}" />
-                                <property name="artifact.id" value="${artifactId}" />
-                                <property name="group.id" value="${groupId}" />
+                                <property name="artifact.id" value="${project.artifactId}" />
+                                <property name="group.id" value="${project.groupId}" />
                                 <property name="title.name" value="${project.name}" />
                                 <property name="user.name" value="${user.name}" />
                                 <property name="java.version" value="${java.version}" />
