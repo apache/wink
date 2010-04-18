@@ -100,7 +100,8 @@ public class JettisonJAXBProvider extends AbstractJAXBProvider implements
             this.outputConfiguration = new Configuration(new HashMap<String, String>());
         }
 
-        // see http://jira.codehaus.org/browse/JETTISON-74 . reading disabled for now
+        // see http://jira.codehaus.org/browse/JETTISON-74 . reading disabled
+        // for now
         isReadable = false;
         isWritable = true;
     }
@@ -130,7 +131,7 @@ public class JettisonJAXBProvider extends AbstractJAXBProvider implements
         Object unmarshaledResource = null;
         try {
             JAXBContext context = getContext(type, mediaType);
-            unmarshaller = getJAXBUnmarshaller(context);
+            unmarshaller = getJAXBUnmarshaller(type, context, mediaType);
 
             XMLStreamReader xsr = null;
 
@@ -139,17 +140,22 @@ public class JettisonJAXBProvider extends AbstractJAXBProvider implements
             } else {
                 xsr =
                     new MappedXMLInputFactory(inputConfiguration)
-                .createXMLStreamReader(entityStream);
+                        .createXMLStreamReader(entityStream);
             }
 
             if (type.isAnnotationPresent(XmlRootElement.class)) {
                 unmarshaledResource = unmarshaller.unmarshal(xsr);
                 if (unmarshaledResource instanceof JAXBElement) {
-                    // this can happen if the JAXBContext object used to create the unmarshaller
-                    // was created using the package name string instead of a class object and the
-                    // ObjectFactory has a creator method for the desired object that returns
-                    // JAXBElement.  But we know better; the 'type' param passed in here had the
-                    // XmlRootElement on it, so we know the desired return object type is NOT
+                    // this can happen if the JAXBContext object used to create
+                    // the unmarshaller
+                    // was created using the package name string instead of a
+                    // class object and the
+                    // ObjectFactory has a creator method for the desired object
+                    // that returns
+                    // JAXBElement. But we know better; the 'type' param passed
+                    // in here had the
+                    // XmlRootElement on it, so we know the desired return
+                    // object type is NOT
                     // JAXBElement, thus:
                     unmarshaledResource = ((JAXBElement)unmarshaledResource).getValue();
                 }

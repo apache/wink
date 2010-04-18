@@ -24,13 +24,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -75,7 +72,7 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
         Object unmarshaledResource = null;
         try {
             JAXBContext context = getContext(type, mediaType);
-            unmarshaller = getJAXBUnmarshaller(context);
+            unmarshaller = getJAXBUnmarshaller(type, context, mediaType);
             if (type.isAnnotationPresent(XmlRootElement.class)) {
                 unmarshaledResource = unmarshaller.unmarshal(entityStream);
                 if (unmarshaledResource instanceof JAXBElement) {

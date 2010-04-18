@@ -30,14 +30,11 @@ import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -59,8 +56,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvider {
-    private static final String JAXB_DEFAULT_NAMESPACE = "##default"; //$NON-NLS-1$
-    private static final String JAXB_DEFAULT_NAME      = "##default"; //$NON-NLS-1$
+    private static final String JAXB_DEFAULT_NAMESPACE = "##default";                                           //$NON-NLS-1$
+    private static final String JAXB_DEFAULT_NAME      = "##default";                                           //$NON-NLS-1$
     private static final Logger logger                 =
                                                            LoggerFactory
                                                                .getLogger(AbstractJAXBCollectionProvider.class);
@@ -76,7 +73,7 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
             XMLStreamReader xsr = xmif.createXMLStreamReader(entityStream);
             Class<?> theType = getParameterizedTypeClass(type, genericType, true);
             JAXBContext context = getContext(theType, mediaType);
-            Unmarshaller unmarshaller = getJAXBUnmarshaller(context);
+            Unmarshaller unmarshaller = getJAXBUnmarshaller(type, context, mediaType);
 
             int nextEvent = xsr.next();
             while (nextEvent != XMLStreamReader.START_ELEMENT)
@@ -152,14 +149,14 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
             Marshaller marshaller = null;
             JAXBContext context = null;
             for (Object o : elementArray) {
-                if(marshaller == null) {
+                if (marshaller == null) {
                     Class<?> oType =
                         isJAXBElement ? ((JAXBElement<?>)o).getDeclaredType() : o.getClass();
-                        context = getContext(oType, mediaType);
-                        marshaller = getJAXBMarshaller(oType, context, mediaType);
-                        marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
-                        Charset charSet = getCharSet(mediaType);
-                        marshaller.setProperty(Marshaller.JAXB_ENCODING, charSet.name());
+                    context = getContext(oType, mediaType);
+                    marshaller = getJAXBMarshaller(oType, context, mediaType);
+                    marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
+                    Charset charSet = getCharSet(mediaType);
+                    marshaller.setProperty(Marshaller.JAXB_ENCODING, charSet.name());
                 }
                 Object entityToMarshal = getEntityToMarshal(o, theType);
                 if (qname == null) {
@@ -221,8 +218,8 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
     }
 
     public static Class<?> getParameterizedTypeClass(Class<?> type,
-                                                        Type genericType,
-                                                        boolean recurse) {
+                                                     Type genericType,
+                                                     boolean recurse) {
         if (Collection.class.isAssignableFrom(type)) {
             if (genericType instanceof ParameterizedType) {
                 ParameterizedType parameterizedType = (ParameterizedType)genericType;

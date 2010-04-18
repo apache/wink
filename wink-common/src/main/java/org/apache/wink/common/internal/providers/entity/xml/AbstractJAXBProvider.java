@@ -49,6 +49,7 @@ import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.utils.JAXBUtils;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.internal.utils.SoftConcurrentMap;
+import org.apache.wink.common.model.JAXBUnmarshalOptions;
 import org.apache.wink.common.model.XmlFormattingOptions;
 import org.apache.wink.common.utils.ProviderUtils;
 import org.slf4j.Logger;
@@ -74,30 +75,35 @@ public abstract class AbstractJAXBProvider {
     // the Pool code for the pooling of unmarshallers is from Axis2 Java
     // http://svn.apache.org/repos/asf/webservices/axis2/trunk/java/modules/jaxws/src/org/apache/axis2/jaxws/message/databinding/JAXBUtils.java
     //
-    // These pools should *not* be static in Wink, however, because the (un)marshallers are unique per JAXBContext instance, each
-    // of which is unique per class object being (un)marshalled.  In Axis2, the JAXBContext instances cover the entire application space, thus
+    // These pools should *not* be static in Wink, however, because the
+    // (un)marshallers are unique per JAXBContext instance, each
+    // of which is unique per class object being (un)marshalled. In Axis2, the
+    // JAXBContext instances cover the entire application space, thus
     // it was safe to cache them in a static field.
-    private Pool<JAXBContext, Marshaller>                  mpool                     =
+    private Pool<JAXBContext, Marshaller>                         mpool                     =
                                                                                                 new Pool<JAXBContext, Marshaller>();
-    private Pool<JAXBContext, Unmarshaller>                upool                     =
+    private Pool<JAXBContext, Unmarshaller>                       upool                     =
                                                                                                 new Pool<JAXBContext, Unmarshaller>();
 
     /**
-     * This class is the key to the JAXBContext cache.  It must be based on the ContextResolver instance who created
-     * the JAXBContext and the type passed to it.  The only way this cache becomes invalid is if the ContextResolver does
-     * something crazy like create JAXBContexts based on time -- it only creates contexts between noon and 5:00pm.  So, uhhh,
-     * don't do that.
+     * This class is the key to the JAXBContext cache. It must be based on the
+     * ContextResolver instance who created the JAXBContext and the type passed
+     * to it. The only way this cache becomes invalid is if the ContextResolver
+     * does something crazy like create JAXBContexts based on time -- it only
+     * creates contexts between noon and 5:00pm. So, uhhh, don't do that.
      */
     private static class JAXBContextResolverKey {
         protected ContextResolver<JAXBContext> _resolver;
-        protected Type _type;
-        private int hashCode = -1;
+        protected Type                         _type;
+        private int                            hashCode = -1;
+
         public JAXBContextResolverKey(ContextResolver<JAXBContext> resolver, Type type) {
-            // resolver may be null, which is ok; we'll protect against NPEs in equals and hashCode overrides
+            // resolver may be null, which is ok; we'll protect against NPEs in
+            // equals and hashCode overrides
             _resolver = resolver;
             _type = type;
         }
-        
+
         @Override
         public boolean equals(Object o) {
             if ((o == null) || (!(o instanceof JAXBContextResolverKey))) {
@@ -105,7 +111,8 @@ public abstract class AbstractJAXBProvider {
             }
             JAXBContextResolverKey obj = (JAXBContextResolverKey)o;
             // check for both null or both NOT null
-            boolean result = ((obj._resolver == null) && (_resolver == null)) || ((obj._resolver != null) && (_resolver != null));
+            boolean result =
+                ((obj._resolver == null) && (_resolver == null)) || ((obj._resolver != null) && (_resolver != null));
             // we can use hashCode() to compare _resolver
             return result && (obj.hashCode() == hashCode()) && (obj._type.equals(_type));
         }
@@ -116,14 +123,21 @@ public abstract class AbstractJAXBProvider {
                 return hashCode;
             }
             if (_resolver == null) {
-                // allow the key to be based entirely on the _type object equality from equals method.  Only YOU can prevent NPEs.
-                hashCode = 0;  // don't use _type's hashCode, as the instances may differ between JAXBContextResolverKey instances
+                // allow the key to be based entirely on the _type object
+                // equality from equals method. Only YOU can prevent NPEs.
+                hashCode = 0; // don't use _type's hashCode, as the instances
+                // may differ between JAXBContextResolverKey
+                // instances
                 return hashCode;
             }
-            // Resolver instances may be unique due to the way we proxy the call to get the instances in the ProvidersRegistry.
-            // Therefore, we'll get better performance if we calculate the hashCode from the package.classname of the ContextResolver.
-            // However, this means we need to make sure the map that uses this key is non-static, so it remains scoped at the
-            // transaction level, rather than at the application, or worse, JVM level.
+            // Resolver instances may be unique due to the way we proxy the call
+            // to get the instances in the ProvidersRegistry.
+            // Therefore, we'll get better performance if we calculate the
+            // hashCode from the package.classname of the ContextResolver.
+            // However, this means we need to make sure the map that uses this
+            // key is non-static, so it remains scoped at the
+            // transaction level, rather than at the application, or worse, JVM
+            // level.
             String resolverName = _resolver.getClass().getName();
             byte[] bytes = resolverName.getBytes();
             for (int i = 0; i < bytes.length; i++) {
@@ -131,25 +145,33 @@ public abstract class AbstractJAXBProvider {
             }
             return hashCode;
         }
-        
+
     }
-    
+
     /*
-     * TODO: in my small, uncontrolled test, the JVM (garbage collector?) was cleaning about 10% of the time.  It may be worth
-     * considering the use of LRU cache or something more directly under our control to gain more of that.
-     * 
-     * To observe this behavior, set the "loop" int in JAXBCustomContextResolverCacheTest.testCustomResolverCacheOn to a high
-     * number, and see the System.out for cacheMisses.  In my checking, it was about 10% of "loop".
+     * TODO: in my small, uncontrolled test, the JVM (garbage collector?) was
+     * cleaning about 10% of the time. It may be worth considering the use of
+     * LRU cache or something more directly under our control to gain more of
+     * that. To observe this behavior, set the "loop" int in
+     * JAXBCustomContextResolverCacheTest.testCustomResolverCacheOn to a high
+     * number, and see the System.out for cacheMisses. In my checking, it was
+     * about 10% of "loop".
      */
-    // do not make static, as the key is based on the classname of the ContextResolver
-    private final SoftConcurrentMap<JAXBContextResolverKey, JAXBContext> jaxbContextCache = new SoftConcurrentMap<JAXBContextResolverKey, JAXBContext>();
-    
+    // do not make static, as the key is based on the classname of the
+    // ContextResolver
+    private final SoftConcurrentMap<JAXBContextResolverKey, JAXBContext> jaxbContextCache =
+                                                                                              new SoftConcurrentMap<JAXBContextResolverKey, JAXBContext>();
+
     // JAXBContext cache can be turned off through system property
-    static private final String propVal = System.getProperty("org.apache.wink.jaxbcontextcache");
+    static private final String                                          propVal          =
+                                                                                              System
+                                                                                                  .getProperty("org.apache.wink.jaxbcontextcache");
     // non-final, protected only to make it unittestable
-    static protected boolean contextCacheOn = !((propVal != null) && (propVal.equalsIgnoreCase("off")));
-    
-    /**
+    static protected boolean                                             contextCacheOn   =
+                                                                                              !((propVal != null) && (propVal
+                                                                                                  .equalsIgnoreCase("off")));
+
+/**
      * Get the unmarshaller. You must call {@link #releaseJAXBUnmarshaller(JAXBContext, Unmarshaller) to put it back
      * into the pool.
      * 
@@ -157,7 +179,9 @@ public abstract class AbstractJAXBProvider {
      * @return Unmarshaller an unmarshaller for the context
      * @throws JAXBException
      */
-    protected final Unmarshaller getJAXBUnmarshaller(JAXBContext context) throws JAXBException {
+    protected final Unmarshaller getJAXBUnmarshaller(Class<?> type,
+                                                     JAXBContext context,
+                                                     MediaType mediaType) throws JAXBException {
         Unmarshaller unm = upool.get(context);
         if (unm == null) {
             if (logger.isDebugEnabled()) {
@@ -169,6 +193,19 @@ public abstract class AbstractJAXBProvider {
                 logger.debug("Unmarshaller obtained [from  pool]"); //$NON-NLS-1$
             }
         }
+
+        if (providers != null) {
+            ContextResolver<JAXBUnmarshalOptions> contextResolver =
+                providers.getContextResolver(JAXBUnmarshalOptions.class, mediaType);
+            JAXBUnmarshalOptions options = null;
+            if (contextResolver != null) {
+                options = contextResolver.getContext(type);
+            }
+            if (options != null) {
+                JAXBUtils.setJAXBUnmarshalOptions(unm, options);
+            }
+        }
+
         return unm;
     }
 
@@ -321,23 +358,25 @@ public abstract class AbstractJAXBProvider {
         return getContext(type, type, mediaType);
     }
 
-    protected JAXBContext getContext(Class<?> type, Type genericType, MediaType mediaType) throws JAXBException {
-        
+    protected JAXBContext getContext(Class<?> type, Type genericType, MediaType mediaType)
+        throws JAXBException {
+
         ContextResolver<JAXBContext> contextResolver =
             providers.getContextResolver(JAXBContext.class, mediaType);
-        
+
         JAXBContext context = null;
-        
+
         JAXBContextResolverKey key = null;
         if (contextCacheOn) {
-            // it's ok and safe for contextResolver to be null at this point.  JAXBContextResolverKey can handle it
+            // it's ok and safe for contextResolver to be null at this point.
+            // JAXBContextResolverKey can handle it
             key = new JAXBContextResolverKey(contextResolver, type);
             context = jaxbContextCache.get(key);
             if (context != null) {
                 return context;
             }
         }
-        
+
         if (contextResolver != null) {
             context = contextResolver.getContext(type);
         }
@@ -345,23 +384,29 @@ public abstract class AbstractJAXBProvider {
         if (context == null) {
             context = getDefaultContext(type, genericType);
         }
-        
+
         if (contextCacheOn) {
             jaxbContextCache.put(key, context);
         }
-        
+
         return context;
     }
 
     private JAXBContext getDefaultContext(Class<?> type, Type genericType) throws JAXBException {
         JAXBContext context = jaxbDefaultContexts.get(type);
         if (context == null) {
-            
-            // CAUTION: be careful with this.  Adding a second or more classes to the JAXBContext has the side
-            // effect of putting a namespace prefix and the namespace decl on the subelements of the 
+
+            // CAUTION: be careful with this. Adding a second or more classes to
+            // the JAXBContext has the side
+            // effect of putting a namespace prefix and the namespace decl on
+            // the subelements of the
             // desired type, thus degrading performance.
-            
-            if(!isXMLRootElement(type) && !isXMLType(type)) {  // use genericType. If that fails, we'll know soon enough
+
+            if (!isXMLRootElement(type) && !isXMLType(type)) { // use
+                // genericType.
+                // If that fails,
+                // we'll know
+                // soon enough
                 context = JAXBContext.newInstance((Class<?>)genericType);
             } else {
                 context = JAXBContext.newInstance(type);
@@ -474,8 +519,7 @@ public abstract class AbstractJAXBProvider {
         /**
          * Maximum number of JAXBContexts to store
          */
-        private static int                                            MAX_LOAD_FACTOR           = 32;
-
+        private static int                                        MAX_LOAD_FACTOR = 32;
 
         /** The maps are freed up when a LOAD FACTOR is hit */
         private static int                                        MAX_LIST_FACTOR = 50;

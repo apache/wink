@@ -135,7 +135,7 @@ public class JettisonJAXBElementProvider extends AbstractJAXBProvider implements
 
         try {
             JAXBContext context = getContext(classToFill, mediaType);
-            unmarshaller = getJAXBUnmarshaller(context);
+            unmarshaller = getJAXBUnmarshaller(type, context, mediaType);
 
             XMLStreamReader xsr = null;
             if (isBadgerFishConventionUsed) {

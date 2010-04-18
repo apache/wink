@@ -27,6 +27,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.wink.common.model.JAXBUnmarshalOptions;
 import org.apache.wink.common.model.XmlFormattingOptions;
 
 public class JAXBUtils {
@@ -71,4 +72,18 @@ public class JAXBUtils {
         }
     }
 
+    public static void setJAXBUnmarshalOptions(Unmarshaller unmarshaller,
+                                               JAXBUnmarshalOptions options) {
+        if (options == null) {
+            return;
+        }
+        try {
+            Map<String, Object> properties = options.getProperties();
+            for (String key : properties.keySet()) {
+                unmarshaller.setProperty(key, properties.get(key));
+            }
+        } catch (Exception e) {
+            throw new WebApplicationException(e);
+        }
+    }
 }

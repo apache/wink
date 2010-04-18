@@ -27,13 +27,10 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -82,7 +79,7 @@ public class JAXBElementXmlProvider extends AbstractJAXBProvider implements
 
         try {
             JAXBContext context = getContext(classToFill, mediaType);
-            unmarshaller = getJAXBUnmarshaller(context);
+            unmarshaller = getJAXBUnmarshaller(type, context, mediaType);
             String charset = ProviderUtils.getCharsetOrNull(mediaType);
             if (charset == null) {
                 // use default
