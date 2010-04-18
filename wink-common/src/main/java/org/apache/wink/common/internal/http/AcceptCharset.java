@@ -52,6 +52,43 @@ public class AcceptCharset {
         public boolean isWildcard() {
             return charset == null;
         }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof ValuedCharset)) {
+                return false;
+            }
+
+            ValuedCharset other = (ValuedCharset)obj;
+            if (other.qValue != this.qValue) {
+                return false;
+            }
+
+            if (charset == null) {
+                if (other.charset != null) {
+                    return false;
+                }
+            } else {
+                if (!charset.equals(other.charset)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = 17;
+            result = 31 * result + Double.valueOf(qValue).hashCode();
+            result = 31 * result + charset.hashCode();
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return charset + ";q=" + qValue;
+        }
     }
 
     private static final HeaderDelegate<AcceptCharset> delegate =
@@ -82,12 +119,12 @@ public class AcceptCharset {
         }
         if (!isISO8859Explicit && !anyAllowed) {
             ArrayList<String> acceptableCharsetsTemp = new ArrayList<String>(acceptableCharsets);
-            acceptableCharsetsTemp.add("ISO-8859-1"); //$NON-NLS-1$
+            acceptableCharsetsTemp.add(0, "ISO-8859-1"); //$NON-NLS-1$
             this.acceptable = Collections.unmodifiableList(acceptableCharsetsTemp);
 
             ArrayList<AcceptCharset.ValuedCharset> valuedCharsetsTemp =
                 new ArrayList<ValuedCharset>(valuedCharsets);
-            valuedCharsetsTemp.add(new AcceptCharset.ValuedCharset(1.0d, "ISO-8859-1")); //$NON-NLS-1$
+            valuedCharsetsTemp.add(0, new AcceptCharset.ValuedCharset(1.0d, "ISO-8859-1")); //$NON-NLS-1$
             this.valuedCharsets = Collections.unmodifiableList(valuedCharsetsTemp);
         } else {
             this.acceptable = Collections.unmodifiableList(acceptableCharsets);
