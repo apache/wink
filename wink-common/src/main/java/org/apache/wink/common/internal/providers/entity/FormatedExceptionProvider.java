@@ -37,7 +37,9 @@ import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 import javax.ws.rs.ext.Providers;
 
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.utils.ExceptionHelper;
+import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.model.synd.SyndContent;
 import org.apache.wink.common.model.synd.SyndEntry;
 import org.apache.wink.common.model.synd.SyndText;
@@ -65,7 +67,8 @@ public class FormatedExceptionProvider implements MessageBodyWriter<Throwable> {
                                Type genericType,
                                Annotation[] annotations,
                                MediaType mediaType) {
-        // do not check for non-null writer here; writeTo will handle this situation
+        // do not check for non-null writer here; writeTo will handle this
+        // situation
         return Throwable.class.isAssignableFrom(type);
     }
 
@@ -80,7 +83,7 @@ public class FormatedExceptionProvider implements MessageBodyWriter<Throwable> {
         SyndEntry se = new SyndEntry();
         Class<?> rawType = se.getClass();
         Type genType = rawType;
-        String defaultErrorMessage = "An error has occurred while processing a request";
+        String defaultErrorMessage = Messages.getMessage("errorOccurredProcessingRequest"); //$NON-NLS-1$
 
         // Check if SyndEntry supports response MediaType
         @SuppressWarnings("unchecked")
@@ -111,6 +114,7 @@ public class FormatedExceptionProvider implements MessageBodyWriter<Throwable> {
                                       entityStream);
         } else {
             localizedMessage = "<error>" + localizedMessage + "</error>"; //$NON-NLS-1$ //$NON-NLS-2$
+            mediaType = MediaTypeUtils.setDefaultCharsetOnMediaTypeHeader(httpHeaders, mediaType);
             entityStream.write(localizedMessage.getBytes(ProviderUtils.getCharset(mediaType)));
         }
     }

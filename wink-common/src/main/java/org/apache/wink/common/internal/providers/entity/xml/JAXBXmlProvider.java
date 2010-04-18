@@ -43,7 +43,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.wink.common.internal.i18n.Messages;
-import org.apache.wink.common.utils.ProviderUtils;
+import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,11 +76,16 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
             if (type.isAnnotationPresent(XmlRootElement.class)) {
                 unmarshaledResource = unmarshaller.unmarshal(entityStream);
                 if (unmarshaledResource instanceof JAXBElement) {
-                    // this can happen if the JAXBContext object used to create the unmarshaller
-                    // was created using the package name string instead of a class object and the
-                    // ObjectFactory has a creator method for the desired object that returns
-                    // JAXBElement.  But we know better; the 'type' param passed in here had the
-                    // XmlRootElement on it, so we know the desired return object type is NOT
+                    // this can happen if the JAXBContext object used to create
+                    // the unmarshaller
+                    // was created using the package name string instead of a
+                    // class object and the
+                    // ObjectFactory has a creator method for the desired object
+                    // that returns
+                    // JAXBElement. But we know better; the 'type' param passed
+                    // in here had the
+                    // XmlRootElement on it, so we know the desired return
+                    // object type is NOT
                     // JAXBElement, thus:
                     unmarshaledResource = ((JAXBElement)unmarshaledResource).getValue();
                 }
@@ -119,8 +124,8 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
                         MediaType mediaType,
                         MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException, WebApplicationException {
-        
-        ProviderUtils.setDefaultCharsetOnMediaTypeHeader(httpHeaders, mediaType);
+
+        mediaType = MediaTypeUtils.setDefaultCharsetOnMediaTypeHeader(httpHeaders, mediaType);
 
         try {
             if (isJAXBObject(type)) {

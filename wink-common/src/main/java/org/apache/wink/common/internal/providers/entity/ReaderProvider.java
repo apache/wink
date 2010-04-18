@@ -39,6 +39,8 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
+import org.apache.wink.common.internal.utils.MediaTypeUtils;
+
 @Provider
 @Produces("*/*")
 @Consumes("*/*")
@@ -82,6 +84,7 @@ public final class ReaderProvider implements MessageBodyReader<Reader>, MessageB
                         MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException {
         try {
+            mediaType = MediaTypeUtils.setDefaultCharsetOnMediaTypeHeader(httpHeaders, mediaType);
             writeTo(t, new OutputStreamWriter(entityStream, getCharset(mediaType)));
         } finally {
             t.close();

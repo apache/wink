@@ -32,8 +32,7 @@ import java.io.Writer;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -43,22 +42,81 @@ import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Providers;
 
 import org.apache.wink.common.internal.MultivaluedMapImpl;
+import org.apache.wink.common.internal.http.AcceptCharset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ProviderUtils {
-    
-    private static final Logger logger = LoggerFactory.getLogger(ProviderUtils.class);
+    private static final Logger logger          = LoggerFactory.getLogger(ProviderUtils.class);
+
+    private static final String DEFAULT_CHARSET = "UTF-8";
 
     public static String getCharsetOrNull(MediaType m) {
         String name = (m == null) ? null : m.getParameters().get("charset"); //$NON-NLS-1$
         return (name == null) ? null : name;
     }
 
-    
     public static String getCharset(MediaType m) {
+        return getCharset(m, null);
+    }
+
+    /**
+     * Returns the charset on the chosen media type or, if no charset parameter
+     * exists on the chosen media type, the most acceptable charset based on the
+     * request headers.
+     * 
+     * @param m the chosen media type
+     * @param requestHeaders the request headers to inspect
+     * @return the charset
+     */
+    public static String getCharset(MediaType m, HttpHeaders requestHeaders) {
+        logger.debug("getCharset({}, {})", m, requestHeaders);
         String name = (m == null) ? null : m.getParameters().get("charset"); //$NON-NLS-1$
-        return (name == null) ? "UTF-8" : name; //$NON-NLS-1$
+        if (name != null) {
+            logger.debug("getCharset() returning {} since parameter was set", name);
+            return name;
+        }
+        if (requestHeaders == null) {
+            logger
+                .debug("getCharset() returning {} since requestHeaders was null", DEFAULT_CHARSET);
+            return DEFAULT_CHARSET; //$NON-NLS-1$
+        }
+        AcceptCharset charsets = null;
+        List<String> acceptableCharsets =
+            requestHeaders.getRequestHeader(HttpHeaders.ACCEPT_CHARSET);
+        if (acceptableCharsets == null || acceptableCharsets.isEmpty()) {
+            // HTTP spec says that no Accept-Charset header indicates that any
+            // charset is acceptable so we'll stick with UTF-8 by default.
+            logger.debug("getCharset() returning {} since no Accept-Charset header",
+                         DEFAULT_CHARSET);
+            return DEFAULT_CHARSET; //$NON-NLS-1$
+        }
+
+        StringBuilder acceptCharsetsTemp = new StringBuilder();
+        acceptCharsetsTemp.append(acceptableCharsets.get(0));
+        for (int c = 1; c < acceptableCharsets.size(); ++c) {
+            acceptCharsetsTemp.append(","); //$NON-NLS-1$
+            acceptCharsetsTemp.append(acceptableCharsets.get(c));
+        }
+        String acceptCharsets = acceptCharsetsTemp.toString();
+        logger.debug("acceptCharsets combined value is {}", acceptCharsets);
+        charsets = AcceptCharset.valueOf(acceptCharsets);
+
+        List<String> orderedCharsets = charsets.getAcceptableCharsets();
+        logger.debug("orderedCharsets is {}", orderedCharsets);
+        if (!orderedCharsets.isEmpty()) {
+            String charset = orderedCharsets.get(0);
+            logger.debug("getCharset() returning {} since highest Accept-Charset value", charset);
+            return charset;
+        }
+        // At this point, it's either any charset is allowed (i.e. wildcard "*"
+        // has a higher quality value than any other charset sent in the
+        // Accept-Charset header), or we only have banned charsets. If there are
+        // any banned charsets, then technically we should pick a non-banned
+        // charset.
+        logger.debug("getCharset() returning {} since no explicit charset required",
+                     DEFAULT_CHARSET);
+        return DEFAULT_CHARSET; //$NON-NLS-1$
     }
 
     public static Reader createReader(InputStream stream, MediaType mediaType) {
@@ -177,24 +235,5 @@ public class ProviderUtils {
             return null;
         }
         return reader.readFrom(type, genericType, new Annotation[0], mediaType, httpHeaders, is);
-    }
-    
-    public static void setDefaultCharsetOnMediaTypeHeader(MultivaluedMap<String, Object> httpHeaders, MediaType mediaType) {
-        if (httpHeaders != null && httpHeaders.get(HttpHeaders.CONTENT_TYPE) == null) {
-            // only correct the MediaType if the MediaType was not explicitly set
-            logger.debug("Media Type not explicitly set on Response so going to correct charset parameter if necessary"); //$NON-NLS-1$
-            if (getCharsetOrNull(mediaType) == null) { //$NON-NLS-1$
-                try {
-                    Map<String, String> params = new HashMap<String, String>(mediaType.getParameters());
-                    params.put("charset", "UTF-8"); //$NON-NLS-1$ $NON-NLS-2$
-                    httpHeaders.putSingle(HttpHeaders.CONTENT_TYPE, new MediaType(mediaType
-                            .getType(), mediaType.getSubtype(), params)); //$NON-NLS-1$
-                    logger.debug("Added charset=UTF-8 parameter to Content-Type HttpHeader"); //$NON-NLS-1$
-                } catch (Exception e) {
-                    logger.debug("Caught exception while trying to set the charset", e); //$NON-NLS-1$
-                }
-            }
-        }
-
     }
 }

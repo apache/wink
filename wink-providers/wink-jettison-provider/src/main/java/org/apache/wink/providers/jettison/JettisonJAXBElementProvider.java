@@ -26,6 +26,7 @@ import java.io.OutputStreamWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 
 import javax.ws.rs.Consumes;
@@ -50,6 +51,7 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.providers.entity.xml.AbstractJAXBProvider;
+import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.utils.ProviderUtils;
 import org.codehaus.jettison.badgerfish.BadgerFishXMLInputFactory;
 import org.codehaus.jettison.badgerfish.BadgerFishXMLStreamWriter;
@@ -180,11 +182,13 @@ public class JettisonJAXBElementProvider extends AbstractJAXBProvider implements
                         MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException, WebApplicationException {
         try {
+            mediaType = MediaTypeUtils.setDefaultCharsetOnMediaTypeHeader(httpHeaders, mediaType);
+
             Class<?> declaredType = t.getDeclaredType();
             JAXBContext context = getContext(declaredType, mediaType);
             Marshaller marshaller = getJAXBMarshaller(declaredType, context, mediaType);
-            OutputStreamWriter writer =
-                new OutputStreamWriter(entityStream, ProviderUtils.getCharset(mediaType));
+            Charset charset = Charset.forName(ProviderUtils.getCharset(mediaType));
+            OutputStreamWriter writer = new OutputStreamWriter(entityStream, charset);
 
             XMLStreamWriter xsw = null;
             if (isBadgerFishConventionUsed) {

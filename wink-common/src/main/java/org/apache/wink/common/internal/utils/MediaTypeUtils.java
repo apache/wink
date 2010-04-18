@@ -21,27 +21,36 @@ package org.apache.wink.common.internal.utils;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 
+import org.apache.wink.common.RuntimeContext;
+import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.common.internal.uri.UriEncoder;
+import org.apache.wink.common.utils.ProviderUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MediaTypeUtils {
 
-    public static final String         ATOM_SERVICE_DOCUMENT         = "application/atomsvc+xml"; //$NON-NLS-1$
-    public static final MediaType      ATOM_SERVICE_DOCUMENT_TYPE    =
-                                                                         new MediaType(
-                                                                                       "application", //$NON-NLS-1$
-                                                                                       "atomsvc+xml"); //$NON-NLS-1$
-    public static final String         ATOM_CATEGORIES_DOCUMENT      = "application/atomcat+xml"; //$NON-NLS-1$
-    public static final MediaType      ATOM_CATEGORIES_DOCUMENT_TYPE =
-                                                                         new MediaType(
-                                                                                       "application", //$NON-NLS-1$
-                                                                                       "atomcat+xml"); //$NON-NLS-1$
+    private static final Logger        logger                        =
+                                                                         LoggerFactory
+                                                                             .getLogger(MediaTypeUtils.class);
+
+    public static final String         ATOM_SERVICE_DOCUMENT         = "application/atomsvc+xml";                   //$NON-NLS-1$
+    public static final MediaType      ATOM_SERVICE_DOCUMENT_TYPE    = new MediaType("application", //$NON-NLS-1$
+                                                                                     "atomsvc+xml");                //$NON-NLS-1$
+    public static final String         ATOM_CATEGORIES_DOCUMENT      = "application/atomcat+xml";                   //$NON-NLS-1$
+    public static final MediaType      ATOM_CATEGORIES_DOCUMENT_TYPE = new MediaType("application", //$NON-NLS-1$
+                                                                                     "atomcat+xml");                //$NON-NLS-1$
     public static final String         ATOM_ENTRY                    =
-                                                                         "application/atom+xml;type=entry"; //$NON-NLS-1$
+                                                                         "application/atom+xml;type=entry";         //$NON-NLS-1$
     public static final MediaType      ATOM_ENTRY_TYPE               =
                                                                          new MediaType(
                                                                                        "application", //$NON-NLS-1$
@@ -51,99 +60,80 @@ public class MediaTypeUtils {
                                                                                                          "entry")); //$NON-NLS-1$
 
     public static final String         ATOM_FEED                     =
-                                                                         "application/atom+xml;type=feed"; //$NON-NLS-1$
+                                                                         "application/atom+xml;type=feed";          //$NON-NLS-1$
     public static final MediaType      ATOM_FEED_TYPE                =
                                                                          new MediaType(
                                                                                        "application", //$NON-NLS-1$
                                                                                        "atom+xml", //$NON-NLS-1$
                                                                                        Collections
                                                                                            .singletonMap("type", //$NON-NLS-1$
-                                                                                                         "feed")); //$NON-NLS-1$
+                                                                                                         "feed"));  //$NON-NLS-1$
 
-    public static final MediaType      IMAGE_X_ICON                  =
-                                                                         new MediaType("image", //$NON-NLS-1$
-                                                                                       "x-icon"); //$NON-NLS-1$
-    public static final MediaType      IMAGE_PNG                     =
-                                                                         new MediaType("image", //$NON-NLS-1$
-                                                                                       "png"); //$NON-NLS-1$
+    public static final MediaType      IMAGE_X_ICON                  = new MediaType("image", //$NON-NLS-1$
+                                                                                     "x-icon");                     //$NON-NLS-1$
+    public static final MediaType      IMAGE_PNG                     = new MediaType("image", //$NON-NLS-1$
+                                                                                     "png");                        //$NON-NLS-1$
     public static final MediaType      IMAGE_VND                     =
                                                                          new MediaType("image", //$NON-NLS-1$
-                                                                                       "vnd.microsoft.icon"); //$NON-NLS-1$
-    public static final String         IMAGE_JPEG                    = "image/jpeg"; //$NON-NLS-1$
-    public static final MediaType      IMAGE_JPEG_TYPE               =
-                                                                         new MediaType("image", //$NON-NLS-1$
-                                                                                       "jpeg"); //$NON-NLS-1$
+                                                                                       "vnd.microsoft.icon");       //$NON-NLS-1$
+    public static final String         IMAGE_JPEG                    = "image/jpeg";                                //$NON-NLS-1$
+    public static final MediaType      IMAGE_JPEG_TYPE               = new MediaType("image", //$NON-NLS-1$
+                                                                                     "jpeg");                       //$NON-NLS-1$
 
-    public static final String         UNKNOWN                       = "x-internal/unknown"; //$NON-NLS-1$
+    public static final String         UNKNOWN                       = "x-internal/unknown";                        //$NON-NLS-1$
 
-    public static final MediaType      UNKNOWN_TYPE                  =
-                                                                         new MediaType(
-                                                                                       "x-internal", //$NON-NLS-1$
-                                                                                       "unknown"); //$NON-NLS-1$
+    public static final MediaType      UNKNOWN_TYPE                  = new MediaType("x-internal", //$NON-NLS-1$
+                                                                                     "unknown");                    //$NON-NLS-1$
 
     public static final String         OPENSEARCH                    =
-                                                                         "application/opensearchdescription+xml"; //$NON-NLS-1$
+                                                                         "application/opensearchdescription+xml";   //$NON-NLS-1$
     public static final MediaType      OPENSEARCH_TYPE               =
                                                                          new MediaType(
                                                                                        "application", //$NON-NLS-1$
                                                                                        "opensearchdescription+xml"); //$NON-NLS-1$
 
-    public static final String         JAVASCRIPT                    = "application/javascript"; //$NON-NLS-1$
+    public static final String         JAVASCRIPT                    = "application/javascript";                    //$NON-NLS-1$
 
-    public static final MediaType      JAVASCRIPT_TYPE               =
-                                                                         new MediaType(
-                                                                                       "application", //$NON-NLS-1$
-                                                                                       "javascript"); //$NON-NLS-1$
+    public static final MediaType      JAVASCRIPT_TYPE               = new MediaType("application", //$NON-NLS-1$
+                                                                                     "javascript");                 //$NON-NLS-1$
 
-    public static final String         ECMASCRIPT                    = "application/ecmascript"; //$NON-NLS-1$
-    public static final MediaType      ECMASCRIPT_TYPE               =
-                                                                         new MediaType(
-                                                                                       "application", //$NON-NLS-1$
-                                                                                       "ecmascript"); //$NON-NLS-1$
+    public static final String         ECMASCRIPT                    = "application/ecmascript";                    //$NON-NLS-1$
+    public static final MediaType      ECMASCRIPT_TYPE               = new MediaType("application", //$NON-NLS-1$
+                                                                                     "ecmascript");                 //$NON-NLS-1$
 
-    public static final String         TEXT_ECMASCRIPT               = "text/ecmascript"; //$NON-NLS-1$
-    public static final MediaType      TEXT_ECMASCRIPT_TYPE          =
-                                                                         new MediaType("text", //$NON-NLS-1$
-                                                                                       "ecmascript"); //$NON-NLS-1$
-    public static final String         TEXT_JAVASCRIPT               = "text/javascript"; //$NON-NLS-1$
+    public static final String         TEXT_ECMASCRIPT               = "text/ecmascript";                           //$NON-NLS-1$
+    public static final MediaType      TEXT_ECMASCRIPT_TYPE          = new MediaType("text", //$NON-NLS-1$
+                                                                                     "ecmascript");                 //$NON-NLS-1$
+    public static final String         TEXT_JAVASCRIPT               = "text/javascript";                           //$NON-NLS-1$
 
-    public static final MediaType      TEXT_JAVASCRIPT_TYPE          =
-                                                                         new MediaType("text", //$NON-NLS-1$
-                                                                                       "javascript"); //$NON-NLS-1$
+    public static final MediaType      TEXT_JAVASCRIPT_TYPE          = new MediaType("text", //$NON-NLS-1$
+                                                                                     "javascript");                 //$NON-NLS-1$
 
-    public static final MediaType      CSV                           = new MediaType("text", "csv"); //$NON-NLS-1$ //$NON-NLS-2$
-    public static final String         PDF                           = "application/pdf"; //$NON-NLS-1$
-    public static final MediaType      PDF_TYPE                      =
-                                                                         new MediaType(
-                                                                                       "application", //$NON-NLS-1$
-                                                                                       "pdf"); //$NON-NLS-1$
-    public static final String         ZIP                           = "application/zip"; //$NON-NLS-1$
-    public static final MediaType      ZIP_TYPE                      =
-                                                                         new MediaType(
-                                                                                       "application", //$NON-NLS-1$
-                                                                                       "zip"); //$NON-NLS-1$
+    public static final MediaType      CSV                           = new MediaType("text", "csv");                //$NON-NLS-1$ //$NON-NLS-2$
+    public static final String         PDF                           = "application/pdf";                           //$NON-NLS-1$
+    public static final MediaType      PDF_TYPE                      = new MediaType("application", //$NON-NLS-1$
+                                                                                     "pdf");                        //$NON-NLS-1$
+    public static final String         ZIP                           = "application/zip";                           //$NON-NLS-1$
+    public static final MediaType      ZIP_TYPE                      = new MediaType("application", //$NON-NLS-1$
+                                                                                     "zip");                        //$NON-NLS-1$
 
-    public static final MediaType      MS_WORD                       =
-                                                                         new MediaType(
-                                                                                       "application", //$NON-NLS-1$
-                                                                                       "msword"); //$NON-NLS-1$
+    public static final MediaType      MS_WORD                       = new MediaType("application", //$NON-NLS-1$
+                                                                                     "msword");                     //$NON-NLS-1$
     public static final MediaType      MS_EXCEL                      =
                                                                          new MediaType(
                                                                                        "application", //$NON-NLS-1$
-                                                                                       "vnd.ms-excel"); //$NON-NLS-1$
+                                                                                       "vnd.ms-excel");             //$NON-NLS-1$
     public static final MediaType      MS_PPT                        =
                                                                          new MediaType(
                                                                                        "application", //$NON-NLS-1$
-                                                                                       "vnd.ms-powerpoint"); //$NON-NLS-1$
-    public static final String         MULTIPART_MIXED               = "multipart/mixed"; //$NON-NLS-1$
-    public static final MediaType      MULTIPART_MIXED_TYPE          =
-                                                                         new MediaType("multipart", //$NON-NLS-1$
-                                                                                       "mixed"); //$NON-NLS-1$
+                                                                                       "vnd.ms-powerpoint");        //$NON-NLS-1$
+    public static final String         MULTIPART_MIXED               = "multipart/mixed";                           //$NON-NLS-1$
+    public static final MediaType      MULTIPART_MIXED_TYPE          = new MediaType("multipart", //$NON-NLS-1$
+                                                                                     "mixed");                      //$NON-NLS-1$
 
-    public static final String         MULTIPART_FORM_DATA           = "multipart/form-data"; //$NON-NLS-1$
-    public static final MediaType      MULTIPART_FORM_DATA_TYPE      =
-                                                                         new MediaType("multipart", //$NON-NLS-1$
-                                                                                       "form-data"); //$NON-NLS-1$
+    public static final String         MULTIPART_FORM_DATA           = "multipart/form-data";                       //$NON-NLS-1$
+    public static final MediaType      MULTIPART_FORM_DATA_TYPE      = new MediaType("multipart", //$NON-NLS-1$
+                                                                                     "form-data");                  //$NON-NLS-1$
 
     public static final Set<MediaType> JSON_TYPES                    = createJsonTypes();
 
@@ -254,6 +244,50 @@ public class MediaTypeUtils {
             return compareTo(m1, m2);
         }
 
+    }
+
+    /**
+     * Given a set of response HTTP headers and a chosen media type, the method
+     * determines the best acceptable charset encoding to use.
+     * 
+     * @param httpHeaders the response HTTP headers, a Content-Type will be set
+     *            if one does not exist and if the media type does not have a
+     *            charset.
+     * @param mediaType the current media type
+     * @return the chosen media type
+     */
+    public static MediaType setDefaultCharsetOnMediaTypeHeader(MultivaluedMap<String, Object> httpHeaders,
+                                                               MediaType mediaType) {
+        logger.debug("setDefaultCharsetOnMediaTypeHeader({}, {}) entry", httpHeaders, mediaType); //$NON-NLS-1$
+
+        if (httpHeaders != null && httpHeaders.get(HttpHeaders.CONTENT_TYPE) == null) {
+            // only correct the MediaType if the MediaType was not explicitly
+            // set
+            logger
+                .debug("Media Type not explicitly set on Response so going to correct charset parameter if necessary"); //$NON-NLS-1$
+            if (ProviderUtils.getCharsetOrNull(mediaType) == null) { //$NON-NLS-1$
+                try {
+                    Map<String, String> params =
+                        new HashMap<String, String>(mediaType.getParameters());
+
+                    RuntimeContext context = RuntimeContextTLS.getRuntimeContext();
+                    HttpHeaders requestHeaders = null;
+                    if (context != null) {
+                        requestHeaders = context.getHttpHeaders();
+                    }
+                    params.put("charset", ProviderUtils.getCharset(mediaType, requestHeaders)); //$NON-NLS-1$ $NON-NLS-2$
+                    mediaType = new MediaType(mediaType.getType(), mediaType.getSubtype(), params);
+                    httpHeaders.putSingle(HttpHeaders.CONTENT_TYPE, mediaType); //$NON-NLS-1$
+                    logger
+                        .debug("Changed media type to be {} in Content-Type HttpHeader", mediaType); //$NON-NLS-1$
+                } catch (Exception e) {
+                    logger.debug("Caught exception while trying to set the charset", e); //$NON-NLS-1$
+                }
+            }
+        }
+
+        logger.debug("setDefaultCharsetOnMediaTypeHeader() exit"); //$NON-NLS-1$
+        return mediaType;
     }
 
 }

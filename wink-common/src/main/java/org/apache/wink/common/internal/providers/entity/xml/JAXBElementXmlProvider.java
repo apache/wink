@@ -27,10 +27,13 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -46,6 +49,7 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.model.ModelUtils;
+import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.utils.ProviderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,7 +126,7 @@ public class JAXBElementXmlProvider extends AbstractJAXBProvider implements
                         MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException, WebApplicationException {
 
-        ProviderUtils.setDefaultCharsetOnMediaTypeHeader(httpHeaders, mediaType);
+        mediaType = MediaTypeUtils.setDefaultCharsetOnMediaTypeHeader(httpHeaders, mediaType);
 
         try {
             Class<?> declaredType = t.getDeclaredType();

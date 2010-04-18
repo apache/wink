@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.nio.charset.Charset;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -97,8 +98,10 @@ public class JsonProvider implements MessageBodyWriter<JSONObject>, MessageBodyR
         } catch (Exception e) {
             logger.debug("Could not get the URI callback param", e); //$NON-NLS-1$
         }
+        mediaType = MediaTypeUtils.setDefaultCharsetOnMediaTypeHeader(httpHeaders, mediaType);
+        Charset charset = Charset.forName(ProviderUtils.getCharset(mediaType));
         OutputStreamWriter writer =
-            new OutputStreamWriter(entityStream, ProviderUtils.getCharset(mediaType));
+            new OutputStreamWriter(entityStream, charset);
         if (callbackParam != null) {
             writer.write(callbackParam);
             writer.write("("); //$NON-NLS-1$

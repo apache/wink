@@ -32,12 +32,16 @@ import java.nio.charset.Charset;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
+import org.apache.wink.common.RuntimeContext;
+import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
+import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.utils.ProviderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,8 +75,16 @@ public class StringProvider implements MessageBodyReader<String>, MessageBodyWri
                         Type genericType,
                         Annotation[] annotations,
                         MediaType mediaType) {
-        String charSet = ProviderUtils.getCharset(mediaType);
-        if (charSet != null && !"UTF-8".equals(charSet)) { //$NON-NLS-1$
+        RuntimeContext context = RuntimeContextTLS.getRuntimeContext();
+        HttpHeaders requestHeaders = null;
+        if (context != null) {
+            requestHeaders = context.getHttpHeaders();
+        }
+        String charSet = ProviderUtils.getCharset(mediaType, requestHeaders);
+        if (charSet == null) {
+            return -1;
+        }
+        if (!"UTF-8".equals(charSet)) { //$NON-NLS-1$
             try {
                 return t.getBytes(charSet).length;
             } catch (UnsupportedEncodingException e) {
@@ -97,11 +109,7 @@ public class StringProvider implements MessageBodyReader<String>, MessageBodyWri
                         MediaType mediaType,
                         MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException, WebApplicationException {
-
-        ProviderUtils.setDefaultCharsetOnMediaTypeHeader(httpHeaders, mediaType);
-
-        logger.debug("Writing {} to stream using {}", t, getClass().getName()); //$NON-NLS-1$
-
+        mediaType = MediaTypeUtils.setDefaultCharsetOnMediaTypeHeader(httpHeaders, mediaType);
         Charset charset = Charset.forName(ProviderUtils.getCharset(mediaType));
         OutputStreamWriter writer = new OutputStreamWriter(entityStream, charset);
         BufferedWriter bw = new BufferedWriter(writer);

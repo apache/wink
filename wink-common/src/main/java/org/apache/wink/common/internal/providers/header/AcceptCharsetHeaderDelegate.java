@@ -34,7 +34,7 @@ public class AcceptCharsetHeaderDelegate implements HeaderDelegate<AcceptCharset
         List<String> banned = new LinkedList<String>();
         boolean anyAllowed = (value == null);
 
-        // parse the Accept-Encoding header
+        // parse the Accept-Charset header
         List<AcceptCharset.ValuedCharset> vCharsets = parseAcceptCharset(value);
 
         for (AcceptCharset.ValuedCharset qCharset : vCharsets) {

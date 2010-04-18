@@ -98,6 +98,8 @@ public class JsonJAXBProvider implements MessageBodyWriter<Object>, MessageBodyR
                         OutputStream entityStream) throws IOException, WebApplicationException {
 
         try {
+            mediaType = MediaTypeUtils.setDefaultCharsetOnMediaTypeHeader(httpHeaders, mediaType);
+
             @SuppressWarnings("unchecked")
             MessageBodyWriter<Object> jaxbWriter =
                 (MessageBodyWriter<Object>)providers

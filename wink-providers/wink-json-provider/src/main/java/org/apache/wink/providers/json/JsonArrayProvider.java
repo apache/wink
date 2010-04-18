@@ -25,6 +25,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.nio.charset.Charset;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -82,6 +83,8 @@ public class JsonArrayProvider implements MessageBodyWriter<JSONArray>,
                         MediaType mediaType,
                         MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException, WebApplicationException {
+        mediaType = MediaTypeUtils.setDefaultCharsetOnMediaTypeHeader(httpHeaders, mediaType);
+
         String jsonString = null;
         try {
             jsonString = t.toString(2);
@@ -97,8 +100,9 @@ public class JsonArrayProvider implements MessageBodyWriter<JSONArray>,
         } catch (Exception e) {
             logger.debug("Could not get the URI callback param", e);
         }
-        OutputStreamWriter writer =
-            new OutputStreamWriter(entityStream, ProviderUtils.getCharset(mediaType));
+
+        Charset charset = Charset.forName(ProviderUtils.getCharset(mediaType));
+        OutputStreamWriter writer = new OutputStreamWriter(entityStream, charset);
         if (callbackParam != null) {
             writer.write(callbackParam);
             writer.write("(");
