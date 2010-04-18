@@ -162,8 +162,10 @@ public class FlushResultHandler extends AbstractHandler {
                                           responseMediaType);
             if (logger.isDebugEnabled()) {
                 logger.debug("{}@{}.getSize({}, {}, {}, {}, {}) returned {}", new Object[] { //$NON-NLS-1$
-                    messageBodyWriter.getClass().getName(), Integer.toHexString(System.identityHashCode(messageBodyWriter)), entity,
-                    rawType, genericType, declaredAnnotations, responseMediaType, size});
+                             messageBodyWriter.getClass().getName(),
+                                 Integer.toHexString(System.identityHashCode(messageBodyWriter)),
+                                 entity, rawType, genericType, declaredAnnotations,
+                                 responseMediaType, size});
             }
             if (size >= 0) {
                 headers.putSingle(HttpHeaders.CONTENT_LENGTH, String.valueOf(size));
@@ -172,10 +174,12 @@ public class FlushResultHandler extends AbstractHandler {
             FlushHeadersOutputStream outputStream =
                 new FlushHeadersOutputStream(httpResponse, headers);
             if (logger.isDebugEnabled()) {
-                logger.debug("{}@{}.writeTo({}, {}, {}, {}, {}, {}, {}) being called", new Object[] { //$NON-NLS-1$
-                    messageBodyWriter.getClass().getName(), Integer.toHexString(System.identityHashCode(messageBodyWriter)), entity,
-                    rawType, genericType, declaredAnnotations, responseMediaType, httpHeaders,
-                    outputStream});
+                logger
+                    .debug("{}@{}.writeTo({}, {}, {}, {}, {}, {}, {}) being called", new Object[] { //$NON-NLS-1$
+                           messageBodyWriter.getClass().getName(),
+                               Integer.toHexString(System.identityHashCode(messageBodyWriter)),
+                               entity, rawType, genericType, declaredAnnotations,
+                               responseMediaType, httpHeaders, outputStream});
             }
             messageBodyWriter.writeTo(entity,
                                       rawType,
@@ -201,9 +205,9 @@ public class FlushResultHandler extends AbstractHandler {
         // try to find a data handler using JavaBeans Activation Framework, if
         // found use DataSourceProvider
         dataContentHandler =
-            CommandMap.getDefaultCommandMap()
+            CommandMap
+                .getDefaultCommandMap()
                 .createDataContentHandler(responseMediaType.getType() + "/" + responseMediaType.getSubtype()); //$NON-NLS-1$
-
         if (dataContentHandler == null) {
             logger.error(Messages.getMessage("noWriterOrDataSourceProvider", entity.getClass() //$NON-NLS-1$
                 .getName(), responseMediaType));
@@ -217,11 +221,12 @@ public class FlushResultHandler extends AbstractHandler {
             new FlushHeadersOutputStream(httpResponse, httpHeaders);
         if (logger.isDebugEnabled()) {
             logger.debug("{}.writeTo({}, {}, {}) being called", new Object[] { //$NON-NLS-1$
-                Integer.toHexString(System.identityHashCode(dataContentHandler)), entity, rawType,
-                responseMediaType.toString(), outputStream});
+                         Integer.toHexString(System.identityHashCode(dataContentHandler)), entity,
+                             rawType, responseMediaType.toString(), outputStream});
         }
-
-        dataContentHandler.writeTo(entity, responseMediaType.getType() + "/" + responseMediaType.getSubtype(), outputStream); //$NON-NLS-1$
+        dataContentHandler
+            .writeTo(entity,
+                     responseMediaType.getType() + "/" + responseMediaType.getSubtype(), outputStream); //$NON-NLS-1$
         logger.debug("Flushing headers if not written"); //$NON-NLS-1$
         outputStream.flushHeaders();
     }
