@@ -298,12 +298,12 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                 eQueryValue = UriEncoder.encodeQueryParam(eQueryValue, true);
                 out.append(delim);
                 out.append(eQueryParam);
+                delim = '&';
                 if (eQueryValue == null) {
                     continue;
                 }
                 out.append('=');
                 out.append(eQueryValue);
-                delim = '&';
             }
         }
         logger.debug("buildQuery() exit - changes out to {}", out); //$NON-NLS-1$

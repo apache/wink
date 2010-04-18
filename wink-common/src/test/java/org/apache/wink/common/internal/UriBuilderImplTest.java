@@ -214,6 +214,22 @@ public class UriBuilderImplTest extends TestCase {
         builder.replaceQuery("q3={v1}&q4={v2}");
         uriString = builder.build("b#3", "b4").toString();
         assertEquals("?q3=b%233&q4=b4", uriString);
+
+        builder.replaceQuery("q3={v1}&q4=");
+        uriString = builder.build("b4").toString();
+        assertEquals("?q3=b4&q4=", uriString);
+
+        builder.replaceQuery("q3={v1}&q4");
+        uriString = builder.build("b4").toString();
+        assertEquals("?q3=b4&q4", uriString);
+
+        builder.replaceQuery("q3=&q4={v2}");
+        uriString = builder.build("b4").toString();
+        assertEquals("?q3=&q4=b4", uriString);
+
+        builder.replaceQuery("q3&q4={v2}");
+        uriString = builder.build("b4").toString();
+        assertEquals("?q3&q4=b4", uriString);
     }
 
     public void testSchemeSpecificPart() {
