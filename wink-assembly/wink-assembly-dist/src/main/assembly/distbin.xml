@@ -33,6 +33,7 @@
             <outputDirectory>dist</outputDirectory>
             <outputFileNameMapping>wink-${project.version}.jar</outputFileNameMapping>
             <useStrictFiltering>true</useStrictFiltering>
+            <directoryMode>0755</directoryMode>
         </dependencySet>
         <dependencySet>
             <includes>
@@ -43,6 +44,7 @@
             <useProjectArtifact>false</useProjectArtifact>
             <outputDirectory>dist</outputDirectory>
             <useStrictFiltering>true</useStrictFiltering>
+            <directoryMode>0755</directoryMode>
         </dependencySet>
         <dependencySet>
             <includes>
@@ -59,6 +61,7 @@
             <useTransitiveFiltering>true</useTransitiveFiltering>
             <outputDirectory>lib</outputDirectory>
             <useStrictFiltering>true</useStrictFiltering>
+            <directoryMode>0755</directoryMode>
         </dependencySet>
         <dependencySet>
             <includes>
@@ -67,6 +70,7 @@
             <useProjectArtifact>false</useProjectArtifact>
             <outputDirectory>ext/wink-abdera-provider</outputDirectory>
             <useStrictFiltering>true</useStrictFiltering>
+            <directoryMode>0755</directoryMode>
         </dependencySet>
         <dependencySet>
             <includes>
@@ -81,6 +85,7 @@
             <outputDirectory>ext/wink-client-apache-httpclient</outputDirectory>
             <useStrictFiltering>true</useStrictFiltering>
             <useTransitiveFiltering>true</useTransitiveFiltering>
+            <directoryMode>0755</directoryMode>
         </dependencySet>
         <dependencySet>
             <includes>
@@ -92,6 +97,7 @@
             <useProjectArtifact>false</useProjectArtifact>
             <outputDirectory>ext/wink-client-apache-httpclient/lib</outputDirectory>
             <useStrictFiltering>true</useStrictFiltering>
+            <directoryMode>0755</directoryMode>
         </dependencySet>
         <dependencySet>
             <includes>
@@ -100,6 +106,7 @@
             <useProjectArtifact>false</useProjectArtifact>
             <outputDirectory>ext/wink-jettison-provider</outputDirectory>
             <useStrictFiltering>true</useStrictFiltering>
+            <directoryMode>0755</directoryMode>
         </dependencySet>
         <dependencySet>
             <includes>
@@ -108,6 +115,7 @@
             <useProjectArtifact>false</useProjectArtifact>
             <outputDirectory>ext/wink-jettison-provider/lib</outputDirectory>
             <useStrictFiltering>true</useStrictFiltering>
+            <directoryMode>0755</directoryMode>
         </dependencySet>
         <dependencySet>
             <includes>
@@ -116,6 +124,7 @@
             <useProjectArtifact>false</useProjectArtifact>
             <outputDirectory>ext/wink-json-provider</outputDirectory>
             <useStrictFiltering>true</useStrictFiltering>
+            <directoryMode>0755</directoryMode>
         </dependencySet>
         <dependencySet>
             <includes>
@@ -124,6 +133,7 @@
             <useProjectArtifact>false</useProjectArtifact>
             <outputDirectory>ext/wink-json-provider/lib</outputDirectory>
             <useStrictFiltering>true</useStrictFiltering>
+            <directoryMode>0755</directoryMode>
         </dependencySet>
         <dependencySet>
             <includes>
@@ -132,6 +142,7 @@
             <useProjectArtifact>false</useProjectArtifact>
             <outputDirectory>ext/wink-spring-support</outputDirectory>
             <useStrictFiltering>true</useStrictFiltering>
+            <directoryMode>0755</directoryMode>
         </dependencySet>
         <dependencySet>
             <includes>
@@ -141,6 +152,7 @@
             <useProjectArtifact>false</useProjectArtifact>
             <outputDirectory>ext/wink-spring-support/lib</outputDirectory>
             <useStrictFiltering>true</useStrictFiltering>
+            <directoryMode>0755</directoryMode>
         </dependencySet>
         <dependencySet>
             <includes>
@@ -149,6 +161,7 @@
             <useProjectArtifact>false</useProjectArtifact>
             <outputDirectory>ext/wink-webdav</outputDirectory>
             <useStrictFiltering>true</useStrictFiltering>
+            <directoryMode>0755</directoryMode>
         </dependencySet>
         <dependencySet>
             <includes>
@@ -158,6 +171,7 @@
             <useTransitiveFiltering>true</useTransitiveFiltering>
             <outputDirectory>examples/lib</outputDirectory>
             <useStrictFiltering>true</useStrictFiltering>
+            <directoryMode>0755</directoryMode>
         </dependencySet>
         <dependencySet>
             <includes>
@@ -167,6 +181,7 @@
             <useTransitiveDependencies>false</useTransitiveDependencies>
             <outputDirectory>examples/lib</outputDirectory>
             <useStrictFiltering>true</useStrictFiltering>
+            <directoryMode>0755</directoryMode>
         </dependencySet>
        </dependencySets>
      <fileSets>
@@ -231,6 +246,7 @@
             </includes>
             <excludes>
                 <exclude>**/target/**</exclude>
+                <exclude>**/src/test/**</exclude>
                 <exclude>**/QADefectWithSpring/**</exclude>
             </excludes>
         </fileSet>
