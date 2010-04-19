@@ -57,7 +57,7 @@
                         <configuration>
                             <instructions>
                                 <Import-Package>org.apache.http.*;resolution:=optional,org.apache.commons.codec.*;resolution:=optional,org.springframework.*;resolution:=optional,!org.apache.http.*,!org.springframework.*,*</Import-Package>
-                                <Export-Package>org.apache.wink.*</Export-Package>
+                                <Export-Package>org.apache.wink.server.internal.servlet.*,!org.apache.wink.*.internal.*,org.apache.wink.*</Export-Package>
                                 <Embed-Dependency>*;inline=true</Embed-Dependency>
                             </instructions>
                             <archive>
