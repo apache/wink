@@ -18,16 +18,16 @@ From: 'an unknown organization'
   - Unnamed - xerces:xercesImpl:jar:2.6.2  xerces:xercesImpl:jar:2.6.2
 
 From: 'QOS.ch' (http://www.qos.ch)
-  - SLF4J API Module (http://www.slf4j.org) org.slf4j:slf4j-api:jar:1.5.8
+  - SLF4J API Module (http://www.slf4j.org) org.slf4j:slf4j-api:jar:1.5.11
 
-  - SLF4J Simple Binding (http://www.slf4j.org) org.slf4j:slf4j-simple:jar:1.5.8
+  - SLF4J Simple Binding (http://www.slf4j.org) org.slf4j:slf4j-simple:jar:1.5.11
 
 From: 'Spring Framework' (http://www.springframework.org/)
   - Spring Framework (http://www.springframework.org) org.springframework:spring:jar:2.5
     License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 From: 'Sun Microsystems, Inc' (http://www.sun.com/)
-  - jsr311-api (https://jsr311.dev.java.net) javax.ws.rs:jsr311-api:jar:1.0
+  - jsr311-api (https://jsr311.dev.java.net) javax.ws.rs:jsr311-api:jar:1.1
     License: CDDL License  (http://www.opensource.org/licenses/cddl1.php)
 
 From: 'The Apache Software Foundation' (http://jakarta.apache.org)
@@ -35,13 +35,13 @@ From: 'The Apache Software Foundation' (http://jakarta.apache.org)
     License: The Apache Software License, Version 2.0  (/LICENSE.txt)
 
 From: 'The Apache Software Foundation' (http://www.apache.org/)
-  - Apache Wink Common (http://www.apache.org/wink/wink-common) org.apache.wink:wink-common:jar:0.2-incubating-SNAPSHOT
+  - Apache Wink Common (http://www.apache.org/wink/wink-common) org.apache.wink:wink-common:jar:1.1-incubating-SNAPSHOT
     License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
-  - Apache Wink Server (http://www.apache.org/wink/wink-server) org.apache.wink:wink-server:jar:0.2-incubating-SNAPSHOT
+  - Apache Wink Server (http://www.apache.org/wink/wink-server) org.apache.wink:wink-server:jar:1.1-incubating-SNAPSHOT
     License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
-  - HttpClient (http://hc.apache.org/httpcomponents-client) org.apache.httpcomponents:httpclient:jar:4.0-beta2
+  - HttpClient (http://hc.apache.org/httpcomponents-client) org.apache.httpcomponents:httpclient:jar:4.0.1
     License: Apache License  (../LICENSE.txt)
-  - HttpCore (http://hc.apache.org/httpcomponents-core/) org.apache.httpcomponents:httpcore:jar:4.0-beta3
+  - HttpCore (http://hc.apache.org/httpcomponents-core/) org.apache.httpcomponents:httpcore:jar:4.0.1
     License: Apache License  (http://www.apache.org/licenses/LICENSE-2.0.html)
 
 

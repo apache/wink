@@ -29,66 +29,78 @@
                 <include>org.apache.wink:wink-common</include>
             </includes>
             <unpack>true</unpack>
-            <excludes>
-                <exclude>**/NOTICE</exclude>
-                <exclude>**/DEPENDENCIES</exclude>
-                <exclude>**/DISCLAIMER</exclude>
-            </excludes>
+            <unpackOptions>
+                <excludes>
+                    <exclude>**/NOTICE</exclude>
+                    <exclude>**/DEPENDENCIES</exclude>
+                    <exclude>**/DISCLAIMER</exclude>
+                </excludes>
+            </unpackOptions>
         </dependencySet>
         <dependencySet>
             <includes>
                 <include>org.apache.wink:wink-client</include>
             </includes>
             <unpack>true</unpack>
-            <excludes>
-                <exclude>**/NOTICE</exclude>
-                <exclude>**/DEPENDENCIES</exclude>
-                <exclude>**/DISCLAIMER</exclude>
-            </excludes>
+            <unpackOptions>
+                <excludes>
+                    <exclude>**/NOTICE</exclude>
+                    <exclude>**/DEPENDENCIES</exclude>
+                    <exclude>**/DISCLAIMER</exclude>
+                </excludes>
+            </unpackOptions>
         </dependencySet>
         <dependencySet>
             <includes>
                 <include>org.apache.wink:wink-server</include>
             </includes>
             <unpack>true</unpack>
-            <excludes>
-                <exclude>**/NOTICE</exclude>
-                <exclude>**/DEPENDENCIES</exclude>
-                <exclude>**/DISCLAIMER</exclude>
-            </excludes>
+            <unpackOptions>
+                <excludes>
+                    <exclude>**/NOTICE</exclude>
+                    <exclude>**/DEPENDENCIES</exclude>
+                    <exclude>**/DISCLAIMER</exclude>
+                </excludes>
+            </unpackOptions>
         </dependencySet>
         <dependencySet>
             <includes>
                 <include>org.apache.wink:wink-webdav</include>
             </includes>
             <unpack>true</unpack>
-            <excludes>
-                <exclude>**/NOTICE</exclude>
-                <exclude>**/DEPENDENCIES</exclude>
-                <exclude>**/DISCLAIMER</exclude>
-            </excludes>
+            <unpackOptions>
+                <excludes>
+                    <exclude>**/NOTICE</exclude>
+                    <exclude>**/DEPENDENCIES</exclude>
+                    <exclude>**/DISCLAIMER</exclude>
+                </excludes>
+            </unpackOptions>
         </dependencySet>
         <dependencySet>
             <includes>
                 <include>org.apache.wink:wink-spring-support</include>
             </includes>
             <unpack>true</unpack>
-            <excludes>
-                <exclude>**/NOTICE</exclude>
-                <exclude>**/DEPENDENCIES</exclude>
-                <exclude>**/DISCLAIMER</exclude>
-            </excludes>
+            <unpackOptions>
+                <excludes>
+                    <exclude>**/NOTICE</exclude>
+                    <exclude>**/DEPENDENCIES</exclude>
+                    <exclude>**/DISCLAIMER</exclude>
+                </excludes>
+            </unpackOptions>
         </dependencySet>
         <dependencySet>
             <includes>
                 <include>org.apache.wink:wink-client-apache-httpclient</include>
             </includes>
             <unpack>true</unpack>
-            <excludes>
-                <exclude>**/NOTICE</exclude>
-                <exclude>**/DEPENDENCIES</exclude>
-                <exclude>**/DISCLAIMER</exclude>
-            </excludes>
+            <unpackOptions>
+                <excludes>
+                    <exclude>**/NOTICE</exclude>
+                    <exclude>**/DEPENDENCIES</exclude>
+                    <exclude>**/DISCLAIMER</exclude>
+                </excludes>
+            </unpackOptions>
         </dependencySet>
      </dependencySets>
     <fileSets>
