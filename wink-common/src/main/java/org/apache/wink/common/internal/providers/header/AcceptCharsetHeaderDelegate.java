@@ -26,10 +26,18 @@ import java.util.List;
 import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 
 import org.apache.wink.common.internal.http.AcceptCharset;
+import org.apache.wink.common.internal.utils.SoftConcurrentMap;
 
 public class AcceptCharsetHeaderDelegate implements HeaderDelegate<AcceptCharset> {
+    private static final SoftConcurrentMap<String, AcceptCharset> cache =
+                                                                            new SoftConcurrentMap<String, AcceptCharset>();
 
     public AcceptCharset fromString(String value) throws IllegalArgumentException {
+        AcceptCharset cached = cache.get(value);
+        if (cached != null) {
+            return cached;
+        }
+
         List<String> acceptable = new LinkedList<String>();
         List<String> banned = new LinkedList<String>();
         boolean anyAllowed = (value == null);
@@ -53,7 +61,8 @@ public class AcceptCharsetHeaderDelegate implements HeaderDelegate<AcceptCharset
                 }
             }
         }
-        return new AcceptCharset(value, acceptable, banned, anyAllowed, vCharsets);
+        return cache
+            .put(value, new AcceptCharset(value, acceptable, banned, anyAllowed, vCharsets));
     }
 
     private List<AcceptCharset.ValuedCharset> parseAcceptCharset(String acceptableCharsetValue) {

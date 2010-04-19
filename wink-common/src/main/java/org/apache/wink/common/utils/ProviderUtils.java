@@ -32,6 +32,8 @@ import java.io.Writer;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.List;
 
 import javax.ws.rs.core.HttpHeaders;
@@ -43,13 +45,21 @@ import javax.ws.rs.ext.Providers;
 
 import org.apache.wink.common.internal.MultivaluedMapImpl;
 import org.apache.wink.common.internal.http.AcceptCharset;
+import org.apache.wink.common.internal.utils.SoftConcurrentMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ProviderUtils {
-    private static final Logger logger          = LoggerFactory.getLogger(ProviderUtils.class);
+    private static final Logger                       logger            =
+                                                                            LoggerFactory
+                                                                                .getLogger(ProviderUtils.class);
 
-    private static final String DEFAULT_CHARSET = "UTF-8";
+    private static final String                       DEFAULT_CHARSET   = "UTF-8";
+
+    private static SoftConcurrentMap<String, Boolean> validCharsets     =
+                                                                            new SoftConcurrentMap<String, Boolean>();
+    private static SoftConcurrentMap<String, String>  preferredCharsets =
+                                                                            new SoftConcurrentMap<String, String>();
 
     public static String getCharsetOrNull(MediaType m) {
         String name = (m == null) ? null : m.getParameters().get("charset"); //$NON-NLS-1$
@@ -79,9 +89,9 @@ public class ProviderUtils {
         if (requestHeaders == null) {
             logger
                 .debug("getCharset() returning {} since requestHeaders was null", DEFAULT_CHARSET);
-            return DEFAULT_CHARSET; //$NON-NLS-1$
+            return DEFAULT_CHARSET;
         }
-        AcceptCharset charsets = null;
+
         List<String> acceptableCharsets =
             requestHeaders.getRequestHeader(HttpHeaders.ACCEPT_CHARSET);
         if (acceptableCharsets == null || acceptableCharsets.isEmpty()) {
@@ -89,7 +99,7 @@ public class ProviderUtils {
             // charset is acceptable so we'll stick with UTF-8 by default.
             logger.debug("getCharset() returning {} since no Accept-Charset header",
                          DEFAULT_CHARSET);
-            return DEFAULT_CHARSET; //$NON-NLS-1$
+            return DEFAULT_CHARSET;
         }
 
         StringBuilder acceptCharsetsTemp = new StringBuilder();
@@ -100,14 +110,48 @@ public class ProviderUtils {
         }
         String acceptCharsets = acceptCharsetsTemp.toString();
         logger.debug("acceptCharsets combined value is {}", acceptCharsets);
-        charsets = AcceptCharset.valueOf(acceptCharsets);
+        String cached = preferredCharsets.get(acceptCharsets);
+        if (cached != null) {
+            return cached;
+        }
+        AcceptCharset charsets = AcceptCharset.valueOf(acceptCharsets);
+
+        if (charsets.isAnyCharsetAllowed()) {
+            preferredCharsets.put(acceptCharsets, DEFAULT_CHARSET);
+            return DEFAULT_CHARSET;
+        }
 
         List<String> orderedCharsets = charsets.getAcceptableCharsets();
         logger.debug("orderedCharsets is {}", orderedCharsets);
         if (!orderedCharsets.isEmpty()) {
-            String charset = orderedCharsets.get(0);
-            logger.debug("getCharset() returning {} since highest Accept-Charset value", charset);
-            return charset;
+            for (int c = 0; c < orderedCharsets.size(); ++c) {
+                String charset = orderedCharsets.get(c);
+                try {
+                    Boolean b = validCharsets.get(charset);
+                    if (b != null && b.booleanValue()) {
+                        logger
+                            .debug("getCharset() returning {} since highest Accept-Charset value",
+                                   charset);
+                        preferredCharsets.put(acceptCharsets, charset);
+                        return charset;
+                    }
+                    Charset.forName(charset);
+                    validCharsets.put(charset, Boolean.TRUE);
+                    logger.debug("getCharset() returning {} since highest Accept-Charset value",
+                                 charset);
+                    preferredCharsets.put(acceptCharsets, charset);
+                    return charset;
+                } catch (IllegalCharsetNameException e) {
+                    logger.debug("IllegalCharsetNameException for {}", charset, e);
+                    validCharsets.put(charset, Boolean.FALSE);
+                } catch (UnsupportedCharsetException e) {
+                    logger.debug("UnsupportedCharsetException for {}", charset, e);
+                    validCharsets.put(charset, Boolean.FALSE);
+                } catch (IllegalArgumentException e) {
+                    logger.debug("IllegalArgumentException for {}", charset, e);
+                    validCharsets.put(charset, Boolean.FALSE);
+                }
+            }
         }
         // At this point, it's either any charset is allowed (i.e. wildcard "*"
         // has a higher quality value than any other charset sent in the
@@ -116,7 +160,8 @@ public class ProviderUtils {
         // charset.
         logger.debug("getCharset() returning {} since no explicit charset required",
                      DEFAULT_CHARSET);
-        return DEFAULT_CHARSET; //$NON-NLS-1$
+        preferredCharsets.put(acceptCharsets, DEFAULT_CHARSET);
+        return DEFAULT_CHARSET;
     }
 
     public static Reader createReader(InputStream stream, MediaType mediaType) {

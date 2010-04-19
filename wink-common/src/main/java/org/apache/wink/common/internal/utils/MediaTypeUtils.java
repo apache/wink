@@ -21,9 +21,7 @@ package org.apache.wink.common.internal.utils;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
 
 import javax.ws.rs.core.HttpHeaders;
@@ -267,26 +265,24 @@ public class MediaTypeUtils {
                 .debug("Media Type not explicitly set on Response so going to correct charset parameter if necessary"); //$NON-NLS-1$
             if (ProviderUtils.getCharsetOrNull(mediaType) == null) { //$NON-NLS-1$
                 try {
-                    Map<String, String> params =
-                        new HashMap<String, String>(mediaType.getParameters());
-
                     RuntimeContext context = RuntimeContextTLS.getRuntimeContext();
                     HttpHeaders requestHeaders = null;
                     if (context != null) {
                         requestHeaders = context.getHttpHeaders();
                     }
-                    params.put("charset", ProviderUtils.getCharset(mediaType, requestHeaders)); //$NON-NLS-1$ $NON-NLS-2$
-                    mediaType = new MediaType(mediaType.getType(), mediaType.getSubtype(), params);
-                    httpHeaders.putSingle(HttpHeaders.CONTENT_TYPE, mediaType); //$NON-NLS-1$
+                    String charsetValue = ProviderUtils.getCharset(mediaType, requestHeaders);
+                    String newMediaTypeStr = mediaType.toString() + ";charset=" + charsetValue;
+                    mediaType = MediaType.valueOf(newMediaTypeStr);
+                    httpHeaders.putSingle(HttpHeaders.CONTENT_TYPE, newMediaTypeStr); //$NON-NLS-1$
                     logger
-                        .debug("Changed media type to be {} in Content-Type HttpHeader", mediaType); //$NON-NLS-1$
+                        .debug("Changed media type to be {} in Content-Type HttpHeader", newMediaTypeStr); //$NON-NLS-1$
                 } catch (Exception e) {
                     logger.debug("Caught exception while trying to set the charset", e); //$NON-NLS-1$
                 }
             }
         }
 
-        logger.debug("setDefaultCharsetOnMediaTypeHeader() exit"); //$NON-NLS-1$
+        logger.debug("setDefaultCharsetOnMediaTypeHeader() exit returning {}", mediaType); //$NON-NLS-1$
         return mediaType;
     }
 
