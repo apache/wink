@@ -29,10 +29,6 @@
         <artifactId>wink</artifactId>
         <version>1.1-incubating-SNAPSHOT</version>
     </parent>
-    <modules>
-        <module>wink-assembly-aggregatejar</module>
-        <module>wink-assembly-dist</module>
-    </modules>
     <build>
         <pluginManagement>
             <plugins>
@@ -47,4 +43,21 @@
             </plugins>
         </pluginManagement>
     </build>
+    <profiles>
+        <profile>
+            <id>CIBuild</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>build</name>
+                    <value>CI</value>
+                </property>
+            </activation>
+            <modules>
+                <module>wink-assembly-aggregatejar</module>
+                <module>wink-assembly-aggregatejar-osgi</module>
+                <module>wink-assembly-dist</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>
