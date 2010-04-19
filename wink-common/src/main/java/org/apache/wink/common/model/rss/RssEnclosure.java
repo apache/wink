@@ -23,13 +23,14 @@
 // Any modifications to this file will be lost upon recompilation of the source schema. 
 // Generated on: 2009.07.20 at 10:55:05 AM IST 
 //
-
 package org.apache.wink.common.model.rss;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+
+import org.apache.wink.common.model.synd.SyndLink;
 
 /**
  * <p>
@@ -81,6 +82,26 @@ public class RssEnclosure {
     protected String length;
     @XmlAttribute(required = true)
     protected String type;
+
+    public RssEnclosure() {
+    }
+
+    public RssEnclosure(SyndLink syndLink) {
+        setType(syndLink.getType());
+        setUrl(syndLink.getHref());
+        setLength(syndLink.getLength());
+    }
+
+    public SyndLink toSynd(SyndLink syndLink) {
+        if (syndLink == null) {
+            return syndLink;
+        }
+        syndLink.setRel("enclosure");
+        syndLink.setType(getType());
+        syndLink.setLength(getLength());
+        syndLink.setHref(getUrl());
+        return syndLink;
+    }
 
     /**
      * Gets the value of the url property.

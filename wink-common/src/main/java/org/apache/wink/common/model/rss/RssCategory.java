@@ -23,7 +23,6 @@
 // Any modifications to this file will be lost upon recompilation of the source schema. 
 // Generated on: 2009.07.20 at 10:55:05 AM IST 
 //
-
 package org.apache.wink.common.model.rss;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -31,6 +30,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
+
+import org.apache.wink.common.model.synd.SyndCategory;
 
 /**
  * <p>
@@ -81,6 +82,31 @@ public class RssCategory {
     protected String content;
     @XmlAttribute
     protected String domain;
+
+    public RssCategory() {
+    }
+
+    public RssCategory(SyndCategory syndCategory) {
+        if (syndCategory.getLabel() != null) {
+            setContent(syndCategory.getLabel());
+        }
+        if (syndCategory.getScheme() != null) {
+            setDomain(syndCategory.getScheme());
+        }
+    }
+
+    public SyndCategory toSynd(SyndCategory syndCategory) {
+        if (syndCategory == null) {
+            return syndCategory;
+        }
+        if (getContent() != null) {
+            syndCategory.setLabel(getContent());
+        }
+        if (getDomain() != null) {
+            syndCategory.setScheme(getDomain());
+        }
+        return syndCategory;
+    }
 
     /**
      * Gets the value of the content property.

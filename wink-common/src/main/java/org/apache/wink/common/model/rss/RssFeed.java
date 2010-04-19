@@ -33,6 +33,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.wink.common.model.synd.SyndFeed;
+
 /**
  * <p>
  * Java class for "rss" element of <a
@@ -70,6 +72,22 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {"channel"})
 @XmlRootElement(name = "rss")
 public class RssFeed {
+
+    public RssFeed() {
+    }
+
+    public RssFeed(SyndFeed syndFeed) {
+        setChannel(new RssChannel(syndFeed));
+        setVersion("2.0");
+    }
+
+    public SyndFeed toSynd(SyndFeed syndFeed) {
+        if (syndFeed == null) {
+            return syndFeed;
+        }
+        syndFeed = getChannel().toSynd(syndFeed);
+        return syndFeed;
+    }
 
     @XmlElement(required = true)
     protected RssChannel channel;

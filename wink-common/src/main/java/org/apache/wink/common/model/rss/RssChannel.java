@@ -23,17 +23,32 @@
 // Any modifications to this file will be lost upon recompilation of the source schema. 
 // Generated on: 2009.07.20 at 10:55:05 AM IST 
 //
-
 package org.apache.wink.common.model.rss;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+
+import org.apache.wink.common.internal.i18n.Messages;
+import org.apache.wink.common.model.synd.SyndCategory;
+import org.apache.wink.common.model.synd.SyndEntry;
+import org.apache.wink.common.model.synd.SyndFeed;
+import org.apache.wink.common.model.synd.SyndGenerator;
+import org.apache.wink.common.model.synd.SyndLink;
+import org.apache.wink.common.model.synd.SyndPerson;
+import org.apache.wink.common.model.synd.SyndText;
+import org.apache.wink.common.model.synd.SyndTextType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -262,6 +277,118 @@ public class RssChannel {
     @XmlAnyElement(lax = true)
     protected List<Object>      any;
     protected List<RssItem>     item;
+
+    private static String       RSS_DATE_FORMAT = "EEE, d MMM yyyy HH:mm:ss z";
+    private static final Logger logger          = LoggerFactory.getLogger(RssChannel.class);
+
+    public RssChannel() {
+    }
+
+    public RssChannel(SyndFeed syndFeed) {
+        if (syndFeed == null) {
+            return;
+        }
+        if (syndFeed.getTitle() != null && syndFeed.getTitle().getValue() != null) {
+            setTitle(syndFeed.getTitle().getValue());
+        }
+        SyndLink link = syndFeed.getLink("alternate");
+        if (link != null && link.getHref() != null) {
+            setLink(link.getHref());
+        }
+        if (syndFeed.getSubtitle() != null && syndFeed.getSubtitle().getValue() != null) {
+            setDescription(syndFeed.getSubtitle().getValue());
+        }
+        if (syndFeed.getLang() != null) {
+            setLanguage(syndFeed.getLang());
+        }
+        if (syndFeed.getRights() != null && syndFeed.getRights().getValue() != null) {
+            setCopyright(syndFeed.getRights().getValue());
+        }
+        if (syndFeed.getAuthors().size() > 0) {
+            SyndPerson author = syndFeed.getAuthors().get(0);
+            if (author.getEmail() != null) {
+                setManagingEditor(author.getEmail());
+            }
+        }
+        if (syndFeed.getUpdated() != null) {
+            setLastBuildDate(convertJavaDateToRssDate(syndFeed.getUpdated()));
+        }
+        getCategories().clear();
+        for (SyndCategory syndCategory : syndFeed.getCategories()) {
+            getCategories().add(new RssCategory(syndCategory));
+        }
+        if (syndFeed.getGenerator() != null && syndFeed.getGenerator().getValue() != null) {
+            setGenerator(syndFeed.getGenerator().getValue());
+        }
+        if (syndFeed.getLogo() != null) {
+            RssImage rssImage = new RssImage();
+            rssImage.setUrl(syndFeed.getLogo());
+            // http://www.rssboard.org/rss-specification mentions that, in
+            // practice the image <title> and <link> should have the same value
+            // as the channel's <title> and <link>.
+            rssImage.setTitle(getTitle());
+            rssImage.setLink(getLink());
+            setImage(rssImage);
+        }
+        getItems().clear();
+        for (SyndEntry syndEntry : syndFeed.getEntries()) {
+            RssItem rssItem = new RssItem(syndEntry);
+            getItems().add(rssItem);
+        }
+    }
+
+    public SyndFeed toSynd(SyndFeed syndFeed) {
+        if (syndFeed == null) {
+            return syndFeed;
+        }
+        if (getTitle() != null) {
+            syndFeed.setTitle(new SyndText(getTitle(), SyndTextType.text));
+        }
+        if (getLink() != null) {
+            SyndLink syndLink = new SyndLink();
+            syndLink.setHref(getLink());
+            syndLink.setRel("alternate");
+            syndFeed.getLinks().add(syndLink);
+        }
+        if (getDescription() != null) {
+            syndFeed.setSubtitle(new SyndText(getDescription(), SyndTextType.text));
+        }
+        if (getLanguage() != null) {
+            syndFeed.setLang(getLanguage());
+        }
+        if (getCopyright() != null) {
+            syndFeed.setRights(new SyndText(getCopyright()));
+        }
+        if (getManagingEditor() != null) {
+            SyndPerson syndAuthor = new SyndPerson();
+            String authorEmail = getManagingEditor();
+            syndAuthor.setEmail(authorEmail);
+            syndAuthor.setName(authorEmail.substring(0, authorEmail.indexOf("@")));
+            syndFeed.getAuthors().add(syndAuthor);
+        }
+        if (getLastBuildDate() != null) {
+            syndFeed.setUpdated(convertRssDateToJavaDate(getLastBuildDate()));
+        }
+        syndFeed.getCategories().clear();
+        for (RssCategory rssCategory : getCategories()) {
+            SyndCategory syndCategory = new SyndCategory();
+            syndCategory = rssCategory.toSynd(syndCategory);
+            syndFeed.getCategories().add(syndCategory);
+        }
+        if (getGenerator() != null) {
+            syndFeed.setGenerator(new SyndGenerator(getGenerator()));
+        }
+        if (getImage() != null && getImage().getUrl() != null) {
+            syndFeed.setLogo(getImage().getUrl());
+        }
+        syndFeed.getEntries().clear();
+        for (RssItem rssItem : getItems()) {
+            SyndEntry syndEntry = new SyndEntry();
+            syndEntry = rssItem.toSynd(syndEntry);
+            syndFeed.getEntries().add(syndEntry);
+        }
+        return syndFeed;
+    }
 
     /**
      * Gets the value of the title property.
@@ -657,4 +784,18 @@ public class RssChannel {
         return this.item;
     }
 
+    public static String convertJavaDateToRssDate(Date javaDate) {
+        SimpleDateFormat format = new SimpleDateFormat(RSS_DATE_FORMAT);
+        return format.format(javaDate);
+    }
+
+    public static Date convertRssDateToJavaDate(String rssDate) {
+        SimpleDateFormat format = new SimpleDateFormat(RSS_DATE_FORMAT);
+        try {
+            return format.parse(rssDate);
+        } catch (ParseException e) {
+            logger.error(Messages.getMessage("listExceptionDuringClassProcessing"), e);
+        }
+        return null;
+    }
 }

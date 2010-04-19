@@ -23,17 +23,24 @@
 // Any modifications to this file will be lost upon recompilation of the source schema. 
 // Generated on: 2009.07.20 at 10:55:05 AM IST 
 //
-
 package org.apache.wink.common.model.rss;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+
+import org.apache.wink.common.model.synd.SyndCategory;
+import org.apache.wink.common.model.synd.SyndEntry;
+import org.apache.wink.common.model.synd.SyndLink;
+import org.apache.wink.common.model.synd.SyndPerson;
+import org.apache.wink.common.model.synd.SyndText;
+import org.apache.wink.common.model.synd.SyndTextType;
 
 /**
  * <p>
@@ -168,6 +175,87 @@ public class RssItem {
     protected RssSource         source;
     @XmlAnyElement(lax = true)
     protected List<Object>      any;
+
+    public RssItem() {
+    }
+
+    public RssItem(SyndEntry syndEntry) {
+        if (syndEntry.getTitle() != null && syndEntry.getTitle().getValue() != null) {
+            setTitle(syndEntry.getTitle().getValue());
+        }
+        SyndLink link = syndEntry.getLink("alternate");
+        if (link != null && link.getHref() != null) {
+            setLink(link.getHref());
+        }
+        if (syndEntry.getSummary() != null && syndEntry.getSummary().getValue() != null) {
+            setDescription(syndEntry.getSummary().getValue());
+        }
+        if (syndEntry.getAuthors().size() > 0) {
+            SyndPerson syndAuthor = syndEntry.getAuthors().get(0);
+            if (syndAuthor.getEmail() != null) {
+                setAuthor(syndAuthor.getEmail());
+            }
+        }
+        getCategories().clear();
+        for (SyndCategory syndCategory : syndEntry.getCategories()) {
+            getCategories().add(new RssCategory(syndCategory));
+        }
+        link = syndEntry.getLink("enclosure");
+        if (link != null) {
+            setEnclosure(new RssEnclosure(link));
+        }
+        if (syndEntry.getId() != null) {
+            RssGuid rssGuid = new RssGuid();
+            rssGuid.setContent(syndEntry.getId());
+            setGuid(rssGuid);
+        }
+        if (syndEntry.getPublished() != null) {
+            setPubDate(RssChannel.convertJavaDateToRssDate(syndEntry.getPublished()));
+        }
+    }
+
+    public SyndEntry toSynd(SyndEntry syndEntry) {
+        if (syndEntry == null) {
+            return syndEntry;
+        }
+        if (getTitle() != null) {
+            syndEntry.setTitle(new SyndText(getTitle(), SyndTextType.text));
+        }
+        if (getLink() != null) {
+            SyndLink syndLink = new SyndLink();
+            syndLink.setHref(getLink());
+            syndLink.setRel("alternate");
+            syndEntry.getLinks().add(syndLink);
+        }
+        if (getDescription() != null) {
+            syndEntry.setSummary(new SyndText(getDescription()));
+        }
+        if (getAuthor() != null) {
+            SyndPerson syndAuthor = new SyndPerson();
+            String authorEmail = getAuthor();
+            syndAuthor.setEmail(authorEmail);
+            syndAuthor.setName(authorEmail.substring(0, authorEmail.indexOf("@")));
+            syndEntry.getAuthors().add(syndAuthor);
+        }
+        syndEntry.getCategories().clear();
+        for (RssCategory rssCategory : getCategories()) {
+            SyndCategory syndCategory = new SyndCategory();
+            syndCategory = rssCategory.toSynd(syndCategory);
+            syndEntry.getCategories().add(syndCategory);
+        }
+        if (getEnclosure() != null) {
+            SyndLink syndEnclosureLink = new SyndLink();
+            syndEnclosureLink = getEnclosure().toSynd(syndEnclosureLink);
+            syndEntry.getLinks().add(syndEnclosureLink);
+        }
+        if (getGuid() != null) {
+            syndEntry.setId(getGuid().getContent());
+        }
+        if (getPubDate() != null) {
+            syndEntry.setPublished(RssChannel.convertRssDateToJavaDate(getPubDate()));
+        }
+        return syndEntry;
+    }
 
     /**
      * Gets the value of the title property.
