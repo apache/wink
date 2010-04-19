@@ -117,22 +117,9 @@
                                 </goals>
                                 <configuration>
                                     <finalName>apache-wink-${project.version}</finalName>
-                                    <appendAssemblyId>false</appendAssemblyId>
+                                    <appendAssemblyId>true</appendAssemblyId>
                                     <descriptors>
                                         <descriptor>src/main/assembly/distbin.xml</descriptor>
-                                    </descriptors>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>make-src-assembly</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>single</goal>
-                                </goals>
-                                <configuration>
-                                    <finalName>apache-wink-${project.version}-src</finalName>
-                                    <appendAssemblyId>false</appendAssemblyId>
-                                    <descriptors>
                                         <descriptor>src/main/assembly/distsrc.xml</descriptor>
                                     </descriptors>
                                 </configuration>
