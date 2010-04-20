@@ -83,15 +83,34 @@ public class RssEnclosure {
     @XmlAttribute(required = true)
     protected String type;
 
+    /**
+     * Creates an RssEnclosure object
+     */
     public RssEnclosure() {
     }
 
+    /**
+     * Creates an RssEnclosure object out of a SyndLink object. Used for mapping
+     * Syndication Object Model into RSS.
+     * 
+     * @param syndLink the SyndLink object which has to be mapped into an
+     *            RssEnclosure object.
+     */
     public RssEnclosure(SyndLink syndLink) {
         setType(syndLink.getType());
         setUrl(syndLink.getHref());
         setLength(syndLink.getLength());
     }
 
+    /**
+     * Maps an RssEnclosure object into a SyndLink object. Used for mapping RSS
+     * into Syndication Object Model.
+     * 
+     * @param syndLink the SyndLink object into which the given RssEnclosure
+     *            object has to be mapped into
+     * @return the SyndLink object into which the given RssEnclosure object has
+     *         been mapped into
+     */
     public SyndLink toSynd(SyndLink syndLink) {
         if (syndLink == null) {
             return syndLink;

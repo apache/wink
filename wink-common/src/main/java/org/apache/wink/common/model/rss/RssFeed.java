@@ -73,14 +73,44 @@ import org.apache.wink.common.model.synd.SyndFeed;
 @XmlRootElement(name = "rss")
 public class RssFeed {
 
+    /**
+     * Creates an RssFeed object
+     */
     public RssFeed() {
     }
 
+    /**
+     * Creates an RssFeed object out of a SyndFeed object. Used for mapping
+     * Syndication Object Model into RSS.
+     * 
+     * @param syndFeed the SyndFeed object which has to be mapped into an RSS
+     *            object
+     */
     public RssFeed(SyndFeed syndFeed) {
         setChannel(new RssChannel(syndFeed));
         setVersion("2.0");
     }
 
+    /**
+     * Maps RssFeed into Syndication Object Model (SyndFeed). This enables the
+     * common SyndFeed APIs to be used for reading both RSS and Atom documents.
+     * 
+     * <pre>
+     * ...
+     * // perform a GET on the RSS resource. The resource will be returned as an Rss object
+     * RssFeed rssFeed = resource.accept(MediaType.APPLICATION_XML).get(RssFeed.class);
+     * 
+     * // Map RSS into SyndFeed
+     * SyndFeed syndFeed = new SyndFeed();
+     * syndFeed = rssFeed.toSynd(syndFeed);
+     * 
+     * // Now access RSS using SyndFeed APIs
+     * ...
+     * </pre>
+     * 
+     * @param syndFeed the SyndFeed object into which the given RSS object has to be mapped into
+     * @return the SyndFeed object into which the given RSS object has been mapped into
+     */
     public SyndFeed toSynd(SyndFeed syndFeed) {
         if (syndFeed == null) {
             return syndFeed;

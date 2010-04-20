@@ -281,9 +281,19 @@ public class RssChannel {
     private static String       RSS_DATE_FORMAT = "EEE, d MMM yyyy HH:mm:ss z";
     private static final Logger logger          = LoggerFactory.getLogger(RssChannel.class);
 
+    /**
+     * Creates an RssChannel object.
+     */
     public RssChannel() {
     }
 
+    /**
+     * Creates an RssChannel object out of a SyndFeed object. Used for mapping
+     * Syndication Object Model into RSS.
+     * 
+     * @param syndFeed the SyndFeed object which has to be mapped into an
+     *            RssChannel object
+     */
     public RssChannel(SyndFeed syndFeed) {
         if (syndFeed == null) {
             return;
@@ -337,6 +347,15 @@ public class RssChannel {
         }
     }
 
+    /**
+     * Maps an RssChannel object into a SyndFeed object. Used for mapping RSS
+     * into Syndication Object Model.
+     * 
+     * @param syndFeed the syndFeed object into which the given RssChannel
+     *            object has to be mapped into
+     * @return the SyndFeed object into which the given RssChannel object has
+     *         been mapped into
+     */
     public SyndFeed toSynd(SyndFeed syndFeed) {
         if (syndFeed == null) {
             return syndFeed;

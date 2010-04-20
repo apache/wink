@@ -176,9 +176,19 @@ public class RssItem {
     @XmlAnyElement(lax = true)
     protected List<Object>      any;
 
+    /**
+     * Creates an RssItem object
+     */
     public RssItem() {
     }
 
+    /**
+     * Creates an RssItem object out of a SyndEntry object. Used for mapping
+     * Syndication Object Model into RSS.
+     * 
+     * @param syndEntry the SyndEntry object which has to be mapped into an
+     *            RssItem object.
+     */
     public RssItem(SyndEntry syndEntry) {
         if (syndEntry.getTitle() != null && syndEntry.getTitle().getValue() != null) {
             setTitle(syndEntry.getTitle().getValue());
@@ -214,6 +224,15 @@ public class RssItem {
         }
     }
 
+    /**
+     * Maps an RssItem object into a SyndEntry object. Used for mapping RSS into
+     * Syndication Object Model.
+     * 
+     * @param syndEntry the SyndEntry object into which the given RssItem object
+     *            has to be mapped into
+     * @return the SyndEntry object into which the given RssItem object has been
+     *         mapped into
+     */
     public SyndEntry toSynd(SyndEntry syndEntry) {
         if (syndEntry == null) {
             return syndEntry;

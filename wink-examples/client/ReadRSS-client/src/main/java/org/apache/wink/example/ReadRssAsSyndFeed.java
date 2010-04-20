@@ -50,7 +50,7 @@ public class ReadRssAsSyndFeed {
             Resource feedResource = restClient.resource(rss_url);
 
             // perform a GET on the resource. The resource will be returned as an Rss object
-            RssFeed rssFeed = feedResource.accept(MediaType.APPLICATION_XML_TYPE).get(RssFeed.class);
+            RssFeed rssFeed = feedResource.accept(MediaType.APPLICATION_XML).get(RssFeed.class);
 
             // Map RSS into SyndFeed
             SyndFeed syndFeed = new SyndFeed();

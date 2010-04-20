@@ -83,9 +83,19 @@ public class RssCategory {
     @XmlAttribute
     protected String domain;
 
+    /**
+     * Creates an RssCategory object
+     */
     public RssCategory() {
     }
 
+    /**
+     * Creates an RssCategory object out of a SyndCategory object. Used for
+     * mapping Syndication Object Model into RSS.
+     * 
+     * @param syndCategory the SyndCategory object which has to be mapped into
+     *            an RssCategory object.
+     */
     public RssCategory(SyndCategory syndCategory) {
         if (syndCategory.getLabel() != null) {
             setContent(syndCategory.getLabel());
@@ -95,6 +105,15 @@ public class RssCategory {
         }
     }
 
+    /**
+     * Maps an RssCategory object into a SyndCategory object. Used for mapping
+     * RSS into Syndication Object Model.
+     * 
+     * @param syndCategory the SyndCategory object into which the given
+     *            RssCategory object has to be mapped into
+     * @return the SyndCategory object into which the given RssCategory object
+     *         has been mapped into
+     */
     public SyndCategory toSynd(SyndCategory syndCategory) {
         if (syndCategory == null) {
             return syndCategory;
