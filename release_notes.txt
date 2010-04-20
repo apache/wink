@@ -1,4 +1,4 @@
-Apache Wink 1.0 Release Notes
+Apache Wink 1.1 Release Notes
 
 
 1. Overview
@@ -6,9 +6,9 @@ Apache Wink 1.0 Release Notes
 This is the first major release of Apache Wink project.
 
 Apache Wink is a framework that helps you to produce and consume RESTful Web
-Services.  Apache Wink is TCK compliant implementation of the JAX-RS v1.0
-specification.  The project also introduces Java API for writing clients that
-consume HTTP-based RESTful Web Services. 
+Services.  Apache Wink aims to be a TCK compliant implementation of the JAX-RS
+v1.1 specification.  The project also introduces Java API for writing clients
+that consume HTTP-based RESTful Web Services. 
 
 The project website is currently at:
 
