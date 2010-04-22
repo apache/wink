@@ -40,6 +40,7 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 
+import org.apache.wink.common.internal.contexts.MediaTypeCharsetAdjuster;
 import org.apache.wink.common.internal.contexts.ProvidersImpl;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.common.internal.runtime.AbstractRuntimeContext;
@@ -49,6 +50,7 @@ import org.apache.wink.server.internal.MediaTypeMapper;
 import org.apache.wink.server.internal.contexts.HttpHeadersImpl;
 import org.apache.wink.server.internal.contexts.RequestImpl;
 import org.apache.wink.server.internal.contexts.SecurityContextImpl;
+import org.apache.wink.server.internal.contexts.ServerMediaTypeCharsetAdjuster;
 import org.apache.wink.server.internal.contexts.UriInfoImpl;
 import org.apache.wink.server.internal.registry.ResourceRegistry;
 import org.apache.wink.server.internal.utils.LinkBuildersImpl;
@@ -85,6 +87,7 @@ public class ServerMessageContext extends AbstractRuntimeContext implements Mess
         setAttribute(DeploymentConfiguration.class, configuration);
         setAttribute(ResourceRegistry.class, configuration.getResourceRegistry());
         setAttribute(ProvidersRegistry.class, configuration.getProvidersRegistry());
+        setAttribute(MediaTypeCharsetAdjuster.class, ServerMediaTypeCharsetAdjuster.getInstance());
 
         initContexts();
         List<Application> apps = configuration.getApplications();
@@ -224,8 +227,12 @@ public class ServerMessageContext extends AbstractRuntimeContext implements Mess
         @Override
         public void setContentType(String type) {
             userContentType = type;
-            MediaType realResponseMimeType = getRealResponseMimeType(type);
-            super.setContentType(realResponseMimeType.toString());
+            if (mediaTypeMapper == null) {
+                super.setContentType(type);
+            } else {
+                MediaType realResponseMimeType = getRealResponseMimeType(type);
+                super.setContentType(realResponseMimeType.toString());
+            }
         }
 
         @Override

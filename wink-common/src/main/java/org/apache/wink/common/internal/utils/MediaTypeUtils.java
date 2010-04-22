@@ -24,14 +24,13 @@ import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.wink.common.RuntimeContext;
+import org.apache.wink.common.internal.contexts.MediaTypeCharsetAdjuster;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.common.internal.uri.UriEncoder;
-import org.apache.wink.common.utils.ProviderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -256,33 +255,14 @@ public class MediaTypeUtils {
      */
     public static MediaType setDefaultCharsetOnMediaTypeHeader(MultivaluedMap<String, Object> httpHeaders,
                                                                MediaType mediaType) {
-        logger.debug("setDefaultCharsetOnMediaTypeHeader({}, {}) entry", httpHeaders, mediaType); //$NON-NLS-1$
-
-        if (httpHeaders != null && httpHeaders.get(HttpHeaders.CONTENT_TYPE) == null) {
-            // only correct the MediaType if the MediaType was not explicitly
-            // set
-            logger
-                .debug("Media Type not explicitly set on Response so going to correct charset parameter if necessary"); //$NON-NLS-1$
-            if (ProviderUtils.getCharsetOrNull(mediaType) == null) { //$NON-NLS-1$
-                try {
-                    RuntimeContext context = RuntimeContextTLS.getRuntimeContext();
-                    HttpHeaders requestHeaders = null;
-                    if (context != null) {
-                        requestHeaders = context.getHttpHeaders();
-                    }
-                    String charsetValue = ProviderUtils.getCharset(mediaType, requestHeaders);
-                    String newMediaTypeStr = mediaType.toString() + ";charset=" + charsetValue;
-                    mediaType = MediaType.valueOf(newMediaTypeStr);
-                    httpHeaders.putSingle(HttpHeaders.CONTENT_TYPE, newMediaTypeStr); //$NON-NLS-1$
-                    logger
-                        .debug("Changed media type to be {} in Content-Type HttpHeader", newMediaTypeStr); //$NON-NLS-1$
-                } catch (Exception e) {
-                    logger.debug("Caught exception while trying to set the charset", e); //$NON-NLS-1$
-                }
+        RuntimeContext context = RuntimeContextTLS.getRuntimeContext();
+        MediaTypeCharsetAdjuster adjuster = null;
+        if (context != null) {
+            adjuster = context.getAttribute(MediaTypeCharsetAdjuster.class);
+            if (adjuster != null) {
+                return adjuster.setDefaultCharsetOnMediaTypeHeader(httpHeaders, mediaType);
             }
         }
-
-        logger.debug("setDefaultCharsetOnMediaTypeHeader() exit returning {}", mediaType); //$NON-NLS-1$
         return mediaType;
     }
 

@@ -133,12 +133,9 @@ public class FlushResultHandler extends AbstractHandler {
             return;
         }
 
-        // we have an entity, set the response media type
+        // we have an entity, get the response media type
+        // the actual writing will take places in the flush
         MediaType responseMediaType = context.getResponseMediaType();
-        if (responseMediaType != null) {
-            logger.debug("Set response Content-Type to: {} ", responseMediaType); //$NON-NLS-1$
-            httpResponse.setContentType(responseMediaType.toString());
-        }
 
         // get the provider to write the entity
         Providers providers = context.getProviders();
@@ -172,7 +169,7 @@ public class FlushResultHandler extends AbstractHandler {
             }
 
             FlushHeadersOutputStream outputStream =
-                new FlushHeadersOutputStream(httpResponse, headers);
+                new FlushHeadersOutputStream(httpResponse, headers, responseMediaType);
             if (logger.isDebugEnabled()) {
                 logger
                     .debug("{}@{}.writeTo({}, {}, {}, {}, {}, {}, {}) being called", new Object[] { //$NON-NLS-1$
@@ -218,7 +215,7 @@ public class FlushResultHandler extends AbstractHandler {
             .getName());
 
         FlushHeadersOutputStream outputStream =
-            new FlushHeadersOutputStream(httpResponse, httpHeaders);
+            new FlushHeadersOutputStream(httpResponse, httpHeaders, responseMediaType);
         if (logger.isDebugEnabled()) {
             logger.debug("{}.writeTo({}, {}, {}) being called", new Object[] { //$NON-NLS-1$
                          Integer.toHexString(System.identityHashCode(dataContentHandler)), entity,
@@ -267,17 +264,20 @@ public class FlushResultHandler extends AbstractHandler {
         // headers that a provider MAY have added to the response, before it
         // actually started writing to stream.
 
-        private boolean                        writeStarted;
-        private HttpServletResponse            httpResponse;
-        private ServletOutputStream            outputStream;
-        private MultivaluedMap<String, Object> headers;
+        private boolean                              writeStarted;
+        final private HttpServletResponse            httpResponse;
+        final private ServletOutputStream            outputStream;
+        final private MultivaluedMap<String, Object> headers;
+        final private MediaType                      responseMediaType;
 
         public FlushHeadersOutputStream(HttpServletResponse httpResponse,
-                                        MultivaluedMap<String, Object> headers) throws IOException {
+                                        MultivaluedMap<String, Object> headers,
+                                        MediaType responseMediaType) throws IOException {
             this.writeStarted = false;
             this.httpResponse = httpResponse;
             this.outputStream = httpResponse.getOutputStream();
             this.headers = headers;
+            this.responseMediaType = responseMediaType;
         }
 
         @Override
@@ -312,6 +312,11 @@ public class FlushResultHandler extends AbstractHandler {
 
         private void flushHeaders() {
             if (!writeStarted) {
+                if (httpResponse.getContentType() == null) {
+                    logger.debug("Set response Content-Type to: {} ", responseMediaType); //$NON-NLS-1$
+                    httpResponse.setContentType(responseMediaType.toString());
+                }
+
                 FlushResultHandler.flushHeaders(httpResponse, headers);
                 writeStarted = true;
             }
