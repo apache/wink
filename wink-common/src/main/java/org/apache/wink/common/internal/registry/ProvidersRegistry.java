@@ -470,6 +470,41 @@ public class ProvidersRegistry {
         return mediaTypes;
     }
 
+    public MediaType getMessageBodyWriterMediaTypeLimitByIsWritable(Class<?> type,
+                                                                          RuntimeContext runtimeContext) {
+        List<MediaType> mediaTypes = new ArrayList<MediaType>();
+        logger.debug("Searching MessageBodyWriters media types limited by class type {}", type); //$NON-NLS-1$
+
+        List<MediaTypeMap<MessageBodyWriter<?>>.OFHolder<MessageBodyWriter<?>>> writerFactories =
+            messageBodyWriters.getProvidersByMediaType(MediaType.WILDCARD_TYPE, type);
+        logger.debug("Found all MessageBodyWriter ObjectFactories limited by class type {}", //$NON-NLS-1$
+                     writerFactories);
+        Annotation[] ann = new Annotation[0];
+        for (ObjectFactory<MessageBodyWriter<?>> factory : writerFactories) {
+            MessageBodyWriter<?> writer = factory.getInstance(runtimeContext);
+            Produces produces = factory.getInstanceClass().getAnnotation(Produces.class);
+            String[] values = null;
+            if (produces != null) {
+                values = AnnotationUtils.parseConsumesProducesValues(produces.value());
+            } else {
+                values = new String[] {MediaType.WILDCARD};
+            }
+            for (String v : values) {
+                MediaType mt = MediaType.valueOf(v);
+                if (logger.isDebugEnabled()) {
+                    List<Annotation> anns = (ann == null) ? null : Arrays.asList(ann);
+                    logger.debug("Calling {}.isWritable( {}, {}, {}, {} )", new Object[] {writer, //$NON-NLS-1$
+                        type, type, anns, mt});
+                }
+                if (writer.isWriteable(type, type, ann, mt)) {
+                    logger.debug("Returning media type {}", mt); //$NON-NLS-1$
+                    return mt;
+                }
+            }
+        }
+        return null;
+    }
+
     public Set<MediaType> getMessageBodyWriterMediaTypes(Class<?> type) {
         if (type == null) {
             throw new NullPointerException(Messages.getMessage("variableIsNull", "type")); //$NON-NLS-1$ //$NON-NLS-2$

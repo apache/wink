@@ -86,12 +86,20 @@ public abstract class AbstractConnectionHandler implements ConnectionHandler {
                 genericType = genericEntity.getType();
                 entity = genericEntity.getEntity();
             }
+            MessageBodyWriter writer = null;
+            MediaType contentMediaType = null;
             String contentType = request.getHeaders().getFirst(HttpHeaders.CONTENT_TYPE);
             if (contentType == null) {
-                contentType = MediaType.APPLICATION_OCTET_STREAM;
-            }
-            MediaType contentMediaType = MediaType.valueOf(contentType);
-            MessageBodyWriter writer =
+                // attempt to infer the media type based on the providers available for this type
+                contentMediaType = providersRegistry.getMessageBodyWriterMediaTypeLimitByIsWritable(type, runtimeContext);
+                if(contentMediaType == null) {
+                    // default if we still couldn't find it
+                    contentType = MediaType.APPLICATION_OCTET_STREAM;
+                }
+            } else
+                contentMediaType = MediaType.valueOf(contentType);
+            request.getHeaders().putSingle(HttpHeaders.CONTENT_TYPE, contentMediaType.toString());
+            writer =
                 providersRegistry.getMessageBodyWriter(type,
                                                        genericType,
                                                        null,
