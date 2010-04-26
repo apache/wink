@@ -67,6 +67,15 @@ public class ResourceMetadataCollectorTest extends TestCase {
     public static class MySuperInterfaceImpl extends SuperResource implements MyInterface {
 
     }
+    
+    @Path("abstractclass")
+    public static abstract class MyAbstractClass {
+        
+    }
+    
+    public static class MyBaseClass extends MyAbstractClass {
+        
+    }
 
     /**
      * Tests that @Path is inheritable. This may not follow the JAX-RS
@@ -94,6 +103,18 @@ public class ResourceMetadataCollectorTest extends TestCase {
         assertFalse(ResourceMetadataCollector.isDynamicResource(MySuperInterfaceImpl.class));
         assertTrue(ResourceMetadataCollector.isStaticResource(MySuperInterfaceImpl.class));
         assertEquals("superclassvalue", classMetadata.getPath());
+        
+        assertFalse(ResourceMetadataCollector.isResource(MyInterface.class));
+        assertFalse(ResourceMetadataCollector.isDynamicResource(MyInterface.class));
+        assertFalse(ResourceMetadataCollector.isStaticResource(MyInterface.class));
+        
+        assertFalse(ResourceMetadataCollector.isResource(MyAbstractClass.class));
+        assertFalse(ResourceMetadataCollector.isDynamicResource(MyAbstractClass.class));
+        assertFalse(ResourceMetadataCollector.isStaticResource(MyAbstractClass.class));
+        
+        assertTrue(ResourceMetadataCollector.isResource(MyBaseClass.class));
+        assertFalse(ResourceMetadataCollector.isDynamicResource(MyBaseClass.class));
+        assertTrue(ResourceMetadataCollector.isStaticResource(MyBaseClass.class));
     }
 
     /**

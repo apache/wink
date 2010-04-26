@@ -62,6 +62,10 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
     }
 
     public static boolean isStaticResource(Class<?> cls) {
+        if(Modifier.isInterface(cls.getModifiers()) || Modifier.isAbstract(cls.getModifiers())) {
+            return false;
+        }
+        
         if (cls.getAnnotation(Path.class) != null) {
             return true;
         }
