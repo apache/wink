@@ -21,6 +21,7 @@
 package org.apache.wink.server.internal.contexts;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
@@ -60,6 +62,7 @@ public class HttpHeadersImpl implements HttpHeaders {
     private Map<String, Cookie>            cookies;
     private Locale                         language;
     private MediaType                      mediaType;
+    private MultivaluedMap<String, String> allHeadersView;
 
     public HttpHeadersImpl(MessageContext msgContext) {
         this.msgContext = msgContext;
@@ -70,6 +73,7 @@ public class HttpHeadersImpl implements HttpHeaders {
         language = null;
         mediaType = null;
         allHeaders = null;
+        allHeadersView = null;
     }
 
     public List<Locale> getAcceptableLanguages() {
@@ -251,12 +255,12 @@ public class HttpHeadersImpl implements HttpHeaders {
     }
 
     public MultivaluedMap<String, String> getRequestHeaders() {
-        if (allHeaders == null) {
-            allHeaders = buildRequestHeaders();
-            logger.debug("getRequests() called so building allHeaders cache", allHeaders); //$NON-NLS-1$
+        if (allHeadersView == null) {
+            allHeadersView =
+                new UnmodifiableMultivaluedMap<String, String>(
+                                                               new MultivaluedRequestHeaderDelegate());
         }
-
-        return allHeaders;
+        return allHeadersView;
     }
 
     private MultivaluedMap<String, String> buildRequestHeaders() {
@@ -284,4 +288,85 @@ public class HttpHeadersImpl implements HttpHeaders {
         return new UnmodifiableMultivaluedMap<String, String>(map);
     }
 
+    private class MultivaluedRequestHeaderDelegate implements MultivaluedMap<String, String> {
+
+        public void setupAllHeaders() {
+            if (allHeaders == null) {
+                allHeaders = buildRequestHeaders();
+            }
+        }
+
+        public void add(String key, String value) {
+            throw new UnsupportedOperationException();
+        }
+
+        public String getFirst(String key) {
+            List<String> headers = getRequestHeaderInternal(key);
+            if(headers == null || headers.isEmpty()) {
+                return null;
+            }
+            return headers.get(0);
+        }
+
+        public void putSingle(String key, String value) {
+            throw new UnsupportedOperationException();
+        }
+
+        public void clear() {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean containsKey(Object key) {
+            setupAllHeaders();
+            return allHeaders.containsKey(key);
+        }
+
+        public boolean containsValue(Object value) {
+            setupAllHeaders();
+            return allHeaders.containsValue(value);
+        }
+
+        public Set<java.util.Map.Entry<String, List<String>>> entrySet() {
+            setupAllHeaders();
+            return allHeaders.entrySet();
+        }
+
+        public List<String> get(Object key) {
+            setupAllHeaders();
+            return allHeaders.get(key);
+        }
+
+        public boolean isEmpty() {
+            setupAllHeaders();
+            return allHeaders.isEmpty();
+        }
+
+        public Set<String> keySet() {
+            setupAllHeaders();
+            return allHeaders.keySet();
+        }
+
+        public List<String> put(String key, List<String> value) {
+            throw new UnsupportedOperationException();
+        }
+
+        public void putAll(Map<? extends String, ? extends List<String>> t) {
+            throw new UnsupportedOperationException();
+        }
+
+        public List<String> remove(Object key) {
+            throw new UnsupportedOperationException();
+        }
+
+        public int size() {
+            setupAllHeaders();
+            return allHeaders.size();
+        }
+
+        public Collection<List<String>> values() {
+            setupAllHeaders();
+            return allHeaders.values();
+        }
+
+    }
 }
