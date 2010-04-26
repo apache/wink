@@ -247,7 +247,7 @@ Copyright (c) 2002 JSON.org
     SOFTWARE.
 
 --------------------------------------------------------------------------------
-JSR 311 API (https://jsr311.dev.java.net/) javax.ws.rs:jsr311-api:jar:1.0
+JSR 311 API (https://jsr311.dev.java.net/) javax.ws.rs:jsr311-api:jar:1.1
 JAXB Reference Implementation project (https://jaxb.dev.java.net/) javax.xml.bind:jaxb-api:jar:2.1 
 Sun JAXB Reference Implementation Runtime com.sun.xml.bind:jaxb-impl:jar:2.1.4
 JavaBeans Activation Framework (http://java.sun.com/javase/technologies/desktop/javabeans/jaf/) javax.activation:activation:1.1
