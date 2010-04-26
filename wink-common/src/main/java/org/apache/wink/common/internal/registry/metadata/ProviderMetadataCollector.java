@@ -21,6 +21,7 @@ package org.apache.wink.common.internal.registry.metadata;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Member;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 
 import javax.ws.rs.core.Context;
@@ -52,16 +53,21 @@ public class ProviderMetadataCollector extends AbstractMetadataCollector {
             return false;
         }
 
+        if (Modifier.isInterface(cls.getModifiers()) || Modifier.isAbstract(cls.getModifiers())) {
+            logger.warn(Messages.getMessage("providerIsInterfaceOrAbstract", cls));
+            return false;
+        }
+
         if (cls.getAnnotation(Provider.class) != null) {
             return true;
         }
 
         Class<?> declaringClass = cls;
 
-        while (!declaringClass.equals(Object.class)) {
+        while (declaringClass != null && !declaringClass.equals(Object.class)) {
             // try a superclass
             Class<?> superclass = declaringClass.getSuperclass();
-            if (superclass.getAnnotation(Provider.class) != null) {
+            if (superclass != null && superclass.getAnnotation(Provider.class) != null) {
                 // issue warning
                 logger.warn(Messages.getMessage("providerShouldBeAnnotatedDirectly", cls));
                 return true;
