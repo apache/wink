@@ -25,6 +25,7 @@ This document describes the examples available in Wink distribution
 		- DynamicResource
 		- History
 		- LinkBuilders
+		- MultiPart
 		- RuntimeRegistration
 		- Spring
 		- Scope
