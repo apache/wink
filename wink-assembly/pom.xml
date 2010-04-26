@@ -56,7 +56,7 @@
             <modules>
                 <module>wink-assembly-aggregatejar</module>
                 <module>wink-assembly-aggregatejar-osgi</module>
-                <module>wink-assembly-dist</module>
+                <module>apache-wink</module>
             </modules>
         </profile>
     </profiles>
