@@ -129,7 +129,7 @@ public class WinkRequestMethodsTest extends TestCase {
         throws IOException, HttpException {
         Date d2 = new Date(System.currentTimeMillis() - 120000);
         Date d = new Date(System.currentTimeMillis() - 60000);
-       
+
         /*
          * get the time zone for the server
          */
@@ -137,13 +137,13 @@ public class WinkRequestMethodsTest extends TestCase {
         ClientResponse response = dateResource.get();
         assertEquals(200, response.getStatusCode());
         String serverTimeZone = response.getEntity(String.class);
-        
+
         /*
          * sets a last modified date
          */
         dateResource = client.resource(getBaseURI() + "/context/request/date");
-        DateFormat dateFormat = DateFormat.getDateTimeInstance();
-        dateFormat.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
+        DateFormat dateFormat =
+            new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.ENGLISH); // DateFormat.getDateTimeInstance();
         response = dateResource.contentType("text/string").put(dateFormat.format(d));
         assertEquals(204, response.getStatusCode());
 
@@ -165,8 +165,6 @@ public class WinkRequestMethodsTest extends TestCase {
         assertEquals(200, response.getStatusCode());
         rfc1123Format.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
         assertEquals("the date: " + rfc1123Format.format(d), response.getEntity(String.class));
-        rfc1123Format.setTimeZone(TimeZone.getDefault());
-
         rfc1123Format.setTimeZone(TimeZone.getTimeZone("GMT"));
         assertEquals(rfc1123Format.format(d), response.getHeaders()
             .getFirst(HttpHeaders.LAST_MODIFIED));
@@ -250,16 +248,16 @@ public class WinkRequestMethodsTest extends TestCase {
         throws IOException, HttpException {
         Date d2 = new Date(System.currentTimeMillis() - 120000);
         Date d = new Date(System.currentTimeMillis() - 60000);
-        
+
         /*
          * get the time zone for the server
          */
         ClientResponse response = client.resource(getBaseURI() + "/context/request/timezone").get();
         assertEquals(200, response.getStatusCode());
         String serverTimeZone = response.getEntity(String.class);
-        
-        DateFormat dateFormat = DateFormat.getDateTimeInstance();
-        dateFormat.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
+
+        DateFormat dateFormat =
+            new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.ENGLISH); // DateFormat.getDateTimeInstance();
         response =
             client.resource(getBaseURI() + "/context/request/date").contentType("text/string")
                 .put(dateFormat.format(d));

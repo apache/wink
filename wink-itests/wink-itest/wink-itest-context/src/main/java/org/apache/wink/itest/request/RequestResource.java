@@ -60,7 +60,8 @@ public class RequestResource {
     @GET
     @Path("timezone")
     public String getTimeZone() {
-        return TimeZone.getDefault().getDisplayName(false, TimeZone.SHORT);
+        boolean dst = TimeZone.getDefault().inDaylightTime(new Date());
+        return TimeZone.getDefault().getDisplayName(dst, TimeZone.SHORT);
     }
 
     @GET
@@ -72,10 +73,18 @@ public class RequestResource {
         if (date == null) {
             return Response.serverError().build();
         }
+        System.out.println("GET Date: " + date);
         ResponseBuilder respBuilder = req.evaluatePreconditions(date);
         if (respBuilder != null) {
+            System.out.println("Returning 304");
             return respBuilder.build();
         }
+        System.out.println("Returning 200");
+        SimpleDateFormat rfc1123Format =
+            new SimpleDateFormat(
+                                 "EEE, dd MMM yyyy HH:mm:ss zzz",
+                                 Locale.ENGLISH);
+        rfc1123Format.setTimeZone(TimeZone.getTimeZone("GMT"));
         return Response.ok("the date: " + rfc1123Format.format(date)).lastModified(date).build();
     }
 
@@ -86,7 +95,10 @@ public class RequestResource {
             throw new WebApplicationException();
         }
         try {
-            date = DateFormat.getDateTimeInstance().parse(dateSource);
+            date = new SimpleDateFormat(
+                                                   "EEE, dd MMM yyyy HH:mm:ss zzz",
+                                                   Locale.ENGLISH).parse(dateSource);
+            System.out.println("PUT Date: " + date);
         } catch (ParseException e) {
             throw new WebApplicationException(e);
         }
