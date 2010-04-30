@@ -73,6 +73,10 @@ public class WriterResource {
         return null;
     }
 
+    private static class MyType {
+
+    }
+
     @Path("classtype")
     @GET
     public Object getWriterClassType(@QueryParam("type") String type) {
@@ -81,8 +85,8 @@ public class WriterResource {
             d.add("str:foo");
             d.add("str:bar");
             return d;
-        } else if ("hashmap".equals(type)) {
-            return new HashMap<String, String>();
+        } else if ("mytype".equals(type)) {
+            return new MyType();
         } else if ("string".equals(type)) {
             return "str:foobar";
         } else if ("stringcontenttype".equals(type)) {

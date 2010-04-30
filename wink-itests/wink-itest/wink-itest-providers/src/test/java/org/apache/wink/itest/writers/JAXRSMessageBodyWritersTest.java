@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.MessageBodyWriter;
 
@@ -363,7 +364,8 @@ public class JAXRSMessageBodyWritersTest extends TestCase {
 
             assertEquals(200, getMethod.getStatusCode());
             assertEquals("Hello there", getMethod.getResponseBodyAsString());
-            assertEquals("text/xml" + ";charset=UTF-8", getMethod.getResponseHeader("Content-Type").getValue());
+            assertEquals("text/xml" + ";charset=UTF-8", getMethod.getResponseHeader("Content-Type")
+                .getValue());
         } finally {
             getMethod.releaseConnection();
         }
@@ -389,7 +391,8 @@ public class JAXRSMessageBodyWritersTest extends TestCase {
     /**
      * Tests that the
      * {@link MessageBodyWriter#isWriteable(Class, java.lang.reflect.Type, java.lang.annotation.Annotation[], javax.ws.rs.core.MediaType)}
-     * method receives the correct class type.
+     * method receives the correct class type. The test should receive an error
+     * 500 because no writer could be found for the type.
      * 
      * @throws HttpException
      * @throws IOException
@@ -399,7 +402,9 @@ public class JAXRSMessageBodyWritersTest extends TestCase {
 
         GetMethod getMethod =
             new GetMethod(
-                          getBaseURI() + "/jaxrs/tests/providers/messagebodywriter/classtype?type=hashmap");
+                          getBaseURI() + "/jaxrs/tests/providers/messagebodywriter/classtype?type=mytype");
+        getMethod.addRequestHeader(HttpHeaders.ACCEPT, "application/json");
+
         try {
             client.executeMethod(getMethod);
 
@@ -505,6 +510,7 @@ public class JAXRSMessageBodyWritersTest extends TestCase {
         PostMethod postMethod =
             new PostMethod(
                            getBaseURI() + "/jaxrs/tests/providers/messagebodywriter/genericentity?query=setshort");
+        postMethod.addRequestHeader(HttpHeaders.ACCEPT, "application/json");
         try {
             client.executeMethod(postMethod);
             assertEquals(500, postMethod.getStatusCode());
@@ -537,6 +543,7 @@ public class JAXRSMessageBodyWritersTest extends TestCase {
 
         GetMethod getMethod =
             new GetMethod(getBaseURI() + "/jaxrs/tests/providers/messagebodywriter/notannotated");
+        getMethod.addRequestHeader(HttpHeaders.ACCEPT, "application/json");
         try {
             client.executeMethod(getMethod);
 

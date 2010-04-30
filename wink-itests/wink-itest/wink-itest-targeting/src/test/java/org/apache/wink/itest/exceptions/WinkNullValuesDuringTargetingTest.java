@@ -22,6 +22,7 @@ import java.io.IOException;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import junit.framework.TestCase;
 
@@ -165,7 +166,9 @@ public class WinkNullValuesDuringTargetingTest extends TestCase {
     public void testNoContentTypeWithNoRequestEntityIncomingRequestWithNoConsumesMethod()
         throws IOException {
         ClientResponse response =
-            client.resource(getBaseURI() + "/targeting/nullresource/withoutconsumes").post(null);
+            client.resource(getBaseURI() + "/targeting/nullresource/withoutconsumes")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM).post(new String());
+
         assertEquals(200, response.getStatusCode());
         assertEquals("userReader", response.getEntity(String.class));
         String contentType =
@@ -226,8 +229,8 @@ public class WinkNullValuesDuringTargetingTest extends TestCase {
                 .accept("custom/type; q=0.8").post(null);
         assertEquals(200, response.getStatusCode());
         assertEquals("calledWithProduces", response.getEntity(String.class));
-        assertEquals("custom/type;q=0.8" + ";charset=UTF-8", response.getHeaders()
-            .getFirst("Content-Type"));
+        assertEquals(MediaType.valueOf("custom/type;q=0.8" + ";charset=UTF-8"), MediaType
+            .valueOf(response.getHeaders().getFirst("Content-Type")));
     }
 
     /**
@@ -242,8 +245,8 @@ public class WinkNullValuesDuringTargetingTest extends TestCase {
                 .accept("custom/type2; q=0.8").post(null);
         assertEquals(200, response.getStatusCode());
         assertEquals("calledWithoutProduces", response.getEntity(String.class));
-        assertEquals("custom/type2;q=0.8" + ";charset=UTF-8", response.getHeaders()
-            .getFirst("Content-Type"));
+        assertEquals(MediaType.valueOf("custom/type2;q=0.8" + ";charset=UTF-8"), MediaType
+            .valueOf(response.getHeaders().getFirst("Content-Type")));
     }
 
     /**
