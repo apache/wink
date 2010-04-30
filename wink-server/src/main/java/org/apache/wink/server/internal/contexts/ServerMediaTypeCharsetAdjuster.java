@@ -19,7 +19,6 @@
  */
 package org.apache.wink.server.internal.contexts;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -73,11 +72,7 @@ public class ServerMediaTypeCharsetAdjuster implements MediaTypeCharsetAdjuster 
                         }
                         String newMediaTypeStr = mediaType.toString() + ";charset=" + charsetValue;
                         mediaType = MediaType.valueOf(newMediaTypeStr);
-                        if (context != null) {
-                            HttpServletResponse response =
-                                context.getAttribute(HttpServletResponse.class);
-                            response.setContentType(newMediaTypeStr);
-                        }
+                        httpHeaders.putSingle(HttpHeaders.CONTENT_TYPE, newMediaTypeStr);
                         logger.debug("Changed media type to be {} in Content-Type HttpHeader", newMediaTypeStr); //$NON-NLS-1$
                     } catch (Exception e) {
                         logger.debug("Caught exception while trying to set the charset", e); //$NON-NLS-1$

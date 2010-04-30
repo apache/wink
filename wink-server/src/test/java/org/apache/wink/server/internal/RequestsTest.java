@@ -293,7 +293,7 @@ public class RequestsTest extends MockServletInvocationTest {
         request.addHeader(HttpHeaders.ACCEPT_LANGUAGE, "en");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(MediaType.TEXT_PLAIN + ";charset=UTF-8", response.getContentType());
+        assertEquals(MediaType.TEXT_PLAIN, response.getContentType());
         assertEquals("en", response.getHeader(HttpHeaders.CONTENT_LANGUAGE));
         assertEquals(HttpHeaders.ACCEPT_LANGUAGE, response.getHeader(HttpHeaders.VARY));
         assertNull(response.getHeader(HttpHeaders.CONTENT_ENCODING));
@@ -305,7 +305,7 @@ public class RequestsTest extends MockServletInvocationTest {
         request.addHeader(HttpHeaders.ACCEPT_LANGUAGE, "fr");
         response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(MediaType.TEXT_PLAIN + ";charset=UTF-8", response.getContentType());
+        assertEquals(MediaType.TEXT_PLAIN, response.getContentType());
         assertEquals("fr", response.getHeader(HttpHeaders.CONTENT_LANGUAGE));
         assertEquals(HttpHeaders.ACCEPT_LANGUAGE, response.getHeader(HttpHeaders.VARY));
         assertNull(response.getHeader(HttpHeaders.CONTENT_ENCODING));
@@ -319,7 +319,7 @@ public class RequestsTest extends MockServletInvocationTest {
         request.addHeader(HttpHeaders.ACCEPT_LANGUAGE, "en;q=0.6,fr;q=0.5");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(MediaType.TEXT_PLAIN + ";charset=UTF-8", response.getContentType());
+        assertEquals(MediaType.TEXT_PLAIN, response.getContentType());
         assertEquals("en", response.getHeader(HttpHeaders.CONTENT_LANGUAGE));
         assertEquals(HttpHeaders.ACCEPT_LANGUAGE, response.getHeader(HttpHeaders.VARY));
 
@@ -330,7 +330,7 @@ public class RequestsTest extends MockServletInvocationTest {
         request.addHeader(HttpHeaders.ACCEPT_LANGUAGE, "en;q=0.6,fr;q=0.7");
         response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(MediaType.TEXT_PLAIN + ";charset=UTF-8", response.getContentType());
+        assertEquals(MediaType.TEXT_PLAIN, response.getContentType());
         assertEquals("fr", response.getHeader(HttpHeaders.CONTENT_LANGUAGE));
         assertEquals(HttpHeaders.ACCEPT_LANGUAGE, response.getHeader(HttpHeaders.VARY));
     }
@@ -344,7 +344,7 @@ public class RequestsTest extends MockServletInvocationTest {
                                                         MediaType.TEXT_PLAIN);
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(MediaType.TEXT_PLAIN + ";charset=UTF-8", response.getContentType());
+        assertEquals(MediaType.TEXT_PLAIN, response.getContentType());
         assertEquals("identity", response.getHeader(HttpHeaders.CONTENT_ENCODING));
         assertEquals(HttpHeaders.ACCEPT_ENCODING, response.getHeader(HttpHeaders.VARY));
 
@@ -355,7 +355,7 @@ public class RequestsTest extends MockServletInvocationTest {
         request.addHeader(HttpHeaders.ACCEPT_ENCODING, "gzip");
         response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(MediaType.TEXT_PLAIN + ";charset=UTF-8", response.getContentType());
+        assertEquals(MediaType.TEXT_PLAIN, response.getContentType());
         assertEquals("gzip", response.getHeader(HttpHeaders.CONTENT_ENCODING));
         assertEquals(HttpHeaders.ACCEPT_ENCODING, response.getHeader(HttpHeaders.VARY));
 
@@ -374,7 +374,7 @@ public class RequestsTest extends MockServletInvocationTest {
         request.addHeader(HttpHeaders.ACCEPT_ENCODING, "gzip");
         response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(MediaType.TEXT_PLAIN + ";charset=UTF-8", response.getContentType());
+        assertEquals(MediaType.TEXT_PLAIN, response.getContentType());
         assertEquals("gzip", response.getHeader(HttpHeaders.CONTENT_ENCODING));
         assertEquals(HttpHeaders.ACCEPT_ENCODING, response.getHeader(HttpHeaders.VARY));
     }
@@ -387,7 +387,7 @@ public class RequestsTest extends MockServletInvocationTest {
         request.addHeader(HttpHeaders.ACCEPT_ENCODING, "gzip;q=0.8,deflate;q=0.7");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(MediaType.TEXT_PLAIN + ";charset=UTF-8", response.getContentType());
+        assertEquals(MediaType.TEXT_PLAIN, response.getContentType());
         assertEquals("gzip", response.getHeader(HttpHeaders.CONTENT_ENCODING));
         assertEquals(HttpHeaders.ACCEPT_ENCODING, response.getHeader(HttpHeaders.VARY));
 
@@ -398,7 +398,7 @@ public class RequestsTest extends MockServletInvocationTest {
         request.addHeader(HttpHeaders.ACCEPT_ENCODING, "deflate;q=0.8,gzip;q=0.7");
         response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(MediaType.TEXT_PLAIN + ";charset=UTF-8", response.getContentType());
+        assertEquals(MediaType.TEXT_PLAIN, response.getContentType());
         assertEquals("deflate", response.getHeader(HttpHeaders.CONTENT_ENCODING));
         assertEquals(HttpHeaders.ACCEPT_ENCODING, response.getHeader(HttpHeaders.VARY));
     }
@@ -433,7 +433,7 @@ public class RequestsTest extends MockServletInvocationTest {
         request.addHeader(HttpHeaders.ACCEPT_CHARSET, "shift_jis, *;q=0.5");
         response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(MediaType.TEXT_PLAIN + ";charset=shift_jis", response.getContentType());
+        assertEquals(MediaType.TEXT_PLAIN  + ";charset=shift_jis", response.getContentType());
         assertEquals("Accept, Accept-Charset", response.getHeader(HttpHeaders.VARY));
 
         request =
@@ -441,7 +441,7 @@ public class RequestsTest extends MockServletInvocationTest {
         request.addHeader(HttpHeaders.ACCEPT_CHARSET, "SHIFT_jis, *;q=0.5");
         response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(MediaType.TEXT_PLAIN + ";charset=shift_jis", response.getContentType());
+        assertEquals(MediaType.TEXT_PLAIN  + ";charset=shift_jis", response.getContentType());
         assertEquals("Accept, Accept-Charset", response.getHeader(HttpHeaders.VARY));
 
         request =
@@ -449,7 +449,7 @@ public class RequestsTest extends MockServletInvocationTest {
         request.addHeader(HttpHeaders.ACCEPT_CHARSET, "shift_jis, iso-8859-1;q=0.5");
         response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(MediaType.TEXT_PLAIN + ";charset=shift_jis", response.getContentType());
+        assertEquals(MediaType.TEXT_PLAIN  + ";charset=shift_jis", response.getContentType());
         assertEquals("Accept, Accept-Charset", response.getHeader(HttpHeaders.VARY));
 
         request =
@@ -457,7 +457,7 @@ public class RequestsTest extends MockServletInvocationTest {
         request.addHeader(HttpHeaders.ACCEPT_CHARSET, "iso-8859-1");
         response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(MediaType.TEXT_PLAIN + ";charset=iso-8859-1", response.getContentType());
+        assertEquals(MediaType.TEXT_PLAIN  + ";charset=iso-8859-1", response.getContentType());
         assertEquals("Accept, Accept-Charset", response.getHeader(HttpHeaders.VARY));
 
         /*
@@ -471,7 +471,7 @@ public class RequestsTest extends MockServletInvocationTest {
         request.addHeader(HttpHeaders.ACCEPT_CHARSET, "abcd");
         response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertEquals(MediaType.TEXT_PLAIN + ";charset=iso-8859-1", response.getContentType());
+        assertEquals(MediaType.TEXT_PLAIN  + ";charset=iso-8859-1", response.getContentType());
         assertEquals("Accept, Accept-Charset", response.getHeader(HttpHeaders.VARY));
     }
 
@@ -534,7 +534,7 @@ public class RequestsTest extends MockServletInvocationTest {
                                                         "/root/defaultcharset",
                                                         MediaType.TEXT_PLAIN);
         MockHttpServletResponse response = invoke(request);
-        assertEquals(MediaType.TEXT_PLAIN + ";charset=UTF-8", response.getContentType());
+        assertEquals(MediaType.TEXT_PLAIN, response.getContentType());
     }
 
     public void testMoreSimpleMultipleAcceptHeaders() throws Exception {

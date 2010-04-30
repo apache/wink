@@ -82,7 +82,7 @@ public class JAXRSReaderTest extends TestCase {
             String str = new String(carr);
 
             assertEquals("abcd", str);
-            assertEquals("text/plain;charset=UTF-8", postMethod.getResponseHeader("Content-Type").getValue());
+            assertEquals("text/plain", postMethod.getResponseHeader("Content-Type").getValue());
             Header contentLengthHeader = postMethod.getResponseHeader("Content-Length");
             assertNull(contentLengthHeader == null ? "null" : contentLengthHeader.getValue(),
                        contentLengthHeader);
@@ -187,7 +187,7 @@ public class JAXRSReaderTest extends TestCase {
             String str = new String(carr);
 
             assertEquals("wxyz", str);
-            assertEquals("mytype/subtype;charset=UTF-8", getMethod.getResponseHeader("Content-Type").getValue());
+            assertEquals("mytype/subtype", getMethod.getResponseHeader("Content-Type").getValue());
 
             Header contentLengthHeader = getMethod.getResponseHeader("Content-Length");
             assertNull(contentLengthHeader == null ? "null" : contentLengthHeader.getValue(),

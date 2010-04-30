@@ -260,7 +260,7 @@ public class NullValuesDuringTargettingTest extends TestCase {
             client.executeMethod(postMethod);
             assertEquals(200, postMethod.getStatusCode());
             assertEquals("calledWithProduces", postMethod.getResponseBodyAsString());
-            assertEquals("custom/type;q=0.8" + ";charset=UTF-8", postMethod.getResponseHeader("Content-Type")
+            assertEquals("custom/type;q=0.8", postMethod.getResponseHeader("Content-Type")
                 .getValue());
         } finally {
             postMethod.releaseConnection();
@@ -281,7 +281,7 @@ public class NullValuesDuringTargettingTest extends TestCase {
             client.executeMethod(postMethod);
             assertEquals(200, postMethod.getStatusCode());
             assertEquals("calledWithoutProduces", postMethod.getResponseBodyAsString());
-            assertEquals("custom/type2;q=0.8" + ";charset=UTF-8", postMethod.getResponseHeader("Content-Type")
+            assertEquals("custom/type2;q=0.8", postMethod.getResponseHeader("Content-Type")
                 .getValue());
         } finally {
             postMethod.releaseConnection();
@@ -301,7 +301,7 @@ public class NullValuesDuringTargettingTest extends TestCase {
             client.executeMethod(postMethod);
             assertEquals(200, postMethod.getStatusCode());
             assertEquals("calledWithProduces", postMethod.getResponseBodyAsString());
-            assertEquals("custom/type" + ";charset=UTF-8", postMethod.getResponseHeader("Content-Type").getValue());
+            assertEquals("custom/type", postMethod.getResponseHeader("Content-Type").getValue());
         } finally {
             postMethod.releaseConnection();
         }

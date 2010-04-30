@@ -60,7 +60,7 @@ public class ValidationDuringTargettingTest extends TestCase {
 
             assertEquals(200, getMethod.getStatusCode());
             assertEquals("Hello JSON Produces", getMethod.getResponseBodyAsString());
-            assertEquals("application/json" + ";charset=UTF-8", getMethod
+            assertEquals("application/json", getMethod
                 .getResponseHeader("Content-Type").getValue());
         } finally {
             getMethod.releaseConnection();
@@ -74,7 +74,7 @@ public class ValidationDuringTargettingTest extends TestCase {
 
             assertEquals(200, getMethod.getStatusCode());
             assertEquals("Hello XML Produces", getMethod.getResponseBodyAsString());
-            assertEquals("application/xml" + ";charset=UTF-8", getMethod
+            assertEquals("application/xml", getMethod
                 .getResponseHeader("Content-Type").getValue());
         } finally {
             getMethod.releaseConnection();
@@ -144,7 +144,7 @@ public class ValidationDuringTargettingTest extends TestCase {
 
             assertEquals(200, getMethod.getStatusCode());
             assertEquals("Hello JSON Consumes And Produces", getMethod.getResponseBodyAsString());
-            assertEquals("application/json" + ";charset=UTF-8", getMethod
+            assertEquals("application/json", getMethod
                 .getResponseHeader("Content-Type").getValue());
         } finally {
             getMethod.releaseConnection();
@@ -157,7 +157,7 @@ public class ValidationDuringTargettingTest extends TestCase {
 
             assertEquals(200, getMethod.getStatusCode());
             assertEquals("Hello JSON Consumes And Produces", getMethod.getResponseBodyAsString());
-            assertEquals("application/json" + ";charset=UTF-8", getMethod
+            assertEquals("application/json", getMethod
                 .getResponseHeader("Content-Type").getValue());
         } finally {
             getMethod.releaseConnection();
@@ -176,12 +176,12 @@ public class ValidationDuringTargettingTest extends TestCase {
                 assertEquals(200, getMethod.getStatusCode());
                 assertEquals("Hello XML Consumes And JSON Produces", getMethod
                     .getResponseBodyAsString());
-                assertEquals("application/json" + ";charset=UTF-8", getMethod
+                assertEquals("application/json", getMethod
                     .getResponseHeader("Content-Type").getValue());
             } else {
                 assertEquals(200, getMethod.getStatusCode());
                 assertEquals("Hello XML Consumes And Produces", getMethod.getResponseBodyAsString());
-                assertEquals("application/xml" + ";charset=UTF-8", getMethod
+                assertEquals("application/xml", getMethod
                     .getResponseHeader("Content-Type").getValue());
             }
         } finally {
@@ -196,7 +196,7 @@ public class ValidationDuringTargettingTest extends TestCase {
 
             assertEquals(200, getMethod.getStatusCode());
             assertEquals("Hello XML Consumes And Produces", getMethod.getResponseBodyAsString());
-            assertEquals("application/xml" + ";charset=UTF-8", getMethod
+            assertEquals("application/xml", getMethod
                 .getResponseHeader("Content-Type").getValue());
         } finally {
             getMethod.releaseConnection();
@@ -211,7 +211,7 @@ public class ValidationDuringTargettingTest extends TestCase {
             assertEquals(200, getMethod.getStatusCode());
             assertEquals("Hello XML Consumes And JSON Produces", getMethod
                 .getResponseBodyAsString());
-            assertEquals("application/json" + ";charset=UTF-8", getMethod
+            assertEquals("application/json", getMethod
                 .getResponseHeader("Content-Type").getValue());
         } finally {
             getMethod.releaseConnection();

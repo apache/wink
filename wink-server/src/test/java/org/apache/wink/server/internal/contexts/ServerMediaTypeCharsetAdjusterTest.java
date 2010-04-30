@@ -22,7 +22,6 @@ package org.apache.wink.server.internal.contexts;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -38,22 +37,24 @@ import org.junit.Test;
 public class ServerMediaTypeCharsetAdjusterTest extends MockObjectTestCase {
 
     RuntimeContext context = null;
-    HttpServletResponse servletResponse = null;
     DeploymentConfiguration myConfig = new DeploymentConfiguration();
+    MultivaluedMap<String, Object> responseHttpHeaders = null;
 
     
+    @SuppressWarnings("unchecked")
     @Override
     protected void setUp() throws Exception {
         super.setUp();
         
         myConfig.init();
-        // default is true in the real config  
+        // default is false in the real config  
         myConfig.setDefaultResponseCharset(true);
         // default is false in the real config  
         myConfig.setUseAcceptCharset(false);
         
         // common expectations
         context = mock(RuntimeContext.class);
+        responseHttpHeaders = mock(MultivaluedMap.class);
         checking(new Expectations() {{
             allowing(context).getAttribute(DeploymentConfiguration.class); will(returnValue(myConfig));
         }});
@@ -93,8 +94,6 @@ public class ServerMediaTypeCharsetAdjusterTest extends MockObjectTestCase {
 
         final String expected = "application/xml";
         
-        servletResponse = mock(HttpServletResponse.class);
-        
         ServerMediaTypeCharsetAdjuster serverMediaTypeCharsetAdjuster = ServerMediaTypeCharsetAdjuster.getInstance();
         
         // switch off the default
@@ -112,16 +111,15 @@ public class ServerMediaTypeCharsetAdjusterTest extends MockObjectTestCase {
 
         final String expected = "application/xml;charset=UTF-8";
         
-        servletResponse = mock(HttpServletResponse.class);
         checking(new Expectations() {{
-            oneOf(servletResponse).setContentType(expected);
-            oneOf(context).getAttribute(HttpServletResponse.class); will(returnValue(servletResponse));
+            oneOf(responseHttpHeaders).isEmpty(); will(returnValue(true));
+            oneOf(responseHttpHeaders).putSingle(HttpHeaders.CONTENT_TYPE, expected);
         }});
         
         ServerMediaTypeCharsetAdjuster serverMediaTypeCharsetAdjuster = ServerMediaTypeCharsetAdjuster.getInstance();
         
         // empty map
-        MediaType mediaType = serverMediaTypeCharsetAdjuster.setDefaultCharsetOnMediaTypeHeader(new MultivaluedMapImpl<String, Object>(), MediaType.APPLICATION_XML_TYPE);
+        MediaType mediaType = serverMediaTypeCharsetAdjuster.setDefaultCharsetOnMediaTypeHeader(responseHttpHeaders, MediaType.APPLICATION_XML_TYPE);
         assertEquals(expected, mediaType.toString());
         
     }
@@ -132,10 +130,9 @@ public class ServerMediaTypeCharsetAdjusterTest extends MockObjectTestCase {
         final String expected = "application/xml;charset=UTF-8";
         
         final HttpHeaders httpHeaders = mock(HttpHeaders.class);
-        servletResponse = mock(HttpServletResponse.class);
         checking(new Expectations() {{
-            oneOf(servletResponse).setContentType(expected);
-            oneOf(context).getAttribute(HttpServletResponse.class); will(returnValue(servletResponse));
+            oneOf(responseHttpHeaders).isEmpty(); will(returnValue(true));
+            oneOf(responseHttpHeaders).putSingle(HttpHeaders.CONTENT_TYPE, expected);
             oneOf(context).getHttpHeaders(); will(returnValue(httpHeaders));
             oneOf(httpHeaders).getRequestHeader(HttpHeaders.ACCEPT_CHARSET); will(returnValue(null));
         }});
@@ -146,7 +143,7 @@ public class ServerMediaTypeCharsetAdjusterTest extends MockObjectTestCase {
         myConfig.setUseAcceptCharset(true);
         
         // empty map
-        MediaType mediaType = serverMediaTypeCharsetAdjuster.setDefaultCharsetOnMediaTypeHeader(new MultivaluedMapImpl<String, Object>(), MediaType.APPLICATION_XML_TYPE);
+        MediaType mediaType = serverMediaTypeCharsetAdjuster.setDefaultCharsetOnMediaTypeHeader(responseHttpHeaders, MediaType.APPLICATION_XML_TYPE);
         assertEquals(expected, mediaType.toString());
         
     }
@@ -160,25 +157,24 @@ public class ServerMediaTypeCharsetAdjusterTest extends MockObjectTestCase {
         acceptHeaders.add("UTF-16");
         
         final HttpHeaders httpHeaders = mock(HttpHeaders.class);
-        servletResponse = mock(HttpServletResponse.class);
         checking(new Expectations() {{
-            oneOf(servletResponse).setContentType(expected);
-            oneOf(context).getAttribute(HttpServletResponse.class); will(returnValue(servletResponse));
+            oneOf(responseHttpHeaders).add("nonesense", null);
+            oneOf(responseHttpHeaders).isEmpty(); will(returnValue(false));
+            oneOf(responseHttpHeaders).get(HttpHeaders.CONTENT_TYPE); will(returnValue(null));
+            oneOf(responseHttpHeaders).putSingle(HttpHeaders.CONTENT_TYPE, expected);
             oneOf(context).getHttpHeaders(); will(returnValue(httpHeaders));
             oneOf(httpHeaders).getRequestHeader(HttpHeaders.ACCEPT_CHARSET); will(returnValue(acceptHeaders));
         }});
         
         // non-empty map, just to make sure production code path is as expected
-        MultivaluedMap<String, Object> map = new MultivaluedMapImpl<String, Object>();
-        map.add("nonsense", null);
-
+        responseHttpHeaders.add("nonesense", null);
         ServerMediaTypeCharsetAdjuster serverMediaTypeCharsetAdjuster = ServerMediaTypeCharsetAdjuster.getInstance();
         
         // exercise code path that reads the Accept-Charset header
         myConfig.setUseAcceptCharset(true);
         
         // empty map
-        MediaType mediaType = serverMediaTypeCharsetAdjuster.setDefaultCharsetOnMediaTypeHeader(map, MediaType.APPLICATION_XML_TYPE);
+        MediaType mediaType = serverMediaTypeCharsetAdjuster.setDefaultCharsetOnMediaTypeHeader(responseHttpHeaders, MediaType.APPLICATION_XML_TYPE);
         // still defaults back to ISO-8859-1 because it is silently added as top q-valued charset on the client-originated Accept-Header.  See HTTP spec.
         assertEquals(expected, mediaType.toString());
         
@@ -193,18 +189,16 @@ public class ServerMediaTypeCharsetAdjusterTest extends MockObjectTestCase {
         acceptHeaders.add("UTF-16;q=1.0");
         acceptHeaders.add("ISO-8859-1;q=0.5");  // re-prioritize silently added charset to lower q-value than UTF-16
         
-        final HttpHeaders httpHeaders = mock(HttpHeaders.class);
-        servletResponse = mock(HttpServletResponse.class);
         checking(new Expectations() {{
-            oneOf(servletResponse).setContentType(expected);
-            oneOf(context).getAttribute(HttpServletResponse.class); will(returnValue(servletResponse));
+            oneOf(responseHttpHeaders).isEmpty(); will(returnValue(true));
+            oneOf(responseHttpHeaders).putSingle(HttpHeaders.CONTENT_TYPE, expected);
         }});
         
         ServerMediaTypeCharsetAdjuster serverMediaTypeCharsetAdjuster = ServerMediaTypeCharsetAdjuster.getInstance();
         
         // leave useAcceptHeader to the default of false
         
-        MediaType mediaType = serverMediaTypeCharsetAdjuster.setDefaultCharsetOnMediaTypeHeader(new MultivaluedMapImpl<String, Object>(), MediaType.APPLICATION_XML_TYPE);
+        MediaType mediaType = serverMediaTypeCharsetAdjuster.setDefaultCharsetOnMediaTypeHeader(responseHttpHeaders, MediaType.APPLICATION_XML_TYPE);
         // UTF-16 has highest q-value, but Accept-Charset is being ignored due to config, so...
         assertEquals(expected, mediaType.toString());
         
@@ -220,10 +214,9 @@ public class ServerMediaTypeCharsetAdjusterTest extends MockObjectTestCase {
         acceptHeaders.add("ISO-8859-1;q=0.5");  // re-prioritize silently added charset to lower q-value than UTF-16
         
         final HttpHeaders httpHeaders = mock(HttpHeaders.class);
-        servletResponse = mock(HttpServletResponse.class);
         checking(new Expectations() {{
-            oneOf(servletResponse).setContentType(expected);
-            oneOf(context).getAttribute(HttpServletResponse.class); will(returnValue(servletResponse));
+            oneOf(responseHttpHeaders).isEmpty(); will(returnValue(true));
+            oneOf(responseHttpHeaders).putSingle(HttpHeaders.CONTENT_TYPE, expected);
             oneOf(context).getHttpHeaders(); will(returnValue(httpHeaders));
             oneOf(httpHeaders).getRequestHeader(HttpHeaders.ACCEPT_CHARSET); will(returnValue(acceptHeaders));
         }});
@@ -233,7 +226,7 @@ public class ServerMediaTypeCharsetAdjusterTest extends MockObjectTestCase {
         // exercise code path that reads the Accept-Charset header
         myConfig.setUseAcceptCharset(true);
         
-        MediaType mediaType = serverMediaTypeCharsetAdjuster.setDefaultCharsetOnMediaTypeHeader(new MultivaluedMapImpl<String, Object>(), MediaType.APPLICATION_XML_TYPE);
+        MediaType mediaType = serverMediaTypeCharsetAdjuster.setDefaultCharsetOnMediaTypeHeader(responseHttpHeaders, MediaType.APPLICATION_XML_TYPE);
         // UTF-16 has highest q-value
         assertEquals(expected, mediaType.toString());
         
@@ -249,10 +242,9 @@ public class ServerMediaTypeCharsetAdjusterTest extends MockObjectTestCase {
         acceptHeaders.add("ISO-8859-1;q=0.5");  // re-prioritize silently added charset to lower q-value than UTF-16
         
         final HttpHeaders httpHeaders = mock(HttpHeaders.class);
-        servletResponse = mock(HttpServletResponse.class);
         checking(new Expectations() {{
-            oneOf(servletResponse).setContentType(expected);
-            oneOf(context).getAttribute(HttpServletResponse.class); will(returnValue(servletResponse));
+            oneOf(responseHttpHeaders).isEmpty(); will(returnValue(true));
+            oneOf(responseHttpHeaders).putSingle(HttpHeaders.CONTENT_TYPE, expected);
             oneOf(context).getHttpHeaders(); will(returnValue(httpHeaders));
             oneOf(httpHeaders).getRequestHeader(HttpHeaders.ACCEPT_CHARSET); will(returnValue(acceptHeaders));
         }});
@@ -266,7 +258,7 @@ public class ServerMediaTypeCharsetAdjusterTest extends MockObjectTestCase {
         // exercise code path that reads the Accept-Charset header
         myConfig.setUseAcceptCharset(true);
         
-        MediaType mediaType = serverMediaTypeCharsetAdjuster.setDefaultCharsetOnMediaTypeHeader(new MultivaluedMapImpl<String, Object>(), MediaType.APPLICATION_XML_TYPE);
+        MediaType mediaType = serverMediaTypeCharsetAdjuster.setDefaultCharsetOnMediaTypeHeader(responseHttpHeaders, MediaType.APPLICATION_XML_TYPE);
         // UTF-16 has highest q-value
         assertEquals(expected, mediaType.toString());
         

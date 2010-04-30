@@ -162,7 +162,7 @@ public class WinkHttpHeadersTest extends TestCase {
         assertEquals(200, response.getStatusCode());
         String responseBody = response.getEntity(String.class);
         assertEquals("acceptablemediatypes:text/plain:", responseBody);
-        assertEquals(MediaType.TEXT_PLAIN + ";charset=UTF-8", response.getHeaders()
+        assertEquals(MediaType.TEXT_PLAIN, response.getHeaders()
             .getFirst("Content-Type"));
 
         response =
@@ -171,7 +171,7 @@ public class WinkHttpHeadersTest extends TestCase {
         assertEquals(200, response.getStatusCode());
         responseBody = response.getEntity(String.class);
         assertEquals("acceptablemediatypes:text/plain:", responseBody);
-        assertEquals(MediaType.TEXT_PLAIN + ";charset=UTF-8", response.getHeaders()
+        assertEquals(MediaType.TEXT_PLAIN, response.getHeaders()
             .getFirst("Content-Type"));
 
         response =
@@ -180,7 +180,7 @@ public class WinkHttpHeadersTest extends TestCase {
         assertEquals(200, response.getStatusCode());
         responseBody = response.getEntity(String.class);
         assertEquals("acceptablemediatypes:text/plain:", responseBody);
-        assertEquals(MediaType.TEXT_PLAIN + ";charset=UTF-8", response.getHeaders()
+        assertEquals(MediaType.TEXT_PLAIN, response.getHeaders()
             .getFirst("Content-Type"));
     }
 
@@ -214,7 +214,7 @@ public class WinkHttpHeadersTest extends TestCase {
         assertEquals(200, response.getStatusCode());
         String responseBody = response.getEntity(String.class);
         assertEquals("acceptablemediatypes:text/plain:text/xml:application/json:*/*:", responseBody);
-        assertEquals("text/plain;q=1.0" + ";charset=UTF-8", response.getHeaders()
+        assertEquals("text/plain;q=1.0", response.getHeaders()
             .getFirst("Content-Type"));
 
         response =
@@ -224,7 +224,7 @@ public class WinkHttpHeadersTest extends TestCase {
         assertEquals(200, response.getStatusCode());
         responseBody = response.getEntity(String.class);
         assertEquals("acceptablemediatypes:text/plain:text/xml:application/json:*/*:", responseBody);
-        assertEquals("text/plain;q=1.0" + ";charset=UTF-8", response.getHeaders()
+        assertEquals("text/plain;q=1.0", response.getHeaders()
             .getFirst("Content-Type"));
 
         response =
@@ -234,7 +234,7 @@ public class WinkHttpHeadersTest extends TestCase {
         assertEquals(200, response.getStatusCode());
         responseBody = response.getEntity(String.class);
         assertEquals("acceptablemediatypes:text/plain:text/xml:application/json:*/*:", responseBody);
-        assertEquals("text/plain;q=1.0" + ";charset=UTF-8", response.getHeaders()
+        assertEquals("text/plain;q=1.0", response.getHeaders()
             .getFirst("Content-Type"));
 
         response =
@@ -245,7 +245,7 @@ public class WinkHttpHeadersTest extends TestCase {
         assertEquals(200, response.getStatusCode());
         responseBody = response.getEntity(String.class);
         assertEquals("acceptablemediatypes:text/plain:text/xml:application/json:*/*:", responseBody);
-        assertEquals("text/plain;q=1.0" + ";charset=UTF-8", response.getHeaders()
+        assertEquals("text/plain;q=1.0", response.getHeaders()
             .getFirst("Content-Type"));
     }
 

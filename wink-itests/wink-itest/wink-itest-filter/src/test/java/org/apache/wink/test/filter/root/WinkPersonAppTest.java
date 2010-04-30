@@ -49,7 +49,7 @@ public class WinkPersonAppTest extends TestCase {
             client.resource(getBaseURI() + "/person/abcd").contentType(MediaType.TEXT_PLAIN)
                 .post("Hello");
         assertEquals(200, response.getStatusCode());
-        assertEquals(MediaType.TEXT_PLAIN + ";charset=UTF-8", response.getHeaders()
+        assertEquals(MediaType.TEXT_PLAIN, response.getHeaders()
             .getFirst(HttpHeaders.CONTENT_TYPE));
         assertEquals("Person: abcd query parameter: defaultQuery matrix parameter: defaultMatrix entity: Hello",
                      response.getEntity(String.class));
@@ -60,7 +60,7 @@ public class WinkPersonAppTest extends TestCase {
             client.resource(getBaseURI() + "/person/abcd").contentType(MediaType.TEXT_XML)
                 .post("Hello");
         assertEquals(200, response.getStatusCode());
-        assertEquals(MediaType.TEXT_XML + ";charset=UTF-8", response.getHeaders()
+        assertEquals(MediaType.TEXT_XML, response.getHeaders()
             .getFirst(HttpHeaders.CONTENT_TYPE));
         assertEquals("Person: abcd query parameter: defaultQuery matrix parameter: defaultMatrix entity: Hello",
                      response.getEntity(String.class));

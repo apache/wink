@@ -105,7 +105,7 @@ public abstract class AbstractWebDAVResourcesTest extends MockServletInvocationT
         Assert.assertEquals(HttpStatus.MULTI_STATUS.getCode(), response.getStatus());
         MediaType mediaType = MediaType.valueOf(response.getContentType());
         // we can't clear MediaType params due to UnsupportedOperationException on the collection, so...
-        Assert.assertEquals(MediaType.valueOf(MediaType.APPLICATION_XML_TYPE.toString() + ";charset=UTF-8"), mediaType);
+        Assert.assertEquals(MediaType.valueOf(MediaType.APPLICATION_XML_TYPE.toString()), mediaType);
         // body
         String responseContent = response.getContentAsString();
         StringReader reader = new StringReader(responseContent);
@@ -264,7 +264,7 @@ public abstract class AbstractWebDAVResourcesTest extends MockServletInvocationT
         Assert.assertEquals(HttpStatus.OK.getCode(), response.getStatus());
         MediaType mediaType = MediaType.valueOf(response.getContentType());
         // we can't clear MediaType params due to UnsupportedOperationException on the collection, so...
-        Assert.assertEquals(MediaType.valueOf(MediaType.APPLICATION_XML_TYPE.toString() + ";charset=UTF-8"), mediaType);
+        Assert.assertEquals(MediaType.valueOf(MediaType.APPLICATION_XML_TYPE.toString()), mediaType);
         StringReader reader = new StringReader(response.getContentAsString());
         Prop prop =
             WebDAVModelHelper.unmarshal(WebDAVModelHelper.createUnmarshaller(),

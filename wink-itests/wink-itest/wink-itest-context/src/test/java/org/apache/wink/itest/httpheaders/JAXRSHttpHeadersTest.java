@@ -170,7 +170,7 @@ public class JAXRSHttpHeadersTest extends TestCase {
             assertEquals(200, getMethod.getStatusCode());
             String responseBody = getMethod.getResponseBodyAsString();
             assertEquals("acceptablemediatypes:text/plain:", responseBody);
-            assertEquals("text/plain" + ";charset=UTF-8", getMethod
+            assertEquals("text/plain", getMethod
                 .getResponseHeader("Content-Type").getValue());
         } finally {
             getMethod.releaseConnection();
@@ -196,7 +196,7 @@ public class JAXRSHttpHeadersTest extends TestCase {
             String responseBody = getMethod.getResponseBodyAsString();
             assertEquals("acceptablemediatypes:text/plain:text/xml:application/json:*/*:",
                          responseBody);
-            assertEquals("text/plain;q=1.0" + ";charset=UTF-8", getMethod
+            assertEquals("text/plain;q=1.0", getMethod
                 .getResponseHeader("Content-Type").getValue());
         } finally {
             getMethod.releaseConnection();

@@ -293,7 +293,7 @@ public class JAXRSMessageBodyReadersTest extends TestCase {
             client.executeMethod(postMethod);
 
             assertEquals(200, postMethod.getStatusCode());
-            assertEquals("text/plain" + ";charset=UTF-8", postMethod
+            assertEquals("text/plain", postMethod
                 .getResponseHeader("Content-Type").getValue());
             assertEquals("Hello thereWorld there", postMethod.getResponseBodyAsString());
         } finally {
@@ -323,7 +323,7 @@ public class JAXRSMessageBodyReadersTest extends TestCase {
             client.executeMethod(postMethod);
 
             assertEquals(200, postMethod.getStatusCode());
-            assertEquals("text/plain" + ";charset=UTF-8", postMethod
+            assertEquals("text/plain", postMethod
                 .getResponseHeader("Content-Type").getValue());
             assertEquals("Hello thereWorld there", postMethod.getResponseBodyAsString());
         } finally {
