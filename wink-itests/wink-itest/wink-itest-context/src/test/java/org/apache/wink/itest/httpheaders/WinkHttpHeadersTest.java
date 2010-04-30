@@ -306,7 +306,13 @@ public class WinkHttpHeadersTest extends TestCase {
             client.resource(getBaseURI() + "/context/httpheaders/requestmediatype").post(null);
         assertEquals(200, response.getStatusCode());
         String responseBody = response.getEntity(String.class);
-        assertEquals("mediatype:null:", responseBody);
+
+        try {
+            assertEquals("mediatype:null:", responseBody);
+        } catch (Error e) {
+            // some JDKs will automatically put this on the type
+            assertEquals("mediatype:application/x-www-form-urlencoded:", responseBody);
+        }
     }
 
     /**
