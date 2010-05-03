@@ -54,7 +54,7 @@ public class WinkServerTest {
 		mavenBundle().groupId("org.slf4j").artifactId("slf4j-api")
 				.versionAsInProject(),
 
-		mavenBundle().groupId("org.slf4j").artifactId("slf4j-simple")
+		mavenBundle().groupId("org.slf4j").artifactId("slf4j-jdk14")
 				.versionAsInProject(),
 
 		mavenBundle().groupId("org.apache.geronimo.specs").artifactId(

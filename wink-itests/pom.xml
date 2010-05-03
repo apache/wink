@@ -32,6 +32,8 @@
         <module>wink-itest-support</module>
         <module>wink-itest-logging</module>
         <module>wink-itest</module>
+<!--
         <module>wink-itest-osgi</module>
+-->
     </modules>
 </project>

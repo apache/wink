@@ -43,7 +43,7 @@ public class WinkCommonsTest {
 				.groupId("javax.ws.rs").artifactId("jsr311-api")
 				.versionAsInProject(), mavenBundle().groupId("org.slf4j")
 				.artifactId("slf4j-api").versionAsInProject(), mavenBundle()
-				.groupId("org.slf4j").artifactId("slf4j-simple")
+				.groupId("org.slf4j").artifactId("slf4j-jdk14")
 				.versionAsInProject()));
 	}
 
