@@ -136,7 +136,6 @@ public class WinkRequestMethodsTest extends TestCase {
         Resource dateResource = client.resource(getBaseURI() + "/context/request/timezone");
         ClientResponse response = dateResource.get();
         assertEquals(200, response.getStatusCode());
-        String serverTimeZone = response.getEntity(String.class);
 
         /*
          * sets a last modified date
@@ -163,7 +162,7 @@ public class WinkRequestMethodsTest extends TestCase {
         dateResource = client.resource(getBaseURI() + "/context/request/date");
         response = dateResource.get();
         assertEquals(200, response.getStatusCode());
-        rfc1123Format.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
+        rfc1123Format.setTimeZone(TimeZone.getTimeZone("GMT"));
         assertEquals("the date: " + rfc1123Format.format(d), response.getEntity(String.class));
         rfc1123Format.setTimeZone(TimeZone.getTimeZone("GMT"));
         assertEquals(rfc1123Format.format(d), response.getHeaders()
@@ -188,7 +187,7 @@ public class WinkRequestMethodsTest extends TestCase {
         dateResource = client.resource(getBaseURI() + "/context/request/date");
         response = dateResource.header(HttpHeaders.IF_MODIFIED_SINCE, formatter.format(d2)).get();
         assertEquals(200, response.getStatusCode());
-        rfc1123Format.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
+        rfc1123Format.setTimeZone(TimeZone.getTimeZone("GMT"));
         assertEquals("the date: " + rfc1123Format.format(d), response.getEntity(String.class));
         rfc1123Format.setTimeZone(TimeZone.getDefault());
 
@@ -254,7 +253,6 @@ public class WinkRequestMethodsTest extends TestCase {
          */
         ClientResponse response = client.resource(getBaseURI() + "/context/request/timezone").get();
         assertEquals(200, response.getStatusCode());
-        String serverTimeZone = response.getEntity(String.class);
 
         DateFormat dateFormat =
             new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.ENGLISH); // DateFormat.getDateTimeInstance();
@@ -273,7 +271,7 @@ public class WinkRequestMethodsTest extends TestCase {
             client.resource(getBaseURI() + "/context/request/date")
                 .header(HttpHeaders.IF_UNMODIFIED_SINCE, formatter.format(d)).get();
         assertEquals(200, response.getStatusCode());
-        rfc1123Format.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
+        rfc1123Format.setTimeZone(TimeZone.getTimeZone("GMT"));
         assertEquals("the date: " + rfc1123Format.format(d), response.getEntity(String.class));
         rfc1123Format.setTimeZone(TimeZone.getDefault());
 
@@ -288,7 +286,7 @@ public class WinkRequestMethodsTest extends TestCase {
         response = client.resource(getBaseURI() + "/context/request/date").get();
 
         assertEquals(200, response.getStatusCode());
-        rfc1123Format.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
+        rfc1123Format.setTimeZone(TimeZone.getTimeZone("GMT"));
         assertEquals("the date: " + rfc1123Format.format(d), response.getEntity(String.class));
         rfc1123Format.setTimeZone(TimeZone.getDefault());
 
@@ -308,7 +306,7 @@ public class WinkRequestMethodsTest extends TestCase {
                 .header(HttpHeaders.IF_UNMODIFIED_SINCE, lastModified).get();
 
         assertEquals(200, response.getStatusCode());
-        rfc1123Format.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
+        rfc1123Format.setTimeZone(TimeZone.getTimeZone("GMT"));
         assertEquals("the date: " + rfc1123Format.format(d), response.getEntity(String.class));
         rfc1123Format.setTimeZone(TimeZone.getDefault());
 
@@ -338,7 +336,7 @@ public class WinkRequestMethodsTest extends TestCase {
          * return 200 and the entity
          */
         assertEquals(200, response.getStatusCode());
-        rfc1123Format.setTimeZone(TimeZone.getTimeZone(serverTimeZone));
+        rfc1123Format.setTimeZone(TimeZone.getTimeZone("GMT"));
         assertEquals("the date: " + rfc1123Format.format(d), response.getEntity(String.class));
         rfc1123Format.setTimeZone(TimeZone.getDefault());
 
