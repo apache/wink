@@ -16,15 +16,14 @@
         and limitations under the License.
     -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>wink-client-apache-httpclient</artifactId>
     <name>Apache Wink Client :: Apache Http Client</name>
     <parent>
         <groupId>org.apache.wink</groupId>
         <artifactId>wink</artifactId>
-        <version>1.1-incubating-SNAPSHOT</version>
+        <version>1.1-incubating</version>
     </parent>
     <dependencies>
         <dependency>
