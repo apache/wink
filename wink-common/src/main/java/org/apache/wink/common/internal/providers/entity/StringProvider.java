@@ -39,19 +39,13 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
-import org.apache.wink.common.RuntimeContext;
-import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.utils.ProviderUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Provider
 @Consumes
 @Produces
 public class StringProvider implements MessageBodyReader<String>, MessageBodyWriter<String> {
-
-    private static final Logger logger = LoggerFactory.getLogger(StringProvider.class);
 
     public boolean isReadable(Class<?> type,
                               Type genericType,
@@ -75,24 +69,7 @@ public class StringProvider implements MessageBodyReader<String>, MessageBodyWri
                         Type genericType,
                         Annotation[] annotations,
                         MediaType mediaType) {
-        RuntimeContext context = RuntimeContextTLS.getRuntimeContext();
-        HttpHeaders requestHeaders = null;
-        if (context != null) {
-            requestHeaders = context.getHttpHeaders();
-        }
-        String charSet = ProviderUtils.getCharset(mediaType, requestHeaders);
-        if (charSet == null) {
-            return -1;
-        }
-        if (!"UTF-8".equals(charSet)) { //$NON-NLS-1$
-            try {
-                return t.getBytes(charSet).length;
-            } catch (UnsupportedEncodingException e) {
-                logger.debug("Unsupported character encoding exception: {}", e); //$NON-NLS-1$
-                throw new WebApplicationException(e, 500);
-            }
-        }
-        return t.length();
+        return -1;
     }
 
     public boolean isWriteable(Class<?> type,
