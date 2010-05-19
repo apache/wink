@@ -37,7 +37,7 @@ import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.model.atom.AtomConstants;
 import org.apache.wink.common.model.synd.SyndLink;
 import org.apache.wink.server.internal.handlers.FindRootResourceHandler;
-import org.apache.wink.server.internal.handlers.ServerMessageContext;
+import org.apache.wink.server.handlers.MessageContext;
 import org.apache.wink.server.internal.registry.ResourceInstance;
 import org.apache.wink.server.internal.registry.ResourceRecord;
 import org.apache.wink.server.internal.registry.SubResourceInstance;
@@ -49,7 +49,7 @@ public class SystemLinksBuilderImpl extends AbstractLinksBuilderImpl<SystemLinks
     private LinkType[] types;
     private boolean    allResources;
 
-    public SystemLinksBuilderImpl(ServerMessageContext context) {
+    public SystemLinksBuilderImpl(MessageContext context) {
         super(context);
         types = null;
         allResources = isContinuedSearchMode();
