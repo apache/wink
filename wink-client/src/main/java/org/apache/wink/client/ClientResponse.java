@@ -85,6 +85,7 @@ public interface ClientResponse extends BaseRequestResponse {
      * @param <T> type of the response entity to get
      * @param cls class of the response entity to get
      * @return the response entity
+     * @throws ClientRuntimeException if there are exceptions that the Wink client encounters
      */
     public <T> T getEntity(Class<T> cls);
 
@@ -106,7 +107,8 @@ public interface ClientResponse extends BaseRequestResponse {
      * @param <T> type of the response entity to get
      * @param entityType an instance of {@link EntityType} specifying the type
      *            of the entity
-     * @return
+     * @return the response entity
+     * @throws ClientRuntimeException if there are exceptions that the Wink client encounters
      */
     public <T> T getEntity(EntityType<T> entityType);
 
