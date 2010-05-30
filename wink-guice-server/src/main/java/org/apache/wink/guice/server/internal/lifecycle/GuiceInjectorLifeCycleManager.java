@@ -72,8 +72,7 @@ public class GuiceInjectorLifeCycleManager<T> implements LifecycleManager<T> {
         if (ResourceMetadataCollector.isDynamicResource(clazz)) {
             // default factory cannot create instance of DynamicResource
             throw new IllegalArgumentException(String
-                .format("Cannot create default factory for DynamicResource: %s", String
-                    .valueOf(clazz)));
+                .format("Cannot create default factory for DynamicResource: %s", clazz));
         }
 
         if (ProviderMetadataCollector.isProvider(clazz)) {
@@ -88,7 +87,7 @@ public class GuiceInjectorLifeCycleManager<T> implements LifecycleManager<T> {
 
         // unknown object, should never reach this code
         throw new IllegalArgumentException(String
-            .format("Cannot create default factory for class: %s", String.valueOf(clazz)));
+            .format("Cannot create default factory for class: %s", clazz));
     }
 
     private static class GuiceSingletonObjectFactory<T> implements ObjectFactory<T> {

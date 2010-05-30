@@ -883,7 +883,7 @@ public class ProvidersRegistry {
 
         @Override
         public String toString() {
-            return String.format("Priority: %f, ObjectFactory: %s", priority, String.valueOf(of)); //$NON-NLS-1$
+            return String.format("Priority: %f, ObjectFactory: %s", priority, of); //$NON-NLS-1$
         }
     }
 

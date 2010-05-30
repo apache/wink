@@ -167,9 +167,9 @@ public class ServerMessageContext extends AbstractRuntimeContext implements Mess
     @Override
     public String toString() {
         return String.format("Method: %s, Path: %s, MediaType: %s", //$NON-NLS-1$
-                             String.valueOf(getHttpMethod()),
-                             String.valueOf(getUriInfo().getPath(false)),
-                             String.valueOf(getHttpHeaders().getMediaType()));
+                             getHttpMethod(),
+                             getUriInfo().getPath(false),
+                             getHttpHeaders().getMediaType());
     }
 
     // Contexts methods

@@ -212,9 +212,11 @@ public class SearchResult {
 
     @Override
     public String toString() {
-        return String.format("Found: %s, Resource: %s, Method: %s, Error: %s", String //$NON-NLS-1$
-            .valueOf(found), String.valueOf(resource), String.valueOf(method), String
-            .valueOf(error));
+        return String.format("Found: %s, Resource: %s, Method: %s, Error: %s", //$NON-NLS-1$
+                             found,
+                             resource,
+                             method,
+                             error);
     }
 
     public SearchResult(ResourceInstance resource, UriInfo uriInfo) {
