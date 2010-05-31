@@ -173,7 +173,7 @@ public class WebDAVResponseBuilder {
         // sub-collections and entries
         // get Depth header
         int depth = 1; // the default depth should be infinity but we support
-                       // only 0 or 1
+        // only 0 or 1
         // String strDepth = requestHeaders.getFirst(WebDAVHeaders.DEPTH);
         if (depthStr != null) {
             depth = Integer.parseInt(depthStr);
@@ -376,7 +376,9 @@ public class WebDAVResponseBuilder {
         }
         if (link == null) {
             // no link in the resource
-            logger.error(Messages.getMessage("webDAVNoEditOrSelfLink", synd.getId())); //$NON-NLS-1$
+            if (logger.isErrorEnabled()) {
+                logger.error(Messages.getMessage("webDAVNoEditOrSelfLink", synd.getId())); //$NON-NLS-1$
+            }
             throw new WebApplicationException();
         }
 

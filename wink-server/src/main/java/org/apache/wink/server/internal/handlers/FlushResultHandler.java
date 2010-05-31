@@ -206,8 +206,10 @@ public class FlushResultHandler extends AbstractHandler {
                 .getDefaultCommandMap()
                 .createDataContentHandler(responseMediaType.getType() + "/" + responseMediaType.getSubtype()); //$NON-NLS-1$
         if (dataContentHandler == null) {
-            logger.error(Messages.getMessage("noWriterOrDataSourceProvider", entity.getClass() //$NON-NLS-1$
-                .getName(), responseMediaType));
+            if (logger.isErrorEnabled()) {
+                logger.error(Messages.getMessage("noWriterOrDataSourceProvider", entity.getClass() //$NON-NLS-1$
+                    .getName(), responseMediaType));
+            }
             throw new WebApplicationException(500);
         }
 

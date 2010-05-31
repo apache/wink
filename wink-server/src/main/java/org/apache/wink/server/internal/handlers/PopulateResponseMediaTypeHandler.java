@@ -44,7 +44,7 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
                                                         LoggerFactory
                                                             .getLogger(PopulateResponseMediaTypeHandler.class);
 
-    private static final MediaType APPLICATION_TYPE = new MediaType("application", "*"); //$NON-NLS-1$ //$NON-NLS-2$
+    private static final MediaType APPLICATION_TYPE = new MediaType("application", "*");                       //$NON-NLS-1$ //$NON-NLS-2$
 
     private boolean                errorFlow        = false;
 
@@ -100,9 +100,11 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
                  * This is to inform the application developer that they should
                  * specify the Content-Type.
                  */
-                logger
-                    .info(Messages
-                        .getMessage("populateResponseMediaTypeHandlerFromCompatibleMessageBodyWriters")); //$NON-NLS-1$
+                if (logger.isInfoEnabled()) {
+                    logger
+                        .info(Messages
+                            .getMessage("populateResponseMediaTypeHandlerFromCompatibleMessageBodyWriters")); //$NON-NLS-1$
+                }
                 logger
                     .debug("Determining Content-Type from compatible generic type to {} from MessageBodyWriters: {}", //$NON-NLS-1$
                            result.getClass(),
@@ -151,8 +153,10 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
                     logger.debug("Error flow and no candidates so not going to set a Content-Type"); //$NON-NLS-1$
                     return;
                 }
-                logger.info(Messages
-                    .getMessage("populateResponseMediaTypeHandlerNoAcceptableResponse")); //$NON-NLS-1$
+                if (logger.isInfoEnabled()) {
+                    logger.info(Messages
+                        .getMessage("populateResponseMediaTypeHandlerNoAcceptableResponse")); //$NON-NLS-1$
+                }
                 throw new WebApplicationException(Response.Status.NOT_ACCEPTABLE);
             }
 
@@ -212,8 +216,10 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
                     logger.debug("Error flow so not going to set a response Content-Type"); //$NON-NLS-1$
                     return;
                 }
-                logger.info(Messages
-                    .getMessage("populateResponseMediaTypeHandlerNoAcceptableResponse")); //$NON-NLS-1$
+                if (logger.isInfoEnabled()) {
+                    logger.info(Messages
+                        .getMessage("populateResponseMediaTypeHandlerNoAcceptableResponse")); //$NON-NLS-1$
+                }
                 throw new WebApplicationException(Response.Status.NOT_ACCEPTABLE);
             }
 

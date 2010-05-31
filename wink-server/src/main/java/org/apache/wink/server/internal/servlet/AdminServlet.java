@@ -60,15 +60,15 @@ public class AdminServlet extends AbstractRestServlet {
     private static final long                                                      serialVersionUID       =
                                                                                                               -5972412568762942420L;
     private static final String                                                    APPLICATION_XML        =
-                                                                                                              "application/xml"; //$NON-NLS-1$
+                                                                                                              "application/xml";    //$NON-NLS-1$
     private static final String                                                    DOCUMENT_TYPE          =
-                                                                                                              "doc"; //$NON-NLS-1$
+                                                                                                              "doc";                //$NON-NLS-1$
     private static final String                                                    DOCUMENT_TYPE_REGISTRY =
-                                                                                                              "registry"; //$NON-NLS-1$
+                                                                                                              "registry";           //$NON-NLS-1$
     private static final String                                                    DOCUMENT_TYPE_RESOURCE =
-                                                                                                              "resources"; //$NON-NLS-1$
+                                                                                                              "resources";          //$NON-NLS-1$
     private static final String                                                    SLASH                  =
-                                                                                                              "/"; //$NON-NLS-1$
+                                                                                                              "/";                  //$NON-NLS-1$
 
     private static final JAXBContext                                               resourceCtx;
     private static final org.apache.wink.common.internal.model.admin.ObjectFactory resourcesObjectFactory;
@@ -419,8 +419,8 @@ public class AdminServlet extends AbstractRestServlet {
             Marshaller marshaller = JAXBUtils.createMarshaller(resourceCtx);
             marshaller.marshal(jaxbObject, writer);
         } catch (JAXBException e) {
-            throw new ServletException(String.format(Messages
-                .getMessage("adminServletFailMarshalObject"), jaxbObject.getClass().getName()), e);
+            throw new ServletException(Messages.getMessage("adminServletFailMarshalObject",
+                                                           jaxbObject.getClass().getName()), e);
 
         }
 

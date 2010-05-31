@@ -137,9 +137,9 @@ public class ResourceRecordFactory {
                         readersLock.lock();
                     }
                 } else {
-                    throw new IllegalArgumentException(String
-                        .format(Messages.getMessage("rootResourceInstanceIsAnInvalidResource"), instance
-                            .getClass().getCanonicalName()));
+                    throw new IllegalArgumentException(Messages
+                        .getMessage("rootResourceInstanceIsAnInvalidResource", instance.getClass()
+                            .getCanonicalName()));
                 }
             } else {
                 // if this is a sub-resource, don't use cache, and don't use the

@@ -48,11 +48,11 @@ import org.apache.wink.common.internal.utils.FileLoader;
  */
 public class ApplicationFileLoader {
 
-    private static final String WINK_APPLICATION = "META-INF/wink-application"; //$NON-NLS-1$
+    private static final String WINK_APPLICATION = "META-INF/wink-application";                  //$NON-NLS-1$
     private static final Logger logger           =
                                                      LoggerFactory
                                                          .getLogger(ApplicationFileLoader.class);
-    private static final String CORE_APPLICATION = "META-INF/core/wink-providers"; //$NON-NLS-1$
+    private static final String CORE_APPLICATION = "META-INF/core/wink-providers";               //$NON-NLS-1$
     private final Set<Class<?>> classes          = new LinkedHashSet<Class<?>>();
 
     /**
@@ -72,7 +72,10 @@ public class ApplicationFileLoader {
                     FileLoader.loadFileUsingClassLoaders(WINK_APPLICATION);
                 while (applications.hasMoreElements()) {
                     URL url = applications.nextElement();
-                    logger.info(Messages.getMessage("loadingApplication", url.toExternalForm())); //$NON-NLS-1$
+                    if (logger.isInfoEnabled()) {
+                        logger
+                            .info(Messages.getMessage("loadingApplication", url.toExternalForm())); //$NON-NLS-1$
+                    }
                     loadClasses(url.openStream());
                 }
             }
@@ -88,7 +91,9 @@ public class ApplicationFileLoader {
      * @throws FileNotFoundException - if file is not found
      */
     public ApplicationFileLoader(String appConfigFile) throws FileNotFoundException {
-        logger.debug(Messages.getMessage("loadingApplication"), appConfigFile); //$NON-NLS-1$
+        if (logger.isDebugEnabled()) {
+            logger.debug(Messages.getMessage("loadingApplication", appConfigFile)); //$NON-NLS-1$
+        }
         loadClasses(FileLoader.loadFileAsStream(appConfigFile));
     }
 
@@ -126,15 +131,25 @@ public class ApplicationFileLoader {
                     cls = ClassUtils.loadClass(line);
                     if (ResourceMetadataCollector.isStaticResource(cls) || ProviderMetadataCollector
                         .isProvider(cls)) {
-                        logger.debug(Messages.getMessage("loadingClassToApplication"), line);
+                        if (logger.isDebugEnabled()) {
+                            logger.debug(Messages.getMessage("loadingClassToApplication", line));
+                        }
                         classes.add(cls);
                     } else {
-                        logger.warn(Messages.getMessage("classNotAResourceNorProvider"), cls);
+                        if (logger.isWarnEnabled()) {
+                            logger.warn(Messages.getMessage("classNotAResourceNorProvider", cls
+                                .getName()));
+                        }
                     }
                 } catch (ClassNotFoundException e) {
-                    logger.debug("ClassNotFoundException while loading class", e); //$NON-NLS-1$
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("ClassNotFoundException while loading class", e); //$NON-NLS-1$
+                    }
                 } catch (NoClassDefFoundError e) {
-                    logger.debug(Messages.getMessage("classInstantiationExceptionWithMsgFormat", e), e); //$NON-NLS-1$
+                    if (logger.isDebugEnabled()) {
+                        logger.debug(Messages
+                            .getMessage("classInstantiationExceptionWithMsgFormat", line), e); //$NON-NLS-1$
+                    }
                 }
             }
         } catch (IOException e) {
@@ -143,7 +158,9 @@ public class ApplicationFileLoader {
             try {
                 is.close();
             } catch (IOException e) {
-                logger.info(Messages.getMessage("exceptionClosingFile"), e); //$NON-NLS-1$
+                if (logger.isInfoEnabled()) {
+                    logger.info(Messages.getMessage("exceptionClosingFile"), e); //$NON-NLS-1$
+                }
             }
         }
     }

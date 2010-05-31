@@ -85,17 +85,17 @@ public class DeploymentConfiguration {
     private static final String       ALTERNATIVE_SHORTCUTS               =
                                                                               "META-INF/wink-alternate-shortcuts.properties"; //$NON-NLS-1$
     private static final String       HTTP_METHOD_OVERRIDE_HEADERS_PROP   =
-                                                                              "wink.httpMethodOverrideHeaders"; //$NON-NLS-1$
+                                                                              "wink.httpMethodOverrideHeaders";              //$NON-NLS-1$
     private static final String       HANDLERS_FACTORY_CLASS_PROP         =
-                                                                              "wink.handlersFactoryClass"; //$NON-NLS-1$
+                                                                              "wink.handlersFactoryClass";                   //$NON-NLS-1$
     private static final String       MEDIATYPE_MAPPER_FACTORY_CLASS_PROP =
-                                                                              "wink.mediaTypeMapperFactoryClass"; //$NON-NLS-1$
+                                                                              "wink.mediaTypeMapperFactoryClass";            //$NON-NLS-1$
     private static final String       VALIDATE_LOCATION_HEADER            =
-                                                                              "wink.validateLocationHeader"; //$NON-NLS-1$
+                                                                              "wink.validateLocationHeader";                 //$NON-NLS-1$
     private static final String       DEFAULT_RESPONSE_CHARSET            =
-                                                                              "wink.response.defaultCharset"; // $NON-NLS-1$
+                                                                              "wink.response.defaultCharset";                // $NON-NLS-1$
     private static final String       USE_ACCEPT_CHARSET                  =
-                                                                              "wink.response.useAcceptCharset"; // $NON-NLS-1$
+                                                                              "wink.response.useAcceptCharset";              // $NON-NLS-1$
     // handler chains
     private RequestHandlersChain      requestHandlersChain;
     private ResponseHandlersChain     responseHandlersChain;
@@ -352,14 +352,21 @@ public class DeploymentConfiguration {
                     MediaTypeMapperFactory handlersFactory = handlerFactoryClass.newInstance();
                     mediaTypeMapper.addMappings(handlersFactory.getMediaTypeMappings());
                 } catch (ClassNotFoundException e) {
-                    logger.error(Messages.getMessage("isNotAClassWithMsgFormat",
-                                                     mediaTypeMapperFactoryClassName), e);
+                    if (logger.isErrorEnabled()) {
+                        logger.error(Messages.getMessage("isNotAClassWithMsgFormat",
+                                                         mediaTypeMapperFactoryClassName), e);
+                    }
                 } catch (InstantiationException e) {
-                    logger.error(Messages.getMessage("classInstantiationExceptionWithMsgFormat",
-                                                     mediaTypeMapperFactoryClassName), e);
+                    if (logger.isErrorEnabled()) {
+                        logger.error(Messages
+                            .getMessage("classInstantiationExceptionWithMsgFormat",
+                                        mediaTypeMapperFactoryClassName), e);
+                    }
                 } catch (IllegalAccessException e) {
-                    logger.error(Messages.getMessage("classIllegalAccessWithMsgFormat",
-                                                     mediaTypeMapperFactoryClassName), e);
+                    if (logger.isErrorEnabled()) {
+                        logger.error(Messages.getMessage("classIllegalAccessWithMsgFormat",
+                                                         mediaTypeMapperFactoryClassName), e);
+                    }
                 }
             }
         }
@@ -561,32 +568,37 @@ public class DeploymentConfiguration {
     public String[] getHttpMethodOverrideHeaders() {
         return httpMethodOverrideHeaders;
     }
-    
+
     /**
-     * isDefaultResponseCharset will write charset=UTF-8 to the response Content-Type header if a response
-     * charset is not already explicitly defined.
+     * isDefaultResponseCharset will write charset=UTF-8 to the response
+     * Content-Type header if a response charset is not already explicitly
+     * defined.
+     * 
      * @return boolean
      */
     public boolean isDefaultResponseCharset() {
         String val = properties.getProperty(DEFAULT_RESPONSE_CHARSET);
         return Boolean.valueOf(val).booleanValue();
     }
-    
+
     public void setDefaultResponseCharset(boolean val) {
         properties.setProperty(DEFAULT_RESPONSE_CHARSET, Boolean.toString(val));
     }
-    
+
     /**
-     * isUseAcceptCharset will use the Accept-Charset header, if present, to write a charset to the response Content-Type
-     * header if a response charset is not already explicitly defined.  This setting will override the isDefaultResponseCharset
-     * setting when the Accept-Charset header is present.
+     * isUseAcceptCharset will use the Accept-Charset header, if present, to
+     * write a charset to the response Content-Type header if a response charset
+     * is not already explicitly defined. This setting will override the
+     * isDefaultResponseCharset setting when the Accept-Charset header is
+     * present.
+     * 
      * @return
      */
     public boolean isUseAcceptCharset() {
         String val = properties.getProperty(USE_ACCEPT_CHARSET);
         return Boolean.valueOf(val).booleanValue();
     }
-    
+
     public void setUseAcceptCharset(boolean val) {
         properties.setProperty(USE_ACCEPT_CHARSET, Boolean.toString(val));
     }

@@ -150,7 +150,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
     private URI buildInternal(Map<String, ? extends Object> values)
         throws IllegalArgumentException, UriBuilderException {
         if (logger.isDebugEnabled()) {
-            logger.debug("buildInternal({}, {}) entry", values //$NON-NLS-1$
+            logger.debug("buildInternal({}) entry", values //$NON-NLS-1$
                 );
         }
         StringBuilder out = new StringBuilder();

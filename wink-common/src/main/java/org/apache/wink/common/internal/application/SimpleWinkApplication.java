@@ -51,7 +51,7 @@ public class SimpleWinkApplication extends WinkApplication {
     private static final Logger logger         =
                                                    LoggerFactory
                                                        .getLogger(SimpleWinkApplication.class);
-    private static final String FILE_SEPARATOR = ";"; //$NON-NLS-1$
+    private static final String FILE_SEPARATOR = ";";                                          //$NON-NLS-1$
     private final String        applicationConfigFiles;
     private Set<Class<?>>       jaxRSClasses;
 
@@ -79,7 +79,9 @@ public class SimpleWinkApplication extends WinkApplication {
                         .addAll(getApplicationFileLoader(getFileStream(applicationConfigFile))
                             .getClasses());
                 } catch (FileNotFoundException e) {
-                    logger.warn(Messages.getMessage("configNotFound", applicationConfigFile)); //$NON-NLS-1$
+                    if (logger.isWarnEnabled()) {
+                        logger.warn(Messages.getMessage("configNotFound", applicationConfigFile)); //$NON-NLS-1$
+                    }
                 }
             }
         }

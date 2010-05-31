@@ -52,16 +52,16 @@ public class RequestProcessor {
     private static final Logger           logger                           =
                                                                                LoggerFactory
                                                                                    .getLogger(RequestProcessor.class);
-    private static final String           PROPERTY_ROOT_RESOURCE_NONE      = "none"; //$NON-NLS-1$
-    private static final String           PROPERTY_ROOT_RESOURCE_ATOM      = "atom"; //$NON-NLS-1$
-    private static final String           PROPERTY_ROOT_RESOURCE_ATOM_HTML = "atom+html"; //$NON-NLS-1$
+    private static final String           PROPERTY_ROOT_RESOURCE_NONE      = "none";                                  //$NON-NLS-1$
+    private static final String           PROPERTY_ROOT_RESOURCE_ATOM      = "atom";                                  //$NON-NLS-1$
+    private static final String           PROPERTY_ROOT_RESOURCE_ATOM_HTML = "atom+html";                             //$NON-NLS-1$
     private static final String           PROPERTY_ROOT_RESOURCE_DEFAULT   =
                                                                                PROPERTY_ROOT_RESOURCE_ATOM_HTML;
-    private static final String           PROPERTY_ROOT_RESOURCE           = "wink.rootResource"; //$NON-NLS-1$
+    private static final String           PROPERTY_ROOT_RESOURCE           = "wink.rootResource";                     //$NON-NLS-1$
     private static final String           PROPERTY_ROOT_RESOURCE_CSS       =
-                                                                               "wink.serviceDocumentCssPath"; //$NON-NLS-1$
+                                                                               "wink.serviceDocumentCssPath";         //$NON-NLS-1$
     private static final String           PROPERTY_LOAD_WINK_APPLICATIONS  =
-                                                                               "wink.loadApplications"; //$NON-NLS-1$
+                                                                               "wink.loadApplications";               //$NON-NLS-1$
 
     private final DeploymentConfiguration configuration;
 
@@ -136,7 +136,9 @@ public class RequestProcessor {
             if (logger.isDebugEnabled()) {
                 logger.debug(Messages.getMessage("unhandledExceptionToContainer"), t); //$NON-NLS-1$
             } else {
-                logger.info(Messages.getMessage("unhandledExceptionToContainer")); //$NON-NLS-1$
+                if (logger.isInfoEnabled()) {
+                    logger.info(Messages.getMessage("unhandledExceptionToContainer")); //$NON-NLS-1$
+                }
             }
             if (t instanceof RuntimeException) {
                 // let the servlet container to handle the runtime exception
@@ -175,8 +177,8 @@ public class RequestProcessor {
     }
 
     private void logException(Throwable t) {
-        String messageFormat = Messages.getMessage("exceptionOccurredDuringInvocation");
         String exceptionName = t.getClass().getSimpleName();
+        String messageFormat = Messages.getMessage("exceptionOccurredDuringInvocation", exceptionName);
         if (t instanceof WebApplicationException) {
             WebApplicationException wae = (WebApplicationException)t;
             int statusCode = wae.getResponse().getStatus();
@@ -196,7 +198,8 @@ public class RequestProcessor {
                     logger.info(String.format(messageFormat, exceptionName));
                 }
             } else {
-                // don't log the whole call stack for sub-500 return codes unless debugging
+                // don't log the whole call stack for sub-500 return codes
+                // unless debugging
                 if (logger.isDebugEnabled()) {
                     logger.debug(String.format(messageFormat, exceptionName), t);
                 } else {
@@ -212,7 +215,7 @@ public class RequestProcessor {
         }
     }
 
-    private ServerMessageContext createMessageContext(HttpServletRequest request,   
+    private ServerMessageContext createMessageContext(HttpServletRequest request,
                                                       HttpServletResponse response) {
         ServerMessageContext messageContext =
             new ServerMessageContext(request, response, configuration);

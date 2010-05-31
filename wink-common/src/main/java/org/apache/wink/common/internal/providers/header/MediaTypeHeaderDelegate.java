@@ -63,7 +63,7 @@ public class MediaTypeHeaderDelegate implements HeaderDelegate<MediaType> {
             String[] mainArray = SLASH.split(main);
             type = mainArray[0];
             if ("".equals(type)) {
-                String errMsg = String.format(Messages.getMessage("mediaTypeWrongFormat"), value);
+                String errMsg = Messages.getMessage("mediaTypeWrongFormat", value);
                 logger.error(errMsg);
                 throw new IllegalArgumentException(errMsg);
             }
@@ -82,7 +82,7 @@ public class MediaTypeHeaderDelegate implements HeaderDelegate<MediaType> {
                 }
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-            String errMsg = String.format(Messages.getMessage("mediaTypeWrongFormat"), value);
+            String errMsg = Messages.getMessage("mediaTypeWrongFormat", value);
             logger.error(errMsg, e);
             throw new IllegalArgumentException(errMsg, e);
         }

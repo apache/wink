@@ -82,7 +82,9 @@ public class AnyContentHandler implements DomHandler<XmlWrapper, StreamResult> {
             (MessageBodyWriter<Object>)providers.getMessageBodyWriter(cls, cls, null, type);
 
         if (writer == null) {
-            logger.error(Messages.getMessage("noWriterFound", cls.getName(), type.toString())); //$NON-NLS-1$
+            if (logger.isErrorEnabled()) {
+                logger.error(Messages.getMessage("noWriterFound", cls.getName(), type.toString())); //$NON-NLS-1$
+            }
             throw new WebApplicationException(500);
         }
 
@@ -101,11 +103,10 @@ public class AnyContentHandler implements DomHandler<XmlWrapper, StreamResult> {
         byte[] result;
         if (contentType.equals("xhtml")) { //$NON-NLS-1$
             try {
-                result =
-                    new StringBuilder().append("<div xmlns=\"") //$NON-NLS-1$
-                        .append(RestConstants.NAMESPACE_XHTML).append("\">").append(os //$NON-NLS-1$
-                            .toString(ProviderUtils.getCharset(type))).append("</div>").toString() //$NON-NLS-1$
-                        .getBytes();
+                result = new StringBuilder().append("<div xmlns=\"") //$NON-NLS-1$
+                    .append(RestConstants.NAMESPACE_XHTML).append("\">").append(os //$NON-NLS-1$
+                        .toString(ProviderUtils.getCharset(type))).append("</div>").toString() //$NON-NLS-1$
+                    .getBytes();
             } catch (UnsupportedEncodingException e) {
                 throw new WebApplicationException(e);
             }

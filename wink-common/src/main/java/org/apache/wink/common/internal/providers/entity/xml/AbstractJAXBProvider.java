@@ -431,7 +431,9 @@ public abstract class AbstractJAXBProvider {
         if (!isXMLRootElement(type) && isXMLType(type)) {
             JAXBElement<?> wrappedJAXBElement = wrapInJAXBElement(jaxbObject, type);
             if (wrappedJAXBElement == null) {
-                logger.error(Messages.getMessage("jaxbObjectFactoryNotFound", type.getName())); //$NON-NLS-1$
+                if (logger.isErrorEnabled()) {
+                    logger.error(Messages.getMessage("jaxbObjectFactoryNotFound", type.getName())); //$NON-NLS-1$
+                }
                 throw new WebApplicationException();
             }
             return wrappedJAXBElement;
@@ -463,10 +465,14 @@ public abstract class AbstractJAXBProvider {
                 }
                 return null;
             }
-            logger.warn(Messages.getMessage("jaxbObjectFactoryInstantiate", type.getName())); //$NON-NLS-1$
+            if (logger.isWarnEnabled()) {
+                logger.warn(Messages.getMessage("jaxbObjectFactoryInstantiate", type.getName())); //$NON-NLS-1$
+            }
             return defaultWrapInJAXBElement(jaxbObject, type);
         } catch (Exception e) {
-            logger.error(Messages.getMessage("jaxbElementFailToBuild", type.getName())); //$NON-NLS-1$
+            if (logger.isErrorEnabled()) {
+                logger.error(Messages.getMessage("jaxbElementFailToBuild", type.getName())); //$NON-NLS-1$
+            }
             return null;
         }
 
@@ -486,13 +492,17 @@ public abstract class AbstractJAXBProvider {
         try {
             factoryClass = Thread.currentThread().getContextClassLoader().loadClass(b.toString());
         } catch (ClassNotFoundException e) {
-            logger.error(Messages.getMessage("jaxbObjectFactoryNotFound", type.getName())); //$NON-NLS-1$
+            if (logger.isErrorEnabled()) {
+                logger.error(Messages.getMessage("jaxbObjectFactoryNotFound", type.getName())); //$NON-NLS-1$
+            }
             return null;
         }
 
         if (!factoryClass.isAnnotationPresent(XmlRegistry.class)) {
-            logger.error(Messages.getMessage("jaxbObjectFactoryNotAnnotatedXMLRegistry", type //$NON-NLS-1$
-                .getName()));
+            if (logger.isErrorEnabled()) {
+                logger.error(Messages.getMessage("jaxbObjectFactoryNotAnnotatedXMLRegistry", type //$NON-NLS-1$
+                    .getName()));
+            }
             return null;
         }
 
@@ -501,7 +511,9 @@ public abstract class AbstractJAXBProvider {
 
     @SuppressWarnings("unchecked")
     private JAXBElement<?> defaultWrapInJAXBElement(Object jaxbObject, Class<?> type) {
-        logger.info(Messages.getMessage("jaxbCreateDefaultJAXBElement", type.getName())); //$NON-NLS-1$
+        if (logger.isInfoEnabled()) {
+            logger.info(Messages.getMessage("jaxbCreateDefaultJAXBElement", type.getName())); //$NON-NLS-1$
+        }
         String typeStr = type.getAnnotation(XmlType.class).name();
         return new JAXBElement(new QName(typeStr), type, jaxbObject);
     }

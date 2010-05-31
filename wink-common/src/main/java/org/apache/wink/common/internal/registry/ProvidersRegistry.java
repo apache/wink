@@ -157,7 +157,9 @@ public class ProvidersRegistry {
             retValue = true;
         }
         if (retValue == false) {
-            logger.warn(Messages.getMessage("classIsUnknownProvider", cls)); //$NON-NLS-1$
+            if (logger.isWarnEnabled()) {
+                logger.warn(Messages.getMessage("classIsUnknownProvider", cls)); //$NON-NLS-1$
+            }
         }
         return retValue;
 
@@ -471,7 +473,7 @@ public class ProvidersRegistry {
     }
 
     public MediaType getMessageBodyWriterMediaTypeLimitByIsWritable(Class<?> type,
-                                                                          RuntimeContext runtimeContext) {
+                                                                    RuntimeContext runtimeContext) {
         List<MediaType> mediaTypes = new ArrayList<MediaType>();
         logger.debug("Searching MessageBodyWriters media types limited by class type {}", type); //$NON-NLS-1$
 
@@ -676,7 +678,9 @@ public class ProvidersRegistry {
             }
             copyOfMap.put(key, set);
             if (!set.add(objectFactory)) {
-                logger.warn(Messages.getMessage("mediaTypeSetAlreadyContains", objectFactory)); //$NON-NLS-1$
+                if (logger.isWarnEnabled()) {
+                    logger.warn(Messages.getMessage("mediaTypeSetAlreadyContains", objectFactory)); //$NON-NLS-1$
+                }
             } else {
 
                 // need to resort the entry set

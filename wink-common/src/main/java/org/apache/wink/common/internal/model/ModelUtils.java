@@ -332,10 +332,11 @@ public class ModelUtils {
                                 mediaType,
                                 httpHeaders,
                                 new ByteArrayInputStream((byte[])value));
-            
-            // Reset RuntimeContext from temporary above.  tempRuntimeContext may be null here, which is ok.
+
+            // Reset RuntimeContext from temporary above. tempRuntimeContext may
+            // be null here, which is ok.
             RuntimeContextTLS.setRuntimeContext(tempRuntimeContext);
-            
+
             return read;
         }
         throw new ClassCastException("Cannot cast " + value.getClass().getName()
@@ -425,7 +426,9 @@ public class ModelUtils {
             if (ProviderMetadataCollector.isProvider(cls)) {
                 providersRegistry.addProvider(cls);
             } else {
-                logger.warn(Messages.getMessage("classNotAProvider", cls)); //$NON-NLS-1$
+                if (logger.isWarnEnabled()) {
+                    logger.warn(Messages.getMessage("classNotAProvider", cls)); //$NON-NLS-1$
+                }
             }
         }
     }
@@ -437,7 +440,9 @@ public class ModelUtils {
             if (ProviderMetadataCollector.isProvider(cls)) {
                 providersRegistry.addProvider(obj);
             } else {
-                logger.warn(Messages.getMessage("classNotAProvider", obj.getClass())); //$NON-NLS-1$
+                if (logger.isWarnEnabled()) {
+                    logger.warn(Messages.getMessage("classNotAProvider", obj.getClass())); //$NON-NLS-1$
+                }
             }
         }
     }
@@ -455,7 +460,9 @@ public class ModelUtils {
             if (ProviderMetadataCollector.isProvider(cls)) {
                 providersRegistry.addProvider(obj, priority);
             } else {
-                logger.warn(Messages.getMessage("classNotAProvider", obj.getClass())); //$NON-NLS-1$
+                if (logger.isWarnEnabled()) {
+                    logger.warn(Messages.getMessage("classNotAProvider", obj.getClass())); //$NON-NLS-1$
+                }
             }
         }
     }
