@@ -880,7 +880,10 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
             port(uri.getPort());
         }
         if (uri.getRawPath() != null) {
-            path(UriEncoder.decodeString(uri.getRawPath()));
+            String path = uri.getRawPath();
+            if(this.host == null && uri.getRawAuthority() != null)
+                path = UriEncoder.decodeString(uri.getRawAuthority()) + "/" + path;
+            path(UriEncoder.decodeString(path));
         }
         logger.debug("schemeSpecificPart() exit"); //$NON-NLS-1$
         return this;
@@ -956,9 +959,9 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
             logger.debug("Constructing fragment"); //$NON-NLS-1$
             fragment(uri.getRawFragment());
         }
-        if (uri.getSchemeSpecificPart() != null) {
+        if (uri.getRawSchemeSpecificPart() != null) {
             logger.debug("Constructing schemeSpecificPart"); //$NON-NLS-1$
-            schemeSpecificPart(uri.getSchemeSpecificPart());
+            schemeSpecificPart(uri.getRawSchemeSpecificPart());
         }
         logger.debug("uri() exit"); //$NON-NLS-1$
         return this;
