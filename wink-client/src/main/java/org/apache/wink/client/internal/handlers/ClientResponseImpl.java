@@ -27,6 +27,7 @@ import java.lang.reflect.Type;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.StatusType;
 import javax.ws.rs.core.Response.Status.Family;
 import javax.ws.rs.ext.MessageBodyReader;
@@ -120,8 +121,8 @@ public class ClientResponseImpl extends BaseRequestResponseImpl implements Clien
                                                        runtimeContext);
             if (reader == null) {
                 throw new RuntimeException(Messages.getMessage("clientNoReaderForTypeAndMediaType",
-                                                         String.valueOf(type),
-                                                         contentType));
+                                                               String.valueOf(type),
+                                                               contentType));
             }
             T entity = reader.readFrom(type, genericType, null, contentMediaType, getHeaders(), is);
             return entity;
@@ -150,33 +151,73 @@ public class ClientResponseImpl extends BaseRequestResponseImpl implements Clien
     }
 
     public StatusType getStatusType() {
-        final int statusCode = status;
-        final String reasonPhrase = message;
-        return new StatusType() {
-
-            public int getStatusCode() {
-                return statusCode;
-            }
-
-            public String getReasonPhrase() {
-                return reasonPhrase;
-            }
-
-            public Family getFamily() {
-                int family = statusCode / 100;
-                if(family == 1) {
-                    return Family.INFORMATIONAL;
-                } else if (family == 2) {
-                    return Family.SUCCESSFUL;
-                } else if (family == 3) {
-                    return Family.REDIRECTION;
-                } else if (family == 4) {
-                    return Family.CLIENT_ERROR;
-                } else if (family == 5) {
-                    return Family.SERVER_ERROR;
-                }
-                return Family.OTHER;
-            }
-        };
+        StatusType statusType = Response.Status.fromStatusCode(status);
+        if (statusType == null) {
+            statusType = new ClientStatusType(status, message);
+        }
+        return statusType;
     }
+
+    static class ClientStatusType implements StatusType {
+
+        final int    statusCode;
+        final String reasonPhrase;
+
+        public ClientStatusType(int statusCode, String reasonPhrase) {
+            this.statusCode = statusCode;
+            this.reasonPhrase = reasonPhrase;
+        }
+
+        public int getStatusCode() {
+            return statusCode;
+        }
+
+        public String getReasonPhrase() {
+            return reasonPhrase;
+        }
+
+        public Family getFamily() {
+            int family = statusCode / 100;
+            if (family == 1) {
+                return Family.INFORMATIONAL;
+            } else if (family == 2) {
+                return Family.SUCCESSFUL;
+            } else if (family == 3) {
+                return Family.REDIRECTION;
+            } else if (family == 4) {
+                return Family.CLIENT_ERROR;
+            } else if (family == 5) {
+                return Family.SERVER_ERROR;
+            }
+            return Family.OTHER;
+        }
+
+        @Override
+        public int hashCode() {
+            return statusCode;
+        }
+
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+
+            if (!(obj instanceof StatusType)) {
+                return false;
+            }
+
+            StatusType other = (StatusType)obj;
+            if (statusCode != other.getStatusCode()) {
+                return false;
+            }
+
+            return true;
+        }
+
+        @Override
+        public String toString() {
+            return reasonPhrase;
+        }
+    }
+
 }
