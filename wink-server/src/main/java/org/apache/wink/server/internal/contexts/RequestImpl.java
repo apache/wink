@@ -478,8 +478,8 @@ public class RequestImpl implements Request {
             String vEncoding = v.getEncoding();
             if (vEncoding != null) {
                 logger.debug("Checking variant encoding {}", vEncoding); //$NON-NLS-1$
-                if (encodings == null || encodings.isAnyEncodingAllowed()) {
-                    logger.debug("Accept-Encoding is null or wildcard"); //$NON-NLS-1$
+                if (encodings == null) {
+                    logger.debug("Accept-Encoding is null"); //$NON-NLS-1$
                     if (!v.getEncoding().equalsIgnoreCase("identity")) { //$NON-NLS-1$
                         logger
                             .debug("Variant encoding {} does not equal identity so not acceptable", //$NON-NLS-1$
