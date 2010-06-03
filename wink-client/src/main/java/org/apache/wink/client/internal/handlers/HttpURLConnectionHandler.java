@@ -56,13 +56,11 @@ public class HttpURLConnectionHandler extends AbstractConnectionHandler {
         HttpURLConnection connection = openConnection(request);
         NonCloseableOutputStream ncos = new NonCloseableOutputStream();
         OutputStream os = ncos;
-        if (request.getEntity() != null) {
-            os = adaptOutputStream(ncos, request, context.getOutputStreamAdapters());
-        }
         processRequestHeaders(request, connection);
         connection.connect();
         if (request.getEntity() != null) {
             ncos.setOutputStream(connection.getOutputStream());
+            os = adaptOutputStream(ncos, request, context.getOutputStreamAdapters());
             writeEntity(request, os);
         }
         return connection;
