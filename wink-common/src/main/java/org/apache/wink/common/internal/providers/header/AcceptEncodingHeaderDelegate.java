@@ -27,8 +27,14 @@ import java.util.List;
 import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 
 import org.apache.wink.common.internal.http.AcceptEncoding;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AcceptEncodingHeaderDelegate implements HeaderDelegate<AcceptEncoding> {
+
+    final private static Logger logger =
+                                           LoggerFactory
+                                               .getLogger(AcceptEncodingHeaderDelegate.class);
 
     public AcceptEncoding fromString(String value) throws IllegalArgumentException {
         List<String> acceptable = new LinkedList<String>();
@@ -39,17 +45,25 @@ public class AcceptEncodingHeaderDelegate implements HeaderDelegate<AcceptEncodi
         List<AcceptEncoding.ValuedEncoding> vEncodings = parseAcceptEncoding(value);
 
         for (AcceptEncoding.ValuedEncoding qEncoding : vEncodings) {
+            logger.debug("Processing {} with qValue {}", qEncoding.encoding, qEncoding.qValue);
             if (anyAllowed) {
+                logger.debug("anyAllowed is true");
                 if (qEncoding.qValue == 0 && !qEncoding.isWildcard()) {
+                    logger.debug("qValue is 0 and qEncoding is not a wildcard so {} is banned",
+                                 qEncoding.encoding);
                     banned.add(qEncoding.encoding);
                 }
             } else {
+                logger.debug("anyAllowed is still false");
                 if (qEncoding.qValue == 0) {
+                    logger.debug("qValue is 0 so breaking out of loop");
                     break; // gone through all acceptable languages
                 }
                 if (qEncoding.isWildcard()) {
+                    logger.debug("qEncoding is a wildcard so everything afterwards is allowable");
                     anyAllowed = true;
                 } else {
+                    logger.debug("qEncoding is not a wildcard so adding to acceptable list");
                     acceptable.add(qEncoding.encoding);
                 }
             }
@@ -58,13 +72,16 @@ public class AcceptEncodingHeaderDelegate implements HeaderDelegate<AcceptEncodi
     }
 
     private List<AcceptEncoding.ValuedEncoding> parseAcceptEncoding(String acceptableEncodingValue) {
+        logger.debug("parseAcceptEncoding({}) entry", acceptableEncodingValue);
         List<AcceptEncoding.ValuedEncoding> qEncodings =
             new LinkedList<AcceptEncoding.ValuedEncoding>();
         if (acceptableEncodingValue == null) {
+            logger.debug("parseAcceptEncoding() exit - return empty list");
             return qEncodings;
         }
 
         for (String encodingRange : acceptableEncodingValue.split(",")) { //$NON-NLS-1$
+            logger.debug("Parsing encodingRange as {}", encodingRange);
             int semicolonIndex = encodingRange.indexOf(';');
             double qValue;
             String encodingSpec;
@@ -84,17 +101,22 @@ public class AcceptEncodingHeaderDelegate implements HeaderDelegate<AcceptEncodi
                     qValue = 1.0d;
                 }
             }
+            logger.debug("encodingSpec before trim is {}", encodingSpec);
+            logger.debug("qValue is {}", qValue);
             encodingSpec = encodingSpec.trim();
             if (encodingSpec.length() == 0) {
                 // ignore empty encoding specifications
+                logger.debug("ignoring empty encodingSpec");
                 continue;
             } else if (encodingSpec.equals("*")) { //$NON-NLS-1$
+                logger.debug("Wildcard spec so adding as wildcard");
                 qEncodings.add(new AcceptEncoding.ValuedEncoding(qValue, null));
             } else {
                 qEncodings.add(new AcceptEncoding.ValuedEncoding(qValue, encodingSpec));
             }
         }
         Collections.sort(qEncodings, Collections.reverseOrder());
+        logger.debug("parseAcceptEncoding exit() returning {}", qEncodings);
         return qEncodings;
     }
 

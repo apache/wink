@@ -52,6 +52,11 @@ public class AcceptEncoding {
         public boolean isWildcard() {
             return encoding == null;
         }
+        
+        @Override
+        public String toString() {
+            return "ValuedEncoding(" + qValue + "," + encoding + ")";
+        }
     }
 
     private static final HeaderDelegate<AcceptEncoding> delegate =
