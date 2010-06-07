@@ -22,6 +22,7 @@ package org.apache.wink.common.internal.lifecycle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.i18n.Messages;
+import org.apache.wink.common.internal.registry.metadata.ApplicationMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
 
@@ -73,6 +74,11 @@ class DefaultLifecycleManager<T> implements LifecycleManager<T> {
             // default factory cannot create instance of DynamicResource
             throw new IllegalArgumentException(Messages
                 .getMessage("cannotCreateDefaultFactoryForDR", String.valueOf(cls))); //$NON-NLS-1$
+        }
+
+        if (ApplicationMetadataCollector.isApplication(cls)) {
+            // by default application subclasses are singletons
+            return LifecycleManagerUtils.createSingletonObjectFactory(cls);
         }
 
         if (ProviderMetadataCollector.isProvider(cls)) {

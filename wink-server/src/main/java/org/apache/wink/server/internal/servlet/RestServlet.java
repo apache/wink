@@ -31,7 +31,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Application;
 
 import org.apache.wink.common.internal.i18n.Messages;
-import org.apache.wink.common.internal.lifecycle.LifecycleManagerUtils;
 import org.apache.wink.common.internal.lifecycle.ObjectFactory;
 import org.apache.wink.common.internal.utils.ClassUtils;
 import org.apache.wink.server.internal.DeploymentConfiguration;
@@ -116,7 +115,11 @@ public class RestServlet extends AbstractRestServlet {
         DeploymentConfiguration deploymentConfiguration = getDeploymentConfiguration();
         // order of next two lines is important to allow Application to have
         // control over priority order of Providers
-        deploymentConfiguration.addApplication(getApplication(), false);
+        Application app = getApplication();
+        if (app == null) {
+            app = getApplication(deploymentConfiguration);
+        }
+        deploymentConfiguration.addApplication(app, false);
         RequestProcessor requestProcessor = new RequestProcessor(deploymentConfiguration);
         logger.debug("Creating request processor {} for servlet {}", requestProcessor, this); //$NON-NLS-1$
         return requestProcessor;
@@ -176,8 +179,8 @@ public class RestServlet extends AbstractRestServlet {
     }
 
     @SuppressWarnings("unchecked")
-    protected Application getApplication() throws ClassNotFoundException, InstantiationException,
-        IllegalAccessException {
+    protected Application getApplication(DeploymentConfiguration configuration)
+        throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         Class<? extends Application> appClass = null;
         String initParameter = getInitParameter(APPLICATION_INIT_PARAM);
         if (initParameter != null) {
@@ -192,8 +195,8 @@ public class RestServlet extends AbstractRestServlet {
 
             // let the lifecycle manager create the instance and process fields
             // for injection
-            ObjectFactory of = LifecycleManagerUtils.createSingletonObjectFactory(appClass);
-
+            ObjectFactory of = configuration.getOfFactoryRegistry().getObjectFactory(appClass);
+            configuration.addApplicationObjectFactory(of);
             return (Application)of.getInstance(null);
         }
         String appLocationParameter = getInitParameter(APP_LOCATION_PARAM);
@@ -208,6 +211,16 @@ public class RestServlet extends AbstractRestServlet {
                                             APP_LOCATION_PARAM));
         }
         return new ServletWinkApplication(getServletContext(), appLocationParameter);
+    }
+
+    protected Application getApplication() throws ClassNotFoundException, InstantiationException,
+        IllegalAccessException {
+        /*
+         * this is a legacy call. in the end, should call
+         * getApplication(DeploymentConfiguration) by default but this is left
+         * as a call for legacy
+         */
+        return null;
     }
 
     /**
@@ -256,6 +269,11 @@ public class RestServlet extends AbstractRestServlet {
     public void destroy() {
         getRequestProcessor().getConfiguration().getProvidersRegistry().removeAllProviders();
         getRequestProcessor().getConfiguration().getResourceRegistry().removeAllResources();
+        for (ObjectFactory<?> of : getRequestProcessor().getConfiguration()
+            .getApplicationObjectFactories()) {
+            of.releaseAll(null);
+        }
+
         /*
          * Be sure to call super.destroy()
          */

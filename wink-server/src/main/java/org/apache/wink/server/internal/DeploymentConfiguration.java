@@ -25,9 +25,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import javax.servlet.FilterConfig;
@@ -40,6 +42,7 @@ import org.apache.commons.lang.ClassUtils;
 import org.apache.wink.common.internal.application.ApplicationValidator;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
+import org.apache.wink.common.internal.lifecycle.ObjectFactory;
 import org.apache.wink.common.internal.lifecycle.ScopeLifecycleManager;
 import org.apache.wink.common.internal.registry.InjectableFactory;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
@@ -127,6 +130,8 @@ public class DeploymentConfiguration {
 
     private String[]                  httpMethodOverrideHeaders;
 
+    private Set<ObjectFactory<?>>     appObjectFactories;
+
     /**
      * Makes sure that the object was properly initialized. Should be invoked
      * AFTER all the setters were invoked.
@@ -135,6 +140,7 @@ public class DeploymentConfiguration {
         if (properties == null) {
             properties = new Properties();
         }
+        appObjectFactories = new HashSet<ObjectFactory<?>>(8);
 
         logger.debug("Deployment configuration properties: {}", properties); //$NON-NLS-1$
 
@@ -603,4 +609,11 @@ public class DeploymentConfiguration {
         properties.setProperty(USE_ACCEPT_CHARSET, Boolean.toString(val));
     }
 
+    public void addApplicationObjectFactory(ObjectFactory<?> of) {
+        appObjectFactories.add(of);
+    }
+
+    public Set<ObjectFactory<?>> getApplicationObjectFactories() {
+        return appObjectFactories;
+    }
 }
