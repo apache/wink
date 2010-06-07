@@ -60,6 +60,14 @@ public class GuiceInjectorLifeCycleManager<T> implements LifecycleManager<T> {
             public Class<T> getInstanceClass() {
                 return (Class<T>)object.getClass();
             }
+
+            public void releaseInstance(T instance, RuntimeContext context) {
+                /* do nothing */
+            }
+
+            public void releaseAll(RuntimeContext context) {
+                /* do nothing */
+            }
         };
     }
 
@@ -137,6 +145,14 @@ public class GuiceInjectorLifeCycleManager<T> implements LifecycleManager<T> {
         public Class<T> getInstanceClass() {
             return clazz;
         }
+
+        public void releaseInstance(T instance, RuntimeContext context) {
+            /* do nothing */
+        }
+
+        public void releaseAll(RuntimeContext context) {
+            /* do nothing */
+        }
     }
 
     private static class GuicePrototypeObjectFactory<T> implements ObjectFactory<T> {
@@ -180,6 +196,14 @@ public class GuiceInjectorLifeCycleManager<T> implements LifecycleManager<T> {
 
         public Class<T> getInstanceClass() {
             return clazz;
+        }
+
+        public void releaseInstance(T instance, RuntimeContext context) {
+            /* do nothing */
+        }
+
+        public void releaseAll(RuntimeContext context) {
+            /* do nothing */
         }
     }
 

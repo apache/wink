@@ -53,4 +53,12 @@ public class SpringObjectFactory implements ObjectFactory<Object> {
         return classMetadata;
     }
 
+    public void releaseInstance(Object instance, RuntimeContext context) {
+        /* do nothing */
+    }
+
+    public void releaseAll(RuntimeContext context) {
+        /* do nothing */
+    }
+
 }

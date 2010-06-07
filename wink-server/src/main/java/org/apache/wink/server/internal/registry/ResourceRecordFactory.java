@@ -286,6 +286,14 @@ public class ResourceRecordFactory {
         public String toString() {
             return String.format("InstanceObjectFactory: %s", getInstanceClass()); //$NON-NLS-1$
         }
+
+        public void releaseInstance(T instance, RuntimeContext context) {
+            /* do nothing */
+        }
+
+        public void releaseAll(RuntimeContext context) {
+            /* do nothing */
+        }
     }
 
 }

@@ -81,6 +81,14 @@ public class ResourceInstance {
         return instance;
     }
 
+    @SuppressWarnings("unchecked")
+    public void releaseInstance(RuntimeContext context) {
+        if (instance != null) {
+            ObjectFactory of = record.getObjectFactory();
+            of.releaseInstance(instance, context);
+        }
+    }
+
     /**
      * Returns whether the matcher used to match this resource was an exact
      * match

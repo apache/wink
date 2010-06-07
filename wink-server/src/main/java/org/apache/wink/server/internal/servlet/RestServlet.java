@@ -251,4 +251,14 @@ public class RestServlet extends AbstractRestServlet {
 
         return properties;
     }
+
+    @Override
+    public void destroy() {
+        getRequestProcessor().getConfiguration().getProvidersRegistry().removeAllProviders();
+        getRequestProcessor().getConfiguration().getResourceRegistry().removeAllResources();
+        /*
+         * Be sure to call super.destroy()
+         */
+        super.destroy();
+    }
 }

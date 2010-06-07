@@ -164,6 +164,22 @@ public class ResourceRegistry {
     }
 
     /**
+     * Removes all the root resource records.
+     */
+    public void removeAllResources() {
+        writersLock.lock();
+        try {
+            for (ResourceRecord record : rootResources) {
+                record.getObjectFactory().releaseAll(null);
+            }
+            rootResources.clear();
+            assertSorted();
+        } finally {
+            writersLock.unlock();
+        }
+    }
+
+    /**
      * Get the {@link ResourceRecord} of the specified root resource instance.
      * This is a shortcut for {@code getRecord(instance, true)}
      * 

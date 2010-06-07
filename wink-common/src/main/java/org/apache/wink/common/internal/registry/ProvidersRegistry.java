@@ -173,6 +173,19 @@ public class ProvidersRegistry {
         return addProvider(provider, WinkApplication.DEFAULT_PRIORITY);
     }
 
+    /**
+     * Removes all providers in the registry.
+     */
+    public void removeAllProviders() {
+        contextResolvers.removeAll();
+        messageBodyReaders.removeAll();
+        messageBodyWriters.removeAll();
+
+        for (ObjectFactory<?> of : exceptionMappers) {
+            of.releaseAll(null);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     public <T> ContextResolver<T> getContextResolver(final Class<T> contextType,
                                                      MediaType mediaType,
@@ -576,6 +589,22 @@ public class ProvidersRegistry {
             return data.isEmpty();
         }
 
+        @SuppressWarnings("unchecked")
+        synchronized void removeAll() {
+            // order of operations for the next 4 lines matter
+            Entry<MediaType, HashSet<PriorityObjectFactory<T>>>[] oldEntrySet = entrySet;
+            entrySet = data.entrySet().toArray(new Entry[0]);
+            data = new HashMap<MediaType, HashSet<PriorityObjectFactory<T>>>();
+            providersCache.clear();
+
+            for (Entry<MediaType, HashSet<PriorityObjectFactory<T>>> entry : oldEntrySet) {
+                HashSet<PriorityObjectFactory<T>> set = entry.getValue();
+                for (PriorityObjectFactory<T> of : set) {
+                    of.releaseAll(null);
+                }
+            }
+        }
+
         /**
          * returns providers by mediaType and by type
          * 
@@ -817,6 +846,14 @@ public class ProvidersRegistry {
                 return of.getInstanceClass();
             }
 
+            public void releaseInstance(T instance, RuntimeContext context) {
+                of.releaseInstance(instance, context);
+            }
+
+            public void releaseAll(RuntimeContext context) {
+                of.releaseAll(context);
+            }
+
             public int compareTo(OFHolder<T> o) {
                 // check if this is a system provider
                 // system providers are less than
@@ -878,6 +915,14 @@ public class ProvidersRegistry {
 
         public Class<T> getInstanceClass() {
             return of.getInstanceClass();
+        }
+
+        public void releaseInstance(T instance, RuntimeContext context) {
+            of.releaseInstance(instance, context);
+        }
+
+        public void releaseAll(RuntimeContext context) {
+            of.releaseAll(context);
         }
 
         // this compare is used by exception mappers

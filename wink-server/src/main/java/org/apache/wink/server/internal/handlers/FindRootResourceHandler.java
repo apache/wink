@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 public class FindRootResourceHandler implements RequestHandler {
 
     public static final String  SEARCH_POLICY_CONTINUED_SEARCH_KEY =
-                                                                       "wink.searchPolicyContinuedSearch"; //$NON-NLS-1$
+                                                                       "wink.searchPolicyContinuedSearch";           //$NON-NLS-1$
     private static final Logger logger                             =
                                                                        LoggerFactory
                                                                            .getLogger(FindRootResourceHandler.class);
@@ -95,6 +95,15 @@ public class FindRootResourceHandler implements RequestHandler {
             // check the result to see if we found a match
             if (result.isFound()) {
                 break;
+            }
+
+            // if the search result was unsuccessful, should automatically do
+            // the release on any root resources created (and any subresource
+            // instances used; the subresource is dead)
+            List<ResourceInstance> resourceInstances = result.getData().getMatchedResources();
+            for (ResourceInstance res : resourceInstances) {
+                logger.debug("Releasing resource instance");
+                res.releaseInstance(context);
             }
         }
     }
