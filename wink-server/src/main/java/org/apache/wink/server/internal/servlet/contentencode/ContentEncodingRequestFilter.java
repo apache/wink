@@ -20,6 +20,10 @@ package org.apache.wink.server.internal.servlet.contentencode;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
@@ -39,9 +43,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A servlet filter which changes the HttpServletRequest to
- * automatically inflate or GZIP decode an incoming request that has an
- * appropriate Content-Encoding request header value. Add to your web.xml like: <br/>
+ * A servlet filter which changes the HttpServletRequest to automatically
+ * inflate or GZIP decode an incoming request that has an appropriate
+ * Content-Encoding request header value. Add to your web.xml like: <br/>
  * <code>
  * &lt;filter&gt;<br/>
         &lt;filter-name&gt;ContentEncodingRequestFilter&lt;/filter-name&gt;<br/>
@@ -213,6 +217,58 @@ public class ContentEncodingRequestFilter implements Filter {
             }
             logger.debug("getInputStream() exit - returning {}", inputStream);
             return inputStream;
+        }
+
+        @Override
+        public String getHeader(String name) {
+            if (HttpHeaders.CONTENT_ENCODING.equalsIgnoreCase(name)) {
+                return null;
+            }
+            return super.getHeader(name);
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public Enumeration<String> getHeaders(String name) {
+            if (HttpHeaders.CONTENT_ENCODING.equalsIgnoreCase(name)) {
+                // an empty enumeration
+                return new Enumeration<String>() {
+
+                    public boolean hasMoreElements() {
+                        return false;
+                    }
+
+                    public String nextElement() {
+                        return null;
+                    }
+                };
+            }
+            return super.getHeaders(name);
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public Enumeration getHeaderNames() {
+            final Enumeration<String> headers = super.getHeaderNames();
+            List<String> httpHeaders = new ArrayList<String>();
+            while (headers.hasMoreElements()) {
+                String header = headers.nextElement();
+                if (!HttpHeaders.CONTENT_ENCODING.equalsIgnoreCase(header)) {
+                    httpHeaders.add(header);
+                }
+            }
+            final Iterator<String> iterator = httpHeaders.iterator();
+            return new Enumeration<String>() {
+
+                public boolean hasMoreElements() {
+                    return iterator.hasNext();
+                }
+
+                public String nextElement() {
+                    return iterator.next();
+                }
+
+            };
         }
     }
 

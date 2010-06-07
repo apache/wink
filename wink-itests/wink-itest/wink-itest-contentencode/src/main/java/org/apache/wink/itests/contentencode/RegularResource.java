@@ -18,8 +18,10 @@
  */
 package org.apache.wink.itests.contentencode;
 
+import java.util.Enumeration;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -103,5 +105,30 @@ public class RegularResource {
                                                                 .toLowerCase()
                                                             + "  , "
                                                             + HttpHeaders.ACCEPT).build();
+    }
+
+    /**
+     * Resource that will return the HTTP header Content-Encoding values.
+     * 
+     * @return
+     */
+    @POST
+    @Path("httpheadercontentencoding")
+    public Response getResourceHttpHeaderValues(String entity,
+                                                @Context HttpHeaders httpHeaders,
+                                                @Context HttpServletRequest servletRequest) {
+        Enumeration headerNames = servletRequest.getHeaderNames();
+        boolean isContentEncodingHeaderPresent = false;
+        while (headerNames.hasMoreElements()) {
+            if (HttpHeaders.CONTENT_ENCODING.equalsIgnoreCase((String)headerNames.nextElement())) {
+                isContentEncodingHeaderPresent = true;
+            }
+        }
+        return Response.ok(httpHeaders.getRequestHeader(HttpHeaders.CONTENT_ENCODING) + ":"
+            + servletRequest.getHeader(HttpHeaders.CONTENT_ENCODING)
+            + ":"
+            + servletRequest.getHeaders(HttpHeaders.CONTENT_ENCODING).hasMoreElements()
+            + ":"
+            + isContentEncodingHeaderPresent).build();
     }
 }

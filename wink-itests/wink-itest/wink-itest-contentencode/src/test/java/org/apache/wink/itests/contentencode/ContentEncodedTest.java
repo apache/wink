@@ -486,4 +486,36 @@ public class ContentEncodedTest extends TestCase {
                         gzipIS);
         assertEquals("text/plain content", responseEntity);
     }
+
+    /**
+     * Tests that the server side request headers have the Content-Encoding
+     * in them normally (without filter).
+     */
+    public void testHttpHeaderRequestWithoutFilter() throws IOException {
+        RestClient client = new RestClient();
+        ClientResponse response =
+            client.resource(getBaseURI() + "/regular/httpheadercontentencoding")
+                .header(HttpHeaders.ACCEPT_ENCODING, "*").accept(MediaType.TEXT_PLAIN)
+                .contentType(MediaType.TEXT_PLAIN).header(HttpHeaders.CONTENT_ENCODING, "gzip")
+                .post("HI");
+        assertEquals(200, response.getStatusCode());
+        assertEquals("[gzip]:gzip:true:true", response.getEntity(String.class));
+    }
+
+    /**
+     * Tests that the server side request headers have the Content-Encoding
+     * stripped since the filter is decoding it.
+     */
+    public void testHttpHeaderRequest() throws IOException {
+        RestClient client = new RestClient(new ClientConfig().handlers(new GzipHandler()));
+        ClientResponse response =
+            client.resource(getBaseURI() + "/contentencode/httpheadercontentencoding")
+                .header(HttpHeaders.ACCEPT_ENCODING, "*").accept(MediaType.TEXT_PLAIN)
+                .contentType(MediaType.TEXT_PLAIN).post("HI");
+        assertEquals(200, response.getStatusCode());
+        assertEquals(1, response.getHeaders().get(HttpHeaders.VARY).size());
+        assertEquals("gzip", response.getHeaders().getFirst(HttpHeaders.CONTENT_ENCODING));
+        assertEquals(1, response.getHeaders().get(HttpHeaders.CONTENT_ENCODING).size());
+        assertEquals("null:null:false:false", response.getEntity(String.class));
+    }
 }
