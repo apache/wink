@@ -19,6 +19,8 @@
  *******************************************************************************/
 package org.apache.wink.common.internal.providers.entity.xml;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.ref.SoftReference;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -28,6 +30,7 @@ import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.ws.rs.WebApplicationException;
@@ -44,8 +47,14 @@ import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 
+import org.apache.wink.common.RuntimeContext;
+import org.apache.wink.common.internal.WinkConfiguration;
 import org.apache.wink.common.internal.i18n.Messages;
+import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.common.internal.utils.JAXBUtils;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.internal.utils.SoftConcurrentMap;
@@ -84,7 +93,12 @@ public abstract class AbstractJAXBProvider {
                                                                                                 new Pool<JAXBContext, Marshaller>();
     private Pool<JAXBContext, Unmarshaller>                       upool                     =
                                                                                                 new Pool<JAXBContext, Unmarshaller>();
+                                                                                                
 
+    // For performance, it might seem advantageous to use a static XMLInputFactory instance.  However, this was shown to
+    // be problematic on the Sun StAX parser (which is a fork of Apache Xerces) under load stress test.  So we use ThreadLocal.
+    private static ThreadLocal<XMLInputFactory> xmlInputFactory = new ThreadLocal<XMLInputFactory>();
+    
     /**
      * This class is the key to the JAXBContext cache. It must be based on the
      * ContextResolver instance who created the JAXBContext and the type passed
@@ -207,6 +221,96 @@ public abstract class AbstractJAXBProvider {
         }
 
         return unm;
+    }
+    
+    /**
+     * skips START_DOCUMENT, COMMENTs, PIs, and checks for DTD
+     * @param reader
+     * @throws XMLStreamException
+     */
+    private static void checkForDTD(XMLStreamReader reader)
+            throws XMLStreamException {
+        boolean supportDTD = false;
+
+        int event = reader.getEventType();
+        if (event != XMLStreamReader.START_DOCUMENT) {
+            // something went horribly wrong; the reader passed into us has
+            // already been partially processed
+            throw new XMLStreamException(Messages.getMessage("badXMLReaderInitialStart")); //$NON-NLS-1$
+        }
+        while (event != XMLStreamReader.START_ELEMENT) {  // all StAX parsers require a START_ELEMENT.  See AbstractJAXBProviderTest class
+            event = reader.next();
+            if (event == XMLStreamReader.DTD) {
+
+                RuntimeContext runtimeContext = RuntimeContextTLS.getRuntimeContext();
+                WinkConfiguration winkConfig = runtimeContext.getAttribute(WinkConfiguration.class);
+                if (winkConfig != null) {
+                    Properties props = winkConfig.getProperties();
+                    if (props != null) {
+                        // use valueOf method to require the word "true"
+                        supportDTD = Boolean.valueOf(props.getProperty("wink.supportDTDEntityExpansion"));
+                    }
+                }
+                if (!supportDTD) {
+                    throw new XMLStreamException(Messages.getMessage("entityRefsNotSupported")); //$NON-NLS-1$
+                } else {
+                    logger.debug("DTD entity reference expansion is enabled.  This may present a security risk.");
+                }
+            }
+        }
+    }
+    
+    private static XMLInputFactory getXMLInputFactory() {
+        XMLInputFactory factory = xmlInputFactory.get();
+        if (factory == null) {
+            factory = XMLInputFactory.newInstance();
+            xmlInputFactory.set(factory);
+        }
+        return factory;
+    }
+    
+    /**
+     * A consistent place to get a properly configured XMLStreamReader.
+     * 
+     * @param entityStream
+     * @return
+     * @throws XMLStreamException
+     */
+    protected static XMLStreamReader getXMLStreamReader(InputStream entityStream) throws XMLStreamException  {
+        // NOTE: createFilteredReader may appear to be more convenient, but it comes at the cost of
+        // performance.  This solution (to use checkForDTD) appears to be the best solution to preserve
+        // performance, but still achieve what we need to do.
+        XMLStreamReader reader = getXMLInputFactory().createXMLStreamReader(entityStream);
+        checkForDTD(reader);
+        return reader;
+    }
+    
+    /**
+     * A consistent place to get a properly configured XMLStreamReader.
+     * 
+     * @param entityStream
+     * @return
+     * @throws XMLStreamException
+     */
+    protected static XMLStreamReader getXMLStreamReader(InputStreamReader entityStreamReader) throws XMLStreamException  {
+        // NOTE: createFilteredReader may appear to be more convenient, but it comes at the cost of
+        // performance.  This solution (to use checkForDTD) appears to be the best solution to preserve
+        // performance, but still achieve what we need to do.
+        XMLStreamReader reader = getXMLInputFactory().createXMLStreamReader(entityStreamReader);
+        checkForDTD(reader);
+        return reader;
+    }
+    
+    protected static void closeXMLStreamReader(XMLStreamReader xmlStreamReader) {
+        if (xmlStreamReader != null) {
+            try {
+                xmlStreamReader.close();
+            } catch (XMLStreamException e) {
+                logger.debug("XMLStreamReader already closed.", e);
+            } catch (RuntimeException e) {
+                logger.debug("RuntimeException occurred: ", e);
+            }
+        }
     }
 
     private static Unmarshaller internalCreateUnmarshaller(final JAXBContext context)

@@ -38,6 +38,7 @@ import org.apache.wink.client.ClientRequest;
 import org.apache.wink.client.ClientResponse;
 import org.apache.wink.client.handlers.HandlerContext;
 import org.apache.wink.client.internal.ClientUtils;
+import org.apache.wink.common.internal.WinkConfiguration;
 
 public class HttpURLConnectionHandler extends AbstractConnectionHandler {
 
@@ -69,7 +70,8 @@ public class HttpURLConnectionHandler extends AbstractConnectionHandler {
     private HttpURLConnection openConnection(ClientRequest request) throws IOException {
         URL url = request.getURI().toURL();
         HttpURLConnection connection = null;
-        ClientConfig config = request.getAttribute(ClientConfig.class);
+        // we're on the client so this is a safe cast
+        ClientConfig config = (ClientConfig)request.getAttribute(WinkConfiguration.class);
 
         // setup proxy
         if (config.getProxyHost() != null) {

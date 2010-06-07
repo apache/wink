@@ -40,6 +40,7 @@ import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.wink.common.RestConstants;
 import org.apache.wink.common.internal.CaseInsensitiveMultivaluedMap;
+import org.apache.wink.common.internal.WinkConfiguration;
 import org.apache.wink.common.internal.http.Accept;
 import org.apache.wink.common.internal.http.AcceptLanguage;
 import org.apache.wink.common.internal.utils.HeaderUtils;
@@ -115,8 +116,9 @@ public class HttpHeadersImpl implements HttpHeaders {
         logger.debug("alternateParameter is {}", alternateParameter); //$NON-NLS-1$
         if (alternateParameter != null) {
             // try to map alternate parameter shortcut to a real media type
+            // we're on the server, so this is a safe cast
             DeploymentConfiguration deploymentConfiguration =
-                msgContext.getAttribute(DeploymentConfiguration.class);
+                (DeploymentConfiguration)msgContext.getAttribute(WinkConfiguration.class);
             Map<String, String> alternateShortcutMap =
                 deploymentConfiguration.getAlternateShortcutMap();
             logger.debug("alternateShortcutMap is {}", alternateShortcutMap); //$NON-NLS-1$

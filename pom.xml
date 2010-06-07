@@ -605,7 +605,7 @@
             </modules>
         </profile>
         <profile>
-            <!-- users can specify -Dlogfile=/full/path/to/logging.properties to turn on
+            <!-- users can specify -Djava.util.logging.config.file=/full/path/to/logging.properties to turn on
                  logging for any given maven build in any project.  There is a default
                  logging.properties in wink-component-test-support/src/main/resources. -->
             <id>Log</id>

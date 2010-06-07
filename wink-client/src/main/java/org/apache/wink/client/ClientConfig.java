@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.ws.rs.core.Application;
@@ -33,6 +34,7 @@ import org.apache.wink.client.handlers.ConnectionHandler;
 import org.apache.wink.client.internal.handlers.AcceptHeaderHandler;
 import org.apache.wink.client.internal.handlers.HttpURLConnectionHandler;
 import org.apache.wink.common.WinkApplication;
+import org.apache.wink.common.internal.WinkConfiguration;
 import org.apache.wink.common.internal.application.ApplicationFileLoader;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.slf4j.Logger;
@@ -45,11 +47,14 @@ import org.slf4j.LoggerFactory;
  * Custom client handlers are defined by calling the
  * {@link #handlers(ClientHandler...)} method.
  */
-public class ClientConfig implements Cloneable {
+public class ClientConfig implements Cloneable, WinkConfiguration {
+
+    private static final Logger       logger                             =
+        LoggerFactory
+            .getLogger(ClientConfig.class);
+    
     private String                    proxyHost;
     private int                       proxyPort;
-    private int                       connectTimeout;
-    private int                       readTimeout;
     private boolean                   followRedirects;
     private LinkedList<ClientHandler> handlers;
     private LinkedList<Application>   applications;
@@ -61,33 +66,14 @@ public class ClientConfig implements Cloneable {
                                                                              "wink.client.connectTimeout";
     private static final String       WINK_CLIENT_READTIMEOUT            =
                                                                              "wink.client.readTimeout";
-    private static final Logger       logger                             =
-                                                                             LoggerFactory
-                                                                                 .getLogger(ClientConfig.class);
+    private static final String       WINK_SUPPORT_DTD_EXPANSION  =
+                                                                             "wink.supportDTDEntityExpansion";
 
     private static int                WINK_CLIENT_CONNECTTIMEOUT_DEFAULT = 60000;
     private static int                WINK_CLIENT_READTIMEOUT_DEFAULT    = 60000;
-
-    static {
-        try {
-            String connectTimeoutString = System.getProperty(WINK_CLIENT_CONNECTTIMEOUT);
-            if (connectTimeoutString != null)
-                WINK_CLIENT_CONNECTTIMEOUT_DEFAULT = Integer.parseInt(connectTimeoutString);
-            logger.debug("Wink client connectTimeout default value is {}.",
-                         WINK_CLIENT_CONNECTTIMEOUT_DEFAULT);
-        } catch (Exception e) {
-            logger.debug("Error processing {} system property: {}", WINK_CLIENT_CONNECTTIMEOUT, e);
-        }
-        try {
-            String readTimeoutString = System.getProperty(WINK_CLIENT_READTIMEOUT);
-            if (readTimeoutString != null)
-                WINK_CLIENT_READTIMEOUT_DEFAULT = Integer.parseInt(readTimeoutString);
-            logger.debug("Wink client readTimeout default value is {}.",
-                         +WINK_CLIENT_READTIMEOUT_DEFAULT);
-        } catch (Exception e) {
-            logger.debug("Error processing {} system property: {}", WINK_CLIENT_READTIMEOUT, e);
-        }
-    }
+    private static boolean            WINK_CLIENT_SUPPORT_DTD_EXPANSION_DEFAULT = false;
+    
+    private Properties properties = null;
 
     /**
      * Construct a new ClientConfig with the following default settings:
@@ -102,8 +88,6 @@ public class ClientConfig implements Cloneable {
         modifiable = true;
         proxyHost = null;
         proxyPort = 80;
-        connectTimeout = WINK_CLIENT_CONNECTTIMEOUT_DEFAULT;
-        readTimeout = WINK_CLIENT_READTIMEOUT_DEFAULT;
         followRedirects = true;
         isAcceptHeaderAutoSet = true;
         handlers = new LinkedList<ClientHandler>();
@@ -116,6 +100,7 @@ public class ClientConfig implements Cloneable {
         } else {
             applications = new LinkedList<Application>();
         }
+        
         try {
             final Set<Class<?>> classes =
                 new ApplicationFileLoader(loadWinkApplications).getClasses();
@@ -188,16 +173,22 @@ public class ClientConfig implements Cloneable {
     }
 
     /**
-     * Get the connect timeout in milliseconds
+     * Convenience method to get the int value of the wink.client.connectTimeout property
      * 
      * @return the connect timeout in milliseconds
      */
     public final int getConnectTimeout() {
-        return connectTimeout;
+        try {
+            return Integer.valueOf(getProperties().getProperty(WINK_CLIENT_CONNECTTIMEOUT)).intValue();
+        } catch (NumberFormatException e) {
+            logger.debug("Value in properties for key " + WINK_CLIENT_CONNECTTIMEOUT + " is invalid.  Reverting to default: " + WINK_CLIENT_CONNECTTIMEOUT_DEFAULT);
+            getProperties().setProperty(WINK_CLIENT_CONNECTTIMEOUT, String.valueOf(WINK_CLIENT_CONNECTTIMEOUT_DEFAULT));
+            return getReadTimeout();  // this is safe, because it's unit tested.  :)
+        }
     }
 
     /**
-     * Set the connect timeout in milliseconds
+     * Convenience method to set the wink.client.connectTimeout property
      * 
      * @param connectTimeout the connect timeout in milliseconds
      * @return this client configuration
@@ -207,21 +198,27 @@ public class ClientConfig implements Cloneable {
         if (!modifiable) {
             throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable")); //$NON-NLS-1$
         }
-        this.connectTimeout = connectTimeout;
+        getProperties().setProperty(WINK_CLIENT_CONNECTTIMEOUT, String.valueOf(connectTimeout));
         return this;
     }
 
     /**
-     * Get the read timeout in milliseconds
+     * Convenience method to get the int value of the wink.client.readTimeout property
      * 
      * @return the read timeout in milliseconds
      */
     public final int getReadTimeout() {
-        return readTimeout;
+        try {
+            return Integer.valueOf(getProperties().getProperty(WINK_CLIENT_READTIMEOUT)).intValue();
+        } catch (NumberFormatException e) {
+            logger.debug("Value in properties for key " + WINK_CLIENT_READTIMEOUT + " is invalid.  Reverting to default: " + WINK_CLIENT_READTIMEOUT_DEFAULT);
+            getProperties().setProperty(WINK_CLIENT_READTIMEOUT, String.valueOf(WINK_CLIENT_READTIMEOUT_DEFAULT));
+            return getReadTimeout();  // this is safe, because it's unit tested.  :)
+        }
     }
 
     /**
-     * Set the read timeout in milliseconds
+     * Convenience method to set the wink.client.readTimeout property
      * 
      * @param readTimeout the read timeout in milliseconds
      * @return this client configuration
@@ -231,7 +228,32 @@ public class ClientConfig implements Cloneable {
         if (!modifiable) {
             throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable")); //$NON-NLS-1$
         }
-        this.readTimeout = readTimeout;
+        getProperties().setProperty(WINK_CLIENT_READTIMEOUT, String.valueOf(readTimeout));
+        return this;
+    }
+    
+    /**
+     * Convenience method to get the boolean value of the wink.supportDTDExpansion property
+     * 
+     * @return boolean
+     */
+    public final boolean isSupportDTDExpansion() {
+        // this is safe.  See valueOf javadoc
+        return Boolean.valueOf(getProperties().getProperty(WINK_SUPPORT_DTD_EXPANSION)).booleanValue();
+    }
+    
+    /**
+     * Convenience method to set the wink.supportDTDExpansion property
+     * 
+     * @param supportDTDExpansion boolean
+     * @return this client configuration
+     * @throws ClientConfigException
+     */
+    public final ClientConfig supportDTDExpansion(boolean supportDTDExpansion) {
+        if (!modifiable) {
+            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable")); //$NON-NLS-1$
+        }
+        getProperties().setProperty(WINK_SUPPORT_DTD_EXPANSION, String.valueOf(supportDTDExpansion));
         return this;
     }
 
@@ -378,6 +400,11 @@ public class ClientConfig implements Cloneable {
             ClientConfig clone = (ClientConfig)super.clone();
             clone.handlers = new LinkedList<ClientHandler>(handlers);
             clone.applications = new LinkedList<Application>(applications);
+            // need to deep copy the properties:
+            // TODO: thread safe?  Remember there's an Iterator at work under the putAll
+            Properties props = new Properties();
+            props.putAll(getProperties());
+            clone.setProperties(props);
             return clone;
         } catch (CloneNotSupportedException e) {
             // can't happen
@@ -391,6 +418,69 @@ public class ClientConfig implements Cloneable {
 
     public boolean isLoadWinkApplications() {
         return loadWinkApplications;
+    }
+
+    /**
+     * Convenience method for getting all properties registered on this instance.  System properties may be changed between creation of
+     * new instances.
+     * 
+     * The following properties are meaningful to a ClientConfig instance:
+     * wink.client.connectTimeout - value is in milliseconds, default is 60000
+     * wink.client.readTimeout - value is in milliseconds, default is 60000
+     * wink.supportDTDExpansion - value is "true" or "false" to allow DOCTYPE entity expansion when built-in providers parse XML, default is "false"
+     * 
+     * @return properties on this ClientConfig instance
+     */
+    public Properties getProperties() {
+        if (properties == null) {
+            properties = new Properties();
+            try {
+                String connectTimeoutString = System.getProperty(WINK_CLIENT_CONNECTTIMEOUT, String.valueOf(WINK_CLIENT_CONNECTTIMEOUT_DEFAULT));
+                int toSet = Integer.parseInt(connectTimeoutString);
+                properties.put(WINK_CLIENT_CONNECTTIMEOUT, String.valueOf(toSet));
+                logger.debug("Wink client connectTimeout default value is {}.", toSet);
+            } catch (Exception e) {
+                logger.debug("Error processing {} system property: {}", WINK_CLIENT_CONNECTTIMEOUT, e);
+            }
+            try {
+                String readTimeoutString = System.getProperty(WINK_CLIENT_READTIMEOUT, String.valueOf(WINK_CLIENT_READTIMEOUT_DEFAULT));
+                int toSet = Integer.parseInt(readTimeoutString);
+                properties.put(WINK_CLIENT_READTIMEOUT, String.valueOf(toSet));
+                logger.debug("Wink client readTimeout default value is {}.", toSet);
+            } catch (Exception e) {
+                logger.debug("Error processing {} system property: {}", WINK_CLIENT_READTIMEOUT, e);
+            }
+            try {
+                String supportDTD = System.getProperty(WINK_SUPPORT_DTD_EXPANSION, String.valueOf(WINK_CLIENT_SUPPORT_DTD_EXPANSION_DEFAULT));
+                boolean toSet = Boolean.valueOf(supportDTD);  // require "true" or "false", not "yes" or "no" or other variants (see parseBoolean vs. valueOf javadoc)
+                properties.put(WINK_SUPPORT_DTD_EXPANSION, String.valueOf(toSet));
+                logger.debug("Wink client readTimeout default value is {}.", String.valueOf(toSet));
+            } catch (Exception e) {
+                logger.debug("Error processing {} system property: {}", WINK_SUPPORT_DTD_EXPANSION, e);
+            }
+        }
+        return properties;
+    }
+
+    /**
+     * Convenience method to set the client configuration properties.
+     * 
+     * The following properties are meaningful to a ClientConfig instance:
+     * wink.client.connectTimeout - value is in milliseconds, default is 60000
+     * wink.client.readTimeout - value is in milliseconds, default is 60000
+     * wink.supportDTDExpansion - value is "true" or "false" to allow DOCTYPE entity expansion when built-in providers parse XML, default is "false"
+     * 
+     * @param properties the properties object to use.  If properties parameter is null, the properties on this ClientConfig will be cleared with Properties.clear()
+     */
+    public void setProperties(Properties properties) {
+        if (!modifiable) {
+            throw new ClientConfigException(Messages.getMessage("clientConfigurationUnmodifiable")); //$NON-NLS-1$
+        }
+        if (properties == null) {
+            this.properties.clear();
+            return;
+        }
+        this.properties = properties;
     }
 
 }

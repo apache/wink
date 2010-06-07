@@ -32,11 +32,11 @@ import javax.ws.rs.core.Application;
 
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.lifecycle.ObjectFactory;
+import org.apache.wink.common.internal.properties.WinkSystemProperties;
 import org.apache.wink.common.internal.utils.ClassUtils;
 import org.apache.wink.server.internal.DeploymentConfiguration;
 import org.apache.wink.server.internal.RequestProcessor;
 import org.apache.wink.server.internal.application.ServletWinkApplication;
-import org.apache.wink.server.internal.properties.WinkSystemProperties;
 import org.apache.wink.server.internal.utils.ServletFileLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -141,6 +141,13 @@ public class RestServlet extends AbstractRestServlet {
         return deploymentConfiguration;
     }
 
+    /**
+     * order of loading and property precedence:
+     * 
+     * wink-default.properties
+     * file referred to by propertiesLocation init param (may override and add to above set props)
+     * JVM system properties (only sets values for key/value pairs where the value is null or empty)
+     */
     protected Properties getProperties() throws IOException {
         Properties defaultProperties = loadProperties(PROPERTIES_DEFAULT_FILE, null);
         logger.debug("Default properties {} used in RestServlet {}", defaultProperties, this); //$NON-NLS-1$
@@ -230,14 +237,9 @@ public class RestServlet extends AbstractRestServlet {
     }
 
     /**
-     * loadProperties will try to load the properties in the following order.
-     * <ol>
-     * <li>Custom configuration file (defined in init parameter)</li>
-     * <li>The default properties file</li>
-     * <li>System properties (reads the keys defined in the properties to do the
-     * specific lookups and does a lookup for properties that have empty values)
-     * </li>
-     * </ol>
+     * loadProperties will try to load the properties from the resource,
+     * overriding existing properties in defaultProperties, and adding
+     * new ones, and return the result
      * 
      * @param resourceName
      * @param defaultProperties

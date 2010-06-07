@@ -52,6 +52,7 @@ import javax.xml.namespace.QName;
 public class ObjectFactory {
 
     private final static QName _AddNumbers_QNAME = new QName("http://org/apache/wink/common/internal/providers/jaxb/jaxb1", "addNumbers");
+    private final static QName _MyPojo_QNAME = new QName("http://org/apache/wink/common/internal/providers/jaxb/jaxb1", "myPojo");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: org.apache.wink.common.internal.providers.jaxb.jaxb1
@@ -75,6 +76,23 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://org/apache/wink/common/internal/providers/jaxb/jaxb1", name = "addNumbers")
     public JAXBElement<AddNumbers> createAddNumbers(AddNumbers value) {
         return new JAXBElement<AddNumbers>(_AddNumbers_QNAME, AddNumbers.class, null, value);
+    }
+    
+    /**
+     * Create an instance of {@link MyPojo }
+     * 
+     */
+    public MyPojo createMyPojo() {
+        return new MyPojo();
+    }
+    
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link MyPojo }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://org/apache/wink/common/internal/providers/jaxb/jaxb1", name = "MyPojo")
+    public JAXBElement<MyPojo> createMyPojo(MyPojo value) {
+        return new JAXBElement<MyPojo>(_MyPojo_QNAME, MyPojo.class, null, value);
     }
 
 

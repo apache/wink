@@ -39,6 +39,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Application;
 
 import org.apache.commons.lang.ClassUtils;
+import org.apache.wink.common.internal.WinkConfiguration;
 import org.apache.wink.common.internal.application.ApplicationValidator;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
@@ -80,7 +81,7 @@ import org.slf4j.LoggerFactory;
  * the best practices are to override methods the "init" methods. See the
  * javadoc for each method for more details.
  */
-public class DeploymentConfiguration {
+public class DeploymentConfiguration implements WinkConfiguration {
 
     private static final Logger       logger                              =
                                                                               LoggerFactory

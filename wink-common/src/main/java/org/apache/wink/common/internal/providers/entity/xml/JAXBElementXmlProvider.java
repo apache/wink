@@ -27,13 +27,10 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -45,10 +42,10 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.stream.StreamSource;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 
 import org.apache.wink.common.internal.i18n.Messages;
-import org.apache.wink.common.internal.model.ModelUtils;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.utils.ProviderUtils;
 import org.slf4j.Logger;
@@ -81,6 +78,7 @@ public class JAXBElementXmlProvider extends AbstractJAXBProvider implements
         JAXBElement<?> unmarshaledResource = null;
         Unmarshaller unmarshaller = null;
 
+        XMLStreamReader xmlStreamReader = null;
         try {
             JAXBContext context = getContext(classToFill, mediaType);
             unmarshaller = getJAXBUnmarshaller(type, context, mediaType);
@@ -88,18 +86,30 @@ public class JAXBElementXmlProvider extends AbstractJAXBProvider implements
             if (charset == null) {
                 // use default
                 // performance is better, though the charset cannot be ensured
-                unmarshaledResource =
-                    unmarshaller.unmarshal(new StreamSource(entityStream), classToFill);
+                xmlStreamReader = getXMLStreamReader(entityStream);
+                unmarshaledResource = unmarshaller.unmarshal(xmlStreamReader, classToFill);
+                closeXMLStreamReader(xmlStreamReader);
             } else {
-                ModelUtils.unmarshal(unmarshaller, new InputStreamReader(entityStream, Charset
-                    .forName(charset)));
+                xmlStreamReader = getXMLStreamReader(new InputStreamReader(entityStream, Charset.forName(charset)));
+                unmarshaledResource = unmarshaller.unmarshal(xmlStreamReader, classToFill);
+                closeXMLStreamReader(xmlStreamReader);
             }
 
             releaseJAXBUnmarshaller(context, unmarshaller);
         } catch (JAXBException e) {
+            closeXMLStreamReader(xmlStreamReader);
             if (logger.isErrorEnabled()) {
                 logger.error(Messages.getMessage("jaxbFailToUnmarshal", type.getName()), e); //$NON-NLS-1$
             }
+            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
+        } catch (XMLStreamException e) {
+            closeXMLStreamReader(xmlStreamReader);
+            if (logger.isErrorEnabled()) {
+                logger.error(Messages.getMessage("entityRefsNotSupported")); //$NON-NLS-1$
+            }
+            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
+        } catch (RuntimeException e) {
+            closeXMLStreamReader(xmlStreamReader);
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         }
         return unmarshaledResource;

@@ -28,6 +28,7 @@ import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.internal.MultivaluedMapImpl;
+import org.apache.wink.common.internal.WinkConfiguration;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.server.internal.DeploymentConfiguration;
 import org.jmock.Expectations;
@@ -56,10 +57,15 @@ public class ServerMediaTypeCharsetAdjusterTest extends MockObjectTestCase {
         context = mock(RuntimeContext.class);
         responseHttpHeaders = mock(MultivaluedMap.class);
         checking(new Expectations() {{
-            allowing(context).getAttribute(DeploymentConfiguration.class); will(returnValue(myConfig));
+            allowing(context).getAttribute(WinkConfiguration.class); will(returnValue(myConfig));
         }});
         
         RuntimeContextTLS.setRuntimeContext(context);
+    }
+    
+    @Override
+    public void tearDown() {
+        RuntimeContextTLS.setRuntimeContext(null);
     }
 
     @Test

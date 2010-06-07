@@ -24,6 +24,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.wink.common.RuntimeContext;
+import org.apache.wink.common.internal.WinkConfiguration;
 import org.apache.wink.common.internal.contexts.MediaTypeCharsetAdjuster;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.common.utils.ProviderUtils;
@@ -52,7 +53,8 @@ public class ServerMediaTypeCharsetAdjuster implements MediaTypeCharsetAdjuster 
         logger.debug("setDefaultCharsetOnMediaTypeHeader({}, {}) entry", httpHeaders, mediaType); //$NON-NLS-1$
 
         RuntimeContext context = RuntimeContextTLS.getRuntimeContext();
-        DeploymentConfiguration config = context.getAttribute(DeploymentConfiguration.class);
+        // we're on the server, so this is a safe cast
+        DeploymentConfiguration config = (DeploymentConfiguration)context.getAttribute(WinkConfiguration.class);
         if (config.isDefaultResponseCharset() || config.isUseAcceptCharset()) {
             if (httpHeaders != null && (httpHeaders.isEmpty() || httpHeaders
                     .get(HttpHeaders.CONTENT_TYPE) == null)) {

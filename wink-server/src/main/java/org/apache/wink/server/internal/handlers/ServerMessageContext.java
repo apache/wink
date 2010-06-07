@@ -40,6 +40,7 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 
+import org.apache.wink.common.internal.WinkConfiguration;
 import org.apache.wink.common.internal.contexts.MediaTypeCharsetAdjuster;
 import org.apache.wink.common.internal.contexts.ProvidersImpl;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
@@ -66,7 +67,7 @@ public class ServerMessageContext extends AbstractRuntimeContext implements Mess
     public ServerMessageContext(HttpServletRequest servletRequest,
                                 HttpServletResponse servletResponse,
                                 DeploymentConfiguration configuration) {
-
+        
         this.httpMethod =
             buildHttpMethod(configuration.getHttpMethodOverrideHeaders(), servletRequest);
         this.responseStatusCode = -1;
@@ -84,7 +85,11 @@ public class ServerMessageContext extends AbstractRuntimeContext implements Mess
         setAttribute(ServletContext.class, configuration.getServletContext());
         setAttribute(ServletConfig.class, configuration.getServletConfig());
         setAttribute(FilterConfig.class, configuration.getFilterConfig());
+        setAttribute(WinkConfiguration.class, configuration);
+        
+        // for legacy, if third-party code is calling getAttribute with DeploymentConfiguration.class as key
         setAttribute(DeploymentConfiguration.class, configuration);
+        
         setAttribute(ResourceRegistry.class, configuration.getResourceRegistry());
         setAttribute(ProvidersRegistry.class, configuration.getProvidersRegistry());
         setAttribute(MediaTypeCharsetAdjuster.class, ServerMediaTypeCharsetAdjuster.getInstance());
@@ -187,7 +192,8 @@ public class ServerMessageContext extends AbstractRuntimeContext implements Mess
     }
 
     private DeploymentConfiguration getDeploymentConfiguration() {
-        return getAttribute(DeploymentConfiguration.class);
+        // this cast is safe because we're on the server
+        return (DeploymentConfiguration)getAttribute(WinkConfiguration.class);
     }
 
     // Wrapped response for changing the output media type according to the

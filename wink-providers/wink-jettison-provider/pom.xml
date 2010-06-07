@@ -67,5 +67,11 @@
 			<artifactId>wink-server</artifactId>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+                <groupId>woodstox</groupId>
+                <artifactId>wstx-asl</artifactId>
+                <version>3.2.1</version>
+                <scope>test</scope>
+        </dependency>
 	</dependencies>
 </project>
