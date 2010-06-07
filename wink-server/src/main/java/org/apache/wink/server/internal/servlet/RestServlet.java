@@ -95,6 +95,12 @@ public class RestServlet extends AbstractRestServlet {
                 }
                 storeRequestProcessorOnServletContext(requestProcessor);
             }
+            if (requestProcessor.getConfiguration().getServletConfig() == null) {
+                requestProcessor.getConfiguration().setServletConfig(getServletConfig());
+            }
+            if (requestProcessor.getConfiguration().getServletContext() == null) {
+                requestProcessor.getConfiguration().setServletContext(getServletContext());
+            }
         } catch (Exception e) {
             // when exception occurs during the servlet initialization
             // it should be marked as unavailable
