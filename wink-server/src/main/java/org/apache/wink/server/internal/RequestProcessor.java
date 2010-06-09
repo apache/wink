@@ -243,24 +243,24 @@ public class RequestProcessor {
                 String.format("%s (%d%s%s)", exceptionName, statusCode, statusSep, statusMessage);
             if (statusCode >= 500) {
                 if (logger.isDebugEnabled()) {
-                    logger.debug(String.format(messageFormat, exceptionName), t);
+                    logger.debug(messageFormat, t);
                 } else {
-                    logger.info(String.format(messageFormat, exceptionName));
+                    logger.info(messageFormat);
                 }
             } else {
                 // don't log the whole call stack for sub-500 return codes
                 // unless debugging
                 if (logger.isDebugEnabled()) {
-                    logger.debug(String.format(messageFormat, exceptionName), t);
+                    logger.debug(messageFormat, t);
                 } else {
-                    logger.info(String.format(messageFormat, exceptionName));
+                    logger.info(messageFormat);
                 }
             }
         } else {
             if (logger.isDebugEnabled()) {
-                logger.debug(String.format(messageFormat, exceptionName), t);
+                logger.debug(messageFormat, t);
             } else {
-                logger.info(String.format(messageFormat, exceptionName));
+                logger.info(messageFormat);
             }
         }
     }
