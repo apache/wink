@@ -51,7 +51,7 @@ public class ResourceRecordFactory {
 
     public ResourceRecordFactory(LifecycleManagersRegistry lifecycleManagerRegistry) {
         if (lifecycleManagerRegistry == null) {
-            throw new NullPointerException();
+            throw new NullPointerException("lifecycleManagerRegistry"); //$NON-NLS-1$
         }
         this.lifecycleManagerRegistry = lifecycleManagerRegistry;
         this.cacheByClass = new HashMap<Class<?>, ResourceRecord>();
