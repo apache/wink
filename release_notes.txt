@@ -3,7 +3,7 @@ Apache Wink 1.1 Release Notes
 
 1. Overview
  
-This is the second major release of Apache Wink project.
+This is the third major release of Apache Wink project.
 
 Apache Wink is a framework that helps you to produce and consume RESTful Web
 Services.  Apache Wink aims to be a TCK compliant implementation of the JAX-RS
@@ -54,11 +54,11 @@ http://incubator.apache.org/wink/
 		   	* stax-api-<VERSION>.jar
 		   	
    NOTICE #2: Apache Wink uses SLF4J logging framework, and by default is
-              shipped with a simple SLF4J binding (slf4j-simple-1.5.8.jar).
+              shipped with a simple SLF4J binding (slf4j-simple-1.5.11.jar).
    	          Application that uses another logging framework (e.g. LOG4J),
    	          must replace default binding with relevant one. For example,
-   	          application that uses LOG4J will replace slf4j-simple-1.5.8.jar
-   	          with slf4j-log4j12-1.5.8.jar
+   	          application that uses LOG4J will replace slf4j-simple-1.5.11.jar
+   	          with slf4j-log4j12-1.5.11.jar
    	          
    	          For more details about SLF4J configuration, refer to
    	          http://www.slf4j.org/
