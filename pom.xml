@@ -71,10 +71,44 @@
                     <excludes>
                         <exclude>**/*.txt</exclude>
                         <exclude>**/*.docx</exclude>
+                        <exclude>**/*.jpg</exclude>
                         <exclude>**/*.pdf</exclude>
-                        <exclude>javax.ws.rs.ext.RuntimeDelegate</exclude>
+                        <exclude>**/target/**</exclude>
+
+                        <!-- The following files cannot technically have a license file due to compatibiity issues with spec API JAR -->
+                        <exclude>wink-common/src/main/resources/META-INF/services/javax.ws.rs.ext.RuntimeDelegate</exclude>
+
+                        <!-- The following list of files should have the LICENSE in them as comments but don't have an extension so would generate a warning -->
+                        <exclude>wink-providers/wink-json-provider/src/main/resources/META-INF/wink-application</exclude>
+                        <exclude>wink-providers/wink-abdera-provider/src/main/resources/META-INF/wink-application</exclude>
+                        <exclude>wink-providers/wink-jettison-provider/src/main/resources/META-INF/wink-application</exclude>
+
+                        <exclude>wink-common/src/main/resources/META-INF/core/wink-providers</exclude>
+                        <exclude>wink-server/src/main/resources/META-INF/server/wink-providers</exclude>
+
+                        <exclude>wink-examples/apps/SimpleDefects/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/apps/HelloWorld/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/apps/QADefect/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/apps/Bookmarks/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/core/Preconditions/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/core/CustomExceptionMapper/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/core/CustomContext/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/core/Jaxb/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/ext/Asset/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/ext/Scope/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/ext/History/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/ext/LinkBuilders/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/ext/DynamicResource/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/ext/MultiPart/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/ext/WebDAV/src/main/webapp/WEB-INF/application-dav</exclude>
+
+                        <exclude>wink-itests/wink-itest/wink-itest-targeting/src/main/java/org/apache/wink/itest/contentnegotiation/jaxb.index</exclude>
+                        <exclude>wink-server/src/test/resources/META-INF/mailcap</exclude>
+
+                        <!-- The following is a binary file used for test -->
+                        <exclude>wink-examples/ext/MultiPart/src/test/resources/org/apache/wink/example/multipart/file1</exclude>
                     </excludes>
-                    <useDefaultExcludes>true</useDefaultExcludes>
+                    <useDefaultExcludes>false</useDefaultExcludes>
                     <mapping>
                         <app>SCRIPT_STYLE</app>
                     </mapping>
