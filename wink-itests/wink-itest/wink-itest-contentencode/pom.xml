@@ -22,7 +22,7 @@
   <parent>
     <artifactId>wink-itest</artifactId>
     <groupId>org.apache.wink</groupId>
-    <version>1.1.1-incubating-SNAPSHOT</version>
+    <version>1.1.1-incubating</version>
   </parent>
   <groupId>org.apache.wink</groupId>
   <artifactId>wink-itest-contentencode</artifactId>
