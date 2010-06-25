@@ -51,7 +51,7 @@ public class ResourceRecordFactory {
 
     public ResourceRecordFactory(LifecycleManagersRegistry lifecycleManagerRegistry) {
         if (lifecycleManagerRegistry == null) {
-            throw new NullPointerException();
+            throw new NullPointerException("lifecycleManagerRegistry"); //$NON-NLS-1$
         }
         this.lifecycleManagerRegistry = lifecycleManagerRegistry;
         this.cacheByClass = new HashMap<Class<?>, ResourceRecord>();
@@ -137,9 +137,9 @@ public class ResourceRecordFactory {
                         readersLock.lock();
                     }
                 } else {
-                    throw new IllegalArgumentException(String
-                        .format(Messages.getMessage("rootResourceInstanceIsAnInvalidResource"), instance
-                            .getClass().getCanonicalName()));
+                    throw new IllegalArgumentException(Messages
+                        .getMessage("rootResourceInstanceIsAnInvalidResource", instance.getClass()
+                            .getCanonicalName()));
                 }
             } else {
                 // if this is a sub-resource, don't use cache, and don't use the
@@ -285,6 +285,14 @@ public class ResourceRecordFactory {
         @Override
         public String toString() {
             return String.format("InstanceObjectFactory: %s", getInstanceClass()); //$NON-NLS-1$
+        }
+
+        public void releaseInstance(T instance, RuntimeContext context) {
+            /* do nothing */
+        }
+
+        public void releaseAll(RuntimeContext context) {
+            /* do nothing */
         }
     }
 

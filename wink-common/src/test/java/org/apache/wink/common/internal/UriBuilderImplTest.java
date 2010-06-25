@@ -355,6 +355,9 @@ public class UriBuilderImplTest extends TestCase {
         uriBuilder = UriBuilder.fromUri(new URI("foo://localhost:8080/com/ibm?name=myname#first"));
         uriBuilder = uriBuilder.uri(new URI("//localhost:8080/com/ibm?name=myname#last"));
         assertEquals("foo://localhost:8080/com/ibm?name=myname#last", uriBuilder.build().toString());
+        
+        uriBuilder = UriBuilder.fromUri(new URI("http://myserver/dm/atom/library/%5B@Pgistest/@RMain.nsf%5D/feed"));
+        assertEquals("http://myserver/dm/atom/library/%5B@Pgistest/@RMain.nsf%5D/feed", uriBuilder.build().toString());
     }
 
     public void testClone() {

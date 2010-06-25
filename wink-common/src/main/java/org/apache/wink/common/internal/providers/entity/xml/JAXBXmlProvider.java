@@ -40,7 +40,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.transform.stream.StreamSource;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
@@ -70,11 +71,14 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
                            InputStream entityStream) throws IOException, WebApplicationException {
         Unmarshaller unmarshaller = null;
         Object unmarshaledResource = null;
+        XMLStreamReader xmlStreamReader = null;
         try {
             JAXBContext context = getContext(type, mediaType);
             unmarshaller = getJAXBUnmarshaller(type, context, mediaType);
+            xmlStreamReader = getXMLStreamReader(entityStream);
             if (type.isAnnotationPresent(XmlRootElement.class)) {
-                unmarshaledResource = unmarshaller.unmarshal(entityStream);
+                unmarshaledResource = unmarshaller.unmarshal(xmlStreamReader);
+                closeXMLStreamReader(xmlStreamReader);
                 if (unmarshaledResource instanceof JAXBElement) {
                     // this can happen if the JAXBContext object used to create
                     // the unmarshaller
@@ -90,14 +94,26 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
                     unmarshaledResource = ((JAXBElement)unmarshaledResource).getValue();
                 }
             } else {
-                unmarshaledResource =
-                    unmarshaller.unmarshal(new StreamSource(entityStream), type).getValue();
+                unmarshaledResource = unmarshaller.unmarshal(xmlStreamReader, type).getValue();
+                closeXMLStreamReader(xmlStreamReader);
             }
 
             releaseJAXBUnmarshaller(context, unmarshaller);
         } catch (JAXBException e) {
-            logger.error(Messages.getMessage("jaxbFailToUnmarshal", type.getName()), e); //$NON-NLS-1$
+            closeXMLStreamReader(xmlStreamReader);
+            if (logger.isErrorEnabled()) {
+                logger.error(Messages.getMessage("jaxbFailToUnmarshal", type.getName()), e); //$NON-NLS-1$
+            }
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
+        } catch (XMLStreamException e) {
+            closeXMLStreamReader(xmlStreamReader);
+            if (logger.isErrorEnabled()) {
+                logger.error(Messages.getMessage("entityRefsNotSupported")); //$NON-NLS-1$
+            }
+            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
+        } catch (RuntimeException e) {
+            closeXMLStreamReader(xmlStreamReader);
+            throw e;
         }
         return unmarshaledResource;
     }
@@ -151,7 +167,9 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
                 releaseJAXBMarshaller(context, marshaller);
             }
         } catch (JAXBException e) {
-            logger.error(Messages.getMessage("jaxbFailToMarshal", type.getName()), e); //$NON-NLS-1$
+            if (logger.isErrorEnabled()) {
+                logger.error(Messages.getMessage("jaxbFailToMarshal", type.getName()), e); //$NON-NLS-1$
+            }
             throw new WebApplicationException(e);
         }
     }

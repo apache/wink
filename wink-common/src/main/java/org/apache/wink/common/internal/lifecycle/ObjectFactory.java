@@ -27,4 +27,7 @@ public interface ObjectFactory<T> {
 
     Class<T> getInstanceClass();
 
+    void releaseInstance(T instance, RuntimeContext context);
+
+    void releaseAll(RuntimeContext context);
 }

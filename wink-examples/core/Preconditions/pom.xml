@@ -27,7 +27,7 @@
     <parent>
         <groupId>org.apache.wink.example</groupId>
         <artifactId>core</artifactId>
-        <version>1.1-incubating</version>
+        <version>1.1.1-incubating-SNAPSHOT</version>
     </parent>
     <build>
         <finalName>Preconditions</finalName>
@@ -61,6 +61,12 @@
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-j2ee_1.4_spec</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>woodstox</groupId>
+            <artifactId>wstx-asl</artifactId>
+            <version>3.2.1</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

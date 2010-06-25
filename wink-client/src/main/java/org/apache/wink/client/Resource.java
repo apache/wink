@@ -184,6 +184,7 @@ public interface Resource {
      * @return an instance of the response entity as specified by the response
      *         entity type
      * @throws ClientWebException if the response code represents an error code
+     * @throws ClientRuntimeException if there are other exceptions that the Wink client encounters
      */
     <T> T invoke(String method, Class<T> responseEntity, Object requestEntity);
 
@@ -201,6 +202,7 @@ public interface Resource {
      * @return an instance of the response entity as specified by the response
      *         entity type
      * @throws ClientWebException if the response code represents an error code
+     * @throws ClientRuntimeException if there are other exceptions that the Wink client encounters
      */
     <T> T invoke(String method, EntityType<T> responseEntity, Object requestEntity);
 
@@ -226,6 +228,7 @@ public interface Resource {
      * @return an instance of the response entity as specified by the response
      *         entity type
      * @throws ClientWebException if the response code represents an error code
+     * @throws ClientRuntimeException if there are other exceptions that the Wink client encounters
      */
     <T> T get(Class<T> responseEntity);
 
@@ -238,6 +241,7 @@ public interface Resource {
      * @return an instance of the response entity as specified by the response
      *         entity type
      * @throws ClientWebException if the response code represents an error code
+     * @throws ClientRuntimeException if there are other exceptions that the Wink client encounters
      */
     <T> T get(EntityType<T> responseEntity);
 
@@ -257,6 +261,7 @@ public interface Resource {
      * @return an instance of the response entity as specified by the response
      *         entity type
      * @throws ClientWebException if the response code represents an error code
+     * @throws ClientRuntimeException if there are other exceptions that the Wink client encounters
      */
     <T> T post(Class<T> responseEntity, Object requestEntity);
 
@@ -270,6 +275,7 @@ public interface Resource {
      * @return an instance of the response entity as specified by the response
      *         entity type
      * @throws ClientWebException if the response code represents an error code
+     * @throws ClientRuntimeException if there are other exceptions that the Wink client encounters
      */
     <T> T post(EntityType<T> responseEntity, Object requestEntity);
 
@@ -289,6 +295,7 @@ public interface Resource {
      * @return an instance of the response entity as specified by the response
      *         entity type
      * @throws ClientWebException if the response code represents an error code
+     * @throws ClientRuntimeException if there are other exceptions that the Wink client encounters
      */
     <T> T put(Class<T> responseEntity, Object requestEntity);
 
@@ -302,6 +309,7 @@ public interface Resource {
      * @return an instance of the response entity as specified by the response
      *         entity type
      * @throws ClientWebException if the response code represents an error code
+     * @throws ClientRuntimeException if there are other exceptions that the Wink client encounters
      */
     <T> T put(EntityType<T> responseEntity, Object requestEntity);
 
@@ -320,6 +328,7 @@ public interface Resource {
      * @return an instance of the response entity as specified by the response
      *         entity type
      * @throws ClientWebException if the response code represents an error code
+     * @throws ClientRuntimeException if there are other exceptions that the Wink client encounters
      */
     <T> T delete(Class<T> responseEntity);
 
@@ -332,6 +341,7 @@ public interface Resource {
      * @return an instance of the response entity as specified by the response
      *         entity type
      * @throws ClientWebException if the response code represents an error code
+     * @throws ClientRuntimeException if there are other exceptions that the Wink client encounters
      */
     <T> T delete(EntityType<T> responseEntity);
 

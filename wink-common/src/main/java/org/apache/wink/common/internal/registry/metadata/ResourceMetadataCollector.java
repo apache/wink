@@ -62,10 +62,10 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
     }
 
     public static boolean isStaticResource(Class<?> cls) {
-        if(Modifier.isInterface(cls.getModifiers()) || Modifier.isAbstract(cls.getModifiers())) {
+        if (Modifier.isInterface(cls.getModifiers()) || Modifier.isAbstract(cls.getModifiers())) {
             return false;
         }
-        
+
         if (cls.getAnnotation(Path.class) != null) {
             return true;
         }
@@ -76,8 +76,9 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             // try a superclass
             Class<?> superclass = declaringClass.getSuperclass();
             if (superclass.getAnnotation(Path.class) != null) {
-                // issue warning
-                logger.warn(Messages.getMessage("rootResourceShouldBeAnnotatedDirectly", cls));
+                if (logger.isWarnEnabled()) {
+                    logger.warn(Messages.getMessage("rootResourceShouldBeAnnotatedDirectly", cls));
+                }
                 return true;
             }
 
@@ -85,8 +86,10 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             Class<?>[] interfaces = declaringClass.getInterfaces();
             for (Class<?> interfaceClass : interfaces) {
                 if (interfaceClass.getAnnotation(Path.class) != null) {
-                    // issue warning
-                    logger.warn(Messages.getMessage("rootResourceShouldBeAnnotatedDirectly", cls));
+                    if (logger.isWarnEnabled()) {
+                        logger.warn(Messages.getMessage("rootResourceShouldBeAnnotatedDirectly",
+                                                        cls));
+                    }
                     return true;
                 }
             }
@@ -217,10 +220,11 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                             String.format("%s.%s", declaringClass.getName(), method.getName());
                         for (Injectable id : methodMetadata.getFormalParameters()) {
                             if (id.getParamType() == Injectable.ParamType.ENTITY) {
-                                logger
-                                    .warn(Messages
-                                              .getMessage("subresourceLocatorIllegalEntityParameter"),
-                                          methodName);
+                                if (logger.isWarnEnabled()) {
+                                    logger.warn(Messages
+                                        .getMessage("subresourceLocatorIllegalEntityParameter",
+                                                    methodName));
+                                }
                                 continue F1;
                             }
                         }
@@ -228,10 +232,11 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                         // Consumes annotation
                         if (!methodMetadata.getConsumes().isEmpty() || !methodMetadata
                             .getProduces().isEmpty()) {
-                            logger
-                                .warn(Messages
-                                          .getMessage("subresourceLocatorAnnotatedConsumesProduces"),
-                                      methodName);
+                            if (logger.isWarnEnabled()) {
+                                logger.warn(Messages
+                                    .getMessage("subresourceLocatorAnnotatedConsumesProduces",
+                                                methodName));
+                            }
                         }
                         getMetadata().getSubResourceLocators().add(methodMetadata);
                     }
@@ -332,9 +337,11 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                 // are not HTTP methods/paths
                 return null;
             }
-            logger.warn(Messages.getMessage("methodNotAnnotatedCorrectly"),
-                        method.getName(),
-                        method.getDeclaringClass().getCanonicalName());
+            if (logger.isWarnEnabled()) {
+                logger.warn(Messages.getMessage("methodNotAnnotatedCorrectly",
+                                                method.getName(),
+                                                method.getDeclaringClass().getCanonicalName()));
+            }
             return null;
         }
 

@@ -52,6 +52,14 @@ class PrototypeObjectFactory<T> implements ObjectFactory<T> {
 
     @Override
     public String toString() {
-        return String.format("ClassMetadataPrototypeOF %s", String.valueOf(metadata)); //$NON-NLS-1$
+        return String.format("ClassMetadataPrototypeOF %s", metadata); //$NON-NLS-1$
+    }
+
+    public void releaseInstance(T instance, RuntimeContext context) {
+        /* do nothing */
+    }
+
+    public void releaseAll(RuntimeContext context) {
+        /* do nothing */
     }
 }

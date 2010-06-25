@@ -25,15 +25,19 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.Properties;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
@@ -45,15 +49,27 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.wink.common.RuntimeContext;
+import org.apache.wink.common.internal.WinkConfiguration;
+import org.apache.wink.common.internal.i18n.Messages;
+import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 public abstract class SourceProvider implements MessageBodyWriter<Source> {
 
     private static TransformerFactory     transformerFactory;
     private static DocumentBuilderFactory documentBuilderFactory;
 
+    private static final Logger logger =
+        LoggerFactory
+            .getLogger(SourceProvider.class);
+    
     static {
         transformerFactory = TransformerFactory.newInstance();
         documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -113,12 +129,41 @@ public abstract class SourceProvider implements MessageBodyWriter<Source> {
     @Produces( {MediaType.TEXT_XML, MediaType.APPLICATION_XML, MediaType.WILDCARD})
     public static class DOMSourceProvider extends SourceProvider implements
         MessageBodyReader<DOMSource> {
-
+        
         public boolean isReadable(Class<?> type,
                                   Type genericType,
                                   Annotation[] annotations,
                                   MediaType mediaType) {
             return (DOMSource.class == type && super.isReadable(mediaType));
+        }
+        
+        private void setupDocumentBuilderToFilterDTD(DocumentBuilder dbuilder) {
+            /*
+             * You might think you could just do this to prevent entity expansion:
+             *    documentBuilderFactory.setExpandEntityReferences(false);
+             * In fact, you should not do that, because it will just increase the size
+             * of your DOMSource.  We want to actively reject XML when a DTD is present, so...
+             */
+            dbuilder.setEntityResolver(new EntityResolver() {
+                public InputSource resolveEntity(String name, String baseURI)
+                throws SAXException, IOException {
+                    // we don't support entity resolution here
+                    throw new SAXParseException(Messages.getMessage("entityRefsNotSupported"), null, null);  //$NON-NLS-1$
+                }
+            });
+            try {
+                // important: keep this order
+                documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            } catch (ParserConfigurationException e) {
+                // this should never happen if you run the SourceProviderTest unittests
+                logger.error(e.getMessage());
+            }
+            try {
+                // workaround for JDK5 bug that causes NPE in checking done due to above FEATURE_SECURE_PROCESSING
+                documentBuilderFactory.setFeature("http://apache.org/xml/features/dom/defer-node-expansion", false);
+            } catch (ParserConfigurationException e) {
+                // possible if not on apache parser?  ignore...
+            }
         }
 
         public DOMSource readFrom(Class<DOMSource> type,
@@ -129,12 +174,25 @@ public abstract class SourceProvider implements MessageBodyWriter<Source> {
                                   InputStream entityStream) throws IOException,
             WebApplicationException {
             try {
-                return new DOMSource(documentBuilderFactory.newDocumentBuilder()
-                    .parse(entityStream));
+                DocumentBuilder dbuilder = documentBuilderFactory.newDocumentBuilder();
+                RuntimeContext runtimeContext = RuntimeContextTLS.getRuntimeContext();
+                WinkConfiguration winkConfig = runtimeContext.getAttribute(WinkConfiguration.class);
+                if (winkConfig != null) {
+                    Properties props = winkConfig.getProperties();
+                    if (props != null) {
+                        // use valueOf method to require the word "true"
+                        if (!Boolean.valueOf(props.getProperty("wink.supportDTDEntityExpansion"))) {
+                            setupDocumentBuilderToFilterDTD(dbuilder);
+                        }
+                    }
+                }
+                return new DOMSource(dbuilder.parse(entityStream));
             } catch (SAXException e) {
-                throw asIOExcpetion(e);
+                logger.error(Messages.getMessage("saxParseException", type.getName()), e); //$NON-NLS-1$
+                throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
             } catch (ParserConfigurationException e) {
-                throw asIOExcpetion(e);
+                logger.error(Messages.getMessage("saxParserConfigurationException"), e); //$NON-NLS-1$
+                throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
             }
         }
     }
@@ -171,11 +229,11 @@ public abstract class SourceProvider implements MessageBodyWriter<Source> {
             transformer = transformerFactory.newTransformer();
             transformer.transform(t, sr);
         } catch (TransformerException e) {
-            throw asIOExcpetion(e);
+            throw asIOException(e);
         }
     }
-
-    private static IOException asIOExcpetion(Exception e) throws IOException {
+    
+    private static IOException asIOException(Exception e) throws IOException {
         IOException exception = new IOException();
         exception.initCause(e);
         return exception;

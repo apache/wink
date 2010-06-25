@@ -29,6 +29,7 @@ import org.apache.wink.common.internal.lifecycle.ObjectCreationException;
 import org.apache.wink.common.internal.lifecycle.ObjectFactory;
 import org.apache.wink.common.internal.registry.Injectable;
 import org.apache.wink.common.internal.registry.InjectableFactory;
+import org.apache.wink.common.internal.registry.metadata.ApplicationMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
 import org.apache.wink.common.internal.registry.metadata.ConstructorMetadata;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
@@ -60,6 +61,14 @@ public class GuiceInjectorLifeCycleManager<T> implements LifecycleManager<T> {
             public Class<T> getInstanceClass() {
                 return (Class<T>)object.getClass();
             }
+
+            public void releaseInstance(T instance, RuntimeContext context) {
+                /* do nothing */
+            }
+
+            public void releaseAll(RuntimeContext context) {
+                /* do nothing */
+            }
         };
     }
 
@@ -72,8 +81,12 @@ public class GuiceInjectorLifeCycleManager<T> implements LifecycleManager<T> {
         if (ResourceMetadataCollector.isDynamicResource(clazz)) {
             // default factory cannot create instance of DynamicResource
             throw new IllegalArgumentException(String
-                .format("Cannot create default factory for DynamicResource: %s", String
-                    .valueOf(clazz)));
+                .format("Cannot create default factory for DynamicResource: %s", clazz));
+        }
+
+        if (ApplicationMetadataCollector.isApplication(clazz)) {
+            // by default application subclasses are singletons
+            return new GuiceSingletonObjectFactory<T>(clazz, injector);
         }
 
         if (ProviderMetadataCollector.isProvider(clazz)) {
@@ -88,7 +101,7 @@ public class GuiceInjectorLifeCycleManager<T> implements LifecycleManager<T> {
 
         // unknown object, should never reach this code
         throw new IllegalArgumentException(String
-            .format("Cannot create default factory for class: %s", String.valueOf(clazz)));
+            .format("Cannot create default factory for class: %s", clazz));
     }
 
     private static class GuiceSingletonObjectFactory<T> implements ObjectFactory<T> {
@@ -138,6 +151,14 @@ public class GuiceInjectorLifeCycleManager<T> implements LifecycleManager<T> {
         public Class<T> getInstanceClass() {
             return clazz;
         }
+
+        public void releaseInstance(T instance, RuntimeContext context) {
+            /* do nothing */
+        }
+
+        public void releaseAll(RuntimeContext context) {
+            /* do nothing */
+        }
     }
 
     private static class GuicePrototypeObjectFactory<T> implements ObjectFactory<T> {
@@ -181,6 +202,14 @@ public class GuiceInjectorLifeCycleManager<T> implements LifecycleManager<T> {
 
         public Class<T> getInstanceClass() {
             return clazz;
+        }
+
+        public void releaseInstance(T instance, RuntimeContext context) {
+            /* do nothing */
+        }
+
+        public void releaseAll(RuntimeContext context) {
+            /* do nothing */
         }
     }
 

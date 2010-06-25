@@ -38,10 +38,32 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
+import org.apache.wink.common.RuntimeContext;
+import org.apache.wink.common.internal.WinkConfiguration;
+import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.common.utils.ProviderUtils;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
 
 public class ApacheClientTest extends BaseTest {
 
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        Mockery mockery = new Mockery();
+        final RuntimeContext context = mockery.mock(RuntimeContext.class);
+        mockery.checking(new Expectations() {{
+            allowing(context).getAttribute(WinkConfiguration.class); will(returnValue(null));
+        }});
+        
+        RuntimeContextTLS.setRuntimeContext(context);
+    }
+    
+    @Override
+    public void tearDown() {
+        RuntimeContextTLS.setRuntimeContext(null);
+    }
+    
     public static class TestGenerics<T> {
         private T t;
 

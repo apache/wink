@@ -45,6 +45,7 @@ import org.apache.wink.client.ClientConfig;
 import org.apache.wink.client.ClientRequest;
 import org.apache.wink.client.ClientResponse;
 import org.apache.wink.client.handlers.HandlerContext;
+import org.apache.wink.common.internal.WinkConfiguration;
 
 /**
  * Extends AbstractConnectionHandler and uses Apache HttpClient to perform HTTP
@@ -127,7 +128,8 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
             return this.httpclient;
         }
 
-        ClientConfig config = request.getAttribute(ClientConfig.class);
+        // cast is safe because we're on the client
+        ClientConfig config = (ClientConfig)request.getAttribute(WinkConfiguration.class);
         BasicHttpParams params = new BasicHttpParams();
         params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, Integer.valueOf(config
             .getConnectTimeout()));

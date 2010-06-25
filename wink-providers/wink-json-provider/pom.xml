@@ -21,7 +21,7 @@
 	<parent>
 		<artifactId>wink-providers</artifactId>
 		<groupId>org.apache.wink</groupId>
-		<version>1.1-incubating</version>
+		<version>1.1.1-incubating-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>wink-json-provider</artifactId>
@@ -58,5 +58,11 @@
 			<artifactId>wink-server</artifactId>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>woodstox</groupId>
+            <artifactId>wstx-asl</artifactId>
+            <version>3.2.1</version>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
 </project>

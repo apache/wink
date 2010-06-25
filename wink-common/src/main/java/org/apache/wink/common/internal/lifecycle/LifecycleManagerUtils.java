@@ -43,10 +43,14 @@ public class LifecycleManagerUtils {
             CreationUtils.injectFields(object, classMetadata, null);
             return new SingletonObjectFactory<T>(object);
         } catch (IOException e) {
-            logger.error(Messages.getMessage("injectionFailureSingleton", cls)); //$NON-NLS-1$
+            if (logger.isErrorEnabled()) {
+                logger.error(Messages.getMessage("injectionFailureSingleton", cls.getName())); //$NON-NLS-1$
+            }
             throw new ObjectCreationException(e);
         } catch (PrivilegedActionException e) {
-            logger.error(Messages.getMessage("injectionFailureSingleton", cls)); //$NON-NLS-1$
+            if (logger.isErrorEnabled()) {
+                logger.error(Messages.getMessage("injectionFailureSingleton", cls.getName())); //$NON-NLS-1$
+            }
             throw new ObjectCreationException(e);
         }
     }

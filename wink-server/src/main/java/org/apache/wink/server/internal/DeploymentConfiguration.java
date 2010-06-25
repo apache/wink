@@ -25,9 +25,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import javax.servlet.FilterConfig;
@@ -37,9 +39,11 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Application;
 
 import org.apache.commons.lang.ClassUtils;
+import org.apache.wink.common.internal.WinkConfiguration;
 import org.apache.wink.common.internal.application.ApplicationValidator;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
+import org.apache.wink.common.internal.lifecycle.ObjectFactory;
 import org.apache.wink.common.internal.lifecycle.ScopeLifecycleManager;
 import org.apache.wink.common.internal.registry.InjectableFactory;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
@@ -77,7 +81,7 @@ import org.slf4j.LoggerFactory;
  * the best practices are to override methods the "init" methods. See the
  * javadoc for each method for more details.
  */
-public class DeploymentConfiguration {
+public class DeploymentConfiguration implements WinkConfiguration {
 
     private static final Logger       logger                              =
                                                                               LoggerFactory
@@ -85,17 +89,17 @@ public class DeploymentConfiguration {
     private static final String       ALTERNATIVE_SHORTCUTS               =
                                                                               "META-INF/wink-alternate-shortcuts.properties"; //$NON-NLS-1$
     private static final String       HTTP_METHOD_OVERRIDE_HEADERS_PROP   =
-                                                                              "wink.httpMethodOverrideHeaders"; //$NON-NLS-1$
+                                                                              "wink.httpMethodOverrideHeaders";              //$NON-NLS-1$
     private static final String       HANDLERS_FACTORY_CLASS_PROP         =
-                                                                              "wink.handlersFactoryClass"; //$NON-NLS-1$
+                                                                              "wink.handlersFactoryClass";                   //$NON-NLS-1$
     private static final String       MEDIATYPE_MAPPER_FACTORY_CLASS_PROP =
-                                                                              "wink.mediaTypeMapperFactoryClass"; //$NON-NLS-1$
+                                                                              "wink.mediaTypeMapperFactoryClass";            //$NON-NLS-1$
     private static final String       VALIDATE_LOCATION_HEADER            =
-                                                                              "wink.validateLocationHeader"; //$NON-NLS-1$
+                                                                              "wink.validateLocationHeader";                 //$NON-NLS-1$
     private static final String       DEFAULT_RESPONSE_CHARSET            =
-                                                                              "wink.response.defaultCharset"; // $NON-NLS-1$
+                                                                              "wink.response.defaultCharset";                // $NON-NLS-1$
     private static final String       USE_ACCEPT_CHARSET                  =
-                                                                              "wink.response.useAcceptCharset"; // $NON-NLS-1$
+                                                                              "wink.response.useAcceptCharset";              // $NON-NLS-1$
     // handler chains
     private RequestHandlersChain      requestHandlersChain;
     private ResponseHandlersChain     responseHandlersChain;
@@ -127,6 +131,8 @@ public class DeploymentConfiguration {
 
     private String[]                  httpMethodOverrideHeaders;
 
+    private Set<ObjectFactory<?>>     appObjectFactories;
+
     /**
      * Makes sure that the object was properly initialized. Should be invoked
      * AFTER all the setters were invoked.
@@ -135,6 +141,7 @@ public class DeploymentConfiguration {
         if (properties == null) {
             properties = new Properties();
         }
+        appObjectFactories = new HashSet<ObjectFactory<?>>(8);
 
         logger.debug("Deployment configuration properties: {}", properties); //$NON-NLS-1$
 
@@ -352,14 +359,21 @@ public class DeploymentConfiguration {
                     MediaTypeMapperFactory handlersFactory = handlerFactoryClass.newInstance();
                     mediaTypeMapper.addMappings(handlersFactory.getMediaTypeMappings());
                 } catch (ClassNotFoundException e) {
-                    logger.error(Messages.getMessage("isNotAClassWithMsgFormat",
-                                                     mediaTypeMapperFactoryClassName), e);
+                    if (logger.isErrorEnabled()) {
+                        logger.error(Messages.getMessage("isNotAClassWithMsgFormat",
+                                                         mediaTypeMapperFactoryClassName), e);
+                    }
                 } catch (InstantiationException e) {
-                    logger.error(Messages.getMessage("classInstantiationExceptionWithMsgFormat",
-                                                     mediaTypeMapperFactoryClassName), e);
+                    if (logger.isErrorEnabled()) {
+                        logger.error(Messages
+                            .getMessage("classInstantiationExceptionWithMsgFormat",
+                                        mediaTypeMapperFactoryClassName), e);
+                    }
                 } catch (IllegalAccessException e) {
-                    logger.error(Messages.getMessage("classIllegalAccessWithMsgFormat",
-                                                     mediaTypeMapperFactoryClassName), e);
+                    if (logger.isErrorEnabled()) {
+                        logger.error(Messages.getMessage("classIllegalAccessWithMsgFormat",
+                                                         mediaTypeMapperFactoryClassName), e);
+                    }
                 }
             }
         }
@@ -561,34 +575,46 @@ public class DeploymentConfiguration {
     public String[] getHttpMethodOverrideHeaders() {
         return httpMethodOverrideHeaders;
     }
-    
+
     /**
-     * isDefaultResponseCharset will write charset=UTF-8 to the response Content-Type header if a response
-     * charset is not already explicitly defined.
+     * isDefaultResponseCharset will write charset=UTF-8 to the response
+     * Content-Type header if a response charset is not already explicitly
+     * defined.
+     * 
      * @return boolean
      */
     public boolean isDefaultResponseCharset() {
         String val = properties.getProperty(DEFAULT_RESPONSE_CHARSET);
         return Boolean.valueOf(val).booleanValue();
     }
-    
+
     public void setDefaultResponseCharset(boolean val) {
         properties.setProperty(DEFAULT_RESPONSE_CHARSET, Boolean.toString(val));
     }
-    
+
     /**
-     * isUseAcceptCharset will use the Accept-Charset header, if present, to write a charset to the response Content-Type
-     * header if a response charset is not already explicitly defined.  This setting will override the isDefaultResponseCharset
-     * setting when the Accept-Charset header is present.
+     * isUseAcceptCharset will use the Accept-Charset header, if present, to
+     * write a charset to the response Content-Type header if a response charset
+     * is not already explicitly defined. This setting will override the
+     * isDefaultResponseCharset setting when the Accept-Charset header is
+     * present.
+     * 
      * @return
      */
     public boolean isUseAcceptCharset() {
         String val = properties.getProperty(USE_ACCEPT_CHARSET);
         return Boolean.valueOf(val).booleanValue();
     }
-    
+
     public void setUseAcceptCharset(boolean val) {
         properties.setProperty(USE_ACCEPT_CHARSET, Boolean.toString(val));
     }
 
+    public void addApplicationObjectFactory(ObjectFactory<?> of) {
+        appObjectFactories.add(of);
+    }
+
+    public Set<ObjectFactory<?>> getApplicationObjectFactories() {
+        return appObjectFactories;
+    }
 }

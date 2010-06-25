@@ -20,14 +20,21 @@
 
 package org.apache.wink.server.internal.providers.entity;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.StringTokenizer;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.MessageBodyReader;
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -40,11 +47,17 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.wink.common.RuntimeContext;
+import org.apache.wink.common.internal.WinkConfiguration;
 import org.apache.wink.common.internal.providers.entity.SourceProvider;
+import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 public class SourceProviderTest extends MockServletInvocationTest {
@@ -52,7 +65,45 @@ public class SourceProviderTest extends MockServletInvocationTest {
     private static final String SOURCE       =
                                                  "<?xml version=\"1.0\" encoding=\"UTF-8\"?><message>this is a test message</message>";
     private static final byte[] SOURCE_BYTES = SOURCE.getBytes();
+    private String TEST_CLASSES_PATH = null;
 
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        Mockery mockery = new Mockery();
+        final RuntimeContext context = mockery.mock(RuntimeContext.class);
+        mockery.checking(new Expectations() {{
+            allowing(context).getAttribute(WinkConfiguration.class); will(returnValue(null));
+        }});
+        
+        RuntimeContextTLS.setRuntimeContext(context);
+    }
+    
+    @Override
+    public void tearDown() {
+        RuntimeContextTLS.setRuntimeContext(null);
+    }
+
+    private String getPath() {
+        if (TEST_CLASSES_PATH == null) {
+	        String classpath = System.getProperty("java.class.path");
+	        StringTokenizer tokenizer = new StringTokenizer(classpath, System.getProperty("path.separator"));
+	        TEST_CLASSES_PATH = null;
+	        while (tokenizer.hasMoreTokens()) {
+	            TEST_CLASSES_PATH = tokenizer.nextToken();
+	            if (TEST_CLASSES_PATH.endsWith("test-classes")) {
+	                break;
+	            }
+	        }
+	        // for windows:
+	        int driveIndex = TEST_CLASSES_PATH.indexOf(":");
+	        if(driveIndex != -1) {
+	            TEST_CLASSES_PATH = TEST_CLASSES_PATH.substring(driveIndex + 1);
+	        }
+        }
+        return TEST_CLASSES_PATH;
+    }
+    
     @Override
     protected Class<?>[] getClasses() {
         return new Class<?>[] {SourceResource.class};
@@ -98,20 +149,51 @@ public class SourceProviderTest extends MockServletInvocationTest {
         public String postSax(SAXSource source) throws Exception {
             return extractXml(source);
         }
+        
+        @POST
+        @Path("saxwithdtd")
+        public String postSaxWithDTD(SAXSource source) throws Exception {
+            /*
+             * we don't want to trigger a parse in this resource method.  We're testing to see what happened
+             * with the SAXSource on the way here.
+             */
+            StringBuilder sb = new StringBuilder();
+            String line;
+            InputStream is = source.getInputSource().getByteStream();
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+            } finally {
+                is.close();
+            }
+            return sb.toString();
+        }
 
         @POST
         @Path("dom")
         public String postDom(DOMSource source) throws Exception {
             return extractXml(source);
         }
+        
+        @POST
+        @Path("domwithdtd")
+        public String postDomWithDTD(DOMSource source) throws Exception {
+            /*
+             * we don't want to trigger a parse in this resource method.  We're testing to see what happened
+             * with the SAXSource on the way here.
+             */
+            return source.getNode().getFirstChild().getFirstChild().getTextContent();
+        }
 
         private String extractXml(Source source) throws TransformerFactoryConfigurationError,
             TransformerConfigurationException, TransformerException {
             Transformer transformer = transformerFactory.newTransformer();
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            StreamResult sr = new StreamResult(outputStream);
+            StringWriter sw = new StringWriter();
+            StreamResult sr = new StreamResult(sw);
             transformer.transform(source, sr);
-            return outputStream.toString();
+            return sw.toString();
         }
 
     }
@@ -186,6 +268,58 @@ public class SourceProviderTest extends MockServletInvocationTest {
         // when DOMSource is serialized
         assertEqualsEgnoreXmlDecl(SOURCE, response.getContentAsString());
 
+    }
+    
+    public void testSaxWithDTD() throws Exception {
+        
+        String path = getPath();
+        
+        final String SOURCE =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+            "<!DOCTYPE data [<!ENTITY file SYSTEM \""+ path +"/etc/SourceProviderTest.txt\">]>" +
+            "<message>&file;</message>";
+        
+        final byte[] SOURCE_BYTES = SOURCE.getBytes();
+        
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/source/saxwithdtd",
+                                                        "application/xml",
+                                                        "application/xml",
+                                                        SOURCE_BYTES);
+        MockHttpServletResponse response = invoke(request);
+        assertEquals(200, response.getStatus());
+        assertFalse("File content is visible but should not be.",
+                response.getContentAsString().contains("YOU SHOULD NOT BE ABLE TO SEE THIS"));
+        assertEquals(SOURCE, response.getContentAsString().trim());
+    }
+    
+    public void testDomWithDTD() throws Exception {
+        
+        String path = getPath();
+        
+        final String SOURCE =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+            "<!DOCTYPE data [<!ENTITY file SYSTEM \""+ path +"/etc/SourceProviderTest.txt\">]>" +
+            "<message>&file;</message>";
+
+        final byte[] SOURCE_BYTES = SOURCE.getBytes();
+        
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/source/domwithdtd",
+                                                        "application/xml",
+                                                        "application/xml",
+                                                        SOURCE_BYTES);
+        MockHttpServletResponse response = invoke(request);
+        assertEquals(400, response.getStatus());
+        
+        // as a sanity check, let's make sure our xml is good:
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        InputSource is = new InputSource( new StringReader(SOURCE) );
+        Document d = builder.parse( is );
+        assertEquals("xml is bad", "YOU SHOULD NOT BE ABLE TO SEE THIS", d.getElementsByTagName("message").item(0).getTextContent().trim());
     }
 
     // -- Helpers

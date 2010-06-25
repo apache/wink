@@ -95,7 +95,6 @@ public class JAXRSMessageBodyWritersTest extends TestCase {
                 (getMethod.getResponseHeader("Content-Type") == null) ? null : getMethod
                     .getResponseHeader("Content-Type").getValue();
             assertNotNull(contentType, contentType);
-            assertEquals("21", getMethod.getResponseHeader("Content-Length").getValue());
         } finally {
             getMethod.releaseConnection();
         }
@@ -113,7 +112,6 @@ public class JAXRSMessageBodyWritersTest extends TestCase {
                 (getMethod.getResponseHeader("Content-Type") == null) ? null : getMethod
                     .getResponseHeader("Content-Type").getValue();
             assertNotNull(contentType, contentType);
-            assertEquals("10", getMethod.getResponseHeader("Content-Length").getValue());
         } finally {
             getMethod.releaseConnection();
         }

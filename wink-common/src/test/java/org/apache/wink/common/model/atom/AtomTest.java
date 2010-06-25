@@ -62,6 +62,7 @@ import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.common.internal.utils.JAXBUtils;
 import org.apache.wink.common.model.opensearch.OpenSearchQuery;
 import org.apache.wink.test.mock.TestUtils;
+import org.junit.After;
 
 public class AtomTest extends TestCase {
 
@@ -319,6 +320,11 @@ public class AtomTest extends TestCase {
         runtimeContext.setAttribute(Providers.class, new ProvidersImpl(providersRegistry,
                                                                        runtimeContext));
         RuntimeContextTLS.setRuntimeContext(runtimeContext);
+    }
+    
+    @After
+    public void tearDown() {
+        RuntimeContextTLS.setRuntimeContext(null);
     }
 
     public void testAtomTextMarshal() throws Exception {

@@ -26,6 +26,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.net.SocketTimeoutException;
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.ws.rs.Consumes;
@@ -38,15 +39,10 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.apache.wink.client.ClientConfig;
-import org.apache.wink.client.ClientConfigException;
-import org.apache.wink.client.ClientRuntimeException;
-import org.apache.wink.client.Resource;
-import org.apache.wink.client.RestClient;
 import org.apache.wink.common.internal.providers.entity.StringProvider;
 import org.apache.wink.common.utils.ProviderUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConfigurationTest extends BaseTest {
 
@@ -60,6 +56,7 @@ public class ConfigurationTest extends BaseTest {
         assertEquals(conf.getProxyPort(), 8080);
         assertEquals(conf.getConnectTimeout(), 6000);
         assertEquals(conf.isFollowRedirects(), true);
+        assertEquals(conf.isSupportDTDExpansion(), false);
 
         RestClient rc = new RestClient(conf);
         ClientConfig config = rc.getConfig();
@@ -71,6 +68,57 @@ public class ConfigurationTest extends BaseTest {
         } catch (ClientConfigException e) {
             // Success - Configuration is locked
         }
+    }
+    
+    // exercise the API
+    public void testAPI() {
+        
+        String connectTimeoutKey = "wink.client.connectTimeout";
+        String readTimeoutKey = "wink.client.readTimeout";
+        String dtdKey = "wink.supportDTDEntityExpansion";
+        
+        ClientConfig conf1 = new ClientConfig();
+        System.setProperty(connectTimeoutKey, "50");
+        System.setProperty(readTimeoutKey, "60");
+        System.setProperty(dtdKey, "tRUe");
+        Properties props = conf1.getProperties();
+        assertEquals("50", props.getProperty(connectTimeoutKey));
+        assertEquals("60", props.getProperty(readTimeoutKey));
+        assertEquals("true", props.getProperty(dtdKey));
+        
+        // changing the system property should not change the props in the conf instance
+        System.setProperty(connectTimeoutKey, "100");
+        props = conf1.getProperties();
+        assertEquals("50", props.getProperty(connectTimeoutKey));
+        
+        // setting through the api should set the property value:
+        conf1.supportDTDExpansion(false);
+        assertEquals("false", props.getProperty(dtdKey));
+        // setting new properties should change the value
+        Properties changedProps = new Properties();
+        changedProps.put(dtdKey, "true");
+        conf1.setProperties(changedProps);
+        assertTrue(conf1.isSupportDTDExpansion());
+        
+        // props are unique per conf instance, however
+        ClientConfig conf2 = new ClientConfig();
+        assertEquals("100", conf2.getProperties().getProperty(connectTimeoutKey));
+        
+        // props are not permitted to be null
+        conf2.setProperties(null);
+        assertNotNull(conf2.getProperties());
+        // should be cleared, however
+        assertNull(conf2.getProperties().getProperty(connectTimeoutKey));
+        
+        // bad data should be tolerated (meaning, won't crash the system)
+        conf2.supportDTDExpansion(true);
+        changedProps.put(dtdKey, "some bad data");
+        changedProps.put(connectTimeoutKey, "this is not an int");
+        changedProps.put(readTimeoutKey, "this is also not an int");
+        conf2.setProperties(changedProps);
+        assertFalse(conf2.isSupportDTDExpansion());  // any string not "true" is false
+        assertEquals(60000, conf2.getReadTimeout());  // reverts to default
+        assertEquals(60000, conf2.getConnectTimeout());  // reverts to default
     }
 
     public void testConnectionThroughProxy() {

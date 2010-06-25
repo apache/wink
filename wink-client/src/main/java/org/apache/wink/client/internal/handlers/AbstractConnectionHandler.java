@@ -90,9 +90,12 @@ public abstract class AbstractConnectionHandler implements ConnectionHandler {
             MediaType contentMediaType = null;
             String contentType = request.getHeaders().getFirst(HttpHeaders.CONTENT_TYPE);
             if (contentType == null) {
-                // attempt to infer the media type based on the providers available for this type
-                contentMediaType = providersRegistry.getMessageBodyWriterMediaTypeLimitByIsWritable(type, runtimeContext);
-                if(contentMediaType == null) {
+                // attempt to infer the media type based on the providers
+                // available for this type
+                contentMediaType =
+                    providersRegistry
+                        .getMessageBodyWriterMediaTypeLimitByIsWritable(type, runtimeContext);
+                if (contentMediaType == null) {
                     // default if we still couldn't find it
                     contentType = MediaType.APPLICATION_OCTET_STREAM;
                 }
@@ -106,9 +109,9 @@ public abstract class AbstractConnectionHandler implements ConnectionHandler {
                                                        contentMediaType,
                                                        runtimeContext);
             if (writer == null) {
-                throw new RuntimeException(String.format(Messages.getMessage("clientNoWriterForTypeAndMediaType"),
-                                                         String.valueOf(type),
-                                                         contentType));
+                throw new RuntimeException(String
+                    .format(Messages.getMessage("clientNoWriterForTypeAndMediaType"), String
+                        .valueOf(type), contentType));
             }
             writer.writeTo(entity,
                            type,

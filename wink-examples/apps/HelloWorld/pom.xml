@@ -27,7 +27,7 @@
     <parent>
         <groupId>org.apache.wink.example</groupId>
         <artifactId>apps</artifactId>
-        <version>1.1-incubating</version>
+        <version>1.1.1-incubating-SNAPSHOT</version>
     </parent>
     <build>
         <finalName>HelloWorld</finalName>
@@ -74,6 +74,12 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>woodstox</groupId>
+            <artifactId>wstx-asl</artifactId>
+            <version>3.2.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

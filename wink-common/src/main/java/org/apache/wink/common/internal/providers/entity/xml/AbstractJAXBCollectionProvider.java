@@ -45,7 +45,6 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.namespace.QName;
-import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
@@ -68,18 +67,19 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
                        MediaType mediaType,
                        MultivaluedMap<String, String> httpHeaders,
                        InputStream entityStream) throws IOException, WebApplicationException {
+        XMLStreamReader xsr = null;
         try {
-            XMLInputFactory xmif = XMLInputFactory.newInstance();
-            XMLStreamReader xsr = xmif.createXMLStreamReader(entityStream);
+            xsr = getXMLStreamReader(entityStream);
             Class<?> theType = getParameterizedTypeClass(type, genericType, true);
             JAXBContext context = getContext(theType, mediaType);
             Unmarshaller unmarshaller = getJAXBUnmarshaller(type, context, mediaType);
 
-            int nextEvent = xsr.next();
+            int nextEvent = xsr.getEventType();
             while (nextEvent != XMLStreamReader.START_ELEMENT)
                 nextEvent = xsr.next();
 
             List<Object> elementList = new ArrayList<Object>();
+            // skip the plural tag
             nextEvent = xsr.next();
             while (nextEvent != XMLStreamReader.END_DOCUMENT) {
                 switch (nextEvent) {
@@ -87,7 +87,11 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
                         if (getParameterizedTypeClass(type, genericType, false) == JAXBElement.class) {
                             elementList.add(unmarshaller.unmarshal(xsr, theType));
                         } else if (theType.isAnnotationPresent(XmlRootElement.class)) {
-                            elementList.add(unmarshaller.unmarshal(xsr));
+                            Object o = unmarshaller.unmarshal(xsr);
+                            if (o instanceof JAXBElement) {
+                                o = ((JAXBElement)o).getValue();
+                            }
+                            elementList.add(o);
                         } else {
                             elementList.add(unmarshaller.unmarshal(xsr, theType).getValue());
                         }
@@ -97,6 +101,7 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
                         nextEvent = xsr.next();
                 }
             }
+            closeXMLStreamReader(xsr);
 
             Object ret = null;
             if (type.isArray())
@@ -109,13 +114,18 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
             releaseJAXBUnmarshaller(context, unmarshaller);
             return ret;
         } catch (XMLStreamException e) {
+            closeXMLStreamReader(xsr);
             logger.error(Messages.getMessage("jaxbFailToUnmarshal", type.getName()), e); // TODO //$NON-NLS-1$
             // change
             // message
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         } catch (JAXBException e) {
+            closeXMLStreamReader(xsr);
             logger.error(Messages.getMessage("jaxbFailToUnmarshal", type.getName()), e); //$NON-NLS-1$
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
+        } catch (RuntimeException e) {
+            closeXMLStreamReader(xsr);
+            throw e;
         }
     }
 

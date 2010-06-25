@@ -18,7 +18,7 @@
  *  
  *******************************************************************************/
 
-package org.apache.wink.server.internal.properties;
+package org.apache.wink.common.internal.properties;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -30,10 +30,8 @@ import org.slf4j.LoggerFactory;
 
 public class WinkSystemProperties {
 
-    private static final Logger logger           =
-                                                     LoggerFactory
-                                                         .getLogger(WinkSystemProperties.class);
-
+    private static final Logger logger = LoggerFactory.getLogger(WinkSystemProperties.class);
+    
     /**
      * Walks through each of the passed-in properties--presumably, these are
      * all defined in a configuration file. - If the property is already set, do

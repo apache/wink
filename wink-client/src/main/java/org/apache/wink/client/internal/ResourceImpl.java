@@ -46,6 +46,7 @@ import org.apache.wink.client.internal.handlers.HandlerContextImpl;
 import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.http.HttpMethodEx;
 import org.apache.wink.common.internal.CaseInsensitiveMultivaluedMap;
+import org.apache.wink.common.internal.WinkConfiguration;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
@@ -55,7 +56,7 @@ import org.slf4j.LoggerFactory;
 
 public class ResourceImpl implements Resource {
 
-    private static final String            USER_AGENT = "Wink Client v1.1";                         //$NON-NLS-1$
+    private static final String            USER_AGENT = "Wink Client v1.1.1";                         //$NON-NLS-1$
 
     private ProvidersRegistry              providersRegistry;
     private ClientConfig                   config;
@@ -216,7 +217,7 @@ public class ResourceImpl implements Resource {
             ClientResponse response = context.doChain(request);
             int statusCode = response.getStatusCode();
             if (ClientUtils.isErrorCode(statusCode)) {
-                logger.info(Messages.getMessage("clientResponseIsErrorCode"), statusCode);
+                logger.debug(Messages.getMessage("clientResponseIsErrorCode", statusCode));
                 throw new ClientWebException(request, response);
             }
             return response;
@@ -253,7 +254,11 @@ public class ResourceImpl implements Resource {
 
         request.getAttributes().putAll(attributes);
         request.setAttribute(ProvidersRegistry.class, providersRegistry);
+        request.setAttribute(WinkConfiguration.class, config);
+        
+        // for legacy, if third-party code is calling getAttribute with ClientConfig.class as key
         request.setAttribute(ClientConfig.class, config);
+        
         request.getAttributes().put(ClientRequestImpl.RESPONSE_ENTITY_GENERIC_TYPE,
                                     responseEntityType);
         request.getAttributes().put(ClientRequestImpl.RESPONSE_ENTITY_CLASS_TYPE, responseEntity);

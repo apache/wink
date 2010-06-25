@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-    <!--
-        Licensed to the Apache Software Foundation (ASF) under one or
-        more contributor license agreements. See the NOTICE file
-        distributed with this work for additional information regarding
-        copyright ownership. The ASF licenses this file to you under the
-        Apache License, Version 2.0 (the "License"); you may not use
-        this file except in compliance with the License. You may obtain
-        a copy of the License at
-
-        http://www.apache.org/licenses/LICENSE-2.0 Unless required by
-        applicable law or agreed to in writing, software distributed
-        under the License is distributed on an "AS IS" BASIS, WITHOUT
-        WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-        See the License for the specific language governing permissions
-        and limitations under the License.
-    -->
-
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+    
+     http://www.apache.org/licenses/LICENSE-2.0
+    
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.wink</groupId>
     <artifactId>wink</artifactId>
-    <version>1.1-incubating</version>
+    <version>1.1.1-incubating-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Apache Wink</name>
     <parent>
@@ -49,9 +50,9 @@
         <module>wink-assembly</module>
     </modules>
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/wink/branches/wink-1.1-incubating</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/wink/branches/wink-1.1-incubating</developerConnection>
-        <url>http://svn.apache.org/viewvc/incubator/wink/branches/wink-1.1-incubating</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/wink/trunk</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/wink/trunk</developerConnection>
+        <url>http://svn.apache.org/viewvc/incubator/wink/trunk</url>
     </scm>
     <build>
         <plugins>
@@ -66,15 +67,56 @@
                     <aggregate>true</aggregate>
                     <includes>
                         <include>**/src/**</include>
+                        <include>**/wink*/**</include>
                         <include>**/pom.xml</include>
                     </includes>
                     <excludes>
+                        <exclude>**/LICENSE</exclude>
+                        <exclude>**/DISCLAIMER</exclude>
+                        <exclude>**/DEPENDENCIES</exclude>
+                        <exclude>**/NOTICE</exclude>
+                        <exclude>**/.*</exclude>
+                        <exclude>**/.*/**</exclude>
                         <exclude>**/*.txt</exclude>
                         <exclude>**/*.docx</exclude>
+                        <exclude>**/*.jpg</exclude>
                         <exclude>**/*.pdf</exclude>
-                        <exclude>javax.ws.rs.ext.RuntimeDelegate</exclude>
+                        <exclude>**/target/**</exclude>
+
+                        <!-- The following files cannot technically have a license file due to compatibiity issues with spec API JAR -->
+                        <exclude>wink-common/src/main/resources/META-INF/services/javax.ws.rs.ext.RuntimeDelegate</exclude>
+
+                        <!-- The following list of files should have the LICENSE in them as comments but don't have an extension so would generate a warning -->
+                        <exclude>wink-providers/wink-json-provider/src/main/resources/META-INF/wink-application</exclude>
+                        <exclude>wink-providers/wink-abdera-provider/src/main/resources/META-INF/wink-application</exclude>
+                        <exclude>wink-providers/wink-jettison-provider/src/main/resources/META-INF/wink-application</exclude>
+
+                        <exclude>wink-common/src/main/resources/META-INF/core/wink-providers</exclude>
+                        <exclude>wink-server/src/main/resources/META-INF/server/wink-providers</exclude>
+
+                        <exclude>wink-examples/apps/SimpleDefects/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/apps/HelloWorld/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/apps/QADefect/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/apps/Bookmarks/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/core/Preconditions/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/core/CustomExceptionMapper/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/core/CustomContext/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/core/Jaxb/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/ext/Asset/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/ext/Scope/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/ext/History/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/ext/LinkBuilders/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/ext/DynamicResource/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/ext/MultiPart/src/main/webapp/WEB-INF/application</exclude>
+                        <exclude>wink-examples/ext/WebDAV/src/main/webapp/WEB-INF/application-dav</exclude>
+
+                        <exclude>wink-itests/wink-itest/wink-itest-targeting/src/main/java/org/apache/wink/itest/contentnegotiation/jaxb.index</exclude>
+                        <exclude>wink-server/src/test/resources/META-INF/mailcap</exclude>
+
+                        <!-- The following is a binary file used for test -->
+                        <exclude>wink-examples/ext/MultiPart/src/test/resources/org/apache/wink/example/multipart/file1</exclude>
                     </excludes>
-                    <useDefaultExcludes>true</useDefaultExcludes>
+                    <useDefaultExcludes>false</useDefaultExcludes>
                     <mapping>
                         <app>SCRIPT_STYLE</app>
                     </mapping>
@@ -273,6 +315,7 @@
                         <preparationGoals>clean install</preparationGoals>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                     </configuration>
+                    <version>2.0</version>
                 </plugin>
 
                 <!-- Add manifest configuration since it is not defined in apache pom-->
@@ -451,6 +494,7 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-jdk14</artifactId>
                 <version>1.5.11</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -603,7 +647,7 @@
             </modules>
         </profile>
         <profile>
-            <!-- users can specify -Dlogfile=/full/path/to/logging.properties to turn on
+            <!-- users can specify -Djava.util.logging.config.file=/full/path/to/logging.properties to turn on
                  logging for any given maven build in any project.  There is a default
                  logging.properties in wink-component-test-support/src/main/resources. -->
             <id>Log</id>

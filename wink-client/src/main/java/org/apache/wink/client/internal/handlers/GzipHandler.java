@@ -40,6 +40,9 @@ public class GzipHandler implements ClientHandler {
 
     public ClientResponse handle(ClientRequest request, HandlerContext context) throws Exception {
         request.getHeaders().add("Accept-Encoding", "gzip"); //$NON-NLS-1$ //$NON-NLS-2$
+        if (request.getEntity() != null) {
+            request.getHeaders().add("Content-Encoding", "gzip"); //$NON-NLS-1$ //$NON-NLS-2$
+        }
         context.addInputStreamAdapter(new GzipAdapter());
         context.addOutputStreamAdapter(new GzipAdapter());
         return context.doChain(request);
@@ -48,7 +51,6 @@ public class GzipHandler implements ClientHandler {
     private static class GzipAdapter implements InputStreamAdapter, OutputStreamAdapter {
 
         public OutputStream adapt(OutputStream os, ClientRequest request) throws IOException {
-            request.getHeaders().add("Content-Encoding", "gzip"); //$NON-NLS-1$ //$NON-NLS-2$
             return new GZIPOutputStream(os);
         }
 

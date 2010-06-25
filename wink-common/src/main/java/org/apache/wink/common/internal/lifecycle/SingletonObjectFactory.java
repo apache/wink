@@ -49,4 +49,12 @@ class SingletonObjectFactory<T> implements ObjectFactory<T> {
     public String toString() {
         return String.format("SingletonOF: %s", objectClass); //$NON-NLS-1$
     }
+
+    public void releaseInstance(T instance, RuntimeContext context) {
+        /* do nothing */
+    }
+
+    public void releaseAll(RuntimeContext context) {
+        /* do nothing */
+    }
 }

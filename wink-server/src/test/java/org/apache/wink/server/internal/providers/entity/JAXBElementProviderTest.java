@@ -21,12 +21,14 @@ package org.apache.wink.server.internal.providers.entity;
 
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.Type;
+import java.util.StringTokenizer;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -53,6 +55,7 @@ public class JAXBElementProviderTest extends MockServletInvocationTest {
 
     private static final String SOURCE_REQUEST              =
                                                                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><feed xmlns:ns2=\"http://a9.com/-/spec/opensearch/1.1/\" xmlns=\"http://www.w3.org/2005/Atom\" ><id>ID</id></feed>";
+
     private static final byte[] SOURCE_REQUEST_BYTES        = SOURCE_REQUEST.getBytes();
     private static final String SOURCE_RESPONSE             =
                                                                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><feed xmlns:ns2=\"http://a9.com/-/spec/opensearch/1.1/\" xmlns=\"http://www.w3.org/2005/Atom\"><id>ID</id></feed>";
@@ -220,6 +223,88 @@ public class JAXBElementProviderTest extends MockServletInvocationTest {
             (JAXBElement<AtomFeed>)unmarshaller.unmarshal(new ByteArrayInputStream(invoke
                 .getContentAsByteArray()));
         assertEquals(expectedResponse.getValue().getId(), response.getValue().getId());
+    }
+    
+    @SuppressWarnings("unchecked")
+    public void testJAXBElementProviderInvocationDTD() throws Exception {
+        String classpath = System.getProperty("java.class.path");
+        StringTokenizer tokenizer = new StringTokenizer(classpath, System.getProperty("path.separator"));
+        String path = null;
+        while (tokenizer.hasMoreTokens()) {
+            path = tokenizer.nextToken();
+            if (path.endsWith("test-classes")) {
+                break;
+            }
+        }
+        
+        /*
+         * the addition of the DOCTYPE tests a well-known XML parser exploit in which arbitrary server
+         * filesystem files can be read.  See JAXBElementXmlProvider.readFrom
+         * 
+         */
+
+        final String LOCALSOURCE = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
+        "<!DOCTYPE data [<!ENTITY file SYSTEM \""+ path +"/etc/JAXBElementProviderTest.txt\">]>" +
+        "<feed xmlns:ns2=\"http://a9.com/-/spec/opensearch/1.1/\" xmlns=\"http://www.w3.org/2005/Atom\"><id>&file;</id></feed>";
+
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/jaxbresource/jaxbelement",
+                                                        "text/xml",
+                                                        "text/xml",
+                                                        LOCALSOURCE.getBytes());
+        
+        MockHttpServletResponse invoke = invoke(request);
+        assertEquals(400, invoke.getStatus());  // 400 means the unmarshaller could not unmarshal the xml
+        
+        // let's make sure our test string is unmarshallable, just for a good sanity check
+        JAXBContext testcontext = JAXBContext.newInstance(AtomFeed.class);
+        Unmarshaller testunmarshaller = testcontext.createUnmarshaller();
+        JAXBElement<AtomFeed> testresponse =
+            (JAXBElement<AtomFeed>)testunmarshaller.unmarshal(new ByteArrayInputStream(LOCALSOURCE.getBytes()));
+        assertEquals("we could not unmarshal the test xml", "YOU SHOULD NOT BE ABLE TO SEE THIS", testresponse.getValue().getId().trim());
+        
+    }
+    
+    @SuppressWarnings("unchecked")
+    public void testJAXBElementProviderInvocationDTDWithCharset() throws Exception {
+        String classpath = System.getProperty("java.class.path");
+        StringTokenizer tokenizer = new StringTokenizer(classpath, System.getProperty("path.separator"));
+        String path = null;
+        while (tokenizer.hasMoreTokens()) {
+            path = tokenizer.nextToken();
+            if (path.endsWith("test-classes")) {
+                break;
+            }
+        }
+        
+        /*
+         * the addition of the DOCTYPE tests a well-known XML parser exploit in which arbitrary server
+         * filesystem files can be read.  See JAXBElementXmlProvider.readFrom
+         * 
+         */
+
+        final String LOCALSOURCE = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
+        "<!DOCTYPE data [<!ENTITY file SYSTEM \""+ path +"/etc/JAXBElementProviderTest.txt\">]>" +
+        "<feed xmlns:ns2=\"http://a9.com/-/spec/opensearch/1.1/\" xmlns=\"http://www.w3.org/2005/Atom\"><id>&file;</id></feed>";
+
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/jaxbresource/jaxbelement",
+                                                        "text/xml",
+                                                        "text/xml;charset=UTF-8",
+                                                        LOCALSOURCE.getBytes());
+        
+        MockHttpServletResponse invoke = invoke(request);
+        assertEquals(400, invoke.getStatus());  // 400 means the unmarshaller could not unmarshal the xml, this is good
+        
+        // let's make sure our test string is unmarshallable, just for a good sanity check
+        JAXBContext testcontext = JAXBContext.newInstance(AtomFeed.class);
+        Unmarshaller testunmarshaller = testcontext.createUnmarshaller();
+        JAXBElement<AtomFeed> testresponse =
+            (JAXBElement<AtomFeed>)testunmarshaller.unmarshal(new ByteArrayInputStream(LOCALSOURCE.getBytes()));
+        assertEquals("we could not unmarshal the test xml", "YOU SHOULD NOT BE ABLE TO SEE THIS", testresponse.getValue().getId().trim());
+        
     }
 
     @SuppressWarnings("unchecked")

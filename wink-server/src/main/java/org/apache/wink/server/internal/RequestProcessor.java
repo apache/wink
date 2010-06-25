@@ -22,6 +22,7 @@ package org.apache.wink.server.internal;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -33,11 +34,14 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.server.internal.application.ServletApplicationFileLoader;
+import org.apache.wink.server.internal.handlers.SearchResult;
 import org.apache.wink.server.internal.handlers.ServerMessageContext;
+import org.apache.wink.server.internal.registry.ResourceInstance;
 import org.apache.wink.server.internal.resources.HtmlServiceDocumentResource;
 import org.apache.wink.server.internal.resources.RootResource;
 import org.apache.wink.server.utils.RegistrationUtils;
@@ -52,16 +56,16 @@ public class RequestProcessor {
     private static final Logger           logger                           =
                                                                                LoggerFactory
                                                                                    .getLogger(RequestProcessor.class);
-    private static final String           PROPERTY_ROOT_RESOURCE_NONE      = "none"; //$NON-NLS-1$
-    private static final String           PROPERTY_ROOT_RESOURCE_ATOM      = "atom"; //$NON-NLS-1$
-    private static final String           PROPERTY_ROOT_RESOURCE_ATOM_HTML = "atom+html"; //$NON-NLS-1$
+    private static final String           PROPERTY_ROOT_RESOURCE_NONE      = "none";                                  //$NON-NLS-1$
+    private static final String           PROPERTY_ROOT_RESOURCE_ATOM      = "atom";                                  //$NON-NLS-1$
+    private static final String           PROPERTY_ROOT_RESOURCE_ATOM_HTML = "atom+html";                             //$NON-NLS-1$
     private static final String           PROPERTY_ROOT_RESOURCE_DEFAULT   =
                                                                                PROPERTY_ROOT_RESOURCE_ATOM_HTML;
-    private static final String           PROPERTY_ROOT_RESOURCE           = "wink.rootResource"; //$NON-NLS-1$
+    private static final String           PROPERTY_ROOT_RESOURCE           = "wink.rootResource";                     //$NON-NLS-1$
     private static final String           PROPERTY_ROOT_RESOURCE_CSS       =
-                                                                               "wink.serviceDocumentCssPath"; //$NON-NLS-1$
+                                                                               "wink.serviceDocumentCssPath";         //$NON-NLS-1$
     private static final String           PROPERTY_LOAD_WINK_APPLICATIONS  =
-                                                                               "wink.loadApplications"; //$NON-NLS-1$
+                                                                               "wink.loadApplications";               //$NON-NLS-1$
 
     private final DeploymentConfiguration configuration;
 
@@ -136,7 +140,9 @@ public class RequestProcessor {
             if (logger.isDebugEnabled()) {
                 logger.debug(Messages.getMessage("unhandledExceptionToContainer"), t); //$NON-NLS-1$
             } else {
-                logger.info(Messages.getMessage("unhandledExceptionToContainer")); //$NON-NLS-1$
+                if (logger.isInfoEnabled()) {
+                    logger.info(Messages.getMessage("unhandledExceptionToContainer")); //$NON-NLS-1$
+                }
             }
             if (t instanceof RuntimeException) {
                 // let the servlet container to handle the runtime exception
@@ -148,7 +154,7 @@ public class RequestProcessor {
 
     private void handleRequestWithoutFaultBarrier(HttpServletRequest request,
                                                   HttpServletResponse response) throws Throwable {
-
+        boolean isReleaseResourcesCalled = false;
         try {
             ServerMessageContext msgContext = createMessageContext(request, response);
             RuntimeContextTLS.setRuntimeContext(msgContext);
@@ -160,23 +166,69 @@ public class RequestProcessor {
                        msgContext);
             // run the response handler chain
             configuration.getResponseHandlersChain().run(msgContext);
+
+            logger.debug("Attempting to release resource instance");
+            isReleaseResourcesCalled = true;
+            try {
+                releaseResources(msgContext);
+            } catch (Exception e) {
+                logger.debug("Caught exception when releasing resource object", e);
+                throw e;
+            }
         } catch (Throwable t) {
-            logException(t);
-            ServerMessageContext msgContext = createMessageContext(request, response);
-            RuntimeContextTLS.setRuntimeContext(msgContext);
-            msgContext.setResponseEntity(t);
-            // run the error handler chain
-            logger.debug("Exception occured, starting error handlers chain: {}", msgContext); //$NON-NLS-1$
-            configuration.getErrorHandlersChain().run(msgContext);
+            RuntimeContext originalContext = RuntimeContextTLS.getRuntimeContext();
+            ServerMessageContext msgContext = null;
+            try {
+                logException(t);
+                msgContext = createMessageContext(request, response);
+                RuntimeContextTLS.setRuntimeContext(msgContext);
+                msgContext.setResponseEntity(t);
+                // run the error handler chain
+                logger.debug("Exception occured, starting error handlers chain: {}", msgContext); //$NON-NLS-1$
+                configuration.getErrorHandlersChain().run(msgContext);
+
+                RuntimeContextTLS.setRuntimeContext(originalContext);
+                if (!isReleaseResourcesCalled) {
+                    isReleaseResourcesCalled = true;
+                    try {
+                        releaseResources(originalContext);
+                    } catch (Exception e2) {
+                        logger.debug("Caught exception when releasing resource object", e2);
+                    }
+                }
+            } catch (Exception e) {
+                RuntimeContextTLS.setRuntimeContext(originalContext);
+                if (!isReleaseResourcesCalled) {
+                    isReleaseResourcesCalled = true;
+                    try {
+                        releaseResources(originalContext);
+                    } catch (Exception e2) {
+                        logger.debug("Caught exception when releasing resource object", e2);
+                    }
+                }
+                throw e;
+            }
         } finally {
             logger.debug("Finished response handlers chain"); //$NON-NLS-1$
             RuntimeContextTLS.setRuntimeContext(null);
         }
     }
 
+    private void releaseResources(RuntimeContext msgContext) throws Exception {
+        SearchResult searchResult = msgContext.getAttribute(SearchResult.class);
+        if (searchResult != null) {
+            List<ResourceInstance> resourceInstances = searchResult.getData().getMatchedResources();
+            for (ResourceInstance res : resourceInstances) {
+                logger.debug("Releasing resource instance");
+                res.releaseInstance(msgContext);
+            }
+        }
+    }
+
     private void logException(Throwable t) {
-        String messageFormat = Messages.getMessage("exceptionOccurredDuringInvocation");
         String exceptionName = t.getClass().getSimpleName();
+        String messageFormat =
+            Messages.getMessage("exceptionOccurredDuringInvocation", exceptionName);
         if (t instanceof WebApplicationException) {
             WebApplicationException wae = (WebApplicationException)t;
             int statusCode = wae.getResponse().getStatus();
@@ -191,28 +243,29 @@ public class RequestProcessor {
                 String.format("%s (%d%s%s)", exceptionName, statusCode, statusSep, statusMessage);
             if (statusCode >= 500) {
                 if (logger.isDebugEnabled()) {
-                    logger.debug(String.format(messageFormat, exceptionName), t);
+                    logger.debug(messageFormat, t);
                 } else {
-                    logger.info(String.format(messageFormat, exceptionName));
+                    logger.info(messageFormat);
                 }
             } else {
-                // don't log the whole call stack for sub-500 return codes unless debugging
+                // don't log the whole call stack for sub-500 return codes
+                // unless debugging
                 if (logger.isDebugEnabled()) {
-                    logger.debug(String.format(messageFormat, exceptionName), t);
+                    logger.debug(messageFormat, t);
                 } else {
-                    logger.info(String.format(messageFormat, exceptionName));
+                    logger.info(messageFormat);
                 }
             }
         } else {
             if (logger.isDebugEnabled()) {
-                logger.debug(String.format(messageFormat, exceptionName), t);
+                logger.debug(messageFormat, t);
             } else {
-                logger.info(String.format(messageFormat, exceptionName));
+                logger.info(messageFormat);
             }
         }
     }
 
-    private ServerMessageContext createMessageContext(HttpServletRequest request,   
+    private ServerMessageContext createMessageContext(HttpServletRequest request,
                                                       HttpServletResponse response) {
         ServerMessageContext messageContext =
             new ServerMessageContext(request, response, configuration);

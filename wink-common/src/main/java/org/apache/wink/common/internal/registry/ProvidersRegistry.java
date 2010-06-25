@@ -157,7 +157,9 @@ public class ProvidersRegistry {
             retValue = true;
         }
         if (retValue == false) {
-            logger.warn(Messages.getMessage("classIsUnknownProvider", cls)); //$NON-NLS-1$
+            if (logger.isWarnEnabled()) {
+                logger.warn(Messages.getMessage("classIsUnknownProvider", cls)); //$NON-NLS-1$
+            }
         }
         return retValue;
 
@@ -169,6 +171,19 @@ public class ProvidersRegistry {
 
     public boolean addProvider(Object provider) {
         return addProvider(provider, WinkApplication.DEFAULT_PRIORITY);
+    }
+
+    /**
+     * Removes all providers in the registry.
+     */
+    public void removeAllProviders() {
+        contextResolvers.removeAll();
+        messageBodyReaders.removeAll();
+        messageBodyWriters.removeAll();
+
+        for (ObjectFactory<?> of : exceptionMappers) {
+            of.releaseAll(null);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -471,7 +486,7 @@ public class ProvidersRegistry {
     }
 
     public MediaType getMessageBodyWriterMediaTypeLimitByIsWritable(Class<?> type,
-                                                                          RuntimeContext runtimeContext) {
+                                                                    RuntimeContext runtimeContext) {
         List<MediaType> mediaTypes = new ArrayList<MediaType>();
         logger.debug("Searching MessageBodyWriters media types limited by class type {}", type); //$NON-NLS-1$
 
@@ -572,6 +587,22 @@ public class ProvidersRegistry {
 
         boolean isMapEmpty() {
             return data.isEmpty();
+        }
+
+        @SuppressWarnings("unchecked")
+        synchronized void removeAll() {
+            // order of operations for the next 4 lines matter
+            Entry<MediaType, HashSet<PriorityObjectFactory<T>>>[] oldEntrySet = entrySet;
+            entrySet = data.entrySet().toArray(new Entry[0]);
+            data = new HashMap<MediaType, HashSet<PriorityObjectFactory<T>>>();
+            providersCache.clear();
+
+            for (Entry<MediaType, HashSet<PriorityObjectFactory<T>>> entry : oldEntrySet) {
+                HashSet<PriorityObjectFactory<T>> set = entry.getValue();
+                for (PriorityObjectFactory<T> of : set) {
+                    of.releaseAll(null);
+                }
+            }
         }
 
         /**
@@ -676,7 +707,9 @@ public class ProvidersRegistry {
             }
             copyOfMap.put(key, set);
             if (!set.add(objectFactory)) {
-                logger.warn(Messages.getMessage("mediaTypeSetAlreadyContains", objectFactory)); //$NON-NLS-1$
+                if (logger.isWarnEnabled()) {
+                    logger.warn(Messages.getMessage("mediaTypeSetAlreadyContains", objectFactory)); //$NON-NLS-1$
+                }
             } else {
 
                 // need to resort the entry set
@@ -813,6 +846,14 @@ public class ProvidersRegistry {
                 return of.getInstanceClass();
             }
 
+            public void releaseInstance(T instance, RuntimeContext context) {
+                of.releaseInstance(instance, context);
+            }
+
+            public void releaseAll(RuntimeContext context) {
+                of.releaseAll(context);
+            }
+
             public int compareTo(OFHolder<T> o) {
                 // check if this is a system provider
                 // system providers are less than
@@ -876,6 +917,14 @@ public class ProvidersRegistry {
             return of.getInstanceClass();
         }
 
+        public void releaseInstance(T instance, RuntimeContext context) {
+            of.releaseInstance(instance, context);
+        }
+
+        public void releaseAll(RuntimeContext context) {
+            of.releaseAll(context);
+        }
+
         // this compare is used by exception mappers
         public int compareTo(PriorityObjectFactory<T> o) {
             return Double.compare(priority, o.priority);
@@ -883,7 +932,7 @@ public class ProvidersRegistry {
 
         @Override
         public String toString() {
-            return String.format("Priority: %f, ObjectFactory: %s", priority, String.valueOf(of)); //$NON-NLS-1$
+            return String.format("Priority: %f, ObjectFactory: %s", priority, of); //$NON-NLS-1$
         }
     }
 

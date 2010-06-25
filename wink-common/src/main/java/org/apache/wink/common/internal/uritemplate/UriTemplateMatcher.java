@@ -45,8 +45,11 @@ public class UriTemplateMatcher {
 
     @Override
     public String toString() {
-        return String.format("Parent: %s; URI: %s; Matcher: %s; Matches: %b", String //$NON-NLS-1$
-            .valueOf(parent), uri, String.valueOf(matcher), matches);
+        return String.format("Parent: %s; URI: %s; Matcher: %s; Matches: %b", //$NON-NLS-1$
+                             parent,
+                             uri,
+                             matcher,
+                             matches);
     }
 
     /* package */UriTemplateMatcher(UriTemplateProcessor parent) {

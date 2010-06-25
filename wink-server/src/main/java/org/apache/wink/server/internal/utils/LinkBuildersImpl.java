@@ -38,11 +38,11 @@ public final class LinkBuildersImpl implements LinkBuilders {
     }
 
     public SingleLinkBuilder createSingleLinkBuilder() {
-        return new SingleLinkBuilderImpl((ServerMessageContext)msgContext);
+        return new SingleLinkBuilderImpl(msgContext);
     }
 
     public SystemLinksBuilder createSystemLinksBuilder() {
-        return new SystemLinksBuilderImpl((ServerMessageContext)msgContext);
+        return new SystemLinksBuilderImpl(msgContext);
     }
 
 }

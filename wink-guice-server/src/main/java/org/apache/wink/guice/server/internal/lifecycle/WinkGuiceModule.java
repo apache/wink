@@ -68,12 +68,19 @@ public class WinkGuiceModule extends AbstractModule {
 
         public void injectMembers(T instance) {
             try {
-                CreationUtils.injectFields(instance, classMetaData, RuntimeContextTLS.getRuntimeContext());
+                CreationUtils.injectFields(instance, classMetaData, RuntimeContextTLS
+                    .getRuntimeContext());
             } catch (IOException e) {
-                logger.error(Messages.getMessage("injectionFailureSingleton"), instance.getClass());
+                if (logger.isErrorEnabled()) {
+                    logger.error(Messages.getMessage("injectionFailureSingleton", instance
+                        .getClass().getName()));
+                }
                 throw new ObjectCreationException(e);
             } catch (PrivilegedActionException e) {
-                logger.error(Messages.getMessage("injectionFailureSingleton"), instance.getClass());
+                if (logger.isErrorEnabled()) {
+                    logger.error(Messages.getMessage("injectionFailureSingleton", instance
+                        .getClass().getName()));
+                }
                 throw new ObjectCreationException(e);
             }
         }

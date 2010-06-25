@@ -27,11 +27,16 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Map.Entry;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
 
+import org.apache.wink.server.internal.DeploymentConfiguration;
+import org.apache.wink.server.internal.RequestProcessor;
 
+import org.springframework.mock.web.MockServletConfig;
+import org.springframework.mock.web.MockServletContext;
 
 public class RestServletTest extends MockServletInvocationTest {
 
@@ -124,11 +129,13 @@ public class RestServletTest extends MockServletInvocationTest {
         return propFileCustom.getPath();
     }
 
-    // dummy compiler check to confirm service method from RestServlet can be overridden
+    // dummy compiler check to confirm service method from RestServlet can be
+    // overridden
     public class MyRestServlet extends RestServlet {
         @Override
         public void service(HttpServletRequest httpServletRequest,
-            HttpServletResponse httpServletResponse) throws ServletException, IOException {
+                            HttpServletResponse httpServletResponse) throws ServletException,
+            IOException {
         }
     }
 
@@ -148,20 +155,23 @@ public class RestServletTest extends MockServletInvocationTest {
         // make sure properties are not lost
         assertEquals(OTHER_DEFAULT_VAL, properties.getProperty(OTHER_DEFAULT_KEY));
         assertEquals(OTHER_CUSTOM_VAL, properties.getProperty(OTHER_CUSTOM_KEY));
-        
-        // make sure properties were overridden (in other words, custom property file always wins)
+
+        // make sure properties were overridden (in other words, custom property
+        // file always wins)
         assertEquals(PROP_CUSTOM_VAL, properties.getProperty(PROP_COMMON_KEY));
         assertEquals(JVM_CUSTOM1_VAL, properties.getProperty(JVM_COMMON1_KEY));
         assertEquals(JVM_CUSTOM2_VAL, properties.getProperty(JVM_COMMON2_KEY));
     }
-    
-    
+
     // utility method
-    private File createFileWithProperties(String relativeFilePath, Properties props) throws Exception {
-        // set up the default properties file in the location where the RestServlet will find it upon test execution
+    private File createFileWithProperties(String relativeFilePath, Properties props)
+        throws Exception {
+        // set up the default properties file in the location where the
+        // RestServlet will find it upon test execution
         String classPath = System.getProperty("java.class.path");
-        
-        StringTokenizer tokenizer = new StringTokenizer(classPath, System.getProperty("path.separator"));
+
+        StringTokenizer tokenizer =
+            new StringTokenizer(classPath, System.getProperty("path.separator"));
         String pathToUse = null;
         while (tokenizer.hasMoreElements()) {
             String temp = tokenizer.nextToken();
@@ -170,14 +180,14 @@ public class RestServletTest extends MockServletInvocationTest {
                 break;
             }
         }
-        
+
         if (pathToUse == null) {
             fail("failed to find test-classes directory to use for temporary creation of " + relativeFilePath);
         }
-        
+
         File propFile = new File(pathToUse + relativeFilePath);
         FileWriter fileWriter = new FileWriter(propFile);
-        for (Iterator<Entry<Object, Object>> it = props.entrySet().iterator(); it.hasNext(); ) {
+        for (Iterator<Entry<Object, Object>> it = props.entrySet().iterator(); it.hasNext();) {
             Entry<Object, Object> entry = (Entry<Object, Object>)it.next();
             fileWriter.write(entry.getKey() + "=" + entry.getValue());
             fileWriter.write(System.getProperty("line.separator"));
@@ -187,4 +197,51 @@ public class RestServletTest extends MockServletInvocationTest {
         return propFile;
     }
 
+    public void testInjectServletContfig() {
+        RestServlet restServlet = (RestServlet)this.getServlet();
+        DeploymentConfiguration configuration =
+            restServlet.getRequestProcessor().getConfiguration();
+
+        assertNotNull(configuration.getServletContext());
+        assertNotNull(configuration.getServletConfig());
+    }
+
+    public void testInjectServletConfigIntoInitializedRequestProcessor() throws Exception {
+        RestServlet servlet =
+            (RestServlet)Class.forName("org.apache.wink.server.internal.servlet.RestServlet")
+                .newInstance();
+
+        String requestProcessorAttribute = "MOCK_REQUEST_PROCESSOR";
+        DeploymentConfiguration configuration = new DeploymentConfiguration();
+        configuration.init();
+
+        RequestProcessor requestProcessor = new RequestProcessor(configuration);
+
+        MockServletContext servletContext = new MockServletContext();
+        servletContext.setAttribute(requestProcessorAttribute, requestProcessor);
+
+        MockServletConfig servletConfig = new MockServletConfig(servletContext);
+        servletConfig.addInitParameter("javax.ws.rs.Application", getApplicationClassName());
+        servletConfig.addInitParameter("requestProcessorAttribute", requestProcessorAttribute);
+
+        String propertiesFile = getPropertiesFile();
+        if (propertiesFile != null) {
+            servletConfig.addInitParameter("propertiesLocation", propertiesFile);
+        }
+
+        assertNull(configuration.getServletContext());
+        assertNull(configuration.getServletConfig());
+
+        ThreadLocal<MockServletInvocationTest> tls = new ThreadLocal<MockServletInvocationTest>();
+        tls.set(this);
+        servlet.init(servletConfig);
+
+        DeploymentConfiguration servletConfiguration =
+            servlet.getRequestProcessor().getConfiguration();
+
+        assertEquals(configuration, servletConfiguration);
+
+        assertNotNull(servletConfiguration.getServletContext());
+        assertNotNull(servletConfiguration.getServletConfig());
+    }
 }

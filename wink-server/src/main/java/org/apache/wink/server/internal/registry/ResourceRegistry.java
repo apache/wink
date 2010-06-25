@@ -121,7 +121,10 @@ public class ResourceRegistry {
         writersLock.lock();
         try {
             if (!applicationValidator.isValidResource(instance.getClass())) {
-                logger.warn(Messages.getMessage("resourceClassNotValid", instance.getClass())); //$NON-NLS-1$
+                if (logger.isWarnEnabled()) {
+                    logger.warn(Messages
+                        .getMessage("resourceClassNotValid", instance.getClass().getName())); //$NON-NLS-1$
+                }
                 return;
             }
 
@@ -146,12 +149,30 @@ public class ResourceRegistry {
         writersLock.lock();
         try {
             if (!applicationValidator.isValidResource(clazz)) {
-                logger.warn(Messages.getMessage("resourceClassNotValid", clazz)); //$NON-NLS-1$
+                if (logger.isWarnEnabled()) {
+                    logger.warn(Messages.getMessage("resourceClassNotValid", clazz.getName())); //$NON-NLS-1$
+                }
                 return;
             }
             ResourceRecord record = getRecord(clazz);
             record.setPriority(priority);
             rootResources.add(record);
+            assertSorted();
+        } finally {
+            writersLock.unlock();
+        }
+    }
+
+    /**
+     * Removes all the root resource records.
+     */
+    public void removeAllResources() {
+        writersLock.lock();
+        try {
+            for (ResourceRecord record : rootResources) {
+                record.getObjectFactory().releaseAll(null);
+            }
+            rootResources.clear();
             assertSorted();
         } finally {
             writersLock.unlock();
@@ -421,8 +442,10 @@ public class ResourceRegistry {
             }
         }
         if (methodRecords.size() == 0) {
-            logger.info(Messages.getMessage("noMethodInClassSupportsHTTPMethod"), resource
-                .getResourceClass().getName(), context.getRequest().getMethod());
+            if (logger.isInfoEnabled()) {
+                logger.info(Messages.getMessage("noMethodInClassSupportsHTTPMethod", resource
+                    .getResourceClass().getName(), context.getRequest().getMethod()));
+            }
             Set<String> httpMethods = getOptions(resource);
             ResponseBuilder builder = Response.status(HttpStatus.METHOD_NOT_ALLOWED.getCode());
             // add 'Allow' header to the response

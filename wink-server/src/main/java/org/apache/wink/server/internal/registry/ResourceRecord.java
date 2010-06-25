@@ -163,8 +163,8 @@ public class ResourceRecord extends TemplatedRecord {
 
     @Override
     public String toString() {
-        return String.format("Path: %s; ClassMetadata: %s", super.toString(), String //$NON-NLS-1$
-            .valueOf(metadata));
+        return String.format("Path: %s; ClassMetadata: %s", super.toString(), //$NON-NLS-1$
+                             metadata);
     }
 
     @Override

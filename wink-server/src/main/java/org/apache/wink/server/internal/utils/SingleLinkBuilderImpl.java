@@ -31,7 +31,7 @@ import org.apache.wink.common.RestConstants;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.model.atom.AtomConstants;
 import org.apache.wink.common.model.synd.SyndLink;
-import org.apache.wink.server.internal.handlers.ServerMessageContext;
+import org.apache.wink.server.handlers.MessageContext;
 import org.apache.wink.server.utils.SingleLinkBuilder;
 
 public class SingleLinkBuilderImpl extends AbstractLinksBuilderImpl<SingleLinkBuilder> implements
@@ -40,7 +40,7 @@ public class SingleLinkBuilderImpl extends AbstractLinksBuilderImpl<SingleLinkBu
     private String    rel;
     private MediaType type;
 
-    public SingleLinkBuilderImpl(ServerMessageContext context) {
+    public SingleLinkBuilderImpl(MessageContext context) {
         super(context);
         type = null;
         rel = null;

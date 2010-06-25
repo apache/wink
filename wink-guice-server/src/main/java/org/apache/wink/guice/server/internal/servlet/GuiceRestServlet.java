@@ -42,9 +42,11 @@ public class GuiceRestServlet extends RestServlet {
         throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         String initParameter = getInitParameter(DEPLYMENT_CONF_PARAM);
         if (initParameter != null) {
-            logger.info(Messages.getMessage("restServletUseDeploymentConfigurationParam"),
-                        initParameter,
-                        DEPLYMENT_CONF_PARAM);
+            if (logger.isInfoEnabled()) {
+                logger.info(Messages.getMessage("restServletUseDeploymentConfigurationParam",
+                                                initParameter,
+                                                DEPLYMENT_CONF_PARAM));
+            }
             // use ClassUtils.loadClass instead of Class.forName so we have
             // classloader visibility into the Web module in J2EE environments
             Class<?> confClass = ClassUtils.loadClass(initParameter);
