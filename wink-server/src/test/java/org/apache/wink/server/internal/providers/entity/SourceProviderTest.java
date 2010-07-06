@@ -59,6 +59,9 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 public class SourceProviderTest extends MockServletInvocationTest {
 
@@ -320,6 +323,110 @@ public class SourceProviderTest extends MockServletInvocationTest {
         InputSource is = new InputSource( new StringReader(SOURCE) );
         Document d = builder.parse( is );
         assertEquals("xml is bad", "YOU SHOULD NOT BE ABLE TO SEE THIS", d.getElementsByTagName("message").item(0).getTextContent().trim());
+    }
+        
+    public void testDomWithDTDEntityExpansionAttack1() throws Exception {
+        
+        String classpath = System.getProperty("java.class.path");
+        StringTokenizer tokenizer = new StringTokenizer(classpath, System.getProperty("path.separator"));
+        String path = null;
+        while (tokenizer.hasMoreTokens()) {
+            path = tokenizer.nextToken();
+            if (path.endsWith("test-classes")) {
+                break;
+            }
+        }
+        
+        final String SOURCE = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
+            "<!DOCTYPE root [" +
+            "<!ENTITY % a \"x\">" +
+            "<!ENTITY % b \"%a;%a;\">" +
+            "]>" +
+            "<message>&b;</message>";
+
+        final byte[] SOURCE_BYTES = SOURCE.getBytes();
+        
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/source/domwithdtd",
+                                                        "application/xml",
+                                                        "application/xml",
+                                                        SOURCE_BYTES);
+        
+        // The SAX parser will not allow entity refs inside a DTD.  There is no special Wink code necessary for this.
+        MockHttpServletResponse response = invoke(request);
+        assertEquals(400, response.getStatus());
+        
+        // as a sanity check, let's make sure the xml is good:
+        XMLReader xmlReader = XMLReaderFactory.createXMLReader();
+        try {
+            xmlReader.parse(new InputSource(new ByteArrayInputStream(SOURCE_BYTES)));
+            fail("expected SAXParseException");
+        } catch (SAXParseException e) {
+            
+        }
+    }
+    
+    public void testDomWithDTDEntityExpansionAttack2() throws Exception {
+        
+        String classpath = System.getProperty("java.class.path");
+        StringTokenizer tokenizer = new StringTokenizer(classpath, System.getProperty("path.separator"));
+        String path = null;
+        while (tokenizer.hasMoreTokens()) {
+            path = tokenizer.nextToken();
+            if (path.endsWith("test-classes")) {
+                break;
+            }
+        }
+        
+        final String SOURCE = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
+            "<!DOCTYPE root [" +
+            "<!ENTITY x32 \"foobar\">" +
+            "<!ENTITY x31 \"&x32;&x32;\">" +
+            "<!ENTITY x30 \"&x31;&x31;\">" +
+            "<!ENTITY x29 \"&x30;&x30;\">" +
+            "<!ENTITY x28 \"&x29;&x29;\">" +
+            "<!ENTITY x27 \"&x28;&x28;\">" +
+            "<!ENTITY x26 \"&x27;&x27;\">" +
+            "<!ENTITY x25 \"&x26;&x26;\">" +
+            "<!ENTITY x24 \"&x25;&x25;\">" +
+            "<!ENTITY x23 \"&x24;&x24;\">" +
+            "<!ENTITY x22 \"&x23;&x23;\">" +
+            "<!ENTITY x21 \"&x22;&x22;\">" +
+            "<!ENTITY x20 \"&x21;&x21;\">" +
+            "<!ENTITY x19 \"&x20;&x20;\">" +
+            "<!ENTITY x18 \"&x19;&x19;\">" +
+            "<!ENTITY x17 \"&x18;&x18;\">" +
+            "<!ENTITY x16 \"&x17;&x17;\">" +
+            "<!ENTITY x15 \"&x16;&x16;\">" +
+            "<!ENTITY x14 \"&x15;&x15;\">" +
+            "<!ENTITY x13 \"&x14;&x14;\">" +
+            "<!ENTITY x12 \"&x13;&x13;\">" +
+            "<!ENTITY x11 \"&x12;&x12;\">" +
+            "<!ENTITY x10 \"&x11;&x11;\">" +
+            "<!ENTITY  x9 \"&x10;&x10;\">" +
+            "<!ENTITY  x8 \"&x9;&x9;\">" +
+            "<!ENTITY  x7 \"&x8;&x8;\">" +
+            "<!ENTITY  x6 \"&x7;&x7;\">" +
+            "<!ENTITY  x5 \"&x6;&x6;\">" +
+            "<!ENTITY  x4 \"&x5;&x5;\">" +
+            "<!ENTITY  x3 \"&x4;&x4;\">" +
+            "<!ENTITY  x2 \"&x3;&x3;\">" +
+            "<!ENTITY  x1 \"&x2;&x2;\">" +
+            "]>" +
+            "<message>&x1;</message>";
+
+        final byte[] SOURCE_BYTES = SOURCE.getBytes();
+        
+        MockHttpServletRequest request =
+            MockRequestConstructor.constructMockRequest("POST",
+                                                        "/source/domwithdtd",
+                                                        "application/xml",
+                                                        "application/xml",
+                                                        SOURCE_BYTES);
+        
+        MockHttpServletResponse response = invoke(request);
+        assertEquals(400, response.getStatus());
     }
 
     // -- Helpers

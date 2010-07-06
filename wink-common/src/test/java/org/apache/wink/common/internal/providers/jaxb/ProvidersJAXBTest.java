@@ -118,6 +118,57 @@ public class ProvidersJAXBTest extends MockObjectTestCase {
         "<ns2:myPojo xmlns:ns2=\"http://org/apache/wink/common/internal/providers/jaxb/jaxb1\">" +
         "<ns2:stringdata>&file;</ns2:stringdata>" +
         "</ns2:myPojo>";
+    
+    static final String xmlWithDTDEntityExpansionAttack = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
+        "<!DOCTYPE root [" +
+        "<!ENTITY % a \"x\">" +
+        "<!ENTITY % b \"%a;%a;\">" +
+        "]>" +
+        "<ns2:addNumbers xmlns:ns2=\"http://org/apache/wink/common/internal/providers/jaxb/jaxb1\">" +
+        "<ns2:arg0>&b;</ns2:arg0>" +
+        "<ns2:arg1>2</ns2:arg1>" +
+        "</ns2:addNumbers>";
+    
+    static final String xmlWithDTDEntityExpansionAttack2 = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
+        "<!DOCTYPE root [" +
+        "<!ENTITY x32 \"foobar\">" +
+        "<!ENTITY x31 \"&x32;&x32;\">" +
+        "<!ENTITY x30 \"&x31;&x31;\">" +
+        "<!ENTITY x29 \"&x30;&x30;\">" +
+        "<!ENTITY x28 \"&x29;&x29;\">" +
+        "<!ENTITY x27 \"&x28;&x28;\">" +
+        "<!ENTITY x26 \"&x27;&x27;\">" +
+        "<!ENTITY x25 \"&x26;&x26;\">" +
+        "<!ENTITY x24 \"&x25;&x25;\">" +
+        "<!ENTITY x23 \"&x24;&x24;\">" +
+        "<!ENTITY x22 \"&x23;&x23;\">" +
+        "<!ENTITY x21 \"&x22;&x22;\">" +
+        "<!ENTITY x20 \"&x21;&x21;\">" +
+        "<!ENTITY x19 \"&x20;&x20;\">" +
+        "<!ENTITY x18 \"&x19;&x19;\">" +
+        "<!ENTITY x17 \"&x18;&x18;\">" +
+        "<!ENTITY x16 \"&x17;&x17;\">" +
+        "<!ENTITY x15 \"&x16;&x16;\">" +
+        "<!ENTITY x14 \"&x15;&x15;\">" +
+        "<!ENTITY x13 \"&x14;&x14;\">" +
+        "<!ENTITY x12 \"&x13;&x13;\">" +
+        "<!ENTITY x11 \"&x12;&x12;\">" +
+        "<!ENTITY x10 \"&x11;&x11;\">" +
+        "<!ENTITY  x9 \"&x10;&x10;\">" +
+        "<!ENTITY  x8 \"&x9;&x9;\">" +
+        "<!ENTITY  x7 \"&x8;&x8;\">" +
+        "<!ENTITY  x6 \"&x7;&x7;\">" +
+        "<!ENTITY  x5 \"&x6;&x6;\">" +
+        "<!ENTITY  x4 \"&x5;&x5;\">" +
+        "<!ENTITY  x3 \"&x4;&x4;\">" +
+        "<!ENTITY  x2 \"&x3;&x3;\">" +
+        "<!ENTITY  x1 \"&x2;&x2;\">" +
+        "]>" +
+        "<ns2:addNumbers xmlns:ns2=\"http://org/apache/wink/common/internal/providers/jaxb/jaxb1\">" +
+        "<ns2:arg0>&x1;</ns2:arg0>" +
+        "<ns2:arg1>2</ns2:arg1>" +
+        "</ns2:addNumbers>";
+
 
     private WinkConfiguration winkConfiguration = null;
     private MessageBodyReader jaxbProviderReader = null;
@@ -283,6 +334,46 @@ public class ProvidersJAXBTest extends MockObjectTestCase {
             (JAXBElement<MyPojo>)testunmarshaller.unmarshal(new StreamSource(new ByteArrayInputStream(xmlMyPojoWithDTD.getBytes())), MyPojo.class);
         MyPojo myPojo = testresponse.getValue();
         assertEquals("we could not unmarshal the test xml", "99999999", myPojo.getStringdata().trim());
+    }
+    
+    @Test
+    public void testEntityExpansionAttack() throws Exception {
+        
+        final Properties props = new Properties();
+        checking(new Expectations() {{
+            allowing(winkConfiguration).getProperties(); will(returnValue(props));
+        }});
+        
+        Exception ex = null;
+        try {
+            assertTrue(jaxbProviderReader.isReadable(MyPojo.class, null, null, MediaType.TEXT_XML_TYPE));
+            ByteArrayInputStream bais = new ByteArrayInputStream(xmlWithDTDEntityExpansionAttack.getBytes());
+            Object obj = jaxbProviderReader.readFrom(MyPojo.class, null, null, MediaType.TEXT_XML_TYPE, null, bais);
+            fail("should have got an exception");
+        } catch (Exception e) {
+            ex = e;
+        }
+        assertTrue("expected an XMLStreamException", ex.getCause() instanceof XMLStreamException);
+    }
+    
+    @Test(timeout=2000)
+    public void testEntityExpansionAttack2() throws Exception {
+        
+        final Properties props = new Properties();
+        checking(new Expectations() {{
+            allowing(winkConfiguration).getProperties(); will(returnValue(props));
+        }});
+        
+        Exception ex = null;
+        try {
+            assertTrue(jaxbProviderReader.isReadable(MyPojo.class, null, null, MediaType.TEXT_XML_TYPE));
+            ByteArrayInputStream bais = new ByteArrayInputStream(xmlWithDTDEntityExpansionAttack2.getBytes());
+            Object obj = jaxbProviderReader.readFrom(MyPojo.class, null, null, MediaType.TEXT_XML_TYPE, null, bais);
+            fail("should have got an exception");
+        } catch (Exception e) {
+            ex = e;
+        }
+        assertTrue("expected an XMLStreamException", ex.getCause() instanceof XMLStreamException);
     }
 
 }
