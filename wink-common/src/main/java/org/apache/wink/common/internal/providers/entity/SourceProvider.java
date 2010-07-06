@@ -137,7 +137,33 @@ public abstract class SourceProvider implements MessageBodyWriter<Source> {
             return (DOMSource.class == type && super.isReadable(mediaType));
         }
         
-        private void setupDocumentBuilderToFilterDTD(DocumentBuilder dbuilder) {
+        private DocumentBuilder getDocumentBuilder() throws ParserConfigurationException {
+            RuntimeContext runtimeContext = RuntimeContextTLS.getRuntimeContext();
+            WinkConfiguration winkConfig = runtimeContext.getAttribute(WinkConfiguration.class);
+            if (winkConfig != null) {
+                Properties props = winkConfig.getProperties();
+                if (props != null) {
+                    // use valueOf method to require the word "true"
+                    if (Boolean.valueOf(props.getProperty("wink.supportDTDEntityExpansion"))) { //$NON-NLS-1$
+                        return documentBuilderFactory.newDocumentBuilder();
+                    }
+                }
+            }
+            try {
+                // important: keep this order
+                documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            } catch (ParserConfigurationException e) {
+                // this should never happen if you run the SourceProviderTest unittests
+                logger.error(e.getMessage());
+            }
+            try {
+                // workaround for JDK5 bug that causes NPE in checking done due to above FEATURE_SECURE_PROCESSING
+                // For Apache Xerces-J:  https://issues.apache.org/jira/browse/XERCESJ-977
+                documentBuilderFactory.setFeature("http://apache.org/xml/features/dom/defer-node-expansion", Boolean.FALSE); //$NON-NLS-1$
+            } catch (ParserConfigurationException e) {
+                // possible if not on apache parser?  ignore...
+            }
+            DocumentBuilder dbuilder = documentBuilderFactory.newDocumentBuilder();
             /*
              * You might think you could just do this to prevent entity expansion:
              *    documentBuilderFactory.setExpandEntityReferences(false);
@@ -151,19 +177,7 @@ public abstract class SourceProvider implements MessageBodyWriter<Source> {
                     throw new SAXParseException(Messages.getMessage("entityRefsNotSupported"), null);  //$NON-NLS-1$
                 }
             });
-            try {
-                // important: keep this order
-                documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-            } catch (ParserConfigurationException e) {
-                // this should never happen if you run the SourceProviderTest unittests
-                logger.error(e.getMessage());
-            }
-            try {
-                // workaround for JDK5 bug that causes NPE in checking done due to above FEATURE_SECURE_PROCESSING
-                documentBuilderFactory.setFeature("http://apache.org/xml/features/dom/defer-node-expansion", false); //$NON-NLS-1$
-            } catch (ParserConfigurationException e) {
-                // possible if not on apache parser?  ignore...
-            }
+            return dbuilder;
         }
 
         public DOMSource readFrom(Class<DOMSource> type,
@@ -174,19 +188,25 @@ public abstract class SourceProvider implements MessageBodyWriter<Source> {
                                   InputStream entityStream) throws IOException,
             WebApplicationException {
             try {
-                DocumentBuilder dbuilder = documentBuilderFactory.newDocumentBuilder();
-                RuntimeContext runtimeContext = RuntimeContextTLS.getRuntimeContext();
-                WinkConfiguration winkConfig = runtimeContext.getAttribute(WinkConfiguration.class);
-                if (winkConfig != null) {
-                    Properties props = winkConfig.getProperties();
-                    if (props != null) {
-                        // use valueOf method to require the word "true"
-                        if (!Boolean.valueOf(props.getProperty("wink.supportDTDEntityExpansion"))) { //$NON-NLS-1$
-                            setupDocumentBuilderToFilterDTD(dbuilder);
-                        }
+                DocumentBuilder dbuilder = getDocumentBuilder();  //documentBuilderFactory.newDocumentBuilder();
+                return new DOMSource(dbuilder.parse(entityStream));
+            } catch (NullPointerException npe) {
+                // For Sun JDK5, they will never fix this problem.  See http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6181020
+                // Let's be as safe as possible, and check that all the conditions that indicate we're avoiding DTD expansion attack
+                // are present.  We'll need the catch the NPE when we do the parse, inspect the stack, and fail gracefully.  Ugly
+                // hack, but it works.  (Ideally, we'd also inspect the entityStream to ensure we're definitely doing DTD expansion
+                // when we get this NPE, but we cannot reliably reset the stream and re-read it due to possibly getting a stream
+                // that does not support .reset().)
+                StackTraceElement[] stackTraceElement = npe.getStackTrace();
+                for(int i = 0; i < stackTraceElement.length; i++) {
+                    if(stackTraceElement[i].getClassName().equals("com.sun.org.apache.xerces.internal.dom.DeferredDocumentImpl") //$NON-NLS-1$
+                            && (stackTraceElement[i].getMethodName().equals("setChunkIndex"))) { //$NON-NLS-1$
+                        // then it's really Sun JDK5, and as far as we can tell, it's related to DTD expansion attack, and we should fail gracefully
+                        logger.error(Messages.getMessage("entityRefsNotSupportedSunJDK5"), npe); //$NON-NLS-1$
+                        throw new WebApplicationException(Response.Status.BAD_REQUEST);
                     }
                 }
-                return new DOMSource(dbuilder.parse(entityStream));
+                throw npe;
             } catch (SAXException e) {
                 logger.error(Messages.getMessage("saxParseException", type.getName()), e); //$NON-NLS-1$
                 throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
