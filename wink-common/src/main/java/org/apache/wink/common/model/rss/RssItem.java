@@ -193,7 +193,7 @@ public class RssItem {
         if (syndEntry.getTitle() != null && syndEntry.getTitle().getValue() != null) {
             setTitle(syndEntry.getTitle().getValue());
         }
-        SyndLink link = syndEntry.getLink("alternate");
+        SyndLink link = syndEntry.getLink("alternate"); //$NON-NLS-1$
         if (link != null && link.getHref() != null) {
             setLink(link.getHref());
         }
@@ -210,7 +210,7 @@ public class RssItem {
         for (SyndCategory syndCategory : syndEntry.getCategories()) {
             getCategories().add(new RssCategory(syndCategory));
         }
-        link = syndEntry.getLink("enclosure");
+        link = syndEntry.getLink("enclosure"); //$NON-NLS-1$
         if (link != null) {
             setEnclosure(new RssEnclosure(link));
         }
@@ -243,7 +243,7 @@ public class RssItem {
         if (getLink() != null) {
             SyndLink syndLink = new SyndLink();
             syndLink.setHref(getLink());
-            syndLink.setRel("alternate");
+            syndLink.setRel("alternate"); //$NON-NLS-1$
             syndEntry.getLinks().add(syndLink);
         }
         if (getDescription() != null) {
@@ -253,7 +253,7 @@ public class RssItem {
             SyndPerson syndAuthor = new SyndPerson();
             String authorEmail = getAuthor();
             syndAuthor.setEmail(authorEmail);
-            syndAuthor.setName(authorEmail.substring(0, authorEmail.indexOf("@")));
+            syndAuthor.setName(authorEmail.substring(0, authorEmail.indexOf("@"))); //$NON-NLS-1$
             syndEntry.getAuthors().add(syndAuthor);
         }
         syndEntry.getCategories().clear();

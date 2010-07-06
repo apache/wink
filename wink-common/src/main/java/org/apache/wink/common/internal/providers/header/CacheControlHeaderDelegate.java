@@ -26,25 +26,27 @@ import java.util.Map.Entry;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 
+import org.apache.wink.common.internal.i18n.Messages;
+
 public class CacheControlHeaderDelegate implements HeaderDelegate<CacheControl> {
 
-    private static final String S_MAXAGE         = "s-maxage";
-    private static final String MAX_AGE          = "max-age";
-    private static final String PROXY_REVALIDATE = "proxy-revalidate";
-    private static final String MUST_REVALIDATE  = "must-revalidate";
-    private static final String NO_TRANSFORM     = "no-transform";
-    private static final String NO_STORE         = "no-store";
-    private static final String NO_CACHE         = "no-cache";
-    private static final String PRIVATE          = "private";
+    private static final String S_MAXAGE         = "s-maxage"; //$NON-NLS-1$
+    private static final String MAX_AGE          = "max-age"; //$NON-NLS-1$
+    private static final String PROXY_REVALIDATE = "proxy-revalidate"; //$NON-NLS-1$
+    private static final String MUST_REVALIDATE  = "must-revalidate"; //$NON-NLS-1$
+    private static final String NO_TRANSFORM     = "no-transform"; //$NON-NLS-1$
+    private static final String NO_STORE         = "no-store"; //$NON-NLS-1$
+    private static final String NO_CACHE         = "no-cache"; //$NON-NLS-1$
+    private static final String PRIVATE          = "private"; //$NON-NLS-1$
 
     public CacheControl fromString(String value) throws IllegalArgumentException {
         throw new UnsupportedOperationException(
-                                                "JAX-RS CacheControl type is designed to support only cache-response-directives");
+                                                Messages.getMessage("jaxrsCacheControlTypeSupport")); //$NON-NLS-1$
     }
 
     public String toString(CacheControl header) {
         if (header == null)
-            throw new IllegalArgumentException("CacheControl header is null");
+            throw new IllegalArgumentException(Messages.getMessage("headerIsNull", "CacheControl")); //$NON-NLS-1$ //$NON-NLS-2$
 
         StringBuffer cacheControlHeader = new StringBuffer();
 

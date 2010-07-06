@@ -43,6 +43,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.wink.common.RestException;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.model.ModelUtils;
 import org.apache.wink.common.internal.utils.JAXBUtils;
 import org.apache.wink.common.model.atom.AtomCategory;
@@ -120,7 +121,7 @@ public class AppCategories {
     boolean                          isFixedSet    = false;
 
     private static final String      ERROR_MESSAGE =
-                                                       "cannot mix inline and out-of-line categories attributes";
+                                                       Messages.getMessage("cannotMixInlineAndOutOfLine"); //$NON-NLS-1$
 
     // ============================
     @XmlTransient
@@ -130,7 +131,7 @@ public class AppCategories {
         try {
             context = JAXBContext.newInstance(AppCategories.class.getPackage().getName());
         } catch (JAXBException e) {
-            throw new RestException("Failed to create JAXBContext for AppCategories", e);
+            throw new RestException(Messages.getMessage("failedToCreateJAXBContextFor", "AppCategories"), e); //$NON-NLS-1$ //$NON-NLS-2$
         }
     }
 

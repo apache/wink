@@ -151,11 +151,11 @@ public class RestClient {
                 } catch (Exception e) {
                     logger.warn(Messages.getMessage("exceptionOccurredDuringClassProcessing", //$NON-NLS-1$
                                                     cls));
-                    logger.warn(Messages.getMessage("listExceptionDuringClassProcessing"), e);
+                    logger.warn(Messages.getMessage("listExceptionDuringClassProcessing"), e); //$NON-NLS-1$
                 } catch (NoClassDefFoundError e) {
                     logger.warn(Messages.getMessage("exceptionOccurredDuringClassProcessing", //$NON-NLS-1$
                                                     cls.getCanonicalName()));
-                    logger.warn(Messages.getMessage("listExceptionDuringClassProcessing"), e);
+                    logger.warn(Messages.getMessage("listExceptionDuringClassProcessing"), e); //$NON-NLS-1$
                 }
             } else {
                 logger.warn(Messages.getMessage("classNotAProvider", cls)); //$NON-NLS-1$
@@ -197,16 +197,16 @@ public class RestClient {
                 try {
                     providersRegistry.addProvider(obj, priority);
                 } catch (Exception e) {
-                    logger.warn(Messages.getMessage("exceptionOccurredDuringInstanceProcessing",
+                    logger.warn(Messages.getMessage("exceptionOccurredDuringInstanceProcessing", //$NON-NLS-1$
                                                     obj.getClass().getCanonicalName()));
-                    logger.warn(Messages.getMessage("listExceptionDuringInstanceProcessing"), e);
+                    logger.warn(Messages.getMessage("listExceptionDuringInstanceProcessing"), e); //$NON-NLS-1$
                 } catch (NoClassDefFoundError e) {
-                    logger.warn(Messages.getMessage("exceptionOccurredDuringInstanceProcessing",
+                    logger.warn(Messages.getMessage("exceptionOccurredDuringInstanceProcessing", //$NON-NLS-1$
                                                     obj.getClass().getCanonicalName()));
-                    logger.warn(Messages.getMessage("listExceptionDuringInstanceProcessing"), e);
+                    logger.warn(Messages.getMessage("listExceptionDuringInstanceProcessing"), e); //$NON-NLS-1$
                 }
             } else {
-                logger.warn(Messages.getMessage("classNotAProvider", cls));
+                logger.warn(Messages.getMessage("classNotAProvider", cls)); //$NON-NLS-1$
             }
         }
     }

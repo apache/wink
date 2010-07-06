@@ -23,6 +23,7 @@ import java.util.Date;
 
 import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.utils.HttpDateParser;
 
 /**
@@ -33,7 +34,7 @@ public class DateHeaderDelegate implements HeaderDelegate<Date> {
     public Date fromString(String date) throws IllegalArgumentException {
 
         if (date == null) {
-            throw new IllegalArgumentException("Date is null");
+            throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "date")); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         return HttpDateParser.parseHttpDate(date);
@@ -45,7 +46,7 @@ public class DateHeaderDelegate implements HeaderDelegate<Date> {
     public String toString(Date date) {
 
         if (date == null) {
-            throw new IllegalArgumentException("Date is null");
+            throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "date")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         return HttpDateParser.toHttpDate(date);
     }

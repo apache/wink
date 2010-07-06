@@ -25,39 +25,41 @@ import java.util.regex.Pattern;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 
+import org.apache.wink.common.internal.i18n.Messages;
+
 public class CookieHeaderDelegate implements HeaderDelegate<Cookie> {
 
-    private static Pattern      whitespace = Pattern.compile("\\s");
-    private static final String VERSION    = "$Version";
-    private static final String DOMAIN     = "$Domain";
-    private static final String PATH       = "$Path";
+    private static Pattern      whitespace = Pattern.compile("\\s"); //$NON-NLS-1$
+    private static final String VERSION    = "$Version"; //$NON-NLS-1$
+    private static final String DOMAIN     = "$Domain"; //$NON-NLS-1$
+    private static final String PATH       = "$Path"; //$NON-NLS-1$
 
     public Cookie fromString(String cookie) throws IllegalArgumentException {
 
         if (cookie == null) {
-            throw new IllegalArgumentException("Cookie header is null");
+            throw new IllegalArgumentException(Messages.getMessage("headerIsNull", "Cookie")); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
-        String tokens[] = cookie.split("[;,]");
+        String tokens[] = cookie.split("[;,]"); //$NON-NLS-1$
 
         if (tokens.length <= 0) {
-            throw new IllegalArgumentException("Invalid Cookie " + cookie);
+            throw new IllegalArgumentException(Messages.getMessage("invalidCookie", cookie)); //$NON-NLS-1$
         }
 
         ModifiableCookie firstCookie = null;
         int cookieNum = 0;
         boolean versionSet = false;
         for (String token : tokens) {
-            String[] subTokens = token.trim().split("=", 2);
+            String[] subTokens = token.trim().split("=", 2); //$NON-NLS-1$
             String name = subTokens.length > 0 ? subTokens[0] : null;
             String value = subTokens.length > 1 ? subTokens[1] : null;
-            if (value != null && value.startsWith("\"")
-                && value.endsWith("\"")
+            if (value != null && value.startsWith("\"") //$NON-NLS-1$
+                && value.endsWith("\"") //$NON-NLS-1$
                 && value.length() > 1) {
                 value = value.substring(1, value.length() - 1);
             }
 
-            if (!name.startsWith("$")) {
+            if (!name.startsWith("$")) { //$NON-NLS-1$
                 cookieNum++;
                 if (cookieNum > 1) {
                     // Return only first Cookie
@@ -74,37 +76,37 @@ public class CookieHeaderDelegate implements HeaderDelegate<Cookie> {
                 } else {
                     if (versionSet) {
                         throw new IllegalArgumentException(
-                                                           "Cookie cannot contain additional $Version: " + cookie);
+                                                           Messages.getMessage("cookieCannotContainAddlVers", cookie)); //$NON-NLS-1$
                     }
                 }
                 versionSet = true;
                 firstCookie.version = Integer.parseInt(value);
             } else if (name.startsWith(PATH) && cookie != null) {
                 if (firstCookie == null) {
-                    throw new IllegalArgumentException("Cookie must start with $Version: " + cookie);
+                    throw new IllegalArgumentException(Messages.getMessage("cookieMustStartWithVersion", cookie)); //$NON-NLS-1$
                 }
                 firstCookie.path = value;
             } else if (name.startsWith(DOMAIN) && cookie != null) {
                 if (firstCookie == null) {
-                    throw new IllegalArgumentException("Cookie must start with $Version: " + cookie);
+                    throw new IllegalArgumentException(Messages.getMessage("cookieMustStartWithVersion", cookie)); //$NON-NLS-1$
                 }
                 firstCookie.domain = value;
             }
         }
         if (cookieNum == 0) {
-            throw new IllegalArgumentException("Cookie doesn't contain NAME+VALUE: " + cookie);
+            throw new IllegalArgumentException(Messages.getMessage("cookieDoesNotContainNAMEVALUE", cookie)); //$NON-NLS-1$
         }
 
         if (firstCookie != null) {
             return validateAndBuildCookie(firstCookie, cookie);
         } else {
-            throw new IllegalArgumentException("Failed to parse Cookie " + cookie);
+            throw new IllegalArgumentException(Messages.getMessage("failedToParseCookie", cookie)); //$NON-NLS-1$
         }
     }
 
     private Cookie validateAndBuildCookie(ModifiableCookie firstCookie, String cookie) {
         if (firstCookie.name == null || firstCookie.value == null) {
-            throw new IllegalArgumentException("Failed to parse Cookie " + cookie);
+            throw new IllegalArgumentException(Messages.getMessage("failedToParseCookie", cookie)); //$NON-NLS-1$
         }
         return new Cookie(firstCookie.name, firstCookie.value, firstCookie.path,
                           firstCookie.domain, firstCookie.version);
@@ -113,21 +115,21 @@ public class CookieHeaderDelegate implements HeaderDelegate<Cookie> {
 
     public String toString(Cookie cookie) {
         if (cookie == null) {
-            throw new IllegalArgumentException("Cookie header is null");
+            throw new IllegalArgumentException(Messages.getMessage("headerIsNull", "Cookie")); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         StringBuilder cookieHeader = new StringBuilder();
 
-        cookieHeader.append(VERSION + "=").append(cookie.getVersion()).append(';');
+        cookieHeader.append(VERSION + "=").append(cookie.getVersion()).append(';'); //$NON-NLS-1$
         cookieHeader.append(cookie.getName()).append('=');
         appendValue(cookieHeader, cookie.getValue());
 
         if (cookie.getDomain() != null) {
-            cookieHeader.append(";" + DOMAIN + "=");
+            cookieHeader.append(";" + DOMAIN + "="); //$NON-NLS-1$ //$NON-NLS-2$
             appendValue(cookieHeader, cookie.getDomain());
         }
         if (cookie.getPath() != null) {
-            cookieHeader.append(";" + PATH + "=");
+            cookieHeader.append(";" + PATH + "="); //$NON-NLS-1$ //$NON-NLS-2$
             appendValue(cookieHeader, cookie.getPath());
         }
         return cookieHeader.toString();

@@ -148,7 +148,7 @@ public abstract class SourceProvider implements MessageBodyWriter<Source> {
                 public InputSource resolveEntity(String name, String baseURI)
                 throws SAXException, IOException {
                     // we don't support entity resolution here
-                    throw new SAXParseException(Messages.getMessage("entityRefsNotSupported"), null, null);  //$NON-NLS-1$
+                    throw new SAXParseException(Messages.getMessage("entityRefsNotSupported"), null);  //$NON-NLS-1$
                 }
             });
             try {
@@ -160,7 +160,7 @@ public abstract class SourceProvider implements MessageBodyWriter<Source> {
             }
             try {
                 // workaround for JDK5 bug that causes NPE in checking done due to above FEATURE_SECURE_PROCESSING
-                documentBuilderFactory.setFeature("http://apache.org/xml/features/dom/defer-node-expansion", false);
+                documentBuilderFactory.setFeature("http://apache.org/xml/features/dom/defer-node-expansion", false); //$NON-NLS-1$
             } catch (ParserConfigurationException e) {
                 // possible if not on apache parser?  ignore...
             }
@@ -181,7 +181,7 @@ public abstract class SourceProvider implements MessageBodyWriter<Source> {
                     Properties props = winkConfig.getProperties();
                     if (props != null) {
                         // use valueOf method to require the word "true"
-                        if (!Boolean.valueOf(props.getProperty("wink.supportDTDEntityExpansion"))) {
+                        if (!Boolean.valueOf(props.getProperty("wink.supportDTDEntityExpansion"))) { //$NON-NLS-1$
                             setupDocumentBuilderToFilterDTD(dbuilder);
                         }
                     }

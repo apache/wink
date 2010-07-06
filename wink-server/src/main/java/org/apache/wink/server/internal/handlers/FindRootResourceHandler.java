@@ -102,7 +102,7 @@ public class FindRootResourceHandler implements RequestHandler {
             // instances used; the subresource is dead)
             List<ResourceInstance> resourceInstances = result.getData().getMatchedResources();
             for (ResourceInstance res : resourceInstances) {
-                logger.debug("Releasing resource instance");
+                logger.debug("Releasing resource instance"); //$NON-NLS-1$
                 res.releaseInstance(context);
             }
         }

@@ -107,11 +107,14 @@ public abstract class AbstractJAXBProvider {
      * creates contexts between noon and 5:00pm. So, uhhh, don't do that.
      */
     private static class JAXBContextResolverKey {
+        private static final Logger logger = LoggerFactory.getLogger(JAXBContextResolverKey.class);
+        
         protected ContextResolver<JAXBContext> _resolver;
         protected Type                         _type;
         private int                            hashCode = -1;
 
         public JAXBContextResolverKey(ContextResolver<JAXBContext> resolver, Type type) {
+            logger.debug("Constructing JAXBContextResolverKey with {} and {}", resolver, type); //$NON-NLS-1$
             // resolver may be null, which is ok; we'll protect against NPEs in
             // equals and hashCode overrides
             _resolver = resolver;
@@ -120,20 +123,27 @@ public abstract class AbstractJAXBProvider {
 
         @Override
         public boolean equals(Object o) {
+            logger.debug("equals({}) entry", o); //$NON-NLS-1$
             if ((o == null) || (!(o instanceof JAXBContextResolverKey))) {
+                logger.debug("equals() exit due to null or not instance of JAXBContextResolverKey"); //$NON-NLS-1$
                 return false;
             }
             JAXBContextResolverKey obj = (JAXBContextResolverKey)o;
             // check for both null or both NOT null
             boolean result =
                 ((obj._resolver == null) && (_resolver == null)) || ((obj._resolver != null) && (_resolver != null));
+            logger.debug("null check result is {}", result); //$NON-NLS-1$
             // we can use hashCode() to compare _resolver
-            return result && (obj.hashCode() == hashCode()) && (obj._type.equals(_type));
+            boolean finalResult = result && (obj.hashCode() == hashCode()) && (obj._type.equals(_type));
+            logger.debug("final result is {}", finalResult); //$NON-NLS-1$
+            return finalResult;
         }
 
         @Override
         public int hashCode() {
+            logger.debug("hashCode() entry"); //$NON-NLS-1$
             if (hashCode != -1) {
+                logger.debug("returning hashCode {}", hashCode); //$NON-NLS-1$
                 return hashCode;
             }
             if (_resolver == null) {
@@ -142,6 +152,7 @@ public abstract class AbstractJAXBProvider {
                 hashCode = 0; // don't use _type's hashCode, as the instances
                 // may differ between JAXBContextResolverKey
                 // instances
+                logger.debug("resolver is null so returning hashCode {}", hashCode); //$NON-NLS-1$
                 return hashCode;
             }
             // Resolver instances may be unique due to the way we proxy the call
@@ -153,10 +164,12 @@ public abstract class AbstractJAXBProvider {
             // transaction level, rather than at the application, or worse, JVM
             // level.
             String resolverName = _resolver.getClass().getName();
+            logger.debug("resolverName is {}", resolverName); //$NON-NLS-1$
             byte[] bytes = resolverName.getBytes();
             for (int i = 0; i < bytes.length; i++) {
                 hashCode += bytes[i];
             }
+            logger.debug("returning hashCode to be {}", hashCode); //$NON-NLS-1$
             return hashCode;
         }
 
@@ -179,11 +192,11 @@ public abstract class AbstractJAXBProvider {
     // JAXBContext cache can be turned off through system property
     static private final String                                          propVal          =
                                                                                               System
-                                                                                                  .getProperty("org.apache.wink.jaxbcontextcache");
+                                                                                                  .getProperty("org.apache.wink.jaxbcontextcache"); //$NON-NLS-1$
     // non-final, protected only to make it unittestable
     static protected boolean                                             contextCacheOn   =
                                                                                               !((propVal != null) && (propVal
-                                                                                                  .equalsIgnoreCase("off")));
+                                                                                                  .equalsIgnoreCase("off"))); //$NON-NLS-1$
 
 /**
      * Get the unmarshaller. You must call {@link #releaseJAXBUnmarshaller(JAXBContext, Unmarshaller) to put it back
@@ -248,13 +261,13 @@ public abstract class AbstractJAXBProvider {
                     Properties props = winkConfig.getProperties();
                     if (props != null) {
                         // use valueOf method to require the word "true"
-                        supportDTD = Boolean.valueOf(props.getProperty("wink.supportDTDEntityExpansion"));
+                        supportDTD = Boolean.valueOf(props.getProperty("wink.supportDTDEntityExpansion")); //$NON-NLS-1$
                     }
                 }
                 if (!supportDTD) {
                     throw new XMLStreamException(Messages.getMessage("entityRefsNotSupported")); //$NON-NLS-1$
                 } else {
-                    logger.debug("DTD entity reference expansion is enabled.  This may present a security risk.");
+                    logger.debug("DTD entity reference expansion is enabled.  This may present a security risk."); //$NON-NLS-1$
                 }
             }
         }
@@ -306,9 +319,9 @@ public abstract class AbstractJAXBProvider {
             try {
                 xmlStreamReader.close();
             } catch (XMLStreamException e) {
-                logger.debug("XMLStreamReader already closed.", e);
+                logger.debug("XMLStreamReader already closed.", e); //$NON-NLS-1$
             } catch (RuntimeException e) {
-                logger.debug("RuntimeException occurred: ", e);
+                logger.debug("RuntimeException occurred: ", e); //$NON-NLS-1$
             }
         }
     }
@@ -464,7 +477,7 @@ public abstract class AbstractJAXBProvider {
 
     protected JAXBContext getContext(Class<?> type, Type genericType, MediaType mediaType)
         throws JAXBException {
-
+        logger.debug("getContext({}, {}, {}) entry", new Object[] { type, genericType, mediaType }); //$NON-NLS-1$
         ContextResolver<JAXBContext> contextResolver =
             providers.getContextResolver(JAXBContext.class, mediaType);
 
@@ -472,11 +485,16 @@ public abstract class AbstractJAXBProvider {
 
         JAXBContextResolverKey key = null;
         if (contextCacheOn) {
+            logger.debug("contextCacheOn is true"); //$NON-NLS-1$
             // it's ok and safe for contextResolver to be null at this point.
             // JAXBContextResolverKey can handle it
             key = new JAXBContextResolverKey(contextResolver, type);
+            logger.debug("created JAXBContextResolverKey {} for ({}, {}, {})", new Object[] { key, type, genericType, mediaType }); //$NON-NLS-1$
             context = jaxbContextCache.get(key);
+            logger.debug("retrieved context {}", context); //$NON-NLS-1$
             if (context != null) {
+                logger.debug("retrieved context {}@{}", context.getClass().getName(), System.identityHashCode(context)); //$NON-NLS-1$
+                logger.debug("returned context {}", context); //$NON-NLS-1$
                 return context;
             }
         }
@@ -490,13 +508,17 @@ public abstract class AbstractJAXBProvider {
         }
 
         if (contextCacheOn) {
+            logger.debug("put key {} and context {} into jaxbContextCache", key, context); //$NON-NLS-1$
             jaxbContextCache.put(key, context);
         }
 
+        logger.debug("returned context {}", context); //$NON-NLS-1$
+        logger.debug("retrieved context {}@{}", context.getClass().getName(), System.identityHashCode(context)); //$NON-NLS-1$
         return context;
     }
 
     private JAXBContext getDefaultContext(Class<?> type, Type genericType) throws JAXBException {
+        logger.debug("getDefaultContext({}, {}) entry", type, genericType); //$NON-NLS-1$
         JAXBContext context = jaxbDefaultContexts.get(type);
         if (context == null) {
 
@@ -511,13 +533,17 @@ public abstract class AbstractJAXBProvider {
                 // If that fails,
                 // we'll know
                 // soon enough
+                logger.debug("Using genericType to create context"); //$NON-NLS-1$
                 context = JAXBContext.newInstance((Class<?>)genericType);
             } else {
+                logger.debug("Using type to create context"); //$NON-NLS-1$
                 context = JAXBContext.newInstance(type);
             }
 
             jaxbDefaultContexts.put(type, context);
         }
+        logger.debug("getDefaultContext() exit returning", context); //$NON-NLS-1$
+        logger.debug("returning context {}@{}", context.getClass().getName(), System.identityHashCode(context)); //$NON-NLS-1$
         return context;
     }
 

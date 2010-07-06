@@ -23,21 +23,23 @@ import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 
+import org.apache.wink.common.internal.i18n.Messages;
+
 public class NewCookieHeaderDelegate implements HeaderDelegate<NewCookie> {
 
     public NewCookie fromString(String cookie) throws IllegalArgumentException {
         if (cookie == null) {
-            throw new IllegalArgumentException("Cookie is null");
+            throw new IllegalArgumentException(Messages.getMessage("cookieIsNull")); //$NON-NLS-1$
         }
 
-        String tokens[] = cookie.split(";");
+        String tokens[] = cookie.split(";"); //$NON-NLS-1$
         ModifiableCookie modifiableCookie = null;
         for (String token : tokens) {
-            String[] subTokens = token.split("=", 2);
+            String[] subTokens = token.split("=", 2); //$NON-NLS-1$
             String name = subTokens.length > 0 ? subTokens[0] : null;
             String value = subTokens.length > 1 ? subTokens[1] : null;
-            if (value != null && value.startsWith("\"")
-                && value.endsWith("\"")
+            if (value != null && value.startsWith("\"") //$NON-NLS-1$
+                && value.endsWith("\"") //$NON-NLS-1$
                 && value.length() > 1) {
                 value = value.substring(1, value.length() - 1);
             }
@@ -45,28 +47,26 @@ public class NewCookieHeaderDelegate implements HeaderDelegate<NewCookie> {
             // Create new NewCookie
             if (modifiableCookie == null) {
                 if (name == null) {
-                    throw new IllegalArgumentException("Invalid Cookie  - Cookie Name" + name
-                        + "is not valid");
+                    throw new IllegalArgumentException(Messages.getMessage("cookieNameNotValid", name)); //$NON-NLS-1$
                 }
                 if (value == null) {
                     throw new IllegalArgumentException(
-                                                       "Invalid Cookie  - Cookie Name value " + value
-                                                           + "is not valid");
+                                                       Messages.getMessage("cookieNameValueNotValid", value)); //$NON-NLS-1$
                 }
                 modifiableCookie = new ModifiableCookie();
                 modifiableCookie.name = name;
                 modifiableCookie.value = value;
-            } else if (name.trim().startsWith("Version")) {
+            } else if (name.trim().startsWith("Version")) { //$NON-NLS-1$
                 modifiableCookie.version = Integer.parseInt(value);
-            } else if (name.trim().startsWith("Path")) {
+            } else if (name.trim().startsWith("Path")) { //$NON-NLS-1$
                 modifiableCookie.path = value;
-            } else if (name.trim().startsWith("Domain")) {
+            } else if (name.trim().startsWith("Domain")) { //$NON-NLS-1$
                 modifiableCookie.domain = value;
-            } else if (name.trim().startsWith("Comment")) {
+            } else if (name.trim().startsWith("Comment")) { //$NON-NLS-1$
                 modifiableCookie.comment = value;
-            } else if (name.trim().startsWith("Max-Age")) {
+            } else if (name.trim().startsWith("Max-Age")) { //$NON-NLS-1$
                 modifiableCookie.maxAge = Integer.parseInt(value);
-            } else if (name.trim().startsWith("Secure")) {
+            } else if (name.trim().startsWith("Secure")) { //$NON-NLS-1$
                 modifiableCookie.secure = true;
             }
         }
@@ -85,7 +85,7 @@ public class NewCookieHeaderDelegate implements HeaderDelegate<NewCookie> {
 
     public String toString(NewCookie cookie) {
         if (cookie == null) {
-            throw new IllegalArgumentException("Cookie is null");
+            throw new IllegalArgumentException(Messages.getMessage("cookieIsNull")); //$NON-NLS-1$
         }
         return buildCookie(cookie.getName(), cookie.getValue(), cookie.getPath(), cookie
             .getDomain(), cookie.getVersion(), cookie.getComment(), cookie.getMaxAge(), cookie

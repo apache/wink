@@ -63,7 +63,7 @@ public class ServerMediaTypeCharsetAdjuster implements MediaTypeCharsetAdjuster 
                 logger.debug("Media Type not explicitly set on Response so going to correct charset parameter if necessary"); //$NON-NLS-1$
                 if (ProviderUtils.getCharsetOrNull(mediaType) == null) { //$NON-NLS-1$
                     try {
-                        String charsetValue = "UTF-8";
+                        String charsetValue = "UTF-8"; //$NON-NLS-1$
                         if (config.isUseAcceptCharset()) {
                             // configuration says to inspect and use the Accept-Charset header to determine response charset
                             HttpHeaders requestHeaders = null;
@@ -72,7 +72,7 @@ public class ServerMediaTypeCharsetAdjuster implements MediaTypeCharsetAdjuster 
                             }
                             charsetValue = ProviderUtils.getCharset(mediaType, requestHeaders);
                         }
-                        String newMediaTypeStr = mediaType.toString() + ";charset=" + charsetValue;
+                        String newMediaTypeStr = mediaType.toString() + ";charset=" + charsetValue; //$NON-NLS-1$
                         mediaType = MediaType.valueOf(newMediaTypeStr);
                         httpHeaders.putSingle(HttpHeaders.CONTENT_TYPE, newMediaTypeStr);
                         logger.debug("Changed media type to be {} in Content-Type HttpHeader", newMediaTypeStr); //$NON-NLS-1$
@@ -83,7 +83,7 @@ public class ServerMediaTypeCharsetAdjuster implements MediaTypeCharsetAdjuster 
                 }
             }
         } else {
-            logger.debug("No default charset was applied to the response Content-Type header due to deployment configuration directive.");  // $NON-NLS-1$
+            logger.debug("No default charset was applied to the response Content-Type header due to deployment configuration directive.");  // $NON-NLS-1$ //$NON-NLS-1$
         }
 
         logger.debug("setDefaultCharsetOnMediaTypeHeader() exit returning {}", mediaType); //$NON-NLS-1$

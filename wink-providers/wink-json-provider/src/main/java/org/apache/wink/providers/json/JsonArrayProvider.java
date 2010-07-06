@@ -89,7 +89,7 @@ public class JsonArrayProvider implements MessageBodyWriter<JSONArray>,
         try {
             jsonString = t.toString(2);
         } catch (JSONException e) {
-            logger.error(Messages.getMessage("jsonFailWriteJSONArray"));
+            logger.error(Messages.getMessage("jsonFailWriteJSONArray")); //$NON-NLS-1$
             throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
         }
 
@@ -98,18 +98,18 @@ public class JsonArrayProvider implements MessageBodyWriter<JSONArray>,
             callbackParam =
                 uriInfo.getQueryParameters().getFirst(RestConstants.REST_PARAM_JSON_CALLBACK);
         } catch (Exception e) {
-            logger.debug("Could not get the URI callback param", e);
+            logger.debug("Could not get the URI callback param", e); //$NON-NLS-1$
         }
 
         Charset charset = Charset.forName(ProviderUtils.getCharset(mediaType));
         OutputStreamWriter writer = new OutputStreamWriter(entityStream, charset);
         if (callbackParam != null) {
             writer.write(callbackParam);
-            writer.write("(");
+            writer.write("("); //$NON-NLS-1$
         }
         writer.write(jsonString);
         if (callbackParam != null) {
-            writer.write(")");
+            writer.write(")"); //$NON-NLS-1$
         }
         writer.flush();
     }
@@ -131,7 +131,7 @@ public class JsonArrayProvider implements MessageBodyWriter<JSONArray>,
             return new JSONArray(new JSONTokener(ProviderUtils
                 .createReader(entityStream, mediaType)));
         } catch (JSONException e) {
-            logger.error(Messages.getMessage("jsonFailReadJSONArray"));
+            logger.error(Messages.getMessage("jsonFailReadJSONArray")); //$NON-NLS-1$
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         }
     }

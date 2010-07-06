@@ -28,7 +28,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,6 +37,7 @@ import java.util.TreeSet;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.PathSegment;
 
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.utils.GenericsUtils;
 import org.apache.wink.common.internal.utils.UriHelper;
 
@@ -137,20 +137,19 @@ public abstract class ValueConvertor {
         // http://jcp.org/aboutJava/communityprocess/maintenance/jsr311/311ChangeLog.html
         // precendence for enums is fromString, then valueOf
         try {
-            Method valueOf = classType.getDeclaredMethod("fromString", String.class);
+            Method valueOf = classType.getDeclaredMethod("fromString", String.class); //$NON-NLS-1$
             return new FromStringConvertor(valueOf);
         } catch (SecurityException e) {
         } catch (NoSuchMethodException e) {
             try {
-                Method fromString = classType.getDeclaredMethod("valueOf", String.class);
+                Method fromString = classType.getDeclaredMethod("valueOf", String.class); //$NON-NLS-1$
                 return new ValueOfConvertor(fromString);
             } catch (SecurityException e2) {
             } catch (NoSuchMethodException e2) {
             }
         }
 
-        throw new IllegalArgumentException("type '" + classType
-            + "' is not a supported resource method parameter");
+        throw new IllegalArgumentException(Messages.getMessage("notASupportedResourceMethodParam", classType)); //$NON-NLS-1$
     }
 
     private static ValueConvertor getSingleValueConvertor(Class<?> classType) {
@@ -188,15 +187,14 @@ public abstract class ValueConvertor {
             // http://jcp.org/aboutJava/communityprocess/maintenance/jsr311/311ChangeLog.html
             // fallback to fromString method when no valueOf method exists
             try {
-                Method fromString = classType.getDeclaredMethod("fromString", String.class);
+                Method fromString = classType.getDeclaredMethod("fromString", String.class); //$NON-NLS-1$
                 return new FromStringConvertor(fromString);
             } catch (SecurityException e2) {
             } catch (NoSuchMethodException e2) {
             }
         }
 
-        throw new IllegalArgumentException("type '" + classType
-            + "' is not a supported resource method parameter");
+        throw new IllegalArgumentException(Messages.getMessage("notASupportedResourceMethodParam", classType)); //$NON-NLS-1$
     }
 
     private static class ArrayValueConvertor extends ValueConvertor {
@@ -236,8 +234,7 @@ public abstract class ValueConvertor {
             if (e instanceof WebApplicationException) {
                 return (RuntimeException)e;
             }
-            String message = String.format("Cannot convert value '%s' to %s", value, targetClass);
-            return new ConversionException(message, e);
+            return new ConversionException(Messages.getMessage("cannotConvertValueFromTo", value, targetClass), e); //$NON-NLS-1$
         }
 
         public Object convert(List<String> values) throws WebApplicationException {
@@ -296,9 +293,8 @@ public abstract class ValueConvertor {
                     // enforce E009 from http://jcp.org/aboutJava/communityprocess/maintenance/jsr311/311ChangeLog.html
                     // note that we don't care what return object type the method declares, only what it actually returns
                     throw createConversionException(value, method.getDeclaringClass(),
-                            new Exception("Value returned from method " + method.toString() + " must be "
-                                    + "of type " + method.getDeclaringClass() + ".  "
-                                    + "Returned object was type " + objToReturn.getClass()));
+                            new Exception(Messages.getMessage("valueFromMethodMustBeType", method.toString(), method.getDeclaringClass()) //$NON-NLS-1$
+                                    + "  " + Messages.getMessage("returnedTypeWas", objToReturn.getClass()))); //$NON-NLS-1$ //$NON-NLS-2$
                 }
                 return objToReturn;
             } catch (IllegalArgumentException e) {

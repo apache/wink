@@ -63,11 +63,11 @@ public class ClientConfig implements Cloneable, WinkConfiguration {
     private boolean                   loadWinkApplications               = true;
 
     private static final String       WINK_CLIENT_CONNECTTIMEOUT         =
-                                                                             "wink.client.connectTimeout";
+                                                                             "wink.client.connectTimeout"; //$NON-NLS-1$
     private static final String       WINK_CLIENT_READTIMEOUT            =
-                                                                             "wink.client.readTimeout";
+                                                                             "wink.client.readTimeout"; //$NON-NLS-1$
     private static final String       WINK_SUPPORT_DTD_EXPANSION  =
-                                                                             "wink.supportDTDEntityExpansion";
+                                                                             "wink.supportDTDEntityExpansion"; //$NON-NLS-1$
 
     private static int                WINK_CLIENT_CONNECTTIMEOUT_DEFAULT = 60000;
     private static int                WINK_CLIENT_READTIMEOUT_DEFAULT    = 60000;
@@ -181,7 +181,7 @@ public class ClientConfig implements Cloneable, WinkConfiguration {
         try {
             return Integer.valueOf(getProperties().getProperty(WINK_CLIENT_CONNECTTIMEOUT)).intValue();
         } catch (NumberFormatException e) {
-            logger.debug("Value in properties for key " + WINK_CLIENT_CONNECTTIMEOUT + " is invalid.  Reverting to default: " + WINK_CLIENT_CONNECTTIMEOUT_DEFAULT);
+            logger.debug("Value in properties for key {} is invalid.  Reverting to default: {}", WINK_CLIENT_CONNECTTIMEOUT, WINK_CLIENT_CONNECTTIMEOUT_DEFAULT); //$NON-NLS-1$
             getProperties().setProperty(WINK_CLIENT_CONNECTTIMEOUT, String.valueOf(WINK_CLIENT_CONNECTTIMEOUT_DEFAULT));
             return getReadTimeout();  // this is safe, because it's unit tested.  :)
         }
@@ -211,7 +211,7 @@ public class ClientConfig implements Cloneable, WinkConfiguration {
         try {
             return Integer.valueOf(getProperties().getProperty(WINK_CLIENT_READTIMEOUT)).intValue();
         } catch (NumberFormatException e) {
-            logger.debug("Value in properties for key " + WINK_CLIENT_READTIMEOUT + " is invalid.  Reverting to default: " + WINK_CLIENT_READTIMEOUT_DEFAULT);
+            logger.debug("Value in properties for key {} is invalid.  Reverting to default: {}", WINK_CLIENT_READTIMEOUT, WINK_CLIENT_READTIMEOUT_DEFAULT); //$NON-NLS-1$
             getProperties().setProperty(WINK_CLIENT_READTIMEOUT, String.valueOf(WINK_CLIENT_READTIMEOUT_DEFAULT));
             return getReadTimeout();  // this is safe, because it's unit tested.  :)
         }
@@ -438,25 +438,25 @@ public class ClientConfig implements Cloneable, WinkConfiguration {
                 String connectTimeoutString = System.getProperty(WINK_CLIENT_CONNECTTIMEOUT, String.valueOf(WINK_CLIENT_CONNECTTIMEOUT_DEFAULT));
                 int toSet = Integer.parseInt(connectTimeoutString);
                 properties.put(WINK_CLIENT_CONNECTTIMEOUT, String.valueOf(toSet));
-                logger.debug("Wink client connectTimeout default value is {}.", toSet);
+                logger.debug("Wink client connectTimeout default value is {}.", toSet); //$NON-NLS-1$
             } catch (Exception e) {
-                logger.debug("Error processing {} system property: {}", WINK_CLIENT_CONNECTTIMEOUT, e);
+                logger.debug("Error processing {} system property: {}", WINK_CLIENT_CONNECTTIMEOUT, e); //$NON-NLS-1$
             }
             try {
                 String readTimeoutString = System.getProperty(WINK_CLIENT_READTIMEOUT, String.valueOf(WINK_CLIENT_READTIMEOUT_DEFAULT));
                 int toSet = Integer.parseInt(readTimeoutString);
                 properties.put(WINK_CLIENT_READTIMEOUT, String.valueOf(toSet));
-                logger.debug("Wink client readTimeout default value is {}.", toSet);
+                logger.debug("Wink client readTimeout default value is {}.", toSet); //$NON-NLS-1$
             } catch (Exception e) {
-                logger.debug("Error processing {} system property: {}", WINK_CLIENT_READTIMEOUT, e);
+                logger.debug("Error processing {} system property: {}", WINK_CLIENT_READTIMEOUT, e); //$NON-NLS-1$
             }
             try {
                 String supportDTD = System.getProperty(WINK_SUPPORT_DTD_EXPANSION, String.valueOf(WINK_CLIENT_SUPPORT_DTD_EXPANSION_DEFAULT));
                 boolean toSet = Boolean.valueOf(supportDTD);  // require "true" or "false", not "yes" or "no" or other variants (see parseBoolean vs. valueOf javadoc)
                 properties.put(WINK_SUPPORT_DTD_EXPANSION, String.valueOf(toSet));
-                logger.debug("Wink client readTimeout default value is {}.", String.valueOf(toSet));
+                logger.debug("Wink client readTimeout default value is {}.", String.valueOf(toSet)); //$NON-NLS-1$
             } catch (Exception e) {
-                logger.debug("Error processing {} system property: {}", WINK_SUPPORT_DTD_EXPANSION, e);
+                logger.debug("Error processing {} system property: {}", WINK_SUPPORT_DTD_EXPANSION, e); //$NON-NLS-1$
             }
         }
         return properties;

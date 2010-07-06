@@ -68,11 +68,12 @@ public class RestServlet extends AbstractRestServlet {
     private static final Logger logger                  =
                                                             LoggerFactory
                                                                 .getLogger(RestServlet.class);
-    public static final String  APPLICATION_INIT_PARAM  = "javax.ws.rs.Application";          //$NON-NLS-1$
-    public static final String  PROPERTIES_DEFAULT_FILE = "META-INF/wink-default.properties"; //$NON-NLS-1$
-    public static final String  PROPERTIES_INIT_PARAM   = "propertiesLocation";               //$NON-NLS-1$
-    public static final String  APP_LOCATION_PARAM      = "applicationConfigLocation";        //$NON-NLS-1$
-    public static final String  DEPLOYMENT_CONF_PARAM   = "deploymentConfiguration";          //$NON-NLS-1$
+    
+    public static final String APPLICATION_INIT_PARAM  = "javax.ws.rs.Application";          //$NON-NLS-1$
+    public static final String PROPERTIES_DEFAULT_FILE = "META-INF/wink-default.properties"; //$NON-NLS-1$
+    public static final String PROPERTIES_INIT_PARAM   = "propertiesLocation";               //$NON-NLS-1$
+    public static final String APP_LOCATION_PARAM      = "applicationConfigLocation";        //$NON-NLS-1$
+    public static final String DEPLOYMENT_CONF_PARAM    = "deploymentConfiguration";          //$NON-NLS-1$
 
     @Override
     public void init() throws ServletException {

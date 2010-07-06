@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 
 import javax.ws.rs.core.MultivaluedMap;
 
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.uri.UriEncoder;
 
 /**
@@ -284,11 +285,11 @@ public class JaxRsUriTemplateProcessor extends UriTemplateProcessor {
 
         public void variable(String name, String regex) {
             if (values == null) {
-                throw new NullPointerException("variable '" + name + "' was not supplied a value");
+                throw new NullPointerException(Messages.getMessage("variableNotSuppliedAValue", name)); //$NON-NLS-1$
             }
             String valueStr = values.getFirst(name);
             if (valueStr == null) {
-                throw new NullPointerException("variable '" + name + "' was not supplied a value");
+                throw new NullPointerException(Messages.getMessage("variableNotSuppliedAValue", name)); //$NON-NLS-1$
             }
             out.append(valueStr);
         }

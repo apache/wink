@@ -35,6 +35,7 @@ import javax.xml.namespace.QName;
 import junit.framework.TestCase;
 
 import org.apache.wink.common.RestException;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.model.ModelUtils;
 import org.apache.wink.common.internal.utils.JAXBUtils;
 import org.apache.wink.common.model.atom.AtomCategory;
@@ -143,7 +144,7 @@ public class AppTest extends TestCase {
         try {
             cats.setScheme("scheme");
         } catch (RestException e) {
-            assertEquals("cannot mix inline and out-of-line categories attributes", e.getMessage());
+            assertEquals(Messages.getMessage("cannotMixInlineAndOutOfLine"), e.getMessage());
         }
 
         cats = new AppCategories();
@@ -151,7 +152,7 @@ public class AppTest extends TestCase {
         try {
             cats.setFixed(AppYesNo.YES);
         } catch (RestException e) {
-            assertEquals("cannot mix inline and out-of-line categories attributes", e.getMessage());
+            assertEquals(Messages.getMessage("cannotMixInlineAndOutOfLine"), e.getMessage());
         }
 
         cats = new AppCategories();
@@ -160,7 +161,7 @@ public class AppTest extends TestCase {
         try {
             cats.setHref("scheme");
         } catch (RestException e) {
-            assertEquals("cannot mix inline and out-of-line categories attributes", e.getMessage());
+            assertEquals(Messages.getMessage("cannotMixInlineAndOutOfLine"), e.getMessage());
         }
 
         cats = new AppCategories();

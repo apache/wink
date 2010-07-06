@@ -31,6 +31,7 @@ import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Providers;
 
 import org.apache.wink.common.internal.CaseInsensitiveMultivaluedMap;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -97,9 +98,8 @@ public class OutPart {
                     .valueOf(getContentType()));
             if (writer == null) {
                 logger
-                    .warn("Could not find a writer for {} and {}. Try to find JAF DataSourceProvider",
-                          getBody().getClass(),
-                          getContentType());
+                    .warn(Messages.getMessage("couldNotFindWriter", getBody().getClass(), //$NON-NLS-1$
+                           getContentType()));
                 throw new WebApplicationException(500);
             }
             writer.writeTo(getBody(), getBody().getClass(), null, null, MediaType

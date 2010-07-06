@@ -65,6 +65,7 @@ class DefaultLifecycleManager<T> implements LifecycleManager<T> {
     }
 
     public ObjectFactory<T> createObjectFactory(final Class<T> cls) {
+        logger.trace("Entry {}", cls); //$NON-NLS-1$
 
         if (cls == null) {
             throw new NullPointerException(Messages.getMessage("variableIsNull", "cls")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -76,24 +77,25 @@ class DefaultLifecycleManager<T> implements LifecycleManager<T> {
                 .getMessage("cannotCreateDefaultFactoryForDR", String.valueOf(cls))); //$NON-NLS-1$
         }
 
+        ObjectFactory<T> ret = null;
         if (ApplicationMetadataCollector.isApplication(cls)) {
             // by default application subclasses are singletons
-            return LifecycleManagerUtils.createSingletonObjectFactory(cls);
-        }
-
-        if (ProviderMetadataCollector.isProvider(cls)) {
+            ret = LifecycleManagerUtils.createSingletonObjectFactory(cls);
+        } else if (ProviderMetadataCollector.isProvider(cls)) {
             // by default providers are singletons
-            return LifecycleManagerUtils.createSingletonObjectFactory(cls);
-        }
-
-        if (ResourceMetadataCollector.isStaticResource(cls)) {
+            ret = LifecycleManagerUtils.createSingletonObjectFactory(cls);
+        } else if (ResourceMetadataCollector.isStaticResource(cls)) {
             // by default resources are prototypes (created per request)
-            return LifecycleManagerUtils.createPrototypeObjectFactory(cls);
+            ret = LifecycleManagerUtils.createPrototypeObjectFactory(cls);
         }
 
-        // unknown object, should never reach this code
-        throw new IllegalArgumentException(Messages
-            .getMessage("cannotCreateDefaultFactoryFor", String.valueOf(cls))); //$NON-NLS-1$
+        if (ret != null) {
+            logger.trace("Exit {}", ret); //$NON-NLS-1$
+            return ret;
+        } else
+            // unknown object, should never reach this code
+            throw new IllegalArgumentException(Messages
+                .getMessage("cannotCreateDefaultFactoryFor", String.valueOf(cls))); //$NON-NLS-1$
     }
 
 }

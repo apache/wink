@@ -278,7 +278,7 @@ public class RssChannel {
     protected List<Object>      any;
     protected List<RssItem>     item;
 
-    private static String       RSS_DATE_FORMAT = "EEE, d MMM yyyy HH:mm:ss z";
+    private static String       RSS_DATE_FORMAT = "EEE, d MMM yyyy HH:mm:ss z"; //$NON-NLS-1$
     private static final Logger logger          = LoggerFactory.getLogger(RssChannel.class);
 
     /**
@@ -301,7 +301,7 @@ public class RssChannel {
         if (syndFeed.getTitle() != null && syndFeed.getTitle().getValue() != null) {
             setTitle(syndFeed.getTitle().getValue());
         }
-        SyndLink link = syndFeed.getLink("alternate");
+        SyndLink link = syndFeed.getLink("alternate"); //$NON-NLS-1$
         if (link != null && link.getHref() != null) {
             setLink(link.getHref());
         }
@@ -366,7 +366,7 @@ public class RssChannel {
         if (getLink() != null) {
             SyndLink syndLink = new SyndLink();
             syndLink.setHref(getLink());
-            syndLink.setRel("alternate");
+            syndLink.setRel("alternate"); //$NON-NLS-1$
             syndFeed.getLinks().add(syndLink);
         }
         if (getDescription() != null) {
@@ -382,7 +382,7 @@ public class RssChannel {
             SyndPerson syndAuthor = new SyndPerson();
             String authorEmail = getManagingEditor();
             syndAuthor.setEmail(authorEmail);
-            syndAuthor.setName(authorEmail.substring(0, authorEmail.indexOf("@")));
+            syndAuthor.setName(authorEmail.substring(0, authorEmail.indexOf("@"))); //$NON-NLS-1$
             syndFeed.getAuthors().add(syndAuthor);
         }
         if (getLastBuildDate() != null) {
@@ -813,7 +813,7 @@ public class RssChannel {
         try {
             return format.parse(rssDate);
         } catch (ParseException e) {
-            logger.error(Messages.getMessage("listExceptionDuringClassProcessing"), e);
+            logger.error(Messages.getMessage("listExceptionDuringClassProcessing"), e); //$NON-NLS-1$
         }
         return null;
     }

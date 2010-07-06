@@ -97,9 +97,9 @@ public class DeploymentConfiguration implements WinkConfiguration {
     private static final String       VALIDATE_LOCATION_HEADER            =
                                                                               "wink.validateLocationHeader";                 //$NON-NLS-1$
     private static final String       DEFAULT_RESPONSE_CHARSET            =
-                                                                              "wink.response.defaultCharset";                // $NON-NLS-1$
+                                                                              "wink.response.defaultCharset";                // $NON-NLS-1$ //$NON-NLS-1$
     private static final String       USE_ACCEPT_CHARSET                  =
-                                                                              "wink.response.useAcceptCharset";              // $NON-NLS-1$
+                                                                              "wink.response.useAcceptCharset";              // $NON-NLS-1$ //$NON-NLS-1$
     // handler chains
     private RequestHandlersChain      requestHandlersChain;
     private ResponseHandlersChain     responseHandlersChain;
@@ -360,18 +360,18 @@ public class DeploymentConfiguration implements WinkConfiguration {
                     mediaTypeMapper.addMappings(handlersFactory.getMediaTypeMappings());
                 } catch (ClassNotFoundException e) {
                     if (logger.isErrorEnabled()) {
-                        logger.error(Messages.getMessage("isNotAClassWithMsgFormat",
+                        logger.error(Messages.getMessage("isNotAClassWithMsgFormat", //$NON-NLS-1$
                                                          mediaTypeMapperFactoryClassName), e);
                     }
                 } catch (InstantiationException e) {
                     if (logger.isErrorEnabled()) {
                         logger.error(Messages
-                            .getMessage("classInstantiationExceptionWithMsgFormat",
+                            .getMessage("classInstantiationExceptionWithMsgFormat", //$NON-NLS-1$
                                         mediaTypeMapperFactoryClassName), e);
                     }
                 } catch (IllegalAccessException e) {
                     if (logger.isErrorEnabled()) {
-                        logger.error(Messages.getMessage("classIllegalAccessWithMsgFormat",
+                        logger.error(Messages.getMessage("classIllegalAccessWithMsgFormat", //$NON-NLS-1$
                                                          mediaTypeMapperFactoryClassName), e);
                     }
                 }
@@ -389,7 +389,7 @@ public class DeploymentConfiguration implements WinkConfiguration {
         String handlersFactoryClassName = properties.getProperty(HANDLERS_FACTORY_CLASS_PROP);
         if (handlersFactoryClassName != null) {
             try {
-                logger.debug("Handlers Factory Class is: {}", handlersFactoryClassName);
+                logger.debug("Handlers Factory Class is: {}", handlersFactoryClassName); //$NON-NLS-1$
                 // use ClassUtils.getClass instead of Class.forName so we have
                 // classloader visibility into the Web module in J2EE
                 // environments
@@ -408,13 +408,13 @@ public class DeploymentConfiguration implements WinkConfiguration {
                     errorUserHandlers = (List<ResponseHandler>)handlersFactory.getErrorHandlers();
                 }
             } catch (ClassNotFoundException e) {
-                logger.error(Messages.getMessage("isNotAClassWithMsgFormat",
+                logger.error(Messages.getMessage("isNotAClassWithMsgFormat", //$NON-NLS-1$
                                                  handlersFactoryClassName), e);
             } catch (InstantiationException e) {
-                logger.error(Messages.getMessage("classInstantiationExceptionWithMsgFormat",
+                logger.error(Messages.getMessage("classInstantiationExceptionWithMsgFormat", //$NON-NLS-1$
                                                  handlersFactoryClassName), e);
             } catch (IllegalAccessException e) {
-                logger.error(Messages.getMessage("classIllegalAccessWithMsgFormat",
+                logger.error(Messages.getMessage("classIllegalAccessWithMsgFormat", //$NON-NLS-1$
                                                  handlersFactoryClassName), e);
             }
         }

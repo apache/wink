@@ -73,22 +73,22 @@ public class ContentEncodingResponseFilter implements Filter {
                                                                                              .createHeaderDelegate(AcceptEncoding.class);
 
     public void init(FilterConfig arg0) throws ServletException {
-        logger.debug("init({}) entry", arg0);
+        logger.debug("init({}) entry", arg0); //$NON-NLS-1$
         /* do nothing */
-        logger.debug("init() exit");
+        logger.debug("init() exit"); //$NON-NLS-1$
     }
 
     public void destroy() {
-        logger.debug("destroy() entry");
+        logger.debug("destroy() entry"); //$NON-NLS-1$
         /* do nothing */
-        logger.debug("destroy() exit");
+        logger.debug("destroy() exit"); //$NON-NLS-1$
     }
 
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse,
                          FilterChain chain) throws IOException, ServletException {
         if (logger.isDebugEnabled()) {
-            logger.debug("doFilter({}, {}, {}) entry", new Object[] {servletRequest,
+            logger.debug("doFilter({}, {}, {}) entry", new Object[] {servletRequest, //$NON-NLS-1$
                 servletResponse, chain});
         }
         /*
@@ -97,30 +97,30 @@ public class ContentEncodingResponseFilter implements Filter {
         if (servletRequest instanceof HttpServletRequest && servletResponse instanceof HttpServletResponse) {
             HttpServletRequest httpServletRequest = (HttpServletRequest)servletRequest;
             final AcceptEncoding acceptEncoding = getAcceptEncodingHeader(httpServletRequest);
-            logger.debug("AcceptEncoding header was {}", acceptEncoding);
+            logger.debug("AcceptEncoding header was {}", acceptEncoding); //$NON-NLS-1$
             if (acceptEncoding != null && (acceptEncoding.isAnyEncodingAllowed() || acceptEncoding
                 .getAcceptableEncodings().size() > 0)) {
-                logger.debug("AcceptEncoding header was set so wrapping HttpServletResponse");
+                logger.debug("AcceptEncoding header was set so wrapping HttpServletResponse"); //$NON-NLS-1$
                 HttpServletResponseContentEncodingWrapperImpl wrappedServletResponse =
                     new HttpServletResponseContentEncodingWrapperImpl(
                                                                       (HttpServletResponse)servletResponse,
                                                                       acceptEncoding);
-                logger.debug("Passing on request and response down the filter chain");
+                logger.debug("Passing on request and response down the filter chain"); //$NON-NLS-1$
                 chain.doFilter(servletRequest, wrappedServletResponse);
-                logger.debug("Finished filter chain");
+                logger.debug("Finished filter chain"); //$NON-NLS-1$
                 EncodedOutputStream encodedOutputStream =
                     wrappedServletResponse.getEncodedOutputStream();
                 if (encodedOutputStream != null) {
-                    logger.debug("Calling encodedOutputStream finish");
+                    logger.debug("Calling encodedOutputStream finish"); //$NON-NLS-1$
                     encodedOutputStream.finish();
                 }
-                logger.debug("doFilter exit()");
+                logger.debug("doFilter exit()"); //$NON-NLS-1$
                 return;
             }
         }
-        logger.debug("AcceptEncoding header not found so processing like normal request");
+        logger.debug("AcceptEncoding header not found so processing like normal request"); //$NON-NLS-1$
         chain.doFilter(servletRequest, servletResponse);
-        logger.debug("doFilter exit()");
+        logger.debug("doFilter exit()"); //$NON-NLS-1$
     }
 
     /**
@@ -130,23 +130,23 @@ public class ContentEncodingResponseFilter implements Filter {
      * @return
      */
     static AcceptEncoding getAcceptEncodingHeader(HttpServletRequest httpServletRequest) {
-        logger.debug("getAcceptEncodingHeader({}) entry", httpServletRequest);
+        logger.debug("getAcceptEncodingHeader({}) entry", httpServletRequest); //$NON-NLS-1$
         Enumeration<String> acceptEncodingEnum =
             httpServletRequest.getHeaders(HttpHeaders.ACCEPT_ENCODING);
         StringBuilder sb = new StringBuilder();
         if (acceptEncodingEnum.hasMoreElements()) {
             sb.append(acceptEncodingEnum.nextElement());
             while (acceptEncodingEnum.hasMoreElements()) {
-                sb.append(",");
+                sb.append(","); //$NON-NLS-1$
                 sb.append(acceptEncodingEnum.nextElement());
             }
             String acceptEncodingHeader = sb.toString();
-            logger.debug("acceptEncodingHeader is {} so returning as AcceptEncodingHeader",
+            logger.debug("acceptEncodingHeader is {} so returning as AcceptEncodingHeader", //$NON-NLS-1$
                          acceptEncodingHeader);
             return acceptEncodingHeaderDelegate.fromString(acceptEncodingHeader);
         }
-        logger.debug("No Accept-Encoding header");
-        logger.debug("getAcceptEncodingHeader() exit - returning null");
+        logger.debug("No Accept-Encoding header"); //$NON-NLS-1$
+        logger.debug("getAcceptEncodingHeader() exit - returning null"); //$NON-NLS-1$
         return null;
     }
 
@@ -221,7 +221,7 @@ public class ContentEncodingResponseFilter implements Filter {
 
         @Override
         public void isFirstWrite() {
-            response.addHeader(HttpHeaders.CONTENT_ENCODING, "gzip");
+            response.addHeader(HttpHeaders.CONTENT_ENCODING, "gzip"); //$NON-NLS-1$
             response.addHeader(HttpHeaders.VARY, HttpHeaders.ACCEPT_ENCODING);
         }
     }
@@ -238,7 +238,7 @@ public class ContentEncodingResponseFilter implements Filter {
 
         @Override
         public void isFirstWrite() {
-            response.addHeader(HttpHeaders.CONTENT_ENCODING, "deflate");
+            response.addHeader(HttpHeaders.CONTENT_ENCODING, "deflate"); //$NON-NLS-1$
             response.addHeader(HttpHeaders.VARY, HttpHeaders.ACCEPT_ENCODING);
         }
     }
@@ -268,7 +268,7 @@ public class ContentEncodingResponseFilter implements Filter {
         }
 
         private boolean containsAcceptEncoding(String value) {
-            String[] str = value.split(",");
+            String[] str = value.split(","); //$NON-NLS-1$
             for (String s : str) {
                 if (HttpHeaders.ACCEPT_ENCODING.equalsIgnoreCase(s.trim())) {
                     return true;
@@ -279,26 +279,26 @@ public class ContentEncodingResponseFilter implements Filter {
 
         @Override
         public void addHeader(String name, String value) {
-            logger.debug("addHeader({}, {}) entry", name, value);
+            logger.debug("addHeader({}, {}) entry", name, value); //$NON-NLS-1$
             /*
              * this logic is added to append Accept-Encoding to the first Vary
              * header value.
              */
             if (HttpHeaders.VARY.equalsIgnoreCase(name)) {
                 ++varyHeaderCount;
-                logger.debug("Vary header count is now {}", varyHeaderCount);
+                logger.debug("Vary header count is now {}", varyHeaderCount); //$NON-NLS-1$
                 if (varyHeaderCount == 1) {
                     // add the Accept-Encoding value to the Vary header
-                    if (!"*".equals(value) && !containsAcceptEncoding(value)) {
+                    if (!"*".equals(value) && !containsAcceptEncoding(value)) { //$NON-NLS-1$
                         logger
-                            .debug("Vary header did not contain Accept-Encoding so appending to Vary header value");
-                        super.addHeader(HttpHeaders.VARY, value + ", "
+                            .debug("Vary header did not contain Accept-Encoding so appending to Vary header value"); //$NON-NLS-1$
+                        super.addHeader(HttpHeaders.VARY, value + ", " //$NON-NLS-1$
                             + HttpHeaders.ACCEPT_ENCODING);
                         return;
                     }
                 } else if (HttpHeaders.ACCEPT_ENCODING.equals(value)) {
                     logger
-                        .debug("Skipping Vary header that was only Accept-Encoding since it was already appended to a previous Vary header value");
+                        .debug("Skipping Vary header that was only Accept-Encoding since it was already appended to a previous Vary header value"); //$NON-NLS-1$
                     // skip this addition since it has already been appended to
                     // the first Vary value by the "if true" block above
                     return;
@@ -309,40 +309,40 @@ public class ContentEncodingResponseFilter implements Filter {
 
         @Override
         public ServletOutputStream getOutputStream() throws IOException {
-            logger.debug("getOutputStream() entry");
+            logger.debug("getOutputStream() entry"); //$NON-NLS-1$
             if (outputStream == null) {
-                logger.debug("output stream was null");
+                logger.debug("output stream was null"); //$NON-NLS-1$
                 this.outputStream = super.getOutputStream();
                 List<String> acceptableEncodings = acceptEncoding.getAcceptableEncodings();
-                logger.debug("acceptableEncodings is {}", acceptableEncodings);
+                logger.debug("acceptableEncodings is {}", acceptableEncodings); //$NON-NLS-1$
                 for (String encoding : acceptableEncodings) {
-                    logger.debug("encoding under test is {}", encoding);
-                    if ("gzip".equalsIgnoreCase(encoding)) {
-                        logger.debug("going to use gzip encoding");
+                    logger.debug("encoding under test is {}", encoding); //$NON-NLS-1$
+                    if ("gzip".equalsIgnoreCase(encoding)) { //$NON-NLS-1$
+                        logger.debug("going to use gzip encoding"); //$NON-NLS-1$
                         this.encodedOutputStream = new GzipEncoderOutputStream(outputStream, this);
                         this.outputStream = encodedOutputStream;
-                        logger.debug("getOutputStream() exit - returning gzipped encode stream");
+                        logger.debug("getOutputStream() exit - returning gzipped encode stream"); //$NON-NLS-1$
                         return outputStream;
-                    } else if ("deflate".equalsIgnoreCase(encoding)) {
-                        logger.debug("going to use deflate encoding");
+                    } else if ("deflate".equalsIgnoreCase(encoding)) { //$NON-NLS-1$
+                        logger.debug("going to use deflate encoding"); //$NON-NLS-1$
                         this.encodedOutputStream =
                             new DeflaterContentEncodedOutputStream(outputStream, this);
                         this.outputStream = encodedOutputStream;
-                        logger.debug("getOutputStream() exit - returning deflate encode stream");
+                        logger.debug("getOutputStream() exit - returning deflate encode stream"); //$NON-NLS-1$
                         return outputStream;
                     }
                 }
 
                 if (acceptEncoding.isAnyEncodingAllowed() && !acceptEncoding.getBannedEncodings()
-                    .contains("gzip")) {
-                    logger.debug("going to use gzip encoding because any encoding is allowed");
+                    .contains("gzip")) { //$NON-NLS-1$
+                    logger.debug("going to use gzip encoding because any encoding is allowed"); //$NON-NLS-1$
                     this.encodedOutputStream = new GzipEncoderOutputStream(outputStream, this);
                     this.outputStream = encodedOutputStream;
-                    logger.debug("getOutputStream() exit - returning gzipped encode stream");
+                    logger.debug("getOutputStream() exit - returning gzipped encode stream"); //$NON-NLS-1$
                     return outputStream;
                 }
             }
-            logger.debug("getOutputStream() exit - returning output stream");
+            logger.debug("getOutputStream() exit - returning output stream"); //$NON-NLS-1$
             return outputStream;
         }
     }

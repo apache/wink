@@ -52,6 +52,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.wink.common.RestConstants;
 import org.apache.wink.common.RestException;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.model.ModelUtils;
 import org.apache.wink.common.internal.utils.JAXBUtils;
 import org.apache.wink.common.model.opensearch.OpenSearchDescription;
@@ -182,10 +183,10 @@ public class AtomFeed extends AtomCommonAttributes {
     static {
         try {
             atomContext =
-                JAXBContext.newInstance(AtomFeed.class.getPackage().getName() + ":"
+                JAXBContext.newInstance(AtomFeed.class.getPackage().getName() + ":" //$NON-NLS-1$
                     + OpenSearchDescription.class.getPackage().getName());
         } catch (JAXBException e) {
-            throw new RestException("Failed to create JAXBContext for AtomFeed", e);
+            throw new RestException(Messages.getMessage("failedToCreateJAXBContextFor", "AtomFeed"), e); //$NON-NLS-1$ //$NON-NLS-2$
         }
     }
 

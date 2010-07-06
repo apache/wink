@@ -40,7 +40,7 @@ public class OpenSearchUtils {
      */
     public static OpenSearchImage createOpenSearchImage(String mediaTypeString, String url) {
         if (mediaTypeString == null) {
-            throw new NullPointerException("mediaType parameter is null");
+            throw new NullPointerException(Messages.getMessage("variableIsNull", "mediaTypeString")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         OpenSearchImage image = new OpenSearchImage();
         MediaType mediaType = MediaType.valueOf(mediaTypeString);

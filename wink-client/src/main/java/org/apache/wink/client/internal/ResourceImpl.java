@@ -217,7 +217,8 @@ public class ResourceImpl implements Resource {
             ClientResponse response = context.doChain(request);
             int statusCode = response.getStatusCode();
             if (ClientUtils.isErrorCode(statusCode)) {
-                logger.debug(Messages.getMessage("clientResponseIsErrorCode", statusCode));
+                logger.debug(Messages.getMessage("clientResponseIsErrorCode", String //$NON-NLS-1$
+                    .valueOf(statusCode)));
                 throw new ClientWebException(request, response);
             }
             return response;

@@ -44,6 +44,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
 import org.apache.wink.common.RestException;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.utils.JAXBUtils;
 
 /**
@@ -395,7 +396,7 @@ public class OpenSearchDescription {
         try {
             context = JAXBContext.newInstance(OpenSearchDescription.class.getPackage().getName());
         } catch (JAXBException e) {
-            throw new RestException("Failed to create JAXBContext for OpenSearchDescription", e);
+            throw new RestException(Messages.getMessage("failedToCreateJAXBContextFor", "OpenSearchDescription"), e); //$NON-NLS-1$ //$NON-NLS-2$
         }
     }
 

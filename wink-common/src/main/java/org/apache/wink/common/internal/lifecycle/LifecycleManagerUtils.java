@@ -77,13 +77,13 @@ public class LifecycleManagerUtils {
         } else if (ApplicationMetadataCollector.isApplication(cls)) {
             classMetadata = ApplicationMetadataCollector.collectMetadata(cls);
         } else {
-            throw new IllegalArgumentException("Cannot create factory for class " + cls);
+            throw new IllegalArgumentException(Messages.getMessage("cannotCreateFactoryForClass", cls)); //$NON-NLS-1$
         }
 
         // validate that there is a valid constructor if needed
         if (validateConstructor && classMetadata.getConstructor().getConstructor() == null) {
-            throw new IllegalStateException("No valid constructor found for " + cls
-                .getCanonicalName());
+            throw new IllegalStateException(Messages.getMessage("noValidConstructorFoundFor", cls //$NON-NLS-1$
+                .getCanonicalName()));
         }
         return classMetadata;
     }

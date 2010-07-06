@@ -79,7 +79,7 @@ public class RequestImpl implements Request {
     // see C007
     // http://jcp.org/aboutJava/communityprocess/maintenance/jsr311/311ChangeLog.html
     public ResponseBuilder evaluatePreconditions() {
-        logger.debug("evaluatePreconditions() called");
+        logger.debug("evaluatePreconditions() called"); //$NON-NLS-1$
 
         // the resource does not exist yet so any If-Match header would result
         // in a precondition failed
@@ -88,7 +88,7 @@ public class RequestImpl implements Request {
             try {
                 EntityTagMatchHeader ifMatchHeader = null;
                 ifMatchHeader = ifMatchHeaderDelegate.fromString(ifMatch);
-                logger.debug("ifMatchHeaderDelegate returned {}", ifMatchHeader);
+                logger.debug("ifMatchHeaderDelegate returned {}", ifMatchHeader); //$NON-NLS-1$
             } catch (IllegalArgumentException e) {
                 throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
             }
@@ -97,7 +97,7 @@ public class RequestImpl implements Request {
             ResponseBuilder responseBuilder = delegate.createResponseBuilder();
             responseBuilder.status(HttpServletResponse.SC_PRECONDITION_FAILED);
             logger
-                .debug("evaluatePreconditions() returning built response because there was no match due to no entity tag");
+                .debug("evaluatePreconditions() returning built response because there was no match due to no entity tag"); //$NON-NLS-1$
             return responseBuilder;
         }
 

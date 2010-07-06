@@ -26,6 +26,7 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 
+import org.apache.wink.common.internal.i18n.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -164,7 +165,7 @@ public class GenericsUtils {
             return getClassType(((WildcardType)type).getUpperBounds()[0]);
         }
 
-        logger.error("Method cannot handle '{}'", String.valueOf(type));
+        logger.error(Messages.getMessage("methodCannotHandleType", String.valueOf(type))); //$NON-NLS-1$
         return null;
     }
 

@@ -138,7 +138,7 @@ public class ResourceRecordFactory {
                     }
                 } else {
                     throw new IllegalArgumentException(Messages
-                        .getMessage("rootResourceInstanceIsAnInvalidResource", instance.getClass()
+                        .getMessage("rootResourceInstanceIsAnInvalidResource", instance.getClass() //$NON-NLS-1$
                             .getCanonicalName()));
                 }
             } else {

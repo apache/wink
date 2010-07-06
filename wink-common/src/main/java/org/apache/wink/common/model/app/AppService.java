@@ -45,6 +45,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.wink.common.RestException;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.model.ModelUtils;
 import org.apache.wink.common.internal.utils.JAXBUtils;
 import org.apache.wink.common.model.atom.AtomCommonAttributes;
@@ -88,7 +89,7 @@ public class AppService extends AtomCommonAttributes {
         try {
             context = JAXBContext.newInstance(AppService.class.getPackage().getName());
         } catch (JAXBException e) {
-            throw new RestException("Failed to create JAXBContext for AppService", e);
+            throw new RestException(Messages.getMessage("failedToCreateJAXBContextFor", "AppService"), e); //$NON-NLS-1$ //$NON-NLS-2$
         }
     }
 

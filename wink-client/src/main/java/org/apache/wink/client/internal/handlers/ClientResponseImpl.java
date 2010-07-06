@@ -69,8 +69,7 @@ public class ClientResponseImpl extends BaseRequestResponseImpl implements Clien
         if (entity == null) {
             return null;
         }
-        throw new ClassCastException(String
-            .format(Messages.getMessage("clientCannotConvertEntity"),
+        throw new ClassCastException(Messages.getMessage("clientCannotConvertEntity", //$NON-NLS-1$
                     entity.getClass().getName(),
                     type.getName()));
     }
@@ -120,7 +119,7 @@ public class ClientResponseImpl extends BaseRequestResponseImpl implements Clien
                                                        contentMediaType,
                                                        runtimeContext);
             if (reader == null) {
-                throw new RuntimeException(Messages.getMessage("clientNoReaderForTypeAndMediaType",
+                throw new RuntimeException(Messages.getMessage("clientNoReaderForTypeAndMediaType", //$NON-NLS-1$
                                                                String.valueOf(type),
                                                                contentType));
             }

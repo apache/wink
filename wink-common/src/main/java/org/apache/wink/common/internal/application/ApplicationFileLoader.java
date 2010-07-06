@@ -132,12 +132,12 @@ public class ApplicationFileLoader {
                     if (ResourceMetadataCollector.isStaticResource(cls) || ProviderMetadataCollector
                         .isProvider(cls)) {
                         if (logger.isDebugEnabled()) {
-                            logger.debug(Messages.getMessage("loadingClassToApplication", line));
+                            logger.debug(Messages.getMessage("loadingClassToApplication", line)); //$NON-NLS-1$
                         }
                         classes.add(cls);
                     } else {
                         if (logger.isWarnEnabled()) {
-                            logger.warn(Messages.getMessage("classNotAResourceNorProvider", cls
+                            logger.warn(Messages.getMessage("classNotAResourceNorProvider", cls //$NON-NLS-1$
                                 .getName()));
                         }
                     }

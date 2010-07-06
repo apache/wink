@@ -77,7 +77,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             Class<?> superclass = declaringClass.getSuperclass();
             if (superclass.getAnnotation(Path.class) != null) {
                 if (logger.isWarnEnabled()) {
-                    logger.warn(Messages.getMessage("rootResourceShouldBeAnnotatedDirectly", cls));
+                    logger.warn(Messages.getMessage("rootResourceShouldBeAnnotatedDirectly", cls)); //$NON-NLS-1$
                 }
                 return true;
             }
@@ -87,7 +87,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             for (Class<?> interfaceClass : interfaces) {
                 if (interfaceClass.getAnnotation(Path.class) != null) {
                     if (logger.isWarnEnabled()) {
-                        logger.warn(Messages.getMessage("rootResourceShouldBeAnnotatedDirectly",
+                        logger.warn(Messages.getMessage("rootResourceShouldBeAnnotatedDirectly", //$NON-NLS-1$
                                                         cls));
                     }
                     return true;
@@ -217,12 +217,12 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                         // verify that the method does not take an entity
                         // parameter
                         String methodName =
-                            String.format("%s.%s", declaringClass.getName(), method.getName());
+                            String.format("%s.%s", declaringClass.getName(), method.getName()); //$NON-NLS-1$
                         for (Injectable id : methodMetadata.getFormalParameters()) {
                             if (id.getParamType() == Injectable.ParamType.ENTITY) {
                                 if (logger.isWarnEnabled()) {
                                     logger.warn(Messages
-                                        .getMessage("subresourceLocatorIllegalEntityParameter",
+                                        .getMessage("subresourceLocatorIllegalEntityParameter", //$NON-NLS-1$
                                                     methodName));
                                 }
                                 continue F1;
@@ -234,7 +234,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                             .getProduces().isEmpty()) {
                             if (logger.isWarnEnabled()) {
                                 logger.warn(Messages
-                                    .getMessage("subresourceLocatorAnnotatedConsumesProduces",
+                                    .getMessage("subresourceLocatorAnnotatedConsumesProduces", //$NON-NLS-1$
                                                 methodName));
                             }
                         }
@@ -338,7 +338,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                 return null;
             }
             if (logger.isWarnEnabled()) {
-                logger.warn(Messages.getMessage("methodNotAnnotatedCorrectly",
+                logger.warn(Messages.getMessage("methodNotAnnotatedCorrectly", //$NON-NLS-1$
                                                 method.getName(),
                                                 method.getDeclaringClass().getCanonicalName()));
             }
@@ -416,8 +416,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             HttpMethod httpMethodCurr = annotation.annotationType().getAnnotation(HttpMethod.class);
             if (httpMethodCurr != null) {
                 if (httpMethod != null) {
-                    throw new IllegalStateException(String
-                        .format("Multiple http method annotations on method %s in class %s", method
+                    throw new IllegalStateException(Messages.getMessage("multipleHttpMethodAnnotations", method //$NON-NLS-1$
                             .getName(), method.getDeclaringClass().getCanonicalName()));
                 }
                 httpMethod = httpMethodCurr;
@@ -450,9 +449,8 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                 if (entityParamExists) {
                     // we are allowed to have only one entity parameter
                     String methodName =
-                        method.getDeclaringClass().getName() + "." + method.getName();
-                    throw new IllegalStateException("Resource method " + methodName
-                        + " has more than one entity parameter");
+                        method.getDeclaringClass().getName() + "." + method.getName(); //$NON-NLS-1$
+                    throw new IllegalStateException(Messages.getMessage("resourceMethodMoreThanOneEntityParam", methodName)); //$NON-NLS-1$
                 }
                 entityParamExists = true;
             }

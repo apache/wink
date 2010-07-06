@@ -88,7 +88,7 @@ public class RssFeed {
      */
     public RssFeed(SyndFeed syndFeed) {
         setChannel(new RssChannel(syndFeed));
-        setVersion("2.0");
+        setVersion("2.0"); //$NON-NLS-1$
     }
 
     /**

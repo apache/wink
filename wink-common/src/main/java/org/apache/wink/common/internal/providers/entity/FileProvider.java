@@ -76,7 +76,7 @@ public class FileProvider implements MessageBodyWriter<File>, MessageBodyReader<
                         OutputStream entityStream) throws IOException, WebApplicationException {
         if (!t.canRead() || t.isDirectory()) {
             if (logger.isWarnEnabled()) {
-                logger.warn(Messages.getMessage("cannotUseFileAsResponse", t.getAbsoluteFile()));
+                logger.warn(Messages.getMessage("cannotUseFileAsResponse", t.getAbsoluteFile())); //$NON-NLS-1$
             }
             throw new WebApplicationException();
         } else {

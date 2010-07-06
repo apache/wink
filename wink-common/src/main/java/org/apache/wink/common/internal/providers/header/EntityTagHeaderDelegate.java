@@ -22,13 +22,15 @@ package org.apache.wink.common.internal.providers.header;
 import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 
+import org.apache.wink.common.internal.i18n.Messages;
+
 public class EntityTagHeaderDelegate implements HeaderDelegate<EntityTag> {
 
-    private static String WEAK = "W/";
+    private static String WEAK = "W/"; //$NON-NLS-1$
 
     public EntityTag fromString(String eTag) throws IllegalArgumentException {
         if (eTag == null) {
-            throw new IllegalArgumentException("Entity Tag is null");
+            throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "eTag")); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         // Remove leading and trailing white spaces
@@ -41,11 +43,11 @@ public class EntityTagHeaderDelegate implements HeaderDelegate<EntityTag> {
         }
 
         // Check that e-tag is quoted-string
-        if (!eTag.startsWith("\"") || !eTag.endsWith("\"")) {
-            if ("*".equals(eTag)) {
-                return new EntityTag("*");
+        if (!eTag.startsWith("\"") || !eTag.endsWith("\"")) { //$NON-NLS-1$ //$NON-NLS-2$
+            if ("*".equals(eTag)) { //$NON-NLS-1$
+                return new EntityTag("*"); //$NON-NLS-1$
             }
-            throw new IllegalArgumentException("Entity Tag " + eTag + " is not quoted properly");
+            throw new IllegalArgumentException(Messages.getMessage("entityTagNotQuoted", eTag)); //$NON-NLS-1$
         }
 
         // Remove quotes
@@ -85,12 +87,12 @@ public class EntityTagHeaderDelegate implements HeaderDelegate<EntityTag> {
     public String toString(EntityTag eTag) {
 
         if (eTag == null) {
-            throw new IllegalArgumentException("Entity Tag is null");
+            throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "eTag")); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         StringBuilder builder = new StringBuilder();
         if (eTag.isWeak()) {
-            builder.append("W/");
+            builder.append("W/"); //$NON-NLS-1$
         }
         builder.append('"');
         String value = eTag.getValue();

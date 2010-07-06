@@ -32,6 +32,7 @@ import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.wink.common.http.HttpStatus;
 import org.apache.wink.common.internal.MultivaluedMapImpl;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.uri.UriEncoder;
 import org.apache.wink.common.internal.utils.UriHelper;
 
@@ -274,7 +275,7 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
 
     protected void assertPatternState() {
         if (pattern == null) {
-            throw new IllegalStateException("pattern not compiled");
+            throw new IllegalStateException(Messages.getMessage("patternNotCompiled")); //$NON-NLS-1$
         }
     }
 
@@ -376,8 +377,7 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
         private static void assertValid(String literal) {
             // assert that the literal does not contain curly brackets
             if (literal.indexOf('{') != -1 || literal.indexOf('}') != -1) {
-                throw new IllegalArgumentException("Syntax error: '" + literal
-                    + "' contains invalid template form");
+                throw new IllegalArgumentException(Messages.getMessage("variableNotSuppliedAValue", literal)); //$NON-NLS-1$
             }
         }
 
@@ -505,8 +505,7 @@ public abstract class UriTemplateProcessor implements Comparable<UriTemplateProc
             }
 
             if (value == null) {
-                throw new IllegalArgumentException("variable '" + name
-                    + "' was not supplied a value");
+                throw new IllegalArgumentException(Messages.getMessage("syntaxErrorInvalidTemplateForm", name)); //$NON-NLS-1$
             }
 
             if (encode) {

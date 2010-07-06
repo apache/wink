@@ -69,7 +69,6 @@ public class ServletContextAccessor extends ContextAccessor {
             return (T)new HttpServletResponseWrapperImpl();
         }
 
-        throw new IllegalArgumentException(Messages
-            .getMessage("invalidServletContextAccessor", contextClass));
+        throw new IllegalArgumentException(Messages.getMessage("invalidServletContextAccessor", contextClass)); //$NON-NLS-1$
     }
 }

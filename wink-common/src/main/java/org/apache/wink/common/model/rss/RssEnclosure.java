@@ -115,7 +115,7 @@ public class RssEnclosure {
         if (syndLink == null) {
             return syndLink;
         }
-        syndLink.setRel("enclosure");
+        syndLink.setRel("enclosure"); //$NON-NLS-1$
         syndLink.setType(getType());
         syndLink.setLength(getLength());
         syndLink.setHref(getUrl());

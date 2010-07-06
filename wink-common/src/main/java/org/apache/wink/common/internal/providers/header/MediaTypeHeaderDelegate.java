@@ -36,15 +36,15 @@ public class MediaTypeHeaderDelegate implements HeaderDelegate<MediaType> {
     private static final Logger                               logger    =
                                                                             LoggerFactory
                                                                                 .getLogger(MediaTypeHeaderDelegate.class);
-    private static final Pattern                              EQUALS    = Pattern.compile("=");
-    private static final Pattern                              SEMICOLON = Pattern.compile(";");
-    private static final Pattern                              SLASH     = Pattern.compile("/");
+    private static final Pattern                              EQUALS    = Pattern.compile("="); //$NON-NLS-1$
+    private static final Pattern                              SEMICOLON = Pattern.compile(";"); //$NON-NLS-1$
+    private static final Pattern                              SLASH     = Pattern.compile("/"); //$NON-NLS-1$
     private static final SoftConcurrentMap<String, MediaType> cache     =
                                                                             new SoftConcurrentMap<String, MediaType>();
 
     public MediaType fromString(String value) throws IllegalArgumentException {
         if (value == null) {
-            throw new IllegalArgumentException("MediaType header is null");
+            throw new IllegalArgumentException(Messages.getMessage("mediaTypeHeaderNull")); //$NON-NLS-1$
         }
 
         MediaType cached = cache.get(value);
@@ -62,8 +62,8 @@ public class MediaTypeHeaderDelegate implements HeaderDelegate<MediaType> {
             String main = all[0];
             String[] mainArray = SLASH.split(main);
             type = mainArray[0];
-            if ("".equals(type)) {
-                String errMsg = Messages.getMessage("mediaTypeWrongFormat", value);
+            if ("".equals(type)) { //$NON-NLS-1$
+                String errMsg = Messages.getMessage("mediaTypeWrongFormat", value); //$NON-NLS-1$
                 logger.error(errMsg);
                 throw new IllegalArgumentException(errMsg);
             }
@@ -82,7 +82,7 @@ public class MediaTypeHeaderDelegate implements HeaderDelegate<MediaType> {
                 }
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-            String errMsg = Messages.getMessage("mediaTypeWrongFormat", value);
+            String errMsg = Messages.getMessage("mediaTypeWrongFormat", value); //$NON-NLS-1$
             logger.error(errMsg, e);
             throw new IllegalArgumentException(errMsg, e);
         }
@@ -92,14 +92,14 @@ public class MediaTypeHeaderDelegate implements HeaderDelegate<MediaType> {
 
     public String toString(MediaType value) {
         if (value == null) {
-            throw new IllegalArgumentException("MediaType header is null");
+            throw new IllegalArgumentException(Messages.getMessage("mediaTypeHeaderNull")); //$NON-NLS-1$
         }
 
         StringBuilder result = new StringBuilder();
-        result.append(value.getType()).append("/").append(value.getSubtype());
+        result.append(value.getType()).append("/").append(value.getSubtype()); //$NON-NLS-1$
         Map<String, String> params = value.getParameters();
         for (String key : params.keySet()) {
-            result.append(";").append(key).append("=").append(params.get(key));
+            result.append(";").append(key).append("=").append(params.get(key)); //$NON-NLS-1$ //$NON-NLS-2$
         }
         return result.toString();
 

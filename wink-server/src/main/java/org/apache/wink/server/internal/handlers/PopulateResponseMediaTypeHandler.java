@@ -44,7 +44,7 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
                                                         LoggerFactory
                                                             .getLogger(PopulateResponseMediaTypeHandler.class);
 
-    private static final MediaType APPLICATION_TYPE = new MediaType("application", "*");                       //$NON-NLS-1$ //$NON-NLS-2$
+    private static final MediaType APPLICATION_TYPE = new MediaType("application", "*"); //$NON-NLS-1$ //$NON-NLS-2$
 
     private boolean                errorFlow        = false;
 
@@ -199,7 +199,7 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
                 if (!useOctetStream && (candidate.getMediaType().equals(MediaType.WILDCARD_TYPE) || candidate
                     .getMediaType().equals(APPLICATION_TYPE))) {
                     logger
-                        .debug("If necessary, use an application/octet-stream because there is a wildcard", //$NON-NLS-1$
+                        .debug("If necessary, use an application/octet-stream because there is a wildcard: {}", //$NON-NLS-1$
                                candidate.getMediaType());
                     useOctetStream = true;
                 }

@@ -55,7 +55,7 @@ public class ProviderMetadataCollector extends AbstractMetadataCollector {
 
         if (Modifier.isInterface(cls.getModifiers()) || Modifier.isAbstract(cls.getModifiers())) {
             if (logger.isWarnEnabled()) {
-                logger.warn(Messages.getMessage("providerIsInterfaceOrAbstract", cls));
+                logger.warn(Messages.getMessage("providerIsInterfaceOrAbstract", cls)); //$NON-NLS-1$
             }
             return false;
         }
@@ -71,7 +71,7 @@ public class ProviderMetadataCollector extends AbstractMetadataCollector {
             Class<?> superclass = declaringClass.getSuperclass();
             if (superclass != null && superclass.getAnnotation(Provider.class) != null) {
                 if (logger.isWarnEnabled()) {
-                    logger.warn(Messages.getMessage("providerShouldBeAnnotatedDirectly", cls));
+                    logger.warn(Messages.getMessage("providerShouldBeAnnotatedDirectly", cls)); //$NON-NLS-1$
                 }
                 return true;
             }
@@ -81,7 +81,7 @@ public class ProviderMetadataCollector extends AbstractMetadataCollector {
             for (Class<?> interfaceClass : interfaces) {
                 if (interfaceClass.getAnnotation(Provider.class) != null) {
                     if (logger.isWarnEnabled()) {
-                        logger.warn(Messages.getMessage("providerShouldBeAnnotatedDirectly", cls));
+                        logger.warn(Messages.getMessage("providerShouldBeAnnotatedDirectly", cls)); //$NON-NLS-1$
                     }
                     return true;
                 }

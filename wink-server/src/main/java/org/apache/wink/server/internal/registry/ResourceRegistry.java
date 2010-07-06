@@ -443,7 +443,7 @@ public class ResourceRegistry {
         }
         if (methodRecords.size() == 0) {
             if (logger.isInfoEnabled()) {
-                logger.info(Messages.getMessage("noMethodInClassSupportsHTTPMethod", resource
+                logger.info(Messages.getMessage("noMethodInClassSupportsHTTPMethod", resource //$NON-NLS-1$
                     .getResourceClass().getName(), context.getRequest().getMethod()));
             }
             Set<String> httpMethods = getOptions(resource);

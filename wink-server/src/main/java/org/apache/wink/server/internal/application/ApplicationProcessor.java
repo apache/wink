@@ -54,9 +54,9 @@ public class ApplicationProcessor {
     private final boolean           isSystemApplication;
 
     public ApplicationProcessor(Application application,
-                                ResourceRegistry resourceRegistry,
-                                ProvidersRegistry providersRegistry,
-                                boolean isSystemApplication) {
+            ResourceRegistry resourceRegistry,
+            ProvidersRegistry providersRegistry,
+            boolean isSystemApplication) {
         super();
         this.application = application;
         this.resourceRegistry = resourceRegistry;
@@ -118,18 +118,18 @@ public class ApplicationProcessor {
                 } else {
                     if (logger.isWarnEnabled()) {
                         logger.warn(Messages
-                            .getMessage("classNotADynamicResourceNorResourceNorProvider", obj
-                                .getClass().getName()));
+                                .getMessage("classNotADynamicResourceNorResourceNorProvider", obj //$NON-NLS-1$
+                                        .getClass().getName()));
                     }
                 }
             } catch (Exception e) {
-                logger.warn(Messages.getMessage("exceptionOccurredDuringInstanceProcessing", obj
-                    .getClass().getCanonicalName()));
-                logger.warn(Messages.getMessage("listExceptionDuringInstanceProcessing"), e);
+                logger.warn(Messages.getMessage("exceptionOccurredDuringInstanceProcessing", obj //$NON-NLS-1$
+                        .getClass().getCanonicalName()));
+                logger.warn(Messages.getMessage("listExceptionDuringInstanceProcessing"), e); //$NON-NLS-1$
             } catch (NoClassDefFoundError e) {
-                logger.warn(Messages.getMessage("exceptionOccurredDuringInstanceProcessing", obj
-                    .getClass().getCanonicalName()));
-                logger.warn(Messages.getMessage("listExceptionDuringInstanceProcessing"), e);
+                logger.warn(Messages.getMessage("exceptionOccurredDuringInstanceProcessing", obj //$NON-NLS-1$
+                        .getClass().getCanonicalName()));
+                logger.warn(Messages.getMessage("listExceptionDuringInstanceProcessing"), e); //$NON-NLS-1$
             }
         }
     }
@@ -148,21 +148,21 @@ public class ApplicationProcessor {
                     providersRegistry.addProvider(cls, priority, isSystemApplication);
                 } else {
                     if (logger.isWarnEnabled()) {
-                        logger.warn(Messages.getMessage("classNotAResourceNorProvider", cls
-                            .getName()));
+                        logger.warn(Messages.getMessage("classNotAResourceNorProvider", cls //$NON-NLS-1$
+                                .getName()));
                     }
                 }
             } catch (Exception e) {
                 if (logger.isWarnEnabled()) {
-                    logger.warn(Messages.getMessage("exceptionOccurredDuringClassProcessing", cls
-                        .getName()));
-                    logger.warn(Messages.getMessage("listExceptionDuringClassProcessing"), e);
+                    logger.warn(Messages.getMessage("exceptionOccurredDuringClassProcessing", cls //$NON-NLS-1$
+                            .getName()));
+                    logger.warn(Messages.getMessage("listExceptionDuringClassProcessing"), e); //$NON-NLS-1$
                 }
             } catch (NoClassDefFoundError e) {
                 if (logger.isWarnEnabled()) {
-                    logger.warn(Messages.getMessage("exceptionOccurredDuringClassProcessing", cls
-                        .getCanonicalName()));
-                    logger.warn(Messages.getMessage("listExceptionDuringClassProcessing"), e);
+                    logger.warn(Messages.getMessage("exceptionOccurredDuringClassProcessing", cls //$NON-NLS-1$
+                            .getCanonicalName()));
+                    logger.warn(Messages.getMessage("listExceptionDuringClassProcessing"), e); //$NON-NLS-1$
                 }
             }
         }
@@ -183,21 +183,21 @@ public class ApplicationProcessor {
                     providersRegistry.addProvider(obj, priority, isSystemApplication);
                 } else {
                     if (logger.isWarnEnabled()) {
-                        logger.warn(Messages.getMessage("classNotAResourceNorProvider", obj
-                            .getClass().getName()));
+                        logger
+                        .warn(Messages.getMessage("classNotAResourceNorProvider", obj.getClass())); //$NON-NLS-1$
                     }
                 }
             } catch (Exception e) {
                 if (logger.isWarnEnabled()) {
-                    logger.warn(Messages.getMessage("exceptionOccurredDuringSingletonProcessing",
-                                                    obj.getClass().getCanonicalName()));
-                    logger.warn(Messages.getMessage("listExceptionDuringSingletonProcessing"), e);
+                    logger.warn(Messages.getMessage("exceptionOccurredDuringSingletonProcessing", obj //$NON-NLS-1$
+                            .getClass().getCanonicalName()));
+                    logger.warn(Messages.getMessage("listExceptionDuringSingletonProcessing"), e); //$NON-NLS-1$
                 }
             } catch (NoClassDefFoundError e) {
                 if (logger.isWarnEnabled()) {
-                    logger.warn(Messages.getMessage("exceptionOccurredDuringSingletonProcessing",
-                                                    obj.getClass().getCanonicalName()));
-                    logger.warn(Messages.getMessage("listExceptionDuringSingletonProcessing"), e);
+                    logger.warn(Messages.getMessage("exceptionOccurredDuringSingletonProcessing", //$NON-NLS-1$
+                            obj.getClass().getCanonicalName()));
+                    logger.warn(Messages.getMessage("listExceptionDuringSingletonProcessing"), e); //$NON-NLS-1$
                 }
             }
         }

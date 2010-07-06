@@ -419,7 +419,7 @@ public class AdminServlet extends AbstractRestServlet {
             Marshaller marshaller = JAXBUtils.createMarshaller(resourceCtx);
             marshaller.marshal(jaxbObject, writer);
         } catch (JAXBException e) {
-            throw new ServletException(Messages.getMessage("adminServletFailMarshalObject",
+            throw new ServletException(Messages.getMessage("adminServletFailMarshalObject", //$NON-NLS-1$
                                                            jaxbObject.getClass().getName()), e);
 
         }

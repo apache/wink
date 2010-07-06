@@ -109,9 +109,9 @@ public abstract class AbstractConnectionHandler implements ConnectionHandler {
                                                        contentMediaType,
                                                        runtimeContext);
             if (writer == null) {
-                throw new RuntimeException(String
-                    .format(Messages.getMessage("clientNoWriterForTypeAndMediaType"), String
-                        .valueOf(type), contentType));
+                throw new RuntimeException(Messages.getMessage("clientNoWriterForTypeAndMediaType", //$NON-NLS-1$
+                                                               String.valueOf(type),
+                                                               contentType));
             }
             writer.writeTo(entity,
                            type,

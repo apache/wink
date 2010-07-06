@@ -110,7 +110,7 @@ public class RestFilter implements Filter {
             }
         } else {
             logger
-                .debug("Filter {} did not expect a non-HttpServletRequest and/or non-HttpServletResponse but letting chain continue"); //$NON-NLS-1$
+                .debug("Filter {} did not expect a non-HttpServletRequest and/or non-HttpServletResponse but letting chain continue", this); //$NON-NLS-1$
             chain.doFilter(servletRequest, servletResponse);
         }
     }

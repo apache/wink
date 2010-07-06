@@ -97,7 +97,7 @@ public class ModelUtils {
             spf.setValidating(false);
             datatypeFactory = DatatypeFactory.newInstance();
         } catch (Exception e) {
-            throw new RestException("Error setting up Atom JAXB utils", e);
+            throw new RestException(Messages.getMessage("errorSettingUpAtom", e)); //$NON-NLS-1$
         }
     }
 
@@ -339,9 +339,9 @@ public class ModelUtils {
 
             return read;
         }
-        throw new ClassCastException("Cannot cast " + value.getClass().getName()
-            + " to "
-            + type.getName());
+        throw new ClassCastException(Messages.getMessage("cannotCastTo", //$NON-NLS-1$
+                                                         value.getClass().getName(),
+                                                         type.getName()));
 
     }
 

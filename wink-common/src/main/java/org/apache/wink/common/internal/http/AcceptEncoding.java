@@ -55,7 +55,7 @@ public class AcceptEncoding {
         
         @Override
         public String toString() {
-            return "ValuedEncoding(" + qValue + "," + encoding + ")";
+            return "ValuedEncoding(" + qValue + "," + encoding + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         }
     }
 

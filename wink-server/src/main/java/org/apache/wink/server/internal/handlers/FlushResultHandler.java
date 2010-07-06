@@ -219,9 +219,10 @@ public class FlushResultHandler extends AbstractHandler {
         FlushHeadersOutputStream outputStream =
             new FlushHeadersOutputStream(httpResponse, httpHeaders, responseMediaType);
         if (logger.isDebugEnabled()) {
-            logger.debug("{}.writeTo({}, {}, {}) being called", new Object[] { //$NON-NLS-1$
+            logger.debug("{}@{}.writeTo({}, {}, {}) being called", new Object[] { //$NON-NLS-1$
+                         dataContentHandler.getClass().getName(),
                          Integer.toHexString(System.identityHashCode(dataContentHandler)), entity,
-                             rawType, responseMediaType.toString(), outputStream});
+                             responseMediaType.toString(), outputStream});
         }
         dataContentHandler
             .writeTo(entity,

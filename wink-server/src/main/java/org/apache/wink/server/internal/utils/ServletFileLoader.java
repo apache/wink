@@ -34,14 +34,14 @@ public class ServletFileLoader extends FileLoader {
 
     public static InputStream loadFileAsStream(ServletContext servletContext, String fileName)
         throws FileNotFoundException {
-        if (fileName == null || fileName.trim().equals("")) {
-            throw new NullPointerException("fileName");
+        if (fileName == null || fileName.trim().equals("")) { //$NON-NLS-1$
+            throw new NullPointerException("fileName"); //$NON-NLS-1$
         }
 
         if (servletContext != null) {
-            logger.debug("Searching for {} using servlet context.", fileName);
+            logger.debug("Searching for {} using servlet context.", fileName); //$NON-NLS-1$
 
-            if(fileName.startsWith("/")) {  // protect against MalformedURLException
+            if (fileName.startsWith("/")) {  // protect against MalformedURLException //$NON-NLS-1$
                 InputStream is = servletContext.getResourceAsStream(fileName);
                 if (is != null) {
                     return is;

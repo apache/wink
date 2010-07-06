@@ -35,11 +35,15 @@ import org.apache.wink.common.internal.MultivaluedMapImpl;
 import org.apache.wink.common.internal.PathSegmentImpl;
 import org.apache.wink.common.internal.uri.UriEncoder;
 import org.apache.wink.common.internal.uri.UriPathNormalizer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Various methods for URI/URL manipulation.
  */
 public class UriHelper {
+
+    private static final Logger logger = LoggerFactory.getLogger(UriHelper.class);
 
     // no instances
     private UriHelper() {
@@ -434,12 +438,14 @@ public class UriHelper {
      * @return list of PathSegement instances
      */
     public static List<PathSegment> parsePath(String path) {
+        logger.debug("parsePath({}) entry", path); //$NON-NLS-1$
         String[] segmentsArray = StringUtils.fastSplitTemplate(path, "/", true); //$NON-NLS-1$
         List<PathSegment> pathSegments = new ArrayList<PathSegment>(segmentsArray.length);
         // go over all the segments and add them
         for (String segment : segmentsArray) {
             pathSegments.add(new PathSegmentImpl(segment));
         }
+        logger.debug("parsePath() exit returning {}", pathSegments); //$NON-NLS-1$
         return pathSegments;
     }
 

@@ -36,6 +36,7 @@ import javax.ws.rs.core.PathSegment;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriBuilderException;
 
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.uri.UriEncoder;
 import org.apache.wink.common.internal.uritemplate.JaxRsUriTemplateProcessor;
 import org.apache.wink.common.internal.utils.UriHelper;
@@ -209,7 +210,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
 
     private void buildPath(Map<String, ? extends Object> values, StringBuilder out) {
         if (logger.isDebugEnabled()) {
-            logger.debug("buildPath({}, {}) entry", new Object[] {values, out, //$NON-NLS-1$
+            logger.debug("buildPath({}, {}) entry", new Object[] {values, out //$NON-NLS-1$
             });
         }
         if (segments == null || segments.size() == 0) {
@@ -349,19 +350,20 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                 }
                 return uri;
             } catch (URISyntaxException e) {
-                throw new IllegalArgumentException("schemeSpecificPart is invalid", e);
+                throw new IllegalArgumentException(Messages
+                    .getMessage("isInvalid", "schemeSpecificPart"), e); //$NON-NLS-1$ //$NON-NLS-2$
             }
         }
 
         Set<String> names = getVariableNamesList();
         if (values == null || names.size() > values.length) {
-            throw new IllegalArgumentException("missing variable values");
+            throw new IllegalArgumentException(Messages.getMessage("missingVariable", "values")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         Map<String, Object> valuesMap = new HashMap<String, Object>();
         int i = 0;
         for (String name : names) {
             if (values[i] == null) {
-                throw new IllegalArgumentException("value for variable " + name + " is null");
+                throw new IllegalArgumentException(Messages.getMessage("variableIsNull", name)); //$NON-NLS-1$
             }
             // put only the first occurrence of the value in the map
             if (valuesMap.get(name) == null) {
@@ -376,7 +378,8 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         }
         for (; i < values.length; ++i) {
             if (values[i] == null) {
-                throw new IllegalArgumentException("value argument at " + i + "index is null");
+                throw new IllegalArgumentException(Messages
+                    .getMessage("valueAtIndexIsNull", String.valueOf(i))); //$NON-NLS-1$
             }
         }
         return buildInternal(valuesMap);
@@ -401,14 +404,14 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         }
         Set<String> names = getVariableNamesList();
         if (values == null || (names.size() > values.size())) {
-            throw new IllegalArgumentException("missing variable values");
+            throw new IllegalArgumentException(Messages.getMessage("missingVariable", "values")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         logger.debug("names are {}", names); //$NON-NLS-1$
         Map<String, Object> valuesMap = new HashMap<String, Object>();
         for (String name : names) {
             Object value = values.get(name);
             if (value == null) {
-                throw new IllegalArgumentException("value for variable " + name + " is null");
+                throw new IllegalArgumentException(Messages.getMessage("variableIsNull", name)); //$NON-NLS-1$
             }
             // put only the first occurrence of the value in the map
             if (valuesMap.get(name) == null) {
@@ -450,7 +453,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         uriBuilder.fragment(this.fragment);
         uriBuilder.segments(this.segments);
         uriBuilder.query(this.query);
-        logger.debug("clone() exit"); //$NON-NLS-1$
+        logger.debug("clone() exit returning {}", uriBuilder); //$NON-NLS-1$
         return uriBuilder;
     }
 
@@ -488,8 +491,8 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
     @Override
     public UriBuilder host(String host) throws IllegalArgumentException {
         logger.debug("host({}) entry", host); //$NON-NLS-1$
-        if ("".equals(host)) {
-            throw new IllegalArgumentException("host is empty");
+        if ("".equals(host)) { //$NON-NLS-1$
+            throw new IllegalArgumentException(Messages.getMessage("variableIsEmpty", "host")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         this.host = host;
         logger.debug("host() exit"); //$NON-NLS-1$
@@ -503,10 +506,10 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                 .asList(values));
         }
         if (name == null) {
-            throw new IllegalArgumentException("name is null");
+            throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "name")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         if (values == null) {
-            throw new IllegalArgumentException("values is null");
+            throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "values")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         PathSegmentImpl lastSegment = getLastPathSegment();
         for (Object value : values) {
@@ -539,23 +542,23 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
     public UriBuilder path(String path) throws IllegalArgumentException {
         logger.debug("path({}) entry", path); //$NON-NLS-1$
         if (path == null) {
-            throw new IllegalArgumentException("path is null");
+            throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "path")); //$NON-NLS-1$ //$NON-NLS-2$
         }
-        if ("".equals(path)) {
+        if ("".equals(path)) { //$NON-NLS-1$
             // do nothing if there is an empty path
             return this;
         }
 
         if (isFirstCall) {
-            if (path.indexOf(":") != -1) {
+            if (path.indexOf(":") != -1) { //$NON-NLS-1$
                 // we need to parse this as scheme:scheme-specific-part#fragment
                 // for
                 // a hierarchical URI
                 // if a non-valid URI is passed in, the path is parsed as normal
-                String[] segments = path.split(":", 2);
-                if (segments.length == 2 && segments[0].length() > 0 && segments[0].indexOf("{") == -1) {
+                String[] segments = path.split(":", 2); //$NON-NLS-1$
+                if (segments.length == 2 && segments[0].length() > 0 && segments[0].indexOf("{") == -1) { //$NON-NLS-1$
                     String scheme = segments[0];
-                    segments = segments[1].split("#", 2);
+                    segments = segments[1].split("#", 2); //$NON-NLS-1$
                     if (segments[0].length() > 0) {
                         String schemeSpecificPart = segments[0];
                         String fragment = null;
@@ -564,7 +567,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                         scheme(scheme);
                         schemeSpecificPart(schemeSpecificPart);
                         fragment(fragment);
-                        logger.debug("replacePath() exit");
+                        logger.debug("replacePath() exit"); //$NON-NLS-1$
                         return this;
                     }
                 }
@@ -574,10 +577,10 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
 
         // strip off the authority prefix if present
         String _path = path;
-        if (path.startsWith("//")) {
+        if (path.startsWith("//")) { //$NON-NLS-1$
             if (path.length() > 2) {
                 _path = path.substring(2);
-                getPathSegments().add(new PathSegmentImpl("/"));
+                getPathSegments().add(new PathSegmentImpl("/")); //$NON-NLS-1$
             } else {
                 logger.debug("path() exit"); //$NON-NLS-1$
                 return this;
@@ -602,12 +605,12 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
     public UriBuilder path(Class resource) throws IllegalArgumentException {
         logger.debug("path({}) entry", resource); //$NON-NLS-1$
         if (resource == null) {
-            throw new IllegalArgumentException("resource is null");
+            throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "resource")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         isFirstCall = false;
         Path pathAnnotation = ((Class<?>)resource).getAnnotation(Path.class);
         if (pathAnnotation == null) {
-            throw new IllegalArgumentException("resource is not annotated with Path");
+            throw new IllegalArgumentException(Messages.getMessage("resourceNotAnnotated", "Path")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         String path = pathAnnotation.value();
         logger.debug("path annotation value is {}", path); //$NON-NLS-1$
@@ -620,11 +623,11 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
     public UriBuilder path(Method method) throws IllegalArgumentException {
         logger.debug("path({}) entry", method); //$NON-NLS-1$
         if (method == null) {
-            throw new IllegalArgumentException("method is null");
+            throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "method")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         Path pathAnnotation = method.getAnnotation(Path.class);
         if (pathAnnotation == null) {
-            throw new IllegalArgumentException("method is not annotated with Path");
+            throw new IllegalArgumentException(Messages.getMessage("methodNotAnnotated", "Path")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         String path = pathAnnotation.value();
         logger.debug("path method annotation is {}", path); //$NON-NLS-1$
@@ -638,10 +641,10 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
     public UriBuilder path(Class resource, String method) throws IllegalArgumentException {
         logger.debug("path({}, {}) entry", resource, method); //$NON-NLS-1$
         if (resource == null) {
-            throw new IllegalArgumentException("resource is null");
+            throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "resource")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         if (method == null) {
-            throw new IllegalArgumentException("method is null");
+            throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "method")); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         Method foundMethod = null;
@@ -651,15 +654,15 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                 Path pathAnnotation = m.getAnnotation(Path.class);
                 if (pathAnnotation != null) {
                     if (foundMethod != null) {
-                        throw new IllegalArgumentException(
-                                                           "more than one method with Path annotation exists");
+                        throw new IllegalArgumentException(Messages
+                            .getMessage("moreThanOneMethodAnnotated", "Path")); //$NON-NLS-1$ //$NON-NLS-2$
                     }
                     foundMethod = m;
                 }
             }
         }
         if (foundMethod == null) {
-            throw new IllegalArgumentException("no method with Path annotation exists");
+            throw new IllegalArgumentException(Messages.getMessage("noMethodAnnotated", "Path")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         path(foundMethod);
         logger.debug("path() exit"); //$NON-NLS-1$
@@ -672,7 +675,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
             logger.debug("port({}) entry", port); //$NON-NLS-1$
         }
         if (port < -1) {
-            throw new IllegalArgumentException("port is not valid");
+            throw new IllegalArgumentException(Messages.getMessage("invalidPort")); //$NON-NLS-1$
         }
         this.port = port;
         logger.debug("port() exit"); //$NON-NLS-1$
@@ -686,16 +689,16 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                 .asList(values));
         }
         if (name == null) {
-            throw new IllegalArgumentException("name is null");
+            throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "name")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         if (values == null) {
-            throw new IllegalArgumentException("values is null");
+            throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "values")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         MultivaluedMap<String, String> query = getQuery();
         logger.debug("query map is {}", query); //$NON-NLS-1$
         for (Object value : values) {
             if (value == null) {
-                throw new IllegalArgumentException(); //$NON-NLS-1$ //$NON-NLS-2$
+                throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "value")); //$NON-NLS-1$ //$NON-NLS-2$
             }
             query.add(name, value != null ? value.toString() : null);
         }
@@ -730,7 +733,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                 .asList(values));
         }
         if (name == null) {
-            throw new IllegalArgumentException("name is null");
+            throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "name")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         PathSegmentImpl lastPathSegment = getLastPathSegment();
         if (values == null || values.length == 0) {
@@ -751,25 +754,25 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         logger.debug("replacePath({}) entry", path); //$NON-NLS-1$
         if (isFirstCall) {
             if (path == null) {
-                throw new IllegalArgumentException("path is null"); //$NON-NLS-1$ //$NON-NLS-2$
+                throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "path")); //$NON-NLS-1$ //$NON-NLS-2$
             }
             isFirstCall = false;
         }
         if (path == null) {
-            logger.debug("path is null. resetting");
+            logger.debug("path is null. resetting"); //$NON-NLS-1$
             reset();
-            logger.debug("replacePath() exit");
+            logger.debug("replacePath() exit"); //$NON-NLS-1$
             return this;
         }
         getPathSegments().clear();
-        if (path.indexOf(":") != -1) {
+        if (path.indexOf(":") != -1) { //$NON-NLS-1$
             // we need to parse this as scheme:scheme-specific-part#fragment for
             // a hierarchical URI
             // if a non-valid URI is passed in, the path is parsed as normal
-            String[] segments = path.split(":", 2);
-            if (segments.length == 2 && segments[0].length() > 0 && segments[0].indexOf("{") == -1) {
+            String[] segments = path.split(":", 2); //$NON-NLS-1$
+            if (segments.length == 2 && segments[0].length() > 0 && segments[0].indexOf("{") == -1) { //$NON-NLS-1$
                 String scheme = segments[0];
-                segments = segments[1].split("#", 2);
+                segments = segments[1].split("#", 2); //$NON-NLS-1$
                 if (segments[0].length() > 0) {
                     String schemeSpecificPart = segments[0];
                     String fragment = null;
@@ -778,12 +781,12 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                     scheme(scheme);
                     schemeSpecificPart(schemeSpecificPart);
                     fragment(fragment);
-                    logger.debug("replacePath() exit");
+                    logger.debug("replacePath() exit"); //$NON-NLS-1$
                     return this;
                 }
             }
         }
-        if (path != null && !"".equals(path)) {
+        if (path != null && !"".equals(path)) { //$NON-NLS-1$
             path(path);
         }
         logger.debug("replacePath() exit"); //$NON-NLS-1$
@@ -795,7 +798,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         logger.debug("replaceQuery({}) entry", query); //$NON-NLS-1$
         getQuery().clear();
         if (query != null) {
-            query = query.replaceAll(" ", "%20");
+            query = query.replaceAll(" ", "%20"); //$NON-NLS-1$ //$NON-NLS-2$
             MultivaluedMap<String, String> queries = UriHelper.parseQuery(query);
             // should values be URL encoded or query encoded?
 
@@ -824,7 +827,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                 .asList(values));
         }
         if (name == null) {
-            throw new IllegalArgumentException("name is null");
+            throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "name")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         // remove any exiting values
         getQuery().remove(name);
@@ -848,7 +851,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
     public UriBuilder schemeSpecificPart(String ssp) throws IllegalArgumentException {
         logger.debug("schemeSpecificPart({}) entry", ssp); //$NON-NLS-1$
         if (ssp == null) {
-            throw new IllegalArgumentException("schemeSpecificPart is null");
+            throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "ssp")); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         if (!ssp.startsWith("/")) { //$NON-NLS-1$
@@ -864,7 +867,8 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
             // uri templates will be automatically encoded
             uri = new URI(scheme, ssp, fragment);
         } catch (URISyntaxException e) {
-            throw new IllegalArgumentException("schemeSpecificPart is invalid", e);
+            throw new IllegalArgumentException(Messages
+                .getMessage("isInvalid", "schemeSpecificPart"), e); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         resetSchemeSpecificPart();
@@ -882,7 +886,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         if (uri.getRawPath() != null) {
             String path = uri.getRawPath();
             if(this.host == null && uri.getRawAuthority() != null)
-                path = UriEncoder.decodeString(uri.getRawAuthority()) + "/" + path;
+                path = UriEncoder.decodeString(uri.getRawAuthority()) + "/" + path; //$NON-NLS-1$
             path(UriEncoder.decodeString(path));
         }
         logger.debug("schemeSpecificPart() exit"); //$NON-NLS-1$
@@ -895,16 +899,17 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
             logger.debug("segment({}) entry", (segments == null) ? null : Arrays.asList(segments)); //$NON-NLS-1$
         }
         if (segments == null) {
-            throw new IllegalArgumentException("segments is null");
+            throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "segments")); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         List<PathSegment> pathSegments = getPathSegments();
         for (int i = 0; i < segments.length; ++i) {
             if (segments[i] == null) {
-                throw new IllegalArgumentException("segment at index " + i + " is null");
+                throw new IllegalArgumentException(Messages
+                    .getMessage("segmentAtIndexIsNull", String.valueOf(i))); //$NON-NLS-1$
             }
-            if (segments[i].contains("/")) {
-                String segValue = segments[i].replace("/", "%2F");
+            if (segments[i].contains("/")) { //$NON-NLS-1$
+                String segValue = segments[i].replace("/", "%2F"); //$NON-NLS-1$ //$NON-NLS-2$
                 pathSegments.add(new PathSegmentImpl(segValue));
             } else {
                 pathSegments.add(new PathSegmentImpl(segments[i]));
@@ -926,7 +931,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
     public UriBuilder uri(URI uri) throws IllegalArgumentException {
         logger.debug("Entering uri({})", uri); //$NON-NLS-1$
         if (uri == null) {
-            throw new IllegalArgumentException("uri is null");
+            throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "uri")); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         isFirstCall = false;

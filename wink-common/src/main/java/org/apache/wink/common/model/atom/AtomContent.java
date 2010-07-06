@@ -38,6 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.wink.common.RestException;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.model.AnyContentHandler;
 import org.apache.wink.common.internal.model.ModelUtils;
 import org.apache.wink.common.model.synd.SyndContent;
@@ -400,11 +401,11 @@ public class AtomContent extends AtomCommonAttributes {
 
     public void checkValidity() {
         if (src != null && any != null) {
-            throw new RestException("Content element may have either inline or out-of-line content");
+            throw new RestException(Messages.getMessage("contentMayHaveInlineOrOutContent")); //$NON-NLS-1$
         } else if (src != null && type != null) {
-            if (type.equals("text") || type.equals("html") || type.equals("xhtml")) {
+            if (type.equals("text") || type.equals("html") || type.equals("xhtml")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                 throw new RestException(
-                                        "Type attribute of content element must be a valid mime type when content is out-of-line");
+                                        Messages.getMessage("typeAttribMustHaveValidMimeType")); //$NON-NLS-1$
             }
         }
     }

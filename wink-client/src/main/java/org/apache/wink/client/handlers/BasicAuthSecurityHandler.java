@@ -25,6 +25,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.wink.client.ClientAuthenticationException;
 import org.apache.wink.client.ClientRequest;
 import org.apache.wink.client.ClientResponse;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -112,8 +113,8 @@ public class BasicAuthSecurityHandler implements ClientHandler {
                 if (response.getStatusCode() == 401) {
                     logger
                         .debug("After sending request with Authorization header, still got 401 response"); //$NON-NLS-1$
-                    throw new ClientAuthenticationException(
-                                                            "Service failed to authenticate user: " + userid); //$NON-NLS-1$
+                    throw new ClientAuthenticationException(Messages
+                        .getMessage("serviceFailedToAuthenticateUser", userid)); //$NON-NLS-1$
                 } else {
                     logger.debug("Got a non-401 response, so returning response"); //$NON-NLS-1$
                     return response;
@@ -121,8 +122,8 @@ public class BasicAuthSecurityHandler implements ClientHandler {
             } else {
                 logger.debug("userid and/or password were not set so throwing exception"); //$NON-NLS-1$
                 // no user credential available
-                throw new ClientAuthenticationException(
-                                                        "Missing client authentication credential for user: " + userid); //$NON-NLS-1$
+                throw new ClientAuthenticationException(Messages
+                    .getMessage("missingClientAuthenticationCredentialForUser", userid)); //$NON-NLS-1$
             }
 
         } // end if block

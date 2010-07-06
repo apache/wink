@@ -167,12 +167,12 @@ public class RequestProcessor {
             // run the response handler chain
             configuration.getResponseHandlersChain().run(msgContext);
 
-            logger.debug("Attempting to release resource instance");
+            logger.debug("Attempting to release resource instance"); //$NON-NLS-1$
             isReleaseResourcesCalled = true;
             try {
                 releaseResources(msgContext);
             } catch (Exception e) {
-                logger.debug("Caught exception when releasing resource object", e);
+                logger.debug("Caught exception when releasing resource object", e); //$NON-NLS-1$
                 throw e;
             }
         } catch (Throwable t) {
@@ -193,7 +193,7 @@ public class RequestProcessor {
                     try {
                         releaseResources(originalContext);
                     } catch (Exception e2) {
-                        logger.debug("Caught exception when releasing resource object", e2);
+                        logger.debug("Caught exception when releasing resource object", e2); //$NON-NLS-1$
                     }
                 }
             } catch (Exception e) {
@@ -203,7 +203,7 @@ public class RequestProcessor {
                     try {
                         releaseResources(originalContext);
                     } catch (Exception e2) {
-                        logger.debug("Caught exception when releasing resource object", e2);
+                        logger.debug("Caught exception when releasing resource object", e2); //$NON-NLS-1$
                     }
                 }
                 throw e;
@@ -219,7 +219,7 @@ public class RequestProcessor {
         if (searchResult != null) {
             List<ResourceInstance> resourceInstances = searchResult.getData().getMatchedResources();
             for (ResourceInstance res : resourceInstances) {
-                logger.debug("Releasing resource instance");
+                logger.debug("Releasing resource instance"); //$NON-NLS-1$
                 res.releaseInstance(msgContext);
             }
         }
@@ -228,39 +228,38 @@ public class RequestProcessor {
     private void logException(Throwable t) {
         String exceptionName = t.getClass().getSimpleName();
         String messageFormat =
-            Messages.getMessage("exceptionOccurredDuringInvocation", exceptionName);
+            Messages.getMessage("exceptionOccurredDuringInvocation", exceptionName); //$NON-NLS-1$
         if (t instanceof WebApplicationException) {
             WebApplicationException wae = (WebApplicationException)t;
             int statusCode = wae.getResponse().getStatus();
             Status status = Response.Status.fromStatusCode(statusCode);
-            String statusSep = "";
-            String statusMessage = "";
+            String statusSep = ""; //$NON-NLS-1$
+            String statusMessage = ""; //$NON-NLS-1$
             if (status != null) {
-                statusSep = " - ";
+                statusSep = " - "; //$NON-NLS-1$
                 statusMessage = status.toString();
             }
             exceptionName =
-                String.format("%s (%d%s%s)", exceptionName, statusCode, statusSep, statusMessage);
+                String.format("%s (%d%s%s)", exceptionName, statusCode, statusSep, statusMessage); //$NON-NLS-1$
             if (statusCode >= 500) {
                 if (logger.isDebugEnabled()) {
-                    logger.debug(messageFormat, t);
+                    logger.debug(messageFormat, t); //$NON-NLS-1$
                 } else {
-                    logger.info(messageFormat);
+                    logger.info(messageFormat); //$NON-NLS-1$
                 }
             } else {
-                // don't log the whole call stack for sub-500 return codes
-                // unless debugging
+                // don't log the whole call stack for sub-500 return codes unless debugging
                 if (logger.isDebugEnabled()) {
-                    logger.debug(messageFormat, t);
+                    logger.debug(messageFormat, t); //$NON-NLS-1$
                 } else {
-                    logger.info(messageFormat);
+                    logger.info(messageFormat); //$NON-NLS-1$
                 }
             }
         } else {
             if (logger.isDebugEnabled()) {
-                logger.debug(messageFormat, t);
+                logger.debug(messageFormat, t); //$NON-NLS-1$
             } else {
-                logger.info(messageFormat);
+                logger.info(messageFormat); //$NON-NLS-1$
             }
         }
     }

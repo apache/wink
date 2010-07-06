@@ -87,7 +87,7 @@ public class AcceptCharset {
 
         @Override
         public String toString() {
-            return charset + ";q=" + qValue;
+            return charset + ";q=" + qValue; //$NON-NLS-1$
         }
     }
 
