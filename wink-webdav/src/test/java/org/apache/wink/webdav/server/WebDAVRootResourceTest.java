@@ -32,7 +32,6 @@ import org.apache.wink.webdav.model.Propfind;
 import org.apache.wink.webdav.model.Propname;
 import org.apache.wink.webdav.model.Propstat;
 import org.apache.wink.webdav.model.Response;
-import org.apache.wink.webdav.server.WebDAVRootResource;
 import org.junit.Assert;
 
 public class WebDAVRootResourceTest extends AbstractWebDAVResourcesTest {

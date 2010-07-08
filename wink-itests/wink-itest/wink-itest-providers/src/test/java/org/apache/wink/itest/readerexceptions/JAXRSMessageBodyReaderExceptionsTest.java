@@ -30,8 +30,6 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
-import org.apache.wink.itest.readerexceptions.IOExceptionMapper;
-import org.apache.wink.itest.readerexceptions.NullPointerExceptionMapper;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
 public class JAXRSMessageBodyReaderExceptionsTest extends TestCase {

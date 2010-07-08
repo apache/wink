@@ -23,8 +23,6 @@ package org.apache.wink.common.internal.utils;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import org.apache.wink.common.internal.utils.ExceptionHelper;
-
 import junit.framework.TestCase;
 
 /**

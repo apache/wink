@@ -20,10 +20,10 @@
 
 package org.apache.wink.common.uri;
 
+import junit.framework.TestCase;
+
 import org.apache.wink.common.internal.uri.UriEncoder;
 import org.apache.wink.common.internal.utils.UriHelper;
-
-import junit.framework.TestCase;
 
 /**
  * Unit test of UriEncoder

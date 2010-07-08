@@ -27,7 +27,6 @@ import javax.servlet.ServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.wink.server.internal.providers.entity.html.OutputStreamHttpServletResponseWrapper;
 import org.springframework.mock.web.MockRequestDispatcher;
 import org.springframework.util.Assert;
 

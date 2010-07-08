@@ -20,9 +20,9 @@
 
 package org.apache.wink.example.dynamicresource;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Collections;
 
 /**
  * Memory store of bookmarks, created just for the needs of Bookmarks demo.

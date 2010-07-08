@@ -38,8 +38,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.wink.itest.exceptionmappers.nomapper.GuestbookDatabase;
-
 /**
  * The main JAX-RS resource.
  */

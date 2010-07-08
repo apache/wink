@@ -24,11 +24,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.RuntimeDelegate;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.server.handlers.AbstractHandler;
 import org.apache.wink.server.handlers.MessageContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PopulateErrorResponseHandler extends AbstractHandler {
 

@@ -27,8 +27,6 @@ import java.util.List;
 
 import javax.ws.rs.core.MultivaluedMap;
 
-import org.apache.wink.common.internal.providers.multipart.MultiPartParser;
-
 import junit.framework.TestCase;
 
 public class TestMultiPartParser extends TestCase {

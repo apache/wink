@@ -22,8 +22,6 @@ package org.apache.wink.spring.internal;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wink.common.DynamicResource;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.lifecycle.LifecycleManager;
@@ -31,6 +29,8 @@ import org.apache.wink.common.internal.lifecycle.ObjectCreationException;
 import org.apache.wink.common.internal.lifecycle.ObjectFactory;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SpringLifecycleManager<T> implements LifecycleManager<T> {
 

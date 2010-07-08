@@ -35,8 +35,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wink.common.http.OPTIONS;
 import org.apache.wink.common.model.synd.SyndBase;
 import org.apache.wink.common.model.synd.SyndEntry;
@@ -51,6 +49,8 @@ import org.apache.wink.webdav.WebDAVMethod;
 import org.apache.wink.webdav.model.Getcontentlength;
 import org.apache.wink.webdav.server.WebDAVResponseBuilder;
 import org.apache.wink.webdav.server.WebDAVUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This resource handles WebDAV methods for collection of defects.

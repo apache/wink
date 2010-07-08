@@ -39,8 +39,6 @@ import org.apache.wink.common.model.synd.SyndLink;
 import org.apache.wink.common.model.synd.SyndText;
 import org.apache.wink.webdav.WebDAVHeaders;
 import org.apache.wink.webdav.WebDAVMethod;
-import org.apache.wink.webdav.server.WebDAVResource;
-import org.apache.wink.webdav.server.WebDAVResponseBuilder;
 
 @Workspace(workspaceTitle = "Test Service", collectionTitle = WebDAVTestCollectionResource.TITLE)
 @Path(WebDAVTestCollectionResource.PATH)

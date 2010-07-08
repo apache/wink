@@ -21,9 +21,6 @@
 package org.apache.wink.common.internal.utils;
 
 import static org.junit.Assert.assertArrayEquals;
-
-import org.apache.wink.common.internal.utils.StringUtils;
-
 import junit.framework.TestCase;
 
 public class StringUtilsTest extends TestCase {

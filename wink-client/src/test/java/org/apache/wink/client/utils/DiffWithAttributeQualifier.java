@@ -20,12 +20,12 @@
 
 package org.apache.wink.client.utils;
 
+import java.io.IOException;
+
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.ElementNameAndAttributeQualifier;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-
-import java.io.IOException;
 
 /**
  * Class that overrides XmlUnit Diff class. Only Elements with the same name as

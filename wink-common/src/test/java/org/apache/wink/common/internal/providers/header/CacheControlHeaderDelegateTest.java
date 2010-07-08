@@ -19,7 +19,8 @@
  *******************************************************************************/
 package org.apache.wink.common.internal.providers.header;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 

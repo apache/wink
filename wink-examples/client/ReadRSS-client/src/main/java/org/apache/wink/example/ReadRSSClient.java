@@ -20,7 +20,6 @@
 package org.apache.wink.example;
 
 import javax.ws.rs.core.MediaType;
-import javax.xml.bind.JAXB;
 
 import org.apache.wink.client.Resource;
 import org.apache.wink.client.RestClient;

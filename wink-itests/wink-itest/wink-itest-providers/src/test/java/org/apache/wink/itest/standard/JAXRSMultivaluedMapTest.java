@@ -35,7 +35,6 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
-import org.apache.wink.itest.standard.ArrayUtils;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
 public class JAXRSMultivaluedMapTest extends TestCase {

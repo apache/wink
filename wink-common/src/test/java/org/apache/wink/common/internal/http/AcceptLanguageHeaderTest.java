@@ -20,12 +20,10 @@
 
 package org.apache.wink.common.internal.http;
 
-import junit.framework.TestCase;
-
-import java.util.Locale;
 import java.util.Arrays;
+import java.util.Locale;
 
-import org.apache.wink.common.internal.http.AcceptLanguage;
+import junit.framework.TestCase;
 
 /**
  * Unit test of AcceptLanguageHeader.

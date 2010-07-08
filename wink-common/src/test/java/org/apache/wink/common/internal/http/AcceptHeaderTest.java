@@ -20,16 +20,15 @@
 
 package org.apache.wink.common.internal.http;
 
-import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.apache.wink.common.internal.http.Accept;
-import org.apache.wink.common.internal.http.Accept.ValuedMediaType;
-import org.apache.wink.common.internal.utils.MediaTypeUtils;
+import javax.ws.rs.core.MediaType;
 
 import junit.framework.TestCase;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.apache.wink.common.internal.http.Accept.ValuedMediaType;
+import org.apache.wink.common.internal.utils.MediaTypeUtils;
 
 /**
  * Unit test of accept header.

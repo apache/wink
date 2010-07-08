@@ -38,6 +38,8 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Providers;
 
+import junit.framework.TestCase;
+
 import org.apache.wink.common.internal.MultivaluedMapImpl;
 import org.apache.wink.common.internal.providers.entity.csv.CsvDeserializerProvider;
 import org.apache.wink.common.internal.providers.entity.csv.CsvSerializerProvider;
@@ -50,8 +52,6 @@ import org.apache.wink.common.model.synd.SyndContent;
 import org.apache.wink.common.model.synd.SyndEntry;
 import org.apache.wink.common.model.synd.SyndFeed;
 import org.apache.wink.common.model.synd.SyndPerson;
-
-import junit.framework.TestCase;
 
 /**
  * 

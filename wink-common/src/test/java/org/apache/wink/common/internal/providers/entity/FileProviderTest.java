@@ -19,18 +19,18 @@
  *******************************************************************************/
 package org.apache.wink.common.internal.providers.entity;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
-import org.apache.wink.common.internal.providers.entity.FileProvider;
-import org.junit.Before;
-import org.junit.Test;
-
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+
+import org.junit.Before;
+import org.junit.Test;
 
 public class FileProviderTest {
     FileProvider fileProvider = null;

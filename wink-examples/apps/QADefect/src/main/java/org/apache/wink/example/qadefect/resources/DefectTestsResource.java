@@ -31,13 +31,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wink.common.annotations.Workspace;
 import org.apache.wink.example.qadefect.legacy.DataStore;
 import org.apache.wink.example.qadefect.legacy.DefectBean;
 import org.apache.wink.example.qadefect.legacy.TestBean;
 import org.apache.wink.server.utils.LinkBuilders;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>

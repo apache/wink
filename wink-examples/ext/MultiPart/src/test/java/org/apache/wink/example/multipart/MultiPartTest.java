@@ -20,33 +20,21 @@
 
 package org.apache.wink.example.multipart;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.wink.common.internal.providers.multipart.MultiPartParser;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
-import org.apache.wink.common.model.atom.AtomEntry;
-import org.apache.wink.common.model.atom.AtomFeed;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
-import org.apache.wink.test.diff.DiffIgnoreUpdateWithAttributeQualifier;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.apache.wink.test.mock.TestUtils;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.w3c.dom.Document;
 
 /**
  *

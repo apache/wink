@@ -22,6 +22,7 @@ package org.apache.wink.client.handlers;
 
 import org.apache.wink.client.ClientRequest;
 import org.apache.wink.client.ClientResponse;
+import org.apache.wink.client.ClientRuntimeException;
 
 /**
  * Interface that all client handlers must implement

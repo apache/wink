@@ -34,7 +34,6 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.ByteArrayRequestEntity;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.wink.itest.contextresolver.User;
 import org.apache.wink.itest.contextresolver.jaxb.ObjectFactory;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 

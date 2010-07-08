@@ -28,6 +28,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.ext.Provider;
 
+import junit.framework.TestCase;
+
 import org.apache.wink.common.AbstractDynamicResource;
 import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
@@ -35,12 +37,9 @@ import org.apache.wink.common.internal.providers.entity.FileProvider;
 import org.apache.wink.common.internal.providers.entity.StreamingOutputProvider;
 import org.apache.wink.common.internal.providers.entity.StringProvider;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
-import org.apache.wink.server.internal.application.ApplicationProcessor;
 import org.apache.wink.server.internal.registry.ResourceRegistry;
 import org.apache.wink.server.internal.resources.HtmlServiceDocumentResource;
 import org.apache.wink.server.internal.resources.RootResource;
-
-import junit.framework.TestCase;
 
 public class ApplicationProcessorTest extends TestCase {
 

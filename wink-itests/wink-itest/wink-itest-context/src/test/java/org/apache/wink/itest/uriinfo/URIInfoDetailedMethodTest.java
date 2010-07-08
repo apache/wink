@@ -28,8 +28,6 @@ import junit.framework.TestCase;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.wink.itest.uriinfo.MatchedResourcesSubResource;
-import org.apache.wink.itest.uriinfo.UriInfoDetailedMethods;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
 /**

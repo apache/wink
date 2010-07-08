@@ -22,10 +22,10 @@ package org.apache.wink.providers.json;
 
 import java.util.Iterator;
 
-import org.json.JSONObject;
 import org.json.JSONArray;
-import org.json.JSONTokener;
 import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 public class JSONUtils {
 

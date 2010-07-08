@@ -30,11 +30,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.PathSegment;
 
+import junit.framework.TestCase;
+
 import org.apache.wink.common.internal.MultivaluedMapImpl;
 import org.apache.wink.common.internal.PathSegmentImpl;
-import org.apache.wink.common.internal.utils.UriHelper;
-
-import junit.framework.TestCase;
 
 /**
  * Unit test of UriHelper.

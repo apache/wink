@@ -23,9 +23,9 @@ package org.apache.wink.common.internal.providers.header;
 import javax.ws.rs.ext.RuntimeDelegate;
 import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 
-import org.apache.wink.common.internal.http.ContentDispositionHeader;
-
 import junit.framework.TestCase;
+
+import org.apache.wink.common.internal.http.ContentDispositionHeader;
 
 /**
  * Unit test of ContentDispositionHelper

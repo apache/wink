@@ -22,12 +22,11 @@ package org.apache.wink.server.internal.application;
 import java.io.InputStream;
 import java.util.Set;
 
+import junit.framework.TestCase;
+
 import org.apache.wink.common.internal.providers.entity.FileProvider;
 import org.apache.wink.common.internal.providers.entity.SourceProvider;
-import org.apache.wink.server.internal.application.ServletWinkApplication;
 import org.apache.wink.test.mock.ServletContextMock;
-
-import junit.framework.TestCase;
 
 public class ServletWinkApplicationTest extends TestCase {
 

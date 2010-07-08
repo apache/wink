@@ -21,11 +21,10 @@ package org.apache.wink.common.internal.application;
 
 import java.util.Set;
 
-import org.apache.wink.common.internal.application.SimpleWinkApplication;
+import junit.framework.TestCase;
+
 import org.apache.wink.common.internal.providers.entity.FileProvider;
 import org.apache.wink.common.internal.providers.entity.SourceProvider;
-
-import junit.framework.TestCase;
 
 public class SimpleWinkApplicationTest extends TestCase {
 

@@ -19,7 +19,6 @@
 
 package org.apache.wink.itest.request;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;

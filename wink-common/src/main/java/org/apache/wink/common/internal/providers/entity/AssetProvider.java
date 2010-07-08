@@ -43,8 +43,6 @@ import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 import javax.ws.rs.ext.Providers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.annotations.Asset;
 import org.apache.wink.common.annotations.Scope;
@@ -57,6 +55,8 @@ import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.common.internal.utils.AnnotationUtils;
 import org.apache.wink.common.internal.utils.GenericsUtils;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Scope(ScopeType.PROTOTYPE)
 @Provider

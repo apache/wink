@@ -27,11 +27,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
 
+import junit.framework.TestCase;
+
 import org.apache.wink.common.internal.application.ApplicationValidator;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
-
-import junit.framework.TestCase;
 
 public class ProvidersContextResolverTest extends TestCase {
 

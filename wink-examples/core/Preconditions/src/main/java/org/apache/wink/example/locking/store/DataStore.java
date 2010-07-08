@@ -26,9 +26,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.wink.example.locking.legacy.DefectBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.wink.example.locking.legacy.DefectBean;
 
 /**
  * Implementation of a demo memory store of legacy beans. Singleton class.

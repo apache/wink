@@ -21,8 +21,6 @@
 package org.apache.wink.client;
 
 import org.apache.http.client.HttpClient;
-
-import org.apache.wink.client.ClientConfig;
 import org.apache.wink.client.handlers.ConnectionHandler;
 import org.apache.wink.client.internal.handlers.ApacheHttpClientConnectionHandler;
 

@@ -23,8 +23,6 @@ package org.apache.wink.common.internal;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.PathSegment;
 
-import org.apache.wink.common.internal.PathSegmentImpl;
-
 import junit.framework.TestCase;
 
 public class PathSegmentImplTest extends TestCase {

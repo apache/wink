@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import javax.ws.rs.HeaderParam;
+import javax.xml.ws.http.HTTPException;
 
 import junit.framework.TestCase;
 

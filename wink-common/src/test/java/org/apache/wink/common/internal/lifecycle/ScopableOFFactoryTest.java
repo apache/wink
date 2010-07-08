@@ -19,8 +19,6 @@
  *******************************************************************************/
 package org.apache.wink.common.internal.lifecycle;
 
-import org.apache.wink.common.internal.lifecycle.ScopeLifecycleManager;
-
 import junit.framework.TestCase;
 
 /**

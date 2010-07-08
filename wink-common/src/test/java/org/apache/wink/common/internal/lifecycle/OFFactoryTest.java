@@ -22,14 +22,10 @@ package org.apache.wink.common.internal.lifecycle;
 import javax.ws.rs.Path;
 import javax.ws.rs.ext.Provider;
 
+import junit.framework.TestCase;
+
 import org.apache.wink.common.annotations.Scope;
 import org.apache.wink.common.annotations.Scope.ScopeType;
-import org.apache.wink.common.internal.lifecycle.PrototypeObjectFactory;
-import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
-import org.apache.wink.common.internal.lifecycle.ScopeLifecycleManager;
-import org.apache.wink.common.internal.lifecycle.SingletonObjectFactory;
-
-import junit.framework.TestCase;
 
 public class OFFactoryTest extends TestCase {
 

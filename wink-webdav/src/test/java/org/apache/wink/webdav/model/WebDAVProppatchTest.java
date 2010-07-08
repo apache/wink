@@ -28,10 +28,6 @@ import java.util.Set;
 
 import javax.xml.namespace.QName;
 
-import org.apache.wink.webdav.model.Prop;
-import org.apache.wink.webdav.model.Propertyupdate;
-import org.apache.wink.webdav.model.Remove;
-import org.apache.wink.webdav.model.WebDAVModelHelper;
 import org.custommonkey.xmlunit.Diff;
 import org.junit.Assert;
 import org.junit.Test;

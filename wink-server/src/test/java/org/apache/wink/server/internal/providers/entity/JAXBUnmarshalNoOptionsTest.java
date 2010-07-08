@@ -19,10 +19,7 @@
  *******************************************************************************/
 package org.apache.wink.server.internal.providers.entity;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -40,14 +37,10 @@ import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.wink.common.model.JAXBUnmarshalOptions;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.xml.sax.SAXException;
-
-import com.sun.xml.bind.IDResolver;
 
 /**
  * Adding a JAXBUnmarshalOptions allows JAXB unmarshallers to have properties

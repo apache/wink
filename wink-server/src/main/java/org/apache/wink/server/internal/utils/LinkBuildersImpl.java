@@ -21,7 +21,6 @@
 package org.apache.wink.server.internal.utils;
 
 import org.apache.wink.server.handlers.MessageContext;
-import org.apache.wink.server.internal.handlers.ServerMessageContext;
 import org.apache.wink.server.utils.LinkBuilders;
 import org.apache.wink.server.utils.SingleLinkBuilder;
 import org.apache.wink.server.utils.SystemLinksBuilder;

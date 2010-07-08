@@ -23,8 +23,6 @@ import java.util.List;
 
 import javax.ws.rs.core.MultivaluedMap;
 
-import org.apache.wink.common.internal.MultivaluedMapImpl;
-
 import junit.framework.TestCase;
 
 public class MultivaluedMapImplTest extends TestCase {

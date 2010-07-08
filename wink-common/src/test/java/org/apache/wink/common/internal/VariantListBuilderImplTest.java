@@ -20,16 +20,14 @@
 
 package org.apache.wink.common.internal;
 
+import static org.junit.Assert.assertArrayEquals;
+
 import java.util.List;
 import java.util.Locale;
-
-import static org.junit.Assert.assertArrayEquals;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Variant;
 import javax.ws.rs.core.Variant.VariantListBuilder;
-
-import org.apache.wink.common.internal.VariantListBuilderImpl;
 
 import junit.framework.TestCase;
 

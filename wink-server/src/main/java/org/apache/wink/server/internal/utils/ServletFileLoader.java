@@ -24,9 +24,9 @@ import java.io.InputStream;
 
 import javax.servlet.ServletContext;
 
+import org.apache.wink.common.internal.utils.FileLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.wink.common.internal.utils.FileLoader;
 
 public class ServletFileLoader extends FileLoader {
 

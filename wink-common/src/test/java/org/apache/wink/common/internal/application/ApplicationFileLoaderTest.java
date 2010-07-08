@@ -21,14 +21,10 @@ package org.apache.wink.common.internal.application;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.logging.LogRecord;
 
 import junit.framework.TestCase;
-
-import org.apache.wink.logging.WinkLogHandler;
 
 public class ApplicationFileLoaderTest extends TestCase {
 

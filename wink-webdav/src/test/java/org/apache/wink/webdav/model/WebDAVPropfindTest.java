@@ -25,10 +25,6 @@ import java.io.StringWriter;
 
 import javax.xml.namespace.QName;
 
-import org.apache.wink.webdav.model.Allprop;
-import org.apache.wink.webdav.model.Prop;
-import org.apache.wink.webdav.model.Propfind;
-import org.apache.wink.webdav.model.Propname;
 import org.custommonkey.xmlunit.Diff;
 import org.junit.Assert;
 import org.junit.Test;

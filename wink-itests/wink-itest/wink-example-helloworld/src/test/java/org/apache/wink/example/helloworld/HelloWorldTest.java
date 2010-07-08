@@ -20,11 +20,11 @@
 
 package org.apache.wink.example.helloworld;
 
+import junit.framework.TestCase;
+
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
-
-import junit.framework.TestCase;
 
 /**
  * Test of response from HelloWorld Resource.

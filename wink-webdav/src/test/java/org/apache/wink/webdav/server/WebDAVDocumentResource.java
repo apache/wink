@@ -40,8 +40,6 @@ import org.apache.wink.common.model.synd.SyndEntry;
 import org.apache.wink.common.model.synd.SyndLink;
 import org.apache.wink.common.model.synd.SyndText;
 import org.apache.wink.webdav.WebDAVMethod;
-import org.apache.wink.webdav.server.WebDAVLockableResource;
-import org.apache.wink.webdav.server.WebDAVResponseBuilder;
 
 @Path("/feed/{entry}")
 public class WebDAVDocumentResource extends WebDAVLockableResource {

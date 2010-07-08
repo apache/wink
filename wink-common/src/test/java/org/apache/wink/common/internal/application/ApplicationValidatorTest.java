@@ -22,11 +22,10 @@ package org.apache.wink.common.internal.application;
 import javax.ws.rs.Path;
 import javax.ws.rs.ext.Provider;
 
-import org.apache.wink.common.AbstractDynamicResource;
-import org.apache.wink.common.internal.application.ApplicationValidator;
-import org.apache.wink.common.internal.providers.entity.FileProvider;
-
 import junit.framework.TestCase;
+
+import org.apache.wink.common.AbstractDynamicResource;
+import org.apache.wink.common.internal.providers.entity.FileProvider;
 
 public class ApplicationValidatorTest extends TestCase {
 

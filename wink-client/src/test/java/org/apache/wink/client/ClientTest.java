@@ -39,12 +39,6 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
-import org.apache.wink.client.ClientConfig;
-import org.apache.wink.client.ClientResponse;
-import org.apache.wink.client.ClientWebException;
-import org.apache.wink.client.EntityType;
-import org.apache.wink.client.Resource;
-import org.apache.wink.client.RestClient;
 import org.apache.wink.common.utils.ProviderUtils;
 
 public class ClientTest extends BaseTest {

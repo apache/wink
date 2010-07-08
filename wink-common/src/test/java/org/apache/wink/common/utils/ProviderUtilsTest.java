@@ -19,7 +19,8 @@
  *******************************************************************************/
 package org.apache.wink.common.utils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -29,7 +30,6 @@ import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
 
-import org.apache.wink.common.utils.ProviderUtils;
 import org.junit.Test;
 
 public class ProviderUtilsTest {

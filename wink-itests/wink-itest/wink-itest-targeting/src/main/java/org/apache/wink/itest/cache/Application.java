@@ -22,8 +22,6 @@ package org.apache.wink.itest.cache;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.wink.itest.cache.NewsResource;
-
 public class Application extends javax.ws.rs.core.Application {
 
     public Set<Class<?>> getClasses() {

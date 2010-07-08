@@ -31,8 +31,6 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.wink.itest.writerexceptions.IOExceptionMapper;
-import org.apache.wink.itest.writerexceptions.NullPointerExceptionMapper;
 import org.apache.wink.test.integration.ServerContainerAssertions;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 

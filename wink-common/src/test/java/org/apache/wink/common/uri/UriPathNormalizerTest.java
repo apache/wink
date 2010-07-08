@@ -20,9 +20,9 @@
 
 package org.apache.wink.common.uri;
 
-import org.apache.wink.common.internal.uri.UriPathNormalizer;
-
 import junit.framework.TestCase;
+
+import org.apache.wink.common.internal.uri.UriPathNormalizer;
 
 /**
  * Unit test of UriPathNormalizer.

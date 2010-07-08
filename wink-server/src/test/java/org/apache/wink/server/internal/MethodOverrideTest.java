@@ -28,7 +28,6 @@ import junit.framework.TestCase;
 
 import org.apache.wink.common.http.HttpHeadersEx;
 import org.apache.wink.server.handlers.MessageContext;
-import org.apache.wink.server.internal.DeploymentConfiguration;
 import org.apache.wink.server.internal.handlers.ServerMessageContext;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;

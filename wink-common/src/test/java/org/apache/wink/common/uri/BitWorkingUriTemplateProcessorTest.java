@@ -29,11 +29,11 @@ import java.util.Set;
 
 import javax.ws.rs.core.MultivaluedMap;
 
+import junit.framework.TestCase;
+
 import org.apache.wink.common.internal.uritemplate.BitWorkingUriTemplateProcessor;
 import org.apache.wink.common.internal.uritemplate.UriTemplateMatcher;
 import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor;
-
-import junit.framework.TestCase;
 
 /**
  * Unit test of UriTemplate.

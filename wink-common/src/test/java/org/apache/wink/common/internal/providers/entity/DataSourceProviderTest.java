@@ -31,7 +31,6 @@ import java.io.InputStream;
 import javax.activation.DataSource;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.wink.common.internal.providers.entity.DataSourceProvider;
 import org.junit.Test;
 
 public class DataSourceProviderTest {

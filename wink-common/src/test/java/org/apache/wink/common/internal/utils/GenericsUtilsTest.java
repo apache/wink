@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.wink.common.internal.utils.GenericsUtils;
-
 import junit.framework.TestCase;
 
 public class GenericsUtilsTest extends TestCase {

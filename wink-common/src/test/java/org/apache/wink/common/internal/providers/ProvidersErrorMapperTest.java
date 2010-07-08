@@ -25,14 +25,14 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
+import junit.framework.TestCase;
+
 import org.apache.wink.common.RestException;
 import org.apache.wink.common.annotations.Scope;
 import org.apache.wink.common.annotations.Scope.ScopeType;
 import org.apache.wink.common.internal.application.ApplicationValidator;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
-
-import junit.framework.TestCase;
 
 public class ProvidersErrorMapperTest extends TestCase {
 

@@ -19,9 +19,9 @@
  *******************************************************************************/
 package org.apache.wink.common.internal.lifecycle;
 
-import org.apache.wink.common.DynamicResource;
-import org.apache.wink.common.internal.lifecycle.DefaultLifecycleManager;
 import junit.framework.TestCase;
+
+import org.apache.wink.common.DynamicResource;
 
 /**
  * test scenarios not covered by OFFactoryTest

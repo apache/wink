@@ -29,8 +29,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wink.common.http.HttpStatus;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.model.synd.SyndBase;
@@ -55,6 +53,8 @@ import org.apache.wink.webdav.model.Propstat;
 import org.apache.wink.webdav.model.Resourcetype;
 import org.apache.wink.webdav.model.Supportedlock;
 import org.apache.wink.webdav.model.WebDAVModelHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 

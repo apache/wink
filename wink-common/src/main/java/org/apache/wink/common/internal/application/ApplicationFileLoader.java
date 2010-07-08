@@ -31,13 +31,13 @@ import java.util.Set;
 
 import javax.ws.rs.WebApplicationException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
 import org.apache.wink.common.internal.utils.ClassUtils;
 import org.apache.wink.common.internal.utils.FileLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>

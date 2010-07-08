@@ -38,9 +38,6 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
-import org.apache.wink.itest.contextresolver.Department;
-import org.apache.wink.itest.contextresolver.DepartmentDatabase;
-import org.apache.wink.itest.contextresolver.DepartmentListWrapper;
 import org.apache.wink.test.integration.ServerEnvironmentInfo;
 
 public class DepartmentTest extends TestCase {

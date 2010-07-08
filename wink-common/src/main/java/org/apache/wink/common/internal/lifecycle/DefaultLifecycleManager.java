@@ -19,12 +19,12 @@
  *******************************************************************************/
 package org.apache.wink.common.internal.lifecycle;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.registry.metadata.ApplicationMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>

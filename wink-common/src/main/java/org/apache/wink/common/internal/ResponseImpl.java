@@ -37,7 +37,6 @@ import javax.ws.rs.core.Variant;
 
 import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
-import org.apache.wink.common.internal.utils.HeaderUtils;
 
 public class ResponseImpl extends Response {
 

@@ -19,6 +19,10 @@
  *******************************************************************************/
 package org.apache.wink.common.internal.providers.entity;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -28,9 +32,7 @@ import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 
 import javax.ws.rs.core.MediaType;
-import static org.junit.Assert.*;
 
-import org.apache.wink.common.internal.providers.entity.ReaderProvider;
 import org.junit.Test;
 
 public class ReaderProviderTest {

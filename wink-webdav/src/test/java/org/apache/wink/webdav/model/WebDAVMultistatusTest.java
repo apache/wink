@@ -26,11 +26,6 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
-import org.apache.wink.webdav.model.Multistatus;
-import org.apache.wink.webdav.model.Prop;
-import org.apache.wink.webdav.model.Propstat;
-import org.apache.wink.webdav.model.Response;
-import org.apache.wink.webdav.model.WebDAVModelHelper;
 import org.custommonkey.xmlunit.Diff;
 import org.junit.Assert;
 import org.junit.Test;

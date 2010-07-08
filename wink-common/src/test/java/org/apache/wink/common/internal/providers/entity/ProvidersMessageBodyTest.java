@@ -35,18 +35,14 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
+import junit.framework.TestCase;
+
 import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.annotations.Scope;
 import org.apache.wink.common.annotations.Scope.ScopeType;
 import org.apache.wink.common.internal.application.ApplicationValidator;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
-import org.apache.wink.common.internal.providers.entity.ByteArrayProvider;
-import org.apache.wink.common.internal.providers.entity.FileProvider;
-import org.apache.wink.common.internal.providers.entity.InputStreamProvider;
-import org.apache.wink.common.internal.providers.entity.StringProvider;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
-
-import junit.framework.TestCase;
 
 public class ProvidersMessageBodyTest extends TestCase {
 

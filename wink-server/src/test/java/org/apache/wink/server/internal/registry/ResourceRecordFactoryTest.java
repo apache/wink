@@ -23,12 +23,10 @@ package org.apache.wink.server.internal.registry;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
+import junit.framework.TestCase;
+
 import org.apache.wink.common.AbstractDynamicResource;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
-import org.apache.wink.server.internal.registry.ResourceRecord;
-import org.apache.wink.server.internal.registry.ResourceRecordFactory;
-
-import junit.framework.TestCase;
 
 public class ResourceRecordFactoryTest extends TestCase {
 

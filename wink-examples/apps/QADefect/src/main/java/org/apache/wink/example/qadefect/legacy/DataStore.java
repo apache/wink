@@ -32,10 +32,10 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.Map.Entry;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wink.example.qadefect.resources.DefectsResource;
 import org.apache.wink.example.qadefect.utils.SearchMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of a demo memory store of legacy beans. Singleton class.

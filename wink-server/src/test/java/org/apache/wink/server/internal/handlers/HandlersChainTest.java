@@ -22,14 +22,14 @@ package org.apache.wink.server.internal.handlers;
 
 import java.util.Properties;
 
+import junit.framework.TestCase;
+
 import org.apache.wink.server.handlers.HandlersChain;
 import org.apache.wink.server.handlers.MessageContext;
 import org.apache.wink.server.handlers.RequestHandler;
 import org.apache.wink.server.handlers.RequestHandlersChain;
 import org.apache.wink.server.handlers.ResponseHandler;
 import org.apache.wink.server.handlers.ResponseHandlersChain;
-
-import junit.framework.TestCase;
 
 public class HandlersChainTest extends TestCase {
 

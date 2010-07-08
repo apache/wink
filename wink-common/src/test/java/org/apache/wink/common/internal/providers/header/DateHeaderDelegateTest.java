@@ -19,6 +19,9 @@
  *******************************************************************************/
 package org.apache.wink.common.internal.providers.header;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,8 +29,6 @@ import java.util.Locale;
 
 import javax.ws.rs.ext.RuntimeDelegate;
 import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
-
-import static org.junit.Assert.*;
 
 import org.junit.Test;
 

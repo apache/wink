@@ -26,13 +26,13 @@ import java.util.regex.PatternSyntaxException;
 
 import javax.ws.rs.core.MultivaluedMap;
 
+import junit.framework.TestCase;
+
 import org.apache.wink.common.internal.MultivaluedMapImpl;
 import org.apache.wink.common.internal.uritemplate.JaxRsUriTemplateProcessor;
 import org.apache.wink.common.internal.uritemplate.UriTemplateMatcher;
 import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor;
 import org.apache.wink.common.internal.uritemplate.JaxRsUriTemplateProcessor.JaxRsCompilationHandler;
-
-import junit.framework.TestCase;
 
 public class JaxRsUriTemplateProcessorTest extends TestCase {
 

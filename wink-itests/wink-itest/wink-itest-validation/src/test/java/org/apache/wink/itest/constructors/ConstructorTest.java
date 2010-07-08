@@ -21,6 +21,8 @@ package org.apache.wink.itest.constructors;
 
 import java.io.IOException;
 
+import javax.xml.ws.http.HTTPException;
+
 import junit.framework.TestCase;
 
 import org.apache.commons.httpclient.HttpClient;
