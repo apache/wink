@@ -302,7 +302,7 @@ public class DataStore {
             return getDefects();
         }
 
-        logger.debug("Defect search was actived.");
+        logger.trace("Defect search was actived.");
         // in real world there should have been a sql query, but for example
         // purpose
         // we'll do search manually
@@ -316,12 +316,12 @@ public class DataStore {
             l_defects: for (DefectBean defect : defects.values()) {
                 for (Entry<String, String> entry : searchParameters.entrySet()) {
                     String value = entry.getValue();
-                    logger.debug("Parameter: {}; value: {}", entry.getKey(), value);
+                    logger.trace("Parameter: {}; value: {}", entry.getKey(), value);
 
                     if (entry.getKey().equals(DefectsResource.ASSIGNED_TO)) {
                         if (defect.getAssignedTo() == null || !defect.getAssignedTo()
                             .equalsIgnoreCase(value)) {
-                            logger.debug("Defect " + defect.getId()
+                            logger.trace("Defect " + defect.getId()
                                 + " was skipped, since it doesn't match "
                                 + DefectsResource.ASSIGNED_TO
                                 + " parameter: "
@@ -337,7 +337,7 @@ public class DataStore {
                                 .contains(value))
                             && (defect.getStatus() != null && !defect.getStatus().toLowerCase()
                                 .contains(value))) {
-                            logger.debug("Defect " + defect.getId()
+                            logger.trace("Defect " + defect.getId()
                                 + " was skipped, since it doesn't match "
                                 + DefectsResource.FTS
                                 + " parameter.");
@@ -347,7 +347,7 @@ public class DataStore {
                     if (entry.getKey().equals(DefectsResource.SEVERIIY)) {
                         if (defect.getSeverity() == null || !defect.getSeverity()
                             .equalsIgnoreCase(value)) {
-                            logger.debug("Defect " + defect.getId()
+                            logger.trace("Defect " + defect.getId()
                                 + " was skipped, since it doesn't match "
                                 + DefectsResource.SEVERIIY
                                 + " parameter: "
@@ -358,7 +358,7 @@ public class DataStore {
                 }
                 // defect matched all filters
                 // add it to result collection
-                logger.debug("Defect " + defect.getId() + " was added to result.");
+                logger.trace("Defect " + defect.getId() + " was added to result.");
                 hashSet.add(defect);
             }
         }

@@ -60,7 +60,7 @@ public class FindResourceMethodHandler implements RequestHandler {
         // resource method
         if (resource.isExactMatch()) {
             logger
-                .debug("Root resource @Path matches exactly so finding root resource method in {}", //$NON-NLS-1$
+                .trace("Root resource @Path matches exactly so finding root resource method in {}", //$NON-NLS-1$
                        resource.getResourceClass().getName());
             handleResourceMethod(context, chain);
             return;
@@ -75,11 +75,11 @@ public class FindResourceMethodHandler implements RequestHandler {
         if (tail.startsWith("/")) { //$NON-NLS-1$
             tail = tail.substring(1);
         }
-        logger.debug("Unmatched tail to the URI: {}", tail); //$NON-NLS-1$
+        logger.trace("Unmatched tail to the URI: {}", tail); //$NON-NLS-1$
 
         // get a sorted list of all the sub-resources (methods and locators)
         List<SubResourceInstance> subResources = resource.getRecord().getMatchingSubResources(tail);
-        logger.debug("Possible subresources found: {}", subResources); //$NON-NLS-1$
+        logger.trace("Possible subresources found: {}", subResources); //$NON-NLS-1$
         if (subResources.size() == 0) {
             result.setError(new WebApplicationException(Response.Status.NOT_FOUND));
             return;
@@ -87,7 +87,7 @@ public class FindResourceMethodHandler implements RequestHandler {
 
         // get all the searchable sub-resources
         List<SubResourceInstance> searchableSubResources = getSearchableSubResources(subResources);
-        logger.debug("Possible searchable subresources found: {}", searchableSubResources); //$NON-NLS-1$
+        logger.trace("Possible searchable subresources found: {}", searchableSubResources); //$NON-NLS-1$
         // save the current data in case we need to role back the information if
         // the search fails and we will need to continue to the next
         // sub-resource
@@ -144,9 +144,9 @@ public class FindResourceMethodHandler implements RequestHandler {
         result.setFound(true);
         result.setMethod(method);
         // continue the chain to invoke the method
-        if (logger.isDebugEnabled()) {
+        if (logger.isTraceEnabled()) {
             MethodMetadata metadata = (method == null) ? null : method.getMetadata();
-            logger.debug("Found root resource method to invoke: {} ", metadata); //$NON-NLS-1$
+            logger.trace("Found root resource method to invoke: {} ", metadata); //$NON-NLS-1$
         }
         chain.doChain(context);
     }
@@ -176,9 +176,9 @@ public class FindResourceMethodHandler implements RequestHandler {
         saveFoundMethod(result, matcher, method, context);
 
         // continue the chain to invoke the method
-        if (logger.isDebugEnabled()) {
+        if (logger.isTraceEnabled()) {
             MethodMetadata metadata = (method == null) ? null : method.getMetadata();
-            logger.debug("Found subresource method to invoke: {} ", metadata); //$NON-NLS-1$
+            logger.trace("Found subresource method to invoke: {} ", metadata); //$NON-NLS-1$
         }
         chain.doChain(context);
     }
@@ -202,10 +202,10 @@ public class FindResourceMethodHandler implements RequestHandler {
         saveFoundMethod(result, matcher, subResourceInstance, context);
 
         // continue the chain to invoke the locator
-        if (logger.isDebugEnabled()) {
+        if (logger.isTraceEnabled()) {
             MethodMetadata metadata =
                 (subResourceInstance == null) ? null : subResourceInstance.getMetadata();
-            logger.debug("Found subresource locator to invoke: {} ", metadata); //$NON-NLS-1$
+            logger.trace("Found subresource locator to invoke: {} ", metadata); //$NON-NLS-1$
         }
         chain.doChain(context);
 
@@ -213,7 +213,7 @@ public class FindResourceMethodHandler implements RequestHandler {
         // continue the search in it
         Object subResource = context.getResponseEntity();
         if (subResource == null) {
-            logger.debug("Subresource returned was null so returning a 404 Not Found"); //$NON-NLS-1$
+            logger.trace("Subresource returned was null so returning a 404 Not Found"); //$NON-NLS-1$
             result.setError(new WebApplicationException(Status.NOT_FOUND));
             return;
         }
@@ -225,7 +225,7 @@ public class FindResourceMethodHandler implements RequestHandler {
         // call recursively to search in the sub-resource
         result.setFound(false);
         logger
-            .debug("Re-invoking the chain (due to hitting a subresource locator method) with the new subresource instance {}", //$NON-NLS-1$
+            .trace("Re-invoking the chain (due to hitting a subresource locator method) with the new subresource instance {}", //$NON-NLS-1$
                    resourceInstance);
         handleRequest(context, chain);
     }

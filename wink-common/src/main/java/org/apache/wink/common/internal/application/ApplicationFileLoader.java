@@ -91,8 +91,8 @@ public class ApplicationFileLoader {
      * @throws FileNotFoundException - if file is not found
      */
     public ApplicationFileLoader(String appConfigFile) throws FileNotFoundException {
-        if (logger.isDebugEnabled()) {
-            logger.debug(Messages.getMessage("loadingApplication", appConfigFile)); //$NON-NLS-1$
+        if (logger.isTraceEnabled()) {
+            logger.trace(Messages.getMessage("loadingApplication", appConfigFile)); //$NON-NLS-1$
         }
         loadClasses(FileLoader.loadFileAsStream(appConfigFile));
     }
@@ -131,8 +131,8 @@ public class ApplicationFileLoader {
                     cls = ClassUtils.loadClass(line);
                     if (ResourceMetadataCollector.isStaticResource(cls) || ProviderMetadataCollector
                         .isProvider(cls)) {
-                        if (logger.isDebugEnabled()) {
-                            logger.debug(Messages.getMessage("loadingClassToApplication", line)); //$NON-NLS-1$
+                        if (logger.isTraceEnabled()) {
+                            logger.trace(Messages.getMessage("loadingClassToApplication", line)); //$NON-NLS-1$
                         }
                         classes.add(cls);
                     } else {
@@ -142,12 +142,12 @@ public class ApplicationFileLoader {
                         }
                     }
                 } catch (ClassNotFoundException e) {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("ClassNotFoundException while loading class", e); //$NON-NLS-1$
+                    if (logger.isTraceEnabled()) {
+                        logger.trace("ClassNotFoundException while loading class", e); //$NON-NLS-1$
                     }
                 } catch (NoClassDefFoundError e) {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug(Messages
+                    if (logger.isTraceEnabled()) {
+                        logger.trace(Messages
                             .getMessage("classInstantiationExceptionWithMsgFormat", line), e); //$NON-NLS-1$
                     }
                 }

@@ -43,7 +43,7 @@ public abstract class AbstractRestServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         requestProcessorAttribute = getInitParameter(REQUEST_PROCESSOR_ATTRIBUTE);
-        logger.debug("Request processor attribute is {} for {}", requestProcessorAttribute, this); //$NON-NLS-1$
+        logger.trace("Request processor attribute is {} for {}", requestProcessorAttribute, this); //$NON-NLS-1$
     }
 
     protected RequestProcessor getRequestProcessor() {

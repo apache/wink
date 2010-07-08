@@ -424,7 +424,7 @@ public class MessagesTest extends TestCase {
         // SLF4J logger can take an extra exception param
         if (chickenLips == remainingParams-1) {
             // token count may be one greater than chickenlips, since messages may be something like:
-            // logger.debug("abcd", new RuntimeException());
+            // logger.trace("abcd", new RuntimeException());
             // or:
             // logger.error(Messages.getMessage("saxParseException", type.getName()), e);
 //            System.out.print("\nWARNING: Expected " + chickenLips + " parameters, but found " + tokenizer.countTokens() + (string.startsWith("Messages") ? " for key " : " for formatted string ") +
@@ -470,7 +470,7 @@ public class MessagesTest extends TestCase {
     }
 
 
-    // check all production code .java files for all calls to Logger.debug, error, warn, and info to ensure
+    // check all production code .java files for all calls to Logger.trace, error, warn, and info to ensure
     // that the formatted string is correct, and that the reference, if any, to resource.properties keys is correct.
     public void testMessages() throws IOException {
         
@@ -505,7 +505,7 @@ public class MessagesTest extends TestCase {
             // (we can't really use regex here to match balanced parentheses)
             ArrayList<Pattern> betweenLoggersPatterns = new ArrayList<Pattern>();
             if (loggerVariableName != null) {
-                betweenLoggersPatterns.add(Pattern.compile("\\G.*?" + loggerVariableName + "\\s*?\\.\\s*?(info|debug|error|warn)\\s*?\\((.*?);", Pattern.COMMENTS));
+                betweenLoggersPatterns.add(Pattern.compile("\\G.*?" + loggerVariableName + "\\s*?\\.\\s*?(info|trace|debug|error|warn)\\s*?\\((.*?);", Pattern.COMMENTS));
                 betweenLoggersPatterns.add(patternForNoLogger);  // some patterns may get checked twice, but that's ok
             } else {
                 betweenLoggersPatterns.add(patternForNoLogger);
@@ -514,7 +514,8 @@ public class MessagesTest extends TestCase {
             for (Pattern betweenLoggersPattern: betweenLoggersPatterns.toArray(new Pattern[]{})) {
                 Matcher betweenLoggersMatcher = betweenLoggersPattern.matcher(fileText);
                 while (betweenLoggersMatcher.find()) {
-                    parseAndInspect(betweenLoggersMatcher.group(2), !betweenLoggersMatcher.group(1).equals("debug"), fileText, file.getAbsolutePath(), unusedProps);
+                    boolean externalizationRequired = !betweenLoggersMatcher.group(1).equals("debug") && !betweenLoggersMatcher.group(1).equals("trace");
+                    parseAndInspect(betweenLoggersMatcher.group(2), externalizationRequired, fileText, file.getAbsolutePath(), unusedProps);
                 }
             }
         }

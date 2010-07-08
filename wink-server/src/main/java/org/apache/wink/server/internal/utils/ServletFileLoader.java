@@ -39,7 +39,7 @@ public class ServletFileLoader extends FileLoader {
         }
 
         if (servletContext != null) {
-            logger.debug("Searching for {} using servlet context.", fileName); //$NON-NLS-1$
+            logger.trace("Searching for {} using servlet context.", fileName); //$NON-NLS-1$
 
             if (fileName.startsWith("/")) {  // protect against MalformedURLException //$NON-NLS-1$
                 InputStream is = servletContext.getResourceAsStream(fileName);

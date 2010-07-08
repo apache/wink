@@ -96,7 +96,7 @@ public class JAXBArrayJSONProvider extends AbstractJAXBCollectionProvider implem
                                                        theType,
                                                        annotations,
                                                        mediaType);
-            logger.debug("readerProvider was {} of type {}", System.identityHashCode(readerProvider), readerProvider.getClass().getName()); //$NON-NLS-1$
+            logger.trace("readerProvider was {} of type {}", System.identityHashCode(readerProvider), readerProvider.getClass().getName()); //$NON-NLS-1$
         }
         Queue<String> queue = new LinkedList<String>();
         List<Object> collection = new ArrayList<Object>();
@@ -167,7 +167,7 @@ public class JAXBArrayJSONProvider extends AbstractJAXBCollectionProvider implem
                                                        theType,
                                                        annotations,
                                                        mediaType);
-            logger.debug("writerProvider was {} of type {}", System.identityHashCode(writerProvider), writerProvider.getClass().getName()); //$NON-NLS-1$
+            logger.trace("writerProvider was {} of type {}", System.identityHashCode(writerProvider), writerProvider.getClass().getName()); //$NON-NLS-1$
         }
         entityStream.write("[".getBytes()); //$NON-NLS-1$
         int i = 0;

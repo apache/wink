@@ -50,9 +50,9 @@ public class FindRootResourceHandler implements RequestHandler {
 
         // create a path stripped from all matrix parameters to use for matching
         List<PathSegment> segments = context.getUriInfo().getPathSegments(false);
-        logger.debug("Getting URI Info path segments: {}", segments); //$NON-NLS-1$
+        logger.trace("Getting URI Info path segments: {}", segments); //$NON-NLS-1$
         String strippedPath = buildPathForMatching(segments);
-        logger.debug("Getting stripped path from segments: {}", strippedPath); //$NON-NLS-1$
+        logger.trace("Getting stripped path from segments: {}", strippedPath); //$NON-NLS-1$
         // get a list of root resources that can handle the request
 
         // JAX-RS specification requires to search only the first matching
@@ -61,9 +61,9 @@ public class FindRootResourceHandler implements RequestHandler {
         // matching resources
         List<ResourceInstance> matchedResources =
             registry.getMatchingRootResources(strippedPath, isContinuedSearchPolicy);
-        logger.debug("Found resource instances: {}", matchedResources); //$NON-NLS-1$
+        logger.trace("Found resource instances: {}", matchedResources); //$NON-NLS-1$
         if (matchedResources.size() == 0) {
-            logger.debug("No resource found matching {}", context.getUriInfo().getPath(false)); //$NON-NLS-1$
+            logger.trace("No resource found matching {}", context.getUriInfo().getPath(false)); //$NON-NLS-1$
             SearchResult result =
                 new SearchResult(new WebApplicationException(Response.Status.NOT_FOUND));
             context.setAttribute(SearchResult.class, result);
@@ -84,7 +84,7 @@ public class FindRootResourceHandler implements RequestHandler {
                                             headSegmentsCount,
                                             result.getData().getMatchedVariablesPathSegments());
 
-            logger.debug("Using SearchResult: {}", result); //$NON-NLS-1$
+            logger.trace("Using SearchResult: {}", result); //$NON-NLS-1$
 
             // continue that chain to find the actual resource that will handle
             // the request.
@@ -102,7 +102,7 @@ public class FindRootResourceHandler implements RequestHandler {
             // instances used; the subresource is dead)
             List<ResourceInstance> resourceInstances = result.getData().getMatchedResources();
             for (ResourceInstance res : resourceInstances) {
-                logger.debug("Releasing resource instance"); //$NON-NLS-1$
+                logger.trace("Releasing resource instance"); //$NON-NLS-1$
                 res.releaseInstance(context);
             }
         }

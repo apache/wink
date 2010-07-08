@@ -69,20 +69,20 @@ public class ClassUtils {
 
                             try {
                                 // try context class loader first
-                                logger.debug("Loading class {} using thread context classloader.", className); //$NON-NLS-1$
+                                logger.trace("Loading class {} using thread context classloader.", className); //$NON-NLS-1$
                                 return Class.forName(className,
                                         true,
                                         Thread.currentThread().getContextClassLoader());
                             } catch (ClassNotFoundException cnfe) {
                                 try {
                                     // fallback to current classloader
-                                    logger.debug("Loading class {} using current classloader.", className); //$NON-NLS-1$
+                                    logger.trace("Loading class {} using current classloader.", className); //$NON-NLS-1$
                                     return Class.forName(className,
                                                          true,
                                                          ClassUtils.class.getClassLoader());
                                 } catch (ClassNotFoundException cnfe2) {
                                     // fallback to system classloader
-                                    logger.debug("Loading class {} using system classloader.", className); //$NON-NLS-1$
+                                    logger.trace("Loading class {} using system classloader.", className); //$NON-NLS-1$
                                     try {
                                         return Class.forName(className);
                                     } catch (ClassNotFoundException cnfe3) {
@@ -105,7 +105,7 @@ public class ClassUtils {
             // Class.forName does not support primitives, so do a last check:
             Class cls = (Class) loadClassMap.get(className);
             if (cls != null) {
-                logger.debug("Returning class {}", className); //$NON-NLS-1$
+                logger.trace("Returning class {}", className); //$NON-NLS-1$
                 return cls;
             }
             throw (ClassNotFoundException) ret;

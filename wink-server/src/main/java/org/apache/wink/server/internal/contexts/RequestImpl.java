@@ -79,7 +79,7 @@ public class RequestImpl implements Request {
     // see C007
     // http://jcp.org/aboutJava/communityprocess/maintenance/jsr311/311ChangeLog.html
     public ResponseBuilder evaluatePreconditions() {
-        logger.debug("evaluatePreconditions() called"); //$NON-NLS-1$
+        logger.trace("evaluatePreconditions() called"); //$NON-NLS-1$
 
         // the resource does not exist yet so any If-Match header would result
         // in a precondition failed
@@ -88,7 +88,7 @@ public class RequestImpl implements Request {
             try {
                 EntityTagMatchHeader ifMatchHeader = null;
                 ifMatchHeader = ifMatchHeaderDelegate.fromString(ifMatch);
-                logger.debug("ifMatchHeaderDelegate returned {}", ifMatchHeader); //$NON-NLS-1$
+                logger.trace("ifMatchHeaderDelegate returned {}", ifMatchHeader); //$NON-NLS-1$
             } catch (IllegalArgumentException e) {
                 throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
             }
@@ -97,7 +97,7 @@ public class RequestImpl implements Request {
             ResponseBuilder responseBuilder = delegate.createResponseBuilder();
             responseBuilder.status(HttpServletResponse.SC_PRECONDITION_FAILED);
             logger
-                .debug("evaluatePreconditions() returning built response because there was no match due to no entity tag"); //$NON-NLS-1$
+                .trace("evaluatePreconditions() returning built response because there was no match due to no entity tag"); //$NON-NLS-1$
             return responseBuilder;
         }
 
@@ -108,7 +108,7 @@ public class RequestImpl implements Request {
     }
 
     public ResponseBuilder evaluatePreconditions(EntityTag tag) {
-        logger.debug("evaluatePreconditions({}) called", tag); //$NON-NLS-1$
+        logger.trace("evaluatePreconditions({}) called", tag); //$NON-NLS-1$
         String ifMatch = getHeaderValue(HttpHeaders.IF_MATCH);
         if (ifMatch != null) {
             return evaluateIfMatch(tag, ifMatch);
@@ -124,11 +124,11 @@ public class RequestImpl implements Request {
      * returns ResponseBuilder if none of the tags matched
      */
     private ResponseBuilder evaluateIfMatch(EntityTag tag, String headerValue) {
-        logger.debug("evaluateIfMatch({}, {}) called", tag, headerValue); //$NON-NLS-1$
+        logger.trace("evaluateIfMatch({}, {}) called", tag, headerValue); //$NON-NLS-1$
         EntityTagMatchHeader ifMatchHeader = null;
         try {
             ifMatchHeader = ifMatchHeaderDelegate.fromString(headerValue);
-            logger.debug("ifMatchHeaderDelegate returned {}", ifMatchHeader); //$NON-NLS-1$
+            logger.trace("ifMatchHeaderDelegate returned {}", ifMatchHeader); //$NON-NLS-1$
         } catch (IllegalArgumentException e) {
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         }
@@ -137,10 +137,10 @@ public class RequestImpl implements Request {
             // none of the tags matches the etag
             ResponseBuilder responseBuilder = delegate.createResponseBuilder();
             responseBuilder.status(HttpServletResponse.SC_PRECONDITION_FAILED).tag(tag);
-            logger.debug("evaluateIfMatch returning built response because there was no match"); //$NON-NLS-1$
+            logger.trace("evaluateIfMatch returning built response because there was no match"); //$NON-NLS-1$
             return responseBuilder;
         }
-        logger.debug("evaluateIfMatch returning null because there was a match"); //$NON-NLS-1$
+        logger.trace("evaluateIfMatch returning null because there was a match"); //$NON-NLS-1$
         return null;
     }
 
@@ -148,11 +148,11 @@ public class RequestImpl implements Request {
      * returns ResponseBuilder if any of the tags matched
      */
     private ResponseBuilder evaluateIfNoneMatch(EntityTag tag, String headerValue) {
-        logger.debug("evaluateIfNoneMatch({}, {}) called", tag, headerValue); //$NON-NLS-1$
+        logger.trace("evaluateIfNoneMatch({}, {}) called", tag, headerValue); //$NON-NLS-1$
         EntityTagMatchHeader ifNoneMatchHeader = null;
         try {
             ifNoneMatchHeader = ifMatchHeaderDelegate.fromString(headerValue);
-            logger.debug("ifMatchHeaderDelegate returned {}", ifNoneMatchHeader); //$NON-NLS-1$
+            logger.trace("ifMatchHeaderDelegate returned {}", ifNoneMatchHeader); //$NON-NLS-1$
         } catch (IllegalArgumentException e) {
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         }
@@ -163,24 +163,24 @@ public class RequestImpl implements Request {
             String method = getMethod();
             if (method.equalsIgnoreCase("GET") || method.equalsIgnoreCase("HEAD")) { //$NON-NLS-1$ //$NON-NLS-2$
                 logger
-                    .debug("evaluateIfNoneMatch returning 304 Not Modified because the {} method matched", //$NON-NLS-1$
+                    .trace("evaluateIfNoneMatch returning 304 Not Modified because the {} method matched", //$NON-NLS-1$
                            method);
                 responseBuilder.status(HttpServletResponse.SC_NOT_MODIFIED).tag(tag);
             } else {
                 logger
-                    .debug("evaluateIfNoneMatch returning 412 Precondition Failed because the {} method matched", //$NON-NLS-1$
+                    .trace("evaluateIfNoneMatch returning 412 Precondition Failed because the {} method matched", //$NON-NLS-1$
                            method);
                 responseBuilder.status(HttpServletResponse.SC_PRECONDITION_FAILED).tag(tag);
             }
             return responseBuilder;
         }
-        logger.debug("evaluateIfNoneMatch returning null because there was no match"); //$NON-NLS-1$
+        logger.trace("evaluateIfNoneMatch returning null because there was no match"); //$NON-NLS-1$
         return null;
     }
 
     public ResponseBuilder evaluatePreconditions(Date lastModified) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("evaluatePreconditions({}) called with {} date", //$NON-NLS-1$
+        if (logger.isTraceEnabled()) {
+            logger.trace("evaluatePreconditions({}) called with {} date", //$NON-NLS-1$
                          lastModified,
                          lastModified.getTime());
         }
@@ -197,43 +197,43 @@ public class RequestImpl implements Request {
 
     private ResponseBuilder evalueateIfUnmodifiedSince(Date lastModified, String headerValue) {
         Date date = dateHeaderDelegate.fromString(headerValue);
-        if (logger.isDebugEnabled()) {
+        if (logger.isTraceEnabled()) {
             logger
-                .debug("evalueateIfUnmodifiedSince({}, {}) got Date {} from header so comparing {} is after {}", //$NON-NLS-1$
+                .trace("evalueateIfUnmodifiedSince({}, {}) got Date {} from header so comparing {} is after {}", //$NON-NLS-1$
                        new Object[] {lastModified, headerValue, date, lastModified.getTime(),
                            date.getTime()});
         }
         if (lastModified.after(date)) {
             ResponseBuilder responseBuilder = delegate.createResponseBuilder();
             responseBuilder.status(HttpServletResponse.SC_PRECONDITION_FAILED);
-            logger.debug("evalueateIfUnmodifiedSince returning 412 Precondition Failed"); //$NON-NLS-1$
+            logger.trace("evalueateIfUnmodifiedSince returning 412 Precondition Failed"); //$NON-NLS-1$
             return responseBuilder;
         }
-        logger.debug("evalueateIfUnmodifiedSince returning null"); //$NON-NLS-1$
+        logger.trace("evalueateIfUnmodifiedSince returning null"); //$NON-NLS-1$
         return null;
     }
 
     private ResponseBuilder evaluateIfModifiedSince(Date lastModified, String headerValue) {
         Date date = dateHeaderDelegate.fromString(headerValue);
-        if (logger.isDebugEnabled()) {
+        if (logger.isTraceEnabled()) {
             logger
-                .debug("evaluateIfModifiedSince({}, {}) got Date {} from header so comparing {} is after {}", //$NON-NLS-1$
+                .trace("evaluateIfModifiedSince({}, {}) got Date {} from header so comparing {} is after {}", //$NON-NLS-1$
                        new Object[] {lastModified, headerValue, date, lastModified.getTime(),
                            date.getTime()});
         }
         if (lastModified.after(date)) {
-            logger.debug("evaluateIfModifiedSince returning null"); //$NON-NLS-1$
+            logger.trace("evaluateIfModifiedSince returning null"); //$NON-NLS-1$
             return null;
         }
         ResponseBuilder responseBuilder = delegate.createResponseBuilder();
         responseBuilder.status(HttpServletResponse.SC_NOT_MODIFIED);
-        logger.debug("evaluateIfModifiedSince returning 304 Not Modified"); //$NON-NLS-1$
+        logger.trace("evaluateIfModifiedSince returning 304 Not Modified"); //$NON-NLS-1$
         return responseBuilder;
     }
 
     public ResponseBuilder evaluatePreconditions(Date lastModified, EntityTag tag) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("evaluatePreconditions({}, {}) called with date {} as a long type", //$NON-NLS-1$
+        if (logger.isTraceEnabled()) {
+            logger.trace("evaluatePreconditions({}, {}) called with date {} as a long type", //$NON-NLS-1$
                          new Object[] {lastModified, tag, lastModified.getTime()});
         }
         String ifMatch = getHeaderValue(HttpHeaders.IF_MATCH);
@@ -270,13 +270,13 @@ public class RequestImpl implements Request {
     }
 
     public Variant selectVariant(List<Variant> variants) throws IllegalArgumentException {
-        logger.debug("selectVariant({}) called", variants); //$NON-NLS-1$
+        logger.trace("selectVariant({}) called", variants); //$NON-NLS-1$
         if (variants == null) {
             throw new IllegalArgumentException();
         }
 
         if (variants.size() == 0) {
-            logger.debug("No variants so returning null"); //$NON-NLS-1$
+            logger.trace("No variants so returning null"); //$NON-NLS-1$
             return null;
         }
 
@@ -336,13 +336,13 @@ public class RequestImpl implements Request {
         for (Iterator<Variant> iter = variants.iterator(); iter.hasNext();) {
             double acceptQFactor = -1.0d;
             Variant v = iter.next();
-            logger.debug("Variant being evaluated is: {}", v); //$NON-NLS-1$
+            logger.trace("Variant being evaluated is: {}", v); //$NON-NLS-1$
             MediaType vMediaType = v.getMediaType();
             if (vMediaType != null && acceptableMediaTypes != null) {
                 boolean isCompatible = false;
                 boolean isAcceptable = true; // explicitly denied by the client
                 for (MediaType mt : acceptableMediaTypes) {
-                    logger.debug("Checking variant media type {} against Accept media type {}", //$NON-NLS-1$
+                    logger.trace("Checking variant media type {} against Accept media type {}", //$NON-NLS-1$
                                  vMediaType,
                                  mt);
                     if (mt.isCompatible(vMediaType)) {
@@ -354,7 +354,7 @@ public class RequestImpl implements Request {
                                 if (qAsDouble.equals(0.0)) {
                                     isAcceptable = false;
                                     logger
-                                        .debug("Accept Media Type: {} is NOT compatible with q-factor {}", //$NON-NLS-1$
+                                        .trace("Accept Media Type: {} is NOT compatible with q-factor {}", //$NON-NLS-1$
                                                mt,
                                                qAsDouble);
                                     break;
@@ -362,7 +362,7 @@ public class RequestImpl implements Request {
                                 acceptQFactor = qAsDouble;
                             } catch (NumberFormatException e) {
                                 logger
-                                    .debug("NumberFormatException during MediaType q-factor evaluation: {}", //$NON-NLS-1$
+                                    .trace("NumberFormatException during MediaType q-factor evaluation: {}", //$NON-NLS-1$
                                            e);
                             }
                         } else {
@@ -370,13 +370,13 @@ public class RequestImpl implements Request {
                         }
 
                         isCompatible = true;
-                        logger.debug("Accept Media Type: {} is compatible with q-factor {}", //$NON-NLS-1$
+                        logger.trace("Accept Media Type: {} is compatible with q-factor {}", //$NON-NLS-1$
                                      mt,
                                      acceptQFactor);
                     }
                 }
                 if (!isCompatible || !isAcceptable) {
-                    logger.debug("Variant {} is not compatible or not acceptable", vMediaType); //$NON-NLS-1$
+                    logger.trace("Variant {} is not compatible or not acceptable", vMediaType); //$NON-NLS-1$
                     continue;
                 }
             }
@@ -384,7 +384,7 @@ public class RequestImpl implements Request {
             if (bestVariant != null) {
                 if (acceptQFactor < bestVariant.acceptMediaTypeQFactor) {
                     logger
-                        .debug("Best variant's media type {} q-factor {} is greater than current variant {} q-factor {}", //$NON-NLS-1$
+                        .trace("Best variant's media type {} q-factor {} is greater than current variant {} q-factor {}", //$NON-NLS-1$
                                new Object[] {bestVariant.variant,
                                    bestVariant.acceptMediaTypeQFactor, vMediaType, acceptQFactor});
                     continue;
@@ -395,25 +395,25 @@ public class RequestImpl implements Request {
             Locale vLocale = v.getLanguage();
             if (vLocale != null && languages != null) {
                 boolean isCompatible = false;
-                logger.debug("Checking variant locale {}", vLocale); //$NON-NLS-1$
+                logger.trace("Checking variant locale {}", vLocale); //$NON-NLS-1$
                 if (languages.getBannedLanguages().contains(vLocale)) {
-                    logger.debug("Variant locale {} was in unacceptable languages", vLocale); //$NON-NLS-1$
+                    logger.trace("Variant locale {} was in unacceptable languages", vLocale); //$NON-NLS-1$
                     continue;
                 }
                 for (AcceptLanguage.ValuedLocale locale : languages.getValuedLocales()) {
                     logger
-                        .debug("Checking against Accept-Language locale {} with quality factor {}", //$NON-NLS-1$
+                        .trace("Checking against Accept-Language locale {} with quality factor {}", //$NON-NLS-1$
                                locale.locale,
                                locale.qValue);
                     if (locale.isWildcard() || vLocale.equals(locale.locale)) {
-                        logger.debug("Locale is compatible {}", locale.locale); //$NON-NLS-1$
+                        logger.trace("Locale is compatible {}", locale.locale); //$NON-NLS-1$
                         isCompatible = true;
                         acceptLanguageQFactor = locale.qValue;
                         break;
                     }
                 }
                 if (!isCompatible) {
-                    logger.debug("Variant locale is not compatible {}", vLocale); //$NON-NLS-1$
+                    logger.trace("Variant locale is not compatible {}", vLocale); //$NON-NLS-1$
                     continue;
                 }
             }
@@ -421,7 +421,7 @@ public class RequestImpl implements Request {
             if (bestVariant != null) {
                 if (acceptLanguageQFactor < bestVariant.acceptLanguageQFactor) {
                     logger
-                        .debug("Best variant's language {} q-factor {} is greater than current variant {} q-factor {}", //$NON-NLS-1$
+                        .trace("Best variant's language {} q-factor {} is greater than current variant {} q-factor {}", //$NON-NLS-1$
                                new Object[] {bestVariant.variant,
                                    bestVariant.acceptLanguageQFactor, v, acceptLanguageQFactor});
                     continue;
@@ -436,18 +436,18 @@ public class RequestImpl implements Request {
                 hasCharSet = false;
             } else if (vCharset != null && charsets != null) {
                 boolean isCompatible = false;
-                logger.debug("Checking variant charset: {}", vCharset); //$NON-NLS-1$
+                logger.trace("Checking variant charset: {}", vCharset); //$NON-NLS-1$
                 if (charsets.getBannedCharsets().contains(vCharset)) {
-                    logger.debug("Variant charset {} was in unacceptable charsets", vCharset); //$NON-NLS-1$
+                    logger.trace("Variant charset {} was in unacceptable charsets", vCharset); //$NON-NLS-1$
                     continue;
                 }
                 for (AcceptCharset.ValuedCharset charset : charsets.getValuedCharsets()) {
                     logger
-                        .debug("Checking against Accept-Charset charset {} with quality factor {}", //$NON-NLS-1$
+                        .trace("Checking against Accept-Charset charset {} with quality factor {}", //$NON-NLS-1$
                                charset.charset,
                                charset.qValue);
                     if (charset.isWildcard() || vCharset.equalsIgnoreCase(charset.charset)) {
-                        logger.debug("Charset is compatible with {}", charset.charset); //$NON-NLS-1$
+                        logger.trace("Charset is compatible with {}", charset.charset); //$NON-NLS-1$
                         isCompatible = true;
                         acceptCharsetQFactor = charset.qValue;
                         break;
@@ -455,7 +455,7 @@ public class RequestImpl implements Request {
                 }
 
                 if (!isCompatible) {
-                    logger.debug("Variant charset is not compatible {}", vCharset); //$NON-NLS-1$
+                    logger.trace("Variant charset is not compatible {}", vCharset); //$NON-NLS-1$
                     /*
                      * do not remove this from the acceptable list even if not
                      * compatible but set to -1.0d for now. according to HTTP
@@ -467,7 +467,7 @@ public class RequestImpl implements Request {
             if (bestVariant != null) {
                 if (acceptCharsetQFactor < bestVariant.acceptCharsetQFactor && hasCharSet) {
                     logger
-                        .debug("Best variant's charset {} q-factor {} is greater than current variant {} q-factor {}", //$NON-NLS-1$
+                        .trace("Best variant's charset {} q-factor {} is greater than current variant {} q-factor {}", //$NON-NLS-1$
                                new Object[] {bestVariant.variant, bestVariant.acceptCharsetQFactor,
                                    v, acceptCharsetQFactor});
                     continue;
@@ -477,12 +477,12 @@ public class RequestImpl implements Request {
             double acceptEncodingQFactor = -1.0d;
             String vEncoding = v.getEncoding();
             if (vEncoding != null) {
-                logger.debug("Checking variant encoding {}", vEncoding); //$NON-NLS-1$
+                logger.trace("Checking variant encoding {}", vEncoding); //$NON-NLS-1$
                 if (encodings == null) {
-                    logger.debug("Accept-Encoding is null"); //$NON-NLS-1$
+                    logger.trace("Accept-Encoding is null"); //$NON-NLS-1$
                     if (!v.getEncoding().equalsIgnoreCase("identity")) { //$NON-NLS-1$
                         logger
-                            .debug("Variant encoding {} does not equal identity so not acceptable", //$NON-NLS-1$
+                            .trace("Variant encoding {} does not equal identity so not acceptable", //$NON-NLS-1$
                                    vEncoding);
                         // if there is no Accept Encoding, only identity is
                         // acceptable
@@ -494,9 +494,9 @@ public class RequestImpl implements Request {
                 } else {
                     boolean isAcceptable = true;
                     for (String encoding : encodings.getBannedEncodings()) {
-                        logger.debug("Checking against not acceptable encoding: {}", encoding); //$NON-NLS-1$
+                        logger.trace("Checking against not acceptable encoding: {}", encoding); //$NON-NLS-1$
                         if (encoding.equalsIgnoreCase(vEncoding)) {
-                            logger.debug("Encoding was not acceptable: {}", vEncoding); //$NON-NLS-1$
+                            logger.trace("Encoding was not acceptable: {}", vEncoding); //$NON-NLS-1$
                             isAcceptable = false;
                             break;
                         }
@@ -507,18 +507,18 @@ public class RequestImpl implements Request {
 
                     boolean isCompatible = false;
                     for (AcceptEncoding.ValuedEncoding encoding : encodings.getValuedEncodings()) {
-                        logger.debug("Checking against acceptable encoding: {}", encoding.encoding); //$NON-NLS-1$
+                        logger.trace("Checking against acceptable encoding: {}", encoding.encoding); //$NON-NLS-1$
                         if (encoding.isWildcard() || encoding.encoding.equalsIgnoreCase(vEncoding)) {
                             isCompatible = true;
                             acceptEncodingQFactor = encoding.qValue;
-                            logger.debug("Encoding {} was acceptable with q-factor {}", //$NON-NLS-1$
+                            logger.trace("Encoding {} was acceptable with q-factor {}", //$NON-NLS-1$
                                          encoding.encoding,
                                          encoding.qValue);
                             break;
                         }
                     }
                     if (!isCompatible) {
-                        logger.debug("Variant encoding {} was not compatible", vEncoding); //$NON-NLS-1$
+                        logger.trace("Variant encoding {} was not compatible", vEncoding); //$NON-NLS-1$
                         continue;
                     }
                 }
@@ -527,7 +527,7 @@ public class RequestImpl implements Request {
             if (bestVariant != null) {
                 if (acceptEncodingQFactor < bestVariant.acceptEncodingQFactor) {
                     logger
-                        .debug("Best variant's encoding {} q-factor {} is greater than current variant {} q-factor {}", //$NON-NLS-1$
+                        .trace("Best variant's encoding {} q-factor {} is greater than current variant {} q-factor {}", //$NON-NLS-1$
                                new Object[] {bestVariant.variant,
                                    bestVariant.acceptEncodingQFactor, v, acceptEncodingQFactor});
                     continue;
@@ -575,7 +575,7 @@ public class RequestImpl implements Request {
             isValueWritten = true;
         }
         String varyHeaderValueStr = varyHeaderValue.toString().trim();
-        logger.debug("Vary Header value should be set to {}", varyHeaderValueStr); //$NON-NLS-1$
+        logger.trace("Vary Header value should be set to {}", varyHeaderValueStr); //$NON-NLS-1$
         msgContext.setAttribute(RequestImpl.VaryHeader.class, new VaryHeader(varyHeaderValueStr));
         return bestVariant.variant;
     }

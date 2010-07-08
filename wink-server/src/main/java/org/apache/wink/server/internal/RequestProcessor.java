@@ -80,7 +80,7 @@ public class RequestProcessor {
             String loadWinkApplicationsProperty =
                 configuration.getProperties().getProperty(PROPERTY_LOAD_WINK_APPLICATIONS,
                                                           Boolean.toString(true));
-            logger.debug("{} property is set to: {}", //$NON-NLS-1$
+            logger.trace("{} property is set to: {}", //$NON-NLS-1$
                          PROPERTY_LOAD_WINK_APPLICATIONS,
                          loadWinkApplicationsProperty);
             final Set<Class<?>> classes =
@@ -99,7 +99,7 @@ public class RequestProcessor {
         Properties properties = configuration.getProperties();
         String registerRootResource =
             properties.getProperty(PROPERTY_ROOT_RESOURCE, PROPERTY_ROOT_RESOURCE_DEFAULT);
-        logger.debug("{} property is set to: {}", PROPERTY_ROOT_RESOURCE, registerRootResource); //$NON-NLS-1$
+        logger.trace("{} property is set to: {}", PROPERTY_ROOT_RESOURCE, registerRootResource); //$NON-NLS-1$
         if (registerRootResource.equals(PROPERTY_ROOT_RESOURCE_ATOM)) {
             RegistrationUtils.InnerApplication application =
                 new RegistrationUtils.InnerApplication(RootResource.class);
@@ -109,7 +109,7 @@ public class RequestProcessor {
             // do nothing
         } else {
             String css = properties.getProperty(PROPERTY_ROOT_RESOURCE_CSS);
-            logger.debug("{} property is set to: {}", PROPERTY_ROOT_RESOURCE_CSS, css); //$NON-NLS-1$
+            logger.trace("{} property is set to: {}", PROPERTY_ROOT_RESOURCE_CSS, css); //$NON-NLS-1$
             HtmlServiceDocumentResource instance = new HtmlServiceDocumentResource();
             if (css != null) {
                 instance.setServiceDocumentCssPath(css);
@@ -134,11 +134,20 @@ public class RequestProcessor {
     public void handleRequest(HttpServletRequest request, HttpServletResponse response)
         throws ServletException {
         try {
+            if (logger.isDebugEnabled()) {
+                String requestString = request.getProtocol() + "://"; //$NON-NLS-1$
+                requestString += ((request.getLocalName() != null && request.getLocalName().length() > 0) ? request.getLocalName() : request.getLocalAddr());
+                requestString += ":"; //$NON-NLS-1$
+                requestString += request.getLocalPort();
+                requestString += request.getRequestURI();
+                requestString += ((request.getQueryString() != null && request.getQueryString().length() > 0) ? ("?" + request.getQueryString()) : ""); //$NON-NLS-1$ $NON-NLS-2$
+                logger.debug(Messages.getMessage("processingRequestTo", request.getMethod(), requestString)); //$NON-NLS-1$
+            }
             handleRequestWithoutFaultBarrier(request, response);
         } catch (Throwable t) {
             // exception was not handled properly
-            if (logger.isDebugEnabled()) {
-                logger.debug(Messages.getMessage("unhandledExceptionToContainer"), t); //$NON-NLS-1$
+            if (logger.isTraceEnabled()) {
+                logger.trace(Messages.getMessage("unhandledExceptionToContainer"), t); //$NON-NLS-1$
             } else {
                 if (logger.isInfoEnabled()) {
                     logger.info(Messages.getMessage("unhandledExceptionToContainer")); //$NON-NLS-1$
@@ -158,21 +167,21 @@ public class RequestProcessor {
         try {
             ServerMessageContext msgContext = createMessageContext(request, response);
             RuntimeContextTLS.setRuntimeContext(msgContext);
-            logger.debug("Set message context and starting request handlers chain: {}", msgContext); //$NON-NLS-1$
+            logger.trace("Set message context and starting request handlers chain: {}", msgContext); //$NON-NLS-1$
             // run the request handler chain
             configuration.getRequestHandlersChain().run(msgContext);
             logger
-                .debug("Finished request handlers chain and starting response handlers chain: {}", //$NON-NLS-1$
+                .trace("Finished request handlers chain and starting response handlers chain: {}", //$NON-NLS-1$
                        msgContext);
             // run the response handler chain
             configuration.getResponseHandlersChain().run(msgContext);
 
-            logger.debug("Attempting to release resource instance"); //$NON-NLS-1$
+            logger.trace("Attempting to release resource instance"); //$NON-NLS-1$
             isReleaseResourcesCalled = true;
             try {
                 releaseResources(msgContext);
             } catch (Exception e) {
-                logger.debug("Caught exception when releasing resource object", e); //$NON-NLS-1$
+                logger.trace("Caught exception when releasing resource object", e); //$NON-NLS-1$
                 throw e;
             }
         } catch (Throwable t) {
@@ -184,7 +193,7 @@ public class RequestProcessor {
                 RuntimeContextTLS.setRuntimeContext(msgContext);
                 msgContext.setResponseEntity(t);
                 // run the error handler chain
-                logger.debug("Exception occured, starting error handlers chain: {}", msgContext); //$NON-NLS-1$
+                logger.trace("Exception occured, starting error handlers chain: {}", msgContext); //$NON-NLS-1$
                 configuration.getErrorHandlersChain().run(msgContext);
 
                 RuntimeContextTLS.setRuntimeContext(originalContext);
@@ -193,7 +202,7 @@ public class RequestProcessor {
                     try {
                         releaseResources(originalContext);
                     } catch (Exception e2) {
-                        logger.debug("Caught exception when releasing resource object", e2); //$NON-NLS-1$
+                        logger.trace("Caught exception when releasing resource object", e2); //$NON-NLS-1$
                     }
                 }
             } catch (Exception e) {
@@ -203,13 +212,13 @@ public class RequestProcessor {
                     try {
                         releaseResources(originalContext);
                     } catch (Exception e2) {
-                        logger.debug("Caught exception when releasing resource object", e2); //$NON-NLS-1$
+                        logger.trace("Caught exception when releasing resource object", e2); //$NON-NLS-1$
                     }
                 }
                 throw e;
             }
         } finally {
-            logger.debug("Finished response handlers chain"); //$NON-NLS-1$
+            logger.trace("Finished response handlers chain"); //$NON-NLS-1$
             RuntimeContextTLS.setRuntimeContext(null);
         }
     }
@@ -219,7 +228,7 @@ public class RequestProcessor {
         if (searchResult != null) {
             List<ResourceInstance> resourceInstances = searchResult.getData().getMatchedResources();
             for (ResourceInstance res : resourceInstances) {
-                logger.debug("Releasing resource instance"); //$NON-NLS-1$
+                logger.trace("Releasing resource instance"); //$NON-NLS-1$
                 res.releaseInstance(msgContext);
             }
         }
@@ -283,7 +292,7 @@ public class RequestProcessor {
         RequestProcessor requestProcessor =
             (RequestProcessor)servletContext.getAttribute(attributeName);
         logger
-            .debug("Retrieving request processor {} using attribute name {} in servlet context {}", //$NON-NLS-1$
+            .trace("Retrieving request processor {} using attribute name {} in servlet context {}", //$NON-NLS-1$
                    new Object[] {requestProcessor, attributeName, servletContext});
         return requestProcessor;
     }
@@ -293,7 +302,7 @@ public class RequestProcessor {
         if (attributeName == null || attributeName.length() == 0) {
             attributeName = RequestProcessor.class.getName();
         }
-        logger.debug("Storing request processor {} using attribute name {} in servlet context {}", //$NON-NLS-1$
+        logger.trace("Storing request processor {} using attribute name {} in servlet context {}", //$NON-NLS-1$
                      new Object[] {this, attributeName, servletContext});
         servletContext.setAttribute(attributeName, this);
     }

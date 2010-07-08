@@ -78,7 +78,7 @@ public class RestServlet extends AbstractRestServlet {
     @Override
     public void init() throws ServletException {
 
-        logger.debug("Initializing {} servlet", this); //$NON-NLS-1$
+        logger.trace("Initializing {} servlet", this); //$NON-NLS-1$
 
         try {
             super.init();
@@ -126,9 +126,12 @@ public class RestServlet extends AbstractRestServlet {
         if (app == null) {
             app = getApplication(deploymentConfiguration);
         }
+        if (logger.isDebugEnabled()) {
+            logger.debug("RestServlet:  setting application to " + app.toString());
+        }
         deploymentConfiguration.addApplication(app, false);
         RequestProcessor requestProcessor = new RequestProcessor(deploymentConfiguration);
-        logger.debug("Creating request processor {} for servlet {}", requestProcessor, this); //$NON-NLS-1$
+        logger.trace("Creating request processor {} for servlet {}", requestProcessor, this); //$NON-NLS-1$
         return requestProcessor;
     }
 
@@ -151,7 +154,7 @@ public class RestServlet extends AbstractRestServlet {
      */
     protected Properties getProperties() throws IOException {
         Properties defaultProperties = loadProperties(PROPERTIES_DEFAULT_FILE, null);
-        logger.debug("Default properties {} used in RestServlet {}", defaultProperties, this); //$NON-NLS-1$
+        logger.trace("Default properties {} used in RestServlet {}", defaultProperties, this); //$NON-NLS-1$
         String propertiesLocation = getInitParameter(PROPERTIES_INIT_PARAM);
         if (propertiesLocation != null) {
             if (logger.isInfoEnabled()) {
@@ -166,7 +169,7 @@ public class RestServlet extends AbstractRestServlet {
             properties.putAll(WinkSystemProperties.loadSystemProperties(properties));
             return properties;
         }
-        logger.debug("Final properties {} used in RestServlet {}", defaultProperties, this); //$NON-NLS-1$
+        logger.trace("Final properties {} used in RestServlet {}", defaultProperties, this); //$NON-NLS-1$
 
         // Load properties set on JVM. These should not override
         // the ones set in the configuration file.
@@ -206,11 +209,12 @@ public class RestServlet extends AbstractRestServlet {
             // use ClassUtils.loadClass instead of Class.forName so we have
             // classloader visibility into the Web module in J2EE environments
             appClass = (Class<? extends Application>)ClassUtils.loadClass(initParameter);
-
+            
             // let the lifecycle manager create the instance and process fields
             // for injection
             ObjectFactory of = configuration.getOfFactoryRegistry().getObjectFactory(appClass);
             configuration.addApplicationObjectFactory(of);
+
             return (Application)of.getInstance(null);
         }
         String appLocationParameter = getInitParameter(APP_LOCATION_PARAM);
@@ -236,7 +240,7 @@ public class RestServlet extends AbstractRestServlet {
          */
         return null;
     }
-
+ 
     /**
      * loadProperties will try to load the properties from the resource,
      * overriding existing properties in defaultProperties, and adding
@@ -265,8 +269,7 @@ public class RestServlet extends AbstractRestServlet {
                 }
             } catch (IOException e) {
                 if (logger.isWarnEnabled()) {
-                    logger
-                        .warn(Messages.getMessage("exceptionClosingFile") + ": " + resourceName, e); //$NON-NLS-1$ //$NON-NLS-2$
+                    logger.warn(Messages.getMessage("exceptionClosingFile") + ": " + resourceName, e); //$NON-NLS-1$ //$NON-NLS-2$
                 }
             }
         }

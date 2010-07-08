@@ -80,15 +80,15 @@ public class ProviderUtils {
      * @return the charset
      */
     public static String getCharset(MediaType m, HttpHeaders requestHeaders) {
-        logger.debug("getCharset({}, {})", m, requestHeaders); //$NON-NLS-1$
+        logger.trace("getCharset({}, {})", m, requestHeaders); //$NON-NLS-1$
         String name = (m == null) ? null : m.getParameters().get("charset"); //$NON-NLS-1$
         if (name != null) {
-            logger.debug("getCharset() returning {} since parameter was set", name); //$NON-NLS-1$
+            logger.trace("getCharset() returning {} since parameter was set", name); //$NON-NLS-1$
             return name;
         }
         if (requestHeaders == null) {
             logger
-                .debug("getCharset() returning {} since requestHeaders was null", DEFAULT_CHARSET); //$NON-NLS-1$
+                .trace("getCharset() returning {} since requestHeaders was null", DEFAULT_CHARSET); //$NON-NLS-1$
             return DEFAULT_CHARSET;
         }
 
@@ -97,7 +97,7 @@ public class ProviderUtils {
         if (acceptableCharsets == null || acceptableCharsets.isEmpty()) {
             // HTTP spec says that no Accept-Charset header indicates that any
             // charset is acceptable so we'll stick with UTF-8 by default.
-            logger.debug("getCharset() returning {} since no Accept-Charset header", //$NON-NLS-1$
+            logger.trace("getCharset() returning {} since no Accept-Charset header", //$NON-NLS-1$
                          DEFAULT_CHARSET);
             return DEFAULT_CHARSET;
         }
@@ -109,7 +109,7 @@ public class ProviderUtils {
             acceptCharsetsTemp.append(acceptableCharsets.get(c));
         }
         String acceptCharsets = acceptCharsetsTemp.toString();
-        logger.debug("acceptCharsets combined value is {}", acceptCharsets); //$NON-NLS-1$
+        logger.trace("acceptCharsets combined value is {}", acceptCharsets); //$NON-NLS-1$
         String cached = preferredCharsets.get(acceptCharsets);
         if (cached != null) {
             return cached;
@@ -122,7 +122,7 @@ public class ProviderUtils {
         }
 
         List<String> orderedCharsets = charsets.getAcceptableCharsets();
-        logger.debug("orderedCharsets is {}", orderedCharsets); //$NON-NLS-1$
+        logger.trace("orderedCharsets is {}", orderedCharsets); //$NON-NLS-1$
         if (!orderedCharsets.isEmpty()) {
             for (int c = 0; c < orderedCharsets.size(); ++c) {
                 String charset = orderedCharsets.get(c);
@@ -130,25 +130,25 @@ public class ProviderUtils {
                     Boolean b = validCharsets.get(charset);
                     if (b != null && b.booleanValue()) {
                         logger
-                            .debug("getCharset() returning {} since highest Accept-Charset value", //$NON-NLS-1$
+                            .trace("getCharset() returning {} since highest Accept-Charset value", //$NON-NLS-1$
                                    charset);
                         preferredCharsets.put(acceptCharsets, charset);
                         return charset;
                     }
                     Charset.forName(charset);
                     validCharsets.put(charset, Boolean.TRUE);
-                    logger.debug("getCharset() returning {} since highest Accept-Charset value", //$NON-NLS-1$
+                    logger.trace("getCharset() returning {} since highest Accept-Charset value", //$NON-NLS-1$
                                  charset);
                     preferredCharsets.put(acceptCharsets, charset);
                     return charset;
                 } catch (IllegalCharsetNameException e) {
-                    logger.debug("IllegalCharsetNameException for {}", charset, e); //$NON-NLS-1$
+                    logger.trace("IllegalCharsetNameException for {}", charset, e); //$NON-NLS-1$
                     validCharsets.put(charset, Boolean.FALSE);
                 } catch (UnsupportedCharsetException e) {
-                    logger.debug("UnsupportedCharsetException for {}", charset, e); //$NON-NLS-1$
+                    logger.trace("UnsupportedCharsetException for {}", charset, e); //$NON-NLS-1$
                     validCharsets.put(charset, Boolean.FALSE);
                 } catch (IllegalArgumentException e) {
-                    logger.debug("IllegalArgumentException for {}", charset, e); //$NON-NLS-1$
+                    logger.trace("IllegalArgumentException for {}", charset, e); //$NON-NLS-1$
                     validCharsets.put(charset, Boolean.FALSE);
                 }
             }
@@ -158,7 +158,7 @@ public class ProviderUtils {
         // Accept-Charset header), or we only have banned charsets. If there are
         // any banned charsets, then technically we should pick a non-banned
         // charset.
-        logger.debug("getCharset() returning {} since no explicit charset required", //$NON-NLS-1$
+        logger.trace("getCharset() returning {} since no explicit charset required", //$NON-NLS-1$
                      DEFAULT_CHARSET);
         preferredCharsets.put(acceptCharsets, DEFAULT_CHARSET);
         return DEFAULT_CHARSET;

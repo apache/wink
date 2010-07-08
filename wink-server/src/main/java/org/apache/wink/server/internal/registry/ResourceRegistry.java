@@ -116,7 +116,7 @@ public class ResourceRegistry {
      * @param priority priority of the resource
      */
     public void addResource(Object instance, double priority) {
-        logger.debug("Adding resource instance: {} with priority: {}", instance, priority); //$NON-NLS-1$
+        logger.trace("Adding resource instance: {} with priority: {}", instance, priority); //$NON-NLS-1$
 
         writersLock.lock();
         try {
@@ -144,7 +144,7 @@ public class ResourceRegistry {
      * @param priority priority of the resource
      */
     public void addResource(Class<?> clazz, double priority) {
-        logger.debug("Adding resource class: {} with priority: {}", clazz, priority); //$NON-NLS-1$
+        logger.trace("Adding resource class: {} with priority: {}", clazz, priority); //$NON-NLS-1$
 
         writersLock.lock();
         try {

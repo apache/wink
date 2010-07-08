@@ -98,7 +98,7 @@ public class JsonArrayProvider implements MessageBodyWriter<JSONArray>,
             callbackParam =
                 uriInfo.getQueryParameters().getFirst(RestConstants.REST_PARAM_JSON_CALLBACK);
         } catch (Exception e) {
-            logger.debug("Could not get the URI callback param", e); //$NON-NLS-1$
+            logger.trace("Could not get the URI callback param", e); //$NON-NLS-1$
         }
 
         Charset charset = Charset.forName(ProviderUtils.getCharset(mediaType));

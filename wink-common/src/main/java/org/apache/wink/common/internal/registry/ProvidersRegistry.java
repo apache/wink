@@ -125,7 +125,7 @@ public class ProvidersRegistry {
     private synchronized boolean addProvider(PriorityObjectFactory<?> objectFactory) {
         Class<? extends Object> cls = objectFactory.getInstanceClass();
 
-        logger.debug("Processing provider of type {}", cls); //$NON-NLS-1$
+        logger.trace("Processing provider of type {}", cls); //$NON-NLS-1$
 
         boolean retValue = false;
 
@@ -138,7 +138,7 @@ public class ProvidersRegistry {
             retValue = true;
         }
         if (ExceptionMapper.class.isAssignableFrom(cls)) {
-            logger.debug("Adding type {} to ExceptionMappers list", cls); //$NON-NLS-1$
+            logger.trace("Adding type {} to ExceptionMappers list", cls); //$NON-NLS-1$
             TreeSet<ObjectFactory<ExceptionMapper<?>>> exceptionMappersCopy =
                 new TreeSet<ObjectFactory<ExceptionMapper<?>>>(Collections.reverseOrder());
             exceptionMappersCopy.addAll(exceptionMappers);
@@ -193,7 +193,7 @@ public class ProvidersRegistry {
         if (contextType == null) {
             throw new NullPointerException(Messages.getMessage("variableIsNull", "contextType")); //$NON-NLS-1$ //$NON-NLS-2$
         }
-        logger.debug("Getting ContextResolver for {} which has @Produces compatible with {}", //$NON-NLS-1$
+        logger.trace("Getting ContextResolver for {} which has @Produces compatible with {}", //$NON-NLS-1$
                      contextType,
                      mediaType);
         if (mediaType == null) {
@@ -205,7 +205,7 @@ public class ProvidersRegistry {
          * performance improvement
          */
         if (contextResolvers.isMapEmpty()) {
-            logger.debug("ContextResolvers MediaTypeMap was empty so returning null"); //$NON-NLS-1$
+            logger.trace("ContextResolvers MediaTypeMap was empty so returning null"); //$NON-NLS-1$
             return null;
         }
 
@@ -214,7 +214,7 @@ public class ProvidersRegistry {
 
         if (factories.isEmpty()) {
             logger
-                .debug("Did not find a ContextResolver for {} which has @Produces compatible with {}", //$NON-NLS-1$
+                .trace("Did not find a ContextResolver for {} which has @Produces compatible with {}", //$NON-NLS-1$
                        contextType,
                        mediaType);
             return null;
@@ -223,7 +223,7 @@ public class ProvidersRegistry {
         if (factories.size() == 1) {
             ObjectFactory<ContextResolver<?>> factory = factories.get(0);
             logger
-                .debug("Found ContextResolver ObjectFactory {} for {} which has @Produces compatible with {}", //$NON-NLS-1$
+                .trace("Found ContextResolver ObjectFactory {} for {} which has @Produces compatible with {}", //$NON-NLS-1$
                        new Object[] {factory, contextType, mediaType});
             return (ContextResolver<T>)factory.getInstance(runtimeContext);
         }
@@ -241,7 +241,7 @@ public class ProvidersRegistry {
         }
 
         logger
-            .debug("Found multiple ContextResolver ObjectFactories {} for {} which has @Produces compatible with {} .  Using Proxy object which will call all matching ContextResolvers to find correct context.", //$NON-NLS-1$
+            .trace("Found multiple ContextResolver ObjectFactories {} for {} which has @Produces compatible with {} .  Using Proxy object which will call all matching ContextResolvers to find correct context.", //$NON-NLS-1$
                    new Object[] {providers, contextType, mediaType});
         final MediaType mt = mediaType;
         return (ContextResolver<T>)Proxy.newProxyInstance(getClass().getClassLoader(),
@@ -262,9 +262,9 @@ public class ProvidersRegistry {
                                                                           Class<?> arg0 =
                                                                               (Class<?>)args[0];
                                                                           if (logger
-                                                                              .isDebugEnabled()) {
+                                                                              .isTraceEnabled()) {
                                                                               logger
-                                                                                  .debug("Calling {}.getContext({}) to find context for {} with @Produces media type compatible with {}", //$NON-NLS-1$
+                                                                                  .trace("Calling {}.getContext({}) to find context for {} with @Produces media type compatible with {}", //$NON-NLS-1$
                                                                                          new Object[] {
                                                                                              resolver,
                                                                                              arg0,
@@ -276,9 +276,9 @@ public class ProvidersRegistry {
                                                                                   .getContext(arg0);
                                                                           if (context != null) {
                                                                               if (logger
-                                                                                  .isDebugEnabled()) {
+                                                                                  .isTraceEnabled()) {
                                                                                   logger
-                                                                                      .debug("Returning {} from calling {}.getContext({}) to find context for {} with @Produces media type compatible with {}", //$NON-NLS-1$
+                                                                                      .trace("Returning {} from calling {}.getContext({}) to find context for {} with @Produces media type compatible with {}", //$NON-NLS-1$
                                                                                              new Object[] {
                                                                                                  context,
                                                                                                  resolver,
@@ -289,9 +289,9 @@ public class ProvidersRegistry {
                                                                               return context;
                                                                           }
                                                                       }
-                                                                      if (logger.isDebugEnabled()) {
+                                                                      if (logger.isTraceEnabled()) {
                                                                           logger
-                                                                              .debug("Did not find context for {} with @Produces media type compatible with {}", //$NON-NLS-1$
+                                                                              .trace("Did not find context for {} with @Produces media type compatible with {}", //$NON-NLS-1$
                                                                                      new Object[] {
                                                                                          contextType,
                                                                                          mt});
@@ -311,7 +311,7 @@ public class ProvidersRegistry {
         if (type == null) {
             throw new NullPointerException(Messages.getMessage("variableIsNull", "type")); //$NON-NLS-1$ //$NON-NLS-2$
         }
-        logger.debug("Getting ExceptionMapper for {} ", type); //$NON-NLS-1$
+        logger.trace("Getting ExceptionMapper for {} ", type); //$NON-NLS-1$
         List<ExceptionMapper<?>> matchingMappers = new ArrayList<ExceptionMapper<?>>();
 
         for (ObjectFactory<ExceptionMapper<?>> factory : exceptionMappers) {
@@ -326,11 +326,11 @@ public class ProvidersRegistry {
         }
 
         if (matchingMappers.isEmpty()) {
-            logger.debug("Did not find an ExceptionMapper for {} ", type); //$NON-NLS-1$
+            logger.trace("Did not find an ExceptionMapper for {} ", type); //$NON-NLS-1$
             return null;
         }
 
-        logger.debug("Found matching ExceptionMappers {} for type {} ", matchingMappers, type); //$NON-NLS-1$
+        logger.trace("Found matching ExceptionMappers {} for type {} ", matchingMappers, type); //$NON-NLS-1$
         while (matchingMappers.size() > 1) {
             Type first =
                 GenericsUtils.getGenericInterfaceParamType(matchingMappers.get(0).getClass(),
@@ -352,7 +352,7 @@ public class ProvidersRegistry {
         }
 
         ExceptionMapper<T> mapper = (ExceptionMapper<T>)matchingMappers.get(0);
-        logger.debug("Found best matching ExceptionMapper {} for type {} ", mapper, type); //$NON-NLS-1$
+        logger.trace("Found best matching ExceptionMapper {} for type {} ", mapper, type); //$NON-NLS-1$
         return mapper;
     }
 
@@ -368,28 +368,28 @@ public class ProvidersRegistry {
         if (mediaType == null) {
             throw new NullPointerException(Messages.getMessage("variableIsNull", "mediaType")); //$NON-NLS-1$ //$NON-NLS-2$
         }
-        if (logger.isDebugEnabled()) {
+        if (logger.isTraceEnabled()) {
             List<Annotation> anns = (annotations == null) ? null : Arrays.asList(annotations);
             logger
-                .debug("Getting MessageBodyReader for class type {}, genericType {}, annotations {}, and media type {}", //$NON-NLS-1$
+                .trace("Getting MessageBodyReader for class type {}, genericType {}, annotations {}, and media type {}", //$NON-NLS-1$
                        new Object[] {type, genericType, anns, mediaType});
         }
         List<MediaTypeMap<MessageBodyReader<?>>.OFHolder<MessageBodyReader<?>>> factories =
             messageBodyReaders.getProvidersByMediaType(mediaType, type);
 
-        logger.debug("Found possible MessageBodyReader ObjectFactories {}", factories); //$NON-NLS-1$
+        logger.trace("Found possible MessageBodyReader ObjectFactories {}", factories); //$NON-NLS-1$
         for (ObjectFactory<MessageBodyReader<?>> factory : factories) {
             MessageBodyReader<?> reader = factory.getInstance(runtimeContext);
-            if (logger.isDebugEnabled()) {
+            if (logger.isTraceEnabled()) {
                 List<Annotation> anns = (annotations == null) ? null : Arrays.asList(annotations);
-                logger.debug("Calling {}.isReadable( {}, {}, {}, {} )", new Object[] {reader, type, //$NON-NLS-1$
+                logger.trace("Calling {}.isReadable( {}, {}, {}, {} )", new Object[] {reader, type, //$NON-NLS-1$
                     genericType, anns, mediaType});
             }
             if (reader.isReadable(type, genericType, annotations, mediaType)) {
-                if (logger.isDebugEnabled()) {
+                if (logger.isTraceEnabled()) {
                     List<Annotation> anns =
                         (annotations == null) ? null : Arrays.asList(annotations);
-                    logger.debug("{}.isReadable( {}, {}, {}, {} ) returned true", new Object[] { //$NON-NLS-1$
+                    logger.trace("{}.isReadable( {}, {}, {}, {} ) returned true", new Object[] { //$NON-NLS-1$
                                  reader, type, genericType, anns, mediaType});
                 }
                 return (MessageBodyReader<T>)reader;
@@ -410,37 +410,37 @@ public class ProvidersRegistry {
         if (mediaType == null) {
             throw new NullPointerException(Messages.getMessage("variableIsNull", "mediaType")); //$NON-NLS-1$ //$NON-NLS-2$
         }
-        if (logger.isDebugEnabled()) {
+        if (logger.isTraceEnabled()) {
             List<Annotation> anns = (annotations == null) ? null : Arrays.asList(annotations);
             logger
-                .debug("Getting MessageBodyWriter for class type {}, genericType {}, annotations {}, and media type {}", //$NON-NLS-1$
+                .trace("Getting MessageBodyWriter for class type {}, genericType {}, annotations {}, and media type {}", //$NON-NLS-1$
                        new Object[] {type, genericType, anns, mediaType});
         }
         List<MediaTypeMap<MessageBodyWriter<?>>.OFHolder<MessageBodyWriter<?>>> writersFactories =
             messageBodyWriters.getProvidersByMediaType(mediaType, type);
-        logger.debug("Found possible MessageBodyWriter ObjectFactories {}", writersFactories); //$NON-NLS-1$
+        logger.trace("Found possible MessageBodyWriter ObjectFactories {}", writersFactories); //$NON-NLS-1$
         for (ObjectFactory<MessageBodyWriter<?>> factory : writersFactories) {
             MessageBodyWriter<?> writer = factory.getInstance(runtimeContext);
-            if (logger.isDebugEnabled()) {
+            if (logger.isTraceEnabled()) {
                 List<Annotation> anns = (annotations == null) ? null : Arrays.asList(annotations);
                 logger
-                    .debug("Calling {}.isWriteable( {}, {}, {}, {} )", new Object[] {writer, type, //$NON-NLS-1$
+                    .trace("Calling {}.isWriteable( {}, {}, {}, {} )", new Object[] {writer, type, //$NON-NLS-1$
                         genericType, anns, mediaType});
             }
             if (writer.isWriteable(type, genericType, annotations, mediaType)) {
-                if (logger.isDebugEnabled()) {
+                if (logger.isTraceEnabled()) {
                     List<Annotation> anns =
                         (annotations == null) ? null : Arrays.asList(annotations);
-                    logger.debug("{}.isWriteable( {}, {}, {}, {} ) returned true", new Object[] { //$NON-NLS-1$
+                    logger.trace("{}.isWriteable( {}, {}, {}, {} ) returned true", new Object[] { //$NON-NLS-1$
                                  writer, type, genericType, anns, mediaType});
                 }
                 return (MessageBodyWriter<T>)writer;
             }
         }
-        if (logger.isDebugEnabled()) {
+        if (logger.isTraceEnabled()) {
             List<Annotation> anns = (annotations == null) ? null : Arrays.asList(annotations);
             logger
-                .debug("No MessageBodyWriter returned true for isWriteable( {}, {}, {}, {} )", new Object[] { //$NON-NLS-1$
+                .trace("No MessageBodyWriter returned true for isWriteable( {}, {}, {}, {} )", new Object[] { //$NON-NLS-1$
                        type, genericType, anns, mediaType});
         }
         return null;
@@ -449,11 +449,11 @@ public class ProvidersRegistry {
     public Set<MediaType> getMessageBodyReaderMediaTypesLimitByIsReadable(Class<?> type,
                                                                           RuntimeContext runtimeContext) {
         Set<MediaType> mediaTypes = new HashSet<MediaType>();
-        logger.debug("Searching MessageBodyReaders media types limited by class type {}", type); //$NON-NLS-1$
+        logger.trace("Searching MessageBodyReaders media types limited by class type {}", type); //$NON-NLS-1$
 
         List<MediaTypeMap<MessageBodyReader<?>>.OFHolder<MessageBodyReader<?>>> readerFactories =
             messageBodyReaders.getProvidersByMediaType(MediaType.WILDCARD_TYPE, type);
-        logger.debug("Found all MessageBodyReader ObjectFactories limited by class type {}", //$NON-NLS-1$
+        logger.trace("Found all MessageBodyReader ObjectFactories limited by class type {}", //$NON-NLS-1$
                      readerFactories);
         Annotation[] ann = new Annotation[0];
         for (ObjectFactory<MessageBodyReader<?>> factory : readerFactories) {
@@ -467,19 +467,19 @@ public class ProvidersRegistry {
             }
             for (String v : values) {
                 MediaType mt = MediaType.valueOf(v);
-                if (logger.isDebugEnabled()) {
+                if (logger.isTraceEnabled()) {
                     List<Annotation> anns = (ann == null) ? null : Arrays.asList(ann);
-                    logger.debug("Calling {}.isReadable( {}, {}, {}, {} )", new Object[] {reader, //$NON-NLS-1$
+                    logger.trace("Calling {}.isReadable( {}, {}, {}, {} )", new Object[] {reader, //$NON-NLS-1$
                         type, type, anns, mt});
                 }
                 if (reader.isReadable(type, type, ann, mt)) {
-                    logger.debug("Adding {} to media type set", mt); //$NON-NLS-1$
+                    logger.trace("Adding {} to media type set", mt); //$NON-NLS-1$
                     mediaTypes.add(mt);
                 }
             }
         }
         logger
-            .debug("Found {} from @Consumes values from all MessageBodyReader ObjectFactories compatible with Java type {}", //$NON-NLS-1$
+            .trace("Found {} from @Consumes values from all MessageBodyReader ObjectFactories compatible with Java type {}", //$NON-NLS-1$
                    mediaTypes,
                    type);
         return mediaTypes;
@@ -488,11 +488,11 @@ public class ProvidersRegistry {
     public MediaType getMessageBodyWriterMediaTypeLimitByIsWritable(Class<?> type,
                                                                     RuntimeContext runtimeContext) {
         List<MediaType> mediaTypes = new ArrayList<MediaType>();
-        logger.debug("Searching MessageBodyWriters media types limited by class type {}", type); //$NON-NLS-1$
+        logger.trace("Searching MessageBodyWriters media types limited by class type {}", type); //$NON-NLS-1$
 
         List<MediaTypeMap<MessageBodyWriter<?>>.OFHolder<MessageBodyWriter<?>>> writerFactories =
             messageBodyWriters.getProvidersByMediaType(MediaType.WILDCARD_TYPE, type);
-        logger.debug("Found all MessageBodyWriter ObjectFactories limited by class type {}", //$NON-NLS-1$
+        logger.trace("Found all MessageBodyWriter ObjectFactories limited by class type {}", //$NON-NLS-1$
                      writerFactories);
         Annotation[] ann = new Annotation[0];
         for (ObjectFactory<MessageBodyWriter<?>> factory : writerFactories) {
@@ -506,13 +506,13 @@ public class ProvidersRegistry {
             }
             for (String v : values) {
                 MediaType mt = MediaType.valueOf(v);
-                if (logger.isDebugEnabled()) {
+                if (logger.isTraceEnabled()) {
                     List<Annotation> anns = (ann == null) ? null : Arrays.asList(ann);
-                    logger.debug("Calling {}.isWritable( {}, {}, {}, {} )", new Object[] {writer, //$NON-NLS-1$
+                    logger.trace("Calling {}.isWritable( {}, {}, {}, {} )", new Object[] {writer, //$NON-NLS-1$
                         type, type, anns, mt});
                 }
                 if (writer.isWriteable(type, type, ann, mt)) {
-                    logger.debug("Returning media type {}", mt); //$NON-NLS-1$
+                    logger.trace("Returning media type {}", mt); //$NON-NLS-1$
                     return mt;
                 }
             }
@@ -620,14 +620,14 @@ public class ProvidersRegistry {
             }
 
             logger
-                .debug("Getting providers by media type by calling getProvidersByMediaType({}, {})", //$NON-NLS-1$
+                .trace("Getting providers by media type by calling getProvidersByMediaType({}, {})", //$NON-NLS-1$
                        mediaType,
                        cls);
             SoftConcurrentMap<MediaType, List<OFHolder<T>>> mediaTypeToProvidersCache =
                 providersCache.get(cls);
             if (mediaTypeToProvidersCache == null) {
                 logger
-                    .debug("MediaType to providers cache for class {} does not exist so creating", //$NON-NLS-1$
+                    .trace("MediaType to providers cache for class {} does not exist so creating", //$NON-NLS-1$
                            cls);
                 mediaTypeToProvidersCache = new SoftConcurrentMap<MediaType, List<OFHolder<T>>>();
                 providersCache.put(cls, mediaTypeToProvidersCache);
@@ -635,7 +635,7 @@ public class ProvidersRegistry {
 
             List<OFHolder<T>> list = mediaTypeToProvidersCache.get(mediaType);
 
-            logger.debug("Get media type to providers cache for media type {} resulted in {}", //$NON-NLS-1$
+            logger.trace("Get media type to providers cache for media type {} resulted in {}", //$NON-NLS-1$
                          mediaType,
                          list);
             if (list == null) {
@@ -729,17 +729,17 @@ public class ProvidersRegistry {
                                   }
                               }));
 
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Added ObjectFactory {} with MediaType {} to MediaTypeMap {}", //$NON-NLS-1$
+                if (logger.isTraceEnabled()) {
+                    logger.trace("Added ObjectFactory {} with MediaType {} to MediaTypeMap {}", //$NON-NLS-1$
                                  new Object[] {objectFactory, key, this});
-                    logger.debug("EntrySet is {}", newEntrySet); //$NON-NLS-1$
+                    logger.trace("EntrySet is {}", newEntrySet); //$NON-NLS-1$
                 }
                 entrySet = newEntrySet;
                 data = copyOfMap;
 
                 // the set of providers has been changed so must clear the cache
                 providersCache.clear();
-                logger.debug("Cleared the providers cache"); //$NON-NLS-1$
+                logger.trace("Cleared the providers cache"); //$NON-NLS-1$
             }
         }
 

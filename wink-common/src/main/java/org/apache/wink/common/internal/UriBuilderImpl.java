@@ -63,29 +63,29 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
     }
 
     public void reset() {
-        logger.debug("Entered reset"); //$NON-NLS-1$
+        logger.trace("Entered reset"); //$NON-NLS-1$
         scheme = null;
         resetSchemeSpecificPart();
         query = null;
         fragment = null;
-        logger.debug("Exit reset"); //$NON-NLS-1$
+        logger.trace("Exit reset"); //$NON-NLS-1$
     }
 
     private void resetSchemeSpecificPart() {
-        logger.debug("Entered resetSchemeSpecificPart"); //$NON-NLS-1$
+        logger.trace("Entered resetSchemeSpecificPart"); //$NON-NLS-1$
         schemeSpecificPart = null;
         userInfo = null;
         host = null;
         port = -1;
         segments = null;
-        logger.debug("Exit resetSchemeSpecificPart"); //$NON-NLS-1$
+        logger.trace("Exit resetSchemeSpecificPart"); //$NON-NLS-1$
     }
 
     private List<PathSegment> getPathSegments() {
         if (segments == null) {
             segments = new ArrayList<PathSegment>();
         }
-        logger.debug("getPathSegments returning {}", segments); //$NON-NLS-1$
+        logger.trace("getPathSegments returning {}", segments); //$NON-NLS-1$
         return segments;
     }
 
@@ -93,13 +93,13 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         if (query == null) {
             query = new MultivaluedMapImpl<String, String>();
         }
-        logger.debug("getQuery returning {}", query); //$NON-NLS-1$
+        logger.trace("getQuery returning {}", query); //$NON-NLS-1$
         return query;
     }
 
     private String constructPathString() {
         if (segments == null) {
-            logger.debug("constructPathString() returning null because null segments"); //$NON-NLS-1$
+            logger.trace("constructPathString() returning null because null segments"); //$NON-NLS-1$
             return null;
         }
 
@@ -108,30 +108,30 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
             String segmentStr = segment.toString();
             path.append("/"); //$NON-NLS-1$
             path.append(segmentStr);
-            logger.debug("appending {} from path segment to path", segmentStr); //$NON-NLS-1$
+            logger.trace("appending {} from path segment to path", segmentStr); //$NON-NLS-1$
         }
 
         String str = path.toString();
-        logger.debug("constructPathString() returning {}", str); //$NON-NLS-1$
+        logger.trace("constructPathString() returning {}", str); //$NON-NLS-1$
         return str;
     }
 
     private String constructQueryString() {
         if (query == null) {
-            logger.debug("constructQueryString returning null beause null"); //$NON-NLS-1$
+            logger.trace("constructQueryString returning null beause null"); //$NON-NLS-1$
             return null;
         }
         if (query.size() == 0) {
-            logger.debug("constructQueryString returning empty string because string size is 0"); //$NON-NLS-1$
+            logger.trace("constructQueryString returning empty string because string size is 0"); //$NON-NLS-1$
             return ""; //$NON-NLS-1$
         }
         String queryStr = "?" + MultivaluedMapImpl.toString(query, "&"); //$NON-NLS-1$ //$NON-NLS-2$
-        logger.debug("constructQueryString returning {}", queryStr); //$NON-NLS-1$
+        logger.trace("constructQueryString returning {}", queryStr); //$NON-NLS-1$
         return queryStr;
     }
 
     private Set<String> getVariableNamesList() {
-        logger.debug("getVariableNamesList() entry"); //$NON-NLS-1$
+        logger.trace("getVariableNamesList() entry"); //$NON-NLS-1$
         String constructedPath = constructPathString();
         String constructedQuery = constructQueryString();
         String uriStr =
@@ -144,14 +144,14 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                                   fragment);
         JaxRsUriTemplateProcessor uriTemplate = new JaxRsUriTemplateProcessor(uriStr);
         Set<String> ret = uriTemplate.getVariableNames();
-        logger.debug("getVariableNamesList() returning {}", ret); //$NON-NLS-1$
+        logger.trace("getVariableNamesList() returning {}", ret); //$NON-NLS-1$
         return ret;
     }
 
     private URI buildInternal(Map<String, ? extends Object> values)
         throws IllegalArgumentException, UriBuilderException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("buildInternal({}) entry", values //$NON-NLS-1$
+        if (logger.isTraceEnabled()) {
+            logger.trace("buildInternal({}) entry", values //$NON-NLS-1$
                 );
         }
         StringBuilder out = new StringBuilder();
@@ -162,7 +162,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         buildFragment(values, out);
         String uriString = out.toString();
         try {
-            logger.debug("buildInternal() exit", uriString); //$NON-NLS-1$
+            logger.trace("buildInternal() exit", uriString); //$NON-NLS-1$
             return new URI(uriString);
         } catch (URISyntaxException e) {
             throw new UriBuilderException(e);
@@ -170,22 +170,22 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
     }
 
     private void buildScheme(Map<String, ? extends Object> values, StringBuilder out) {
-        logger.debug("buildScheme({}, {}) entry", values, out); //$NON-NLS-1$
+        logger.trace("buildScheme({}, {}) entry", values, out); //$NON-NLS-1$
         if (scheme == null) {
-            logger.debug("buildScheme() is null so returning"); //$NON-NLS-1$
+            logger.trace("buildScheme() is null so returning"); //$NON-NLS-1$
             return;
         }
         JaxRsUriTemplateProcessor.expand(scheme,
                                          MultivaluedMapImpl.toMultivaluedMapString(values),
                                          out);
         out.append(':');
-        logger.debug("buildScheme() exit changed out to {}", out); //$NON-NLS-1$
+        logger.trace("buildScheme() exit changed out to {}", out); //$NON-NLS-1$
     }
 
     private void buildAuthority(Map<String, ? extends Object> values, StringBuilder out) {
-        logger.debug("buildAuthority({}, {}) entry", values, out); //$NON-NLS-1$
+        logger.trace("buildAuthority({}, {}) entry", values, out); //$NON-NLS-1$
         if (userInfo == null && host == null && port == -1) {
-            logger.debug("buildAuthority() is null so returning"); //$NON-NLS-1$
+            logger.trace("buildAuthority() is null so returning"); //$NON-NLS-1$
             return;
         }
         out.append("//"); //$NON-NLS-1$
@@ -205,16 +205,16 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
             out.append(':');
             out.append(port);
         }
-        logger.debug("buildAuthority() exit changed out to {}", out); //$NON-NLS-1$
+        logger.trace("buildAuthority() exit changed out to {}", out); //$NON-NLS-1$
     }
 
     private void buildPath(Map<String, ? extends Object> values, StringBuilder out) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("buildPath({}, {}) entry", new Object[] {values, out //$NON-NLS-1$
+        if (logger.isTraceEnabled()) {
+            logger.trace("buildPath({}, {}) entry", new Object[] {values, out //$NON-NLS-1$
             });
         }
         if (segments == null || segments.size() == 0) {
-            logger.debug("buildPath() segments is null or empty so returning"); //$NON-NLS-1$
+            logger.trace("buildPath() segments is null or empty so returning"); //$NON-NLS-1$
             return;
         }
 
@@ -270,17 +270,17 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                 }
             }
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug("buildPath() exit changes out to {} ", out); //$NON-NLS-1$
+        if (logger.isTraceEnabled()) {
+            logger.trace("buildPath() exit changes out to {} ", out); //$NON-NLS-1$
         }
     }
 
     private void buildQuery(Map<String, ? extends Object> values, StringBuilder out) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("buildQuery({}, {}) entry", values, out); //$NON-NLS-1$
+        if (logger.isTraceEnabled()) {
+            logger.trace("buildQuery({}, {}) entry", values, out); //$NON-NLS-1$
         }
         if (query == null || query.size() == 0) {
-            logger.debug("buildQuery() exit - query is null"); //$NON-NLS-1$
+            logger.trace("buildQuery() exit - query is null"); //$NON-NLS-1$
             return;
         }
         char delim = '?';
@@ -307,11 +307,11 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                 out.append(eQueryValue);
             }
         }
-        logger.debug("buildQuery() exit - changes out to {}", out); //$NON-NLS-1$
+        logger.trace("buildQuery() exit - changes out to {}", out); //$NON-NLS-1$
     }
 
     private void buildFragment(Map<String, ? extends Object> values, StringBuilder out) {
-        logger.debug("buildFragment({}, {})", values, out); //$NON-NLS-1$
+        logger.trace("buildFragment({}, {})", values, out); //$NON-NLS-1$
         if (fragment == null) {
             return;
         }
@@ -321,7 +321,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         eFragment = UriEncoder.encodeFragment(eFragment, true);
         out.append('#');
         out.append(eFragment);
-        logger.debug("buildFragment() exit - changes out to {}", out); //$NON-NLS-1$
+        logger.trace("buildFragment() exit - changes out to {}", out); //$NON-NLS-1$
     }
 
     @Override
@@ -337,16 +337,16 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
 
     private URI build(boolean escapePercent, Object... values) throws IllegalArgumentException,
         UriBuilderException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("build({}, {}) enFtry", Boolean.valueOf(escapePercent), Arrays //$NON-NLS-1$
+        if (logger.isTraceEnabled()) {
+            logger.trace("build({}, {}) enFtry", Boolean.valueOf(escapePercent), Arrays //$NON-NLS-1$
                 .asList(values));
         }
         if (schemeSpecificPart != null) {
             try {
                 // uri templates will be automatically encoded
                 URI uri = new URI(scheme, schemeSpecificPart, fragment);
-                if (logger.isDebugEnabled()) {
-                    logger.debug("build() returning {}", uri.toString()); //$NON-NLS-1$
+                if (logger.isTraceEnabled()) {
+                    logger.trace("build() returning {}", uri.toString()); //$NON-NLS-1$
                 }
                 return uri;
             } catch (URISyntaxException e) {
@@ -372,7 +372,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                     value = escapePercent(value);
                 }
                 valuesMap.put(name, value);
-                logger.debug("name: {} has value : {}", name, value); //$NON-NLS-1$
+                logger.trace("name: {} has value : {}", name, value); //$NON-NLS-1$
             }
             ++i;
         }
@@ -399,14 +399,14 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
 
     private URI buildFromMap(boolean escapePercent, Map<String, ? extends Object> values)
         throws IllegalArgumentException, UriBuilderException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("buildFromMap({}, {})", Boolean.valueOf(escapePercent), values); //$NON-NLS-1$
+        if (logger.isTraceEnabled()) {
+            logger.trace("buildFromMap({}, {})", Boolean.valueOf(escapePercent), values); //$NON-NLS-1$
         }
         Set<String> names = getVariableNamesList();
         if (values == null || (names.size() > values.size())) {
             throw new IllegalArgumentException(Messages.getMessage("missingVariable", "values")); //$NON-NLS-1$ //$NON-NLS-2$
         }
-        logger.debug("names are {}", names); //$NON-NLS-1$
+        logger.trace("names are {}", names); //$NON-NLS-1$
         Map<String, Object> valuesMap = new HashMap<String, Object>();
         for (String name : names) {
             Object value = values.get(name);
@@ -420,14 +420,14 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                     valueToPut = escapePercent(valueToPut);
                 }
                 valuesMap.put(name, valueToPut);
-                logger.debug("name {} set to value {}", name, valueToPut); //$NON-NLS-1$
+                logger.trace("name {} set to value {}", name, valueToPut); //$NON-NLS-1$
             }
         }
         return buildInternal(valuesMap);
     }
 
     private String escapePercent(String string) {
-        logger.debug("escapePercent({}) entry", string); //$NON-NLS-1$
+        logger.trace("escapePercent({}) entry", string); //$NON-NLS-1$
         StringBuilder out = new StringBuilder(string.length());
         for (int i = 0; i < string.length(); ++i) {
             char c = string.charAt(i);
@@ -438,13 +438,13 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
             }
         }
         String ret = out.toString();
-        logger.debug("escapePercent() return {}", ret); //$NON-NLS-1$
+        logger.trace("escapePercent() return {}", ret); //$NON-NLS-1$
         return ret;
     }
 
     @Override
     public UriBuilder clone() {
-        logger.debug("clone() entry"); //$NON-NLS-1$
+        logger.trace("clone() entry"); //$NON-NLS-1$
         UriBuilderImpl uriBuilder = new UriBuilderImpl();
         uriBuilder.scheme(this.scheme);
         uriBuilder.userInfo(this.userInfo);
@@ -453,56 +453,56 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         uriBuilder.fragment(this.fragment);
         uriBuilder.segments(this.segments);
         uriBuilder.query(this.query);
-        logger.debug("clone() exit returning {}", uriBuilder); //$NON-NLS-1$
+        logger.trace("clone() exit returning {}", uriBuilder); //$NON-NLS-1$
         return uriBuilder;
     }
 
     private void query(MultivaluedMap<String, String> query) {
-        logger.debug("query({}) entry", query); //$NON-NLS-1$
+        logger.trace("query({}) entry", query); //$NON-NLS-1$
         if (query == null) {
-            logger.debug("query exit"); //$NON-NLS-1$
+            logger.trace("query exit"); //$NON-NLS-1$
             return;
         }
         this.query = ((MultivaluedMapImpl<String, String>)query).clone();
-        logger.debug("query exit"); //$NON-NLS-1$
+        logger.trace("query exit"); //$NON-NLS-1$
     }
 
     private void segments(List<PathSegment> pathSegments) {
-        logger.debug("segments({}) entry", pathSegments); //$NON-NLS-1$
+        logger.trace("segments({}) entry", pathSegments); //$NON-NLS-1$
         if (pathSegments == null) {
-            logger.debug("segments() exit"); //$NON-NLS-1$
+            logger.trace("segments() exit"); //$NON-NLS-1$
             return;
         }
         this.segments = new ArrayList<PathSegment>();
         for (PathSegment segment : pathSegments) {
             this.segments.add(((PathSegmentImpl)segment).clone());
         }
-        logger.debug("segments() exit"); //$NON-NLS-1$
+        logger.trace("segments() exit"); //$NON-NLS-1$
     }
 
     @Override
     public UriBuilder fragment(String fragment) {
-        logger.debug("fragment({}) entry", fragment); //$NON-NLS-1$
+        logger.trace("fragment({}) entry", fragment); //$NON-NLS-1$
         this.fragment = fragment;
-        logger.debug("fragment() exit"); //$NON-NLS-1$
+        logger.trace("fragment() exit"); //$NON-NLS-1$
         return this;
     }
 
     @Override
     public UriBuilder host(String host) throws IllegalArgumentException {
-        logger.debug("host({}) entry", host); //$NON-NLS-1$
+        logger.trace("host({}) entry", host); //$NON-NLS-1$
         if ("".equals(host)) { //$NON-NLS-1$
             throw new IllegalArgumentException(Messages.getMessage("variableIsEmpty", "host")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         this.host = host;
-        logger.debug("host() exit"); //$NON-NLS-1$
+        logger.trace("host() exit"); //$NON-NLS-1$
         return this;
     }
 
     @Override
     public UriBuilder matrixParam(String name, Object... values) throws IllegalArgumentException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("matrixParam({}, {}) entry", name, (values == null) ? null : Arrays //$NON-NLS-1$
+        if (logger.isTraceEnabled()) {
+            logger.trace("matrixParam({}, {}) entry", name, (values == null) ? null : Arrays //$NON-NLS-1$
                 .asList(values));
         }
         if (name == null) {
@@ -514,18 +514,18 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         PathSegmentImpl lastSegment = getLastPathSegment();
         for (Object value : values) {
             lastSegment.getMatrixParameters().add(name, value.toString());
-            if (logger.isDebugEnabled()) {
-                logger.debug("lastSegment add({}, {})", name, value.toString()); //$NON-NLS-1$
+            if (logger.isTraceEnabled()) {
+                logger.trace("lastSegment add({}, {})", name, value.toString()); //$NON-NLS-1$
             }
         }
-        logger.debug("matrixParam exit"); //$NON-NLS-1$
+        logger.trace("matrixParam exit"); //$NON-NLS-1$
         return this;
     }
 
     private PathSegmentImpl getLastPathSegment() {
-        logger.debug("getLastPathSegment() entry"); //$NON-NLS-1$
+        logger.trace("getLastPathSegment() entry"); //$NON-NLS-1$
         List<PathSegment> pathSegments = getPathSegments();
-        logger.debug("getPathSegments() is {}", pathSegments); //$NON-NLS-1$
+        logger.trace("getPathSegments() is {}", pathSegments); //$NON-NLS-1$
         PathSegmentImpl lastSegment = null;
         int lastSegmentIndex = pathSegments.size() - 1;
         if (lastSegmentIndex >= 0) {
@@ -534,13 +534,13 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
             lastSegment = new PathSegmentImpl(""); //$NON-NLS-1$
             pathSegments.add(lastSegment);
         }
-        logger.debug("getLastPathSegment() returning {}", lastSegment); //$NON-NLS-1$
+        logger.trace("getLastPathSegment() returning {}", lastSegment); //$NON-NLS-1$
         return lastSegment;
     }
 
     @Override
     public UriBuilder path(String path) throws IllegalArgumentException {
-        logger.debug("path({}) entry", path); //$NON-NLS-1$
+        logger.trace("path({}) entry", path); //$NON-NLS-1$
         if (path == null) {
             throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "path")); //$NON-NLS-1$ //$NON-NLS-2$
         }
@@ -567,7 +567,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                         scheme(scheme);
                         schemeSpecificPart(schemeSpecificPart);
                         fragment(fragment);
-                        logger.debug("replacePath() exit"); //$NON-NLS-1$
+                        logger.trace("replacePath() exit"); //$NON-NLS-1$
                         return this;
                     }
                 }
@@ -582,13 +582,13 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                 _path = path.substring(2);
                 getPathSegments().add(new PathSegmentImpl("/")); //$NON-NLS-1$
             } else {
-                logger.debug("path() exit"); //$NON-NLS-1$
+                logger.trace("path() exit"); //$NON-NLS-1$
                 return this;
             }
         }
 
         List<PathSegment> list = UriHelper.parsePath(_path);
-        logger.debug("path is {}", list); //$NON-NLS-1$
+        logger.trace("path is {}", list); //$NON-NLS-1$
         for (PathSegment segment : list) {
             segment(segment.getPath());
             MultivaluedMap<String, String> matrixParameters = segment.getMatrixParameters();
@@ -596,14 +596,14 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                 matrixParam(matrix, matrixParameters.get(matrix).toArray());
             }
         }
-        logger.debug("path() exit"); //$NON-NLS-1$
+        logger.trace("path() exit"); //$NON-NLS-1$
         return this;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public UriBuilder path(Class resource) throws IllegalArgumentException {
-        logger.debug("path({}) entry", resource); //$NON-NLS-1$
+        logger.trace("path({}) entry", resource); //$NON-NLS-1$
         if (resource == null) {
             throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "resource")); //$NON-NLS-1$ //$NON-NLS-2$
         }
@@ -613,15 +613,15 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
             throw new IllegalArgumentException(Messages.getMessage("resourceNotAnnotated", "Path")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         String path = pathAnnotation.value();
-        logger.debug("path annotation value is {}", path); //$NON-NLS-1$
+        logger.trace("path annotation value is {}", path); //$NON-NLS-1$
         path(path);
-        logger.debug("path() exit"); //$NON-NLS-1$
+        logger.trace("path() exit"); //$NON-NLS-1$
         return this;
     }
 
     @Override
     public UriBuilder path(Method method) throws IllegalArgumentException {
-        logger.debug("path({}) entry", method); //$NON-NLS-1$
+        logger.trace("path({}) entry", method); //$NON-NLS-1$
         if (method == null) {
             throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "method")); //$NON-NLS-1$ //$NON-NLS-2$
         }
@@ -630,16 +630,16 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
             throw new IllegalArgumentException(Messages.getMessage("methodNotAnnotated", "Path")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         String path = pathAnnotation.value();
-        logger.debug("path method annotation is {}", path); //$NON-NLS-1$
+        logger.trace("path method annotation is {}", path); //$NON-NLS-1$
         path(path);
-        logger.debug("path() exit"); //$NON-NLS-1$
+        logger.trace("path() exit"); //$NON-NLS-1$
         return this;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public UriBuilder path(Class resource, String method) throws IllegalArgumentException {
-        logger.debug("path({}, {}) entry", resource, method); //$NON-NLS-1$
+        logger.trace("path({}, {}) entry", resource, method); //$NON-NLS-1$
         if (resource == null) {
             throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "resource")); //$NON-NLS-1$ //$NON-NLS-2$
         }
@@ -665,27 +665,27 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
             throw new IllegalArgumentException(Messages.getMessage("noMethodAnnotated", "Path")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         path(foundMethod);
-        logger.debug("path() exit"); //$NON-NLS-1$
+        logger.trace("path() exit"); //$NON-NLS-1$
         return this;
     }
 
     @Override
     public UriBuilder port(int port) throws IllegalArgumentException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("port({}) entry", port); //$NON-NLS-1$
+        if (logger.isTraceEnabled()) {
+            logger.trace("port({}) entry", port); //$NON-NLS-1$
         }
         if (port < -1) {
             throw new IllegalArgumentException(Messages.getMessage("invalidPort")); //$NON-NLS-1$
         }
         this.port = port;
-        logger.debug("port() exit"); //$NON-NLS-1$
+        logger.trace("port() exit"); //$NON-NLS-1$
         return this;
     }
 
     @Override
     public UriBuilder queryParam(String name, Object... values) throws IllegalArgumentException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("queryParam({}, {}) entry", name, (values == null) ? null : Arrays //$NON-NLS-1$
+        if (logger.isTraceEnabled()) {
+            logger.trace("queryParam({}, {}) entry", name, (values == null) ? null : Arrays //$NON-NLS-1$
                 .asList(values));
         }
         if (name == null) {
@@ -695,20 +695,20 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
             throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "values")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         MultivaluedMap<String, String> query = getQuery();
-        logger.debug("query map is {}", query); //$NON-NLS-1$
+        logger.trace("query map is {}", query); //$NON-NLS-1$
         for (Object value : values) {
             if (value == null) {
                 throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "value")); //$NON-NLS-1$ //$NON-NLS-2$
             }
             query.add(name, value != null ? value.toString() : null);
         }
-        logger.debug("queryParam() exit"); //$NON-NLS-1$
+        logger.trace("queryParam() exit"); //$NON-NLS-1$
         return this;
     }
 
     @Override
     public UriBuilder replaceMatrix(String matrix) throws IllegalArgumentException {
-        logger.debug("replaceMatrix({}) entry", matrix); //$NON-NLS-1$
+        logger.trace("replaceMatrix({}) entry", matrix); //$NON-NLS-1$
         // clear all matrix parameters from existing last segment
         PathSegmentImpl lastPathSegment = getLastPathSegment();
         lastPathSegment.clearAllMatrixParameters();
@@ -721,15 +721,15 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
             // add the matrix parameter and its values
             matrixParam(param, matrixValues.toArray());
         }
-        logger.debug("replaceMatrix() exit"); //$NON-NLS-1$
+        logger.trace("replaceMatrix() exit"); //$NON-NLS-1$
         return this;
     }
 
     @Override
     public UriBuilder replaceMatrixParam(String name, Object... values)
         throws IllegalArgumentException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("replaceMatrixParam({}, {})", name, (values == null) ? null : Arrays //$NON-NLS-1$
+        if (logger.isTraceEnabled()) {
+            logger.trace("replaceMatrixParam({}, {})", name, (values == null) ? null : Arrays //$NON-NLS-1$
                 .asList(values));
         }
         if (name == null) {
@@ -745,13 +745,13 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
             }
             matrixParam(name, values);
         }
-        logger.debug("replaceMatrixParam() exit"); //$NON-NLS-1$
+        logger.trace("replaceMatrixParam() exit"); //$NON-NLS-1$
         return this;
     }
 
     @Override
     public UriBuilder replacePath(String path) {
-        logger.debug("replacePath({}) entry", path); //$NON-NLS-1$
+        logger.trace("replacePath({}) entry", path); //$NON-NLS-1$
         if (isFirstCall) {
             if (path == null) {
                 throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "path")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -759,9 +759,9 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
             isFirstCall = false;
         }
         if (path == null) {
-            logger.debug("path is null. resetting"); //$NON-NLS-1$
+            logger.trace("path is null. resetting"); //$NON-NLS-1$
             reset();
-            logger.debug("replacePath() exit"); //$NON-NLS-1$
+            logger.trace("replacePath() exit"); //$NON-NLS-1$
             return this;
         }
         getPathSegments().clear();
@@ -781,7 +781,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                     scheme(scheme);
                     schemeSpecificPart(schemeSpecificPart);
                     fragment(fragment);
-                    logger.debug("replacePath() exit"); //$NON-NLS-1$
+                    logger.trace("replacePath() exit"); //$NON-NLS-1$
                     return this;
                 }
             }
@@ -789,20 +789,20 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         if (path != null && !"".equals(path)) { //$NON-NLS-1$
             path(path);
         }
-        logger.debug("replacePath() exit"); //$NON-NLS-1$
+        logger.trace("replacePath() exit"); //$NON-NLS-1$
         return this;
     }
 
     @Override
     public UriBuilder replaceQuery(String query) throws IllegalArgumentException {
-        logger.debug("replaceQuery({}) entry", query); //$NON-NLS-1$
+        logger.trace("replaceQuery({}) entry", query); //$NON-NLS-1$
         getQuery().clear();
         if (query != null) {
             query = query.replaceAll(" ", "%20"); //$NON-NLS-1$ //$NON-NLS-2$
             MultivaluedMap<String, String> queries = UriHelper.parseQuery(query);
             // should values be URL encoded or query encoded?
 
-            logger.debug("queries after parsing: {}", queries); //$NON-NLS-1$
+            logger.trace("queries after parsing: {}", queries); //$NON-NLS-1$
             MultivaluedMap<String, String> queryValues = getQuery();
             for (String name : queries.keySet()) {
                 List<String> values = queries.get(name);
@@ -815,15 +815,15 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                 }
             }
         }
-        logger.debug("replaceQuery() exit"); //$NON-NLS-1$
+        logger.trace("replaceQuery() exit"); //$NON-NLS-1$
         return this;
     }
 
     @Override
     public UriBuilder replaceQueryParam(String name, Object... values)
         throws IllegalArgumentException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("replaceQueryParam({}, {}) entry", name, (values == null) ? null : Arrays //$NON-NLS-1$
+        if (logger.isTraceEnabled()) {
+            logger.trace("replaceQueryParam({}, {}) entry", name, (values == null) ? null : Arrays //$NON-NLS-1$
                 .asList(values));
         }
         if (name == null) {
@@ -835,21 +835,21 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         if (values != null) {
             queryParam(name, values);
         }
-        logger.debug("replaceQueryParam() exit"); //$NON-NLS-1$
+        logger.trace("replaceQueryParam() exit"); //$NON-NLS-1$
         return this;
     }
 
     @Override
     public UriBuilder scheme(String scheme) throws IllegalArgumentException {
-        logger.debug("scheme({}) entry", scheme); //$NON-NLS-1$
+        logger.trace("scheme({}) entry", scheme); //$NON-NLS-1$
         this.scheme = scheme;
-        logger.debug("scheme() exit"); //$NON-NLS-1$
+        logger.trace("scheme() exit"); //$NON-NLS-1$
         return this;
     }
 
     @Override
     public UriBuilder schemeSpecificPart(String ssp) throws IllegalArgumentException {
-        logger.debug("schemeSpecificPart({}) entry", ssp); //$NON-NLS-1$
+        logger.trace("schemeSpecificPart({}) entry", ssp); //$NON-NLS-1$
         if (ssp == null) {
             throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "ssp")); //$NON-NLS-1$ //$NON-NLS-2$
         }
@@ -889,14 +889,14 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                 path = UriEncoder.decodeString(uri.getRawAuthority()) + "/" + path; //$NON-NLS-1$
             path(UriEncoder.decodeString(path));
         }
-        logger.debug("schemeSpecificPart() exit"); //$NON-NLS-1$
+        logger.trace("schemeSpecificPart() exit"); //$NON-NLS-1$
         return this;
     }
 
     @Override
     public UriBuilder segment(String... segments) throws IllegalArgumentException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("segment({}) entry", (segments == null) ? null : Arrays.asList(segments)); //$NON-NLS-1$
+        if (logger.isTraceEnabled()) {
+            logger.trace("segment({}) entry", (segments == null) ? null : Arrays.asList(segments)); //$NON-NLS-1$
         }
         if (segments == null) {
             throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "segments")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -915,21 +915,21 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                 pathSegments.add(new PathSegmentImpl(segments[i]));
             }
         }
-        logger.debug("segment() exit"); //$NON-NLS-1$
+        logger.trace("segment() exit"); //$NON-NLS-1$
         return this;
     }
 
     @Override
     public UriBuilder userInfo(String ui) {
-        logger.debug("userInfo({}) entry", ui); //$NON-NLS-1$
+        logger.trace("userInfo({}) entry", ui); //$NON-NLS-1$
         userInfo = ui;
-        logger.debug("userInfo() exit"); //$NON-NLS-1$
+        logger.trace("userInfo() exit"); //$NON-NLS-1$
         return this;
     }
 
     @Override
     public UriBuilder uri(URI uri) throws IllegalArgumentException {
-        logger.debug("Entering uri({})", uri); //$NON-NLS-1$
+        logger.trace("Entering uri({})", uri); //$NON-NLS-1$
         if (uri == null) {
             throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "uri")); //$NON-NLS-1$ //$NON-NLS-2$
         }
@@ -937,38 +937,38 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         isFirstCall = false;
 
         if (uri.getScheme() != null) {
-            logger.debug("Constructing scheme"); //$NON-NLS-1$
+            logger.trace("Constructing scheme"); //$NON-NLS-1$
             scheme(uri.getScheme());
         }
         if (uri.getRawUserInfo() != null) {
-            logger.debug("Constructing userInfo"); //$NON-NLS-1$
+            logger.trace("Constructing userInfo"); //$NON-NLS-1$
             userInfo(uri.getRawUserInfo());
         }
         if (uri.getHost() != null) {
-            logger.debug("Constructing host"); //$NON-NLS-1$
+            logger.trace("Constructing host"); //$NON-NLS-1$
             host(uri.getHost());
         }
         if (uri.getPort() != -1) {
-            logger.debug("Constructing port"); //$NON-NLS-1$
+            logger.trace("Constructing port"); //$NON-NLS-1$
             port(uri.getPort());
         }
         if (uri.getRawPath() != null) {
-            logger.debug("Constructing rawPath"); //$NON-NLS-1$
+            logger.trace("Constructing rawPath"); //$NON-NLS-1$
             path(uri.getRawPath());
         }
         if (uri.getRawQuery() != null) {
-            logger.debug("Constructing rawQuery"); //$NON-NLS-1$
+            logger.trace("Constructing rawQuery"); //$NON-NLS-1$
             replaceQuery(uri.getRawQuery());
         }
         if (uri.getRawFragment() != null) {
-            logger.debug("Constructing fragment"); //$NON-NLS-1$
+            logger.trace("Constructing fragment"); //$NON-NLS-1$
             fragment(uri.getRawFragment());
         }
         if (uri.getRawSchemeSpecificPart() != null) {
-            logger.debug("Constructing schemeSpecificPart"); //$NON-NLS-1$
+            logger.trace("Constructing schemeSpecificPart"); //$NON-NLS-1$
             schemeSpecificPart(uri.getRawSchemeSpecificPart());
         }
-        logger.debug("uri() exit"); //$NON-NLS-1$
+        logger.trace("uri() exit"); //$NON-NLS-1$
         return this;
     }
 

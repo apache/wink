@@ -59,7 +59,7 @@ class DefaultLifecycleManager<T> implements LifecycleManager<T> {
             throw new NullPointerException(Messages.getMessage("variableIsNull", "object")); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
-        logger.debug("Creating a {} for {}", SingletonObjectFactory.class, object); //$NON-NLS-1$
+        logger.trace("Creating a {} for {}", SingletonObjectFactory.class, object); //$NON-NLS-1$
 
         return LifecycleManagerUtils.createSingletonObjectFactory(object);
     }

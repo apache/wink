@@ -65,15 +65,15 @@ public class ContentEncodingRequestFilter implements Filter {
                                                .getLogger(ContentEncodingRequestFilter.class);
 
     public void init(FilterConfig arg0) throws ServletException {
-        logger.debug("init({}) entry", arg0); //$NON-NLS-1$
+        logger.trace("init({}) entry", arg0); //$NON-NLS-1$
         /* do nothing */
-        logger.debug("init() exit"); //$NON-NLS-1$
+        logger.trace("init() exit"); //$NON-NLS-1$
     }
 
     public void destroy() {
-        logger.debug("destroy() entry"); //$NON-NLS-1$
+        logger.trace("destroy() entry"); //$NON-NLS-1$
         /* do nothing */
-        logger.debug("destroy() exit"); //$NON-NLS-1$
+        logger.trace("destroy() exit"); //$NON-NLS-1$
     }
 
     private String getContentEncoding(HttpServletRequest httpServletRequest) {
@@ -88,32 +88,32 @@ public class ContentEncodingRequestFilter implements Filter {
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse,
                          FilterChain chain) throws IOException, ServletException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("doFilter({}, {}, {}) entry", new Object[] {servletRequest, //$NON-NLS-1$
+        if (logger.isTraceEnabled()) {
+            logger.trace("doFilter({}, {}, {}) entry", new Object[] {servletRequest, //$NON-NLS-1$
                 servletResponse, chain});
         }
         if (servletRequest instanceof HttpServletRequest && servletResponse instanceof HttpServletResponse) {
             HttpServletRequest httpServletRequest = (HttpServletRequest)servletRequest;
             String contentEncoding = getContentEncoding(httpServletRequest);
-            logger.debug("Content-Encoding was {}", contentEncoding); //$NON-NLS-1$
+            logger.trace("Content-Encoding was {}", contentEncoding); //$NON-NLS-1$
             if (contentEncoding != null) {
                 if ("gzip".equals(contentEncoding) || "deflate".equals(contentEncoding)) { //$NON-NLS-1$ //$NON-NLS-2$
                     logger
-                        .debug("Wrapping HttpServletRequest because Content-Encoding was set to gzip or deflate"); //$NON-NLS-1$
+                        .trace("Wrapping HttpServletRequest because Content-Encoding was set to gzip or deflate"); //$NON-NLS-1$
                     httpServletRequest =
                         new HttpServletRequestContentEncodingWrapperImpl(httpServletRequest,
                                                                          contentEncoding);
-                    logger.debug("Invoking chain with wrapped HttpServletRequest"); //$NON-NLS-1$
+                    logger.trace("Invoking chain with wrapped HttpServletRequest"); //$NON-NLS-1$
                     chain.doFilter(httpServletRequest, servletResponse);
-                    logger.debug("doFilter exit()"); //$NON-NLS-1$
+                    logger.trace("doFilter exit()"); //$NON-NLS-1$
                     return;
                 }
             }
         }
         logger
-            .debug("Invoking normal chain since Content-Encoding request header was not understood"); //$NON-NLS-1$
+            .trace("Invoking normal chain since Content-Encoding request header was not understood"); //$NON-NLS-1$
         chain.doFilter(servletRequest, servletResponse);
-        logger.debug("doFilter exit()"); //$NON-NLS-1$
+        logger.trace("doFilter exit()"); //$NON-NLS-1$
     }
 
     static class DecoderServletInputStream extends ServletInputStream {
@@ -204,18 +204,18 @@ public class ContentEncodingRequestFilter implements Filter {
 
         @Override
         public ServletInputStream getInputStream() throws IOException {
-            logger.debug("getInputStream() entry"); //$NON-NLS-1$
+            logger.trace("getInputStream() entry"); //$NON-NLS-1$
             if (inputStream == null) {
                 inputStream = super.getInputStream();
                 if ("gzip".equals(contentEncoding)) { //$NON-NLS-1$
-                    logger.debug("Wrapping ServletInputStream with GZIPDecoder"); //$NON-NLS-1$
+                    logger.trace("Wrapping ServletInputStream with GZIPDecoder"); //$NON-NLS-1$
                     inputStream = new GZIPDecoderInputStream(inputStream);
                 } else if ("deflate".equals(contentEncoding)) { //$NON-NLS-1$
-                    logger.debug("Wrapping ServletInputStream with Inflater"); //$NON-NLS-1$
+                    logger.trace("Wrapping ServletInputStream with Inflater"); //$NON-NLS-1$
                     inputStream = new InflaterDecoderInputStream(inputStream);
                 }
             }
-            logger.debug("getInputStream() exit - returning {}", inputStream); //$NON-NLS-1$
+            logger.trace("getInputStream() exit - returning {}", inputStream); //$NON-NLS-1$
             return inputStream;
         }
 

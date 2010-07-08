@@ -87,13 +87,13 @@ public class UriInfoImpl implements UriInfo {
             String requestPath = getPath(false);
             absolutePath = getBaseUri().resolve(requestPath);
         }
-        logger.debug("getAbsolutePath() returning: {}", absolutePath); //$NON-NLS-1$
+        logger.trace("getAbsolutePath() returning: {}", absolutePath); //$NON-NLS-1$
         return absolutePath;
     }
 
     public UriBuilder getAbsolutePathBuilder() {
         UriBuilder builder = UriBuilder.fromUri(getAbsolutePath());
-        logger.debug("getAbsolutePathBuilder() returning: {}", builder); //$NON-NLS-1$
+        logger.trace("getAbsolutePathBuilder() returning: {}", builder); //$NON-NLS-1$
         return builder;
     }
 
@@ -108,13 +108,13 @@ public class UriInfoImpl implements UriInfo {
                 }
             }
         }
-        logger.debug("getBaseUri() returning: {}", baseUri); //$NON-NLS-1$
+        logger.trace("getBaseUri() returning: {}", baseUri); //$NON-NLS-1$
         return baseUri;
     }
 
     public UriBuilder getBaseUriBuilder() {
         UriBuilder builder = UriBuilder.fromUri(getBaseUri());
-        logger.debug("getBaseUriBuilder() returning: {}", builder); //$NON-NLS-1$
+        logger.trace("getBaseUriBuilder() returning: {}", builder); //$NON-NLS-1$
         return builder;
     }
 
@@ -122,7 +122,7 @@ public class UriInfoImpl implements UriInfo {
         List<ResourceInstance> resources =
             Collections.unmodifiableList(messageContext.getAttribute(SearchResult.class).getData()
                 .getMatchedResources());
-        logger.debug("getMatchedResourceInstances() returning: {}", resources); //$NON-NLS-1$
+        logger.trace("getMatchedResourceInstances() returning: {}", resources); //$NON-NLS-1$
         return resources;
     }
 
@@ -133,7 +133,7 @@ public class UriInfoImpl implements UriInfo {
         for (ResourceInstance resourceInstance : matchedResources) {
             resourceList.add(resourceInstance.getInstance(messageContext));
         }
-        logger.debug("getMatchedResources() returning: {}", resourceList); //$NON-NLS-1$
+        logger.trace("getMatchedResources() returning: {}", resourceList); //$NON-NLS-1$
         return Collections.unmodifiableList(resourceList);
     }
 
@@ -142,7 +142,7 @@ public class UriInfoImpl implements UriInfo {
     }
 
     public List<String> getMatchedURIs(boolean decode) {
-        logger.debug("getMatchedURIs({}) called", decode); //$NON-NLS-1$
+        logger.trace("getMatchedURIs({}) called", decode); //$NON-NLS-1$
         List<List<PathSegment>> matchedURIs =
             messageContext.getAttribute(SearchResult.class).getData().getMatchedURIs();
         if (matchedURIsStrings != null && matchedURIsStrings.size() != matchedURIs.size()) {
@@ -153,7 +153,7 @@ public class UriInfoImpl implements UriInfo {
         if (matchedURIsStrings == null) {
             matchedURIsStrings = new ArrayList<String>(matchedURIs.size());
             for (List<PathSegment> segments : matchedURIs) {
-                logger.debug("Adding matched URI: {}", segments); //$NON-NLS-1$
+                logger.trace("Adding matched URI: {}", segments); //$NON-NLS-1$
                 matchedURIsStrings.add(PathSegmentImpl.toString(segments));
             }
         }
@@ -165,12 +165,12 @@ public class UriInfoImpl implements UriInfo {
                 for (String uri : matchedURIsStrings) {
                     String decodedUri = UriEncoder.decodeString(uri);
                     decodedMatchedURIsStrings.add(decodedUri);
-                    logger.debug("Adding decoded URI: {} from URI: {}", decodedUri, uri); //$NON-NLS-1$
+                    logger.trace("Adding decoded URI: {} from URI: {}", decodedUri, uri); //$NON-NLS-1$
                 }
             }
             list = decodedMatchedURIsStrings;
         }
-        logger.debug("getMatchedURIs({}) returning {}", decode, list); //$NON-NLS-1$
+        logger.trace("getMatchedURIs({}) returning {}", decode, list); //$NON-NLS-1$
         return Collections.unmodifiableList(list);
     }
 
@@ -179,17 +179,17 @@ public class UriInfoImpl implements UriInfo {
     }
 
     public String getPath(boolean decode) {
-        logger.debug("getPath({}) called", decode); //$NON-NLS-1$
+        logger.trace("getPath({}) called", decode); //$NON-NLS-1$
         if (path == null) {
             path = buildRequestPath(messageContext.getAttribute(HttpServletRequest.class));
         }
 
         if (decode) {
             String decodedPath = UriEncoder.decodeString(path);
-            logger.debug("getPath({}) returning {}", decode, decodedPath); //$NON-NLS-1$
+            logger.trace("getPath({}) returning {}", decode, decodedPath); //$NON-NLS-1$
             return decodedPath;
         }
-        logger.debug("getPath({}) returning {}", decode, path); //$NON-NLS-1$
+        logger.trace("getPath({}) returning {}", decode, path); //$NON-NLS-1$
         return path;
     }
 
@@ -198,7 +198,7 @@ public class UriInfoImpl implements UriInfo {
     }
 
     public MultivaluedMap<String, String> getPathParameters(boolean decode) {
-        logger.debug("getPathParameters({}) called", decode); //$NON-NLS-1$
+        logger.trace("getPathParameters({}) called", decode); //$NON-NLS-1$
         if (pathParameters == null) {
             pathParameters = new MultivaluedMapImpl<String, String>();
             SearchResult searchResult = messageContext.getAttribute(SearchResult.class);
@@ -207,7 +207,7 @@ public class UriInfoImpl implements UriInfo {
                     .getMessage("methodCallOutsideScopeOfRequestContext")); //$NON-NLS-1$
             }
             MultivaluedMapImpl.copy(searchResult.getData().getMatchedVariables(), pathParameters);
-            logger.debug("getPathParameters({}) encoded path parameters are: {}", //$NON-NLS-1$
+            logger.trace("getPathParameters({}) encoded path parameters are: {}", //$NON-NLS-1$
                          decode,
                          pathParameters);
         }
@@ -220,7 +220,7 @@ public class UriInfoImpl implements UriInfo {
             map = decodedPathParameters;
         }
 
-        logger.debug("getPathParameters({}) returning {}", decode, map); //$NON-NLS-1$
+        logger.trace("getPathParameters({}) returning {}", decode, map); //$NON-NLS-1$
         return map;
     }
 
@@ -233,10 +233,10 @@ public class UriInfoImpl implements UriInfo {
     }
 
     public List<PathSegment> getPathSegments(boolean decode) {
-        logger.debug("getPathSegments({}) called", decode); //$NON-NLS-1$
+        logger.trace("getPathSegments({}) called", decode); //$NON-NLS-1$
         if (pathSegments == null) {
             pathSegments = UriHelper.parsePath(getPath(false));
-            logger.debug("getPathSegments({}) encoded path parameters are: {}", //$NON-NLS-1$
+            logger.trace("getPathSegments({}) encoded path parameters are: {}", //$NON-NLS-1$
                          decode,
                          pathSegments);
         }
@@ -248,7 +248,7 @@ public class UriInfoImpl implements UriInfo {
             }
             list = decodedPathSegments;
         }
-        logger.debug("getPathSegments({}) returning {}", decode, list); //$NON-NLS-1$
+        logger.trace("getPathSegments({}) returning {}", decode, list); //$NON-NLS-1$
         return list;
     }
 
@@ -257,13 +257,13 @@ public class UriInfoImpl implements UriInfo {
     }
 
     public MultivaluedMap<String, String> getQueryParameters(boolean decode) {
-        logger.debug("getQueryParameters({}) called", decode); //$NON-NLS-1$
+        logger.trace("getQueryParameters({}) called", decode); //$NON-NLS-1$
         if (queryParameters == null) {
             queryParameters = new MultivaluedMapImpl<String, String>();
             String query = messageContext.getAttribute(HttpServletRequest.class).getQueryString();
-            logger.debug("getQueryParameters({}) query string is: {}", decode, query); //$NON-NLS-1$
+            logger.trace("getQueryParameters({}) query string is: {}", decode, query); //$NON-NLS-1$
             queryParameters = UriHelper.parseQuery(query);
-            logger.debug("getQueryParameters({}) encoded query parameters are: {}", //$NON-NLS-1$
+            logger.trace("getQueryParameters({}) encoded query parameters are: {}", //$NON-NLS-1$
                          decode,
                          queryParameters);
         }
@@ -275,25 +275,25 @@ public class UriInfoImpl implements UriInfo {
             }
             map = decodedQueryParameters;
         }
-        logger.debug("getQueryParameters({}) returning {}", decode, map); //$NON-NLS-1$
+        logger.trace("getQueryParameters({}) returning {}", decode, map); //$NON-NLS-1$
         return map;
     }
 
     public URI getRequestUri() {
-        logger.debug("getRequestUri() called"); //$NON-NLS-1$
+        logger.trace("getRequestUri() called"); //$NON-NLS-1$
         UriBuilder builder = getAbsolutePathBuilder();
         String query = messageContext.getAttribute(HttpServletRequest.class).getQueryString();
-        logger.debug("getRequestUri() query string: {}", query); //$NON-NLS-1$
+        logger.trace("getRequestUri() query string: {}", query); //$NON-NLS-1$
         builder.replaceQuery(query);
-        logger.debug("getRequestUri() build after query replacement: {}", builder); //$NON-NLS-1$
+        logger.trace("getRequestUri() build after query replacement: {}", builder); //$NON-NLS-1$
         URI uri = builder.build();
-        logger.debug("getRequestUri() returning: {}", uri); //$NON-NLS-1$
+        logger.trace("getRequestUri() returning: {}", uri); //$NON-NLS-1$
         return uri;
     }
 
     public UriBuilder getRequestUriBuilder() {
         UriBuilder builder = UriBuilder.fromUri(getRequestUri());
-        logger.debug("getRequestUriBuilder() returning: {}", builder); //$NON-NLS-1$
+        logger.trace("getRequestUriBuilder() returning: {}", builder); //$NON-NLS-1$
         return builder;
     }
 
@@ -303,7 +303,7 @@ public class UriInfoImpl implements UriInfo {
                 buildBaseUriString(messageContext.getAttribute(HttpServletRequest.class),
                                    messageContext.getProperties());
         }
-        logger.debug("getBaseUriString() returned {}", baseUriString); //$NON-NLS-1$
+        logger.trace("getBaseUriString() returned {}", baseUriString); //$NON-NLS-1$
         return baseUriString;
     }
 
@@ -320,36 +320,36 @@ public class UriInfoImpl implements UriInfo {
                     .getMessage("parameterHttpIsEmptyOrNotInitialized")); //$NON-NLS-1$
             }
         } else {
-            logger.debug("Endpoint is not set up in the configuration; using request detection"); //$NON-NLS-1$
+            logger.trace("Endpoint is not set up in the configuration; using request detection"); //$NON-NLS-1$
         }
 
         String baseURI = httpURI;
         if (request.isSecure()) {
-            logger.debug("buildBaseUriString request is secure"); //$NON-NLS-1$
+            logger.trace("buildBaseUriString request is secure"); //$NON-NLS-1$
             baseURI = httpsURI;
         }
-        logger.debug("buildBaseUriString baseURI from properties is: {}", baseURI); //$NON-NLS-1$
+        logger.trace("buildBaseUriString baseURI from properties is: {}", baseURI); //$NON-NLS-1$
         if (baseURI == null) {
             baseURI = autodetectBaseUri(request);
-            logger.debug("buildBaseUriString baseURI from autodetectBaseUri is: {}", baseURI); //$NON-NLS-1$
+            logger.trace("buildBaseUriString baseURI from autodetectBaseUri is: {}", baseURI); //$NON-NLS-1$
         }
         return appendContextAndServletPath(baseURI, request, properties);
     }
 
     private String getURI(Properties properties, String propertyName) {
         String uri = properties.getProperty(propertyName);
-        logger.debug("getURI({}, {}) called", properties, propertyName); //$NON-NLS-1$
+        logger.trace("getURI({}, {}) called", properties, propertyName); //$NON-NLS-1$
         if (uri != null && uri.length() != 0) {
             try {
                 URI uriParsed = new URI(uri);
-                logger.debug("getURI({}, {}) returning {}", new Object[] {properties, propertyName, //$NON-NLS-1$
+                logger.trace("getURI({}, {}) returning {}", new Object[] {properties, propertyName, //$NON-NLS-1$
                     uriParsed});
                 return uriParsed.toString();
             } catch (URISyntaxException e) {
                 throw new IllegalArgumentException(Messages.getMessage("uriInfoInvalidURI"), e); //$NON-NLS-1$
             }
         }
-        logger.debug("getURI({}, {}) returning null", properties, propertyName); //$NON-NLS-1$
+        logger.trace("getURI({}, {}) returning null", properties, propertyName); //$NON-NLS-1$
         return null;
     }
 
@@ -365,7 +365,7 @@ public class UriInfoImpl implements UriInfo {
     private String appendContextAndServletPath(String basePath,
                                                HttpServletRequest request,
                                                Properties properties) {
-        logger.debug("appendContextAndServletPath({}, {}, {}) called", new Object[] {basePath, //$NON-NLS-1$
+        logger.trace("appendContextAndServletPath({}, {}, {}) called", new Object[] {basePath, //$NON-NLS-1$
             request, properties});
         StringBuilder builder = new StringBuilder(basePath);
         if (builder.charAt(builder.length() - 1) == '/') {
@@ -377,22 +377,22 @@ public class UriInfoImpl implements UriInfo {
                 .getContextPath());
         if (contextPath != null) {
             builder.append(contextPath);
-            logger.debug("appendContextAndServletPath after contextPath called is: {} ", builder); //$NON-NLS-1$
+            logger.trace("appendContextAndServletPath after contextPath called is: {} ", builder); //$NON-NLS-1$
         }
 
         boolean isServlet =
             RuntimeContextTLS.getRuntimeContext().getAttribute(FilterConfig.class) == null;
-        logger.debug("appendContextAndServletPath isServlet: {} ", isServlet); //$NON-NLS-1$
+        logger.trace("appendContextAndServletPath isServlet: {} ", isServlet); //$NON-NLS-1$
         if (request.getServletPath() != null && isServlet) {
             builder.append(request.getServletPath());
             logger
-                .debug("appendContextAndServletPath after getServletPath called is: {} ", builder); //$NON-NLS-1$
+                .trace("appendContextAndServletPath after getServletPath called is: {} ", builder); //$NON-NLS-1$
         }
         if (builder.charAt(builder.length() - 1) != '/') {
             builder.append('/');
         }
         String builderStr = builder.toString();
-        logger.debug("appendContextAndServletPath returning: {} ", builderStr); //$NON-NLS-1$
+        logger.trace("appendContextAndServletPath returning: {} ", builderStr); //$NON-NLS-1$
         return builderStr;
     }
 
@@ -400,24 +400,24 @@ public class UriInfoImpl implements UriInfo {
         // we cannot use request.getPathInfo() since it cuts off the ';'
         // parameters on Tomcat
         String requestPath = request.getRequestURI();
-        logger.debug("buildRequestPath requestPath is: {}", requestPath); //$NON-NLS-1$
+        logger.trace("buildRequestPath requestPath is: {}", requestPath); //$NON-NLS-1$
         // Syntax-Based Normalization (RFC 3986, section 6.2.2)
         requestPath = UriHelper.normalize(requestPath);
-        logger.debug("buildRequestPath requestPath normalized is: {}", requestPath); //$NON-NLS-1$
+        logger.trace("buildRequestPath requestPath normalized is: {}", requestPath); //$NON-NLS-1$
         // cut off the context path from the beginning
         if (request.getContextPath() != null) {
             requestPath = requestPath.substring(request.getContextPath().length());
-            logger.debug("buildRequestPath after context path removed: {}", requestPath); //$NON-NLS-1$
+            logger.trace("buildRequestPath after context path removed: {}", requestPath); //$NON-NLS-1$
         }
 
         // cut off the servlet path from the beginning
         boolean isServlet =
             RuntimeContextTLS.getRuntimeContext().getAttribute(FilterConfig.class) == null;
-        logger.debug("buildRequestPath isServlet: {}", isServlet); //$NON-NLS-1$
+        logger.trace("buildRequestPath isServlet: {}", isServlet); //$NON-NLS-1$
         if (request.getServletPath() != null && isServlet) {
             requestPath = requestPath.substring(request.getServletPath().length());
             logger
-                .debug("buildRequestPath requestPath after servlet path removed: {}", requestPath); //$NON-NLS-1$
+                .trace("buildRequestPath requestPath after servlet path removed: {}", requestPath); //$NON-NLS-1$
         }
 
         // cut off all leading /
@@ -426,7 +426,7 @@ public class UriInfoImpl implements UriInfo {
             ++index;
         }
         requestPath = requestPath.substring(index);
-        logger.debug("buildRequestPath returning requestPath: {}", requestPath); //$NON-NLS-1$
+        logger.trace("buildRequestPath returning requestPath: {}", requestPath); //$NON-NLS-1$
         return requestPath;
     }
 }

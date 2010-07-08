@@ -61,7 +61,7 @@ public class HeadMethodHandler implements RequestHandler, ResponseHandler {
             .getCode()
             && context.getHttpMethod().equalsIgnoreCase(HttpMethod.HEAD)) {
             logger
-                .debug("No HEAD method so trying GET method while not sending the response entity"); //$NON-NLS-1$
+                .trace("No HEAD method so trying GET method while not sending the response entity"); //$NON-NLS-1$
             context.setHttpMethod(HttpMethod.GET);
             HttpServletResponse originalResponse = context.getAttribute(HttpServletResponse.class);
             NoBodyResponse noBodyResponse = new NoBodyResponse(originalResponse);

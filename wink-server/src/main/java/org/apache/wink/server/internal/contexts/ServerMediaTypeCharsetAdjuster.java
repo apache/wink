@@ -50,7 +50,7 @@ public class ServerMediaTypeCharsetAdjuster implements MediaTypeCharsetAdjuster 
 
     public MediaType setDefaultCharsetOnMediaTypeHeader(MultivaluedMap<String, Object> httpHeaders,
                                                         MediaType mediaType) {
-        logger.debug("setDefaultCharsetOnMediaTypeHeader({}, {}) entry", httpHeaders, mediaType); //$NON-NLS-1$
+        logger.trace("setDefaultCharsetOnMediaTypeHeader({}, {}) entry", httpHeaders, mediaType); //$NON-NLS-1$
 
         RuntimeContext context = RuntimeContextTLS.getRuntimeContext();
         // we're on the server, so this is a safe cast
@@ -60,7 +60,7 @@ public class ServerMediaTypeCharsetAdjuster implements MediaTypeCharsetAdjuster 
                     .get(HttpHeaders.CONTENT_TYPE) == null)) {
                 // only correct the MediaType if the MediaType was not explicitly
                 // set
-                logger.debug("Media Type not explicitly set on Response so going to correct charset parameter if necessary"); //$NON-NLS-1$
+                logger.trace("Media Type not explicitly set on Response so going to correct charset parameter if necessary"); //$NON-NLS-1$
                 if (ProviderUtils.getCharsetOrNull(mediaType) == null) { //$NON-NLS-1$
                     try {
                         String charsetValue = "UTF-8"; //$NON-NLS-1$
@@ -75,18 +75,18 @@ public class ServerMediaTypeCharsetAdjuster implements MediaTypeCharsetAdjuster 
                         String newMediaTypeStr = mediaType.toString() + ";charset=" + charsetValue; //$NON-NLS-1$
                         mediaType = MediaType.valueOf(newMediaTypeStr);
                         httpHeaders.putSingle(HttpHeaders.CONTENT_TYPE, newMediaTypeStr);
-                        logger.debug("Changed media type to be {} in Content-Type HttpHeader", newMediaTypeStr); //$NON-NLS-1$
+                        logger.trace("Changed media type to be {} in Content-Type HttpHeader", newMediaTypeStr); //$NON-NLS-1$
                     } catch (Exception e) {
-                        logger.debug("Caught exception while trying to set the charset", e); //$NON-NLS-1$
+                        logger.trace("Caught exception while trying to set the charset", e); //$NON-NLS-1$
                     }
 
                 }
             }
         } else {
-            logger.debug("No default charset was applied to the response Content-Type header due to deployment configuration directive.");  // $NON-NLS-1$ //$NON-NLS-1$
+            logger.trace("No default charset was applied to the response Content-Type header due to deployment configuration directive.");  // $NON-NLS-1$ //$NON-NLS-1$
         }
 
-        logger.debug("setDefaultCharsetOnMediaTypeHeader() exit returning {}", mediaType); //$NON-NLS-1$
+        logger.trace("setDefaultCharsetOnMediaTypeHeader() exit returning {}", mediaType); //$NON-NLS-1$
         return mediaType;
     }
 

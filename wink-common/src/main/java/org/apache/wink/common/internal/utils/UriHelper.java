@@ -438,14 +438,14 @@ public class UriHelper {
      * @return list of PathSegement instances
      */
     public static List<PathSegment> parsePath(String path) {
-        logger.debug("parsePath({}) entry", path); //$NON-NLS-1$
+        logger.trace("parsePath({}) entry", path); //$NON-NLS-1$
         String[] segmentsArray = StringUtils.fastSplitTemplate(path, "/", true); //$NON-NLS-1$
         List<PathSegment> pathSegments = new ArrayList<PathSegment>(segmentsArray.length);
         // go over all the segments and add them
         for (String segment : segmentsArray) {
             pathSegments.add(new PathSegmentImpl(segment));
         }
-        logger.debug("parsePath() exit returning {}", pathSegments); //$NON-NLS-1$
+        logger.trace("parsePath() exit returning {}", pathSegments); //$NON-NLS-1$
         return pathSegments;
     }
 

@@ -217,7 +217,7 @@ public class ResourceImpl implements Resource {
             ClientResponse response = context.doChain(request);
             int statusCode = response.getStatusCode();
             if (ClientUtils.isErrorCode(statusCode)) {
-                logger.debug(Messages.getMessage("clientResponseIsErrorCode", String //$NON-NLS-1$
+                logger.trace(Messages.getMessage("clientResponseIsErrorCode", String //$NON-NLS-1$
                     .valueOf(statusCode)));
                 throw new ClientWebException(request, response);
             }
@@ -243,10 +243,10 @@ public class ResourceImpl implements Resource {
         request.setURI(requestURI);
         request.setMethod(method);
         request.getHeaders().putAll(headers);
-        if (logger.isDebugEnabled()) {
+        if (logger.isTraceEnabled()) {
             Integer requestEntityInfo =
                 (requestEntity == null) ? null : System.identityHashCode(requestEntity);
-            logger.debug(Messages.getMessage("clientIssueRequest", new Object[] {method, //$NON-NLS-1$
+            logger.trace(Messages.getMessage("clientIssueRequest", new Object[] {method, //$NON-NLS-1$
                 requestURI, requestEntityInfo, headers.keySet()}));
         }
         if (headers.getFirst(HttpHeaders.USER_AGENT) == null) {

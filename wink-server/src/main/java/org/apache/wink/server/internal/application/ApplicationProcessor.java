@@ -65,12 +65,12 @@ public class ApplicationProcessor {
     }
 
     public void process() {
-        logger.debug("Processing Application: {}", application); //$NON-NLS-1$
+        logger.trace("Processing Application: {}", application); //$NON-NLS-1$
 
         double priority = WinkApplication.DEFAULT_PRIORITY;
         if (application instanceof WinkApplication) {
             priority = ((WinkApplication)application).getPriority();
-            logger.debug("WinkApplication priority is set to: {}", priority); //$NON-NLS-1$
+            logger.trace("WinkApplication priority is set to: {}", priority); //$NON-NLS-1$
         }
 
         // process singletons
@@ -89,7 +89,7 @@ public class ApplicationProcessor {
             processWinkApplication((WinkApplication)application);
         }
 
-        logger.debug("Processing of Application completed."); //$NON-NLS-1$
+        logger.trace("Processing of Application completed."); //$NON-NLS-1$
     }
 
     private void processWinkApplication(WinkApplication sApplication) {
@@ -97,13 +97,13 @@ public class ApplicationProcessor {
         double priority = sApplication.getPriority();
 
         if (instances == null) {
-            logger.debug("WinkApplication.getInstances() returned null"); //$NON-NLS-1$
+            logger.trace("WinkApplication.getInstances() returned null"); //$NON-NLS-1$
             return;
         }
 
         for (Object obj : instances) {
             try {
-                logger.debug("Processing instance: {}", obj); //$NON-NLS-1$
+                logger.trace("Processing instance: {}", obj); //$NON-NLS-1$
 
                 Class<?> cls = obj.getClass();
 
@@ -138,7 +138,7 @@ public class ApplicationProcessor {
 
         for (Class<?> cls : classes) {
             try {
-                logger.debug("Processing class: {}", cls); //$NON-NLS-1$
+                logger.trace("Processing class: {}", cls); //$NON-NLS-1$
 
                 // the validations were moved to registry
 
@@ -173,7 +173,7 @@ public class ApplicationProcessor {
         // add singletons
         for (Object obj : singletons) {
             try {
-                logger.debug("Processing singleton: {}", obj); //$NON-NLS-1$
+                logger.trace("Processing singleton: {}", obj); //$NON-NLS-1$
 
                 Class<?> cls = obj.getClass();
 

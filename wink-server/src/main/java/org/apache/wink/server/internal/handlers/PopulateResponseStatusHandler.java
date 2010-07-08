@@ -53,10 +53,10 @@ public class PopulateResponseStatusHandler extends AbstractHandler {
         if (status == -1) {
             if (entity == null) {
                 logger
-                    .debug("No status set and no entity so setting response status to 204 No Content"); //$NON-NLS-1$
+                    .trace("No status set and no entity so setting response status to 204 No Content"); //$NON-NLS-1$
                 status = HttpServletResponse.SC_NO_CONTENT;
             } else {
-                logger.debug("No status set so setting response status to 200 OK"); //$NON-NLS-1$
+                logger.trace("No status set so setting response status to 200 OK"); //$NON-NLS-1$
                 status = HttpServletResponse.SC_OK;
             }
         }

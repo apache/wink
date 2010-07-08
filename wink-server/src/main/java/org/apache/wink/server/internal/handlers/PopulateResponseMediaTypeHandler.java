@@ -54,14 +54,14 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
         Object result = context.getResponseEntity();
 
         if (result == null) {
-            logger.debug("No entity so no Content-Type needs to be set"); //$NON-NLS-1$
+            logger.trace("No entity so no Content-Type needs to be set"); //$NON-NLS-1$
             return;
         }
 
         if (result instanceof Response) {
             Response response = (Response)result;
             if (response.getEntity() == null) {
-                logger.debug("No entity so no Content-Type needs to be set"); //$NON-NLS-1$
+                logger.trace("No entity so no Content-Type needs to be set"); //$NON-NLS-1$
                 return;
             }
 
@@ -73,7 +73,7 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
                 } else {
                     responseMediaType = MediaType.valueOf(first.toString());
                 }
-                logger.debug("Content-Type was set by application to {}", responseMediaType); //$NON-NLS-1$
+                logger.trace("Content-Type was set by application to {}", responseMediaType); //$NON-NLS-1$
             }
         }
 
@@ -83,7 +83,7 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
             if (searchResult != null && searchResult.isFound()) {
                 MethodMetadata methodMetadata = searchResult.getMethod().getMetadata();
                 producedMime = methodMetadata.getProduces();
-                logger.debug("Determining Content-Type from @Produces on method: {}", producedMime); //$NON-NLS-1$
+                logger.trace("Determining Content-Type from @Produces on method: {}", producedMime); //$NON-NLS-1$
             }
             if (producedMime == null || producedMime.isEmpty()) {
                 if (result instanceof Response) {
@@ -106,7 +106,7 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
                             .getMessage("populateResponseMediaTypeHandlerFromCompatibleMessageBodyWriters")); //$NON-NLS-1$
                 }
                 logger
-                    .debug("Determining Content-Type from compatible generic type to {} from MessageBodyWriters: {}", //$NON-NLS-1$
+                    .trace("Determining Content-Type from compatible generic type to {} from MessageBodyWriters: {}", //$NON-NLS-1$
                            result.getClass(),
                            producedMime);
             }
@@ -121,7 +121,7 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
             List<CandidateMediaType> candidates = new LinkedList<CandidateMediaType>();
             for (MediaType acceptableMediaType : acceptableMediaTypes) {
                 for (MediaType mediaType : producedMime) {
-                    logger.debug("Comparing {} to {}", acceptableMediaType, mediaType); //$NON-NLS-1$
+                    logger.trace("Comparing {} to {}", acceptableMediaType, mediaType); //$NON-NLS-1$
                     if (mediaType.isCompatible(acceptableMediaType)) {
                         MediaType candidateMediaType = null;
                         if (MediaTypeUtils.compareTo(mediaType, acceptableMediaType) > 0) {
@@ -129,15 +129,15 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
                         } else {
                             candidateMediaType = acceptableMediaType;
                         }
-                        logger.debug("MediaType compatible so using candidate type {}", //$NON-NLS-1$
+                        logger.trace("MediaType compatible so using candidate type {}", //$NON-NLS-1$
                                      candidateMediaType);
                         String q = acceptableMediaType.getParameters().get("q"); //$NON-NLS-1$
                         CandidateMediaType candidate =
                             new CandidateMediaType(candidateMediaType, q);
                         if (Double.compare(candidate.q, 0.0) != 0) {
-                            if (logger.isDebugEnabled()) {
+                            if (logger.isTraceEnabled()) {
                                 logger
-                                    .debug("Candidate {} has q value {} so adding to possible candidates", //$NON-NLS-1$
+                                    .trace("Candidate {} has q value {} so adding to possible candidates", //$NON-NLS-1$
                                            candidate.getMediaType(),
                                            q);
                             }
@@ -150,7 +150,7 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
             // there are no candidates
             if (candidates.isEmpty()) {
                 if (isErrorFlow()) {
-                    logger.debug("Error flow and no candidates so not going to set a Content-Type"); //$NON-NLS-1$
+                    logger.trace("Error flow and no candidates so not going to set a Content-Type"); //$NON-NLS-1$
                     return;
                 }
                 if (logger.isInfoEnabled()) {
@@ -168,8 +168,8 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
             for (CandidateMediaType candidate : candidates) {
                 if (max == null) {
                     max = candidate;
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("No previous best candidate so using candidate {}", max //$NON-NLS-1$
+                    if (logger.isTraceEnabled()) {
+                        logger.trace("No previous best candidate so using candidate {}", max //$NON-NLS-1$
                             .getMediaType());
                     }
                 } else {
@@ -180,16 +180,16 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
                         MediaTypeUtils.compareTo(candidate.getMediaType(), max.getMediaType());
                     if (comparison > 0) {
                         max = candidate;
-                        if (logger.isDebugEnabled()) {
+                        if (logger.isTraceEnabled()) {
                             logger
-                                .debug("Best candidate is now {} because it was a more specific media type", //$NON-NLS-1$
+                                .trace("Best candidate is now {} because it was a more specific media type", //$NON-NLS-1$
                                        max.getMediaType());
                         }
                     } else if (comparison == 0 && candidate.getQ() > max.getQ()) {
                         max = candidate;
-                        if (logger.isDebugEnabled()) {
+                        if (logger.isTraceEnabled()) {
                             logger
-                                .debug("Best candidate is now {} because it had a higher quality value {} compared to {} with quality value {}", //$NON-NLS-1$
+                                .trace("Best candidate is now {} because it had a higher quality value {} compared to {} with quality value {}", //$NON-NLS-1$
                                        new Object[] {max.getMediaType(), max.getQ(), candidate,
                                            candidate.getQ()});
                         }
@@ -199,7 +199,7 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
                 if (!useOctetStream && (candidate.getMediaType().equals(MediaType.WILDCARD_TYPE) || candidate
                     .getMediaType().equals(APPLICATION_TYPE))) {
                     logger
-                        .debug("If necessary, use an application/octet-stream because there is a wildcard: {}", //$NON-NLS-1$
+                        .trace("If necessary, use an application/octet-stream because there is a wildcard: {}", //$NON-NLS-1$
                                candidate.getMediaType());
                     useOctetStream = true;
                 }
@@ -209,11 +209,11 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
                 responseMediaType = max.getMediaType();
             } else if (useOctetStream) {
                 logger
-                    .debug("Content-Type was reset to application/octet-stream because it was either */* or was application/*"); //$NON-NLS-1$
+                    .trace("Content-Type was reset to application/octet-stream because it was either */* or was application/*"); //$NON-NLS-1$
                 responseMediaType = MediaType.APPLICATION_OCTET_STREAM_TYPE;
             } else {
                 if (isErrorFlow()) {
-                    logger.debug("Error flow so not going to set a response Content-Type"); //$NON-NLS-1$
+                    logger.trace("Error flow so not going to set a response Content-Type"); //$NON-NLS-1$
                     return;
                 }
                 if (logger.isInfoEnabled()) {
@@ -224,7 +224,7 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
             }
 
         }
-        logger.debug("Response Content-Type will be set to {}", responseMediaType); //$NON-NLS-1$
+        logger.trace("Response Content-Type will be set to {}", responseMediaType); //$NON-NLS-1$
         context.setResponseMediaType(responseMediaType);
     }
 

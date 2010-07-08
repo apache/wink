@@ -240,16 +240,16 @@ public class ResourceRecordFactory {
         String path = dynamicResource.getPath();
         if (path != null) {
             classMetadata.addPath(path);
-            if (logger.isDebugEnabled()) {
-                logger.debug("Adding dispatched path from instance: {}", path); //$NON-NLS-1$
+            if (logger.isTraceEnabled()) {
+                logger.trace("Adding dispatched path from instance: {}", path); //$NON-NLS-1$
             }
         }
 
         Object parent = dynamicResource.getParent();
         if (parent != null) {
             classMetadata.getParentInstances().add(parent);
-            if (logger.isDebugEnabled()) {
-                logger.debug("Adding parent beans from instance: {}", parent); //$NON-NLS-1$
+            if (logger.isTraceEnabled()) {
+                logger.trace("Adding parent beans from instance: {}", parent); //$NON-NLS-1$
             }
         }
 

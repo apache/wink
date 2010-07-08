@@ -81,12 +81,12 @@ public class FileLoader {
             throw new NullPointerException(Messages.getMessage("variableIsNull", "fileName")); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
-        logger.debug("Searching for {} in file system.", fileName); //$NON-NLS-1$
+        logger.trace("Searching for {} in file system.", fileName); //$NON-NLS-1$
 
         File file = new File(fileName);
         if (file.isFile()) {
             // since file is a normal file, return it
-            logger.debug("File {} found in file system.", fileName); //$NON-NLS-1$
+            logger.trace("File {} found in file system.", fileName); //$NON-NLS-1$
             return new FileInputStream(file);
         }
 
@@ -124,21 +124,21 @@ public class FileLoader {
          * org.apache.wink.common.internal.utils.ClassUtils?
          */
 
-        logger.debug("Searching for {} using thread context classloader.", filename); //$NON-NLS-1$
+        logger.trace("Searching for {} using thread context classloader.", filename); //$NON-NLS-1$
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         Enumeration<URL> resources = loadFileUsingClassLoader(classLoader, filename);
         if (resources.hasMoreElements()) {
             return resources;
         }
 
-        logger.debug("Searching for {} using current classloader.", filename); //$NON-NLS-1$
+        logger.trace("Searching for {} using current classloader.", filename); //$NON-NLS-1$
         classLoader = FileLoader.class.getClassLoader();
         resources = loadFileUsingClassLoader(classLoader, filename);
         if (resources.hasMoreElements()) {
             return resources;
         }
 
-        logger.debug("Searching for {} using system classloader.", filename); //$NON-NLS-1$
+        logger.trace("Searching for {} using system classloader.", filename); //$NON-NLS-1$
         return ClassLoader.getSystemResources(filename);
     }
 

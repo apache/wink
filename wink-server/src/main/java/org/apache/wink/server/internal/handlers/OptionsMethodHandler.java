@@ -56,7 +56,7 @@ public class OptionsMethodHandler implements RequestHandler {
             ResourceRegistry resourceRegistry = context.getAttribute(ResourceRegistry.class);
             Set<String> httpMethods = resourceRegistry.getOptions(searchResult.getResource());
             logger
-                .debug("Invoking OPTIONS request handled by runtime with {} resource and {} HTTP methods", //$NON-NLS-1$
+                .trace("Invoking OPTIONS request handled by runtime with {} resource and {} HTTP methods", //$NON-NLS-1$
                        searchResult.getResource(),
                        httpMethods);
             if (httpMethods.size() > 0) {

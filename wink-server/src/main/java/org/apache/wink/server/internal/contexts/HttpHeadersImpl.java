@@ -90,12 +90,12 @@ public class HttpHeadersImpl implements HttpHeaders {
                     acceptLanguageTemp.append(requestHeader.get(c));
                 }
                 String acceptLanguage = acceptLanguageTemp.toString();
-                logger.debug("Accept-Language combined header is {}", acceptLanguage); //$NON-NLS-1$
+                logger.trace("Accept-Language combined header is {}", acceptLanguage); //$NON-NLS-1$
                 AcceptLanguage acceptLanguages = AcceptLanguage.valueOf(acceptLanguage);
                 acceptableLanguages = acceptLanguages.getAcceptableLanguages();
             }
         }
-        logger.debug("getAcceptableLanguages() returns {}", acceptableLanguages); //$NON-NLS-1$
+        logger.trace("getAcceptableLanguages() returns {}", acceptableLanguages); //$NON-NLS-1$
         return acceptableLanguages;
     }
 
@@ -104,7 +104,7 @@ public class HttpHeadersImpl implements HttpHeaders {
             Accept acceptHeader = getAcceptHeader();
             acceptableMediaTypes = acceptHeader.getSortedMediaTypes();
         }
-        logger.debug("getAcceptableMediaTypes() returns {}", acceptableMediaTypes); //$NON-NLS-1$
+        logger.trace("getAcceptableMediaTypes() returns {}", acceptableMediaTypes); //$NON-NLS-1$
         return acceptableMediaTypes;
     }
 
@@ -113,7 +113,7 @@ public class HttpHeadersImpl implements HttpHeaders {
             msgContext.getUriInfo().getQueryParameters()
                 .getFirst(RestConstants.REST_PARAM_MEDIA_TYPE);
         String acceptValue = null;
-        logger.debug("alternateParameter is {}", alternateParameter); //$NON-NLS-1$
+        logger.trace("alternateParameter is {}", alternateParameter); //$NON-NLS-1$
         if (alternateParameter != null) {
             // try to map alternate parameter shortcut to a real media type
             // we're on the server, so this is a safe cast
@@ -121,14 +121,14 @@ public class HttpHeadersImpl implements HttpHeaders {
                 (DeploymentConfiguration)msgContext.getAttribute(WinkConfiguration.class);
             Map<String, String> alternateShortcutMap =
                 deploymentConfiguration.getAlternateShortcutMap();
-            logger.debug("alternateShortcutMap is {}", alternateShortcutMap); //$NON-NLS-1$
+            logger.trace("alternateShortcutMap is {}", alternateShortcutMap); //$NON-NLS-1$
             if (alternateShortcutMap != null) {
                 acceptValue = alternateShortcutMap.get(alternateParameter);
             }
             if (acceptValue == null) {
                 acceptValue = alternateParameter;
             }
-            logger.debug("acceptValue set via alternateParameter is {}", acceptValue); //$NON-NLS-1$
+            logger.trace("acceptValue set via alternateParameter is {}", acceptValue); //$NON-NLS-1$
         } else {
             List<String> requestHeader = getRequestHeader(HttpHeaders.ACCEPT);
             if (requestHeader == null || requestHeader.isEmpty()) {
@@ -146,12 +146,12 @@ public class HttpHeadersImpl implements HttpHeaders {
             }
         }
         try {
-            logger.debug("Accept header is: {}", acceptValue); //$NON-NLS-1$
+            logger.trace("Accept header is: {}", acceptValue); //$NON-NLS-1$
             Accept acceptHeader = Accept.valueOf(acceptValue);
-            logger.debug("getAcceptHeader() returns {}", acceptHeader); //$NON-NLS-1$
+            logger.trace("getAcceptHeader() returns {}", acceptHeader); //$NON-NLS-1$
             return acceptHeader;
         } catch (IllegalArgumentException e) {
-            logger.debug("Illegal Accept request header: {}", e); //$NON-NLS-1$
+            logger.trace("Illegal Accept request header: {}", e); //$NON-NLS-1$
             throw new WebApplicationException(e, 400);
         }
     }
@@ -167,7 +167,7 @@ public class HttpHeadersImpl implements HttpHeaders {
                 }
             }
         }
-        logger.debug("Cookies are: {}", cookies); //$NON-NLS-1$
+        logger.trace("Cookies are: {}", cookies); //$NON-NLS-1$
         return cookies;
     }
 
@@ -182,15 +182,15 @@ public class HttpHeadersImpl implements HttpHeaders {
                     languageStr = s.get(0);
                 }
             }
-            logger.debug("Language string is {}", languageStr); //$NON-NLS-1$
+            logger.trace("Language string is {}", languageStr); //$NON-NLS-1$
             if (languageStr == null) {
-                logger.debug("getLanguage() returning null"); //$NON-NLS-1$
+                logger.trace("getLanguage() returning null"); //$NON-NLS-1$
                 return null;
             }
             String[] locales = StringUtils.fastSplit(languageStr, ","); //$NON-NLS-1$
             language = HeaderUtils.languageToLocale(locales[0].trim());
         }
-        logger.debug("getLanguage() returning {}", language); //$NON-NLS-1$
+        logger.trace("getLanguage() returning {}", language); //$NON-NLS-1$
         return language;
     }
 
@@ -200,23 +200,23 @@ public class HttpHeadersImpl implements HttpHeaders {
             if (contentType == null) {
                 List<String> s = getRequestHeaderInternal(HttpHeaders.CONTENT_TYPE);
                 if (s == null || s.isEmpty()) {
-                    logger.debug("getMediaType() returning null"); //$NON-NLS-1$
+                    logger.trace("getMediaType() returning null"); //$NON-NLS-1$
                     return null;
                 } else {
                     contentType = s.get(0);
                 }
             }
-            logger.debug("Content-type is {}", contentType); //$NON-NLS-1$
+            logger.trace("Content-type is {}", contentType); //$NON-NLS-1$
             mediaType = MediaType.valueOf(contentType);
         }
-        logger.debug("getMediaType() returning {}", mediaType); //$NON-NLS-1$
+        logger.trace("getMediaType() returning {}", mediaType); //$NON-NLS-1$
         return mediaType;
     }
 
     private List<String> getRequestHeaderInternal(String name) {
         if (allHeaders != null) {
             List<String> value = allHeaders.get(name);
-            logger.debug("Returning {} header value from allHeaders cache: {}", name, value); //$NON-NLS-1$
+            logger.trace("Returning {} header value from allHeaders cache: {}", name, value); //$NON-NLS-1$
             return value;
         }
 
@@ -232,27 +232,27 @@ public class HttpHeadersImpl implements HttpHeaders {
                 }
             }
             logger
-                .debug("HttpServletRequest.getHeaders({}) returned {} so putting into headers cache", //$NON-NLS-1$
+                .trace("HttpServletRequest.getHeaders({}) returned {} so putting into headers cache", //$NON-NLS-1$
                        name,
                        list);
             headers.put(name, list);
         }
-        logger.debug("getRequestHeaderInternal({}) returning {}", name, list); //$NON-NLS-1$
+        logger.trace("getRequestHeaderInternal({}) returning {}", name, list); //$NON-NLS-1$
         return list;
     }
 
     public List<String> getRequestHeader(String name) {
         if (name == null) {
-            logger.debug("getRequestHeader({}) returns null", name); //$NON-NLS-1$
+            logger.trace("getRequestHeader({}) returns null", name); //$NON-NLS-1$
             return null;
         }
         List<String> list = getRequestHeaderInternal(name);
         if (list == null || list.isEmpty()) {
-            logger.debug("getRequestHeader({}) returns null due to empty or non-existent header", //$NON-NLS-1$
+            logger.trace("getRequestHeader({}) returns null due to empty or non-existent header", //$NON-NLS-1$
                          name);
             return null;
         }
-        logger.debug("getRequestHeader({}) returns {}", name, list); //$NON-NLS-1$
+        logger.trace("getRequestHeader({}) returns {}", name, list); //$NON-NLS-1$
         return Collections.unmodifiableList(list);
     }
 
@@ -284,7 +284,7 @@ public class HttpHeadersImpl implements HttpHeaders {
                     values.add(val);
                 }
             }
-            logger.debug("buildRequestHeaders() adding {} header with values {}", name, values); //$NON-NLS-1$
+            logger.trace("buildRequestHeaders() adding {} header with values {}", name, values); //$NON-NLS-1$
             map.put(name, values);
         }
         return new UnmodifiableMultivaluedMap<String, String>(map);

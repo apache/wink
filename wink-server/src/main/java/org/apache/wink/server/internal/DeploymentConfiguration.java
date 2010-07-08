@@ -143,7 +143,7 @@ public class DeploymentConfiguration implements WinkConfiguration {
         }
         appObjectFactories = new HashSet<ObjectFactory<?>>(8);
 
-        logger.debug("Deployment configuration properties: {}", properties); //$NON-NLS-1$
+        logger.trace("Deployment configuration properties: {}", properties); //$NON-NLS-1$
 
         // check to see if an override property was specified. if so, then
         // configure
@@ -315,12 +315,12 @@ public class DeploymentConfiguration implements WinkConfiguration {
                 Properties lproperties = new Properties();
 
                 lproperties.load(is);
-                logger.debug("Alternative shortcuts properties: {}", lproperties); //$NON-NLS-1$
+                logger.trace("Alternative shortcuts properties: {}", lproperties); //$NON-NLS-1$
                 alternateShortcutMap = new HashMap<String, String>();
                 for (Entry<Object, Object> entry : lproperties.entrySet()) {
                     alternateShortcutMap.put((String)entry.getKey(), (String)entry.getValue());
                 }
-                logger.debug("Alternative shortcuts map: {}", alternateShortcutMap); //$NON-NLS-1$
+                logger.trace("Alternative shortcuts map: {}", alternateShortcutMap); //$NON-NLS-1$
             } catch (IOException e) {
                 logger.error(Messages.getMessage("alternateShortcutMapLoadFailure"), e); //$NON-NLS-1$
                 throw new WebApplicationException(e);
@@ -351,7 +351,7 @@ public class DeploymentConfiguration implements WinkConfiguration {
                 properties.getProperty(MEDIATYPE_MAPPER_FACTORY_CLASS_PROP);
             if (mediaTypeMapperFactoryClassName != null) {
                 try {
-                    logger.debug("MediaTypeMappingFactory Class is: {}", //$NON-NLS-1$
+                    logger.trace("MediaTypeMappingFactory Class is: {}", //$NON-NLS-1$
                                  mediaTypeMapperFactoryClassName);
                     Class<MediaTypeMapperFactory> handlerFactoryClass =
                         (Class<MediaTypeMapperFactory>)Class
@@ -389,7 +389,7 @@ public class DeploymentConfiguration implements WinkConfiguration {
         String handlersFactoryClassName = properties.getProperty(HANDLERS_FACTORY_CLASS_PROP);
         if (handlersFactoryClassName != null) {
             try {
-                logger.debug("Handlers Factory Class is: {}", handlersFactoryClassName); //$NON-NLS-1$
+                logger.trace("Handlers Factory Class is: {}", handlersFactoryClassName); //$NON-NLS-1$
                 // use ClassUtils.getClass instead of Class.forName so we have
                 // classloader visibility into the Web module in J2EE
                 // environments
@@ -462,7 +462,7 @@ public class DeploymentConfiguration implements WinkConfiguration {
             }
         }
         handlersChain.addHandler(createHandler(InvokeMethodHandler.class));
-        logger.debug("Request handlers chain is: {}", handlersChain); //$NON-NLS-1$
+        logger.trace("Request handlers chain is: {}", handlersChain); //$NON-NLS-1$
         return handlersChain;
     }
 
@@ -521,7 +521,7 @@ public class DeploymentConfiguration implements WinkConfiguration {
         }
         handlersChain.addHandler(createHandler(FlushResultHandler.class));
         handlersChain.addHandler(createHandler(HeadMethodHandler.class));
-        logger.debug("Response handlers chain is: {}", handlersChain); //$NON-NLS-1$
+        logger.trace("Response handlers chain is: {}", handlersChain); //$NON-NLS-1$
         return handlersChain;
     }
 
@@ -545,14 +545,14 @@ public class DeploymentConfiguration implements WinkConfiguration {
             }
         }
         handlersChain.addHandler(createHandler(FlushResultHandler.class));
-        logger.debug("Error handlers chain is: {}", handlersChain); //$NON-NLS-1$
+        logger.trace("Error handlers chain is: {}", handlersChain); //$NON-NLS-1$
         return handlersChain;
     }
 
     private <T extends Handler> T createHandler(Class<T> cls) {
         try {
             T handler = cls.newInstance();
-            logger.debug("Calling {}.init(Properties)", cls); //$NON-NLS-1$
+            logger.trace("Calling {}.init(Properties)", cls); //$NON-NLS-1$
             handler.init(getProperties());
             return handler;
         } catch (InstantiationException e) {
@@ -564,11 +564,11 @@ public class DeploymentConfiguration implements WinkConfiguration {
 
     public void setHttpMethodOverrideHeaders(String[] httpMethodOverrideHeaders) {
         this.httpMethodOverrideHeaders = httpMethodOverrideHeaders;
-        if (logger.isDebugEnabled()) {
+        if (logger.isTraceEnabled()) {
             List<String> overrideHeaders =
                 (httpMethodOverrideHeaders == null) ? null : Arrays
                     .asList(httpMethodOverrideHeaders);
-            logger.debug("Setting HTTP Method override headers: {}", overrideHeaders); //$NON-NLS-1$
+            logger.trace("Setting HTTP Method override headers: {}", overrideHeaders); //$NON-NLS-1$
         }
     }
 

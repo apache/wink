@@ -49,13 +49,13 @@ public class AcceptHeaderHandler implements ClientHandler {
                 request.getAttributes().get(ClientRequestImpl.RESPONSE_ENTITY_CLASS_TYPE);
             if (responseEntityClassType != null) {
                 Class<?> classType = (Class<?>)responseEntityClassType;
-                logger.debug("Response entity class is: {}", classType); //$NON-NLS-1$
+                logger.trace("Response entity class is: {}", classType); //$NON-NLS-1$
                 Set<MediaType> mediaTypes =
                     request.getAttribute(ProvidersRegistry.class)
                         .getMessageBodyReaderMediaTypesLimitByIsReadable(classType,
                                                                          RuntimeContextTLS
                                                                              .getRuntimeContext());
-                logger.debug("Found media types: {}", mediaTypes); //$NON-NLS-1$
+                logger.trace("Found media types: {}", mediaTypes); //$NON-NLS-1$
                 StringBuffer acceptHeader = new StringBuffer();
                 boolean isFirst = true;
                 for (MediaType mt : mediaTypes) {

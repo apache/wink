@@ -45,25 +45,25 @@ public class AcceptEncodingHeaderDelegate implements HeaderDelegate<AcceptEncodi
         List<AcceptEncoding.ValuedEncoding> vEncodings = parseAcceptEncoding(value);
 
         for (AcceptEncoding.ValuedEncoding qEncoding : vEncodings) {
-            logger.debug("Processing {} with qValue {}", qEncoding.encoding, qEncoding.qValue); //$NON-NLS-1$
+            logger.trace("Processing {} with qValue {}", qEncoding.encoding, qEncoding.qValue); //$NON-NLS-1$
             if (anyAllowed) {
-                logger.debug("anyAllowed is true"); //$NON-NLS-1$
+                logger.trace("anyAllowed is true"); //$NON-NLS-1$
                 if (qEncoding.qValue == 0 && !qEncoding.isWildcard()) {
-                    logger.debug("qValue is 0 and qEncoding is not a wildcard so {} is banned", //$NON-NLS-1$
+                    logger.trace("qValue is 0 and qEncoding is not a wildcard so {} is banned", //$NON-NLS-1$
                                  qEncoding.encoding);
                     banned.add(qEncoding.encoding);
                 }
             } else {
-                logger.debug("anyAllowed is still false"); //$NON-NLS-1$
+                logger.trace("anyAllowed is still false"); //$NON-NLS-1$
                 if (qEncoding.qValue == 0) {
-                    logger.debug("qValue is 0 so breaking out of loop"); //$NON-NLS-1$
+                    logger.trace("qValue is 0 so breaking out of loop"); //$NON-NLS-1$
                     break; // gone through all acceptable languages
                 }
                 if (qEncoding.isWildcard()) {
-                    logger.debug("qEncoding is a wildcard so everything afterwards is allowable"); //$NON-NLS-1$
+                    logger.trace("qEncoding is a wildcard so everything afterwards is allowable"); //$NON-NLS-1$
                     anyAllowed = true;
                 } else {
-                    logger.debug("qEncoding is not a wildcard so adding to acceptable list"); //$NON-NLS-1$
+                    logger.trace("qEncoding is not a wildcard so adding to acceptable list"); //$NON-NLS-1$
                     acceptable.add(qEncoding.encoding);
                 }
             }
@@ -72,16 +72,16 @@ public class AcceptEncodingHeaderDelegate implements HeaderDelegate<AcceptEncodi
     }
 
     private List<AcceptEncoding.ValuedEncoding> parseAcceptEncoding(String acceptableEncodingValue) {
-        logger.debug("parseAcceptEncoding({}) entry", acceptableEncodingValue); //$NON-NLS-1$
+        logger.trace("parseAcceptEncoding({}) entry", acceptableEncodingValue); //$NON-NLS-1$
         List<AcceptEncoding.ValuedEncoding> qEncodings =
             new LinkedList<AcceptEncoding.ValuedEncoding>();
         if (acceptableEncodingValue == null) {
-            logger.debug("parseAcceptEncoding() exit - return empty list"); //$NON-NLS-1$
+            logger.trace("parseAcceptEncoding() exit - return empty list"); //$NON-NLS-1$
             return qEncodings;
         }
 
         for (String encodingRange : acceptableEncodingValue.split(",")) { //$NON-NLS-1$
-            logger.debug("Parsing encodingRange as {}", encodingRange); //$NON-NLS-1$
+            logger.trace("Parsing encodingRange as {}", encodingRange); //$NON-NLS-1$
             int semicolonIndex = encodingRange.indexOf(';');
             double qValue;
             String encodingSpec;
@@ -101,22 +101,22 @@ public class AcceptEncodingHeaderDelegate implements HeaderDelegate<AcceptEncodi
                     qValue = 1.0d;
                 }
             }
-            logger.debug("encodingSpec before trim is {}", encodingSpec); //$NON-NLS-1$
-            logger.debug("qValue is {}", qValue); //$NON-NLS-1$
+            logger.trace("encodingSpec before trim is {}", encodingSpec); //$NON-NLS-1$
+            logger.trace("qValue is {}", qValue); //$NON-NLS-1$
             encodingSpec = encodingSpec.trim();
             if (encodingSpec.length() == 0) {
                 // ignore empty encoding specifications
-                logger.debug("ignoring empty encodingSpec"); //$NON-NLS-1$
+                logger.trace("ignoring empty encodingSpec"); //$NON-NLS-1$
                 continue;
             } else if (encodingSpec.equals("*")) { //$NON-NLS-1$
-                logger.debug("Wildcard spec so adding as wildcard"); //$NON-NLS-1$
+                logger.trace("Wildcard spec so adding as wildcard"); //$NON-NLS-1$
                 qEncodings.add(new AcceptEncoding.ValuedEncoding(qValue, null));
             } else {
                 qEncodings.add(new AcceptEncoding.ValuedEncoding(qValue, encodingSpec));
             }
         }
         Collections.sort(qEncodings, Collections.reverseOrder());
-        logger.debug("parseAcceptEncoding exit() returning {}", qEncodings); //$NON-NLS-1$
+        logger.trace("parseAcceptEncoding exit() returning {}", qEncodings); //$NON-NLS-1$
         return qEncodings;
     }
 

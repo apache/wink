@@ -60,7 +60,7 @@ public class BasicAuthSecurityHandler implements ClientHandler {
      * @param aUserName the user name
      */
     public void setUserName(String aUserName) {
-        logger.debug("Setting the username to {}", aUserName); //$NON-NLS-1$
+        logger.trace("Setting the username to {}", aUserName); //$NON-NLS-1$
         this.handlerUsername = aUserName;
     }
 
@@ -70,7 +70,7 @@ public class BasicAuthSecurityHandler implements ClientHandler {
      * @param aPassword the password to use
      */
     public void setPassword(String aPassword) {
-        logger.debug("Setting the password"); //$NON-NLS-1$
+        logger.trace("Setting the password"); //$NON-NLS-1$
         this.handlerPassword = aPassword;
     }
 
@@ -83,24 +83,24 @@ public class BasicAuthSecurityHandler implements ClientHandler {
      *         header
      */
     public ClientResponse handle(ClientRequest request, HandlerContext context) throws Exception {
-        logger.debug("Entering BasicAuthSecurityHandler.doChain()"); //$NON-NLS-1$
+        logger.trace("Entering BasicAuthSecurityHandler.doChain()"); //$NON-NLS-1$
         ClientResponse response = context.doChain(request);
 
         int statusCode = response.getStatusCode();
-        logger.debug("Response status code was {}", statusCode); //$NON-NLS-1$
+        logger.trace("Response status code was {}", statusCode); //$NON-NLS-1$
         if (statusCode != 401) {
-            logger.debug("Status code was not 401 so no need to re-issue request."); //$NON-NLS-1$
+            logger.trace("Status code was not 401 so no need to re-issue request."); //$NON-NLS-1$
             return response;
         } else {
             String userid = handlerUsername;
             String password = handlerPassword;
-            if (logger.isDebugEnabled()) {
-                logger.debug("The 'username' property was set to: {}", userid); //$NON-NLS-1$
-                logger.debug("Was the 'password' property set: {}", password != null); //$NON-NLS-1$
+            if (logger.isTraceEnabled()) {
+                logger.trace("The 'username' property was set to: {}", userid); //$NON-NLS-1$
+                logger.trace("Was the 'password' property set: {}", password != null); //$NON-NLS-1$
             }
 
             if (!(userid == null || userid.equals("") || password == null || password.equals(""))) { //$NON-NLS-1$ //$NON-NLS-2$
-                logger.debug("userid and password set so setting Authorization header"); //$NON-NLS-1$
+                logger.trace("userid and password set so setting Authorization header"); //$NON-NLS-1$
                 // we have a user credential
                 String credential = userid + ":" + password; //$NON-NLS-1$
                 byte[] credBytes = credential.getBytes();
@@ -108,19 +108,19 @@ public class BasicAuthSecurityHandler implements ClientHandler {
                 // id and password needs to be base64 encoded
                 String credEncodedString = "Basic " + new String(encodedCredBytes); //$NON-NLS-1$
                 request.getHeaders().putSingle(HttpHeaders.AUTHORIZATION, credEncodedString);
-                logger.debug("Issuing request again with Authorization header"); //$NON-NLS-1$
+                logger.trace("Issuing request again with Authorization header"); //$NON-NLS-1$
                 response = context.doChain(request);
                 if (response.getStatusCode() == 401) {
                     logger
-                        .debug("After sending request with Authorization header, still got 401 response"); //$NON-NLS-1$
+                        .trace("After sending request with Authorization header, still got 401 response"); //$NON-NLS-1$
                     throw new ClientAuthenticationException(Messages
                         .getMessage("serviceFailedToAuthenticateUser", userid)); //$NON-NLS-1$
                 } else {
-                    logger.debug("Got a non-401 response, so returning response"); //$NON-NLS-1$
+                    logger.trace("Got a non-401 response, so returning response"); //$NON-NLS-1$
                     return response;
                 }
             } else {
-                logger.debug("userid and/or password were not set so throwing exception"); //$NON-NLS-1$
+                logger.trace("userid and/or password were not set so throwing exception"); //$NON-NLS-1$
                 // no user credential available
                 throw new ClientAuthenticationException(Messages
                     .getMessage("missingClientAuthenticationCredentialForUser", userid)); //$NON-NLS-1$

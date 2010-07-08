@@ -57,11 +57,11 @@ public class WinkSystemProperties {
                         systemProperties.setProperty(key, value);
                     }
                 } else {
-                    logger.debug("Property {} is already defined with value {}", key, value); //$NON-NLS-1$
+                    logger.trace("Property {} is already defined with value {}", key, value); //$NON-NLS-1$
                 }
             }
         } else {
-            logger.debug("Properties are null"); //$NON-NLS-1$
+            logger.trace("Properties are null"); //$NON-NLS-1$
         }
         return systemProperties;
     }
@@ -73,7 +73,7 @@ public class WinkSystemProperties {
         String value = AccessController.doPrivileged(new PrivilegedAction<String>() {
             public String run() {
                 String v = System.getProperty(key);
-                logger.debug(key + " = " + v); //$NON-NLS-1$
+                logger.trace(key + " = " + v); //$NON-NLS-1$
                 return v;
             }
         });
