@@ -150,7 +150,7 @@ public class RestFilter implements Filter {
                 return filterConfig.getServletContext();
             }
 
-            public Enumeration<?> getInitParameterNames() {
+            public Enumeration getInitParameterNames() {
                 return filterConfig.getInitParameterNames();
             }
 

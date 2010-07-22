@@ -24,8 +24,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 import java.util.List;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocket;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.http.Header;
@@ -38,6 +45,9 @@ import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.conn.params.ConnRoutePNames;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.conn.ssl.X509HostnameVerifier;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreConnectionPNames;
@@ -74,7 +84,7 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
     }
 
     private HttpResponse processRequest(ClientRequest request, HandlerContext context)
-        throws IOException {
+        throws IOException, KeyManagementException, NoSuchAlgorithmException {
         HttpClient client = openConnection(request);
         // TODO: move this functionality to the base class
         NonCloseableOutputStream ncos = new NonCloseableOutputStream();
@@ -123,7 +133,7 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
         return httpRequest;
     }
 
-    private HttpClient openConnection(ClientRequest request) {
+    private HttpClient openConnection(ClientRequest request) throws NoSuchAlgorithmException, KeyManagementException {
         if (this.httpclient != null) {
             return this.httpclient;
         }
@@ -145,7 +155,33 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
             params.setParameter(ConnRoutePNames.DEFAULT_PROXY, new HttpHost(config.getProxyHost(),
                                                                             config.getProxyPort()));
         }
+
         HttpClient httpclient = new DefaultHttpClient(params);
+
+        if (config.getBypassHostnameVerification()) {
+            SSLContext sslcontext = SSLContext.getInstance("TLS");
+            sslcontext.init(null, null, null);
+
+            SSLSocketFactory sf = new SSLSocketFactory(sslcontext);
+            sf.setHostnameVerifier(new X509HostnameVerifier() {
+
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+
+                public void verify(String host, String[] cns, String[] subjectAlts)
+                    throws SSLException {
+                }
+
+                public void verify(String host, X509Certificate cert) throws SSLException {
+                }
+
+                public void verify(String host, SSLSocket ssl) throws IOException {
+                }
+            });
+            httpclient.getConnectionManager().getSchemeRegistry().register(new Scheme("https", sf,
+                                                                                      443));
+        }
         return httpclient;
     }
 

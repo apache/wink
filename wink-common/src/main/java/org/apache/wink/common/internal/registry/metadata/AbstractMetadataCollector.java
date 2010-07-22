@@ -59,7 +59,7 @@ public abstract class AbstractMetadataCollector {
         List<Injectable> injectableFields = metadata.getInjectableFields();
 
         // add fields
-        while (resourceClass != Object.class) {
+        while (resourceClass != Object.class && resourceClass != null) {
             for (Field field : resourceClass.getDeclaredFields()) {
                 Type fieldType = field.getGenericType();
                 Injectable injectable = parseAccessibleObject(field, fieldType);

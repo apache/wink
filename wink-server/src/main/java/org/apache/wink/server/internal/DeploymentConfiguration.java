@@ -97,9 +97,9 @@ public class DeploymentConfiguration implements WinkConfiguration {
     private static final String       VALIDATE_LOCATION_HEADER            =
                                                                               "wink.validateLocationHeader";                 //$NON-NLS-1$
     private static final String       DEFAULT_RESPONSE_CHARSET            =
-                                                                              "wink.response.defaultCharset";                // $NON-NLS-1$ //$NON-NLS-1$
+                                                                              "wink.response.defaultCharset";                // $NON-NLS-1$
     private static final String       USE_ACCEPT_CHARSET                  =
-                                                                              "wink.response.useAcceptCharset";              // $NON-NLS-1$ //$NON-NLS-1$
+                                                                              "wink.response.useAcceptCharset";              // $NON-NLS-1$
     // handler chains
     private RequestHandlersChain      requestHandlersChain;
     private ResponseHandlersChain     responseHandlersChain;
