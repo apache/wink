@@ -147,7 +147,7 @@ public class ClassMetadata extends AbstractMetadata {
 
     @Override
     public String toString() {
-        return String.format("Class: %s", resourceClass); //$NON-NLS-1$
+        return String.format("Class: %s", resourceClass.toString().replace("class ", "")); //$NON-NLS-1$
     }
 
 }

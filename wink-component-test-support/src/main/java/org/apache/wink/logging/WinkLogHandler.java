@@ -22,34 +22,58 @@ package org.apache.wink.logging;
 
 import java.util.ArrayList;
 import java.util.logging.Handler;
+import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
 public class WinkLogHandler extends Handler {
+    
+    public enum LEVEL {
+        INFO, DEBUG, TRACE
+    }
 
     static private ArrayList<LogRecord> logRecords = new ArrayList<LogRecord>();
     static boolean storeLogsOn = false;
+    static LEVEL level;
     
     @Override
     public void close() throws SecurityException {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void flush() {
-        // TODO Auto-generated method stub
+    }
+    
+    public static Level getLogLevel() {
+        if (level != null) {
+            if (level.equals(LEVEL.INFO)) {
+                return Level.INFO;
+            } else if (level.equals(LEVEL.DEBUG)) {
+                return Level.FINE;
+            } else if (level.equals(LEVEL.TRACE)) {
+                return Level.FINEST;
+            }
+        }
+        return Level.OFF;
     }
 
     @Override
     public void publish(LogRecord record) {
         if (storeLogsOn) {
-            logRecords.add(record);
+            if (level.equals(LEVEL.INFO) && record.getLevel().equals(Level.INFO)) {
+                logRecords.add(record);
+            } else if (level.equals(LEVEL.DEBUG) && record.getLevel().equals(Level.FINE)) {
+                logRecords.add(record);
+            } else if (level.equals(LEVEL.TRACE) && record.getLevel().equals(Level.FINEST)) {
+                logRecords.add(record);
+            }
         }
     }
     
     /**
      * turns logging capture on
      */
-    public static void turnLoggingCaptureOn() {
+    public static void turnLoggingCaptureOn(LEVEL _level) {
+        level = _level;
         storeLogsOn = true;
     }
     
@@ -58,6 +82,7 @@ public class WinkLogHandler extends Handler {
      */
     public static void turnLoggingCaptureOff() {
         storeLogsOn = false;
+        level = null;
     }
     
     /**

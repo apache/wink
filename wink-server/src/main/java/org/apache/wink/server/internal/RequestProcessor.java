@@ -42,6 +42,8 @@ import org.apache.wink.server.internal.application.ServletApplicationFileLoader;
 import org.apache.wink.server.internal.handlers.SearchResult;
 import org.apache.wink.server.internal.handlers.ServerMessageContext;
 import org.apache.wink.server.internal.registry.ResourceInstance;
+import org.apache.wink.server.internal.registry.ResourceRecord;
+import org.apache.wink.server.internal.registry.ResourceRegistry;
 import org.apache.wink.server.internal.resources.HtmlServiceDocumentResource;
 import org.apache.wink.server.internal.resources.RootResource;
 import org.apache.wink.server.utils.RegistrationUtils;
@@ -56,18 +58,21 @@ public class RequestProcessor {
     private static final Logger           logger                           =
                                                                                LoggerFactory
                                                                                    .getLogger(RequestProcessor.class);
-    private static final String           PROPERTY_ROOT_RESOURCE_NONE      = "none";                                  //$NON-NLS-1$
-    private static final String           PROPERTY_ROOT_RESOURCE_ATOM      = "atom";                                  //$NON-NLS-1$
-    private static final String           PROPERTY_ROOT_RESOURCE_ATOM_HTML = "atom+html";                             //$NON-NLS-1$
+    private static final String           PROPERTY_ROOT_RESOURCE_NONE      = "none"; //$NON-NLS-1$
+    private static final String           PROPERTY_ROOT_RESOURCE_ATOM      = "atom"; //$NON-NLS-1$
+    private static final String           PROPERTY_ROOT_RESOURCE_ATOM_HTML = "atom+html"; //$NON-NLS-1$
     private static final String           PROPERTY_ROOT_RESOURCE_DEFAULT   =
                                                                                PROPERTY_ROOT_RESOURCE_ATOM_HTML;
-    private static final String           PROPERTY_ROOT_RESOURCE           = "wink.rootResource";                     //$NON-NLS-1$
+    private static final String           PROPERTY_ROOT_RESOURCE           = "wink.rootResource"; //$NON-NLS-1$
     private static final String           PROPERTY_ROOT_RESOURCE_CSS       =
-                                                                               "wink.serviceDocumentCssPath";         //$NON-NLS-1$
+                                                                               "wink.serviceDocumentCssPath"; //$NON-NLS-1$
     private static final String           PROPERTY_LOAD_WINK_APPLICATIONS  =
-                                                                               "wink.loadApplications";               //$NON-NLS-1$
+                                                                               "wink.loadApplications"; //$NON-NLS-1$
 
     private final DeploymentConfiguration configuration;
+    
+    private String requestString;  // save off the request string in case we need to log it
+    private String requestMethod;  // save off the request method in case we need to log it
 
     public RequestProcessor(DeploymentConfiguration configuration) {
         this.configuration = configuration;
@@ -134,14 +139,11 @@ public class RequestProcessor {
     public void handleRequest(HttpServletRequest request, HttpServletResponse response)
         throws ServletException {
         try {
+            requestMethod = request.getMethod();
+            requestString = request.getRequestURL().toString();
+            requestString += ((request.getQueryString() != null && request.getQueryString().length() > 0) ? ("?" + request.getQueryString()) : ""); //$NON-NLS-1$ $NON-NLS-2$
             if (logger.isDebugEnabled()) {
-                String requestString = request.getProtocol() + "://"; //$NON-NLS-1$
-                requestString += ((request.getLocalName() != null && request.getLocalName().length() > 0) ? request.getLocalName() : request.getLocalAddr());
-                requestString += ":"; //$NON-NLS-1$
-                requestString += request.getLocalPort();
-                requestString += request.getRequestURI();
-                requestString += ((request.getQueryString() != null && request.getQueryString().length() > 0) ? ("?" + request.getQueryString()) : ""); //$NON-NLS-1$ $NON-NLS-2$
-                logger.debug(Messages.getMessage("processingRequestTo", request.getMethod(), requestString)); //$NON-NLS-1$
+                logger.debug(Messages.getMessage("processingRequestTo", requestMethod, requestString, request.getContentType(), request.getHeader("Accept"))); //$NON-NLS-1$ $NON-NLS-2$
             }
             handleRequestWithoutFaultBarrier(request, response);
         } catch (Throwable t) {
@@ -176,12 +178,12 @@ public class RequestProcessor {
             // run the response handler chain
             configuration.getResponseHandlersChain().run(msgContext);
 
-            logger.trace("Attempting to release resource instance"); //$NON-NLS-1$
+            logger.trace("Attempting to release resource instance");
             isReleaseResourcesCalled = true;
             try {
                 releaseResources(msgContext);
             } catch (Exception e) {
-                logger.trace("Caught exception when releasing resource object", e); //$NON-NLS-1$
+                logger.trace("Caught exception when releasing resource object", e);
                 throw e;
             }
         } catch (Throwable t) {
@@ -202,7 +204,7 @@ public class RequestProcessor {
                     try {
                         releaseResources(originalContext);
                     } catch (Exception e2) {
-                        logger.trace("Caught exception when releasing resource object", e2); //$NON-NLS-1$
+                        logger.trace("Caught exception when releasing resource object", e2);
                     }
                 }
             } catch (Exception e) {
@@ -212,7 +214,7 @@ public class RequestProcessor {
                     try {
                         releaseResources(originalContext);
                     } catch (Exception e2) {
-                        logger.trace("Caught exception when releasing resource object", e2); //$NON-NLS-1$
+                        logger.trace("Caught exception when releasing resource object", e2);
                     }
                 }
                 throw e;
@@ -228,16 +230,14 @@ public class RequestProcessor {
         if (searchResult != null) {
             List<ResourceInstance> resourceInstances = searchResult.getData().getMatchedResources();
             for (ResourceInstance res : resourceInstances) {
-                logger.trace("Releasing resource instance"); //$NON-NLS-1$
+                logger.trace("Releasing resource instance");
                 res.releaseInstance(msgContext);
             }
         }
     }
 
     private void logException(Throwable t) {
-        String exceptionName = t.getClass().getSimpleName();
-        String messageFormat =
-            Messages.getMessage("exceptionOccurredDuringInvocation", exceptionName); //$NON-NLS-1$
+        String messageFormat;
         if (t instanceof WebApplicationException) {
             WebApplicationException wae = (WebApplicationException)t;
             int statusCode = wae.getResponse().getStatus();
@@ -248,32 +248,28 @@ public class RequestProcessor {
                 statusSep = " - "; //$NON-NLS-1$
                 statusMessage = status.toString();
             }
-            exceptionName =
-                String.format("%s (%d%s%s)", exceptionName, statusCode, statusSep, statusMessage); //$NON-NLS-1$
-            if (statusCode >= 500) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug(messageFormat, t); //$NON-NLS-1$
-                } else {
-                    logger.info(messageFormat); //$NON-NLS-1$
-                }
-            } else {
-                // don't log the whole call stack for sub-500 return codes unless debugging
-                if (logger.isDebugEnabled()) {
-                    logger.debug(messageFormat, t); //$NON-NLS-1$
-                } else {
-                    logger.info(messageFormat); //$NON-NLS-1$
-                }
-            }
+            String exceptionName =
+                String.format("%s (%d%s%s)", t.getClass().getSimpleName(), statusCode, statusSep, statusMessage); //$NON-NLS-1$
+            messageFormat = Messages.getMessage("exceptionOccurredDuringInvocation", exceptionName, requestMethod, requestString); //$NON-NLS-1$
         } else {
-            if (logger.isDebugEnabled()) {
-                logger.debug(messageFormat, t); //$NON-NLS-1$
-            } else {
-                logger.info(messageFormat); //$NON-NLS-1$
+            messageFormat = Messages.getMessage("exceptionOccurredDuringInvocation", t.getClass().getSimpleName(), requestMethod, requestString); //$NON-NLS-1$
+        }
+        if (logger.isDebugEnabled()) {
+            logger.debug(messageFormat, t);
+            ResourceRegistry rr = this.configuration.getResourceRegistry();
+            List<ResourceRecord> resourceRecords = rr.getRecords();
+            StringBuffer sb = new StringBuffer();
+            for (ResourceRecord record : resourceRecords) {
+                sb.append("\n  " + record.toString()); //$NON-NLS-1$
             }
+            logger.debug(Messages.getMessage("registeredResources", (sb.toString().length() > 0) ? sb.toString() : "{}")); //$NON-NLS-1$ $NON-NLS-2$
+            logger.debug(this.configuration.getProvidersRegistry().getLogFormattedProvidersList(true));
+        } else {
+            logger.info(messageFormat);
         }
     }
 
-    private ServerMessageContext createMessageContext(HttpServletRequest request,
+    private ServerMessageContext createMessageContext(HttpServletRequest request,   
                                                       HttpServletResponse response) {
         ServerMessageContext messageContext =
             new ServerMessageContext(request, response, configuration);

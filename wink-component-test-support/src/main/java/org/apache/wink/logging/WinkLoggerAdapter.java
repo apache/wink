@@ -31,16 +31,21 @@ import org.slf4j.spi.LocationAwareLogger;
 public final class WinkLoggerAdapter extends MarkerIgnoringBase implements
         LocationAwareLogger {
 
-    final java.util.logging.Logger logger;
-
+    /*
+     * We create a new Logger instance for each call because we want the level controlled by WinkLogHandler.
+     * It's clunky, but the level is controllable by individual unittest methods, and we need to accommodate that.
+     */
+    
+    String loggerName;
+    WinkLogHandler winkLogHandler;
+    
     WinkLoggerAdapter(java.util.logging.Logger logger) {
-        this.logger = logger;
-        this.logger.setLevel(Level.FINEST);
-        this.logger.addHandler(new WinkLogHandler());
+        winkLogHandler = new WinkLogHandler();
+        loggerName = logger.getName();
     }
 
     public boolean isTraceEnabled() {
-        return logger.isLoggable(Level.FINEST);
+        return WinkLogHandler.getLogLevel().equals(Level.FINEST);
     }
 
     public void trace(String message) {
@@ -64,7 +69,7 @@ public final class WinkLoggerAdapter extends MarkerIgnoringBase implements
     }
 
     public boolean isDebugEnabled() {
-        return logger.isLoggable(Level.FINE);
+        return WinkLogHandler.getLogLevel().equals(Level.FINE);
     }
 
     public void debug(String msg) {
@@ -88,7 +93,7 @@ public final class WinkLoggerAdapter extends MarkerIgnoringBase implements
     }
 
     public boolean isInfoEnabled() {
-        return logger.isLoggable(Level.INFO);
+        return WinkLogHandler.getLogLevel().equals(Level.INFO);
     }
 
     public void info(String msg) {
@@ -112,7 +117,7 @@ public final class WinkLoggerAdapter extends MarkerIgnoringBase implements
     }
 
     public boolean isWarnEnabled() {
-        return logger.isLoggable(Level.WARNING);
+        return WinkLogHandler.getLogLevel().equals(Level.WARNING);
     }
 
     public void warn(String msg) {
@@ -136,7 +141,7 @@ public final class WinkLoggerAdapter extends MarkerIgnoringBase implements
     }
 
     public boolean isErrorEnabled() {
-        return logger.isLoggable(Level.SEVERE);
+        return WinkLogHandler.getLogLevel().equals(Level.SEVERE);
     }
 
     public void error(String msg) {
@@ -162,8 +167,14 @@ public final class WinkLoggerAdapter extends MarkerIgnoringBase implements
     private void log(Level level, String msg, Throwable t) {
         LogRecord record = new LogRecord(level, msg);
         record.setThrown(t);
+        java.util.logging.Logger logger = java.util.logging.Logger.getLogger(loggerName);
+        logger.setLevel(WinkLogHandler.getLogLevel());
+        // all of the WinkLogHander internals are static, so despite having a new instance
+        // of Logger and WinkLogHandler, we'll get the expected log records
+        logger.addHandler(winkLogHandler);
         record.setLoggerName(logger.getName());
         logger.log(record);
+        logger.removeHandler(winkLogHandler);
     }
 
     public void log(Marker marker, String caller, int level, String message,

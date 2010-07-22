@@ -42,16 +42,22 @@ public class MessageBundle {
      * Gets a string message from the resource bundle for the given key
      * 
      * @param key The resource key
-     * @return The message
+     * @return The message, or key in the case of MissingResourceException
      */
-    public String getMessage(String key) throws MissingResourceException {
-        String msg = resourceBundle.getString(key);
+    public String getMessage(String key) {
+        try {
+            String msg = resourceBundle.getString(key);
 
-        if (msg == null) {
-            throw new MissingResourceException("Cannot find resource key \"" + key //$NON-NLS-1$
-                + "\" in base name " //$NON-NLS-1$
-                + className, className, key);
+            if (msg == null) {
+                throw new MissingResourceException("Cannot find resource key \"" + key //$NON-NLS-1$
+                        + "\" in base name " //$NON-NLS-1$
+                        + className, className, key);
+            }
+            return msg;
+        } catch (MissingResourceException e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace(System.err);
         }
-        return msg;
+        return key;
     }
 }

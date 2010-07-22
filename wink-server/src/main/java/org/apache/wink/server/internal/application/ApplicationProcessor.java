@@ -19,6 +19,7 @@
  *******************************************************************************/
 package org.apache.wink.server.internal.application;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.ws.rs.core.Application;
@@ -28,6 +29,7 @@ import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.registry.ProvidersRegistry;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
+import org.apache.wink.server.internal.registry.ResourceRecord;
 import org.apache.wink.server.internal.registry.ResourceRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,6 +91,17 @@ public class ApplicationProcessor {
             processWinkApplication((WinkApplication)application);
         }
 
+        // always produce INFO output after completing application processing:
+        logger.info(Messages.getMessage("applicationProcessed", application.getClass().getName())); //$NON-NLS-1$
+        List<ResourceRecord> resourceRecords = resourceRegistry.getRecords();
+        StringBuffer sb = new StringBuffer();
+        for (ResourceRecord record : resourceRecords) {
+            sb.append("\n  " + record.toString()); //$NON-NLS-1$
+        }
+        logger.info(Messages.getMessage("registeredResources", (sb.length() > 0) ? sb.toString() : "{}")); //$NON-NLS-1$ $NON-NLS-2$
+        logger.info(providersRegistry.getLogFormattedProvidersList(true));
+        // done with INFO
+        
         logger.trace("Processing of Application completed."); //$NON-NLS-1$
     }
 
@@ -123,13 +136,17 @@ public class ApplicationProcessor {
                     }
                 }
             } catch (Exception e) {
-                logger.warn(Messages.getMessage("exceptionOccurredDuringInstanceProcessing", obj //$NON-NLS-1$
-                        .getClass().getCanonicalName()));
-                logger.warn(Messages.getMessage("listExceptionDuringInstanceProcessing"), e); //$NON-NLS-1$
+                if (logger.isWarnEnabled()) {
+                    logger.warn(Messages.getMessage("exceptionOccurredDuringInstanceProcessing", obj //$NON-NLS-1$
+                            .getClass().getCanonicalName()));
+                    logger.warn(Messages.getMessage("listExceptionDuringInstanceProcessing"), e); //$NON-NLS-1$
+                }
             } catch (NoClassDefFoundError e) {
-                logger.warn(Messages.getMessage("exceptionOccurredDuringInstanceProcessing", obj //$NON-NLS-1$
-                        .getClass().getCanonicalName()));
-                logger.warn(Messages.getMessage("listExceptionDuringInstanceProcessing"), e); //$NON-NLS-1$
+                if (logger.isWarnEnabled()) {
+                    logger.warn(Messages.getMessage("exceptionOccurredDuringInstanceProcessing", obj //$NON-NLS-1$
+                            .getClass().getCanonicalName()));
+                    logger.warn(Messages.getMessage("listExceptionDuringInstanceProcessing"), e); //$NON-NLS-1$
+                }
             }
         }
     }

@@ -745,10 +745,27 @@ public class ProvidersRegistry {
 
         @Override
         public String toString() {
-            return toString("  "); //$NON-NLS-1$
+            return toString("  ", false, true); //$NON-NLS-1$
+        }
+        
+        /**
+         * 
+         * @param userOnly only print user-defined entities
+         * @param trace if calling toString as part of debugging, use trace=false, if as part of trace or any other reason, use trace=true
+         * @return
+         */
+        public String toString(boolean userOnly, boolean trace) {
+            return toString("  ", userOnly, trace);
         }
 
-        protected String toString(String indent) {
+        /**
+         * 
+         * @param indent how far to indent output
+         * @param userOnly only log user-defined entities
+         * @param trace if calling toString as part of debugging, use trace=false, if as part of trace or any other reason, use trace=true (debug prints slightly less verbose)
+         * @return
+         */
+        protected String toString(String indent, boolean userOnly, boolean trace) {
             StringBuffer sb = new StringBuffer();
 
             sb.append("\nRawType: "); //$NON-NLS-1$
@@ -757,25 +774,39 @@ public class ProvidersRegistry {
             if (data.isEmpty()) {
                 sb.append("{empty}"); //$NON-NLS-1$
             } else {
-                sb.append("\n"); //$NON-NLS-1$
-            }
+                StringBuffer sb_map = new StringBuffer();
+                boolean userItemFound = !userOnly;
+                // The data Map can be huge. Separate entries
+                // to make it more understandable
+                for (MediaType k : data.keySet()) {
+                    sb_map.append("MediaType key = "); //$NON-NLS-1$
+                    sb_map.append(k);
+                    sb_map.append("\n"); //$NON-NLS-1$
+                    sb_map.append("ObjectFactory Set value = {\n"); //$NON-NLS-1$
 
-            // The data Map can be huge. Separate entries
-            // to make it more understandable
-            for (MediaType k : data.keySet()) {
-                sb.append("MediaType key = "); //$NON-NLS-1$
-                sb.append(k);
-                sb.append("\n"); //$NON-NLS-1$
-                sb.append("ObjectFactory Set value = {\n"); //$NON-NLS-1$
-
-                // Separate each ObjectFactory entry in the Set
-                // into its own line
-                for (ObjectFactory<T> of : data.get(k)) {
-                    sb.append(indent);
-                    sb.append(of);
-                    sb.append("\n"); //$NON-NLS-1$
+                    // Separate each ObjectFactory entry in the Set
+                    // into its own line
+                    for (ObjectFactory<T> of : data.get(k)) {
+                        // assuming everything in the org.apache.wink.* package space with "internal" in package name is system, not user
+                        String instanceClassName = of.getInstanceClass().getName();
+                        if ((userOnly && !(instanceClassName.startsWith("org.apache.wink.common.internal.") || instanceClassName.startsWith("org.apache.wink.server.internal."))) || !userOnly) { //$NON-NLS-1$ $NON-NLS-2$
+                            userItemFound = true;
+                            sb_map.append(indent);
+                            if (trace) { // trace, print full ObjectFactory.toString()
+                                sb_map.append(of);
+                            } else { // debug, print slightly less information
+                                sb_map.append(of.getInstanceClass());
+                            }
+                            sb_map.append("\n"); //$NON-NLS-1$
+                        }
+                    }
+                    sb_map.append("}\n"); //$NON-NLS-1$
                 }
-                sb.append("}\n"); //$NON-NLS-1$
+                if ((sb_map.length() > 0) && userItemFound) {
+                    sb.append("\n" + sb_map.toString()); //$NON-NLS-1$
+                } else {
+                    sb.append("{empty}"); //$NON-NLS-1$
+                }
             }
             return sb.toString();
         }
@@ -932,7 +963,23 @@ public class ProvidersRegistry {
 
         @Override
         public String toString() {
-            return String.format("Priority: %f, ObjectFactory: %s", priority, of); //$NON-NLS-1$
+            return String.format("Priority: %f, ObjectFactory: %s", priority, of.toString().replace("class ", "")); //$NON-NLS-1$
+        }
+    }
+    
+    /**
+     * 
+     * @param userOnly true = log user providers only, false = log all providers
+     */
+    public String getLogFormattedProvidersList(boolean userOnly) {
+        StringBuffer sb = new StringBuffer();
+        sb.append(this.contextResolvers.toString(userOnly, false));
+        sb.append(this.messageBodyReaders.toString(userOnly, false));
+        sb.append(this.messageBodyWriters.toString(userOnly, false));
+        if (userOnly) {
+            return Messages.getMessage("followingProvidersUserDefined", sb.toString());
+        } else {
+            return Messages.getMessage("followingProviders", sb.toString());
         }
     }
 
