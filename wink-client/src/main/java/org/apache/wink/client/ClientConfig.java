@@ -61,7 +61,6 @@ public class ClientConfig implements Cloneable, WinkConfiguration {
     private boolean                   modifiable;
     private boolean                   isAcceptHeaderAutoSet;
     private boolean                   loadWinkApplications               = true;
-    private boolean                   bypassHostnameVerification         = false;
 
     private static final String       WINK_CLIENT_CONNECTTIMEOUT         =
                                                                              "wink.client.connectTimeout"; //$NON-NLS-1$
@@ -484,24 +483,4 @@ public class ClientConfig implements Cloneable, WinkConfiguration {
         this.properties = properties;
     }
 
-    /**
-     * Get whether or not hostname verification will be bypassed for SSL
-     * certificates.
-     * 
-     * @return Whether or not hostname verification will be bypassed for SSL
-     *         certificates
-     */
-    public boolean getBypassHostnameVerification() {
-        return bypassHostnameVerification;
-    }
-
-    /**
-     * Set whether or not hostname verification to bypass hostname verification
-     * for SSL certificates. Default value is false.
-     * 
-     * @param bypassHostnameVerification true to bypass hostname verification
-     */
-    public void setBypassHostnameVerification(boolean bypassHostnameVerification) {
-        this.bypassHostnameVerification = bypassHostnameVerification;
-    }
 }

@@ -74,9 +74,9 @@ public class ProviderMetadataCollectorTest extends TestCase {
     public void testIsProvider() {
         assertFalse(ProviderMetadataCollector.isProvider(Interface.class));
         assertFalse(ProviderMetadataCollector.isProvider(Class.class));
-        assertTrue(ProviderMetadataCollector.isProvider(ProviderInterface.class));
+        assertFalse(ProviderMetadataCollector.isProvider(ProviderInterface.class));
         assertTrue(ProviderMetadataCollector.isProvider(ProviderInterfaceImpl.class));
-        assertTrue(ProviderMetadataCollector.isProvider(AbstractProvider.class));
+        assertFalse(ProviderMetadataCollector.isProvider(AbstractProvider.class));
         assertTrue(ProviderMetadataCollector.isProvider(ProviderBaseClass.class));
         assertTrue(ProviderMetadataCollector.isProvider(ProviderStandalone.class));
     }

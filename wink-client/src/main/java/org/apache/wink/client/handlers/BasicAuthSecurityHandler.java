@@ -19,11 +19,9 @@
  */
 package org.apache.wink.client.handlers;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Properties;
+import javax.ws.rs.core.HttpHeaders;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.wink.client.ClientAuthenticationException;
 import org.apache.wink.client.ClientRequest;
 import org.apache.wink.client.ClientResponse;
@@ -37,24 +35,24 @@ import org.slf4j.LoggerFactory;
  * <code>
  * Usage:<br/>
  * ClientConfig config = new ClientConfig();<br/>
- * config.handlers(new BasicAuthSecurityHandler());<br/>
+ * BasicAuthSecurityHandler basicAuth = new BasicAuthSecurityHandler();<br/>
+ * basicAuth.setUserName("user1");<br/>
+ * basicAuth.setPassword("password2");<br/>
+ * config.handlers(basicAuth);<br/>
  * // create the rest client instance<br/>
  * RestClient client = new RestClient(config);<br/>
  * // create the resource instance to interact with Resource<br/>
- * resource = client.resource("http://localhost:8080/path/to/resource");<br/>
+ * resource = client.resource("https://localhost:8080/path/to/resource");<br/>
  * </code>
  */
 public class BasicAuthSecurityHandler implements ClientHandler {
 
-    private static Logger    logger          =
-                                                 LoggerFactory
-                                                     .getLogger(BasicAuthSecurityHandler.class);
+    private static Logger   logger          =
+                                                LoggerFactory
+                                                    .getLogger(BasicAuthSecurityHandler.class);
 
-    final static String      PROPS_FILE_NAME = "wink.client.props";                             //$NON-NLS-1$
-    private Properties       clientProps     = null;
-    private volatile boolean propsLoaded     = false;
-    private volatile String  handlerUsername = null;
-    private volatile String  handlerPassword = null;
+    private volatile String handlerUsername = null;
+    private volatile String handlerPassword = null;
 
     /**
      * Sets the username to use.
@@ -94,32 +92,11 @@ public class BasicAuthSecurityHandler implements ClientHandler {
             logger.trace("Status code was not 401 so no need to re-issue request."); //$NON-NLS-1$
             return response;
         } else {
-            // read user id and password from a property
-            // as a start we use java a command line property
-            String userid = System.getProperty("user"); //$NON-NLS-1$
-            String password = System.getProperty("password"); //$NON-NLS-1$
+            String userid = handlerUsername;
+            String password = handlerPassword;
             if (logger.isTraceEnabled()) {
-                logger.trace("The 'user' system property was set to: {}", userid); //$NON-NLS-1$
-                logger.trace("The 'password' system property was set: {}", password != null); //$NON-NLS-1$
-            }
-
-            if (userid == null || userid.equals("") || password == null || password.equals("")) { //$NON-NLS-1$ //$NON-NLS-2$
-                // see if we can load credentials from a properties file
-                String propsFileDir = System.getProperty("wink.client.props.dir"); //$NON-NLS-1$
-                logger
-                    .trace("Could NOT get userid and password from system properties so attempting to look at properties file in {}", propsFileDir); //$NON-NLS-1$
-                if (propsFileDir != null && !propsFileDir.equals("")) { //$NON-NLS-1$
-                    if (!propsLoaded) {
-                        clientProps = loadProps(propsFileDir + File.separator + PROPS_FILE_NAME);
-                    }
-                    userid = clientProps.getProperty("user"); //$NON-NLS-1$
-                    password = clientProps.getProperty("password"); //$NON-NLS-1$
-                } else {
-                    logger
-                        .trace("Could NOT find properties file so checking variables assigned to handler itself", propsFileDir); //$NON-NLS-1$
-                    userid = handlerUsername;
-                    password = handlerPassword;
-                }
+                logger.trace("The 'username' property was set to: {}", userid); //$NON-NLS-1$
+                logger.trace("Was the 'password' property set: {}", password != null); //$NON-NLS-1$
             }
 
             if (!(userid == null || userid.equals("") || password == null || password.equals(""))) { //$NON-NLS-1$ //$NON-NLS-2$
@@ -127,11 +104,10 @@ public class BasicAuthSecurityHandler implements ClientHandler {
                 // we have a user credential
                 String credential = userid + ":" + password; //$NON-NLS-1$
                 byte[] credBytes = credential.getBytes();
-                byte[] encodedCredBytes =
-                    org.apache.commons.codec.binary.Base64.encodeBase64(credBytes, false);
+                byte[] encodedCredBytes = Base64.encodeBase64(credBytes, false);
                 // id and password needs to be base64 encoded
                 String credEncodedString = "Basic " + new String(encodedCredBytes); //$NON-NLS-1$
-                request.getHeaders().putSingle("Authorization", credEncodedString); //$NON-NLS-1$
+                request.getHeaders().putSingle(HttpHeaders.AUTHORIZATION, credEncodedString);
                 logger.trace("Issuing request again with Authorization header"); //$NON-NLS-1$
                 response = context.doChain(request);
                 if (response.getStatusCode() == 401) {
@@ -152,36 +128,6 @@ public class BasicAuthSecurityHandler implements ClientHandler {
 
         } // end if block
     } // end handle
-
-    /**
-     * Loads a properties file that contains user basic authentication
-     * credential.
-     * 
-     * @param propsFileName
-     * @return a Properties object
-     */
-    private synchronized Properties loadProps(String propsFileName) {
-        Properties props = null;
-        FileInputStream fis = null;
-        try {
-            File propsFile = new File(propsFileName);
-            props = new Properties();
-            fis = new FileInputStream(propsFile);
-            props.load(fis);
-            propsLoaded = true;
-        } catch (IOException e) {
-            props = null;
-        } finally {
-            try {
-                if (fis != null) {
-                    fis.close();
-                }
-            } catch (IOException e) {
-                /* do nothing */
-            }
-        }
-        return props;
-    } // end loadProps
 
 } // end class SecurityHandler
 

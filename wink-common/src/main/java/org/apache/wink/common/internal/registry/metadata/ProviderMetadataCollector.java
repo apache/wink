@@ -53,15 +53,15 @@ public class ProviderMetadataCollector extends AbstractMetadataCollector {
             return false;
         }
 
-        if (cls.getAnnotation(Provider.class) != null) {
-            return true;
-        }
-        
         if (Modifier.isInterface(cls.getModifiers()) || Modifier.isAbstract(cls.getModifiers())) {
             if (logger.isWarnEnabled()) {
                 logger.warn(Messages.getMessage("providerIsInterfaceOrAbstract", cls)); //$NON-NLS-1$
             }
             return false;
+        }
+
+        if (cls.getAnnotation(Provider.class) != null) {
+            return true;
         }
 
         Class<?> declaringClass = cls;

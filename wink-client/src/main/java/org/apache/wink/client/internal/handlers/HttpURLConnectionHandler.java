@@ -29,9 +29,6 @@ import java.net.Proxy;
 import java.net.URL;
 import java.util.List;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLSession;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -42,12 +39,8 @@ import org.apache.wink.client.ClientResponse;
 import org.apache.wink.client.handlers.HandlerContext;
 import org.apache.wink.client.internal.ClientUtils;
 import org.apache.wink.common.internal.WinkConfiguration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class HttpURLConnectionHandler extends AbstractConnectionHandler {
-
-    private static final Logger logger = LoggerFactory.getLogger(HttpURLConnectionHandler.class);
 
     public ClientResponse handle(ClientRequest request, HandlerContext context) throws Exception {
         try {
@@ -65,28 +58,7 @@ public class HttpURLConnectionHandler extends AbstractConnectionHandler {
         NonCloseableOutputStream ncos = new NonCloseableOutputStream();
         OutputStream os = ncos;
         processRequestHeaders(request, connection);
-        HostnameVerifier hv = null;
-        boolean bypassHostnameVerification =
-            ((ClientConfig)request.getAttribute(WinkConfiguration.class))
-                .getBypassHostnameVerification() && (connection instanceof HttpsURLConnection);
-        if (bypassHostnameVerification) {
-            HttpsURLConnection https = ((HttpsURLConnection)connection);
-            hv = https.getHostnameVerifier();
-            https.setHostnameVerifier(new HostnameVerifier() {
-                public boolean verify(String urlHostName, SSLSession session) {
-                    logger.trace("Bypassing hostname verification: URL host is " + urlHostName
-                        + ", SSLSession host is "
-                        + session.getPeerHost());
-                    return true;
-                }
-            });
-        }
-        try {
-            connection.connect();
-        } finally {
-            if (bypassHostnameVerification)
-                ((HttpsURLConnection)connection).setHostnameVerifier(hv);
-        }
+        connection.connect();
         if (request.getEntity() != null) {
             ncos.setOutputStream(connection.getOutputStream());
             os = adaptOutputStream(ncos, request, context.getOutputStreamAdapters());
