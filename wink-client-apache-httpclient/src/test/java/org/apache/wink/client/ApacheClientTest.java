@@ -38,6 +38,7 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
+import org.apache.wink.client.MockHttpServer.MockHttpServerResponse;
 import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.internal.WinkConfiguration;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
@@ -149,7 +150,13 @@ public class ApacheClientTest extends BaseTest {
     }
 
     public void testResourceGet() {
-        server.setMockResponseCode(200);
+        MockHttpServerResponse response1 = new MockHttpServerResponse();
+        response1.setMockResponseCode(200);
+        MockHttpServerResponse response2 = new MockHttpServerResponse();
+        response2.setMockResponseCode(200);
+        MockHttpServerResponse response3 = new MockHttpServerResponse();
+        response3.setMockResponseCode(200);
+        server.setMockHttpServerResponses(response1, response2, response3);
         RestClient client = getRestClient();
         Resource resource = client.resource(serviceURL);
 
@@ -167,7 +174,13 @@ public class ApacheClientTest extends BaseTest {
     }
 
     public void testResourcePut() throws IOException {
-        server.setMockResponseCode(200);
+        MockHttpServerResponse response1 = new MockHttpServerResponse();
+        response1.setMockResponseCode(200);
+        MockHttpServerResponse response2 = new MockHttpServerResponse();
+        response2.setMockResponseCode(200);
+        MockHttpServerResponse response3 = new MockHttpServerResponse();
+        response3.setMockResponseCode(200);
+        server.setMockHttpServerResponses(response1, response2, response3);
         RestClient client = getRestClient();
         Resource resource = client.resource(serviceURL + "/testResourcePut");
         String response =
@@ -187,7 +200,13 @@ public class ApacheClientTest extends BaseTest {
     }
 
     public void testResourcePost() throws IOException {
-        server.setMockResponseCode(200);
+        MockHttpServerResponse response1 = new MockHttpServerResponse();
+        response1.setMockResponseCode(200);
+        MockHttpServerResponse response2 = new MockHttpServerResponse();
+        response2.setMockResponseCode(200);
+        MockHttpServerResponse response3 = new MockHttpServerResponse();
+        response3.setMockResponseCode(200);
+        server.setMockHttpServerResponses(response1, response2, response3);
         RestClient client = getRestClient();
         Resource resource = client.resource(serviceURL + "/testResourcePost");
         String response =
@@ -207,7 +226,13 @@ public class ApacheClientTest extends BaseTest {
     }
 
     public void testResourceDelete() {
-        server.setMockResponseCode(200);
+        MockHttpServerResponse response1 = new MockHttpServerResponse();
+        response1.setMockResponseCode(200);
+        MockHttpServerResponse response2 = new MockHttpServerResponse();
+        response2.setMockResponseCode(200);
+        MockHttpServerResponse response3 = new MockHttpServerResponse();
+        response3.setMockResponseCode(200);
+        server.setMockHttpServerResponses(response1, response2, response3);
         RestClient client = getRestClient();
         Resource resource = client.resource(serviceURL);
         String response = resource.accept(MediaType.TEXT_PLAIN_TYPE).delete(String.class);
@@ -224,7 +249,11 @@ public class ApacheClientTest extends BaseTest {
     }
 
     public void testInvoke() {
-        server.setMockResponseCode(200);
+        MockHttpServerResponse response1 = new MockHttpServerResponse();
+        response1.setMockResponseCode(200);
+        MockHttpServerResponse response2 = new MockHttpServerResponse();
+        response2.setMockResponseCode(200);
+        server.setMockHttpServerResponses(response1, response2);
         RestClient client = getRestClient();
         Resource resource = client.resource(serviceURL);
 
@@ -238,7 +267,7 @@ public class ApacheClientTest extends BaseTest {
     }
 
     public void testHttpErrorNoResponse() throws IOException {
-        server.setMockResponseCode(400);
+        server.getMockHttpServerResponses().get(0).setMockResponseCode(400);
         RestClient client = getRestClient();
         Resource resource = client.resource(serviceURL);
         try {
@@ -250,7 +279,7 @@ public class ApacheClientTest extends BaseTest {
     }
 
     public void testHttpErrorWithResponse() throws IOException {
-        server.setMockResponseCode(400);
+        server.getMockHttpServerResponses().get(0).setMockResponseCode(400);
         RestClient client = getRestClient();
         Resource resource = client.resource(serviceURL);
         try {
@@ -264,9 +293,9 @@ public class ApacheClientTest extends BaseTest {
     public void testResponseCharset() throws IOException {
 
         MockHttpServer server = new MockHttpServer(34567);
-        server.setMockResponseCode(200);
-        server.setMockResponseContent("REQUEST".getBytes("UTF-16"));
-        server.setMockResponseContentType("text/plain; charset=UTF-16");
+        server.getMockHttpServerResponses().get(0).setMockResponseCode(200);
+        server.getMockHttpServerResponses().get(0).setMockResponseContent("REQUEST".getBytes("UTF-16"));
+        server.getMockHttpServerResponses().get(0).setMockResponseContentType("text/plain; charset=UTF-16");
 
         server.startServer();
         try {

@@ -113,9 +113,9 @@ public class ClientAtomTest extends BaseTest {
     "</entry>";
     
     public void testAtomContentRetrievalFromAtomEntry() {
-        server.setMockResponseCode(200);
-        server.setMockResponseContentType(MediaType.APPLICATION_ATOM_XML);
-        server.setMockResponseContent(responseString);
+        server.getMockHttpServerResponses().get(0).setMockResponseCode(200);
+        server.getMockHttpServerResponses().get(0).setMockResponseContentType(MediaType.APPLICATION_ATOM_XML);
+        server.getMockHttpServerResponses().get(0).setMockResponseContent(responseString);
         RestClient client = getRestClient();
         Resource resource = client.resource(serviceURL + "/atomresource/entry");
         
@@ -134,9 +134,9 @@ public class ClientAtomTest extends BaseTest {
     }
     
     public void testAtomContentRetrievalFromSyndEntry() {
-        server.setMockResponseCode(200);
-        server.setMockResponseContentType(MediaType.APPLICATION_ATOM_XML);
-        server.setMockResponseContent(responseString);
+        server.getMockHttpServerResponses().get(0).setMockResponseCode(200);
+        server.getMockHttpServerResponses().get(0).setMockResponseContentType(MediaType.APPLICATION_ATOM_XML);
+        server.getMockHttpServerResponses().get(0).setMockResponseContent(responseString);
         RestClient client = getRestClient();
         Resource resource = client.resource(serviceURL + "/atomresource/entry");
         

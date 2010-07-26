@@ -91,7 +91,7 @@ public class EmptyContentTypeTest extends BaseTest {
     }
     
     public void testEmptyContentType() throws Exception {
-        server.setMockResponseCode(200);
+        server.getMockHttpServerResponses().get(0).setMockResponseCode(200);
         RestClient client = getRestClient();
         client.resource(serviceURL + "/integer").put(123);
         byte[] b = server.getRequestContent();

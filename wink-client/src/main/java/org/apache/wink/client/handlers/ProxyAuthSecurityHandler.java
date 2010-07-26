@@ -27,26 +27,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * SecurityHandler for a client to perform http basic auth and http proxy auth:
+ * SecurityHandler for a client to perform http proxy auth:
  * <p/>
  * <code>
  * Usage:<br/>
  * ClientConfig config = new ClientConfig();<br/>
- * BasicAuthSecurityHandler basicAuthSecHandler = new BasicAuthSecurityHandler();
- * basicAuthSecHandler.setUserName("username");
- * basicAuthSecHandler.setPassword("password");
- * config.handlers(basicAuthSecurityHandler);<br/>
+ * ProxyAuthSecurityHandler proxyAuthSecHandler = new ProxyAuthSecurityHandler();
+ * proxyAuthSecHandler.setProxyUserName("username");
+ * proxyAuthSecHandler.setProxyPassword("password");
+ * config.handlers(proxyAuthSecurityHandler);<br/>
  * // create the rest client instance<br/>
  * RestClient client = new RestClient(config);<br/>
  * // create the resource instance to interact with Resource<br/>
- * resource = client.resource("https://localhost:8080/path/to/resource");<br/>
+ * resource = client.resource("http://localhost:8080/path/to/resource");<br/>
  * </code>
  */
-public class BasicAuthSecurityHandler extends AbstractAuthSecurityHandler implements ClientHandler {
+public class ProxyAuthSecurityHandler extends AbstractAuthSecurityHandler implements ClientHandler {
 
-    private static Logger   logger          =
-        LoggerFactory
-        .getLogger(BasicAuthSecurityHandler.class);
+    private static Logger    logger          =
+                                                 LoggerFactory
+                                                     .getLogger(ProxyAuthSecurityHandler.class);
 
     
     /**
@@ -58,37 +58,39 @@ public class BasicAuthSecurityHandler extends AbstractAuthSecurityHandler implem
      *         header
      */
     public ClientResponse handle(ClientRequest request, HandlerContext context) throws Exception {
-        logger.trace("Entering BasicAuthSecurityHandler.doChain()"); //$NON-NLS-1$
+        logger.trace("Entering ProxyAuthSecurityHandler.doChain()"); //$NON-NLS-1$
         ClientResponse response = context.doChain(request);
-        if (response.getStatusCode() == 401) {
+        if (response.getStatusCode() == 407) {  // got a proxy auth challenge
             
             if (!(handlerUsername == null || handlerUsername.equals("") || handlerPassword == null || handlerPassword.equals(""))) { //$NON-NLS-1$ //$NON-NLS-2$
-                logger.trace("userid and password set so setting Authorization header"); //$NON-NLS-1$
+                logger.trace("userid and password set so setting Proxy-Authorization header"); //$NON-NLS-1$
                 // we have a user credential
-                request.getHeaders().putSingle("Authorization", getEncodedString(handlerUsername, handlerPassword)); //$NON-NLS-1$
-                logger.trace("Issuing request again with Authorization header"); //$NON-NLS-1$
+                request.getHeaders().putSingle("Proxy-Connection", "Keep-Alive"); //$NON-NLS-1$ $NON-NLS-2$
+                request.getHeaders().putSingle("Proxy-Authorization", getEncodedString(handlerUsername, handlerPassword)); //$NON-NLS-1$
+                logger.trace("Issuing request again with Proxy-Authorization header"); //$NON-NLS-1$
                 response = context.doChain(request);
-                if (response.getStatusCode() == 401) {
+                if (response.getStatusCode() == 407) {
                     logger
-                    .trace("After sending request with Authorization header, still got 401 response"); //$NON-NLS-1$
+                    .trace("After sending request with Proxy-Authorization header, still got 407 response"); //$NON-NLS-1$
                     throw new ClientAuthenticationException(Messages
-                            .getMessage("serviceFailedToAuthenticateUser", handlerUsername)); //$NON-NLS-1$
+                            .getMessage("serviceFailedToAuthenticateProxyUser", handlerUsername)); //$NON-NLS-1$
                 } else {
-                    logger.trace("Got a non-401 response, so returning response"); //$NON-NLS-1$
+                    logger.trace("Got a non-407 response, so returning response"); //$NON-NLS-1$
                     return response;
                 }
             } else {
-                logger.trace("user and/or password were not set so throwing exception"); //$NON-NLS-1$
-                // no user credential available
+                logger.trace("proxy user and/or proxy password were not set so throwing exception"); //$NON-NLS-1$
+                // no proxy user credential available
                 throw new ClientAuthenticationException(Messages
-                        .getMessage("missingClientAuthenticationCredentialForUser", handlerUsername)); //$NON-NLS-1$
+                        .getMessage("missingClientAuthenticationCredentialForProxyUser", handlerUsername)); //$NON-NLS-1$
             }
-        } else {
-            logger.trace("Status code was not 401 so no need to re-issue request."); //$NON-NLS-1$
+        } else {  // did NOT get a proxy auth challenge
+            logger.trace("Status code was not 407 so no need to re-issue request."); //$NON-NLS-1$
             return response;
         }
 
     }
 
+    
 }
 

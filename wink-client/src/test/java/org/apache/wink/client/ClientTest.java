@@ -39,6 +39,7 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
+import org.apache.wink.client.MockHttpServer.MockHttpServerResponse;
 import org.apache.wink.common.utils.ProviderUtils;
 
 public class ClientTest extends BaseTest {
@@ -57,6 +58,7 @@ public class ClientTest extends BaseTest {
             this.t = t;
         }
     }
+    
 
     @Provider
     public static class TestGenericsProvider implements MessageBodyWriter<TestGenerics<String>>,
@@ -128,7 +130,13 @@ public class ClientTest extends BaseTest {
     }
 
     public void testResourceGet() {
-        server.setMockResponseCode(200);
+        MockHttpServerResponse response1 = new MockHttpServerResponse();
+        response1.setMockResponseCode(200);
+        MockHttpServerResponse response2 = new MockHttpServerResponse();
+        response2.setMockResponseCode(200);
+        MockHttpServerResponse response3 = new MockHttpServerResponse();
+        response3.setMockResponseCode(200);
+        server.setMockHttpServerResponses(response1, response2, response3);
         RestClient client = getRestClient();
         Resource resource = client.resource(serviceURL);
 
@@ -149,7 +157,13 @@ public class ClientTest extends BaseTest {
     }
 
     public void testResourcePut() throws IOException {
-        server.setMockResponseCode(200);
+        MockHttpServerResponse response1 = new MockHttpServerResponse();
+        response1.setMockResponseCode(200);
+        MockHttpServerResponse response2 = new MockHttpServerResponse();
+        response2.setMockResponseCode(200);
+        MockHttpServerResponse response3 = new MockHttpServerResponse();
+        response3.setMockResponseCode(200);
+        server.setMockHttpServerResponses(response1, response2, response3);
         RestClient client = getRestClient();
         Resource resource = client.resource(serviceURL + "/testResourcePut");
         String response =
@@ -172,7 +186,13 @@ public class ClientTest extends BaseTest {
     }
 
     public void testResourcePost() throws IOException {
-        server.setMockResponseCode(200);
+        MockHttpServerResponse response1 = new MockHttpServerResponse();
+        response1.setMockResponseCode(200);
+        MockHttpServerResponse response2 = new MockHttpServerResponse();
+        response2.setMockResponseCode(200);
+        MockHttpServerResponse response3 = new MockHttpServerResponse();
+        response3.setMockResponseCode(200);
+        server.setMockHttpServerResponses(response1, response2, response3);
         RestClient client = getRestClient();
         Resource resource = client.resource(serviceURL + "/testResourcePost");
         String response =
@@ -196,7 +216,13 @@ public class ClientTest extends BaseTest {
     }
 
     public void testResourceDelete() {
-        server.setMockResponseCode(200);
+        MockHttpServerResponse response1 = new MockHttpServerResponse();
+        response1.setMockResponseCode(200);
+        MockHttpServerResponse response2 = new MockHttpServerResponse();
+        response2.setMockResponseCode(200);
+        MockHttpServerResponse response3 = new MockHttpServerResponse();
+        response3.setMockResponseCode(200);
+        server.setMockHttpServerResponses(response1, response2, response3);
         RestClient client = getRestClient();
         Resource resource = client.resource(serviceURL);
         String response = resource.accept(MediaType.TEXT_PLAIN_TYPE).delete(String.class);
@@ -217,7 +243,11 @@ public class ClientTest extends BaseTest {
     }
 
     public void testInvoke() {
-        server.setMockResponseCode(200);
+        MockHttpServerResponse response1 = new MockHttpServerResponse();
+        response1.setMockResponseCode(200);
+        MockHttpServerResponse response2 = new MockHttpServerResponse();
+        response2.setMockResponseCode(200);
+        server.setMockHttpServerResponses(response1, response2);
         RestClient client = getRestClient();
         Resource resource = client.resource(serviceURL);
 
@@ -231,7 +261,7 @@ public class ClientTest extends BaseTest {
     }
 
     public void testHttpErrorNoResponse() throws IOException {
-        server.setMockResponseCode(400);
+        server.getMockHttpServerResponses().get(0).setMockResponseCode(400);
         RestClient client = getRestClient();
         Resource resource = client.resource(serviceURL);
         try {
@@ -243,7 +273,7 @@ public class ClientTest extends BaseTest {
     }
 
     public void testHttpErrorWithResponse() throws IOException {
-        server.setMockResponseCode(400);
+        server.getMockHttpServerResponses().get(0).setMockResponseCode(400);
         RestClient client = getRestClient();
         Resource resource = client.resource(serviceURL);
         try {
@@ -261,9 +291,9 @@ public class ClientTest extends BaseTest {
     public void testResponseCharset() throws IOException {
 
         MockHttpServer server = new MockHttpServer(34567);
-        server.setMockResponseCode(200);
-        server.setMockResponseContent("REQUEST".getBytes("UTF-16"));
-        server.setMockResponseContentType("text/plain; charset=UTF-16");
+        server.getMockHttpServerResponses().get(0).setMockResponseCode(200);
+        server.getMockHttpServerResponses().get(0).setMockResponseContent("REQUEST".getBytes("UTF-16"));
+        server.getMockHttpServerResponses().get(0).setMockResponseContentType("text/plain; charset=UTF-16");
 
         server.startServer();
         try {
@@ -281,9 +311,9 @@ public class ClientTest extends BaseTest {
 
     public void testResponseEmptyContentType() throws IOException {
         MockHttpServer server = new MockHttpServer(34567);
-        server.setMockResponseCode(200);
-        server.setMockResponseContent("REQUEST".getBytes("UTF-8"));
-        server.setMockResponseContentType("");
+        server.getMockHttpServerResponses().get(0).setMockResponseCode(200);
+        server.getMockHttpServerResponses().get(0).setMockResponseContent("REQUEST".getBytes("UTF-8"));
+        server.getMockHttpServerResponses().get(0).setMockResponseContentType("");
 
         server.startServer();
         try {
@@ -297,4 +327,5 @@ public class ClientTest extends BaseTest {
             server.stopServer();
         }
     }
+    
 }

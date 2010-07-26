@@ -126,7 +126,7 @@ public class ConfigurationTest extends BaseTest {
         // if we specify the server port as the proxy port, we in essence test
         // that the connection is going through the proxy, because we
         // specify a different port for the server in the resource URL
-        server.setMockResponseCode(200);
+        server.getMockHttpServerResponses().get(0).setMockResponseCode(200);
         ClientConfig config = new ClientConfig();
         config.proxyHost("localhost").proxyPort(serverPort);
         RestClient client = new RestClient(config);
@@ -165,7 +165,7 @@ public class ConfigurationTest extends BaseTest {
     }
 
     public void testReadTimeout() {
-        server.setMockResponseCode(200);
+        server.getMockHttpServerResponses().get(0).setMockResponseCode(200);
         // set the server to delay the response by 5 seconds.
         server.setDelayResponse(5000);
 
@@ -197,7 +197,7 @@ public class ConfigurationTest extends BaseTest {
     }
 
     public void testApplication() {
-        server.setMockResponseCode(200);
+        server.getMockHttpServerResponses().get(0).setMockResponseCode(200);
         server.setDelayResponse(0);
         ClientConfig conf = new ClientConfig();
 

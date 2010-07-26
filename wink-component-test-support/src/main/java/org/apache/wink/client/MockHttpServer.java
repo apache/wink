@@ -30,7 +30,9 @@ import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.net.ServerSocketFactory;
@@ -40,35 +42,88 @@ import javax.ws.rs.core.Response.Status;
 
 public class MockHttpServer extends Thread {
 
-    private static byte[]         NEW_LINE                = "\r\n".getBytes();
+    public static class MockHttpServerResponse {
 
+        // mock response data
+        private int                   mockResponseCode        = 200;
+        private Map<String, String>   mockResponseHeaders     = new HashMap<String, String>();
+        private byte[]                mockResponseContent     = BaseTest.RECEIVED_MESSAGE.getBytes();
+        private String                mockResponseContentType = "text/plain;charset=utf-8";
+        private boolean               mockResponseContentEchoRequest;
+        
+        public void setMockResponseHeaders(Map<String, String> headers) {
+            mockResponseHeaders.clear();
+            mockResponseHeaders.putAll(headers);
+        }
+
+        public void setMockResponseHeader(String name, String value) {
+            mockResponseHeaders.put(name, value);
+        }
+        
+        public Map<String, String> getMockResponseHeaders() {
+            return mockResponseHeaders;
+        }
+
+        public void setMockResponseCode(int responseCode) {
+            this.mockResponseCode = responseCode;
+        }
+        
+        public int getMockResponseCode() {
+            return mockResponseCode;
+        }
+
+        public void setMockResponseContent(String content) {
+            mockResponseContent = content.getBytes();
+        }
+
+        public void setMockResponseContent(byte[] content) {
+            mockResponseContent = content;
+        }
+        
+        public byte[] getMockResponseContent() {
+            return mockResponseContent;
+        }
+
+        public void setMockResponseContentType(String type) {
+            mockResponseContentType = type;
+        }
+        
+        public String getMockResponseContentType() {
+            return mockResponseContentType;
+        }
+
+        public void setMockResponseContentEchoRequest(boolean echo) {
+            mockResponseContentEchoRequest = echo;
+        }
+        
+        public boolean getMockResponseContentEchoRequest() {
+            return mockResponseContentEchoRequest;
+        }
+    }
+    
     private Thread                serverThread            = null;
     private ServerSocket          serverSocket            = null;
     private boolean               serverStarted           = false;
     private ServerSocketFactory   serverSocketFactory     = null;
+    private int                   serverPort;
     private int                   readTimeOut             = 5000;                         // 5
-                                                                                           // seconds
+    // seconds
     private int                   delayResponseTime       = 0;
-
+    private static byte[]         NEW_LINE                = "\r\n".getBytes();
     // request data
     private String                requestMethod           = null;
     private String                requestUrl              = null;
     private Map<String, String>   requestHeaders          = new HashMap<String, String>();
     private ByteArrayOutputStream requestContent          = new ByteArrayOutputStream();
-
-    // mock response data
-    private int                   mockResponseCode        = 200;
-    private Map<String, String>   mockResponseHeaders     = new HashMap<String, String>();
-    private byte[]                mockResponseContent     = "".getBytes();
-    private String                mockResponseContentType = "text/plain;charset=utf-8";
-    private boolean               mockResponseContentEchoRequest;
-    private int                   serverPort;
+    private List<MockHttpServerResponse> mockHttpServerResponses = new ArrayList<MockHttpServerResponse>();
+    private int responseCounter = 0;
 
     public MockHttpServer(int serverPort) {
         this(serverPort, false);
     }
 
     public MockHttpServer(int serverPort, boolean ssl) {
+        mockHttpServerResponses.add(new MockHttpServerResponse());  // set a default response
         this.serverPort = serverPort;
         try {
             serverSocketFactory = ServerSocketFactory.getDefault();
@@ -251,10 +306,11 @@ public class MockHttpServer extends Thread {
             } else {
                 processRegularContent(is);
             }
-
-            if (mockResponseContentEchoRequest) {
-                mockResponseContent = requestContent.toByteArray();
+            
+            if (mockHttpServerResponses.get(responseCounter).getMockResponseContentEchoRequest()) {
+                mockHttpServerResponses.get(responseCounter).setMockResponseContent(requestContent.toByteArray());
             }
+
         }
 
         private void processRegularContent(InputStream is) throws IOException {
@@ -360,15 +416,16 @@ public class MockHttpServer extends Thread {
             OutputStream sos = socket.getOutputStream();
             BufferedOutputStream os = new BufferedOutputStream(sos);
             String reason = "";
-            Status statusCode = Response.Status.fromStatusCode(mockResponseCode);
+            Status statusCode = Response.Status.fromStatusCode(mockHttpServerResponses.get(responseCounter).getMockResponseCode());
             if (statusCode != null) {
                 reason = statusCode.toString();
             }
-            os.write(("HTTP/1.1 " + mockResponseCode + " " + reason).getBytes());
+            os.write(("HTTP/1.1 " + mockHttpServerResponses.get(responseCounter).getMockResponseCode() + " " + reason).getBytes());
             os.write(NEW_LINE);
             processResponseHeaders(os);
             processResponseContent(os);
             os.flush();
+            responseCounter++;
         }
 
         // return:
@@ -388,57 +445,29 @@ public class MockHttpServer extends Thread {
         }
 
         private void processResponseContent(OutputStream os) throws IOException {
-            if (mockResponseContent == null) {
+            if (mockHttpServerResponses.get(responseCounter).getMockResponseContent() == null) {
                 return;
             }
 
-            os.write(mockResponseContent);
+            os.write(mockHttpServerResponses.get(responseCounter).getMockResponseContent());
         }
 
         private void processResponseHeaders(OutputStream os) throws IOException {
             addServerResponseHeaders();
-            for (String header : mockResponseHeaders.keySet()) {
-                os.write((header + ": " + mockResponseHeaders.get(header)).getBytes());
+            for (String header : mockHttpServerResponses.get(responseCounter).getMockResponseHeaders().keySet()) {
+                os.write((header + ": " + mockHttpServerResponses.get(responseCounter).getMockResponseHeaders().get(header)).getBytes());
                 os.write(NEW_LINE);
             }
             os.write(NEW_LINE);
         }
 
         private void addServerResponseHeaders() {
-            mockResponseHeaders.put("Content-Type", mockResponseContentType);
-            mockResponseHeaders.put("Content-Length", mockResponseContent.length + "");
+            Map<String, String> mockResponseHeaders = mockHttpServerResponses.get(responseCounter).getMockResponseHeaders();
+            mockResponseHeaders.put("Content-Type", mockHttpServerResponses.get(responseCounter).getMockResponseContentType());
+            mockResponseHeaders.put("Content-Length", mockHttpServerResponses.get(responseCounter).getMockResponseContent().length + "");
             mockResponseHeaders.put("Server", "Mock HTTP Server v1.0");
             mockResponseHeaders.put("Connection", "closed");
         }
-    }
-
-    public void setMockResponseHeaders(Map<String, String> headers) {
-        mockResponseHeaders.clear();
-        mockResponseHeaders.putAll(headers);
-    }
-
-    public void setMockResponseHeader(String name, String value) {
-        mockResponseHeaders.put(name, value);
-    }
-
-    public void setMockResponseCode(int responseCode) {
-        this.mockResponseCode = responseCode;
-    }
-
-    public void setMockResponseContent(String content) {
-        mockResponseContent = content.getBytes();
-    }
-
-    public void setMockResponseContent(byte[] content) {
-        mockResponseContent = content;
-    }
-
-    public void setMockResponseContentType(String type) {
-        mockResponseContentType = type;
-    }
-
-    public void setMockResponseContentEchoRequest(boolean echo) {
-        mockResponseContentEchoRequest = echo;
     }
 
     public void setReadTimeout(int milliseconds) {
@@ -529,6 +558,17 @@ public class MockHttpServer extends Thread {
                 server.stopServer();
             }
         }
+    }
+    
+    public void setMockHttpServerResponses(MockHttpServerResponse... responses) {
+        mockHttpServerResponses.clear();
+        for(int i = 0;i < responses.length; i++) {
+            mockHttpServerResponses.add(responses[i]);
+        }
+    }
+
+    public List<MockHttpServerResponse> getMockHttpServerResponses() {
+        return mockHttpServerResponses;
     }
 
     public void setServerPort(int serverPort) {

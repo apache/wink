@@ -38,8 +38,8 @@ public class HandlersTest extends BaseTest {
     private static final String DUMMY_RESPONSE_HEADER = "Dummy-Response-Header";
 
     public void testHandlers() {
-        server.setMockResponseCode(200);
-        server.setMockResponseContent(SENT_MESSAGE);
+        server.getMockHttpServerResponses().get(0).setMockResponseCode(200);
+        server.getMockHttpServerResponses().get(0).setMockResponseContent(SENT_MESSAGE);
 
         ClientConfig config = new ClientConfig();
         config.handlers(new DummyHandler());

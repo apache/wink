@@ -24,6 +24,8 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
+import org.apache.wink.client.MockHttpServer.MockHttpServerResponse;
+
 public abstract class BaseTest extends TestCase {
 
     public static String  SERVICE_URL      = "http://localhost:{0}/some/service";
@@ -51,8 +53,11 @@ public abstract class BaseTest extends TestCase {
     private MockHttpServer startMockHttpServer() {
         MockHttpServer server = new MockHttpServer(34567);
         serverPort = server.getServerPort();
-        server.setMockResponseContent(RECEIVED_MESSAGE);
-        server.setMockResponseHeaders(getMockResponseHeaders());
+        // set a default response, which can be overridden by client test code using setHttpServerResponses method
+        MockHttpServerResponse defaultResponse = new MockHttpServerResponse();
+        defaultResponse.setMockResponseContent(RECEIVED_MESSAGE);
+        defaultResponse.setMockResponseHeaders(getMockResponseHeaders());
+        server.setMockHttpServerResponses(defaultResponse);
         server.startServer();
         return server;
     }

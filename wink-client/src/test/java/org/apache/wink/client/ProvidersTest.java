@@ -126,9 +126,9 @@ public class ProvidersTest extends TestCase {
 
     public void testAtomFeedReadWrite() throws Exception {
         MockHttpServer server = new MockHttpServer(SERVER_PORT);
-        server.setMockResponseCode(200);
-        server.setMockResponseContentEchoRequest(true);
-        server.setMockResponseContentType(MediaType.APPLICATION_ATOM_XML);
+        server.getMockHttpServerResponses().get(0).setMockResponseCode(200);
+        server.getMockHttpServerResponses().get(0).setMockResponseContentEchoRequest(true);
+        server.getMockHttpServerResponses().get(0).setMockResponseContentType(MediaType.APPLICATION_ATOM_XML);
         server.startServer();
         try {
             RestClient client = new RestClient();
