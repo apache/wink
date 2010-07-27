@@ -22,12 +22,13 @@ package org.apache.wink.client.handlers;
 import org.apache.wink.client.ClientAuthenticationException;
 import org.apache.wink.client.ClientRequest;
 import org.apache.wink.client.ClientResponse;
+import org.apache.wink.common.http.HttpStatus;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * SecurityHandler for a client to perform http basic auth and http proxy auth:
+ * SecurityHandler for a client to perform http basic auth:
  * <p/>
  * <code>
  * Usage:<br/>
@@ -48,6 +49,7 @@ public class BasicAuthSecurityHandler extends AbstractAuthSecurityHandler implem
         LoggerFactory
         .getLogger(BasicAuthSecurityHandler.class);
 
+    private static final int UNAUTHORIZED = HttpStatus.UNAUTHORIZED.getCode();
     
     /**
      * Performs basic HTTP authentication and proxy authentication, if necessary.
@@ -60,7 +62,7 @@ public class BasicAuthSecurityHandler extends AbstractAuthSecurityHandler implem
     public ClientResponse handle(ClientRequest request, HandlerContext context) throws Exception {
         logger.trace("Entering BasicAuthSecurityHandler.doChain()"); //$NON-NLS-1$
         ClientResponse response = context.doChain(request);
-        if (response.getStatusCode() == 401) {
+        if (response.getStatusCode() == UNAUTHORIZED) {
             
             if (!(handlerUsername == null || handlerUsername.equals("") || handlerPassword == null || handlerPassword.equals(""))) { //$NON-NLS-1$ //$NON-NLS-2$
                 logger.trace("userid and password set so setting Authorization header"); //$NON-NLS-1$
@@ -68,13 +70,13 @@ public class BasicAuthSecurityHandler extends AbstractAuthSecurityHandler implem
                 request.getHeaders().putSingle("Authorization", getEncodedString(handlerUsername, handlerPassword)); //$NON-NLS-1$
                 logger.trace("Issuing request again with Authorization header"); //$NON-NLS-1$
                 response = context.doChain(request);
-                if (response.getStatusCode() == 401) {
+                if (response.getStatusCode() == UNAUTHORIZED) {
                     logger
-                    .trace("After sending request with Authorization header, still got 401 response"); //$NON-NLS-1$
+                    .trace("After sending request with Authorization header, still got " + UNAUTHORIZED + " response"); //$NON-NLS-1$
                     throw new ClientAuthenticationException(Messages
                             .getMessage("serviceFailedToAuthenticateUser", handlerUsername)); //$NON-NLS-1$
                 } else {
-                    logger.trace("Got a non-401 response, so returning response"); //$NON-NLS-1$
+                    logger.trace("Got a non-" + UNAUTHORIZED + " response, so returning response"); //$NON-NLS-1$
                     return response;
                 }
             } else {
@@ -84,7 +86,7 @@ public class BasicAuthSecurityHandler extends AbstractAuthSecurityHandler implem
                         .getMessage("missingClientAuthenticationCredentialForUser", handlerUsername)); //$NON-NLS-1$
             }
         } else {
-            logger.trace("Status code was not 401 so no need to re-issue request."); //$NON-NLS-1$
+            logger.trace("Status code was not " + UNAUTHORIZED + " so no need to re-issue request."); //$NON-NLS-1$
             return response;
         }
 
