@@ -19,6 +19,7 @@
  *******************************************************************************/
 package org.apache.wink.server.internal.application;
 
+import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Set;
 
@@ -156,6 +157,14 @@ public class ApplicationProcessor {
         for (Class<?> cls : classes) {
             try {
                 logger.trace("Processing class: {}", cls); //$NON-NLS-1$
+                
+                int modifiers = cls.getModifiers();
+                if (Modifier.isInterface(modifiers) || Modifier.isAbstract(modifiers)) {
+                    logger
+                        .trace("Class {} is an interface or abstract class and will not be added as a resource or provider.", //$NON-NLS-1$
+                               cls);
+                    continue;
+                }
 
                 // the validations were moved to registry
 
