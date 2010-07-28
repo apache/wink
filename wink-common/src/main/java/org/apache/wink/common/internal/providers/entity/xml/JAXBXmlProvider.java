@@ -24,6 +24,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -63,12 +66,13 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
         return isJAXBObject(type, genericType) && isSupportedMediaType(mediaType);
     }
 
-    public Object readFrom(Class<Object> type,
+    public Object readFrom(final Class<Object> type,
                            Type genericType,
                            Annotation[] annotations,
                            MediaType mediaType,
                            MultivaluedMap<String, String> httpHeaders,
-                           InputStream entityStream) throws IOException, WebApplicationException {
+                           final InputStream entityStream) throws IOException,
+        WebApplicationException {
         Unmarshaller unmarshaller = null;
         Object unmarshaledResource = null;
         XMLStreamReader xmlStreamReader = null;
@@ -94,8 +98,29 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
                     unmarshaledResource = ((JAXBElement)unmarshaledResource).getValue();
                 }
             } else {
-                unmarshaledResource = unmarshaller.unmarshal(xmlStreamReader, type).getValue();
-                closeXMLStreamReader(xmlStreamReader);
+                try {
+                    final Unmarshaller _unmarshaller = unmarshaller;
+                    final XMLStreamReader _xmlStreamReader = xmlStreamReader;
+                    unmarshaledResource =
+                        AccessController.doPrivileged(new PrivilegedExceptionAction<Object>() {
+                            public Object run() throws PrivilegedActionException {
+                                try {
+                                    Object obj = _unmarshaller.unmarshal(_xmlStreamReader, type).getValue();
+                                    closeXMLStreamReader(_xmlStreamReader);
+                                    return obj;
+                                } catch (JAXBException e) {
+                                    throw new PrivilegedActionException(e);
+                                }
+                            }
+                        });
+                } catch (PrivilegedActionException e) {
+                    closeXMLStreamReader(xmlStreamReader);
+                    if (logger.isErrorEnabled()) {
+                        logger
+                            .error(Messages.getMessage("jaxbFailToUnmarshal", type.getName()), e.getException()); //$NON-NLS-1$
+                    }
+                    throw new WebApplicationException(e.getException(), Response.Status.BAD_REQUEST);
+                }
             }
 
             releaseJAXBUnmarshaller(context, unmarshaller);

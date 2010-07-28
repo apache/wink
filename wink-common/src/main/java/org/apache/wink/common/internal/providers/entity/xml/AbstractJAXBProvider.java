@@ -517,34 +517,44 @@ public abstract class AbstractJAXBProvider {
         return context;
     }
 
-    private JAXBContext getDefaultContext(Class<?> type, Type genericType) throws JAXBException {
+    private JAXBContext getDefaultContext(final Class<?> type, final Type genericType) throws JAXBException {
         logger.trace("getDefaultContext({}, {}) entry", type, genericType); //$NON-NLS-1$
-        JAXBContext context = jaxbDefaultContexts.get(type);
-        if (context == null) {
+        try {
+            return AccessController.doPrivileged(new PrivilegedExceptionAction<JAXBContext>() {
 
-            // CAUTION: be careful with this. Adding a second or more classes to
-            // the JAXBContext has the side
-            // effect of putting a namespace prefix and the namespace decl on
-            // the subelements of the
-            // desired type, thus degrading performance.
+                public JAXBContext run() throws Exception {
+                    JAXBContext context = jaxbDefaultContexts.get(type);
+                    if (context == null) {
 
-            if (!isXMLRootElement(type) && !isXMLType(type)) { // use
-                // genericType.
-                // If that fails,
-                // we'll know
-                // soon enough
-                logger.trace("Using genericType to create context"); //$NON-NLS-1$
-                context = JAXBContext.newInstance((Class<?>)genericType);
-            } else {
-                logger.trace("Using type to create context"); //$NON-NLS-1$
-                context = JAXBContext.newInstance(type);
-            }
+                        // CAUTION: be careful with this. Adding a second or more classes to
+                        // the JAXBContext has the side
+                        // effect of putting a namespace prefix and the namespace decl on
+                        // the subelements of the
+                        // desired type, thus degrading performance.
+                        
+                        if (!isXMLRootElement(type) && !isXMLType(type)) { // use
+                            // genericType.
+                            // If that fails,
+                            // we'll know
+                            // soon enough
+                            logger.trace("Using genericType to create context"); //$NON-NLS-1$
+                            context = JAXBContext.newInstance((Class<?>)genericType);
+                        } else {
+                            logger.trace("Using type to create context"); //$NON-NLS-1$
+                            context = JAXBContext.newInstance(type);
+                        }
 
-            jaxbDefaultContexts.put(type, context);
+                        jaxbDefaultContexts.put(type, context);
+                    }
+                    logger.trace("getDefaultContext() exit returning", context); //$NON-NLS-1$
+                    logger.trace("returning context {}@{}", context.getClass().getName(), System.identityHashCode(context)); //$NON-NLS-1$
+                    return context;
+                }
+                
+            });
+        } catch(PrivilegedActionException e) {
+            throw (JAXBException)e.getException();
         }
-        logger.trace("getDefaultContext() exit returning", context); //$NON-NLS-1$
-        logger.trace("returning context {}@{}", context.getClass().getName(), System.identityHashCode(context)); //$NON-NLS-1$
-        return context;
     }
 
     /**
@@ -616,12 +626,16 @@ public abstract class AbstractJAXBProvider {
         // return null;
         // }
         // Search for Factory
-        StringBuilder b = new StringBuilder(type.getPackage().getName());
+        final StringBuilder b = new StringBuilder(type.getPackage().getName());
         b.append(".ObjectFactory"); //$NON-NLS-1$
         Class<?> factoryClass = null;
         try {
-            factoryClass = Thread.currentThread().getContextClassLoader().loadClass(b.toString());
-        } catch (ClassNotFoundException e) {
+            factoryClass = AccessController.doPrivileged(new PrivilegedExceptionAction<Class<?>>() {
+                public Class<?> run() throws ClassNotFoundException {
+                    return Thread.currentThread().getContextClassLoader().loadClass(b.toString());
+                }
+            });
+        } catch(PrivilegedActionException e) {
             if (logger.isErrorEnabled()) {
                 logger.error(Messages.getMessage("jaxbObjectFactoryNotFound", type.getName())); //$NON-NLS-1$
             }

@@ -27,6 +27,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -67,27 +70,43 @@ public class FileProvider implements MessageBodyWriter<File>, MessageBodyReader<
         return File.class.isAssignableFrom(type);
     }
 
-    public void writeTo(File t,
+    public void writeTo(final File t,
                         Class<?> type,
                         Type genericType,
                         Annotation[] annotations,
                         MediaType mediaType,
                         MultivaluedMap<String, Object> httpHeaders,
-                        OutputStream entityStream) throws IOException, WebApplicationException {
-        if (!t.canRead() || t.isDirectory()) {
-            if (logger.isWarnEnabled()) {
-                logger.warn(Messages.getMessage("cannotUseFileAsResponse", t.getAbsoluteFile())); //$NON-NLS-1$
-            }
-            throw new WebApplicationException();
-        } else {
-            FileInputStream fis = new FileInputStream(t);
-            try {
-                pipe(fis, entityStream);
-            } finally {
-                fis.close();
-            }
-        }
+                        final OutputStream entityStream) throws IOException,
+        WebApplicationException {
+        try {
+            AccessController.doPrivileged(new PrivilegedExceptionAction<Object>() {
 
+                public Object run() throws IOException {
+                    if (!t.canRead() || t.isDirectory()) {
+                        if(logger.isWarnEnabled()) {
+                            logger.warn(Messages.getMessage("cannotUseFileAsResponse", //$NON-NLS-1$
+                                                            t.getAbsoluteFile()));
+                        }
+                        throw new WebApplicationException();
+                    } else {
+                        FileInputStream fis = new FileInputStream(t);
+                        try {
+                            pipe(fis, entityStream);
+                        } finally {
+                            fis.close();
+                        }
+                    }
+                    return null;
+                }
+
+            });
+        } catch (PrivilegedActionException e) {
+            if (e.getException() instanceof IOException)
+                throw (IOException)e.getException();
+            if (e.getException() instanceof WebApplicationException)
+                throw (WebApplicationException)e.getException();
+            throw new WebApplicationException(e.getException());
+        }
     }
 
     /********************** Reader **************************************/
@@ -104,7 +123,7 @@ public class FileProvider implements MessageBodyWriter<File>, MessageBodyReader<
                          Annotation[] annotations,
                          MediaType mediaType,
                          MultivaluedMap<String, String> httpHeaders,
-                         InputStream entityStream) throws IOException, WebApplicationException {
+                         final InputStream entityStream) throws IOException, WebApplicationException {
         File dir = null;
         if (uploadDir != null) {
             dir = new File(uploadDir);
@@ -117,15 +136,29 @@ public class FileProvider implements MessageBodyWriter<File>, MessageBodyReader<
 
             }
         }
-        File f = File.createTempFile(prefix, suffix, dir);
-
-        FileOutputStream fos = new FileOutputStream(f);
+        final File _dir  = dir;
         try {
-            pipe(entityStream, fos);
-        } finally {
-            fos.close();
+            return AccessController.doPrivileged(new PrivilegedExceptionAction<File>() {
+
+                public File run() throws Exception {
+                    File f = File.createTempFile(prefix, suffix, _dir);
+                    FileOutputStream fos = new FileOutputStream(f);
+                    try {
+                        pipe(entityStream, fos);
+                    } finally {
+                        fos.close();
+                    }
+                    return f;
+                }
+                
+            });
+        } catch(PrivilegedActionException e) {
+            if (e.getException() instanceof IOException)
+                throw (IOException)e.getException();
+            if (e.getException() instanceof WebApplicationException)
+                throw (WebApplicationException)e.getException();
+            throw new WebApplicationException(e.getException());
         }
-        return f;
     }
 
     /********************** Help methods ************************************/

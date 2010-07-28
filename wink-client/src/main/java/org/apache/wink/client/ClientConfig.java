@@ -21,6 +21,9 @@
 package org.apache.wink.client;
 
 import java.io.FileNotFoundException;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -103,22 +106,29 @@ public class ClientConfig implements Cloneable, WinkConfiguration {
         }
         
         try {
-            final Set<Class<?>> classes =
-                new ApplicationFileLoader(loadWinkApplications).getClasses();
-
-            applications(new WinkApplication() {
-                @Override
-                public Set<Class<?>> getClasses() {
-                    return classes;
+            AccessController.doPrivileged(new PrivilegedExceptionAction<Object>() {
+    
+                public Object run() throws FileNotFoundException{
+                    final Set<Class<?>> classes =
+                        new ApplicationFileLoader(loadWinkApplications).getClasses();
+    
+                    applications(new WinkApplication() {
+                        @Override
+                        public Set<Class<?>> getClasses() {
+                            return classes;
+                        }
+    
+                        @Override
+                        public double getPriority() {
+                            return WinkApplication.SYSTEM_PRIORITY;
+                        }
+                    });
+                    return null;
                 }
-
-                @Override
-                public double getPriority() {
-                    return WinkApplication.SYSTEM_PRIORITY;
-                }
+                
             });
-        } catch (FileNotFoundException e) {
-            throw new ClientConfigException(e);
+        } catch(PrivilegedActionException e) {
+            throw new ClientConfigException(e.getException());
         }
     }
 
