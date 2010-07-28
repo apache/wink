@@ -74,8 +74,8 @@ public class HttpURLConnectionHandler extends AbstractConnectionHandler {
             hv = https.getHostnameVerifier();
             https.setHostnameVerifier(new HostnameVerifier() {
                 public boolean verify(String urlHostName, SSLSession session) {
-                    logger.debug("Bypassing hostname verification: URL host is " + urlHostName
-                        + ", SSLSession host is "
+                    logger.trace("Bypassing hostname verification: URL host is " + urlHostName //$NON-NLS-1$
+                        + ", SSLSession host is " //$NON-NLS-1$
                         + session.getPeerHost());
                     return true;
                 }

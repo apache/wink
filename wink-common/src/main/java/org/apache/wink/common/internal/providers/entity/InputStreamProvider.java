@@ -84,6 +84,7 @@ public class InputStreamProvider implements MessageBodyReader<InputStream>,
         try {
             ProviderUtils.copyStream(t, entityStream);
         } finally {
+            // be sure to close the input stream but not the entitystream
             t.close();
         }
     }

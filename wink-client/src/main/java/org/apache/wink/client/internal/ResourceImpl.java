@@ -256,10 +256,7 @@ public class ResourceImpl implements Resource {
         request.getAttributes().putAll(attributes);
         request.setAttribute(ProvidersRegistry.class, providersRegistry);
         request.setAttribute(WinkConfiguration.class, config);
-        
-        // for legacy, if third-party code is calling getAttribute with ClientConfig.class as key
-        request.setAttribute(ClientConfig.class, config);
-        
+        request.setAttribute(ClientConfig.class, config);  // legacy
         request.getAttributes().put(ClientRequestImpl.RESPONSE_ENTITY_GENERIC_TYPE,
                                     responseEntityType);
         request.getAttributes().put(ClientRequestImpl.RESPONSE_ENTITY_CLASS_TYPE, responseEntity);

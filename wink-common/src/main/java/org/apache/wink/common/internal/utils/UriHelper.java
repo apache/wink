@@ -154,9 +154,7 @@ public class UriHelper {
             return str;
         }
 
-        return str.substring(0, pidx) + str.substring(pidx + ui.length() + 1); // 1
-                                                                               // for
-                                                                               // @
+        return str.substring(0, pidx) + str.substring(pidx + ui.length() + 1); // 1 for @
     }
 
     /**
@@ -210,11 +208,7 @@ public class UriHelper {
             pos++;
         }
         StringBuilder result = new StringBuilder();
-        if (pos == splitBase.length && !normalizeBasePath.endsWith("/")) { // at //$NON-NLS-1$
-                                                                           // the
-                                                                           // end
-                                                                           // of
-                                                                           // base
+        if (pos == splitBase.length && !normalizeBasePath.endsWith("/")) { // at the end of base //$NON-NLS-1$
             // .../baseEnd
             String lastSegment = splitBase[pos - 1];
             result.append(lastSegment);

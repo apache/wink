@@ -43,16 +43,6 @@ public class ApplicationFileLoaderTest extends TestCase {
             .contains(org.apache.wink.common.internal.providers.entity.ByteArrayProvider.class));
     }
 
-    public void testLogging() throws Exception {
-        //WinkLogHandler.turnLoggingCaptureOn();  // WinkLogHandler imported from wink-component-test-support module
-        ApplicationFileLoader applicationFileLoader =
-            new ApplicationFileLoader("org//apache//wink//common//internal//application//custom.app");
-        //WinkLogHandler.turnLoggingCaptureOff();
-        //ArrayList<LogRecord> logRecords = WinkLogHandler.getRecords();
-        //assertEquals(13, logRecords.size());
-        //WinkLogHandler.clearRecords();  // recommend doing this so static ArrayList of LogRecords is clear for next test
-    }
-    
     public void testFileNotFound() {
         try {
             new ApplicationFileLoader("noSuchFile");

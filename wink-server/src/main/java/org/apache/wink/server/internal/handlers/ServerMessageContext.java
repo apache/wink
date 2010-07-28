@@ -86,10 +86,7 @@ public class ServerMessageContext extends AbstractRuntimeContext implements Mess
         setAttribute(ServletConfig.class, configuration.getServletConfig());
         setAttribute(FilterConfig.class, configuration.getFilterConfig());
         setAttribute(WinkConfiguration.class, configuration);
-        
-        // for legacy, if third-party code is calling getAttribute with DeploymentConfiguration.class as key
-        setAttribute(DeploymentConfiguration.class, configuration);
-        
+        setAttribute(DeploymentConfiguration.class, configuration);  // legacy
         setAttribute(ResourceRegistry.class, configuration.getResourceRegistry());
         setAttribute(ProvidersRegistry.class, configuration.getProvidersRegistry());
         setAttribute(MediaTypeCharsetAdjuster.class, ServerMediaTypeCharsetAdjuster.getInstance());
