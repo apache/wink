@@ -436,6 +436,10 @@ public class AdminServlet extends AbstractRestServlet {
      * @throws IOException
      */
     private void buildAdminHome(HttpServletResponse response) throws IOException {
+        // Set the response code before writing the content
+        // per the servlet specification.
+        response.setStatus(HttpStatus.BAD_REQUEST.getCode());
+        
         PrintWriter writer = response.getWriter();
         writer
             .write("<html>\r\n" + "<head>\r\n" //$NON-NLS-1$ //$NON-NLS-2$
@@ -462,7 +466,6 @@ public class AdminServlet extends AbstractRestServlet {
                 + "</form>\r\n" //$NON-NLS-1$
                 + "</body>\r\n" //$NON-NLS-1$
                 + "</html>"); //$NON-NLS-1$
-        response.setStatus(HttpStatus.BAD_REQUEST.getCode());
         writer.close();
         return;
     }
