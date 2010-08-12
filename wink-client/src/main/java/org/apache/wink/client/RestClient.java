@@ -20,7 +20,10 @@
 
 package org.apache.wink.client;
 
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Set;
 
 import javax.ws.rs.core.Application;
@@ -106,6 +109,23 @@ public class RestClient {
      * @return a new {@link Resource} instance attached to the specified uri
      */
     public Resource resource(String uri) {
+        return resource(URI.create(uri));
+    }
+    
+    /**
+     * Create a new {@link Resource} instance
+     * 
+     * @param uri uri of the resource to create
+     * @param httpEncode boolean to declare whether the passed uri needs to be encoded (true) or not (false)
+     * @return a new {@link Resource} instance attached to the specified uri
+     */
+    public Resource resource(String uri, boolean httpEncode) throws MalformedURLException, URISyntaxException {
+        if (httpEncode) {
+            URL url = new URL(uri);
+            // URI.toURL() will escape characters if we use one of the multi-param constructors
+            URI constructedURI = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(),url.getPath(), url.getQuery(), null);
+            return resource(constructedURI);
+        }
         return resource(URI.create(uri));
     }
 

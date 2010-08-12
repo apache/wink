@@ -27,8 +27,10 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.LogRecord;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Application;
@@ -41,6 +43,7 @@ import javax.ws.rs.ext.Provider;
 
 import org.apache.wink.client.MockHttpServer.MockHttpServerResponse;
 import org.apache.wink.common.utils.ProviderUtils;
+import org.apache.wink.logging.WinkLogHandler;
 
 public class ClientTest extends BaseTest {
 
@@ -129,6 +132,40 @@ public class ClientTest extends BaseTest {
         }));
     }
 
+    public void testRestClientURIEncoded() throws Exception {
+        WinkLogHandler.turnLoggingCaptureOn(WinkLogHandler.LEVEL.TRACE);
+        RestClient client = getRestClient();
+        // I just want to see that the URI got encoded, I don't care if the actual query succeeds; so I'm going to check the logs.
+        Resource resource = client.resource(serviceURL + "/some space", true);
+        try {
+            ClientResponse response = resource.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        WinkLogHandler.turnLoggingCaptureOff();
+        ArrayList<LogRecord> logRecords = WinkLogHandler.getRecords();
+        boolean found = false;
+        for(int i = 0; i < logRecords.size(); i++) {
+            if (logRecords.get(i).getMessage().contains("client issued a request")) {
+                if (logRecords.get(i).getMessage().contains(" http://localhost:34568/some/service/some%20space ")) {
+                    found = true;
+                }
+            }
+        }
+        assertTrue("A log record should have contained the encoded URI", found);
+        WinkLogHandler.clearRecords();
+    }
+    
+    public void testRestClientURINotEncoded() throws Exception {
+        RestClient client = getRestClient();
+        // I just want to see that the URI got rejected due to the whitespace
+        try {
+            Resource resource = client.resource(serviceURL + "/some space", false);
+            fail("should have got an IllegalArgumentException due to a space in the URI.");
+        } catch (IllegalArgumentException e) {
+        }
+    }
+    
     public void testResourceGet() {
         MockHttpServerResponse response1 = new MockHttpServerResponse();
         response1.setMockResponseCode(200);
