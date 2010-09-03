@@ -28,8 +28,12 @@ import java.util.Set;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.wink.common.internal.registry.Injectable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MethodMetadata extends AbstractMetadata {
+    
+    private static final Logger logger = LoggerFactory.getLogger(MethodMetadata.class);
 
     private ClassMetadata    parent;
     private Method           reflectionMethod;
@@ -48,7 +52,9 @@ public class MethodMetadata extends AbstractMetadata {
     }
 
     public void setReflectionMethod(Method reflectionMethod) {
+        logger.trace("setReflectionMethod({}) entry", reflectionMethod);
         this.reflectionMethod = reflectionMethod;
+        logger.trace("setReflectionMethod() exit");
     }
 
     public String getHttpMethod() {
@@ -56,11 +62,19 @@ public class MethodMetadata extends AbstractMetadata {
     }
 
     public void setHttpMethod(String httpMethod) {
+        logger.trace("setHttpMethod({}) entry", httpMethod);
         this.httpMethod = httpMethod;
+        logger.trace("setHttpMethod() exit");
     }
 
     public List<Injectable> getFormalParameters() {
         return formalParameters;
+    }
+    
+    public void setFormalParameters(List<Injectable> formalParameters) {
+        logger.trace("setFormalParameters({}) entry", formalParameters);
+        this.formalParameters = formalParameters;
+        logger.trace("setFormalParameters() exit");
     }
 
     @Override

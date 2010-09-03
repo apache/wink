@@ -32,7 +32,7 @@ public class GenericsUtilsTest extends TestCase {
 
     public interface II {
     }
-
+    
     public abstract static class A implements List<String> {
 
         public List<String>         stringList;
@@ -63,11 +63,14 @@ public class GenericsUtilsTest extends TestCase {
         assertTrue(GenericsUtils.isAssignableFrom(A.class.getField("stringList").getGenericType(),
                                                   List.class));
     }
-
+    
     public void testIsGenericInterfaceAssignableFrom() {
         assertTrue(GenericsUtils
             .isGenericInterfaceAssignableFrom(String.class, B.class, List.class));
         assertTrue(GenericsUtils.isGenericInterfaceAssignableFrom(Integer.class, B.class, I.class));
+        // II is not parameterized, but B is still assignableFrom because we
+        // assume developer just forgot to parameterize their interface:
+        assertTrue(GenericsUtils.isGenericInterfaceAssignableFrom(Integer.class, B.class, II.class));
         assertTrue(GenericsUtils
             .isGenericInterfaceAssignableFrom(byte[].class, C.class, List.class));
         assertTrue(GenericsUtils.isGenericInterfaceAssignableFrom(List.class, L.class, List.class));

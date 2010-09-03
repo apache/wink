@@ -57,7 +57,9 @@ public class GenericsUtils {
                                                            Class<?> assignable,
                                                            Class<?> rawType) {
         Type genericType = GenericsUtils.getGenericInterfaceParamType(assignable, rawType);
-        return isAssignableFrom(genericType, cls);
+        // if genericType == null, assume developer did something like forgot to parameterize
+        // their interface, in which case the genericType is indeed assignable from cls
+        return (genericType == null) || isAssignableFrom(genericType, cls);
     }
 
     /**
@@ -126,6 +128,8 @@ public class GenericsUtils {
             }
             cls = cls.getSuperclass();
         }
+        // if we're done with the recursive calls, perhaps developer
+        // did not parameterize their interface
         return null;
     }
 

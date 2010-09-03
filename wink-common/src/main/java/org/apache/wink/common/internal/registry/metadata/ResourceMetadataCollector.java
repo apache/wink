@@ -200,10 +200,10 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
     private void parseMethods() {
         F1: for (Method method : getMetadata().getResourceClass().getMethods()) {
             Class<?> declaringClass = method.getDeclaringClass();
-            if (method.getDeclaringClass() == Object.class) {
+            if (declaringClass == Object.class) {
                 continue F1;
             }
-            MethodMetadata methodMetadata = createMethodMetadata(method);
+            MethodMetadata methodMetadata = createMethodMetadata(method, null);
             if (methodMetadata != null) {
                 String path = methodMetadata.getPath();
                 String httpMethod = methodMetadata.getHttpMethod();
@@ -248,16 +248,15 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
         }
     }
 
-    private MethodMetadata createMethodMetadata(Method method) {
+    private MethodMetadata createMethodMetadata(Method method, MethodMetadata implMethodMetadata) {
 
         int modifiers = method.getModifiers();
         // only public, non-static methods
         if (Modifier.isStatic(modifiers) || !Modifier.isPublic(modifiers)) {
             return null;
         }
-
+        
         MethodMetadata metadata = new MethodMetadata(getMetadata());
-        metadata.setReflectionMethod(method);
 
         boolean hasAnnotation = false;
 
@@ -296,10 +295,21 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             hasAnnotation = true;
         }
 
-        // if the method has not annotation at all,
+        if (implMethodMetadata == null) {
+            parseMethodParameters(method, metadata);
+            metadata.setReflectionMethod(method);
+        } else {
+            // 'method' being processed is a super (abstract or interface),
+            // but we already have some concrete metadata, so:
+            metadata.setFormalParameters(implMethodMetadata.getFormalParameters());
+            metadata.setReflectionMethod(implMethodMetadata.getReflectionMethod());
+        }
+    
+        // if the method has no annotation at all,
         // then it may override a method in a superclass or interface that has
         // annotations,
         // so try looking at the overridden method annotations
+        // but keep the method params as the super may have declared a generic type param
         if (!hasAnnotation) {
 
             Class<?> declaringClass = method.getDeclaringClass();
@@ -307,7 +317,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             // try a superclass
             Class<?> superclass = declaringClass.getSuperclass();
             if (superclass != null && superclass != Object.class) {
-                MethodMetadata createdMetadata = createMethodMetadata(superclass, method);
+                MethodMetadata createdMetadata = createMethodMetadata(superclass, method, implMethodMetadata);
                 // stop with if the method found
                 if (createdMetadata != null) {
                     return createdMetadata;
@@ -317,7 +327,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             // try interfaces
             Class<?>[] interfaces = declaringClass.getInterfaces();
             for (Class<?> interfaceClass : interfaces) {
-                MethodMetadata createdMetadata = createMethodMetadata(interfaceClass, method);
+                MethodMetadata createdMetadata = createMethodMetadata(interfaceClass, method, implMethodMetadata);
                 // stop with the first method found
                 if (createdMetadata != null) {
                     return createdMetadata;
@@ -345,20 +355,37 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             return null;
         }
 
-        parseMethodParameters(method, metadata);
-
         return metadata;
     }
 
-    private MethodMetadata createMethodMetadata(Class<?> declaringClass, Method method) {
+    private MethodMetadata createMethodMetadata(Class<?> declaringClass, Method method, MethodMetadata implMethodMetadata) {
         try {
             Method declaredMethod =
                 declaringClass.getDeclaredMethod(method.getName(), method.getParameterTypes());
-            return createMethodMetadata(declaredMethod);
+            return createMethodMetadata(declaredMethod, implMethodMetadata);
         } catch (SecurityException e) {
             // can't get to overriding method
             return null;
         } catch (NoSuchMethodException e) {
+            // see if declaringClass's declaredMethod uses generic parameters
+            Method[] methods = declaringClass.getMethods();
+            for(Method candidateMethod: methods) {
+                if (candidateMethod.getName().equals(method.getName())) {
+                    // name matches, now check the param signature:
+                    if (candidateMethod.getParameterTypes().length == method.getParameterTypes().length) {
+                        // so far so good.  Now make sure the params are acceptable:
+                        for (int i = 0; i < candidateMethod.getParameterTypes().length; i++) {
+                            Class clazz = candidateMethod.getParameterTypes()[i];
+                            if (clazz.isPrimitive()) {
+                                break;  // signature doesn't match, otherwise it would have been found in getDeclaredMethod above
+                            }
+                            if (clazz.isAssignableFrom(method.getParameterTypes()[i])) {
+                                return createMethodMetadata(candidateMethod, implMethodMetadata);
+                            }
+                        }
+                    }
+                }
+            }
             // no overriding method exists
             return null;
         }
