@@ -181,4 +181,8 @@ public final class WinkLoggerAdapter extends MarkerIgnoringBase implements
             Throwable t) {
         log(Level.FINEST, message, t);
     }
+    
+    public void log(Marker marker, String caller, int level, String message, Object[] args, Throwable t) {
+        log(Level.FINEST, message, t);
+    }
 }
