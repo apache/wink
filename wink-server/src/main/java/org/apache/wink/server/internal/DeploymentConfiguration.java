@@ -300,7 +300,7 @@ public class DeploymentConfiguration implements WinkConfiguration {
         }
         ApplicationValidator applicationValidator = new ApplicationValidator();
         providersRegistry = new ProvidersRegistry(ofFactoryRegistry, applicationValidator);
-        resourceRegistry = new ResourceRegistry(ofFactoryRegistry, applicationValidator);
+        resourceRegistry = new ResourceRegistry(ofFactoryRegistry, applicationValidator, properties);
     }
 
     /**

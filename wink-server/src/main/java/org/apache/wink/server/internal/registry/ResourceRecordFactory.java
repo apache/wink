@@ -20,20 +20,33 @@
 
 package org.apache.wink.server.internal.registry;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.wink.common.DynamicResource;
 import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.lifecycle.ObjectFactory;
+import org.apache.wink.common.internal.registry.Injectable;
+import org.apache.wink.common.internal.registry.Injectable.ParamType;
 import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
+import org.apache.wink.common.internal.registry.metadata.MethodMetadata;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
 import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor;
+import org.apache.wink.server.internal.ServerCustomProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +62,14 @@ public class ResourceRecordFactory {
     private Lock                                readersLock;
     private Lock                                writersLock;
 
+    final private boolean                       isStrictConsumesProduces;
+
     public ResourceRecordFactory(LifecycleManagersRegistry lifecycleManagerRegistry) {
+        this(lifecycleManagerRegistry, new Properties());
+    }
+
+    public ResourceRecordFactory(LifecycleManagersRegistry lifecycleManagerRegistry,
+                                 Properties customProperties) {
         if (lifecycleManagerRegistry == null) {
             throw new NullPointerException("lifecycleManagerRegistry"); //$NON-NLS-1$
         }
@@ -58,6 +78,18 @@ public class ResourceRecordFactory {
         ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
         readersLock = readWriteLock.readLock();
         writersLock = readWriteLock.writeLock();
+
+        if (customProperties == null) {
+            customProperties = new Properties();
+        }
+
+        String value =
+            customProperties
+                .getProperty(ServerCustomProperties.STRICT_INTERPRET_CONSUMES_PRODUCES_SPEC_CUSTOM_PROPERTY
+                                 .getPropertyName(),
+                             ServerCustomProperties.STRICT_INTERPRET_CONSUMES_PRODUCES_SPEC_CUSTOM_PROPERTY
+                                 .getDefaultValue());
+        isStrictConsumesProduces = Boolean.valueOf(value);
     }
 
     /**
@@ -190,7 +222,9 @@ public class ResourceRecordFactory {
     }
 
     private ClassMetadata createMetadata(Class<? extends Object> cls) {
-        return ResourceMetadataCollector.collectMetadata(cls);
+        ClassMetadata md = ResourceMetadataCollector.collectMetadata(cls);
+        md = fixConsumesAndProduces(md);
+        return md;
     }
 
     private UriTemplateProcessor createUriTemplateProcessor(ClassMetadata metadata) {
@@ -262,6 +296,83 @@ public class ResourceRecordFactory {
         if (collectionTitle != null) {
             classMetadata.setCollectionTitle(collectionTitle);
         }
+        return classMetadata;
+    }
+
+    /**
+     * This method will go through each method and "fix" the method metadata to
+     * "ignore" inherited {@link Consumes} and {@link Produces} annotations when
+     * appropriate. For Produces, if the return type is void, then ignore the
+     * Produces annotation. For Consumes, if there are no entity parameters,
+     * ignore the Consumes annotation.
+     * 
+     * @param classMetadata
+     * @return
+     */
+    ClassMetadata fixConsumesAndProduces(ClassMetadata classMetadata) {
+        logger.trace("fixConsumesAndProduces({}) entry", classMetadata);
+        if (isStrictConsumesProduces) {
+            logger
+                .trace("fixConsumesAndProduces() exit returning because custom property {} is set to true.",
+                       ServerCustomProperties.STRICT_INTERPRET_CONSUMES_PRODUCES_SPEC_CUSTOM_PROPERTY
+                           .getPropertyName());
+            return classMetadata;
+        }
+
+        Set<MediaType> produces = classMetadata.getProduces();
+        Set<MediaType> consumes = classMetadata.getConsumes();
+
+        Set<MethodMetadata> allMethodMetadata = new HashSet<MethodMetadata>();
+        allMethodMetadata.addAll(classMetadata.getResourceMethods());
+        allMethodMetadata.addAll(classMetadata.getSubResourceMethods());
+
+        /*
+         * Ignore subresource locators because a) they have to return a non-void
+         * and b) they aren't allowed to have an entity parameter.
+         */
+
+        /* fix the produces */
+        for (MethodMetadata methodMetadata : allMethodMetadata) {
+            Method method = methodMetadata.getReflectionMethod();
+            if (Void.TYPE.equals(method.getReturnType())) {
+                if (produces.size() > 0 && methodMetadata.getProduces().equals(produces)) {
+                    /*
+                     * let's assume this was inherited now. weird case would be
+                     * they repeated the annotation values in both the class and
+                     * method.
+                     */
+                    methodMetadata.addProduces(MediaType.WILDCARD_TYPE);
+                    logger
+                        .trace("Method has a @Produces value but also a void return type so adding a */* to allow any response: {} ",
+                               methodMetadata);
+                }
+            }
+        }
+
+        /* fix the consumes */
+        for (MethodMetadata methodMetadata : allMethodMetadata) {
+            if (consumes.size() > 0 && methodMetadata.getConsumes().equals(consumes)) {
+                List<Injectable> params = methodMetadata.getFormalParameters();
+                boolean isEntityParamFound = false;
+                for (Injectable p : params) {
+                    if (ParamType.ENTITY.equals(p.getParamType())) {
+                        isEntityParamFound = true;
+                    }
+                }
+                /*
+                 * let's assume this was inherited now. weird case would be they
+                 * repeated the annotation values in both the class and method.
+                 */
+                if (!isEntityParamFound) {
+                    methodMetadata.addConsumes(MediaType.WILDCARD_TYPE);
+                    logger
+                        .trace("Method has a @Consumes value but no entity parameter so adding a */* to allow any request: {} ",
+                               methodMetadata);
+                }
+            }
+        }
+
+        logger.trace("fixConsumesAndProduces() exit returning {}", classMetadata);
         return classMetadata;
     }
 

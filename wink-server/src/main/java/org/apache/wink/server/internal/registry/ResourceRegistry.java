@@ -28,6 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -61,10 +62,10 @@ import org.slf4j.LoggerFactory;
  * the dispatch method of a request, following the JAX-RS spec.
  */
 public class ResourceRegistry {
-
-    private static final Logger                                                    logger             =
-                                                                                                          LoggerFactory
-                                                                                                              .getLogger(ResourceRegistry.class);
+    
+    private static final Logger                                                    logger                              =
+                                                                                                                           LoggerFactory
+                                                                                                                               .getLogger(ResourceRegistry.class);
 
     private List<ResourceRecord>                                                   rootResources;
 
@@ -74,14 +75,20 @@ public class ResourceRegistry {
     private Lock                                                                   writersLock;
     private final ApplicationValidator                                             applicationValidator;
 
-    private HashMap<Boolean, SoftConcurrentMap<String, ArrayList<ResourceRecord>>> uriToResourceCache =
-                                                                                                          new HashMap<Boolean, SoftConcurrentMap<String, ArrayList<ResourceRecord>>>();
+    private HashMap<Boolean, SoftConcurrentMap<String, ArrayList<ResourceRecord>>> uriToResourceCache                  =
+                                                                                                                           new HashMap<Boolean, SoftConcurrentMap<String, ArrayList<ResourceRecord>>>();
 
     public ResourceRegistry(LifecycleManagersRegistry factoryRegistry,
                             ApplicationValidator applicationValidator) {
+        this(factoryRegistry, applicationValidator, new Properties());
+    }
+
+    public ResourceRegistry(LifecycleManagersRegistry factoryRegistry,
+                            ApplicationValidator applicationValidator,
+                            Properties properties) {
         this.applicationValidator = applicationValidator;
         rootResources = new LinkedList<ResourceRecord>();
-        resourceRecordsFactory = new ResourceRecordFactory(factoryRegistry);
+        resourceRecordsFactory = new ResourceRecordFactory(factoryRegistry, properties);
         ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
         readersLock = readWriteLock.readLock();
         writersLock = readWriteLock.writeLock();

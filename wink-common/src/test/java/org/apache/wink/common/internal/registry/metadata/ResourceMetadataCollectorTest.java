@@ -46,6 +46,16 @@ public class ResourceMetadataCollectorTest extends TestCase {
         }
     }
 
+    @Path("/myotherresource")
+    @Consumes(MediaType.APPLICATION_XML)
+    @Produces(MediaType.APPLICATION_JSON)
+    public class MyResource2 {
+
+        @GET
+        public void getString() {
+        }
+    }
+
     @Path("superclassvalue")
     public static class SuperResource {
 
@@ -67,14 +77,14 @@ public class ResourceMetadataCollectorTest extends TestCase {
     public static class MySuperInterfaceImpl extends SuperResource implements MyInterface {
 
     }
-    
+
     @Path("abstractclass")
     public static abstract class MyAbstractClass {
-        
+
     }
-    
+
     public static class MyBaseClass extends MyAbstractClass {
-        
+
     }
 
     /**
@@ -152,5 +162,27 @@ public class ResourceMetadataCollectorTest extends TestCase {
         ClassMetadata classMetadata = ResourceMetadataCollector.collectMetadata(MyResource.class);
         Set<MediaType> mediaTypes = classMetadata.getResourceMethods().get(0).getProduces();
         assertEquals(3, mediaTypes.size());
+    }
+
+    /**
+     * Tests that the classes inherited consumes annotation is found in
+     * ResourceMetadataCollector.
+     */
+    public void testConsumesAnnotationParsingForNoEntityArgument() throws Exception {
+        ClassMetadata classMetadata = ResourceMetadataCollector.collectMetadata(MyResource2.class);
+        Set<MediaType> mediaTypes = classMetadata.getResourceMethods().get(0).getConsumes();
+        assertEquals(mediaTypes.toString(), 1, mediaTypes.size());
+        assertTrue(mediaTypes.toString(), mediaTypes.contains(MediaType.APPLICATION_XML_TYPE));
+    }
+
+    /**
+     * Tests that the classes inherited produces annotation is found in
+     * ResourceMetadataCollector.
+     */
+    public void testProducesAnnotationParsingForNoReturnedEntity() throws Exception {
+        ClassMetadata classMetadata = ResourceMetadataCollector.collectMetadata(MyResource2.class);
+        Set<MediaType> mediaTypes = classMetadata.getResourceMethods().get(0).getProduces();
+        assertEquals(mediaTypes.toString(), 1, mediaTypes.size());
+        assertTrue(mediaTypes.toString(), mediaTypes.contains(MediaType.APPLICATION_JSON_TYPE));
     }
 }
