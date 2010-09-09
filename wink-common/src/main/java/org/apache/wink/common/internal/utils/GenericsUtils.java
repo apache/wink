@@ -86,7 +86,7 @@ public class GenericsUtils {
         } else {
             if (type instanceof GenericArrayType == false) {
                 Class<?> classType = getClassType(type);
-                if (classType.isAssignableFrom(cls)) {
+                if (classType == Object.class || classType.isAssignableFrom(cls)) {
                     return true;
                 }
             }
