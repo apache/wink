@@ -104,4 +104,46 @@ public class MediaTypeHeaderDelegateTest {
             // success
         }
     }
+
+    @Test
+    public void testToleranceOfMalformedMediaTypes() {
+        MediaType mt = MediaType.valueOf("text/html;;charset=utf-8");
+        assertEquals("text", mt.getType());
+        assertEquals("html", mt.getSubtype());
+        assertEquals(1, mt.getParameters().size());
+        assertEquals("utf-8", mt.getParameters().get("charset"));
+
+        mt = MediaType.valueOf("text/html; charset: UTF-8");
+        assertEquals("text", mt.getType());
+        assertEquals("html", mt.getSubtype());
+        assertEquals(0, mt.getParameters().size());
+
+        mt = MediaType.valueOf("text/html; charset=");
+        assertEquals("text", mt.getType());
+        assertEquals("html", mt.getSubtype());
+        assertEquals(0, mt.getParameters().size());
+
+        mt = MediaType.valueOf("text/html; $str_charset; charset=ISO-8859-1");
+        assertEquals("text", mt.getType());
+        assertEquals("html", mt.getSubtype());
+        assertEquals(1, mt.getParameters().size());
+        assertEquals("ISO-8859-1", mt.getParameters().get("charset"));
+
+        mt = MediaType.valueOf("text/html; UTF-8;charset=ISO-8859-1");
+        assertEquals("text", mt.getType());
+        assertEquals("html", mt.getSubtype());
+        assertEquals(1, mt.getParameters().size());
+        assertEquals("ISO-8859-1", mt.getParameters().get("charset"));
+
+        mt = MediaType.valueOf("text/html; utf-8");
+        assertEquals("text", mt.getType());
+        assertEquals("html", mt.getSubtype());
+        assertEquals(0, mt.getParameters().size());
+
+        mt = MediaType.valueOf("text/html; UTF-8;charset=UTF-8");
+        assertEquals("text", mt.getType());
+        assertEquals("html", mt.getSubtype());
+        assertEquals(1, mt.getParameters().size());
+        assertEquals("UTF-8", mt.getParameters().get("charset"));
+    }
 }

@@ -36,9 +36,9 @@ public class MediaTypeHeaderDelegate implements HeaderDelegate<MediaType> {
     private static final Logger                               logger    =
                                                                             LoggerFactory
                                                                                 .getLogger(MediaTypeHeaderDelegate.class);
-    private static final Pattern                              EQUALS    = Pattern.compile("="); //$NON-NLS-1$
-    private static final Pattern                              SEMICOLON = Pattern.compile(";"); //$NON-NLS-1$
-    private static final Pattern                              SLASH     = Pattern.compile("/"); //$NON-NLS-1$
+    private static final Pattern                              EQUALS    = Pattern.compile("=");                           //$NON-NLS-1$
+    private static final Pattern                              SEMICOLON = Pattern.compile(";");                           //$NON-NLS-1$
+    private static final Pattern                              SLASH     = Pattern.compile("/");                           //$NON-NLS-1$
     private static final SoftConcurrentMap<String, MediaType> cache     =
                                                                             new SoftConcurrentMap<String, MediaType>();
 
@@ -77,8 +77,12 @@ public class MediaTypeHeaderDelegate implements HeaderDelegate<MediaType> {
             if (all.length > 1) {
                 paramsMap = new LinkedHashMap<String, String>();
                 for (int i = 1; i < all.length; i++) {
-                    String[] param = EQUALS.split(all[i]);
-                    paramsMap.put(param[0].trim(), param[1].trim());
+                    if (all[i] != null && all[i].trim().length() > 0) {
+                        String[] param = EQUALS.split(all[i]);
+                        if(param.length == 2) {
+                            paramsMap.put(param[0].trim(), param[1].trim());
+                        }
+                    }
                 }
             }
         } catch (ArrayIndexOutOfBoundsException e) {
