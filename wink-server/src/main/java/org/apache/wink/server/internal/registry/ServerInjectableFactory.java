@@ -428,7 +428,11 @@ public class ServerInjectableFactory extends InjectableFactory {
             MultivaluedMap<String, List<PathSegment>> pathSegmentsMap =
                 runtimeContext.getAttribute(SearchResult.class).getData()
                     .getMatchedVariablesPathSegments();
-            List<PathSegment> segments = pathSegmentsMap.getFirst(getName());
+            List<PathSegment> segments = null;
+            List<List<PathSegment>> listOfListPathSegments = pathSegmentsMap.get(getName());
+            if (listOfListPathSegments != null && listOfListPathSegments.size() > 0) {
+                segments = listOfListPathSegments.get(listOfListPathSegments.size() - 1);
+            }
             if (segments != null && segments.size() > 0) {
                 // special handling for PathSegment
                 if (isTypeOf(PathSegment.class)) {
@@ -478,12 +482,24 @@ public class ServerInjectableFactory extends InjectableFactory {
                 } else {
                     values.add(defaultValue);
                 }
+                decodeValues(values);
+                try {
+                    return getConvertor().convert(values);
+                } catch (ConversionException e) {
+                    throw new WebApplicationException(e.getCause(), Response.Status.NOT_FOUND);
+                }
             }
 
             decodeValues(values);
 
             try {
-                return getConvertor().convert(values);
+                // does not make sense to support List as a PathParam method
+                // parameter, so, we get the last value:
+                if (values.size() > 0) {
+                    return getConvertor().convert(values.get(values.size() - 1));
+                } else {
+                    return getConvertor().convert(values);
+                }
             } catch (ConversionException e) {
                 throw new WebApplicationException(e.getCause(), Response.Status.NOT_FOUND);
             }

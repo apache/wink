@@ -100,9 +100,8 @@ public class InjectableDataTest extends MockServletInvocationTest {
         @Path("simpleListMulti/{p:.*/.*}")
         @Produces
         public void getSimpleListMulti(@PathParam("p") List<String> p) {
-            assertEquals(2, p.size());
-            assertEquals("a b+c", p.get(0));
-            assertEquals("a/b", p.get(1));
+            assertEquals(1, p.size());
+            assertEquals("a/b", p.get(0));
         }
 
         @GET

@@ -404,14 +404,15 @@ public class ValueConvertorTest extends MockServletInvocationTest {
             assertEquals(null, p);
         }
 
-        // List
+        // List:  NOTE: very strange to support PathParam as a list, but if people
+        // really want it, they have it.  See JavaDoc for PathParam; there is no statement
+        // about supporting PathParam as a list.  All other *Param are support as list.
 
         @GET
         @Path("ListInteger/{p}")
         @Produces
         public void getListInteger(@PathParam("p") List<Integer> p) {
             List<Integer> list = new ArrayList<Integer>();
-            list.add(1);
             list.add(2);
             assertEquals(list, p);
         }
@@ -428,7 +429,6 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         @Produces
         public void getListString(@PathParam("p") List<String> p) {
             List<String> list = new ArrayList<String>();
-            list.add("1");
             list.add("2");
             assertEquals(list, p);
         }
@@ -445,7 +445,6 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         @Produces
         public void getListStringConstructor(@PathParam("p") List<StringConstructorClass> p) {
             List<StringConstructorClass> list = new ArrayList<StringConstructorClass>();
-            list.add(new StringConstructorClass("1"));
             list.add(new StringConstructorClass("2"));
             assertEquals(list, p);
         }
@@ -462,7 +461,6 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         @Produces
         public void getListValueOf(@PathParam("p") List<ValueOfClass> p) {
             List<ValueOfClass> list = new ArrayList<ValueOfClass>();
-            list.add(ValueOfClass.valueOf("1"));
             list.add(ValueOfClass.valueOf("2"));
             assertEquals(list, p);
         }
@@ -481,7 +479,6 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         @Produces
         public void getSetInteger(@PathParam("p") Set<Integer> p) {
             Set<Integer> list = new HashSet<Integer>();
-            list.add(1);
             list.add(2);
             assertEquals(list, p);
         }
@@ -498,7 +495,6 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         @Produces
         public void getSetString(@PathParam("p") Set<String> p) {
             Set<String> list = new HashSet<String>();
-            list.add("1");
             list.add("2");
             assertEquals(list, p);
         }
@@ -515,7 +511,6 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         @Produces
         public void getSetStringConstructor(@PathParam("p") Set<StringConstructorClass> p) {
             Set<StringConstructorClass> list = new HashSet<StringConstructorClass>();
-            list.add(new StringConstructorClass("1"));
             list.add(new StringConstructorClass("2"));
             assertEquals(list, p);
         }
@@ -532,7 +527,6 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         @Produces
         public void getSetValueOf(@PathParam("p") Set<ValueOfClass> p) {
             Set<ValueOfClass> list = new HashSet<ValueOfClass>();
-            list.add(ValueOfClass.valueOf("1"));
             list.add(ValueOfClass.valueOf("2"));
             assertEquals(list, p);
         }
@@ -551,7 +545,6 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         @Produces
         public void getSortedSetInteger(@PathParam("p") SortedSet<Integer> p) {
             SortedSet<Integer> list = new TreeSet<Integer>();
-            list.add(1);
             list.add(2);
             assertEquals(list, p);
         }
@@ -568,7 +561,6 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         @Produces
         public void getSortedSetString(@PathParam("p") SortedSet<String> p) {
             SortedSet<String> list = new TreeSet<String>();
-            list.add("1");
             list.add("2");
             assertEquals(list, p);
         }
@@ -585,7 +577,6 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         @Produces
         public void getSortedSetStringConstructor(@PathParam("p") SortedSet<StringConstructorClass> p) {
             SortedSet<StringConstructorClass> list = new TreeSet<StringConstructorClass>();
-            list.add(new StringConstructorClass("1"));
             list.add(new StringConstructorClass("2"));
             assertEquals(list, p);
         }
@@ -602,7 +593,6 @@ public class ValueConvertorTest extends MockServletInvocationTest {
         @Produces
         public void getSortedSetValueOf(@PathParam("p") SortedSet<ValueOfClass> p) {
             SortedSet<ValueOfClass> list = new TreeSet<ValueOfClass>();
-            list.add(ValueOfClass.valueOf("1"));
             list.add(ValueOfClass.valueOf("2"));
             assertEquals(list, p);
         }
