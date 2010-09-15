@@ -38,8 +38,6 @@ import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.xc.JaxbAnnotationIntrospector;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -56,13 +54,7 @@ public class PolymorphicTest extends MockServletInvocationTest {
 
     @Override
     protected Object[] getSingletons() {
-        ObjectMapper mapper = new ObjectMapper();
-        JaxbAnnotationIntrospector jaxbIntrospector = new JaxbAnnotationIntrospector();
-        mapper.getSerializationConfig().setAnnotationIntrospector(jaxbIntrospector);
-        mapper.getDeserializationConfig().setAnnotationIntrospector(jaxbIntrospector);
-        jacksonProvider = new JacksonJsonProvider();
-        jacksonProvider.setMapper(mapper);
-        return new Object[]{jacksonProvider};
+        return new Object[]{new JacksonJsonProvider(), new JacksonJaxbJsonProvider()};
     }
 
     @Path("/test/myproperties")
@@ -107,7 +99,7 @@ public class PolymorphicTest extends MockServletInvocationTest {
         
         // call the provider as though the wink-client was in use on the client side
         InputStream is = new ByteArrayInputStream(response.getContentAsByteArray());
-        MyJAXBObject myJAXBObject = (MyJAXBObject)jacksonProvider.readFrom(Object.class, MyJAXBObject.class, null, MediaType.APPLICATION_JSON_TYPE, null, is);
+        MyJAXBObject myJAXBObject = (MyJAXBObject)new JacksonJaxbJsonProvider().readFrom(Object.class, MyJAXBObject.class, null, MediaType.APPLICATION_JSON_TYPE, null, is);
 
         // make sure the Jackson deserializer is using the 'type' property on the XmlElement annotation in MyJAXBObject
         // confirm Jackson deserialized to expected object type -- support for this was added in Jackson 1.4

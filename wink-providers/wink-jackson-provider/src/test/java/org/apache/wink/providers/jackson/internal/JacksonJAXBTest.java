@@ -22,7 +22,6 @@ package org.apache.wink.providers.jackson.internal;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.GregorianCalendar;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -30,9 +29,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.xml.bind.JAXBElement;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.wink.common.model.atom.AtomEntry;
 import org.apache.wink.common.model.synd.SyndEntry;
@@ -41,6 +37,7 @@ import org.apache.wink.providers.json.JSONUtils;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
+import org.codehaus.jackson.map.SerializationConfig.Feature;
 import org.json.JSONObject;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -58,6 +55,7 @@ public class JacksonJAXBTest extends MockServletInvocationTest {
     @Override
     protected Object[] getSingletons() {
         JacksonJaxbJsonProvider jacksonProvider = new JacksonJaxbJsonProvider();
+        jacksonProvider.configure(Feature.WRITE_NULL_PROPERTIES, Boolean.FALSE);
         return new Object[] {jacksonProvider};
     }
 
@@ -170,6 +168,8 @@ public class JacksonJAXBTest extends MockServletInvocationTest {
                                                         "application/json");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
+        System.out.println(new JSONObject(ENTRY_JSON).toString(4));
+        System.out.println(new JSONObject(response.getContentAsString()).toString(4));
         assertTrue(JSONUtils.equals(JSONUtils.objectForString(ENTRY_JSON), JSONUtils
             .objectForString(response.getContentAsString())));
     }
@@ -223,9 +223,9 @@ public class JacksonJAXBTest extends MockServletInvocationTest {
     private static final String ENTRY_STR_JSON      =
                                                         "{\"base\":\"http://b216:8080/reporting/reports\"," + "\"otherAttributes\":{},"
                                                             + "\"id\":\"toptenvalidators\","
-                                                            + "\"updated\":\"2009-08-31T18:30:02Z\","
+                                                            + "\"updated\":1251743402000,"
                                                             + "\"title\":{\"lang\":\"en\",\"otherAttributes\":{},\"type\":\"text\"},"
-                                                            + "\"published\":\"2009-08-31T18:30:02Z\","
+                                                            + "\"published\":1251743402000,"
                                                             + "\"link\":[{\"otherAttributes\":{},\"rel\":\"alternate\",\"type\":\"application/json\",\"href\":\"http://b216:8080/reporting/reports/toptenvalidators?alt=application/json\"}],"
                                                             + "\"author\":[{\"name\":\"admin\"}],"
                                                             + "\"category\":[{\"otherAttributes\":{},\"term\":\"urn:com:systinet:reporting:kind:definition\",\"scheme\":\"urn:com:systinet:reporting:kind\",\"label\":\"report definition\"}]"
@@ -243,29 +243,8 @@ public class JacksonJAXBTest extends MockServletInvocationTest {
     private static final String ENTRY_JSON_POST;
 
     static {
-
-        GregorianCalendar gCal = new GregorianCalendar();
-        XMLGregorianCalendar xmlGCal = null;
-        try {
-            xmlGCal = DatatypeFactory.newInstance().newXMLGregorianCalendar(gCal);
-        } catch (DatatypeConfigurationException e) {
-            fail("could not construct XMLGregorianCalendar: " + e.getMessage());
-            e.printStackTrace();
-        }
-        String jsonTimeStr = "{";
-        jsonTimeStr += "\"eon\":" + xmlGCal.getEon() + ",";
-        jsonTimeStr += "\"year\":" + xmlGCal.getYear() + ",";
-        jsonTimeStr += "\"day\":" + xmlGCal.getDay() + ",";
-        jsonTimeStr += "\"timezone\":" + xmlGCal.getTimezone() + ",";
-        jsonTimeStr += "\"hour\":" + xmlGCal.getHour() + ",";
-        jsonTimeStr += "\"minute\":" + xmlGCal.getMinute() + ",";
-        jsonTimeStr += "\"second\":" + xmlGCal.getSecond() + ",";
-        jsonTimeStr += "\"millisecond\":" + xmlGCal.getMillisecond();
-        jsonTimeStr += "}";
-
-        ENTRY_JSON = ENTRY_STR_JSON.replaceAll("@TIME_JSON@", jsonTimeStr);
-        ENTRY_JSON_POST = ENTRY_STR_JSON_POST.replaceAll("@TIME_JSON@", jsonTimeStr);
-
+        ENTRY_JSON = ENTRY_STR_JSON;
+        ENTRY_JSON_POST = ENTRY_STR_JSON_POST;
     }
 
 }

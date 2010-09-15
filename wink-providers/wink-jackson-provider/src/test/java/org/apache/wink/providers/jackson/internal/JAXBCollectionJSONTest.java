@@ -42,6 +42,7 @@ import org.apache.wink.providers.json.JSONUtils;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
+import org.codehaus.jackson.map.SerializationConfig.Feature;
 import org.json.JSONArray;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -74,9 +75,9 @@ public class JAXBCollectionJSONTest extends MockServletInvocationTest {
     private static final String ENTRY_STR_JSON_1    =
                                                         "{\"base\":\"http://b216:8080/reporting/reports\"," + "\"otherAttributes\":{},"
                                                             + "\"id\":\"toptenvalidators\","
-                                                            + "\"updated\":\"2009-08-31T18:30:02Z\","
+                                                            + "\"updated\":1251743402000,"
                                                             + "\"title\":{\"lang\":\"en\",\"otherAttributes\":{},\"type\":\"text\"},"
-                                                            + "\"published\":\"2009-08-31T18:30:02Z\","
+                                                            + "\"published\":1251743402000,"
                                                             + "\"link\":[{\"otherAttributes\":{},\"rel\":\"alternate\",\"type\":\"application/json\",\"href\":\"http://b216:8080/reporting/reports/toptenvalidators?alt=application/json\"}],"
                                                             + "\"author\":[{\"name\":\"admin 1\"}],"
                                                             + "\"category\":[{\"otherAttributes\":{},\"term\":\"urn:com:systinet:reporting:kind:definition\",\"scheme\":\"urn:com:systinet:reporting:kind\",\"label\":\"report definition\"}]"
@@ -84,9 +85,9 @@ public class JAXBCollectionJSONTest extends MockServletInvocationTest {
     private static final String ENTRY_STR_JSON_2    =
                                                         "{\"base\":\"http://b216:8080/reporting/reports\"," + "\"otherAttributes\":{},"
                                                             + "\"id\":\"toptenvalidators\","
-                                                            + "\"updated\":\"2009-08-31T18:30:02Z\","
+                                                            + "\"updated\":1251743402000,"
                                                             + "\"title\":{\"lang\":\"en\",\"otherAttributes\":{},\"type\":\"text\"},"
-                                                            + "\"published\":\"2009-08-31T18:30:02Z\","
+                                                            + "\"published\":1251743402000,"
                                                             + "\"link\":[{\"otherAttributes\":{},\"rel\":\"alternate\",\"type\":\"application/json\",\"href\":\"http://b216:8080/reporting/reports/toptenvalidators?alt=application/json\"}],"
                                                             + "\"author\":[{\"name\":\"admin 2\"}],"
                                                             + "\"category\":[{\"otherAttributes\":{},\"term\":\"urn:com:systinet:reporting:kind:definition\",\"scheme\":\"urn:com:systinet:reporting:kind\",\"label\":\"report definition\"}]"
@@ -154,6 +155,9 @@ public class JAXBCollectionJSONTest extends MockServletInvocationTest {
     @Override
     protected Object[] getSingletons() {
     	JacksonJaxbJsonProvider jacksonProvider = new JacksonJaxbJsonProvider();
+    	jacksonProvider.configure(Feature.WRITE_NULL_MAP_VALUES, Boolean.FALSE);
+    	jacksonProvider.configure(Feature.WRITE_NULL_PROPERTIES, Boolean.FALSE);
+    	jacksonProvider.configure(Feature.WRITE_DATES_AS_TIMESTAMPS, Boolean.TRUE);
         return new Object[] {jacksonProvider};
     }
 
