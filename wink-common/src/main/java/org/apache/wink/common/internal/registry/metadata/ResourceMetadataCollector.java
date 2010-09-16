@@ -203,7 +203,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             if (declaringClass == Object.class) {
                 continue F1;
             }
-            MethodMetadata methodMetadata = createMethodMetadata(method, null);
+            MethodMetadata methodMetadata = createMethodMetadata(method);
             if (methodMetadata != null) {
                 String path = methodMetadata.getPath();
                 String httpMethod = methodMetadata.getHttpMethod();
@@ -248,7 +248,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
         }
     }
 
-    private MethodMetadata createMethodMetadata(Method method, MethodMetadata implMethodMetadata) {
+    private MethodMetadata createMethodMetadata(Method method) {
 
         int modifiers = method.getModifiers();
         // only public, non-static methods
@@ -257,6 +257,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
         }
         
         MethodMetadata metadata = new MethodMetadata(getMetadata());
+        metadata.setReflectionMethod(method);
 
         boolean hasAnnotation = false;
 
@@ -294,16 +295,6 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             metadata.setEncoded(true);
             hasAnnotation = true;
         }
-
-        if (implMethodMetadata == null) {
-            parseMethodParameters(method, metadata);
-            metadata.setReflectionMethod(method);
-        } else {
-            // 'method' being processed is a super (abstract or interface),
-            // but we already have some concrete metadata, so:
-            metadata.setFormalParameters(implMethodMetadata.getFormalParameters());
-            metadata.setReflectionMethod(implMethodMetadata.getReflectionMethod());
-        }
     
         // if the method has no annotation at all,
         // then it may override a method in a superclass or interface that has
@@ -317,9 +308,12 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             // try a superclass
             Class<?> superclass = declaringClass.getSuperclass();
             if (superclass != null && superclass != Object.class) {
-                MethodMetadata createdMetadata = createMethodMetadata(superclass, method, implMethodMetadata);
+                MethodMetadata createdMetadata = createMethodMetadata(superclass, method);
                 // stop with if the method found
                 if (createdMetadata != null) {
+                    createdMetadata.getFormalParameters().clear();
+                    createdMetadata.setReflectionMethod(method);
+                    parseMethodParameters(method, createdMetadata);
                     return createdMetadata;
                 }
             }
@@ -327,9 +321,12 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             // try interfaces
             Class<?>[] interfaces = declaringClass.getInterfaces();
             for (Class<?> interfaceClass : interfaces) {
-                MethodMetadata createdMetadata = createMethodMetadata(interfaceClass, method, implMethodMetadata);
+                MethodMetadata createdMetadata = createMethodMetadata(interfaceClass, method);
                 // stop with the first method found
                 if (createdMetadata != null) {
+                    createdMetadata.getFormalParameters().clear();
+                    createdMetadata.setReflectionMethod(method);
+                    parseMethodParameters(method, createdMetadata);
                     return createdMetadata;
                 }
             }
@@ -354,15 +351,17 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             }
             return null;
         }
+        
+        parseMethodParameters(method, metadata);
 
         return metadata;
     }
 
-    private MethodMetadata createMethodMetadata(Class<?> declaringClass, Method method, MethodMetadata implMethodMetadata) {
+    private MethodMetadata createMethodMetadata(Class<?> declaringClass, Method method) {
         try {
             Method declaredMethod =
                 declaringClass.getDeclaredMethod(method.getName(), method.getParameterTypes());
-            return createMethodMetadata(declaredMethod, implMethodMetadata);
+            return createMethodMetadata(declaredMethod);
         } catch (SecurityException e) {
             // can't get to overriding method
             return null;
@@ -380,7 +379,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                                 break;  // signature doesn't match, otherwise it would have been found in getDeclaredMethod above
                             }
                             if (clazz.isAssignableFrom(method.getParameterTypes()[i])) {
-                                return createMethodMetadata(candidateMethod, implMethodMetadata);
+                                return createMethodMetadata(candidateMethod);
                             }
                         }
                     }

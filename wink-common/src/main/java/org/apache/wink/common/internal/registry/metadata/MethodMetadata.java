@@ -71,12 +71,6 @@ public class MethodMetadata extends AbstractMetadata {
         return formalParameters;
     }
     
-    public void setFormalParameters(List<Injectable> formalParameters) {
-        logger.trace("setFormalParameters({}) entry", formalParameters);
-        this.formalParameters = formalParameters;
-        logger.trace("setFormalParameters() exit");
-    }
-
     @Override
     public Set<MediaType> getConsumes() {
         Set<MediaType> set = super.getConsumes();
