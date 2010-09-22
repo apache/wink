@@ -117,7 +117,8 @@ public class InjectableFactory {
         }
 
         if (annotationsCounter > 1) {
-            throw new IllegalStateException(Messages.getMessage("conflictingParameterAnnotations", member.getName())); //$NON-NLS-1$
+            throw new IllegalStateException(Messages
+                .getMessage("conflictingParameterAnnotations", member.getName())); //$NON-NLS-1$
         }
 
         if (matrix != null) {
@@ -153,8 +154,12 @@ public class InjectableFactory {
 
     private static class NullInjectable extends Injectable {
 
-        protected NullInjectable(ParamType paramType) {
-            super(paramType, null, null, null, null);
+        protected NullInjectable(ParamType paramType,
+                                 Class<?> type,
+                                 Type genericType,
+                                 Annotation[] annotations,
+                                 Member member) {
+            super(paramType, type, genericType, annotations, member);
         }
 
         @Override
@@ -193,7 +198,8 @@ public class InjectableFactory {
                                         Type genericType,
                                         Annotation[] annotations,
                                         Member member) {
-        return new NullInjectable(Injectable.ParamType.MATRIX);
+        return new NullInjectable(Injectable.ParamType.MATRIX, classType, genericType, annotations,
+                                  member);
     }
 
     public Injectable createPathParam(String value,
@@ -201,7 +207,8 @@ public class InjectableFactory {
                                       Type genericType,
                                       Annotation[] annotations,
                                       Member member) {
-        return new NullInjectable(Injectable.ParamType.PATH);
+        return new NullInjectable(Injectable.ParamType.PATH, classType, genericType, annotations,
+                                  member);
     }
 
     public Injectable createQueryParam(String value,
@@ -209,7 +216,8 @@ public class InjectableFactory {
                                        Type genericType,
                                        Annotation[] annotations,
                                        Member member) {
-        return new NullInjectable(Injectable.ParamType.QUERY);
+        return new NullInjectable(Injectable.ParamType.QUERY, classType, genericType, annotations,
+                                  member);
     }
 
     public Injectable createHeaderParam(String value,
@@ -217,7 +225,8 @@ public class InjectableFactory {
                                         Type genericType,
                                         Annotation[] annotations,
                                         Member member) {
-        return new NullInjectable(Injectable.ParamType.HEADER);
+        return new NullInjectable(Injectable.ParamType.HEADER, classType, genericType, annotations,
+                                  member);
     }
 
     public Injectable createCookieParam(String value,
@@ -225,7 +234,8 @@ public class InjectableFactory {
                                         Type genericType,
                                         Annotation[] annotations,
                                         Member member) {
-        return new NullInjectable(Injectable.ParamType.COOKIE);
+        return new NullInjectable(Injectable.ParamType.COOKIE, classType, genericType, annotations,
+                                  member);
     }
 
     public Injectable createFormParam(String value,
@@ -233,14 +243,16 @@ public class InjectableFactory {
                                       Type genericType,
                                       Annotation[] annotations,
                                       Member member) {
-        return new NullInjectable(Injectable.ParamType.FORM);
+        return new NullInjectable(Injectable.ParamType.FORM, classType, genericType, annotations,
+                                  member);
     }
 
     public Injectable createEntityParam(Class<?> classType,
                                         Type genericType,
                                         Annotation[] annotations,
                                         Member member) {
-        return new NullInjectable(Injectable.ParamType.ENTITY);
+        return new NullInjectable(Injectable.ParamType.ENTITY, classType, genericType, annotations,
+                                  member);
     }
 
 }
