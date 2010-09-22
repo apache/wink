@@ -81,6 +81,24 @@
             <version>3.2.1</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jmock</groupId>
+            <artifactId>jmock-legacy</artifactId>
+            <scope>test</scope>
+            <version>2.5.1</version>
+        </dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <scope>test</scope>
+            <version>2.1_3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.objenesis</groupId>
+            <artifactId>objenesis</artifactId>
+            <scope>test</scope>
+            <version>1.2</version>
+        </dependency>        
     </dependencies>
     <build>
         <plugins>

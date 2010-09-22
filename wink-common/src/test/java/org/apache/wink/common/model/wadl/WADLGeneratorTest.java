@@ -1,0 +1,322 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ *  
+ */
+
+package org.apache.wink.common.model.wadl;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.HttpMethod;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+
+import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
+import org.apache.wink.common.internal.registry.metadata.MethodMetadata;
+import org.apache.wink.common.model.wadl.Application;
+import org.apache.wink.common.model.wadl.Method;
+import org.apache.wink.common.model.wadl.ObjectFactory;
+import org.apache.wink.common.model.wadl.Request;
+import org.apache.wink.common.model.wadl.Resource;
+import org.apache.wink.common.model.wadl.WADLGenerator;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.lib.legacy.ClassImposteriser;
+import org.junit.Assert;
+import org.junit.Test;
+
+public class WADLGeneratorTest {
+
+    @Test
+    public void testInit() throws Exception {
+        new WADLGenerator();
+    }
+
+    private void marshalIt(Application app) throws JAXBException {
+        Marshaller marshaller = JAXBContext.newInstance(ObjectFactory.class).createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        marshaller.marshal(app, System.out);
+    }
+
+    @Test
+    public void testGenerateEmptyApp() throws Exception {
+        WADLGenerator generator = new WADLGenerator();
+        Application app = generator.generate(null);
+        Assert.assertNotNull(app);
+
+        Assert.assertEquals(0, app.getAny().size());
+        Assert.assertEquals(0, app.getDoc().size());
+        Assert.assertEquals(0, app.getResources().size());
+        Assert.assertEquals(0, app.getResourceTypeOrMethodOrRepresentation().size());
+        Assert.assertNull(app.getGrammars());
+    }
+
+    @Path("resource1")
+    @Consumes(value={MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
+    static class Resource1 {
+
+        @GET
+        public String hello(String abcd, @QueryParam("q2") String q, @QueryParam("q3") int q2, @HeaderParam("h1234") String h1) {
+            return null;
+        }
+    }
+
+    @Path("resource2")
+    static class Resource2 {
+        @GET
+        public String world() {
+            return null;
+        }
+
+        @POST
+        public String post() {
+            return null;
+        }
+    }
+
+    @Path("resourcePath")
+    static class ResourceNoMethods {
+    }
+
+    static class NotAResourceWithPath {
+        @GET
+        public String world() {
+            return null;
+        }
+    }
+
+    @Test
+    public void testBuildClassMetadataResource1() {
+        WADLGenerator generator = new WADLGenerator();
+        Set<Class<?>> classes = new HashSet<Class<?>>();
+        classes.add(Resource1.class);
+        Set<ClassMetadata> metadataSet = generator.buildClassMetdata(classes);
+        Assert.assertEquals(1, metadataSet.size());
+
+        ClassMetadata metadata = metadataSet.iterator().next();
+        assertEquals(Resource1.class.getAnnotation(Path.class).value(), metadata.getPath());
+
+        List<MethodMetadata> methodMetadata = metadata.getResourceMethods();
+        assertEquals(1, methodMetadata.size());
+        assertEquals(HttpMethod.GET, methodMetadata.get(0).getHttpMethod());
+    }
+
+    @Test
+    public void testBuildClassMetadataResource2() {
+        WADLGenerator generator = new WADLGenerator();
+        Set<Class<?>> classes = new HashSet<Class<?>>();
+        classes.add(Resource2.class);
+        Set<ClassMetadata> metadataSet = generator.buildClassMetdata(classes);
+        Assert.assertEquals(1, metadataSet.size());
+
+        ClassMetadata metadata = metadataSet.iterator().next();
+        assertEquals(Resource2.class.getAnnotation(Path.class).value(), metadata.getPath());
+
+        List<MethodMetadata> methodMetadata = metadata.getResourceMethods();
+        assertEquals(2, methodMetadata.size());
+        assertEquals(HttpMethod.GET, methodMetadata.get(0).getHttpMethod());
+        assertEquals(HttpMethod.POST, methodMetadata.get(1).getHttpMethod());
+    }
+
+    @Test
+    public void testBuildClassMetadata2Resources() {
+        WADLGenerator generator = new WADLGenerator();
+        Set<Class<?>> classes = new HashSet<Class<?>>();
+        classes.add(Resource1.class);
+        classes.add(Resource2.class);
+        Set<ClassMetadata> metadataSet = generator.buildClassMetdata(classes);
+        Assert.assertEquals(2, metadataSet.size());
+    }
+
+    @Test
+    public void testBuildClassMetadataNoResources() {
+        WADLGenerator generator = new WADLGenerator();
+        Set<Class<?>> classes = new HashSet<Class<?>>();
+        Set<ClassMetadata> metadataSet = generator.buildClassMetdata(classes);
+        Assert.assertEquals(0, metadataSet.size());
+
+        classes.add(NotAResourceWithPath.class);
+        metadataSet = generator.buildClassMetdata(classes);
+        Assert.assertEquals(0, metadataSet.size());
+    }
+
+    @Test
+    public void testBuildResourceWithNoMethodsWithMock() throws Exception {
+        WADLGenerator generator = new WADLGenerator();
+        Mockery mockContext = new Mockery() {
+            {
+                setImposteriser(ClassImposteriser.INSTANCE);
+            }
+        };
+
+        final ClassMetadata metadata = mockContext.mock(ClassMetadata.class);
+
+        mockContext.checking(new Expectations() {
+            {
+                oneOf(metadata).getPath();
+                will(returnValue("myPath"));
+
+                oneOf(metadata).getResourceMethods();
+                will(returnValue(null));
+            }
+        });
+
+        Resource actualRes = generator.buildResource(metadata);
+        assertNull(actualRes.getId());
+        assertEquals(MediaType.APPLICATION_FORM_URLENCODED, actualRes.getQueryType());
+        assertEquals(0, actualRes.getType().size());
+        assertEquals(0, actualRes.getDoc().size());
+        assertEquals("myPath", actualRes.getPath());
+        assertEquals(0, actualRes.getParam().size());
+        assertEquals(0, actualRes.getMethodOrResource().size());
+
+        mockContext.assertIsSatisfied();
+    }
+
+    @Test
+    public void testBuildResourceWithMock() throws Exception {
+        WADLGenerator generator = new WADLGenerator();
+        Mockery mockContext = new Mockery() {
+            {
+                setImposteriser(ClassImposteriser.INSTANCE);
+            }
+        };
+
+        final ClassMetadata metadata = mockContext.mock(ClassMetadata.class);
+        final MethodMetadata methodMeta = mockContext.mock(MethodMetadata.class);
+
+        mockContext.checking(new Expectations() {
+            {
+                oneOf(metadata).getPath();
+                will(returnValue("myResourcePath"));
+
+                oneOf(metadata).getResourceMethods();
+                will(returnValue(Collections.singletonList(methodMeta)));
+
+                oneOf(methodMeta).getHttpMethod();
+                will(returnValue(HttpMethod.GET));
+
+                oneOf(methodMeta).getFormalParameters();
+                will(returnValue(Collections.emptyList()));
+            }
+        });
+
+        Resource actualRes = generator.buildResource(metadata);
+        assertNull(actualRes.getId());
+        assertEquals(MediaType.APPLICATION_FORM_URLENCODED, actualRes.getQueryType());
+        assertEquals(0, actualRes.getType().size());
+        assertEquals(0, actualRes.getDoc().size());
+        assertEquals("myResourcePath", actualRes.getPath());
+        assertEquals(0, actualRes.getParam().size());
+
+        /* method */
+        assertEquals(1, actualRes.getMethodOrResource().size());
+        Method m = ((Method)actualRes.getMethodOrResource().get(0));
+        assertEquals(HttpMethod.GET, m.getName());
+        assertNull(m.getId());
+        assertEquals(0, m.getDoc().size());
+        assertNull(m.getHref());
+        assertNull(m.getRequest());
+        assertEquals(0, m.getResponse().size());
+
+        mockContext.assertIsSatisfied();
+    }
+
+    @Test
+    public void testBuildBasicMethodMetadataWithMock() {
+        WADLGenerator generator = new WADLGenerator();
+        Mockery mockContext = new Mockery() {
+            {
+                setImposteriser(ClassImposteriser.INSTANCE);
+            }
+        };
+        final MethodMetadata metadata = mockContext.mock(MethodMetadata.class);
+        final ClassMetadata classMeta = mockContext.mock(ClassMetadata.class);
+
+        mockContext.checking(new Expectations() {
+            {
+                oneOf(metadata).getHttpMethod();
+                will(returnValue("myHttpMethod"));
+
+                oneOf(metadata).getFormalParameters();
+                will(returnValue(null));
+            }
+        });
+
+        Method m = generator.buildMethod(classMeta, metadata);
+        assertEquals("myHttpMethod", m.getName());
+        assertEquals(0, m.getDoc().size());
+        assertEquals(0, m.getAny().size());
+        assertEquals(0, m.getResponse().size());
+        assertNull(m.getHref());
+        assertNull(m.getId());
+        assertNull(m.getRequest());
+
+        mockContext.assertIsSatisfied();
+    }
+
+    @Test
+    public void testBuildBasicRequestWithMock() {
+        WADLGenerator generator = new WADLGenerator();
+        Mockery mockContext = new Mockery() {
+            {
+                setImposteriser(ClassImposteriser.INSTANCE);
+            }
+        };
+        final MethodMetadata metadata = mockContext.mock(MethodMetadata.class);
+        final ClassMetadata classMeta = mockContext.mock(ClassMetadata.class);
+        
+        mockContext.checking(new Expectations() {
+            {
+                oneOf(metadata).getFormalParameters();
+                will(returnValue(null));
+            }
+        });
+
+        Request r = generator.buildRequest(classMeta, metadata);
+        /*
+         * should be null otherwise a no-value request element might be added
+         */
+        assertNull(r);
+        mockContext.assertIsSatisfied();
+    }
+
+    @Test
+    public void testGenerate1Resource() throws Exception {
+        WADLGenerator generator = new WADLGenerator();
+        Set<Class<?>> classes = new HashSet<Class<?>>();
+        classes.add(Resource1.class);
+        Application app = generator.generate(classes);
+        Assert.assertNotNull(app);
+        marshalIt(app);
+    }
+}
