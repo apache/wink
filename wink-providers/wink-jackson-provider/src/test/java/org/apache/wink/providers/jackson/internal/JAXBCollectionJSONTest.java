@@ -37,12 +37,11 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 
 import org.apache.wink.common.model.atom.AtomEntry;
+import org.apache.wink.providers.jackson.WinkJacksonJaxbJsonProvider;
 import org.apache.wink.providers.jackson.internal.jaxb.Person;
 import org.apache.wink.providers.json.JSONUtils;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
-import org.codehaus.jackson.map.SerializationConfig.Feature;
 import org.json.JSONArray;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -154,11 +153,7 @@ public class JAXBCollectionJSONTest extends MockServletInvocationTest {
 
     @Override
     protected Object[] getSingletons() {
-    	JacksonJaxbJsonProvider jacksonProvider = new JacksonJaxbJsonProvider();
-    	jacksonProvider.configure(Feature.WRITE_NULL_MAP_VALUES, Boolean.FALSE);
-    	jacksonProvider.configure(Feature.WRITE_NULL_PROPERTIES, Boolean.FALSE);
-    	jacksonProvider.configure(Feature.WRITE_DATES_AS_TIMESTAMPS, Boolean.TRUE);
-        return new Object[] {jacksonProvider};
+        return new Object[] {new WinkJacksonJaxbJsonProvider()};
     }
 
     @Path("/test/person")

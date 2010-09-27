@@ -32,12 +32,11 @@ import javax.xml.bind.JAXBElement;
 
 import org.apache.wink.common.model.atom.AtomEntry;
 import org.apache.wink.common.model.synd.SyndEntry;
+import org.apache.wink.providers.jackson.WinkJacksonJaxbJsonProvider;
 import org.apache.wink.providers.jackson.internal.jaxb.Person;
 import org.apache.wink.providers.json.JSONUtils;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
-import org.codehaus.jackson.map.SerializationConfig.Feature;
 import org.json.JSONObject;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -54,9 +53,7 @@ public class JacksonJAXBTest extends MockServletInvocationTest {
 
     @Override
     protected Object[] getSingletons() {
-        JacksonJaxbJsonProvider jacksonProvider = new JacksonJaxbJsonProvider();
-        jacksonProvider.configure(Feature.WRITE_NULL_PROPERTIES, Boolean.FALSE);
-        return new Object[] {jacksonProvider};
+        return new Object[] {new WinkJacksonJaxbJsonProvider()};
     }
 
     @Path("/test/person")
@@ -168,8 +165,6 @@ public class JacksonJAXBTest extends MockServletInvocationTest {
                                                         "application/json");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        System.out.println(new JSONObject(ENTRY_JSON).toString(4));
-        System.out.println(new JSONObject(response.getContentAsString()).toString(4));
         assertTrue(JSONUtils.equals(JSONUtils.objectForString(ENTRY_JSON), JSONUtils
             .objectForString(response.getContentAsString())));
     }

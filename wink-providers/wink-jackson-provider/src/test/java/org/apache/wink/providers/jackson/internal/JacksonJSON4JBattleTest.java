@@ -26,11 +26,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.wink.providers.jackson.WinkJacksonJaxbJsonProvider;
 import org.apache.wink.providers.json.JSONUtils;
 import org.apache.wink.providers.json.JsonProvider;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.json.JSONObject;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -48,7 +48,7 @@ public class JacksonJSON4JBattleTest extends MockServletInvocationTest {
         // last one listed takes priority
         // (note: this test relies on consistent behavior in MockServletInvocationTest.getSingletons() -- if this
         //  method re-orders the data return from here, test results may change)
-        return new Object[] {new JacksonJaxbJsonProvider(), new JsonProvider()};
+        return new Object[] { new WinkJacksonJaxbJsonProvider(), new JsonProvider(),};
     }
 
     @Path("/json4j")

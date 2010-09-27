@@ -29,6 +29,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.wink.providers.jackson.WinkJacksonJaxbJsonProvider;
 import org.apache.wink.providers.jackson.internal.jaxb.polymorphic.MyJAXBObject;
 import org.apache.wink.providers.jackson.internal.jaxb.polymorphic.MyProperties;
 import org.apache.wink.providers.jackson.internal.pojo.polymorphic.Animal;
@@ -45,7 +46,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 public class PolymorphicTest extends MockServletInvocationTest {
 
-    JacksonJsonProvider jacksonProvider;
+    WinkJacksonJaxbJsonProvider winkJacksonProvider = new WinkJacksonJaxbJsonProvider();
     
     @Override
     protected Class<?>[] getClasses() {
@@ -54,7 +55,7 @@ public class PolymorphicTest extends MockServletInvocationTest {
 
     @Override
     protected Object[] getSingletons() {
-        return new Object[]{new JacksonJsonProvider(), new JacksonJaxbJsonProvider()};
+        return new Object[] {winkJacksonProvider};
     }
 
     @Path("/test/myproperties")
@@ -99,7 +100,7 @@ public class PolymorphicTest extends MockServletInvocationTest {
         
         // call the provider as though the wink-client was in use on the client side
         InputStream is = new ByteArrayInputStream(response.getContentAsByteArray());
-        MyJAXBObject myJAXBObject = (MyJAXBObject)new JacksonJaxbJsonProvider().readFrom(Object.class, MyJAXBObject.class, null, MediaType.APPLICATION_JSON_TYPE, null, is);
+        MyJAXBObject myJAXBObject = (MyJAXBObject)winkJacksonProvider.readFrom(Object.class, MyJAXBObject.class, null, MediaType.APPLICATION_JSON_TYPE, null, is);
 
         // make sure the Jackson deserializer is using the 'type' property on the XmlElement annotation in MyJAXBObject
         // confirm Jackson deserialized to expected object type -- support for this was added in Jackson 1.4

@@ -29,10 +29,10 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+import org.apache.wink.providers.jackson.WinkJacksonJaxbJsonProvider;
 import org.apache.wink.providers.json.JSONUtils;
 import org.apache.wink.server.internal.servlet.MockServletInvocationTest;
 import org.apache.wink.test.mock.MockRequestConstructor;
-import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -47,8 +47,7 @@ public class JacksonPOJOTest extends MockServletInvocationTest {
 
     @Override
     protected Object[] getSingletons() {
-        JacksonJsonProvider jacksonProvider = new JacksonJsonProvider();
-        return new Object[] {jacksonProvider};
+        return new Object[] {new WinkJacksonJaxbJsonProvider()};
     }
 
     @Path("/jackson/pojo")
