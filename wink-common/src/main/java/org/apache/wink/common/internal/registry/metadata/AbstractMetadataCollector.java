@@ -28,18 +28,23 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.ws.rs.Encoded;
 
 import org.apache.wink.common.internal.registry.Injectable;
 import org.apache.wink.common.internal.registry.InjectableFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Collects common class meta data of JAX-RS Resources and Providers
  */
 public abstract class AbstractMetadataCollector {
-
+    
+    private static final Logger logger = LoggerFactory.getLogger(AbstractMetadataCollector.class);
+    
     private final ClassMetadata metadata;
 
     public AbstractMetadataCollector(Class<?> clazz) {
@@ -57,12 +62,13 @@ public abstract class AbstractMetadataCollector {
         Class<?> resourceClass = metadata.getResourceClass();
 
         List<Injectable> injectableFields = metadata.getInjectableFields();
-
+        
         // add fields
-        while (resourceClass != Object.class) {
+        while (resourceClass != Object.class && resourceClass != null) {
             for (Field field : resourceClass.getDeclaredFields()) {
                 Type fieldType = field.getGenericType();
                 Injectable injectable = parseAccessibleObject(field, fieldType);
+                logger.trace("Field is {} and injectable is {}", fieldType, injectable);
 
                 if (injectable != null) {
                     injectableFields.add(injectable);
@@ -70,9 +76,13 @@ public abstract class AbstractMetadataCollector {
             }
             resourceClass = resourceClass.getSuperclass();
         }
+        logger.trace("Injectable fields: {}", injectableFields);
 
         // add properties
         PropertyDescriptor[] propertyDescriptors = metadata.getBeanInfo().getPropertyDescriptors();
+        if(logger.isTraceEnabled()) {
+            logger.trace("Property descriptors are: {}", Arrays.asList(propertyDescriptors));
+        }
         if (propertyDescriptors != null) {
             l: for (PropertyDescriptor pd : propertyDescriptors) {
                 Method writeMethod = pd.getWriteMethod();
@@ -80,10 +90,16 @@ public abstract class AbstractMetadataCollector {
                     // the property cannot be written, ignore it.
                     continue l;
                 }
+                if(logger.isTraceEnabled()) {
+                    logger.trace("Method under inspection: {}", writeMethod.getName());
+                }
                 Type genericReturnType = writeMethod.getParameterTypes()[0];
                 Injectable injectable = parseAccessibleObject(writeMethod, genericReturnType);
                 if (injectable != null) {
                     injectableFields.add(injectable);
+                }
+                if(logger.isTraceEnabled()) {
+                    logger.trace("Injectable under inspection: {}", injectable);
                 }
             }
         }
