@@ -21,7 +21,6 @@
 package org.apache.wink.common.model.wadl;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -38,12 +37,13 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.xml.namespace.QName;
 
-import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.registry.Injectable;
 import org.apache.wink.common.internal.registry.Injectable.ParamType;
 import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
 import org.apache.wink.common.internal.registry.metadata.MethodMetadata;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
+import org.apache.wink.common.internal.uritemplate.JaxRsUriTemplateProcessor;
+import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor;
 
 public class WADLGenerator {
 
@@ -95,17 +95,182 @@ public class WADLGenerator {
         Resource r = new Resource();
 
         /* set the path */
-        r.setPath(metadata.getPath());
+        String path = metadata.getPath();
+        UriTemplateProcessor processor = JaxRsUriTemplateProcessor.newNormalizedInstance(path);
+        String pathStr = processor.getTemplate();
+        for(String var : processor.getVariableNames()) {
+            pathStr = pathStr.replaceAll("\\{(\\s)*" + var + "(\\s)*:.*\\}", "{" + var + "}");
+        }
+        r.setPath(pathStr);
 
         List<Object> methodOrSubresource = r.getMethodOrResource();
+        List<Param> resourceParams = r.getParam();
+        
         List<MethodMetadata> methodMetadata = metadata.getResourceMethods();
         if (methodMetadata != null && !methodMetadata.isEmpty()) {
             for (MethodMetadata methodMeta : methodMetadata) {
                 Method m = buildMethod(metadata, methodMeta);
                 methodOrSubresource.add(m);
+                
+                /* also scan for all the path and matrix parameters */
+                List<Injectable> params = methodMeta.getFormalParameters();
+                if (params != null && params.size() > 0) {
+                    for (Injectable p : params) {
+                        switch (p.getParamType()) {
+                            case QUERY:
+                                /* do nothing */
+                                break;
+                            case HEADER:
+                                /* do nothing */
+                                break;
+                            case ENTITY:
+                                /* do nothing */
+                                break;
+                            case COOKIE:
+                                /* not supported in WADL */
+                                break;
+                            case FORM:
+                                /* should show up in the representation instead */
+                                break;
+                            case PATH:
+                                resourceParams.add(buildParam(p));
+                                break;
+                            case MATRIX:
+                                resourceParams.add(buildParam(p));
+                                break;
+                            case CONTEXT:
+                                /* do nothing */
+                                break;
+                        }
+                    }
+                }
             }
         }
-
+        
+        /*
+         * list the class level parameters
+         */
+        for(Injectable p : metadata.getInjectableFields()) {
+            switch (p.getParamType()) {
+                case QUERY:
+                    resourceParams.add(buildParam(p));
+                    break;
+                case HEADER:
+                    resourceParams.add(buildParam(p));
+                    break;
+                case ENTITY:
+                    /* do nothing */
+                    break;
+                case COOKIE:
+                    /* not supported in WADL */
+                    break;
+                case FORM:
+                    /* should show up in the representation instead */
+                    break;
+                case PATH:
+                    resourceParams.add(buildParam(p));
+                    break;
+                case MATRIX:
+                    resourceParams.add(buildParam(p));
+                    break;
+                case CONTEXT:
+                    /* do nothing */
+                    break;
+            }
+        }
+        
+        /*
+         * list subresource methods
+         */
+        methodMetadata = metadata.getSubResourceMethods();
+        if (methodMetadata != null && !methodMetadata.isEmpty()) {
+            for (MethodMetadata methodMeta : methodMetadata) {
+                Resource subRes = new Resource();
+                Method m = buildMethod(metadata, methodMeta);
+                subRes.getMethodOrResource().add(m);
+                subRes.setPath(methodMeta.getPath());
+                methodOrSubresource.add(subRes);
+                
+                /* also scan for all the path and matrix parameters */
+                List<Injectable> params = methodMeta.getFormalParameters();
+                if (params != null && params.size() > 0) {
+                    for (Injectable p : params) {
+                        switch (p.getParamType()) {
+                            case QUERY:
+                                /* do nothing */
+                                break;
+                            case HEADER:
+                                /* do nothing */
+                                break;
+                            case ENTITY:
+                                /* do nothing */
+                                break;
+                            case COOKIE:
+                                /* not supported in WADL */
+                                break;
+                            case FORM:
+                                /* should show up in the representation instead */
+                                break;
+                            case PATH:
+                                subRes.getParam().add(buildParam(p));
+                                break;
+                            case MATRIX:
+                                subRes.getParam().add(buildParam(p));
+                                break;
+                            case CONTEXT:
+                                /* do nothing */
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+        
+        /*
+         * list subresource locators
+         */
+        methodMetadata = metadata.getSubResourceLocators();
+        if (methodMetadata != null && !methodMetadata.isEmpty()) {
+            for (MethodMetadata methodMeta : methodMetadata) {
+                Resource subRes = new Resource();
+                subRes.setPath(methodMeta.getPath());
+                methodOrSubresource.add(subRes);
+                
+                /* also scan for all the path and matrix parameters */
+                List<Injectable> params = methodMeta.getFormalParameters();
+                if (params != null && params.size() > 0) {
+                    for (Injectable p : params) {
+                        switch (p.getParamType()) {
+                            case QUERY:
+                                /* do nothing */
+                                break;
+                            case HEADER:
+                                /* do nothing */
+                                break;
+                            case ENTITY:
+                                /* do nothing */
+                                break;
+                            case COOKIE:
+                                /* not supported in WADL */
+                                break;
+                            case FORM:
+                                /* should show up in the representation instead */
+                                break;
+                            case PATH:
+                                subRes.getParam().add(buildParam(p));
+                                break;
+                            case MATRIX:
+                                subRes.getParam().add(buildParam(p));
+                                break;
+                            case CONTEXT:
+                                /* do nothing */
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+        
         return r;
     }
 
