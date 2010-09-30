@@ -56,7 +56,7 @@ public class HandlersTest extends BaseTest {
         assertEquals(SENT_MESSAGE.toLowerCase(), response.getEntity(String.class));
 
         // Check that handler added Http header
-        assertTrue(server.getRequestHeaders().get(DUMMY_REQUEST_HEADER)
+        assertTrue(server.getRequestHeaders().get(DUMMY_REQUEST_HEADER).get(0)
             .equalsIgnoreCase(DUMMY_REQUEST_VALUE));
         assertTrue(response.getHeaders().get(DUMMY_RESPONSE_HEADER).get(0)
             .equalsIgnoreCase(DUMMY_RESPONSE_VALUE));

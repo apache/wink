@@ -27,8 +27,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.LogRecord;
 
@@ -36,7 +36,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response.Status.Family;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
@@ -61,7 +60,6 @@ public class ClientTest extends BaseTest {
             this.t = t;
         }
     }
-    
 
     @Provider
     public static class TestGenericsProvider implements MessageBodyWriter<TestGenerics<String>>,
@@ -135,7 +133,8 @@ public class ClientTest extends BaseTest {
     public void testRestClientURIEncoded() throws Exception {
         WinkLogHandler.turnLoggingCaptureOn(WinkLogHandler.LEVEL.TRACE);
         RestClient client = getRestClient();
-        // I just want to see that the URI got encoded, I don't care if the actual query succeeds; so I'm going to check the logs.
+        // I just want to see that the URI got encoded, I don't care if the
+        // actual query succeeds; so I'm going to check the logs.
         Resource resource = client.resource(serviceURL + "/some space", true);
         try {
             ClientResponse response = resource.get();
@@ -143,11 +142,12 @@ public class ClientTest extends BaseTest {
             e.printStackTrace();
         }
         WinkLogHandler.turnLoggingCaptureOff();
-        ArrayList<LogRecord> logRecords = WinkLogHandler.getRecords();
+        List<LogRecord> logRecords = WinkLogHandler.getRecords();
         boolean found = false;
-        for(int i = 0; i < logRecords.size(); i++) {
+        for (int i = 0; i < logRecords.size(); i++) {
             if (logRecords.get(i).getMessage().contains("client issued a request")) {
-                if (logRecords.get(i).getMessage().contains(" http://localhost:34568/some/service/some%20space ")) {
+                if (logRecords.get(i).getMessage()
+                    .contains(" http://localhost:34568/some/service/some%20space ")) {
                     found = true;
                 }
             }
@@ -155,7 +155,7 @@ public class ClientTest extends BaseTest {
         assertTrue("A log record should have contained the encoded URI", found);
         WinkLogHandler.clearRecords();
     }
-    
+
     public void testRestClientURINotEncoded() throws Exception {
         RestClient client = getRestClient();
         // I just want to see that the URI got rejected due to the whitespace
@@ -165,7 +165,7 @@ public class ClientTest extends BaseTest {
         } catch (IllegalArgumentException e) {
         }
     }
-    
+
     public void testResourceGet() {
         MockHttpServerResponse response1 = new MockHttpServerResponse();
         response1.setMockResponseCode(200);
@@ -188,9 +188,6 @@ public class ClientTest extends BaseTest {
         TestGenerics<String> tg = resource.get(new EntityType<TestGenerics<String>>() {
         });
         assertEquals(RECEIVED_MESSAGE, tg.getT());
-        assertEquals(200, clientResponse.getStatusType().getStatusCode());
-        assertEquals(Family.SUCCESSFUL, clientResponse.getStatusType().getFamily());
-        assertEquals("OK", clientResponse.getStatusType().getReasonPhrase());
     }
 
     public void testResourcePut() throws IOException {
@@ -217,9 +214,6 @@ public class ClientTest extends BaseTest {
         }, SENT_MESSAGE);
         assertEquals(RECEIVED_MESSAGE, tg.getT());
 
-        assertEquals(200, clientResponse.getStatusType().getStatusCode());
-        assertEquals(Family.SUCCESSFUL, clientResponse.getStatusType().getFamily());
-        assertEquals("OK", clientResponse.getStatusType().getReasonPhrase());
     }
 
     public void testResourcePost() throws IOException {
@@ -246,10 +240,6 @@ public class ClientTest extends BaseTest {
         TestGenerics<String> tg = resource.post(new EntityType<TestGenerics<String>>() {
         }, SENT_MESSAGE);
         assertEquals(RECEIVED_MESSAGE, tg.getT());
-
-        assertEquals(200, clientResponse.getStatusType().getStatusCode());
-        assertEquals(Family.SUCCESSFUL, clientResponse.getStatusType().getFamily());
-        assertEquals("OK", clientResponse.getStatusType().getReasonPhrase());
     }
 
     public void testResourceDelete() {
@@ -273,10 +263,6 @@ public class ClientTest extends BaseTest {
         TestGenerics<String> tg = resource.delete(new EntityType<TestGenerics<String>>() {
         });
         assertEquals(RECEIVED_MESSAGE, tg.getT());
-
-        assertEquals(200, clientResponse.getStatusType().getStatusCode());
-        assertEquals(Family.SUCCESSFUL, clientResponse.getStatusType().getFamily());
-        assertEquals("OK", clientResponse.getStatusType().getReasonPhrase());
     }
 
     public void testInvoke() {
@@ -316,10 +302,6 @@ public class ClientTest extends BaseTest {
         try {
             ClientResponse res = resource.accept("text/plain").get();
             assertTrue(res.getStatusCode() == 400);
-
-            assertEquals(400, res.getStatusType().getStatusCode());
-            assertEquals(Family.CLIENT_ERROR, res.getStatusType().getFamily());
-            assertEquals("Bad Request", res.getStatusType().getReasonPhrase());
         } catch (Exception e) {
             fail("Exception must not be thrown");
         }
@@ -329,8 +311,10 @@ public class ClientTest extends BaseTest {
 
         MockHttpServer server = new MockHttpServer(34567);
         server.getMockHttpServerResponses().get(0).setMockResponseCode(200);
-        server.getMockHttpServerResponses().get(0).setMockResponseContent("REQUEST".getBytes("UTF-16"));
-        server.getMockHttpServerResponses().get(0).setMockResponseContentType("text/plain; charset=UTF-16");
+        server.getMockHttpServerResponses().get(0).setMockResponseContent("REQUEST"
+            .getBytes("UTF-16"));
+        server.getMockHttpServerResponses().get(0)
+            .setMockResponseContentType("text/plain; charset=UTF-16");
 
         server.startServer();
         try {
@@ -349,7 +333,8 @@ public class ClientTest extends BaseTest {
     public void testResponseEmptyContentType() throws IOException {
         MockHttpServer server = new MockHttpServer(34567);
         server.getMockHttpServerResponses().get(0).setMockResponseCode(200);
-        server.getMockHttpServerResponses().get(0).setMockResponseContent("REQUEST".getBytes("UTF-8"));
+        server.getMockHttpServerResponses().get(0).setMockResponseContent("REQUEST"
+            .getBytes("UTF-8"));
         server.getMockHttpServerResponses().get(0).setMockResponseContentType("");
 
         server.startServer();
@@ -364,5 +349,54 @@ public class ClientTest extends BaseTest {
             server.stopServer();
         }
     }
-    
+
+    public void testHeadersConcat() throws IOException {
+        MockHttpServer server = new MockHttpServer(34567);
+
+        MockHttpServerResponse response1 = new MockHttpServerResponse();
+        response1.setMockResponseCode(200);
+        MockHttpServerResponse response2 = new MockHttpServerResponse();
+        response2.setMockResponseCode(200);
+        MockHttpServerResponse response3 = new MockHttpServerResponse();
+        response3.setMockResponseCode(200);
+        MockHttpServerResponse response4 = new MockHttpServerResponse();
+        response4.setMockResponseCode(200);
+
+        server.setMockHttpServerResponses(response1, response2, response3, response4);
+
+        server.startServer();
+        // single
+        try {
+            RestClient client = getRestClient();
+            Resource resource =
+                client.resource(MessageFormat.format(SERVICE_URL, String.valueOf(server
+                    .getServerPort()))).header("customHeader1", "abcd");
+            resource.accept(MediaType.TEXT_PLAIN_TYPE).get(String.class);
+            assertEquals(server.getRequestHeaders().get("customHeader1").get(0), "abcd");
+
+            resource =
+                client.resource(MessageFormat.format(SERVICE_URL, String.valueOf(server
+                    .getServerPort()))).header("customHeader1", "abcd", "lmnop");
+            resource.accept(MediaType.TEXT_PLAIN_TYPE).get(String.class);
+            assertEquals("abcd, lmnop", server.getRequestHeaders().get("customHeader1").get(0));
+
+            resource =
+                client.resource(MessageFormat.format(SERVICE_URL, String.valueOf(server
+                    .getServerPort()))).header("customHeader1", "abcd", "lmnop", "xyz");
+            resource.accept(MediaType.TEXT_PLAIN_TYPE).get(String.class);
+            assertEquals(server.getRequestHeaders().get("customHeader1").get(0), "abcd, lmnop, xyz");
+
+            resource =
+                client.resource(MessageFormat.format(SERVICE_URL, String.valueOf(server
+                    .getServerPort()))).header("customHeader1", "   ", "lmnop", "xyz")
+                    .header("customHeader1", "customValue1");
+            resource.accept(MediaType.TEXT_PLAIN_TYPE).get(String.class);
+            assertEquals(server.getRequestHeaders().get("customHeader1").get(0), "lmnop, xyz");
+            assertEquals(server.getRequestHeaders().get("customHeader1").get(1), "customValue1");
+        } finally {
+            server.stopServer();
+        }
+        server.getMockHttpServerResponses().clear();
+    }
+
 }

@@ -123,10 +123,20 @@ public class ResourceImpl implements Resource {
         if (name == null) {
             return this;
         }
+        StringBuilder finalHeaderValue = new StringBuilder();
+        boolean isFirstHeader = true;
         for (String value : values) {
-            if (value != null) {
-                headers.add(name, value);
+            if (value != null && value.trim().length() != 0) {
+                if (!isFirstHeader) {
+                    finalHeaderValue.append(", ");
+                } else {
+                    isFirstHeader = false;
+                }
+                finalHeaderValue.append(value);
             }
+        }
+        if (finalHeaderValue.length() > 0) {
+            headers.add(name, finalHeaderValue.toString());
         }
         return this;
     }
@@ -256,7 +266,7 @@ public class ResourceImpl implements Resource {
         request.getAttributes().putAll(attributes);
         request.setAttribute(ProvidersRegistry.class, providersRegistry);
         request.setAttribute(WinkConfiguration.class, config);
-        request.setAttribute(ClientConfig.class, config);  // legacy
+        request.setAttribute(ClientConfig.class, config); // legacy
         request.getAttributes().put(ClientRequestImpl.RESPONSE_ENTITY_GENERIC_TYPE,
                                     responseEntityType);
         request.getAttributes().put(ClientRequestImpl.RESPONSE_ENTITY_CLASS_TYPE, responseEntity);
