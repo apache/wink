@@ -200,6 +200,15 @@ public class WADLGeneratorTest {
 
                 oneOf(metadata).getResourceMethods();
                 will(returnValue(null));
+                
+                oneOf(metadata).getInjectableFields();
+                will(returnValue(null));
+                
+                oneOf(metadata).getSubResourceMethods();
+                will(returnValue(null));
+
+                oneOf(metadata).getSubResourceLocators();
+                will(returnValue(null));
             }
         });
 
@@ -248,6 +257,18 @@ public class WADLGeneratorTest {
 
                 oneOf(methodMeta).getReflectionMethod();
                 will(returnValue(method));
+                
+                oneOf(methodMeta).getFormalParameters();
+                will(returnValue(null));
+                
+                oneOf(metadata).getInjectableFields();
+                will(returnValue(null));
+
+                oneOf(metadata).getSubResourceMethods();
+                will(returnValue(null));
+
+                oneOf(metadata).getSubResourceLocators();
+                will(returnValue(null));
             }
         });
 

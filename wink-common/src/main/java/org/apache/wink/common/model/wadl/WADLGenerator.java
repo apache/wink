@@ -98,20 +98,20 @@ public class WADLGenerator {
         String path = metadata.getPath();
         UriTemplateProcessor processor = JaxRsUriTemplateProcessor.newNormalizedInstance(path);
         String pathStr = processor.getTemplate();
-        for(String var : processor.getVariableNames()) {
+        for (String var : processor.getVariableNames()) {
             pathStr = pathStr.replaceAll("\\{(\\s)*" + var + "(\\s)*:.*\\}", "{" + var + "}");
         }
         r.setPath(pathStr);
 
         List<Object> methodOrSubresource = r.getMethodOrResource();
         List<Param> resourceParams = r.getParam();
-        
+
         List<MethodMetadata> methodMetadata = metadata.getResourceMethods();
         if (methodMetadata != null && !methodMetadata.isEmpty()) {
             for (MethodMetadata methodMeta : methodMetadata) {
                 Method m = buildMethod(metadata, methodMeta);
                 methodOrSubresource.add(m);
-                
+
                 /* also scan for all the path and matrix parameters */
                 List<Injectable> params = methodMeta.getFormalParameters();
                 if (params != null && params.size() > 0) {
@@ -146,39 +146,42 @@ public class WADLGenerator {
                 }
             }
         }
-        
+
         /*
          * list the class level parameters
          */
-        for(Injectable p : metadata.getInjectableFields()) {
-            switch (p.getParamType()) {
-                case QUERY:
-                    resourceParams.add(buildParam(p));
-                    break;
-                case HEADER:
-                    resourceParams.add(buildParam(p));
-                    break;
-                case ENTITY:
-                    /* do nothing */
-                    break;
-                case COOKIE:
-                    /* not supported in WADL */
-                    break;
-                case FORM:
-                    /* should show up in the representation instead */
-                    break;
-                case PATH:
-                    resourceParams.add(buildParam(p));
-                    break;
-                case MATRIX:
-                    resourceParams.add(buildParam(p));
-                    break;
-                case CONTEXT:
-                    /* do nothing */
-                    break;
+        List<Injectable> fields = metadata.getInjectableFields();
+        if (fields != null) {
+            for (Injectable p : metadata.getInjectableFields()) {
+                switch (p.getParamType()) {
+                    case QUERY:
+                        resourceParams.add(buildParam(p));
+                        break;
+                    case HEADER:
+                        resourceParams.add(buildParam(p));
+                        break;
+                    case ENTITY:
+                        /* do nothing */
+                        break;
+                    case COOKIE:
+                        /* not supported in WADL */
+                        break;
+                    case FORM:
+                        /* should show up in the representation instead */
+                        break;
+                    case PATH:
+                        resourceParams.add(buildParam(p));
+                        break;
+                    case MATRIX:
+                        resourceParams.add(buildParam(p));
+                        break;
+                    case CONTEXT:
+                        /* do nothing */
+                        break;
+                }
             }
         }
-        
+
         /*
          * list subresource methods
          */
@@ -190,7 +193,7 @@ public class WADLGenerator {
                 subRes.getMethodOrResource().add(m);
                 subRes.setPath(methodMeta.getPath());
                 methodOrSubresource.add(subRes);
-                
+
                 /* also scan for all the path and matrix parameters */
                 List<Injectable> params = methodMeta.getFormalParameters();
                 if (params != null && params.size() > 0) {
@@ -225,7 +228,7 @@ public class WADLGenerator {
                 }
             }
         }
-        
+
         /*
          * list subresource locators
          */
@@ -235,7 +238,7 @@ public class WADLGenerator {
                 Resource subRes = new Resource();
                 subRes.setPath(methodMeta.getPath());
                 methodOrSubresource.add(subRes);
-                
+
                 /* also scan for all the path and matrix parameters */
                 List<Injectable> params = methodMeta.getFormalParameters();
                 if (params != null && params.size() > 0) {
@@ -270,7 +273,7 @@ public class WADLGenerator {
                 }
             }
         }
-        
+
         return r;
     }
 
