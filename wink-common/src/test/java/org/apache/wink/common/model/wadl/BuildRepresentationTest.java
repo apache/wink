@@ -91,7 +91,7 @@ public class BuildRepresentationTest {
         });
 
         try {
-            generator.buildRepresentation(classMeta, methodMeta, metadata);
+            generator.buildIncomingRepresentation(classMeta, methodMeta, metadata);
             fail();
         } catch (IllegalArgumentException e) {
             /* expected */
@@ -101,7 +101,7 @@ public class BuildRepresentationTest {
 
     @Test
     public void testNullMethodMetadata() throws Exception {
-        Set<Representation> reprSet = generator.buildRepresentation(classMeta, null, metadata);
+        Set<Representation> reprSet = generator.buildIncomingRepresentation(classMeta, null, metadata);
         assertNull(reprSet);
 
         mockContext.assertIsSatisfied();
@@ -116,7 +116,7 @@ public class BuildRepresentationTest {
             }
         });
 
-        Set<Representation> reprSet = generator.buildRepresentation(classMeta, methodMeta, null);
+        Set<Representation> reprSet = generator.buildIncomingRepresentation(classMeta, methodMeta, null);
 
         assertNull(reprSet);
 
@@ -132,7 +132,7 @@ public class BuildRepresentationTest {
             }
         });
 
-        Set<Representation> reprSet = generator.buildRepresentation(classMeta, methodMeta, null);
+        Set<Representation> reprSet = generator.buildIncomingRepresentation(classMeta, methodMeta, null);
         assertNull(reprSet);
 
         mockContext.assertIsSatisfied();
@@ -151,7 +151,7 @@ public class BuildRepresentationTest {
             }
         });
 
-        Set<Representation> reprSet = generator.buildRepresentation(classMeta, methodMeta, null);
+        Set<Representation> reprSet = generator.buildIncomingRepresentation(classMeta, methodMeta, null);
         assertEquals(3, reprSet.size());
         List<Representation> orderedRepr = new ArrayList<Representation>(reprSet);
         Collections.sort(orderedRepr, new Comparator<Representation>() {
@@ -182,7 +182,7 @@ public class BuildRepresentationTest {
             }
         });
 
-        Set<Representation> reprSet = generator.buildRepresentation(classMeta, methodMeta, null);
+        Set<Representation> reprSet = generator.buildIncomingRepresentation(classMeta, methodMeta, null);
         assertEquals(1, reprSet.size());
         List<Representation> orderedRepr = new ArrayList<Representation>(reprSet);
         Collections.sort(orderedRepr, new Comparator<Representation>() {
@@ -211,7 +211,7 @@ public class BuildRepresentationTest {
             }
         });
 
-        Set<Representation> reprSet = generator.buildRepresentation(classMeta, methodMeta, null);
+        Set<Representation> reprSet = generator.buildIncomingRepresentation(classMeta, methodMeta, null);
         assertEquals(1, reprSet.size());
         List<Representation> orderedRepr = new ArrayList<Representation>(reprSet);
         Collections.sort(orderedRepr, new Comparator<Representation>() {
@@ -277,7 +277,7 @@ public class BuildRepresentationTest {
             }
         });
 
-        Set<Representation> reprSet = generator.buildRepresentation(classMeta, methodMeta, null);
+        Set<Representation> reprSet = generator.buildIncomingRepresentation(classMeta, methodMeta, null);
         assertEquals(1, reprSet.size());
         List<Representation> orderedRepr = new ArrayList<Representation>(reprSet);
         Collections.sort(orderedRepr, new Comparator<Representation>() {

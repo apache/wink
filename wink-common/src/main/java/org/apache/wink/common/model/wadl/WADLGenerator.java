@@ -21,7 +21,9 @@
 package org.apache.wink.common.model.wadl;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,11 +32,13 @@ import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.MatrixParam;
+import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.xml.namespace.QName;
 
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.registry.Injectable;
 import org.apache.wink.common.internal.registry.Injectable.ParamType;
 import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
@@ -65,7 +69,7 @@ public class WADLGenerator {
     /* package */Set<ClassMetadata> buildClassMetdata(Set<Class<?>> classes) {
         Set<ClassMetadata> metadataSet = new HashSet<ClassMetadata>(classes.size());
         for (Class<?> c : classes) {
-            if (!ResourceMetadataCollector.isResource(c)) {
+            if (!isResource(c)) {
                 /* not a resource, so skip it */
                 continue;
             }
@@ -112,6 +116,11 @@ public class WADLGenerator {
         if (r != null) {
             m.setRequest(r);
         }
+
+        List<Response> resp = buildResponse(metadata);
+        if (resp != null) {
+            m.getResponse().addAll(resp);
+        }
         return m;
     }
 
@@ -134,7 +143,7 @@ public class WADLGenerator {
                     case ENTITY:
                         /* need to build the representation */
                         Set<Representation> representations =
-                            buildRepresentation(classMetadata, metadata, p);
+                            buildIncomingRepresentation(classMetadata, metadata, p);
                         r.getRepresentation().addAll(representations);
                         break;
                     case COOKIE:
@@ -260,9 +269,9 @@ public class WADLGenerator {
         return p;
     }
 
-    /* package */Set<Representation> buildRepresentation(ClassMetadata classMetadata,
-                                                         MethodMetadata methodMetadata,
-                                                         Injectable metadata) {
+    /* package */Set<Representation> buildIncomingRepresentation(ClassMetadata classMetadata,
+                                                                 MethodMetadata methodMetadata,
+                                                                 Injectable metadata) {
         if (methodMetadata == null) {
             return null;
         }
@@ -287,7 +296,8 @@ public class WADLGenerator {
                  * it
                  */
                 /*
-                 * special cases include application/xml, text/xml;  should set the element attribute
+                 * special cases include application/xml, text/xml; should set
+                 * the element attribute
                  */
                 List<Param> params = new ArrayList<Param>();
                 if (mt.isCompatible(MediaType.APPLICATION_FORM_URLENCODED_TYPE) || mt
@@ -306,7 +316,7 @@ public class WADLGenerator {
                      * required to be supported in other places than the
                      * resource method parameters
                      */
-                    if(!params.isEmpty()) {
+                    if (!params.isEmpty()) {
                         r.getParam().addAll(params);
                     }
                 }
@@ -326,4 +336,104 @@ public class WADLGenerator {
 
         return reps;
     }
+
+    /* package */List<Response> buildResponse(MethodMetadata metadata) {
+        if (metadata == null) {
+            return null;
+        }
+        Response r = null;
+        // Set<MediaType> produces = metadata.getProduces();
+        Set<Representation> representations = buildOutgoingRepresentation(metadata, null);
+        if (representations != null && !representations.isEmpty()) {
+            r = new Response();
+            r.getRepresentation().addAll(representations);
+        }
+
+        java.lang.reflect.Method m = metadata.getReflectionMethod();
+        if (Void.TYPE.equals(m.getReturnType())) {
+            if (r == null) {
+                r = new Response();
+            }
+            r.getStatus().add(Long.valueOf(204));
+        } else if (!javax.ws.rs.core.Response.class.isAssignableFrom(m.getReturnType())) {
+            if (r == null) {
+                r = new Response();
+            }
+            r.getStatus().add(Long.valueOf(200));
+        }
+
+        return Collections.singletonList(r);
+    }
+
+    /* package */Set<Representation> buildOutgoingRepresentation(MethodMetadata methodMetadata,
+                                                                 Class<?> returnType) {
+        if (methodMetadata == null) {
+            return null;
+        }
+
+        /*
+         * first check all the consumes
+         */
+        Set<MediaType> producesMT = methodMetadata.getProduces();
+        Set<Representation> reps = null;
+        if (producesMT != null && !producesMT.isEmpty()) {
+            reps = new HashSet<Representation>();
+            for (MediaType mt : producesMT) {
+                Representation r = new Representation();
+                r.setMediaType(mt.toString());
+
+                /*
+                 * if the representation is a special case, we need to build for
+                 * it
+                 */
+                /*
+                 * TODO: special cases include application/xml, text/xml; should
+                 * set the element attribute
+                 */
+                reps.add(r);
+            }
+        } else {
+            /*
+             * there aren't any produces so we can't look for that but maybe we
+             * can look at the Providers registry and find all the relevant
+             * media types there
+             */
+        }
+
+        return reps;
+    }
+
+    /*
+     * Customized isResource method so it accepts interfaces.
+     */
+    private static boolean isResource(Class<?> cls) {
+        if (ResourceMetadataCollector.isDynamicResource(cls)) {
+            return true;
+        }
+
+        if (cls.getAnnotation(Path.class) != null) {
+            return true;
+        }
+
+        Class<?> declaringClass = cls;
+
+        while (!declaringClass.equals(Object.class)) {
+            // try a superclass
+            Class<?> superclass = declaringClass.getSuperclass();
+            if (superclass.getAnnotation(Path.class) != null) {
+                return true;
+            }
+
+            // try interfaces
+            Class<?>[] interfaces = declaringClass.getInterfaces();
+            for (Class<?> interfaceClass : interfaces) {
+                if (interfaceClass.getAnnotation(Path.class) != null) {
+                    return true;
+                }
+            }
+            declaringClass = declaringClass.getSuperclass();
+        }
+        return false;
+    }
+
 }

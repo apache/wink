@@ -34,6 +34,7 @@ import javax.ws.rs.HeaderParam;
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBContext;
@@ -42,12 +43,6 @@ import javax.xml.bind.Marshaller;
 
 import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
 import org.apache.wink.common.internal.registry.metadata.MethodMetadata;
-import org.apache.wink.common.model.wadl.Application;
-import org.apache.wink.common.model.wadl.Method;
-import org.apache.wink.common.model.wadl.ObjectFactory;
-import org.apache.wink.common.model.wadl.Request;
-import org.apache.wink.common.model.wadl.Resource;
-import org.apache.wink.common.model.wadl.WADLGenerator;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.lib.legacy.ClassImposteriser;
@@ -80,12 +75,15 @@ public class WADLGeneratorTest {
         Assert.assertNull(app.getGrammars());
     }
 
-    @Path("resource1")
-    @Consumes(value={MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
+    @Path("resource1/{pp}")
+    @Consumes(value = {MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
     static class Resource1 {
 
         @GET
-        public String hello(String abcd, @QueryParam("q2") String q, @QueryParam("q3") int q2, @HeaderParam("h1234") String h1) {
+        public String hello(String abcd,
+                            @QueryParam("q2") String q,
+                            @QueryParam("q3") int q2,
+                            @HeaderParam("h1234") String h1, @PathParam("pp") String somePath) {
             return null;
         }
     }
@@ -112,6 +110,21 @@ public class WADLGeneratorTest {
         public String world() {
             return null;
         }
+    }
+
+    static class BasicResourceWithVoidReturn {
+
+        @GET
+        public void basicReturn() {
+
+        }
+    }
+
+    @Path("some/path/{id}")
+    static interface MyInterface {
+
+        @GET
+        public void somePath(@PathParam("id") String someId);
     }
 
     @Test
@@ -213,6 +226,8 @@ public class WADLGeneratorTest {
 
         final ClassMetadata metadata = mockContext.mock(ClassMetadata.class);
         final MethodMetadata methodMeta = mockContext.mock(MethodMetadata.class);
+        final java.lang.reflect.Method method =
+            BasicResourceWithVoidReturn.class.getMethod("basicReturn");
 
         mockContext.checking(new Expectations() {
             {
@@ -227,6 +242,12 @@ public class WADLGeneratorTest {
 
                 oneOf(methodMeta).getFormalParameters();
                 will(returnValue(Collections.emptyList()));
+
+                oneOf(methodMeta).getProduces();
+                will(returnValue(Collections.emptySet()));
+
+                oneOf(methodMeta).getReflectionMethod();
+                will(returnValue(method));
             }
         });
 
@@ -246,13 +267,19 @@ public class WADLGeneratorTest {
         assertEquals(0, m.getDoc().size());
         assertNull(m.getHref());
         assertNull(m.getRequest());
-        assertEquals(0, m.getResponse().size());
+        assertEquals(1, m.getResponse().size());
+        List<Response> resps = m.getResponse();
+        assertEquals(Collections.singletonList(Long.valueOf(204)), resps.get(0).getStatus());
+        assertEquals(0, resps.get(0).getAny().size());
+        assertEquals(0, resps.get(0).getDoc().size());
+        assertEquals(0, resps.get(0).getOtherAttributes().size());
+        assertEquals(0, resps.get(0).getParam().size());
 
         mockContext.assertIsSatisfied();
     }
 
     @Test
-    public void testBuildBasicMethodMetadataWithMock() {
+    public void testBuildBasicMethodMetadataWithMock() throws Exception {
         WADLGenerator generator = new WADLGenerator();
         Mockery mockContext = new Mockery() {
             {
@@ -261,6 +288,8 @@ public class WADLGeneratorTest {
         };
         final MethodMetadata metadata = mockContext.mock(MethodMetadata.class);
         final ClassMetadata classMeta = mockContext.mock(ClassMetadata.class);
+        final java.lang.reflect.Method method =
+            BasicResourceWithVoidReturn.class.getMethod("basicReturn");
 
         mockContext.checking(new Expectations() {
             {
@@ -269,6 +298,12 @@ public class WADLGeneratorTest {
 
                 oneOf(metadata).getFormalParameters();
                 will(returnValue(null));
+
+                oneOf(metadata).getProduces();
+                will(returnValue(Collections.emptySet()));
+
+                oneOf(metadata).getReflectionMethod();
+                will(returnValue(method));
             }
         });
 
@@ -276,10 +311,16 @@ public class WADLGeneratorTest {
         assertEquals("myHttpMethod", m.getName());
         assertEquals(0, m.getDoc().size());
         assertEquals(0, m.getAny().size());
-        assertEquals(0, m.getResponse().size());
         assertNull(m.getHref());
         assertNull(m.getId());
         assertNull(m.getRequest());
+        assertEquals(1, m.getResponse().size());
+        List<Response> resps = m.getResponse();
+        assertEquals(Collections.singletonList(Long.valueOf(204)), resps.get(0).getStatus());
+        assertEquals(0, resps.get(0).getAny().size());
+        assertEquals(0, resps.get(0).getDoc().size());
+        assertEquals(0, resps.get(0).getOtherAttributes().size());
+        assertEquals(0, resps.get(0).getParam().size());
 
         mockContext.assertIsSatisfied();
     }
@@ -294,7 +335,7 @@ public class WADLGeneratorTest {
         };
         final MethodMetadata metadata = mockContext.mock(MethodMetadata.class);
         final ClassMetadata classMeta = mockContext.mock(ClassMetadata.class);
-        
+
         mockContext.checking(new Expectations() {
             {
                 oneOf(metadata).getFormalParameters();
@@ -315,6 +356,8 @@ public class WADLGeneratorTest {
         WADLGenerator generator = new WADLGenerator();
         Set<Class<?>> classes = new HashSet<Class<?>>();
         classes.add(Resource1.class);
+        classes.add(Resource2.class);
+        classes.add(MyInterface.class);
         Application app = generator.generate(classes);
         Assert.assertNotNull(app);
         marshalIt(app);
