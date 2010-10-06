@@ -419,7 +419,7 @@ public class AdminServlet extends AbstractRestServlet {
             Marshaller marshaller = JAXBUtils.createMarshaller(resourceCtx);
             marshaller.marshal(jaxbObject, writer);
         } catch (JAXBException e) {
-            throw new ServletException(Messages.getMessage("adminServletFailMarshalObject", //$NON-NLS-1$
+            throw new ServletException(Messages.getMessage("adminServletFailMarshalObject",
                                                            jaxbObject.getClass().getName()), e);
 
         }
@@ -436,10 +436,6 @@ public class AdminServlet extends AbstractRestServlet {
      * @throws IOException
      */
     private void buildAdminHome(HttpServletResponse response) throws IOException {
-        // Set the response code before writing the content
-        // per the servlet specification.
-        response.setStatus(HttpStatus.BAD_REQUEST.getCode());
-        
         PrintWriter writer = response.getWriter();
         writer
             .write("<html>\r\n" + "<head>\r\n" //$NON-NLS-1$ //$NON-NLS-2$
@@ -466,6 +462,7 @@ public class AdminServlet extends AbstractRestServlet {
                 + "</form>\r\n" //$NON-NLS-1$
                 + "</body>\r\n" //$NON-NLS-1$
                 + "</html>"); //$NON-NLS-1$
+        response.setStatus(HttpStatus.BAD_REQUEST.getCode());
         writer.close();
         return;
     }
@@ -473,7 +470,7 @@ public class AdminServlet extends AbstractRestServlet {
     private void buildQueryParams(MethodMetadata methodMetadata, QueryParameters xmlQueryVariables) {
         List<Injectable> formalParameters = methodMetadata.getFormalParameters();
         for (Injectable var : formalParameters) {
-            if (var.getParamType() == Injectable.ParamType.MATRIX) {
+            if (var.getParamType() == Injectable.ParamType.QUERY) {
                 Parameter param = resourcesObjectFactory.createParameter();
                 param.setValue(((BoundInjectable)var).getName());
                 xmlQueryVariables.getParameter().add(param);
