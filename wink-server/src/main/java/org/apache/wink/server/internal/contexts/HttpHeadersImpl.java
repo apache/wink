@@ -43,6 +43,7 @@ import org.apache.wink.common.internal.CaseInsensitiveMultivaluedMap;
 import org.apache.wink.common.internal.WinkConfiguration;
 import org.apache.wink.common.internal.http.Accept;
 import org.apache.wink.common.internal.http.AcceptLanguage;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.utils.HeaderUtils;
 import org.apache.wink.common.internal.utils.StringUtils;
 import org.apache.wink.common.internal.utils.UnmodifiableMultivaluedMap;
@@ -162,12 +163,81 @@ public class HttpHeadersImpl implements HttpHeaders {
             List<String> cookiesHeaders = getRequestHeaderInternal(HttpHeaders.COOKIE);
             if (cookiesHeaders != null) {
                 for (String cookieHeader : cookiesHeaders) {
-                    Cookie cookie = Cookie.valueOf(cookieHeader);
-                    cookies.put(cookie.getName(), cookie);
+                    List<Cookie> currentCookies = parseCookieHeader(cookieHeader);
+                    for (Cookie c : currentCookies) {
+                        cookies.put(c.getName(), c);
+                    }
                 }
             }
         }
         logger.trace("Cookies are: {}", cookies); //$NON-NLS-1$
+        return cookies;
+    }
+
+    private static final String VERSION    = "$Version";            //$NON-NLS-1$
+    private static final String DOMAIN     = "$Domain";             //$NON-NLS-1$
+    private static final String PATH       = "$Path";               //$NON-NLS-1$
+
+    private static class ModifiableCookie {
+        public String name;
+        public String value;
+        public int    version = 0;
+        public String path;
+        public String domain;
+    }
+
+    private List<Cookie> parseCookieHeader(String cookieHeader) {
+        String tokens[] = cookieHeader.split("[;,]"); //$NON-NLS-1$
+
+        if (tokens.length <= 0) {
+            return Collections.emptyList();
+        }
+
+        List<Cookie> cookies = new ArrayList<Cookie>();
+
+        ModifiableCookie currentCookie = null;
+        int version = 0;
+
+        for (String token : tokens) {
+            String[] subTokens = token.trim().split("=", 2); //$NON-NLS-1$
+            String name = subTokens.length > 0 ? subTokens[0] : null;
+            String value = subTokens.length > 1 ? subTokens[1] : null;
+            if (value != null && value.startsWith("\"") //$NON-NLS-1$
+                && value.endsWith("\"") //$NON-NLS-1$
+                && value.length() > 1) {
+                value = value.substring(1, value.length() - 1);
+            }
+
+            if (!name.startsWith("$")) { //$NON-NLS-1$
+                // this is the start of a new cookie
+                if (currentCookie != null) {
+                    if (currentCookie.name != null && currentCookie.value != null) {
+                        cookies.add(new Cookie(currentCookie.name, currentCookie.value,
+                                               currentCookie.path, currentCookie.domain,
+                                               currentCookie.version));
+                    }
+                }
+                currentCookie = new ModifiableCookie();
+                currentCookie.name = name;
+                currentCookie.value = value;
+                currentCookie.version = version;
+            } else if (name.startsWith(VERSION)) {
+                version = Integer.parseInt(value);
+            } else if (name.startsWith(PATH) && currentCookie != null) {
+                currentCookie.path = value;
+            } else if (name.startsWith(DOMAIN) && currentCookie != null) {
+                currentCookie.domain = value;
+            }
+        }
+
+        if (currentCookie != null) {
+            if (currentCookie.name != null && currentCookie.value != null) {
+                cookies.add(new Cookie(currentCookie.name, currentCookie.value,
+                                       currentCookie.path, currentCookie.domain,
+                                       currentCookie.version));
+            }
+        }
+        
         return cookies;
     }
 
@@ -304,7 +374,7 @@ public class HttpHeadersImpl implements HttpHeaders {
 
         public String getFirst(String key) {
             List<String> headers = getRequestHeaderInternal(key);
-            if(headers == null || headers.isEmpty()) {
+            if (headers == null || headers.isEmpty()) {
                 return null;
             }
             return headers.get(0);
