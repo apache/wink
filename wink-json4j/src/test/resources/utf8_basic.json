@@ -1,0 +1,15 @@
+{
+        "string": "This is a string",
+        "booleanTrue": true,
+        "booleanFalse": false,
+        "null": null,
+        "number": 1,
+        "negativeNumber": -1,
+        "float": 1.123,
+        "negativeFloat": -1.123,
+        "exponential": 1123e-3,
+        "negativeExponential": -1123e-3,
+        "object": {"message": "New Object"},
+        "array": [1, 2, null, true, "string", {"message": "Object"}, [1,2,3]]
+}
+

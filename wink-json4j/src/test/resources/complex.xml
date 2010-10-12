@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<process:Server xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:adminservice="http://www.ibm.com/websphere/appserver/schemas/5.0/adminservice.xmi" xmlns:applicationserver="http://www.ibm.com/websphere/appserver/schemas/5.0/applicationserver.xmi" xmlns:applicationserver.ejbcontainer="http://www.ibm.com/websphere/appserver/schemas/5.0/applicationserver.ejbcontainer.xmi" xmlns:applicationserver.ejbcontainer.messagelistener="http://www.ibm.com/websphere/appserver/schemas/5.0/applicationserver.ejbcontainer.messagelistener.xmi" xmlns:applicationserver.webcontainer="http://www.ibm.com/websphere/appserver/schemas/5.0/applicationserver.webcontainer.xmi" xmlns:channelservice="http://www.ibm.com/websphere/appserver/schemas/6.0/channelservice.xmi" xmlns:channelservice.channels="http://www.ibm.com/websphere/appserver/schemas/6.0/channelservice.channels.xmi" xmlns:coregroupbridgeservice="http://www.ibm.com/websphere/appserver/schemas/6.0/coregroupbridgeservice.xmi" xmlns:loggingservice.http="http://www.ibm.com/websphere/appserver/schemas/6.0/loggingservice.http.xmi" xmlns:loggingservice.ras="http://www.ibm.com/websphere/appserver/schemas/5.0/loggingservice.ras.xmi" xmlns:namingserver="http://www.ibm.com/websphere/appserver/schemas/5.0/namingserver.xmi" xmlns:orb="http://www.ibm.com/websphere/appserver/schemas/5.0/orb.xmi" xmlns:pmiservice="http://www.ibm.com/websphere/appserver/schemas/5.0/pmiservice.xmi" xmlns:process="http://www.ibm.com/websphere/appserver/schemas/5.0/process.xmi" xmlns:processexec="http://www.ibm.com/websphere/appserver/schemas/5.0/processexec.xmi" xmlns:threadpoolmanager="http://www.ibm.com/websphere/appserver/schemas/6.0/threadpoolmanager.xmi" xmlns:tperfviewer="http://www.ibm.com/websphere/appserver/schemas/6.0/tperfviewer.xmi" xmlns:traceservice="http://www.ibm.com/websphere/appserver/schemas/5.0/traceservice.xmi" xmi:id="Server_1144082873421" name="server1">
+  <stateManagement xmi:id="StateManageable_1144082873437" initialState="START"/>
+  <statisticsProvider xmi:id="StatisticsProvider_1144082873437" specification="com.ibm.orb=enabled"/>
+  <services xmi:type="pmiservice:PMIService" xmi:id="PMIService_1144082873437" enable="true" initialSpecLevel="" statisticSet="basic" synchronizedUpdate="false"/>
+  <services xmi:type="adminservice:AdminService" xmi:id="AdminService_1144082873437" enable="true" standalone="true" preferredConnector="SOAPConnector_1144082873437">
+    <connectors xmi:type="adminservice:SOAPConnector" xmi:id="SOAPConnector_1144082873437">
+      <properties xmi:id="Property_1144082873437" name="sslConfig" value="shadowfaxNode04/DefaultSSLSettings"/>
+      <properties xmi:id="Property_1144082873438" name="requestTimeout" value="600"/>
+    </connectors>
+    <connectors xmi:type="adminservice:RMIConnector" xmi:id="RMIConnector_1144082873437"/>
+    <configRepository xmi:id="RepositoryService_1144082873437"/>
+    <pluginConfigService xmi:id="PluginConfigService_1144082873437" enable="true"/>
+  </services>
+  <services xmi:type="traceservice:TraceService" xmi:id="TraceService_1144082873437" enable="true" startupTraceSpecification="*=info" traceOutputType="SPECIFIED_FILE" traceFormat="BASIC" memoryBufferSize="8">
+    <traceLog xmi:id="TraceLog_1144082873437" fileName="${SERVER_LOG_ROOT}/trace.log" rolloverSize="20" maxNumberOfBackupFiles="1"/>
+  </services>
+  <services xmi:type="loggingservice.ras:RASLoggingService" xmi:id="RASLoggingService_1144082873437" enable="true" messageFilterLevel="NONE" enableCorrelationId="true">
+    <serviceLog xmi:id="ServiceLog_1144082873437" name="${LOG_ROOT}/activity.log" size="2" enabled="true"/>
+  </services>
+  <services xmi:type="coregroupbridgeservice:CoreGroupBridgeService" xmi:id="CoreGroupBridgeService_1144082873437" enable="true"/>
+  <services xmi:type="tperfviewer:TPVService" xmi:id="TPVService_1144082873437" enable="true"/>
+  <services xmi:type="orb:ObjectRequestBroker" xmi:id="ObjectRequestBroker_1144082873437" enable="true" requestTimeout="180" requestRetriesCount="1" requestRetriesDelay="0" connectionCacheMaximum="240" connectionCacheMinimum="100" commTraceEnabled="false" locateRequestTimeout="180" forceTunnel="never" noLocalCopies="false">
+    <properties xmi:id="Property_1144082873439" name="com.ibm.CORBA.enableLocateRequest" value="true"/>
+    <properties xmi:id="Property_1144082873440" name="com.ibm.CORBA.WSSSLServerSocketFactoryName" value="com.ibm.ws.security.orbssl.WSSSLServerSocketFactoryImpl"/>
+    <properties xmi:id="Property_1144082873441" name="com.ibm.CORBA.WSSSLClientSocketFactoryName" value="com.ibm.ws.security.orbssl.WSSSLClientSocketFactoryImpl"/>
+    <properties xmi:id="Property_1144082873442" name="com.ibm.CORBA.ConnectionInterceptorName" value="com.ibm.ISecurityLocalObjectBaseL13Impl.SecurityConnectionInterceptor"/>
+    <properties xmi:id="Property_1144082873443" name="com.ibm.CORBA.RasManager" value="com.ibm.websphere.ras.WsOrbRasManager"/>
+    <properties xmi:id="Property_1144082873444" name="com.ibm.ws.orb.transport.useMultiHome" value="true"/>
+    <interceptors xmi:id="Interceptor_1144082873437" name="com.ibm.ejs.ras.RasContextSupport"/>
+    <interceptors xmi:id="Interceptor_1144082873438" name="com.ibm.ws.runtime.workloadcontroller.OrbWorkloadRequestInterceptor"/>
+    <interceptors xmi:id="Interceptor_1144082873439" name="com.ibm.ws.Transaction.JTS.TxInterceptorInitializer"/>
+    <interceptors xmi:id="Interceptor_1144082873440" name="com.ibm.ISecurityLocalObjectBaseL13Impl.SecurityComponentFactory"/>
+    <interceptors xmi:id="Interceptor_1144082873441" name="com.ibm.ISecurityLocalObjectBaseL13Impl.ServerRIWrapper"/>
+    <interceptors xmi:id="Interceptor_1144082873442" name="com.ibm.ISecurityLocalObjectBaseL13Impl.ClientRIWrapper"/>
+    <interceptors xmi:id="Interceptor_1144082873443" name="com.ibm.ISecurityLocalObjectBaseL13Impl.CSIClientRI"/>
+    <interceptors xmi:id="Interceptor_1144082873444" name="com.ibm.ISecurityLocalObjectBaseL13Impl.CSIServerRI"/>
+    <interceptors xmi:id="Interceptor_1144082873445" name="com.ibm.ws.wlm.client.WLMClientInitializer"/>
+    <interceptors xmi:id="Interceptor_1144082873446" name="com.ibm.ws.wlm.server.WLMServerInitializer"/>
+    <interceptors xmi:id="Interceptor_1144082873447" name="com.ibm.ws.activity.ActivityServiceServerInterceptor"/>
+    <interceptors xmi:id="Interceptor_1144082873448" name="com.ibm.debug.DebugPortableInterceptor"/>
+    <interceptors xmi:id="Interceptor_1144082873449" name="com.ibm.debug.olt.ivbtrjrt.OLT_RI"/>
+    <plugins xmi:id="ORBPlugin_1144082873437" name="com.ibm.ws.orbimpl.transport.WSTransport"/>
+    <plugins xmi:id="ORBPlugin_1144082873438" name="com.ibm.ISecurityUtilityImpl.SecurityPropertyManager"/>
+    <plugins xmi:id="ORBPlugin_1144082873439" name="com.ibm.ws.orbimpl.WSORBPropertyManager"/>
+    <plugins xmi:id="ORBPlugin_1144082873440" name="com.ibm.ws.wlm.client.WLMClient"/>
+    <plugins xmi:id="ORBPlugin_1144082873441" name="com.ibm.ws.pmi.server.modules.OrbPerfModule"/>
+    <plugins xmi:id="ORBPlugin_1144082873442" name="com.ibm.ws.csi.CORBAORBMethodAccessControl"/>
+    <threadPool xmi:id="ThreadPool_1144082873437" minimumSize="10" maximumSize="50" inactivityTimeout="3500" isGrowable="false" name="ORB.thread.pool"/>
+  </services>
+  <services xmi:type="channelservice:TransportChannelService" xmi:id="TransportChannelService_1144082873437" enable="true">
+    <transportChannels xmi:type="channelservice.channels:TCPInboundChannel" xmi:id="TCPInboundChannel_1144082873437" name="TCP_1" endPointName="WC_adminhost" maxOpenConnections="100" inactivityTimeout="60" threadPool="ThreadPool_1144082873438"/>
+    <transportChannels xmi:type="channelservice.channels:TCPInboundChannel" xmi:id="TCPInboundChannel_1144082873438" name="TCP_2" endPointName="WC_defaulthost" maxOpenConnections="20000" inactivityTimeout="60" threadPool="ThreadPool_1144082873438"/>
+    <transportChannels xmi:type="channelservice.channels:TCPInboundChannel" xmi:id="TCPInboundChannel_1144082873439" name="TCP_3" endPointName="WC_adminhost_secure" maxOpenConnections="100" inactivityTimeout="60" threadPool="ThreadPool_1144082873438"/>
+    <transportChannels xmi:type="channelservice.channels:TCPInboundChannel" xmi:id="TCPInboundChannel_1144082873440" name="TCP_4" endPointName="WC_defaulthost_secure" maxOpenConnections="20000" inactivityTimeout="60" threadPool="ThreadPool_1144082873438"/>
+    <transportChannels xmi:type="channelservice.channels:TCPInboundChannel" xmi:id="TCPInboundChannel_1144082873441" name="TCP_5" endPointName="DCS_UNICAST_ADDRESS" maxOpenConnections="20000" inactivityTimeout="60" threadPool="ThreadPool_1144082873439"/>
+    <transportChannels xmi:type="channelservice.channels:SSLInboundChannel" xmi:id="SSLInboundChannel_1144082873437" name="SSL_1" discriminationWeight="1" sslConfigAlias="shadowfaxNode04/DefaultSSLSettings"/>
+    <transportChannels xmi:type="channelservice.channels:SSLInboundChannel" xmi:id="SSLInboundChannel_1144082873438" name="SSL_2" discriminationWeight="1" sslConfigAlias="shadowfaxNode04/DefaultSSLSettings"/>
+    <transportChannels xmi:type="channelservice.channels:SSLInboundChannel" xmi:id="SSLInboundChannel_1144082873439" name="SSL_3" discriminationWeight="2" sslConfigAlias="shadowfaxNode04/DefaultSSLSettings"/>
+    <transportChannels xmi:type="channelservice.channels:HTTPInboundChannel" xmi:id="HTTPInboundChannel_1144082873437" name="HTTP_1" discriminationWeight="10" maximumPersistentRequests="100" keepAlive="true" readTimeout="60" writeTimeout="60" persistentTimeout="30" enableLogging="false"/>
+    <transportChannels xmi:type="channelservice.channels:HTTPInboundChannel" xmi:id="HTTPInboundChannel_1144082873438" name="HTTP_2" discriminationWeight="10" maximumPersistentRequests="100" keepAlive="true" readTimeout="60" writeTimeout="60" persistentTimeout="30" enableLogging="false"/>
+    <transportChannels xmi:type="channelservice.channels:HTTPInboundChannel" xmi:id="HTTPInboundChannel_1144082873439" name="HTTP_3" discriminationWeight="10" maximumPersistentRequests="100" keepAlive="true" readTimeout="60" writeTimeout="60" persistentTimeout="30" enableLogging="false"/>
+    <transportChannels xmi:type="channelservice.channels:HTTPInboundChannel" xmi:id="HTTPInboundChannel_1144082873440" name="HTTP_4" discriminationWeight="10" maximumPersistentRequests="100" keepAlive="true" readTimeout="60" writeTimeout="60" persistentTimeout="30" enableLogging="false"/>
+    <transportChannels xmi:type="channelservice.channels:WebContainerInboundChannel" xmi:id="WebContainerInboundChannel_1144082873437" name="WCC_1" discriminationWeight="1" writeBufferSize="32768"/>
+    <transportChannels xmi:type="channelservice.channels:WebContainerInboundChannel" xmi:id="WebContainerInboundChannel_1144082873438" name="WCC_2" discriminationWeight="1" writeBufferSize="32768"/>
+    <transportChannels xmi:type="channelservice.channels:WebContainerInboundChannel" xmi:id="WebContainerInboundChannel_1144082873439" name="WCC_3" discriminationWeight="1" writeBufferSize="32768"/>
+    <transportChannels xmi:type="channelservice.channels:WebContainerInboundChannel" xmi:id="WebContainerInboundChannel_1144082873440" name="WCC_4" discriminationWeight="1" writeBufferSize="32768"/>
+    <transportChannels xmi:type="channelservice.channels:DCSInboundChannel" xmi:id="DCSInboundChannel_1144082873437" name="DCS_1" discriminationWeight="1"/>
+    <transportChannels xmi:type="channelservice.channels:DCSInboundChannel" xmi:id="DCSInboundChannel_1144082873438" name="DCS_2" discriminationWeight="1"/>
+    <transportChannels xmi:type="channelservice.channels:TCPInboundChannel" xmi:id="TCPInboundChannel_1144082873442" name="SIB_TCP_JFAP" endPointName="SIB_ENDPOINT_ADDRESS"/>
+    <transportChannels xmi:type="channelservice.channels:TCPInboundChannel" xmi:id="TCPInboundChannel_1144082873443" name="SIB_TCP_JFAP_SSL" endPointName="SIB_ENDPOINT_SECURE_ADDRESS"/>
+    <transportChannels xmi:type="channelservice.channels:TCPInboundChannel" xmi:id="TCPInboundChannel_1144082873444" name="SIB_TCP_MQFAP" endPointName="SIB_MQ_ENDPOINT_ADDRESS"/>
+    <transportChannels xmi:type="channelservice.channels:TCPInboundChannel" xmi:id="TCPInboundChannel_1144082873445" name="SIB_TCP_MQFAP_SSL" endPointName="SIB_MQ_ENDPOINT_SECURE_ADDRESS"/>
+    <transportChannels xmi:type="channelservice.channels:SSLInboundChannel" xmi:id="SSLInboundChannel_1144082873440" name="SIB_SSL_JFAP" discriminationWeight="1" sslConfigAlias="shadowfaxNode04/DefaultSSLSettings"/>
+    <transportChannels xmi:type="channelservice.channels:SSLInboundChannel" xmi:id="SSLInboundChannel_1144082873441" name="SIB_SSL_MQFAP" discriminationWeight="1" sslConfigAlias="shadowfaxNode04/DefaultSSLSettings"/>
+    <transportChannels xmi:type="channelservice.channels:JFAPInboundChannel" xmi:id="JFAPInboundChannel_1144082873437" name="SIB_JFAP" discriminationWeight="1"/>
+    <transportChannels xmi:type="channelservice.channels:JFAPInboundChannel" xmi:id="JFAPInboundChannel_1144082873438" name="SIB_JFAP_SSL" discriminationWeight="1"/>
+    <transportChannels xmi:type="channelservice.channels:MQFAPInboundChannel" xmi:id="MQFAPInboundChannel_1144082873437" name="SIB_MQFAP" discriminationWeight="1"/>
+    <transportChannels xmi:type="channelservice.channels:MQFAPInboundChannel" xmi:id="MQFAPInboundChannel_1144082873438" name="SIB_MQFAP_SSL" discriminationWeight="1"/>
+    <transportChannels xmi:type="channelservice.channels:TCPOutboundChannel" xmi:id="TCPOutboundChannel_1144082873437" name="SIB_TCP_JFAP_OUT" threadPool="ThreadPool_1144082873440"/>
+    <transportChannels xmi:type="channelservice.channels:TCPOutboundChannel" xmi:id="TCPOutboundChannel_1144082873438" name="SIB_TCP_JFAP_SSL_OUT" threadPool="ThreadPool_1144082873440"/>
+    <transportChannels xmi:type="channelservice.channels:TCPOutboundChannel" xmi:id="TCPOutboundChannel_1144082873439" name="SIB_TCP_JFAP_TUN_OUT" threadPool="ThreadPool_1144082873440"/>
+    <transportChannels xmi:type="channelservice.channels:TCPOutboundChannel" xmi:id="TCPOutboundChannel_1144082873440" name="SIB_TCP_JFAP_TUN_SSL_OUT" threadPool="ThreadPool_1144082873440"/>
+    <transportChannels xmi:type="channelservice.channels:TCPOutboundChannel" xmi:id="TCPOutboundChannel_1144082873441" name="SIB_TCP_MQFAP_OUT" threadPool="ThreadPool_1144082873440"/>
+    <transportChannels xmi:type="channelservice.channels:TCPOutboundChannel" xmi:id="TCPOutboundChannel_1144082873442" name="SIB_TCP_MQFAP_SSL_OUT" threadPool="ThreadPool_1144082873440"/>
+    <transportChannels xmi:type="channelservice.channels:SSLOutboundChannel" xmi:id="SSLOutboundChannel_1144082873437" name="SIB_SSL_MQFAP_SSL_OUT" sslConfigAlias="shadowfaxNode04/DefaultSSLSettings"/>
+    <transportChannels xmi:type="channelservice.channels:SSLOutboundChannel" xmi:id="SSLOutboundChannel_1144082873438" name="SIB_SSL_JFAP_SSL_OUT" sslConfigAlias="shadowfaxNode04/DefaultSSLSettings"/>
+    <transportChannels xmi:type="channelservice.channels:SSLOutboundChannel" xmi:id="SSLOutboundChannel_1144082873439" name="SIB_SSL_JFAP_TUN_SSL_OUT" sslConfigAlias="shadowfaxNode04/DefaultSSLSettings"/>
+    <transportChannels xmi:type="channelservice.channels:HTTPOutboundChannel" xmi:id="HTTPOutboundChannel_1144082873437" name="SIB_HTTP_JFAP_TUN_OUT"/>
+    <transportChannels xmi:type="channelservice.channels:HTTPOutboundChannel" xmi:id="HTTPOutboundChannel_1144082873438" name="SIB_HTTP_JFAP_TUN_SSL_OUT"/>
+    <transportChannels xmi:type="channelservice.channels:HTTPTunnelOutboundChannel" xmi:id="HTTPTunnelOutboundChannel_1144082873437" name="SIB_HTC_JFAP_TUN_OUT"/>
+    <transportChannels xmi:type="channelservice.channels:HTTPTunnelOutboundChannel" xmi:id="HTTPTunnelOutboundChannel_1144082873438" name="SIB_HTC_JFAP_TUN_SSL_OUT"/>
+    <transportChannels xmi:type="channelservice.channels:JFAPOutboundChannel" xmi:id="JFAPOutboundChannel_1144082873437" name="SIB_JFAP_JFAP_OUT"/>
+    <transportChannels xmi:type="channelservice.channels:JFAPOutboundChannel" xmi:id="JFAPOutboundChannel_1144082873438" name="SIB_JFAP_JFAP_SSL_OUT"/>
+    <transportChannels xmi:type="channelservice.channels:JFAPOutboundChannel" xmi:id="JFAPOutboundChannel_1144082873439" name="SIB_JFAP_JFAP_TUN_OUT"/>
+    <transportChannels xmi:type="channelservice.channels:JFAPOutboundChannel" xmi:id="JFAPOutboundChannel_1144082873440" name="SIB_JFAP_JFAP_TUN_SSL_OUT"/>
+    <transportChannels xmi:type="channelservice.channels:MQFAPOutboundChannel" xmi:id="MQFAPOutboundChannel_1144082873437" name="SIB_MQFAP_MQFAP_SSL_OUT"/>
+    <transportChannels xmi:type="channelservice.channels:MQFAPOutboundChannel" xmi:id="MQFAPOutboundChannel_1144082873438" name="SIB_MQFAP_MQFAP_OUT"/>
+    <chains xmi:id="Chain_1144082873437" name="WCInboundAdmin" enable="true" transportChannels="TCPInboundChannel_1144082873437 HTTPInboundChannel_1144082873437 WebContainerInboundChannel_1144082873437"/>
+    <chains xmi:id="Chain_1144082873438" name="WCInboundDefault" enable="true" transportChannels="TCPInboundChannel_1144082873438 HTTPInboundChannel_1144082873438 WebContainerInboundChannel_1144082873438"/>
+    <chains xmi:id="Chain_1144082873439" name="WCInboundAdminSecure" enable="true" transportChannels="TCPInboundChannel_1144082873439 SSLInboundChannel_1144082873437 HTTPInboundChannel_1144082873439 WebContainerInboundChannel_1144082873439"/>
+    <chains xmi:id="Chain_1144082873440" name="WCInboundDefaultSecure" enable="true" transportChannels="TCPInboundChannel_1144082873440 SSLInboundChannel_1144082873438 HTTPInboundChannel_1144082873440 WebContainerInboundChannel_1144082873440"/>
+    <chains xmi:id="Chain_1144082873441" name="DCS" enable="true" transportChannels="TCPInboundChannel_1144082873441 DCSInboundChannel_1144082873437"/>
+    <chains xmi:id="Chain_1144082873442" name="DCS-Secure" enable="true" transportChannels="TCPInboundChannel_1144082873441 SSLInboundChannel_1144082873439 DCSInboundChannel_1144082873438"/>
+    <chains xmi:id="Chain_1144082873443" name="InboundBasicMessaging" enable="true" transportChannels="TCPInboundChannel_1144082873442 JFAPInboundChannel_1144082873437"/>
+    <chains xmi:id="Chain_1144082873444" name="InboundSecureMessaging" enable="true" transportChannels="TCPInboundChannel_1144082873443 SSLInboundChannel_1144082873440 JFAPInboundChannel_1144082873438"/>
+    <chains xmi:id="Chain_1144082873445" name="InboundBasicMQLink" enable="true" transportChannels="TCPInboundChannel_1144082873444 MQFAPInboundChannel_1144082873437"/>
+    <chains xmi:id="Chain_1144082873446" name="InboundSecureMQLink" enable="true" transportChannels="TCPInboundChannel_1144082873445 SSLInboundChannel_1144082873441 MQFAPInboundChannel_1144082873438"/>
+    <chains xmi:id="Chain_1144082873447" name="BootstrapBasicMessaging" transportChannels="JFAPOutboundChannel_1144082873437 TCPOutboundChannel_1144082873437"/>
+    <chains xmi:id="Chain_1144082873448" name="BootstrapSecureMessaging" transportChannels="JFAPOutboundChannel_1144082873438 SSLOutboundChannel_1144082873438 TCPOutboundChannel_1144082873438"/>
+    <chains xmi:id="Chain_1144082873449" name="BootstrapTunneledMessaging" transportChannels="JFAPOutboundChannel_1144082873439 HTTPTunnelOutboundChannel_1144082873437 HTTPOutboundChannel_1144082873437 TCPOutboundChannel_1144082873439"/>
+    <chains xmi:id="Chain_1144082873450" name="BootstrapTunneledSecureMessaging" transportChannels="JFAPOutboundChannel_1144082873440 HTTPTunnelOutboundChannel_1144082873438 HTTPOutboundChannel_1144082873438 SSLOutboundChannel_1144082873439 TCPOutboundChannel_1144082873440"/>
+    <chains xmi:id="Chain_1144082873451" name="OutboundBasicMQLink" transportChannels="MQFAPOutboundChannel_1144082873438 TCPOutboundChannel_1144082873441"/>
+    <chains xmi:id="Chain_1144082873452" name="OutboundSecureMQLink" transportChannels="MQFAPOutboundChannel_1144082873437 SSLOutboundChannel_1144082873437 TCPOutboundChannel_1144082873442"/>
+  </services>
+  <services xmi:type="threadpoolmanager:ThreadPoolManager" xmi:id="ThreadPoolManager_1144082873437" enable="true">
+    <threadPools xmi:id="ThreadPool_1144082873441" minimumSize="0" maximumSize="10" inactivityTimeout="30000" isGrowable="false" name="server.startup" description="This pool is used by WebSphere during server startup."/>
+    <threadPools xmi:id="ThreadPool_1144082873439" minimumSize="5" maximumSize="20" name="Default"/>
+    <threadPools xmi:id="ThreadPool_1144082873438" minimumSize="10" maximumSize="50" inactivityTimeout="3500" isGrowable="false" name="WebContainer"/>
+    <threadPools xmi:id="ThreadPool_1144082873440" minimumSize="4" maximumSize="50" name="SIBFAPThreadPool" description="Service integration bus FAP outbound channel thread pool"/>
+  </services>
+  <services xmi:type="loggingservice.http:HTTPAccessLoggingService" xmi:id="HTTPAccessLoggingService_1144082873437" enable="false" enableErrorLogging="true" enableAccessLogging="true">
+    <errorLog xmi:id="LogFile_1144082873437" filePath="${SERVER_LOG_ROOT}/http_error.log" maximumSize="500"/>
+    <accessLog xmi:id="LogFile_1144082873438" filePath="${SERVER_LOG_ROOT}/http_access.log" maximumSize="500"/>
+  </services>
+  <errorStreamRedirect xmi:id="StreamRedirect_1144082873437" fileName="${SERVER_LOG_ROOT}/SystemErr.log" rolloverType="SIZE" maxNumberOfBackupFiles="1" rolloverSize="1" baseHour="24" rolloverPeriod="24" formatWrites="true" messageFormatKind="BASIC" suppressWrites="false" suppressStackTrace="false"/>
+  <outputStreamRedirect xmi:id="StreamRedirect_1144082873438" fileName="${SERVER_LOG_ROOT}/SystemOut.log" rolloverType="SIZE" maxNumberOfBackupFiles="1" rolloverSize="1" baseHour="24" rolloverPeriod="24" formatWrites="true" messageFormatKind="BASIC" suppressWrites="false" suppressStackTrace="false"/>
+  <components xmi:type="namingserver:NameServer" xmi:id="NameServer_1144082873437">
+    <stateManagement xmi:id="StateManageable_1144082873438" initialState="START"/>
+  </components>
+  <components xmi:type="applicationserver:ApplicationServer" xmi:id="ApplicationServer_1144082873453" applicationClassLoaderPolicy="MULTIPLE">
+    <stateManagement xmi:id="StateManageable_1144082873453" initialState="START"/>
+    <services xmi:type="applicationserver:TransactionService" xmi:id="TransactionService_1144082873453" enable="true" totalTranLifetimeTimeout="120" clientInactivityTimeout="60"/>
+    <services xmi:type="applicationserver:DynamicCache" xmi:id="DynamicCache_1144082873453" enable="true">
+      <cacheGroups xmi:id="ExternalCacheGroup_1144082873453" name="EsiInvalidator">
+        <members xmi:id="ExternalCacheGroupMember_1144082873453" address="localhost" adapterBeanName="com.ibm.websphere.servlet.cache.ESIInvalidatorServlet"/>
+      </cacheGroups>
+    </services>
+    <components xmi:type="applicationserver.webcontainer:WebContainer" xmi:id="WebContainer_1144082873453" enableServletCaching="false">
+      <stateManagement xmi:id="StateManageable_1144082873454" initialState="START"/>
+      <services xmi:type="applicationserver.webcontainer:SessionManager" xmi:id="SessionManager_1144082873453" enable="true" enableUrlRewriting="false" enableCookies="true" enableSSLTracking="false" enableProtocolSwitchRewriting="false" sessionPersistenceMode="NONE" enableSecurityIntegration="false" allowSerializedSessionAccess="false" maxWaitTime="5" accessSessionOnTimeout="true">
+        <defaultCookieSettings xmi:id="Cookie_1144082873453" domain="" maximumAge="-1" secure="false"/>
+        <sessionDatabasePersistence xmi:id="SessionDatabasePersistence_1144082873453" datasourceJNDIName="jdbc/Sessions" userId="db2admin" password="{xor}Oz1tPjsyNjE=" db2RowSize="ROW_SIZE_4KB" tableSpaceName=""/>
+        <tuningParams xmi:id="TuningParams_1144082873453" usingMultiRowSchema="false" maxInMemorySessionCount="1000" allowOverflow="true" scheduleInvalidation="false" writeFrequency="TIME_BASED_WRITE" writeInterval="10" writeContents="ONLY_UPDATED_ATTRIBUTES" invalidationTimeout="30">
+          <invalidationSchedule xmi:id="InvalidationSchedule_1144082873453" firstHour="14" secondHour="2"/>
+        </tuningParams>
+      </services>
+    </components>
+    <components xmi:type="applicationserver.ejbcontainer:EJBContainer" xmi:id="EJBContainer_1144082873453" passivationDirectory="${USER_INSTALL_ROOT}/temp" inactivePoolCleanupInterval="30000">
+      <stateManagement xmi:id="StateManageable_1144082873455" initialState="START"/>
+      <services xmi:type="applicationserver.ejbcontainer.messagelistener:MessageListenerService" xmi:id="MessageListenerService_1144082873453">
+        <threadPool xmi:id="ThreadPool_1144082873453" minimumSize="10" maximumSize="50" inactivityTimeout="3500" isGrowable="false" name="Message.Listener.Pool"/>
+      </services>
+      <cacheSettings xmi:id="EJBCache_1144082873453" cleanupInterval="3000" cacheSize="2053"/>
+      <timerSettings xmi:id="EJBTimer_1144082873453" datasourceJNDIName="jdbc/DefaultEJBTimerDataSource" tablePrefix="EJBTIMER_" pollInterval="300" numAlarmThreads="1"/>
+    </components>
+    <webserverPluginSettings xmi:id="WebserverPluginSettings_1144082873453" WaitForContinue="false" ConnectTimeout="0" MaxConnections="-1" ExtendedHandshake="false"/>
+  </components>
+  <processDefinitions xmi:type="processexec:JavaProcessDef" xmi:id="JavaProcessDef_1144082873453" workingDirectory="${USER_INSTALL_ROOT}" executableTargetKind="JAVA_CLASS" executableTarget="com.ibm.ws.runtime.WsServer">
+    <execution xmi:id="ProcessExecution_1144082873453" processPriority="20" runAsUser="" runAsGroup=""/>
+    <ioRedirect xmi:id="OutputRedirect_1144082873453" stdoutFilename="${SERVER_LOG_ROOT}/native_stdout.log" stderrFilename="${SERVER_LOG_ROOT}/native_stderr.log"/>
+    <monitoringPolicy xmi:id="MonitoringPolicy_1144082873453" maximumStartupAttempts="3" pingInterval="60" pingTimeout="300" autoRestart="true" nodeRestartState="STOPPED"/>
+    <jvmEntries xmi:id="JavaVirtualMachine_1144082873453" verboseModeClass="false" verboseModeGarbageCollection="false" verboseModeJNI="false" runHProf="false" hprofArguments="" debugMode="false" debugArgs="-Djava.compiler=NONE -Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=7777" genericJvmArguments=""/>
+  </processDefinitions>
+  <banana foo="This &quot;sucks&quot;"/>
+  
+  <banana foo="&quot;sucks&quot; this does."/>
+  
+  <banana foo="&quot;sucks&quot;"/>
+  
+  <banana foo="   &quot;sucks&quot;  "/>  
+  <banana>BananaMan!</banana>
+  <banana foo="Bad guy">BananaMan!</banana>
+  <banana/>
+</process:Server>

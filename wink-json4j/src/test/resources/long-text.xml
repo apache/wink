@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<fcbst:eColl xmlns:fcbst="http://fcbst.ibm.com">
+  <entity crtDt="2008-01-24" id="1001" lng="en_US" lvl="3" title="Hall of Supreme Harmony" type="Bld">
+    <msgHeader>
+      <retCd>0</retCd>
+    </msgHeader>
+    <sDesc>The Hall of Supreme Harmony is the largest building in the Forbidden City. Located along the central axis, it lies in the center of the Outer Court, and was where the emperor hosted his most important and most lavish ceremonies.</sDesc>
+    <lDesc>The Hall of Supreme Harmony is the largest and most lavish building in the Forbidden City, as well as the largest wooden structure in all of Chinese history.  It was commonly known as the &quot;Golden Imperial Hall&quot; due to the lavish golden decorations both inside and outside the hall.
+
+Along with the Hall of Complete Harmony and the Hall of Preserving Harmony, it lies in the center of the Outer Court.  Together, these three halls are known as the Three Great Audience Halls.
+
+The Hall of Supreme Harmony was the center of court activities, and was where the emperor celebrated the most important ceremonies, such as enthronements, imperial birthdays, royal weddings, the crowning of the empress, and the New Year&apos;s festival.
+
+Later in the Qing dynasty, the emperor held court more frequently, and so moved court hearings to the Inner Court, while the Hall of Supreme Harmony continued to serve as a ceremonial hall.
+
+Before the Hall of Supreme Harmony lies the Pavilion of Spreading Righteousness, the largest courtyard of the Imperial City.  In contrast to the lavishness of the hall, the courtyard is simple, flat-tiled and low-ridged, creating an even more majestic atmosphere for the hall by contrast, as with the Taoist saying, &quot;Heaven is high and the earth is broad&quot; </lDesc>
+    <tnail>
+      <presTxt></presTxt>
+      <presAudio></presAudio>
+      <mediaPath>HOSH1_tn.jpg</mediaPath>
+      <mediaTp>2D</mediaTp>
+    </tnail>
+    <mediaGrp>
+      <media crtDt="2008-01-21 2008-01-21" id="11001 11001" lng="en_US zh_CN" lvl="3 3" title="Gate of Supreme Harmony  Text" type="Med Med">
+        <tnail crtDt="2008-01-21 2008-01-21" id="0 0" lng="en_US zh_CN" lvl="3 3" title="Default Test - tn  Text" type="Med Med">
+          <presTxt>Text</presTxt>
+          <presAudio></presAudio>
+          <mediaPath>TEST_tn.jpg</mediaPath>
+          <mediaTp>2D</mediaTp>
+        </tnail>
+        <presTxt>Text</presTxt>
+        <presAudio></presAudio>
+        <mediaPath>GOSH1.jpg</mediaPath>
+        <mediaTp>2D</mediaTp>
+      </media>
+    </mediaGrp>
+    <coor x="-1.40252" y="-68.8839" z="6.89267"/>
+    <inSBInd>false</inSBInd>
+    <hasRatedInd>false</hasRatedInd>
+    <tags>
+      <tag>Text</tag>
+      <tag>Text</tag>
+      <tag>Hall of Supreme Harmony</tag>
+    </tags>
+  </entity>
+</fcbst:eColl> 

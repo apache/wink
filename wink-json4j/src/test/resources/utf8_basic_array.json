@@ -1,0 +1,10 @@
+[
+        1, 
+        2, 
+        null, 
+        true, 
+        "string", 
+        {"message": "Object"}, 
+        [1,2,3]
+]
+

@@ -1,0 +1,44 @@
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:ns2="http://a9.com/-/spec/opensearch/1.1/">
+  <title type="text">Elias</title>
+  <updated>1969-12-31T18:02:03.456-06:00</updated>
+  <author>
+    <name>Unknown</name>
+  </author>
+  <id>urn:some:arbitrary:value</id>
+  <updated>1969-12-31T18:02:03.456-06:00</updated>
+  <title type="text">A sample feed!</title>
+  <ns2:itemsPerPage>5</ns2:itemsPerPage>
+  <link href="http://abdera.watson.ibm.com:8080/atom/Elias" type="application/atom+xml" rel="self" />
+  <link href="http://abdera.watson.ibm.com:8080/atom/Elias" rel="first" />
+  <link href="http://abdera.watson.ibm.com:8080/atom/Elias" rel="last" />
+
+
+  <entry xmlns="http://www.w3.org/2005/Atom" xmlns:ns2="http://a9.com/-/spec/opensearch/1.1/">
+    <content type="text/html">This is the content of the new collection</content>
+    <title type="text">Entry #1</title>
+    <summary type="text">A summary of atom entry #1</summary>
+    <published>2010-09-23T14:23:32.187-05:00</published>
+    <updated>2010-09-23T14:23:32.187-05:00</updated>
+    <link href="http://abdera.watson.ibm.com:8080/atom/entry/edit/urn:lsid:abdera.watson.ibm.com:entries:189912220" type="application/atom+xml" rel="self" />
+    <link href="http://abdera.watson.ibm.com:8080/atom/entry/edit/urn:lsid:abdera.watson.ibm.com:entries:189912220" rel="edit" />
+    <link href="http://abdera.watson.ibm.com:8080/atom/entry/urn:lsid:abdera.watson.ibm.com:entries:189912220" rel="alternate" />
+    <author>
+      <name>Joe Blow</name>
+    </author>
+  </entry>
+
+
+  <entry>
+    <content type="plain/text">dsfdfadsf</content>
+    <title type="text">foo bar</title>
+    <summary type="text">foo</summary>
+    <id>urn:lsid:abdera.watson.ibm.com:entries:326319018</id>
+    <link href="http://abdera.watson.ibm.com:8080/atom/entry/urn:lsid:abdera.watson.ibm.com:entries:326319018" rel="alternate" />
+    <link href="http://abdera.watson.ibm.com:8080/atom/entry/edit/urn:lsid:abdera.watson.ibm.com:entries:326319018" rel="edit" />
+    <link href="http://abdera.watson.ibm.com:8080/atom/entry/edit/urn:lsid:abdera.watson.ibm.com:entries:326319018" type="application/atom+xml" rel="self" />
+    <updated>2006-08-07T12:37:54.468Z</updated>
+    <author>
+      <name>boo</name>
+    </author>
+  </entry>
+</feed>

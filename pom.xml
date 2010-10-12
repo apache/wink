@@ -44,6 +44,7 @@
         <module>wink-client-apache-httpclient</module>
         <module>wink-spring-support</module>
         <module>wink-webdav</module>
+	<module>wink-json4j</module>
         <module>wink-providers</module>
         <module>wink-jcdi-server</module>
         <module>wink-guice-server</module>
