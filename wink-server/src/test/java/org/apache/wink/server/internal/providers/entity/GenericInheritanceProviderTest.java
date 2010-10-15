@@ -28,6 +28,7 @@ import java.lang.reflect.Type;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyReader;
@@ -60,15 +61,39 @@ public class GenericInheritanceProviderTest extends MockServletInvocationTest {
         }
     }
     
-    public static interface GenericService<T> {
+    public static class Foo {
+        String x;
+        
+        public Foo(String x) {
+            this.x = x;
+        }
+
+        public String getValue() {
+            return x + "foo";
+        }
+    }
+    
+    public static class Bar extends Foo {
+        
+        public Bar(String x) {
+            super(x);
+        }
+        
+        public String getValue() {
+            return x + "bar";
+        }
+    }
+    
+    public static interface GenericService<T, X extends Foo> {
         @POST
         @Consumes(MediaType.APPLICATION_JSON)
-        public void doSomething(T obj);
+        @Path("{id1}/{id2}")
+        public void doSomething(@PathParam("id1") int id1, @PathParam("id2") X id2, T obj);
     }
 
     @Path("/impl")
-    public static class GenericServiceImpl implements GenericService<MyJAXBObject> {
-        public void doSomething(MyJAXBObject obj) {
+    public static class GenericServiceImpl implements GenericService<MyJAXBObject, Bar> {
+        public void doSomething(int id, Bar id2, MyJAXBObject obj) {
             reachedNirvana = true;
         }
     }
@@ -108,7 +133,7 @@ public class GenericInheritanceProviderTest extends MockServletInvocationTest {
     public void test() throws Exception {
         MockHttpServletRequest request =
             MockRequestConstructor.constructMockRequest("POST",
-                                                        "/impl",
+                                                        "/impl/5/6",
                                                         MediaType.TEXT_PLAIN,
                                                         MediaType.APPLICATION_JSON,
                                                         "{stringdata: \"hi\"}".getBytes());

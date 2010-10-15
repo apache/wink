@@ -27,6 +27,8 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -255,7 +257,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
         if (Modifier.isStatic(modifiers) || !Modifier.isPublic(modifiers)) {
             return null;
         }
-        
+
         MethodMetadata metadata = new MethodMetadata(getMetadata());
         metadata.setReflectionMethod(method);
 
@@ -295,12 +297,13 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             metadata.setEncoded(true);
             hasAnnotation = true;
         }
-    
+
         // if the method has no annotation at all,
         // then it may override a method in a superclass or interface that has
         // annotations,
         // so try looking at the overridden method annotations
-        // but keep the method params as the super may have declared a generic type param
+        // but keep the method params as the super may have declared a generic
+        // type param
         if (!hasAnnotation) {
 
             Class<?> declaringClass = method.getDeclaringClass();
@@ -311,9 +314,8 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                 MethodMetadata createdMetadata = createMethodMetadata(superclass, method);
                 // stop with if the method found
                 if (createdMetadata != null) {
-                    createdMetadata.getFormalParameters().clear();
                     createdMetadata.setReflectionMethod(method);
-                    parseMethodParameters(method, createdMetadata);
+                    mergeFormalParameterMetadata(createdMetadata, method);
                     return createdMetadata;
                 }
             }
@@ -324,9 +326,8 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                 MethodMetadata createdMetadata = createMethodMetadata(interfaceClass, method);
                 // stop with the first method found
                 if (createdMetadata != null) {
-                    createdMetadata.getFormalParameters().clear();
                     createdMetadata.setReflectionMethod(method);
-                    parseMethodParameters(method, createdMetadata);
+                    mergeFormalParameterMetadata(createdMetadata, method);
                     return createdMetadata;
                 }
             }
@@ -351,7 +352,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             }
             return null;
         }
-        
+
         parseMethodParameters(method, metadata);
 
         return metadata;
@@ -368,17 +369,26 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
         } catch (NoSuchMethodException e) {
             // see if declaringClass's declaredMethod uses generic parameters
             Method[] methods = declaringClass.getMethods();
-            for(Method candidateMethod: methods) {
+            for (Method candidateMethod : methods) {
+                boolean matchFound = true;
                 if (candidateMethod.getName().equals(method.getName())) {
                     // name matches, now check the param signature:
                     if (candidateMethod.getParameterTypes().length == method.getParameterTypes().length) {
-                        // so far so good.  Now make sure the params are acceptable:
+                        // so far so good. Now make sure the params are
+                        // acceptable:
                         for (int i = 0; i < candidateMethod.getParameterTypes().length; i++) {
                             Class clazz = candidateMethod.getParameterTypes()[i];
-                            if (clazz.isPrimitive()) {
-                                break;  // signature doesn't match, otherwise it would have been found in getDeclaredMethod above
+                            if (clazz.isPrimitive() && !clazz.equals(candidateMethod
+                                .getParameterTypes()[i])) {
+                                matchFound = false; // signature doesn't match,
+                                                    // otherwise it
+                                // would have been found in
+                                // getDeclaredMethod above
                             }
-                            if (clazz.isAssignableFrom(method.getParameterTypes()[i])) {
+                            if (!clazz.isAssignableFrom(method.getParameterTypes()[i])) {
+                                matchFound = false;
+                            }
+                            if (matchFound) {
                                 return createMethodMetadata(candidateMethod);
                             }
                         }
@@ -442,7 +452,8 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             HttpMethod httpMethodCurr = annotation.annotationType().getAnnotation(HttpMethod.class);
             if (httpMethodCurr != null) {
                 if (httpMethod != null) {
-                    throw new IllegalStateException(Messages.getMessage("multipleHttpMethodAnnotations", method //$NON-NLS-1$
+                    throw new IllegalStateException(Messages
+                        .getMessage("multipleHttpMethodAnnotations", method //$NON-NLS-1$
                             .getName(), method.getDeclaringClass().getCanonicalName()));
                 }
                 httpMethod = httpMethodCurr;
@@ -476,12 +487,34 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                     // we are allowed to have only one entity parameter
                     String methodName =
                         method.getDeclaringClass().getName() + "." + method.getName(); //$NON-NLS-1$
-                    throw new IllegalStateException(Messages.getMessage("resourceMethodMoreThanOneEntityParam", methodName)); //$NON-NLS-1$
+                    throw new IllegalStateException(Messages
+                        .getMessage("resourceMethodMoreThanOneEntityParam", methodName)); //$NON-NLS-1$
                 }
                 entityParamExists = true;
             }
             methodMetadata.getFormalParameters().add(fp);
         }
+    }
+
+    private void mergeFormalParameterMetadata(MethodMetadata metadata, Method method) {
+        logger.trace("mergeFormalParameterMetadata({})", new Object[] {metadata, method});
+        Type[] parameterTypes = method.getGenericParameterTypes();
+        List<Injectable> currentParameters =
+            new ArrayList<Injectable>(metadata.getFormalParameters());
+        metadata.getFormalParameters().clear();
+        int i = 0;
+        for (Injectable injectable : currentParameters) {
+            Injectable fp =
+                InjectableFactory.getInstance().create(parameterTypes[i],
+                                                       injectable.getAnnotations(),
+                                                       method,
+                                                       getMetadata().isEncoded() || metadata
+                                                           .isEncoded(),
+                                                       metadata.getDefaultValue());
+            metadata.getFormalParameters().add(fp);
+            ++i;
+        }
+        logger.trace("mergeFormalParameterMetadata exit");
     }
 
     @Override
