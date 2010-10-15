@@ -266,11 +266,11 @@ public class DeploymentConfiguration implements WinkConfiguration {
         this.responseUserHandlers = responseUserHandlers;
     }
 
-    public List<? extends ResponseHandler> getResponseUserHandlers() {
+    public List<ResponseHandler> getResponseUserHandlers() {
         return responseUserHandlers;
     }
 
-    public List<? extends RequestHandler> getRequestUserHandlers() {
+    public List<RequestHandler> getRequestUserHandlers() {
         return requestUserHandlers;
     }
 
@@ -278,7 +278,7 @@ public class DeploymentConfiguration implements WinkConfiguration {
         this.errorUserHandlers = errorUserHandlers;
     }
 
-    public List<? extends ResponseHandler> getErrorUserHandlers() {
+    public List<ResponseHandler> getErrorUserHandlers() {
         return errorUserHandlers;
     }
 
