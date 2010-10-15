@@ -6,16 +6,16 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *  
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  *  Unless required by applicable law or agreed to in writing,
  *  software distributed under the License is distributed on an
  *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
- *  
+ *
  *******************************************************************************/
 package org.apache.wink.server.internal;
 
@@ -101,6 +101,7 @@ public class DeploymentConfiguration implements WinkConfiguration {
     private static final String       USE_ACCEPT_CHARSET                  =
                                                                               "wink.response.useAcceptCharset";              // $NON-NLS-1$
     // handler chains
+    private boolean                   isChainInitialized                  = false;
     private RequestHandlersChain      requestHandlersChain;
     private ResponseHandlersChain     responseHandlersChain;
     private ResponseHandlersChain     errorHandlersChain;
@@ -161,6 +162,9 @@ public class DeploymentConfiguration implements WinkConfiguration {
     }
 
     public RequestHandlersChain getRequestHandlersChain() {
+        if (!isChainInitialized) {
+            initHandlersChain();
+        }
         return requestHandlersChain;
     }
 
@@ -169,6 +173,9 @@ public class DeploymentConfiguration implements WinkConfiguration {
     }
 
     public ResponseHandlersChain getResponseHandlersChain() {
+        if (!isChainInitialized) {
+            initHandlersChain();
+        }
         return responseHandlersChain;
     }
 
@@ -177,6 +184,9 @@ public class DeploymentConfiguration implements WinkConfiguration {
     }
 
     public ResponseHandlersChain getErrorHandlersChain() {
+        if (!isChainInitialized) {
+            initHandlersChain();
+        }
         return errorHandlersChain;
     }
 
@@ -300,7 +310,8 @@ public class DeploymentConfiguration implements WinkConfiguration {
         }
         ApplicationValidator applicationValidator = new ApplicationValidator();
         providersRegistry = new ProvidersRegistry(ofFactoryRegistry, applicationValidator);
-        resourceRegistry = new ResourceRegistry(ofFactoryRegistry, applicationValidator, properties);
+        resourceRegistry =
+            new ResourceRegistry(ofFactoryRegistry, applicationValidator, properties);
     }
 
     /**
@@ -429,6 +440,9 @@ public class DeploymentConfiguration implements WinkConfiguration {
             errorUserHandlers = initErrorUserHandlers();
         }
 
+    }
+
+    private void initHandlersChain() {
         if (requestHandlersChain == null) {
             requestHandlersChain = initRequestHandlersChain();
         }
@@ -438,6 +452,8 @@ public class DeploymentConfiguration implements WinkConfiguration {
         if (errorHandlersChain == null) {
             errorHandlersChain = initErrorHandlersChain();
         }
+
+        isChainInitialized = true;
     }
 
     /**
