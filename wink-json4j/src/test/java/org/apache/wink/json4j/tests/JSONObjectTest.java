@@ -6,15 +6,15 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 
 package org.apache.wink.json4j.tests;
@@ -88,7 +88,7 @@ public class JSONObjectTest extends TestCase {
         Exception ex = null;
         // read in a basic JSON file that has all the various types in it.
         try {
-            Reader rdr = new InputStreamReader(new FileInputStream("jsonfiles/utf8_basic.json"), "UTF-8");
+            Reader rdr = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("utf8_basic.json"), "UTF-8");
             jObject = new JSONObject(rdr);
             rdr.close();
         } catch (Exception ex1) {
@@ -109,7 +109,7 @@ public class JSONObjectTest extends TestCase {
         // read in a basic JSON file that has all the various types in it.
         // Inputstreams are read as UTF-8 by the underlying parser.
         try {
-            InputStream is = new FileInputStream("jsonfiles/utf8_basic.json");
+            InputStream is = this.getClass().getClassLoader().getResourceAsStream("utf8_basic.json");
             jObject = new JSONObject(is);
             is.close();
         } catch (Exception ex1) {
@@ -527,7 +527,7 @@ public class JSONObjectTest extends TestCase {
         }
         assertTrue(ex == null);
     }
-    
+
 
     public void test_EmptyAppend() throws Exception {
         Exception ex = null;
@@ -554,7 +554,7 @@ public class JSONObjectTest extends TestCase {
         try {
             JSONObject jObject = new JSONObject("{\"long\":1}");
             assertTrue(jObject.getLong("long") == 1);
-            
+
             JSONObject json = new JSONObject("{ Date : 1212790800000 }");
     		assertEquals(1212790800000L, json.getLong("Date"));
         } catch (Exception ex1) {
@@ -973,7 +973,7 @@ public class JSONObjectTest extends TestCase {
         }
         assertTrue(ex == null);
     }
-    
+
     /**
      * Test returning of Integer object if within Integer range.
      */
@@ -993,14 +993,14 @@ public class JSONObjectTest extends TestCase {
             assertEquals( jObject4.opt("int").getClass(), Integer.class);
             assertEquals( jObject5.opt("int").getClass(), Integer.class);
             assertEquals( jObject6.opt("int").getClass(), Integer.class);
-                                          
+
         } catch (Exception ex1) {
             ex = ex1;
             ex.printStackTrace();
         }
         assertTrue(ex == null);
     }
-    
+
     /**
      * Test returning of Long object if value out of Integer range.
      */
@@ -1013,83 +1013,83 @@ public class JSONObjectTest extends TestCase {
             JSONObject jObject = new JSONObject("{\"int\" : " + val1 + "}");
             JSONObject jObject2 = new JSONObject("{\"int\" : " + val2 + "}");
             JSONObject jObject3 = new JSONObject("{\"int\" : 0X" + Long.toHexString(val1.longValue()) + "}");
-            JSONObject jObject4 = new JSONObject("{\"int\" : 020000000000}");        
+            JSONObject jObject4 = new JSONObject("{\"int\" : 020000000000}");
             assertEquals( jObject.opt("int").getClass(), Long.class);
             assertEquals( jObject2.opt("int").getClass(), Long.class);
             assertEquals( jObject3.opt("int").getClass(), Long.class);
             assertEquals( jObject4.opt("int").getClass(), Long.class);
-                                          
+
         } catch (Exception ex1) {
             ex = ex1;
             ex.printStackTrace();
         }
         assertTrue(ex == null);
     }
-    
+
     public void test_optWithHex() {
     	  Exception ex = null;
 
-          try {       
-            JSONObject jObject3 = new JSONObject("{\"int\" : 0X7f}");               
+          try {
+            JSONObject jObject3 = new JSONObject("{\"int\" : 0X7f}");
             assertEquals( jObject3.opt("int"), 127);
-            jObject3 = new JSONObject("{\"int\" : 0x7f}");               
+            jObject3 = new JSONObject("{\"int\" : 0x7f}");
             assertEquals( jObject3.opt("int"), 127);
-            jObject3 = new JSONObject("{\"int\" : -0x99e}");               
+            jObject3 = new JSONObject("{\"int\" : -0x99e}");
             assertEquals( jObject3.opt("int"), -2462);
-            jObject3 = new JSONObject("{\"int\" : -0X99e}");               
+            jObject3 = new JSONObject("{\"int\" : -0X99e}");
             assertEquals( jObject3.opt("int"), -2462);
-                                            
+
           } catch (Exception ex1) {
               ex = ex1;
               ex.printStackTrace();
           }
           assertTrue(ex == null);
-          
-          try {       
-              JSONObject jObject3 = new JSONObject("{\"int\" : 343g}");                                               
+
+          try {
+              JSONObject jObject3 = new JSONObject("{\"int\" : 343g}");
             } catch (Exception ex1) {
                 ex = ex1;
                 ex.printStackTrace();
             }
             assertTrue(ex instanceof JSONException);
-            try {       
-                JSONObject jObject3 = new JSONObject("{\"int\" : 343a}");  
+            try {
+                JSONObject jObject3 = new JSONObject("{\"int\" : 343a}");
             } catch (Exception ex1) {
                   ex = ex1;
                   ex.printStackTrace();
             }
             assertTrue(ex instanceof JSONException);
-          
+
     }
-    
+
     public void test_optNumberReturnsSameException() {
   	  Exception ex = null;
-        // Test to make sure same exception is thrown when hex char is included in 
+        // Test to make sure same exception is thrown when hex char is included in
   	    // normal identifier.
-        try {       
-          JSONObject jObject3 = new JSONObject("{\"int\" : 343h}");               
+        try {
+          JSONObject jObject3 = new JSONObject("{\"int\" : 343h}");
           assertEquals( jObject3.opt("int"), 127);
-         
-                                          
+
+
         } catch (Exception ex1) {
             ex = ex1;
         }
         assertTrue(ex instanceof JSONException);
         Throwable cause = ex.getCause();
         assertTrue(cause == null);
-        
-        try {       
-            JSONObject jObject3 = new JSONObject("{\"int\" : 343a}");               
-            assertEquals( jObject3.opt("int"), 127);                                
+
+        try {
+            JSONObject jObject3 = new JSONObject("{\"int\" : 343a}");
+            assertEquals( jObject3.opt("int"), 127);
           } catch (Exception ex1) {
               ex = ex1;
           }
           assertTrue(ex instanceof JSONException);
           cause = ex.getCause();
           assertTrue(cause == null);
-                
+
     }
-    
+
     public void test_ArrayRetrievalFromJavaArrayInsertion() throws Exception {
         JSONObject json = new JSONObject();
         String[] someArray = { "Hello","World!" };
@@ -1097,10 +1097,10 @@ public class JSONObjectTest extends TestCase {
         JSONArray array = json.getJSONArray("somearray");
         assertEquals(array.get(0), "Hello");
         assertEquals(array.get(1), "World!");
-    } 
+    }
 
     /**************************************************************************/
-    /* The following tests all test failure scenarios due to type mismatching.*/  
+    /* The following tests all test failure scenarios due to type mismatching.*/
     /**************************************************************************/
 
     /**
@@ -1277,7 +1277,7 @@ public class JSONObjectTest extends TestCase {
     }
 
     /**
-     * Test the iterator of the sorted keys.  
+     * Test the iterator of the sorted keys.
      */
     public void test_sortedKeys() {
         HashMap map = new HashMap();
@@ -1335,7 +1335,7 @@ public class JSONObjectTest extends TestCase {
     public void test_utf8_korean() {
         Exception ex = null;
         try {
-            Reader reader = new InputStreamReader(new FileInputStream(new File("jsonfiles/utf8_helloworld_ko.json")), "UTF-8");
+            Reader reader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("utf8_helloworld_ko.json"), "UTF-8");
             JSONObject jObject = new JSONObject(reader);
             reader.close();
             assertTrue(jObject.getString("greet").equals("\uc548\ub155 \uc138\uc0c1\uc544"));
@@ -1347,14 +1347,14 @@ public class JSONObjectTest extends TestCase {
     }
 
     /**
-     * Verify a UTF 8 file with character codes in the lower part will parse and 
+     * Verify a UTF 8 file with character codes in the lower part will parse and
      * serialize correctly in escaped unicode format (which is valid JSON and easier
      * to debug)
      */
     public void test_utf8_lowerchar() {
         Exception ex = null;
         try {
-            Reader reader = new InputStreamReader(new FileInputStream(new File("jsonfiles/utf8_lowerchar.json")), "UTF-8");
+            Reader reader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("utf8_lowerchar.json"), "UTF-8");
             JSONObject jObject = new JSONObject(reader);
             reader.close();
             assertTrue(jObject.getString("message").equals("\u00c5\u00c5\u00c5\u00c5"));
@@ -1393,16 +1393,16 @@ public class JSONObjectTest extends TestCase {
             assertTrue(false);
         }
     }
-    
+
     public void test_CStyleCommentWithACommentCharInMiddle() throws Exception {
     	 try {
              JSONObject jObj = new JSONObject("/* * */ { 'test' : 'value' }");
              assertTrue(jObj.has("test"));
              assertTrue(jObj.getString("test").equals("value"));
-             
+
              JSONObject jObj2 = new JSONObject("/* / */ { 'test' : 'value' }");
              assertTrue(jObj2.has("test"));
-             assertTrue(jObj2.getString("test").equals("value")); 
+             assertTrue(jObj2.getString("test").equals("value"));
          } catch (Exception ex) {
              ex.printStackTrace();
              assertTrue(false);
@@ -1419,7 +1419,7 @@ public class JSONObjectTest extends TestCase {
             assertTrue(false);
         }
     }
-    
+
     /**
      * Test special characters in unquoted string key.
      */
@@ -1428,25 +1428,25 @@ public class JSONObjectTest extends TestCase {
             JSONObject jObj = new JSONObject("{test-key:'value'}");
             assertTrue(jObj.has("test-key"));
             assertTrue(jObj.getString("test-key").equals("value"));
-            
+
             jObj = new JSONObject("{test0:'value'}");
             assertTrue(jObj.has("test0"));
             assertTrue(jObj.getString("test0").equals("value"));
-            
+
             jObj = new JSONObject("{test$:'value'}");
             assertTrue(jObj.has("test$"));
             assertTrue(jObj.getString("test$").equals("value"));
-            
+
             jObj = new JSONObject("{test_key:'value'}");
             assertTrue(jObj.has("test_key"));
             assertTrue(jObj.getString("test_key").equals("value"));
-            
+
         } catch (Exception ex) {
             ex.printStackTrace();
             assertTrue(false);
         }
     }
-    
+
     /**
      * Test special characters in unquoted string value.
      */
@@ -1455,15 +1455,15 @@ public class JSONObjectTest extends TestCase {
             JSONObject jObj = new JSONObject("{test:@value}");
             assertTrue(jObj.has("test"));
             assertTrue(jObj.getString("test").equals("@value"));
-            
+
             jObj = new JSONObject("{test:$100}");
             assertTrue(jObj.has("test"));
             assertTrue(jObj.getString("test").equals("$100"));
-            
+
             jObj = new JSONObject("{test:$value}");
             assertTrue(jObj.has("test"));
             assertTrue(jObj.getString("test").equals("$value"));
-            
+
         } catch (Exception ex) {
             ex.printStackTrace();
             assertTrue(false);
@@ -1485,7 +1485,7 @@ public class JSONObjectTest extends TestCase {
         try {
             JSONObject jObj = new JSONObject("// test comment\n{'test':'value'}", true);
         } catch (Exception ex) {
-            ex1 = ex;        
+            ex1 = ex;
         }
 
         assertTrue(ex1 != null);
@@ -1525,5 +1525,5 @@ public class JSONObjectTest extends TestCase {
         }
         assertTrue(ex == null);
     }
-    
+
 }

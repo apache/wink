@@ -6,15 +6,15 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 
 package org.apache.wink.json4j.tests;
@@ -22,16 +22,16 @@ package org.apache.wink.json4j.tests;
 /**
  * Basic junit imports.
  */
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 
-/**
- * Import JSON code we're testing
- */
+import junit.framework.TestCase;
+
 import org.apache.wink.json4j.JSONArray;
 import org.apache.wink.json4j.JSONObject;
-import org.apache.wink.json4j.utils.*;
+import org.apache.wink.json4j.utils.XML;
 
 /**
  * Tests for all the basic XML Transform functions.
@@ -43,10 +43,11 @@ public class XMLTests extends TestCase {
      */
     public void testSimpleXMLDocument_AsFileToStringCompact() {
         Exception ex = null;
-        File file    = new File("xmlfiles/simple.xml");
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("simple.xml");
 
         try {
-            String JSON = XML.toJson(file);
+            String JSON = XML.toJson(is);
+            is.close();
             System.out.println("JSON compacted text:\n");
             System.out.println(JSON);
         } catch (Exception ex1) {
@@ -60,10 +61,11 @@ public class XMLTests extends TestCase {
      */
     public void testSimpleXMLDocument_AsFileToStringVerbose() {
         Exception ex = null;
-        File file    = new File("xmlfiles/simple.xml");
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("simple.xml");
 
         try {
-            String JSON = XML.toJson(file, true);
+            String JSON = XML.toJson(is, true);
+            is.close();
             System.out.println("JSON non-compact text:\n");
             System.out.println(JSON);
         } catch (Exception ex1) {
@@ -78,10 +80,11 @@ public class XMLTests extends TestCase {
      */
     public void testComplexXMLDocument_AsFileToStringCompact() {
         Exception ex = null;
-        File file    = new File("xmlfiles/complex.xml");
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("simple.xml");
 
         try {
-            String JSON = XML.toJson(file);
+            String JSON = XML.toJson(is);
+            is.close();
             System.out.println("JSON compacted text:\n");
             System.out.println(JSON);
         } catch (Exception ex1) {
@@ -95,10 +98,11 @@ public class XMLTests extends TestCase {
      */
     public void testComplexXMLDocument_AsFileToStringVerbose() {
         Exception ex = null;
-        File file    = new File("xmlfiles/complex.xml");
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("complex.xml");
 
         try {
-            String JSON = XML.toJson(file, true);
+            String JSON = XML.toJson(is, true);
+            is.close();
             System.out.println("JSON non-compact text:\n");
             System.out.println(JSON);
         } catch (Exception ex1) {
@@ -112,10 +116,11 @@ public class XMLTests extends TestCase {
      */
     public void testComplexXMLDocumentWithLongText_AsFileToStringVerbose() {
         Exception ex = null;
-        File file    = new File("xmlfiles/long-text.xml");
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("long-text.xml");
 
         try {
-            String JSON = XML.toJson(file, true);
+            String JSON = XML.toJson(is, true);
+            is.close();
             System.out.println("JSON non-compact text with LONG string:\n");
             System.out.println(JSON);
         } catch (Exception ex1) {
@@ -130,12 +135,11 @@ public class XMLTests extends TestCase {
      */
     public void testSimpleXMLDocument_AsStreamToStringCompact() {
         Exception ex = null;
-        File file    = new File("xmlfiles/simple.xml");
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("simple.xml");
 
         try {
-            FileInputStream fis = new FileInputStream(file);
-            String JSON = XML.toJson(fis);
-            fis.close();
+            String JSON = XML.toJson(is);
+            is.close();
             System.out.println("JSON compacted text:\n");
             System.out.println(JSON);
         } catch (Exception ex1) {
@@ -151,12 +155,11 @@ public class XMLTests extends TestCase {
      */
     public void testSimpleXMLDocument_AsStreamToStringVerbose() {
         Exception ex = null;
-        File file    = new File("xmlfiles/simple.xml");
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("simple.xml");
 
         try {
-            FileInputStream fis = new FileInputStream(file);
-            String JSON = XML.toJson(fis, true);
-            fis.close();
+            String JSON = XML.toJson(is, true);
+            is.close();
             System.out.println("JSON non-compact text:\n");
             System.out.println(JSON);
         } catch (Exception ex1) {
@@ -171,12 +174,11 @@ public class XMLTests extends TestCase {
      */
     public void testComplexXMLDocument_AsStreamToStringCompact() {
         Exception ex = null;
-        File file    = new File("xmlfiles/complex.xml");
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("complex.xml");
 
         try {
-            FileInputStream fis = new FileInputStream(file);
-            String JSON = XML.toJson(fis);
-            fis.close();
+            String JSON = XML.toJson(is);
+            is.close();
             System.out.println("JSON compacted text:\n");
             System.out.println(JSON);
         } catch (Exception ex1) {
@@ -190,12 +192,11 @@ public class XMLTests extends TestCase {
      */
     public void testComplexXMLDocument_AsStreamToStringVerbose() {
         Exception ex = null;
-        File file    = new File("xmlfiles/complex.xml");
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("complex.xml");
 
         try {
-            FileInputStream fis = new FileInputStream(file);
-            String JSON = XML.toJson(fis, true);
-            fis.close();
+            String JSON = XML.toJson(is, true);
+            is.close();
             System.out.println("JSON non-compact text:\n");
             System.out.println(JSON);
         } catch (Exception ex1) {
@@ -209,17 +210,16 @@ public class XMLTests extends TestCase {
      */
     public void testSimpleXMLDocument_AsStreamToStreamCompact() {
         Exception ex = null;
-        File file    = new File("xmlfiles/simple.xml");
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("simple.xml");
         File fileOut = new File("json_output/simple_json_compact.json");
 
         try {
             File parent = fileOut.getParentFile();
             parent.mkdirs();
 
-            FileInputStream fis  = new FileInputStream(file);
             FileOutputStream fos = new FileOutputStream(fileOut);
-            XML.toJson(fis, fos);
-            fis.close();
+            XML.toJson(is, fos);
+            is.close();
             fos.flush();
             fos.close();
         } catch (Exception ex1) {
@@ -233,17 +233,16 @@ public class XMLTests extends TestCase {
      */
     public void testSimpleXMLDocument_AsStreamToStreamVerbose() {
         Exception ex = null;
-        File file    = new File("xmlfiles/simple.xml");
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("simple.xml");
         File fileOut = new File("json_output/simple_json_verbose.json");
 
         try {
             File parent = fileOut.getParentFile();
             parent.mkdirs();
 
-            FileInputStream fis  = new FileInputStream(file);
             FileOutputStream fos = new FileOutputStream(fileOut);
-            XML.toJson(fis, fos, true);
-            fis.close();
+            XML.toJson(is, fos, true);
+            is.close();
             fos.flush();
             fos.close();
         } catch (Exception ex1) {
@@ -257,17 +256,16 @@ public class XMLTests extends TestCase {
      */
     public void testComplexXMLDocument_AsStreamToStreamCompact() {
         Exception ex = null;
-        File file    = new File("xmlfiles/complex.xml");
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("complex.xml");
         File fileOut = new File("json_output/complex_json_compact.json");
 
         try {
             File parent = fileOut.getParentFile();
             parent.mkdirs();
 
-            FileInputStream fis = new FileInputStream(file);
             FileOutputStream fos = new FileOutputStream(fileOut);
-            XML.toJson(fis, fos);
-            fis.close();
+            XML.toJson(is, fos);
+            is.close();
             fos.flush();
             fos.close();
         } catch (Exception ex1) {
@@ -281,17 +279,16 @@ public class XMLTests extends TestCase {
      */
     public void testComplexXMLDocument_AsStreamToStreamVerbose() {
         Exception ex = null;
-        File file    = new File("xmlfiles/complex.xml");
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("complex.xml");
         File fileOut = new File("json_output/complex_json_verbose.json");
 
         try {
             File parent = fileOut.getParentFile();
             parent.mkdirs();
 
-            FileInputStream fis = new FileInputStream(file);
             FileOutputStream fos = new FileOutputStream(fileOut);
-            XML.toJson(fis, fos, true);
-            fis.close();
+            XML.toJson(is, fos, true);
+            is.close();
             fos.flush();
             fos.close();
         } catch (Exception ex1) {
@@ -305,10 +302,10 @@ public class XMLTests extends TestCase {
      */
     public void testSimpleXMLDocument_AsFileToStringCompactFailure() {
         Exception ex = null;
-        File file    = new File("xmlfiles/simple_broken.xml");
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("simple_broken.xml");
 
         try {
-            String JSON = XML.toJson(file, true);
+            String JSON = XML.toJson(is, true);
             System.out.println("JSON compacted text:\n");
             System.out.println(JSON);
         } catch (Exception ex1) {
@@ -322,7 +319,7 @@ public class XMLTests extends TestCase {
      */
     public void testAtomFeedConversion1() {
         Exception ex = null;
-        File file    = new File("xmlfiles/atom-xml-entry1");
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("atom-xml-entry1");
         File oFile   = new File("json_output/atomentry-xml-json1.json");
 
         try {
@@ -330,10 +327,9 @@ public class XMLTests extends TestCase {
             if (parent != null && !parent.exists()) {
                 parent.mkdirs();
             }
-            FileInputStream fis  = new FileInputStream(file);
             FileOutputStream fos = new FileOutputStream(oFile);
-            XML.toJson(fis, fos, true);
-            fis.close();
+            XML.toJson(is, fos, true);
+            is.close();
             fos.flush();
             fos.close();
         } catch (Exception ex1) {
@@ -348,7 +344,7 @@ public class XMLTests extends TestCase {
      */
     public void testAtomFeedConversion2() {
         Exception ex = null;
-        File file    = new File("xmlfiles/atom-xml-feed1");
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("atom-xml-feed1");
         File oFile   = new File("json_output/atomfeed-xml-json2.json");
 
         try {
@@ -356,10 +352,9 @@ public class XMLTests extends TestCase {
             if (parent != null && !parent.exists()) {
                 parent.mkdirs();
             }
-            FileInputStream fis  = new FileInputStream(file);
             FileOutputStream fos = new FileOutputStream(oFile);
-            XML.toJson(fis, fos, true);
-            fis.close();
+            XML.toJson(is, fos, true);
+            is.close();
             fos.flush();
             fos.close();
         } catch (Exception ex1) {
@@ -374,23 +369,22 @@ public class XMLTests extends TestCase {
      */
     public void testLowCharacterUTF8String() {
         Exception ex = null;
-        File file    = new File("xmlfiles/utf8-lowerchar.xml");
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("utf8-lowerchar.xml");
         File fileOut = new File("json_output/utf8-lowerchar.json");
 
         try {
             File parent = fileOut.getParentFile();
             parent.mkdirs();
 
-            FileInputStream fis = new FileInputStream(file);
             FileOutputStream fos = new FileOutputStream(fileOut);
-            XML.toJson(fis, fos, false);
-            fis.close();
+            XML.toJson(is, fos, false);
+            is.close();
             fos.flush();
             fos.close();
 
-            fis = new FileInputStream("json_output/utf8-lowerchar.json");
-            JSONObject jObject = new JSONObject(fis);
-            fis.close();
+            is = fileOut.toURL().openStream();// this.getClass().getClassLoader().getResourceAsStream("json_output/utf8-lowerchar.json");
+            JSONObject jObject = new JSONObject(is);
+            is.close();
             String str = (String)jObject.get("hi");
             String expected="\u00C5\u00C5\u00C5\u00C5";
             //Compare this to the string with unicode \u00C5 in it.
@@ -408,23 +402,22 @@ public class XMLTests extends TestCase {
      */
     public void testArrayUTF8String() {
         Exception ex = null;
-        File file    = new File("xmlfiles/utf8-array.xml");
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("utf8-array.xml");
         File fileOut = new File("json_output/utf8-array.json");
 
         try {
             File parent = fileOut.getParentFile();
             parent.mkdirs();
 
-            FileInputStream fis = new FileInputStream(file);
             FileOutputStream fos = new FileOutputStream(fileOut);
-            XML.toJson(fis, fos, false);
-            fis.close();
+            XML.toJson(is, fos, false);
+            is.close();
             fos.flush();
             fos.close();
 
-            fis = new FileInputStream("json_output/utf8-array.json");
-            JSONObject jObject = new JSONObject(fis);
-            fis.close();
+            is = fileOut.toURL().openStream(); //this.getClass().getClassLoader().getResourceAsStream("utf8-array.json");
+            JSONObject jObject = new JSONObject(is);
+            is.close();
             String expected="\u592a\u548c\u6bbf";
             JSONObject search = (JSONObject)jObject.get("search");
             JSONObject payload = (JSONObject)search.get("payLoad");

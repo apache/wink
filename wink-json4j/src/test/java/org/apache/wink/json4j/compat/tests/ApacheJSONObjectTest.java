@@ -6,15 +6,15 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 
 package org.apache.wink.json4j.compat.tests;
@@ -37,7 +37,7 @@ public class ApacheJSONObjectTest extends TestCase {
      * Test the noargs contructor.
      */
     public void test_new() {
-        System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+        System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
         JSONFactory factory = JSONFactory.newInstance();
         JSONObject jObject = factory.createJSONObject();
         assertTrue(jObject != null);
@@ -52,7 +52,7 @@ public class ApacheJSONObjectTest extends TestCase {
         Exception ex = null;
         // Load from empty object string.
         try{
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             jObject = factory.createJSONObject("{}");
         }catch(Exception ex1){
@@ -72,7 +72,7 @@ public class ApacheJSONObjectTest extends TestCase {
         Exception ex = null;
         // Load a basic JSON string
         try{
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             jObject = factory.createJSONObject("{\"foo\":\"bar\", \"bool\": true}");
         }catch(Exception ex1){
@@ -92,8 +92,8 @@ public class ApacheJSONObjectTest extends TestCase {
         Exception ex = null;
         // read in a basic JSON file that has all the various types in it.
         try{
-            Reader rdr = new InputStreamReader(new FileInputStream("jsonfiles/utf8_basic.json"), "UTF-8");
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            Reader rdr = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("utf8_basic.json"), "UTF-8");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             jObject = factory.createJSONObject(rdr);
             rdr.close();
@@ -120,7 +120,7 @@ public class ApacheJSONObjectTest extends TestCase {
 
         // Load a JSON object from a map with JSONable values.
         try{
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             jObject = factory.createJSONObject(map);
         }catch(Exception ex1){
@@ -138,7 +138,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_compact() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"foo\":\"bar\", \"bool\": true}");
             assertTrue(jObject.getBoolean("bool") == true);
@@ -159,7 +159,7 @@ public class ApacheJSONObjectTest extends TestCase {
 
         try {
             // Verify a malformed JSON string (no closure), fails parse.
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"foo\":\"bar\", \"bool\": true");
             assertTrue(jObject.getBoolean("bool") == true);
@@ -180,7 +180,7 @@ public class ApacheJSONObjectTest extends TestCase {
 
         try {
             // Verify a malformed JSON string (no quotes on attributes), fails parse.
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{foo:\"bar\", bool: true}");
             assertTrue(jObject.getBoolean("bool") == true);
@@ -199,7 +199,7 @@ public class ApacheJSONObjectTest extends TestCase {
         Exception ex = null;
 
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"foo\":\"bar\", \"bool\": true}");
             assertTrue(jObject.getBoolean("bool") == true);
@@ -219,7 +219,7 @@ public class ApacheJSONObjectTest extends TestCase {
         Exception ex = null;
 
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"foo\":\"bar\", \"bool\": false, \"null\": null}");
             assertTrue(jObject.has("foo"));
@@ -239,7 +239,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_putLong() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject();
             jObject.put("long", (long)1);
@@ -260,7 +260,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_putInt() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject();
             jObject.put("int", 1);
@@ -281,7 +281,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_putShort() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject();
             jObject.put("short", (short)1);
@@ -302,7 +302,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_putDouble() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject();
             jObject.put("double", (double)1.123);
@@ -323,7 +323,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_putBoolean() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject();
             jObject.put("bool", true);
@@ -344,7 +344,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_putString() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject();
             jObject.put("string", "Hello World.");
@@ -365,7 +365,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_putJSONObject() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject();
             jObject.put("object", factory.createJSONObject());
@@ -386,7 +386,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_putJSONArray() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject();
             jObject.put("array", factory.createJSONArray());
@@ -407,7 +407,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_append() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject();
             jObject.put("string", "Hello World.");
@@ -431,7 +431,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_appendtoNull() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject();
             jObject.put("null", (Object)null);
@@ -465,7 +465,7 @@ public class ApacheJSONObjectTest extends TestCase {
         Exception ex = null;
         try {
             System.out.println("In: test_appendArray");
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject();
             JSONArray array = factory.createJSONArray();
@@ -493,7 +493,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_getLong() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"long\":1}");
             assertTrue(jObject.getLong("long") == 1);
@@ -510,7 +510,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_getLongNgative() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"long\":-1}");
             assertTrue(jObject.getLong("long") == -1);
@@ -527,7 +527,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_getInt() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"int\":1}");
             assertTrue(jObject.getInt("int") == 1);
@@ -544,7 +544,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_getIntNegative() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"int\":-1}");
             assertTrue(jObject.getInt("int") == -1);
@@ -561,7 +561,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_getDouble() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"double\":1}");
             assertTrue(jObject.getDouble("double") == 1);
@@ -578,7 +578,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_getDoubleNegative() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"double\":-1}");
             assertTrue(jObject.getDouble("double") == -1);
@@ -595,7 +595,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_getDoubleWithDecimal() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"double\":100.959}");
             assertTrue(jObject.getDouble("double") == 100.959);
@@ -612,7 +612,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_getDoubleNegativeWithDecimal() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"double\":-100.959}");
             assertTrue(jObject.getDouble("double") == -100.959);
@@ -629,7 +629,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_getDoubleWithExponential() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"double\":100959e-3}");
             assertTrue(jObject.getDouble("double") == 100.959);
@@ -646,7 +646,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_getDoubleNegativeWithExponential() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"double\":-100959e-3}");
             assertTrue(jObject.getDouble("double") == -100.959);
@@ -663,7 +663,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_getString() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"string\":\"some string\"}");
             assertTrue(jObject.getString("string").equals("some string"));
@@ -680,7 +680,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_getBoolean() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"bool\":true}");
             assertTrue(jObject.getBoolean("bool"));
@@ -698,7 +698,7 @@ public class ApacheJSONObjectTest extends TestCase {
         Exception ex = null;
 
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"bool\":\"true\"}");
             assertTrue(jObject.getBoolean("bool"));
@@ -710,7 +710,7 @@ public class ApacheJSONObjectTest extends TestCase {
     }
 
     /**************************************************************************/
-    /* The following tests all test failure scenarios due to type mismatching.*/  
+    /* The following tests all test failure scenarios due to type mismatching.*/
     /**************************************************************************/
 
     /**
@@ -719,7 +719,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_getLong_typeMisMatch() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"long\":\"1\"}");
             assertTrue(jObject.getLong("long") == 1);
@@ -735,7 +735,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_getDouble_typeMisMatch() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"double\":\"1\"}");
             assertTrue(jObject.getDouble("double") == 1);
@@ -751,7 +751,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_getInt_typeMisMatch() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"int\":\"1\"}");
             assertTrue(jObject.getLong("int") == 1);
@@ -767,7 +767,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_getString_typeMisMatch() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"string\":null}");
             assertTrue(jObject.getString("string") == "1");
@@ -783,7 +783,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_getBoolean_typeMisMatch() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"bool\":1}");
             assertTrue(jObject.getBoolean("bool") == true);
@@ -799,7 +799,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_getLong_typeMisMatchNull() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"long\":null}");
             assertTrue(jObject.getLong("long") == 1);
@@ -815,7 +815,7 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_getInt_typeMisMatchNull() {
         Exception ex = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"int\":null}");
             assertTrue(jObject.getLong("int") == 1);
@@ -832,7 +832,7 @@ public class ApacheJSONObjectTest extends TestCase {
         Exception ex = null;
 
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"double\":null}");
             assertTrue(jObject.getDouble("double") == 1);
@@ -849,7 +849,7 @@ public class ApacheJSONObjectTest extends TestCase {
         Exception ex = null;
 
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"string\":null}");
             assertTrue(jObject.getString("string") == "1");
@@ -866,7 +866,7 @@ public class ApacheJSONObjectTest extends TestCase {
         Exception ex = null;
 
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"bool\":null}");
             assertTrue(jObject.getBoolean("bool") == true);
@@ -883,7 +883,7 @@ public class ApacheJSONObjectTest extends TestCase {
         Exception ex = null;
         HashMap map = new HashMap();
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject("{\"foo\": \"bar\", \"number\": 1, \"bool\":null}");
             Iterator keys = jObject.keys();
@@ -902,13 +902,13 @@ public class ApacheJSONObjectTest extends TestCase {
     }
 
     /**
-     * Test the iterator of the sorted keys.  
+     * Test the iterator of the sorted keys.
      */
     public void test_sortedKeys() {
         HashMap map = new HashMap();
         JSONObject jObject = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             jObject = factory.createJSONObject("{\"foo\": \"bar\", \"number\": 1, \"bool\":null}");
         } catch (Exception ex) {
@@ -934,7 +934,7 @@ public class ApacheJSONObjectTest extends TestCase {
         JSONObject jObject = null;
         JSONObject jObject2 = null;
         try {
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             jObject = factory.createJSONObject("{\"foo\": \"bar\", \"number\": 1, \"bool\":true}");
             jObject2 = factory.createJSONObject(jObject.toString());
@@ -964,8 +964,8 @@ public class ApacheJSONObjectTest extends TestCase {
     public void test_utf8_korean() {
         Exception ex = null;
         try {
-            Reader reader = new InputStreamReader(new FileInputStream(new File("jsonfiles/utf8_helloworld_ko.json")), "UTF-8");
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            Reader reader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("utf8_helloworld_ko.json"), "UTF-8");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject(reader);
             reader.close();
@@ -978,15 +978,15 @@ public class ApacheJSONObjectTest extends TestCase {
     }
 
     /**
-     * Verify a UTF 8 file with character codes in the lower part will parse and 
+     * Verify a UTF 8 file with character codes in the lower part will parse and
      * serialize correctly in escaped unicode format (which is valid JSON and easier
      * to debug)
      */
     public void test_utf8_lowerchar() {
         Exception ex = null;
         try {
-            Reader reader = new InputStreamReader(new FileInputStream(new File("jsonfiles/utf8_lowerchar.json")), "UTF-8");
-            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.common.model.json.impl.ApacheJSONFactory");
+            Reader reader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("utf8_lowerchar.json"), "UTF-8");
+            System.setProperty("org.apache.wink.common.model.json.factory.impl", "org.apache.wink.json4j.compat.impl.ApacheJSONFactory");
             JSONFactory factory = JSONFactory.newInstance();
             JSONObject jObject = factory.createJSONObject(reader);
             reader.close();
