@@ -314,7 +314,6 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                 MethodMetadata createdMetadata = createMethodMetadata(superclass, method);
                 // stop with if the method found
                 if (createdMetadata != null) {
-                    createdMetadata.setReflectionMethod(method);
                     mergeFormalParameterMetadata(createdMetadata, method);
                     return createdMetadata;
                 }
@@ -326,7 +325,6 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                 MethodMetadata createdMetadata = createMethodMetadata(interfaceClass, method);
                 // stop with the first method found
                 if (createdMetadata != null) {
-                    createdMetadata.setReflectionMethod(method);
                     mergeFormalParameterMetadata(createdMetadata, method);
                     return createdMetadata;
                 }
