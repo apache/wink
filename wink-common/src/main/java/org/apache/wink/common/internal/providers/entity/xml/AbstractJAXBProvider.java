@@ -44,7 +44,6 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -85,8 +84,6 @@ public abstract class AbstractJAXBProvider {
     private static final SoftConcurrentMap<Class<?>, Boolean>        jaxbIsXMLTypeCache             =
                                                                                                         new SoftConcurrentMap<Class<?>, Boolean>();
 
-    private static final SoftConcurrentMap<Class<?>, Class<?>>       xmlElementConcreteClassCache   =
-                                                                                                        new SoftConcurrentMap<Class<?>, Class<?>>();
 
     // if JAXB objects implement an interface where that interface has
     // @XmlJavaTypeAdapter annotation, or
@@ -485,31 +482,11 @@ public abstract class AbstractJAXBProvider {
         return type;
     }
     
-    private Class<?> getConcreteTypeFromXmlElementAnno(Class<?> type, Annotation[] annotations) {
-        Class<?> ret = xmlElementConcreteClassCache.get(type);
-        if (ret == null) {
-            XmlElement xmlElement = getXmlElementAnno(type, annotations);
-            if (xmlElement != null) {
-                Type xmlElementType = xmlElement.type();
-                if (xmlElementType != null) {
-                    ret = (Class<?>)xmlElementType;
-                }
-            }
-            if (ret == null)
-                ret = type;
-            xmlElementConcreteClassCache.put(type, ret);
-        }
-        return ret;
-    }
 
     public Class<?> getConcreteTypeFromTypeMap(Class<?> type, Annotation[] annotations) {
         Class<?> concreteType = jaxbTypeMapCache.get(type);
         if (concreteType == null) {
             concreteType = getConcreteTypeFromAdapter(type, annotations);
-            // @XmlJavaTypeAdapter takes priority over XmlElement
-            if (concreteType == type) {
-                concreteType = getConcreteTypeFromXmlElementAnno(type, annotations);
-            }
             jaxbTypeMapCache.put(type, concreteType);
         }
         return concreteType;
@@ -569,22 +546,6 @@ public abstract class AbstractJAXBProvider {
         return xmlJavaTypeAdapter;
     }
     
-    /**
-     * @param type
-     * @param annotations
-     * @return
-     */
-    private XmlElement getXmlElementAnno(Type type,
-            Annotation[] annotations) {
-        XmlElement xmlElement = null;
-        for (int i = 0; (annotations != null) && i < annotations.length; i++) {
-            if (annotations[i].annotationType() == XmlElement.class) {
-                xmlElement = (XmlElement)annotations[i];
-                break;
-            }
-        }
-        return xmlElement;
-    }
     
     @SuppressWarnings("unchecked")
     protected Object unmarshalWithXmlAdapter(Object obj, Type type, Annotation[] annotations) {

@@ -37,6 +37,7 @@ import javax.ws.rs.HttpMethod;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.wink.common.DynamicResource;
 import org.apache.wink.common.annotations.Parent;
@@ -470,7 +471,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
 
     private void parseMethodParameters(Method method, MethodMetadata methodMetadata) {
         Annotation[][] parameterAnnotations = method.getParameterAnnotations();
-        Type[] paramTypes = method.getGenericParameterTypes();
+        Type[] paramTypes = getParamTypesFilterByXmlElementAnnotation(method);
         boolean entityParamExists = false;
         for (int pos = 0, limit = paramTypes.length; pos < limit; pos++) {
             Injectable fp =
@@ -492,6 +493,25 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             }
             methodMetadata.getFormalParameters().add(fp);
         }
+    }
+
+    private Type[] getParamTypesFilterByXmlElementAnnotation(Method method) {
+        int index = 0;
+        Type[] paramTypes = method.getGenericParameterTypes();
+        Annotation[][] paramAnnotations = method.getParameterAnnotations();
+        for(Annotation[] annos: paramAnnotations) {
+            for(Annotation anno: annos) {
+                if (anno.annotationType().equals(XmlElement.class)) {
+                    XmlElement xmlElement = (XmlElement)anno;
+                    Type type = xmlElement.type();
+                    if (type != null) {
+                        paramTypes[index] = type;
+                    }
+                }
+            }
+            index++;
+        }
+        return paramTypes;
     }
 
     private void mergeFormalParameterMetadata(MethodMetadata metadata, Method method) {
