@@ -92,6 +92,48 @@ public class ProvidersTest extends TestCase {
                                                     + "</entry>"
                                                     + "</feed>";
 
+    // apparently JAXB 2.2 reads JAXB bean fields in a different order, and replaces namespace prefixes.  This XML is equivalent to above.
+    private static final String FEED_JAXB_22 = "<feed xmlns=\"http://www.w3.org/2005/Atom\" xmlns:ns2=\"http://a9.com/-/spec/opensearch/1.1/\" xmlns:ns3=\"http://www.w3.org/1999/xhtml\">"
+        + "<id>urn:feed:1</id>"
+        + "<updated>1970-01-02T11:20:00+02:00</updated>"
+        + "<title type=\"text\" xml:lang=\"en\">Title</title>"
+        + "<subtitle type=\"text\" xml:lang=\"en\">Subtitle</subtitle>"
+        + "<link rel=\"self\" href=\"http://localhost:8080/rest/service/feed\"/>"
+        + "<author>"
+        + "<name>John Smith</name>"
+        + "</author>"
+        + "<category term=\"1\" scheme=\"urn:entity:priority\" label=\"lable\"/>"
+        + "<entry>"
+        + "<id>urn:entry2</id>"
+        + "<updated>1970-01-02T11:20:00+02:00</updated>"
+        + "<title type=\"text\" xml:lang=\"en\">Title</title>"
+        + "<summary type=\"text\" xml:lang=\"en\">Title</summary>"
+        + "<published>1970-01-02T11:20:00+02:00</published>"
+        + "<link rel=\"self\" type=\"application/xml\" href=\"http://localhost:8080/rest/service/entry/2\"/>"
+        + "<author>"
+        + "<name>John Smith</name>"
+        + "</author>"
+        + "<category term=\"1\" scheme=\"urn:entity:priority\" label=\"lable\"/>"
+        + "<content type=\"text\">This is entity created by John Smith</content>"
+        + "</entry>"
+        + "<entry>"
+        + "<id>urn:entry3</id>"
+        + "<updated>1970-01-02T11:20:00+02:00</updated>"
+        + "<title type=\"text\" xml:lang=\"en\">Title</title>"
+        + "<summary type=\"text\" xml:lang=\"en\">Title</summary>"
+        + "<published>1970-01-02T11:20:00+02:00</published>"
+        + "<link rel=\"self\" type=\"application/xml\" href=\"http://localhost:8080/rest/service/entry/3\"/>"
+        + "<author>"
+        + "<name>John Smith</name>"
+        + "</author>"
+        + "<category term=\"1\" scheme=\"urn:entity:priority\" label=\"lable\"/>"
+        + "<content type=\"text\">This is entity created by John Smith</content>"
+        + "</entry>"
+        + "<ns2:totalResults>100</ns2:totalResults>"
+        + "<ns2:itemsPerPage>10</ns2:itemsPerPage>"
+        + "<ns2:startIndex>0</ns2:startIndex>"
+        + "</feed>";
+    
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -169,6 +211,9 @@ public class ProvidersTest extends TestCase {
             String actual = os.toString();
 
             String msg = TestUtils.diffIgnoreUpdateWithAttributeQualifier(FEED, actual);
+            if (msg != null) {
+                msg = TestUtils.diffIgnoreUpdateWithAttributeQualifier(FEED_JAXB_22, actual);
+            }
             assertNull(msg, msg);
         } finally {
             server.stopServer();

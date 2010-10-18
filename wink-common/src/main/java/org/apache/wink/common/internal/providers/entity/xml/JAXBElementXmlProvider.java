@@ -102,11 +102,14 @@ public class JAXBElementXmlProvider extends AbstractJAXBProvider implements
                 logger.error(Messages.getMessage("jaxbFailToUnmarshal", type.getName()), e); //$NON-NLS-1$
             }
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
-        } catch (XMLStreamException e) {
+        } catch (EntityReferenceXMLStreamException e) {
             closeXMLStreamReader(xmlStreamReader);
             if (logger.isErrorEnabled()) {
                 logger.error(Messages.getMessage("entityRefsNotSupported")); //$NON-NLS-1$
             }
+            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
+        } catch (XMLStreamException e) {
+            closeXMLStreamReader(xmlStreamReader);
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         } catch (RuntimeException e) {
             closeXMLStreamReader(xmlStreamReader);

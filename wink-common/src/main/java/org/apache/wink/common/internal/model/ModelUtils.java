@@ -384,8 +384,8 @@ public class ModelUtils {
             XmlWrapper xmlWrapper = (XmlWrapper)value;
             if (xmlWrapper.getType() == null) {
                 // fixes type on the XmlWrapper in the case it was not set, it
-                // happens if the same object was unmarsheled, and now is going
-                // to be marsheled back to xml
+                // happens if the same object was unmarshaled, and now is going
+                // to be marshaled back to xml
                 xmlWrapper.setType(type);
             }
         } else if (value.getClass() == String.class && !isTypeXml(type)) {
@@ -394,6 +394,28 @@ public class ModelUtils {
         } else {
             // wrapping with XmlWrapper will cause the Providers code to run
             // xml content won't be escaped
+            
+            // because the list comes from an unmarshal through JAXB, we may have white space nodes
+            // see sample XHTML data in AtomTest.  We need the JAXBElement, not the surrounding white space.
+            for (Object anyValue: any) {
+                if (anyValue instanceof JAXBElement) {
+                    value = anyValue;
+                    break;
+                } else if (anyValue instanceof XmlWrapper) {
+                    XmlWrapper xmlWrapper = (XmlWrapper)anyValue;
+                    if (xmlWrapper.getType() == null) {
+                        // fixes type on the XmlWrapper in the case it was not set, it
+                        // happens if the same object was unmarshaled, and now is going
+                        // to be marshaled back to xml
+                        xmlWrapper.setType(type);
+                    }
+                    // only one child of AtomContent is permitted per Atom spec for XHTML content,
+                    // so let's clear the list, and reset the first item to be the content we care about
+                    any.clear();
+                    any.add(0, xmlWrapper);
+                    return;
+                }
+            }
             any.set(0, new XmlWrapper(value, type));
         }
     }

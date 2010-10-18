@@ -28,6 +28,8 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.wink.common.model.atom.AtomTextType;
+
 /**
  * Used to de-serialize XHTML content.
  */
@@ -47,6 +49,7 @@ public class AtomXhtml {
     }
 
     public List<Object> getAny() {
+        ModelUtils.fixAnyContent(any, AtomTextType.xhtml.name());
         return any;
     }
 

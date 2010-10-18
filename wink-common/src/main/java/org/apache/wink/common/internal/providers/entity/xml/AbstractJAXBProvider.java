@@ -21,6 +21,7 @@ package org.apache.wink.common.internal.providers.entity.xml;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.annotation.Annotation;
 import java.lang.ref.SoftReference;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -43,9 +44,12 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -66,20 +70,36 @@ import org.slf4j.LoggerFactory;
 
 public abstract class AbstractJAXBProvider {
 
-    private static final Logger                                   logger                    =
-                                                                                                LoggerFactory
-                                                                                                    .getLogger(AbstractJAXBProvider.class);
-    private static final SoftConcurrentMap<Class<?>, JAXBContext> jaxbDefaultContexts       =
-                                                                                                new SoftConcurrentMap<Class<?>, JAXBContext>();
+    private static final Logger                                      logger                         =
+                                                                                                        LoggerFactory
+                                                                                                            .getLogger(AbstractJAXBProvider.class);
+    private static final SoftConcurrentMap<Class<?>, JAXBContext>    jaxbDefaultContexts            =
+                                                                                                        new SoftConcurrentMap<Class<?>, JAXBContext>();
 
     @Context
-    protected Providers                                           providers;
+    protected Providers                                              providers;
 
-    private static final SoftConcurrentMap<Class<?>, Boolean>     jaxbIsXMLRootElementCache =
-                                                                                                new SoftConcurrentMap<Class<?>, Boolean>();
+    private static final SoftConcurrentMap<Class<?>, Boolean>        jaxbIsXMLRootElementCache      =
+                                                                                                        new SoftConcurrentMap<Class<?>, Boolean>();
 
-    private static final SoftConcurrentMap<Class<?>, Boolean>     jaxbIsXMLTypeCache        =
-                                                                                                new SoftConcurrentMap<Class<?>, Boolean>();
+    private static final SoftConcurrentMap<Class<?>, Boolean>        jaxbIsXMLTypeCache             =
+                                                                                                        new SoftConcurrentMap<Class<?>, Boolean>();
+
+    private static final SoftConcurrentMap<Class<?>, Class<?>>       xmlElementConcreteClassCache   =
+                                                                                                        new SoftConcurrentMap<Class<?>, Class<?>>();
+
+    // if JAXB objects implement an interface where that interface has
+    // @XmlJavaTypeAdapter annotation, or
+    // in JAXB 2.2 if the @XMLElement annotation is on the 'type' of the
+    // resource method parameter
+    protected static final SoftConcurrentMap<Class<?>, Class<?>>     jaxbTypeMapCache               =
+                                                                                                        new SoftConcurrentMap<Class<?>, Class<?>>();
+
+    private static final SoftConcurrentMap<Type, XmlJavaTypeAdapter> xmlJavaTypeAdapterCache        =
+                                                                                                        new SoftConcurrentMap<Type, XmlJavaTypeAdapter>();
+
+    private static final SoftConcurrentMap<Type, Boolean>            xmlJavaTypeAdapterPresentCache =
+                                                                                                        new SoftConcurrentMap<Type, Boolean>();
 
     // the Pool code for the pooling of unmarshallers is from Axis2 Java
     // http://svn.apache.org/repos/asf/webservices/axis2/trunk/java/modules/jaxws/src/org/apache/axis2/jaxws/message/databinding/JAXBUtils.java
@@ -265,7 +285,7 @@ public abstract class AbstractJAXBProvider {
                     }
                 }
                 if (!supportDTD) {
-                    throw new XMLStreamException(Messages.getMessage("entityRefsNotSupported")); //$NON-NLS-1$
+                    throw new EntityReferenceXMLStreamException(Messages.getMessage("entityRefsNotSupported")); //$NON-NLS-1$
                 } else {
                     logger.trace("DTD entity reference expansion is enabled.  This may present a security risk."); //$NON-NLS-1$
                 }
@@ -438,7 +458,154 @@ public abstract class AbstractJAXBProvider {
         }
         return false;
     }
+    
+    /**
+     * Checks to see if type is marshallable.  One of two annotations must be present with the following conditions:
+     * 1)  @XmlJavaTypeAdapter(type, SomeotherType), or
+     * 2)  @XmlElement(type=SomeotherType.class) where SomeotherType is a JAXB object.
+     * @param type
+     * @param annotations
+     * @return
+     */
+    public boolean isCompatible(Class<?> type, Annotation[] annotations) {
+        return isJAXBObject(getConcreteTypeFromTypeMap(type, annotations));
+    }
 
+    private Class<?> getConcreteTypeFromAdapter(Class<?> type, Annotation[] annotations) {
+        XmlJavaTypeAdapter adapter = getXmlJavaTypeAdapter(type, annotations);
+        if (adapter != null) {
+            Class<?> adapterClass = adapter.value();
+            try {
+                return (Class<?>) adapterClass.getMethod("marshal", type).getReturnType();
+            } catch (NoSuchMethodException e) {
+                // not possible to get here;
+                // compiler would have prevented compilation of an application with an XmlJavaTypeAdapter that lacked a "marshal" method
+            }
+        }
+        return type;
+    }
+    
+    private Class<?> getConcreteTypeFromXmlElementAnno(Class<?> type, Annotation[] annotations) {
+        Class<?> ret = xmlElementConcreteClassCache.get(type);
+        if (ret == null) {
+            XmlElement xmlElement = getXmlElementAnno(type, annotations);
+            if (xmlElement != null) {
+                Type xmlElementType = xmlElement.type();
+                if (xmlElementType != null) {
+                    ret = (Class<?>)xmlElementType;
+                }
+            }
+            if (ret == null)
+                ret = type;
+            xmlElementConcreteClassCache.put(type, ret);
+        }
+        return ret;
+    }
+
+    public Class<?> getConcreteTypeFromTypeMap(Class<?> type, Annotation[] annotations) {
+        Class<?> concreteType = jaxbTypeMapCache.get(type);
+        if (concreteType == null) {
+            concreteType = getConcreteTypeFromAdapter(type, annotations);
+            // @XmlJavaTypeAdapter takes priority over XmlElement
+            if (concreteType == type) {
+                concreteType = getConcreteTypeFromXmlElementAnno(type, annotations);
+            }
+            jaxbTypeMapCache.put(type, concreteType);
+        }
+        return concreteType;
+    }
+    
+    @SuppressWarnings("unchecked")
+    protected Object marshalWithXmlAdapter(Object obj, Type type, Annotation[] annotations) {
+        if ((type == null) || (annotations == null)) {
+            return obj;
+        }
+        XmlJavaTypeAdapter xmlJavaTypeAdapter = getXmlJavaTypeAdapter(type,
+                annotations);
+        if (xmlJavaTypeAdapter != null) {
+            try {
+                XmlAdapter xmlAdapter = xmlJavaTypeAdapter.value().newInstance();
+                return xmlAdapter.marshal(obj);
+            } catch (Exception e) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Could not marshal {} using {} due to exception:", new Object[]{obj, xmlJavaTypeAdapter.value().getName(), e});
+                }
+            }
+        }
+        return obj;
+    }
+
+    /**
+     * @param type
+     * @param annotations
+     * @return
+     */
+    private XmlJavaTypeAdapter getXmlJavaTypeAdapter(Type type, Annotation[] annotations) {
+        Boolean present = xmlJavaTypeAdapterPresentCache.get(type);
+        if (Boolean.FALSE.equals(present)) {
+            return null;
+        }
+        XmlJavaTypeAdapter xmlJavaTypeAdapter = xmlJavaTypeAdapterCache.get(type);
+        if(xmlJavaTypeAdapter == null) {
+            xmlJavaTypeAdapter = findXmlJavaTypeAdapter(type, annotations);
+            xmlJavaTypeAdapterCache.put(type, xmlJavaTypeAdapter);
+            xmlJavaTypeAdapterPresentCache.put(type, xmlJavaTypeAdapter != null);
+        }
+        return xmlJavaTypeAdapter;
+    }
+
+    private XmlJavaTypeAdapter findXmlJavaTypeAdapter(Type type, Annotation[] annotations) {
+        XmlJavaTypeAdapter xmlJavaTypeAdapter = null;
+        for (int i = 0; (annotations != null) && i < annotations.length; i++) {
+            if (annotations[i].annotationType() == XmlJavaTypeAdapter.class) {
+                xmlJavaTypeAdapter = (XmlJavaTypeAdapter)annotations[i];
+                break;
+            }
+        }
+        if ((xmlJavaTypeAdapter == null) && (type != null)) {
+            // check the type itself
+            xmlJavaTypeAdapter = ((Class<?>)type).getAnnotation(XmlJavaTypeAdapter.class);
+        }
+        return xmlJavaTypeAdapter;
+    }
+    
+    /**
+     * @param type
+     * @param annotations
+     * @return
+     */
+    private XmlElement getXmlElementAnno(Type type,
+            Annotation[] annotations) {
+        XmlElement xmlElement = null;
+        for (int i = 0; (annotations != null) && i < annotations.length; i++) {
+            if (annotations[i].annotationType() == XmlElement.class) {
+                xmlElement = (XmlElement)annotations[i];
+                break;
+            }
+        }
+        return xmlElement;
+    }
+    
+    @SuppressWarnings("unchecked")
+    protected Object unmarshalWithXmlAdapter(Object obj, Type type, Annotation[] annotations) {
+        if ((type == null) || (annotations == null)) {
+            return obj;
+        }
+        XmlJavaTypeAdapter xmlJavaTypeAdapter = getXmlJavaTypeAdapter(type,
+                annotations);
+        if (xmlJavaTypeAdapter != null) {
+            try {
+                XmlAdapter xmlAdapter = xmlJavaTypeAdapter.value().newInstance();
+                return xmlAdapter.unmarshal(obj);
+            } catch (Exception e) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Could not unmarshal {} using {} due to exception:", new Object[]{obj, xmlJavaTypeAdapter.value().getName(), e});
+                }
+            }
+        }
+        return obj;
+    }
+    
     public static boolean isJAXBObject(Class<?> type) {
         return isXMLRootElement(type) || isXMLType(type);
     }
@@ -477,7 +644,10 @@ public abstract class AbstractJAXBProvider {
 
     protected JAXBContext getContext(Class<?> type, Type genericType, MediaType mediaType)
         throws JAXBException {
-        logger.trace("getContext({}, {}, {}) entry", new Object[] { type, genericType, mediaType }); //$NON-NLS-1$
+        if (logger.isTraceEnabled()) {
+            logger
+                .trace("getContext({}, {}, {}) entry", new Object[] {type, genericType, mediaType}); //$NON-NLS-1$
+        }
         ContextResolver<JAXBContext> contextResolver =
             providers.getContextResolver(JAXBContext.class, mediaType);
 
@@ -489,12 +659,18 @@ public abstract class AbstractJAXBProvider {
             // it's ok and safe for contextResolver to be null at this point.
             // JAXBContextResolverKey can handle it
             key = new JAXBContextResolverKey(contextResolver, type);
-            logger.trace("created JAXBContextResolverKey {} for ({}, {}, {})", new Object[] { key, type, genericType, mediaType }); //$NON-NLS-1$
+            if (logger.isTraceEnabled()) {
+                logger
+                    .trace("created JAXBContextResolverKey {} for ({}, {}, {})", new Object[] {key, type, genericType, mediaType}); //$NON-NLS-1$
+            }
             context = jaxbContextCache.get(key);
             logger.trace("retrieved context {}", context); //$NON-NLS-1$
             if (context != null) {
-                logger.trace("retrieved context {}@{}", context.getClass().getName(), System.identityHashCode(context)); //$NON-NLS-1$
-                logger.trace("returned context {}", context); //$NON-NLS-1$
+                if (logger.isTraceEnabled()) {
+                    logger
+                        .trace("retrieved context {}@{}", context.getClass().getName(), System.identityHashCode(context)); //$NON-NLS-1$
+                    logger.trace("returned context {}", context); //$NON-NLS-1$
+                }
                 return context;
             }
         }
@@ -512,8 +688,11 @@ public abstract class AbstractJAXBProvider {
             jaxbContextCache.put(key, context);
         }
 
-        logger.trace("returned context {}", context); //$NON-NLS-1$
-        logger.trace("retrieved context {}@{}", context.getClass().getName(), System.identityHashCode(context)); //$NON-NLS-1$
+        if (logger.isTraceEnabled()) {
+            logger.trace("returned context {}", context); //$NON-NLS-1$
+            logger
+                .trace("retrieved context {}@{}", context.getClass().getName(), System.identityHashCode(context)); //$NON-NLS-1$
+        }
         return context;
     }
 
@@ -531,7 +710,7 @@ public abstract class AbstractJAXBProvider {
                         // effect of putting a namespace prefix and the namespace decl on
                         // the subelements of the
                         // desired type, thus degrading performance.
-                        
+
                         if (!isXMLRootElement(type) && !isXMLType(type)) { // use
                             // genericType.
                             // If that fails,
@@ -546,8 +725,11 @@ public abstract class AbstractJAXBProvider {
 
                         jaxbDefaultContexts.put(type, context);
                     }
-                    logger.trace("getDefaultContext() exit returning", context); //$NON-NLS-1$
-                    logger.trace("returning context {}@{}", context.getClass().getName(), System.identityHashCode(context)); //$NON-NLS-1$
+                    if (logger.isTraceEnabled()) {
+                        logger.trace("getDefaultContext() exit returning", context); //$NON-NLS-1$
+                        logger
+                            .trace("returning context {}@{}", context.getClass().getName(), System.identityHashCode(context)); //$NON-NLS-1$
+                    }
                     return context;
                 }
                 
@@ -611,7 +793,7 @@ public abstract class AbstractJAXBProvider {
             return defaultWrapInJAXBElement(jaxbObject, type);
         } catch (Exception e) {
             if (logger.isErrorEnabled()) {
-                logger.error(Messages.getMessage("jaxbElementFailToBuild", type.getName())); //$NON-NLS-1$
+                logger.error(Messages.getMessage("jaxbElementFailToBuild", type.getName()), e); //$NON-NLS-1$
             }
             return null;
         }
@@ -636,8 +818,8 @@ public abstract class AbstractJAXBProvider {
                 }
             });
         } catch(PrivilegedActionException e) {
-            if (logger.isErrorEnabled()) {
-                logger.error(Messages.getMessage("jaxbObjectFactoryNotFound", type.getName())); //$NON-NLS-1$
+            if (logger.isDebugEnabled()) {
+                logger.debug(Messages.getMessage("jaxbObjectFactoryNotFound", type.getName()), e); //$NON-NLS-1$
             }
             return null;
         }

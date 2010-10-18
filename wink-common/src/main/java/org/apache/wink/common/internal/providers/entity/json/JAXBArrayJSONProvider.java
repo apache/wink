@@ -67,7 +67,7 @@ public class JAXBArrayJSONProvider extends AbstractJAXBCollectionProvider implem
                               Type genericType,
                               Annotation[] annotations,
                               MediaType mediaType) {
-        Class<?> theType = getParameterizedTypeClass(type, genericType, false);
+        Class<?> theType = getParameterizedTypeClassForRead(type, genericType, false);
         if (theType != null)
             return (type.isArray() && isJAXBObject(theType, genericType) && !isJAXBElement(theType,
                                                                                            genericType));
@@ -89,7 +89,7 @@ public class JAXBArrayJSONProvider extends AbstractJAXBCollectionProvider implem
                              MediaType mediaType,
                              MultivaluedMap<String, String> httpHeaders,
                              InputStream entityStream) throws IOException, WebApplicationException {
-        Class<?> theType = getParameterizedTypeClass(type, genericType, false);
+        Class<?> theType = getParameterizedTypeClassForRead(type, genericType, false);
         if (this.readerProvider == null) {
             this.readerProvider =
                 injectedProviders.getMessageBodyReader((Class<Object>)theType,
@@ -160,7 +160,7 @@ public class JAXBArrayJSONProvider extends AbstractJAXBCollectionProvider implem
                         MediaType mediaType,
                         MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException, WebApplicationException {
-        Class<?> theType = getParameterizedTypeClass(type, genericType, false);
+        Class<?> theType = getParameterizedTypeClassForWrite(type, genericType, false);
         if (this.writerProvider == null) {
             this.writerProvider =
                 injectedProviders.getMessageBodyWriter((Class<Object>)theType,
@@ -189,7 +189,7 @@ public class JAXBArrayJSONProvider extends AbstractJAXBCollectionProvider implem
                                Type genericType,
                                Annotation[] annotations,
                                MediaType mediaType) {
-        Class<?> theType = getParameterizedTypeClass(type, genericType, false);
+        Class<?> theType = getParameterizedTypeClassForWrite(type, genericType, false);
 
         if (theType != null)
             return (isJAXBObject(theType, genericType) && !isJAXBElement(theType, genericType));

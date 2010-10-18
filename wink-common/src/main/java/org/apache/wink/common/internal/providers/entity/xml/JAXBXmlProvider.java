@@ -63,7 +63,7 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
                               Type genericType,
                               Annotation[] annotations,
                               MediaType mediaType) {
-        return isJAXBObject(type, genericType) && isSupportedMediaType(mediaType);
+        return (isJAXBObject(type, genericType) || isCompatible(type, annotations)) && isSupportedMediaType(mediaType);
     }
 
     public Object readFrom(final Class<Object> type,
@@ -73,14 +73,17 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
                            MultivaluedMap<String, String> httpHeaders,
                            final InputStream entityStream) throws IOException,
         WebApplicationException {
+
+        Class<?> concreteType = getConcreteTypeFromTypeMap(type, annotations);
+        
         Unmarshaller unmarshaller = null;
         Object unmarshaledResource = null;
         XMLStreamReader xmlStreamReader = null;
         try {
-            JAXBContext context = getContext(type, mediaType);
-            unmarshaller = getJAXBUnmarshaller(type, context, mediaType);
+            JAXBContext context = getContext(concreteType, mediaType);
+            unmarshaller = getJAXBUnmarshaller(concreteType, context, mediaType);
             xmlStreamReader = getXMLStreamReader(entityStream);
-            if (type.isAnnotationPresent(XmlRootElement.class)) {
+            if (concreteType.isAnnotationPresent(XmlRootElement.class)) {
                 unmarshaledResource = unmarshaller.unmarshal(xmlStreamReader);
                 closeXMLStreamReader(xmlStreamReader);
                 if (unmarshaledResource instanceof JAXBElement) {
@@ -101,11 +104,12 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
                 try {
                     final Unmarshaller _unmarshaller = unmarshaller;
                     final XMLStreamReader _xmlStreamReader = xmlStreamReader;
+                    final Class<?> _concreteType = concreteType;
                     unmarshaledResource =
                         AccessController.doPrivileged(new PrivilegedExceptionAction<Object>() {
                             public Object run() throws PrivilegedActionException {
                                 try {
-                                    Object obj = _unmarshaller.unmarshal(_xmlStreamReader, type).getValue();
+                                    Object obj = _unmarshaller.unmarshal(_xmlStreamReader, _concreteType).getValue();
                                     closeXMLStreamReader(_xmlStreamReader);
                                     return obj;
                                 } catch (JAXBException e) {
@@ -117,7 +121,7 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
                     closeXMLStreamReader(xmlStreamReader);
                     if (logger.isErrorEnabled()) {
                         logger
-                            .error(Messages.getMessage("jaxbFailToUnmarshal", type.getName()), e.getException()); //$NON-NLS-1$
+                            .error(Messages.getMessage("jaxbFailToUnmarshal", concreteType.getName()), e.getException()); //$NON-NLS-1$
                     }
                     throw new WebApplicationException(e.getException(), Response.Status.BAD_REQUEST);
                 }
@@ -127,20 +131,23 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
         } catch (JAXBException e) {
             closeXMLStreamReader(xmlStreamReader);
             if (logger.isErrorEnabled()) {
-                logger.error(Messages.getMessage("jaxbFailToUnmarshal", type.getName()), e); //$NON-NLS-1$
+                logger.error(Messages.getMessage("jaxbFailToUnmarshal", concreteType.getName()), e); //$NON-NLS-1$
             }
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
-        } catch (XMLStreamException e) {
+        } catch (EntityReferenceXMLStreamException e) {
             closeXMLStreamReader(xmlStreamReader);
             if (logger.isErrorEnabled()) {
                 logger.error(Messages.getMessage("entityRefsNotSupported")); //$NON-NLS-1$
             }
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
+        } catch (XMLStreamException e) {
+            closeXMLStreamReader(xmlStreamReader);
+            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         } catch (RuntimeException e) {
             closeXMLStreamReader(xmlStreamReader);
             throw e;
         }
-        return unmarshaledResource;
+        return unmarshalWithXmlAdapter(unmarshaledResource, type, annotations);
     }
 
     public long getSize(Object t,
@@ -155,7 +162,7 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
                                Type genericType,
                                Annotation[] annotations,
                                MediaType mediaType) {
-        return isJAXBObject(type, genericType) && isSupportedMediaType(mediaType);
+        return (isJAXBObject(type, genericType) || isCompatible(type, annotations)) && isSupportedMediaType(mediaType);
     }
 
     public void writeTo(Object t,
@@ -166,14 +173,16 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
                         MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException, WebApplicationException {
 
+        t = marshalWithXmlAdapter(t, genericType, annotations);
+        Class<?> concreteType = getConcreteTypeFromTypeMap(type, annotations);
         mediaType = MediaTypeUtils.setDefaultCharsetOnMediaTypeHeader(httpHeaders, mediaType);
 
         try {
-            if (isJAXBObject(type)) {
-                JAXBContext context = getContext(type, genericType, mediaType);
+            if (isJAXBObject(concreteType)) {
+                JAXBContext context = getContext(concreteType, genericType, mediaType);
                 logger.trace("using context {}@{} to get marshaller", context.getClass().getName(), System.identityHashCode(context)); //$NON-NLS-1$
-                Marshaller marshaller = getJAXBMarshaller(type, context, mediaType);
-                Object entityToMarshal = getEntityToMarshal(t, type);
+                Marshaller marshaller = getJAXBMarshaller(concreteType, context, mediaType);
+                Object entityToMarshal = getEntityToMarshal(t, concreteType);
 
                 // Use an OutputStream directly instead of a Writer for
                 // performance.
@@ -194,7 +203,7 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
             }
         } catch (JAXBException e) {
             if (logger.isErrorEnabled()) {
-                logger.error(Messages.getMessage("jaxbFailToMarshal", type.getName()), e); //$NON-NLS-1$
+                logger.error(Messages.getMessage("jaxbFailToMarshal", concreteType.getName()), e); //$NON-NLS-1$
             }
             throw new WebApplicationException(e);
         }

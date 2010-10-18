@@ -41,6 +41,9 @@ public class RssTest extends TestCase {
                                                   "\n<category domain=\"Newspapers/Regional/United_States\">Texas</category>\n";
     private static final String RSS_CLOUD     =
                                                   "\n<cloud protocol=\"xml-rpc\" registerProcedure=\"cloud.notify\" path=\"/rpc\" port=\"80\" domain=\"server.example.com\"/>\n";
+    // apparently JAXB 2.2 reads the fields in a different order, so:
+    private static final String RSS_CLOUD_JAXB_22 =
+                                                  "\n<cloud domain=\"server.example.com\" port=\"80\" path=\"/rpc\" registerProcedure=\"cloud.notify\" protocol=\"xml-rpc\"/>\n";
     private static final String RSS_IMAGE     =
                                                   "\n<image>\n" + "    <url>http://dallas.example.com/masthead.gif</url>\n"
                                                       + "    <title>Dallas Times-Herald</title>\n"
@@ -72,6 +75,9 @@ public class RssTest extends TestCase {
                                                   "\n<source url=\"http://la.example.com/rss.xml\">Los Angeles Herald-Examiner</source>\n";
     private static final String RSS_ENCLOSURE =
                                                   "\n<enclosure type=\"audio/mpeg\" length=\"24986239\" url=\"http://dallas.example.com/joebob_050689.mp3\"/>\n";
+    // apparently JAXB 2.2 reads the fields in a different order, so:
+    private static final String RSS_ENCLOSURE_JAXB_22 =
+                                                  "\n<enclosure url=\"http://dallas.example.com/joebob_050689.mp3\" length=\"24986239\" type=\"audio/mpeg\"/>\n";
     private static final String RSS_ITEM      =
                                                   "\n<item>\n" + "    <title>Joe Bob Goes to the Drive-In</title>\n"
                                                       + "    <link>http://dallas.example.com/1983/05/06/joebob.htm</link>\n"
@@ -79,7 +85,20 @@ public class RssTest extends TestCase {
                                                       + "    <author>jbb@dallas.example.com (Joe Bob Briggs)</author>\n"
                                                       + "    <category>rec.arts.movies.reviews</category>\n"
                                                       + "    <comments>http://dallas.example.com/feedback/1983/06/joebob.htm</comments>\n"
-                                                      + "    <enclosure type=\"audio/mpeg\" length=\"24986239\" url=\"http://dallas.example.com/joebob_050689.mp3\"/>\n"
+                                                      + "    " + RSS_ENCLOSURE.replaceFirst("\n", "")
+                                                      + "    <guid>http://dallas.example.com/1983/05/06/joebob.htm</guid>\n"
+                                                      + "    <pubDate>Fri, 06 May 1983 09:00:00 CST</pubDate>\n"
+                                                      + "    <source url=\"http://la.example.com/rss.xml\">Los Angeles Herald-Examiner</source>\n"
+                                                      + "</item>\n";
+    // apparently JAXB 2.2 reads the fields in a different order, so:
+    private static final String RSS_ITEM_JAXB_22      =
+                                                  "\n<item>\n" + "    <title>Joe Bob Goes to the Drive-In</title>\n"
+                                                      + "    <link>http://dallas.example.com/1983/05/06/joebob.htm</link>\n"
+                                                      + "    <description>I'm headed for France. I wasn't gonna go this year, but then last week &quot;Valley Girl&quot; came out and I said to myself, Joe Bob, you gotta get out of the country for a while.</description>\n"
+                                                      + "    <author>jbb@dallas.example.com (Joe Bob Briggs)</author>\n"
+                                                      + "    <category>rec.arts.movies.reviews</category>\n"
+                                                      + "    <comments>http://dallas.example.com/feedback/1983/06/joebob.htm</comments>\n"
+                                                      + "    " + RSS_ENCLOSURE_JAXB_22.replaceFirst("\n", "")
                                                       + "    <guid>http://dallas.example.com/1983/05/06/joebob.htm</guid>\n"
                                                       + "    <pubDate>Fri, 06 May 1983 09:00:00 CST</pubDate>\n"
                                                       + "    <source url=\"http://la.example.com/rss.xml\">Los Angeles Herald-Examiner</source>\n"
@@ -171,7 +190,8 @@ public class RssTest extends TestCase {
         Marshaller m = JAXBUtils.createMarshaller(ctx);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         m.marshal(new ObjectFactory().createRssCloud(cloud), os);
-        assertEquals(RSS_CLOUD, os.toString());
+        String actual = os.toString();
+        assertTrue(actual.equals(RSS_CLOUD) || actual.equals(RSS_CLOUD_JAXB_22));
     }
 
     public void testRssCloudUnmarshal() throws JAXBException {
@@ -369,7 +389,8 @@ public class RssTest extends TestCase {
         Marshaller m = JAXBUtils.createMarshaller(ctx);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         m.marshal(new ObjectFactory().createRssEnclosure(enclosure), os);
-        assertEquals(RSS_ENCLOSURE, os.toString());
+        String actual = os.toString();
+        assertTrue(actual.equals(RSS_ENCLOSURE) || actual.equals(RSS_ENCLOSURE_JAXB_22));
     }
 
     public void testRssEnclosureUnmarshal() throws JAXBException {
@@ -425,7 +446,8 @@ public class RssTest extends TestCase {
         Marshaller m = JAXBUtils.createMarshaller(ctx);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         m.marshal(new ObjectFactory().createRssItem(item), os);
-        assertEquals(RSS_ITEM, os.toString());
+        String actual = os.toString();
+        assertTrue(actual.equals(RSS_ITEM) || actual.equals(RSS_ITEM_JAXB_22));
     }
 
     public void testRssItemUnmarshal() throws JAXBException {

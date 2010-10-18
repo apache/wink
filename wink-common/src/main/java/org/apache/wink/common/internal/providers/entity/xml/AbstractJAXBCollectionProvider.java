@@ -70,7 +70,8 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
         XMLStreamReader xsr = null;
         try {
             xsr = getXMLStreamReader(entityStream);
-            Class<?> theType = getParameterizedTypeClass(type, genericType, true);
+            Class<?> theType = getParameterizedTypeClassForRead(type, genericType, true);
+            theType = getConcreteTypeFromTypeMap(theType, annotations);
             JAXBContext context = getContext(theType, mediaType);
             Unmarshaller unmarshaller = getJAXBUnmarshaller(type, context, mediaType);
 
@@ -84,10 +85,12 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
             while (nextEvent != XMLStreamReader.END_DOCUMENT) {
                 switch (nextEvent) {
                     case XMLStreamReader.START_ELEMENT:
-                        if (getParameterizedTypeClass(type, genericType, false) == JAXBElement.class) {
+                        Class<?> parameterizedTypeClass = getParameterizedTypeClassForRead(type, genericType, false);
+                        if (parameterizedTypeClass == JAXBElement.class) {
                             elementList.add(unmarshaller.unmarshal(xsr, theType));
                         } else if (theType.isAnnotationPresent(XmlRootElement.class)) {
                             Object o = unmarshaller.unmarshal(xsr);
+                            o = unmarshalWithXmlAdapter(o, getParameterizedTypeClassForRead(type, genericType, false), annotations);
                             if (o instanceof JAXBElement) {
                                 o = ((JAXBElement)o).getValue();
                             }
@@ -140,7 +143,8 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
         mediaType = MediaTypeUtils.setDefaultCharsetOnMediaTypeHeader(httpHeaders, mediaType);
 
         try {
-            Class<?> theType = getParameterizedTypeClass(type, genericType, false);
+            Class<?> adapterClass = getParameterizedTypeClassForWrite(type, genericType, true);
+            Class<?> theType = getConcreteTypeFromTypeMap(adapterClass, annotations);
             Object[] elementArray = type.isArray() ? (Object[])t : ((Collection<?>)t).toArray();
             QName qname = null;
             boolean isJAXBElement = false;
@@ -159,6 +163,7 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
             Marshaller marshaller = null;
             JAXBContext context = null;
             for (Object o : elementArray) {
+                o = marshalWithXmlAdapter(o, getParameterizedTypeClassForWrite(type, genericType, false), annotations);
                 if(marshaller == null) {
                     Class<?> oType =
                         isJAXBElement ? ((JAXBElement<?>)o).getDeclaredType() : o.getClass();
@@ -168,7 +173,7 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
                         Charset charSet = getCharSet(mediaType);
                         marshaller.setProperty(Marshaller.JAXB_ENCODING, charSet.name());
                 }
-                Object entityToMarshal = getEntityToMarshal(o, theType);
+                Object entityToMarshal = getEntityToMarshal(o, getParameterizedTypeClassForWrite(type, genericType, false));
                 if (qname == null) {
                     if (entityToMarshal instanceof JAXBElement<?>)
                         qname = ((JAXBElement<?>)entityToMarshal).getName();
@@ -227,7 +232,7 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
         entityStream.write(endTag.getBytes());
     }
 
-    public static Class<?> getParameterizedTypeClass(Class<?> type,
+    public static Class<?> getParameterizedTypeClassForRead(Class<?> type,
                                                         Type genericType,
                                                         boolean recurse) {
         if (Collection.class.isAssignableFrom(type)) {
@@ -239,7 +244,7 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
                 } else {
                     parameterizedType = (ParameterizedType)actualTypeArguments[0];
                     if (recurse)
-                        return getParameterizedTypeClass(type, parameterizedType, recurse);
+                        return getParameterizedTypeClassForRead(type, parameterizedType, recurse);
                     else
                         return (Class<?>)parameterizedType.getRawType();
                 }
@@ -247,6 +252,42 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
                 return GenericsUtils.getGenericParamType(genericType);
             }
         } else if (type.isArray()) {
+            return type.getComponentType();
+        }
+        return null;
+    }
+    
+    public static Class<?> getParameterizedTypeClassForWrite(Class<?> type,
+            Type genericType,
+            boolean recurse) {
+        if (Collection.class.isAssignableFrom(type)) {
+            if (genericType instanceof ParameterizedType) {
+                ParameterizedType parameterizedType = (ParameterizedType)genericType;
+                Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+                if (!(actualTypeArguments[0] instanceof ParameterizedType)) {
+                    return (Class<?>)actualTypeArguments[0];
+                } else {
+                    parameterizedType = (ParameterizedType)actualTypeArguments[0];
+                    if (recurse)
+                        return getParameterizedTypeClassForRead(type, parameterizedType, recurse);
+                    else
+                        return (Class<?>)parameterizedType.getRawType();
+                }
+            } else {
+                return GenericsUtils.getGenericParamType(genericType);
+            }
+        } else if (genericType != null) {
+            Class genericTypeClass = null;
+            try {
+                genericTypeClass = (Class<?>)genericType;
+            } catch (ClassCastException cce) {
+                genericTypeClass = genericType.getClass();
+            }
+            if (genericTypeClass.isArray()) {
+                return genericTypeClass.getComponentType();
+            }
+        }
+        if (type.isArray()) {
             return type.getComponentType();
         }
         return null;

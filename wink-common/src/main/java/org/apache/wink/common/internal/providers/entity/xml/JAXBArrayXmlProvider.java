@@ -45,10 +45,11 @@ public class JAXBArrayXmlProvider extends AbstractJAXBCollectionProvider impleme
                               Type genericType,
                               Annotation[] annotations,
                               MediaType mediaType) {
-        Class<?> theType = getParameterizedTypeClass(type, genericType, false);
+        Class<?> theType = getParameterizedTypeClassForRead(type, genericType, false);
         if (theType != null)
-            return (isSupportedMediaType(mediaType) && isJAXBObject(theType, genericType) && !isJAXBElement(theType,
-                                                                                                            genericType));
+            return (isSupportedMediaType(mediaType) && ((isJAXBObject(theType, genericType) && !isJAXBElement(theType,
+                                                                                                            genericType))
+                                                                                                            || isCompatible(theType, annotations)));
         return false;
     }
 
@@ -78,10 +79,10 @@ public class JAXBArrayXmlProvider extends AbstractJAXBCollectionProvider impleme
                                Type genericType,
                                Annotation[] annotations,
                                MediaType mediaType) {
-        Class<?> theType = getParameterizedTypeClass(type, genericType, false);
+        Class<?> theType = getParameterizedTypeClassForWrite(type, genericType, false);
         if (theType != null)
-            return (isSupportedMediaType(mediaType) && isJAXBObject(theType, genericType) && !isJAXBElement(theType,
-                                                                                                            genericType));
+            return (isSupportedMediaType(mediaType) && ((isJAXBObject(theType, genericType) && !isJAXBElement(theType,
+                                                                                                            genericType)) || isCompatible(theType, annotations)));
         return false;
     }
 
