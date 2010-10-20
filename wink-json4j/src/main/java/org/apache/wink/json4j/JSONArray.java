@@ -967,10 +967,12 @@ public class JSONArray extends ArrayList implements JSONArtifact {
         //Try to avoid double-buffering or buffering in-memory
         //writers.
         Class writerClass = writer.getClass();
+        boolean flushIt = false;
         if (!StringWriter.class.isAssignableFrom(writerClass) &&
             !CharArrayWriter.class.isAssignableFrom(writerClass) &&
             !BufferedWriter.class.isAssignableFrom(writerClass)) {
             writer = new BufferedWriter(writer);
+            flushIt = true;
         }
 
         if (verbose) {
@@ -985,6 +987,15 @@ public class JSONArray extends ArrayList implements JSONArtifact {
             JSONException jex = new JSONException("Error occurred during input read.");
             jex.initCause(iox);
             throw jex;
+        }
+        if (flushIt) {
+            try {
+                writer.flush();
+            } catch (Exception ex) { 
+                JSONException jex = new JSONException("Error during buffer flush");
+                jex.initCause(ex);
+                throw jex;
+            }
         }
         return writer;
     }
