@@ -41,6 +41,7 @@
         <module>wink-example-helloworld</module>
         <module>wink-itest-client-timeout</module>
         <module>wink-itest-contentencode</module>
+        <module>wink-itest-jsr250-lifecycle</module>
     </modules>
 
     <properties>
