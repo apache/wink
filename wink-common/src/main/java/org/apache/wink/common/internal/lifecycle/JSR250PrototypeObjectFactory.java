@@ -20,41 +20,35 @@
 package org.apache.wink.common.internal.lifecycle;
 
 import org.apache.wink.common.RuntimeContext;
+import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Creates a ObjectFactory that always returns a same instance.
+ * Implements ObjectFactory that creates a new object for each call based on its
+ * ClassMetadata, with JSR250 PostConstruct and PreDestroy support.
  * 
  * @param <T>
  */
-class SingletonObjectFactory<T> implements ObjectFactory<T> {
+class JSR250PrototypeObjectFactory<T> extends PrototypeObjectFactory<T> {
 
-    protected final T        object;
-    protected final Class<T> objectClass;
-
-    @SuppressWarnings("unchecked")
-    public SingletonObjectFactory(T object) {
-        this.object = object;
-        this.objectClass = (Class<T>)object.getClass();
-    }
-
-    public T getInstance(RuntimeContext context) {
-        return object;
-    }
-
-    public Class<T> getInstanceClass() {
-        return objectClass;
+    private static Logger logger = LoggerFactory.getLogger(JSR250PrototypeObjectFactory.class);
+    
+    public JSR250PrototypeObjectFactory(ClassMetadata metadata) {
+        super(metadata);
     }
 
     @Override
-    public String toString() {
-        return String.format("SingletonOF: %s", objectClass); //$NON-NLS-1$
+    public T getInstance(RuntimeContext context) {
+        T instance = super.getInstance(context);
+        // TODO instead of below, get the method that has the postconstruct
+        JSR250LifecycleManagerUtils.executePostConstructMethod(instance);
+        return instance;
     }
 
+    @Override
     public void releaseInstance(T instance, RuntimeContext context) {
-        /* do nothing */
+        JSR250LifecycleManagerUtils.executePreDestroyMethod(instance);
     }
 
-    public void releaseAll(RuntimeContext context) {
-        /* do nothing */
-    }
 }

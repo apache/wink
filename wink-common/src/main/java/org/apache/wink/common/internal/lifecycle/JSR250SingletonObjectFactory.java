@@ -21,40 +21,20 @@ package org.apache.wink.common.internal.lifecycle;
 
 import org.apache.wink.common.RuntimeContext;
 
-/**
- * Creates a ObjectFactory that always returns a same instance.
- * 
- * @param <T>
- */
-class SingletonObjectFactory<T> implements ObjectFactory<T> {
+public class JSR250SingletonObjectFactory<T> extends SingletonObjectFactory<T> {
 
-    protected final T        object;
-    protected final Class<T> objectClass;
-
-    @SuppressWarnings("unchecked")
-    public SingletonObjectFactory(T object) {
-        this.object = object;
-        this.objectClass = (Class<T>)object.getClass();
+    public JSR250SingletonObjectFactory(T object) {
+        super(object);
     }
 
-    public T getInstance(RuntimeContext context) {
-        return object;
-    }
-
-    public Class<T> getInstanceClass() {
-        return objectClass;
-    }
-
+    /*
+     * Do not override releaseInstance since this is a singleton.  The SingletonObjectFactory is a holder for an instance;
+     * it does *not* create objects per request, but releaseInstance may be called per request.  That would be bad.
+     */
+    
     @Override
-    public String toString() {
-        return String.format("SingletonOF: %s", objectClass); //$NON-NLS-1$
-    }
-
-    public void releaseInstance(T instance, RuntimeContext context) {
-        /* do nothing */
-    }
-
     public void releaseAll(RuntimeContext context) {
-        /* do nothing */
+        JSR250LifecycleManagerUtils.executePreDestroyMethod(object);
     }
+
 }

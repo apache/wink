@@ -67,7 +67,7 @@ public class LifecycleManagerUtils {
         return new PrototypeObjectFactory<T>(classMetadata);
     }
 
-    private static <T> ClassMetadata collectClassMetadata(final Class<T> cls,
+    protected static <T> ClassMetadata collectClassMetadata(final Class<T> cls,
                                                           boolean validateConstructor) {
         ClassMetadata classMetadata = null;
         if (ProviderMetadataCollector.isProvider(cls)) {
