@@ -42,6 +42,7 @@ import org.apache.commons.lang.ClassUtils;
 import org.apache.wink.common.internal.WinkConfiguration;
 import org.apache.wink.common.internal.application.ApplicationValidator;
 import org.apache.wink.common.internal.i18n.Messages;
+import org.apache.wink.common.internal.lifecycle.JSR250LifecycleManager;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.lifecycle.ObjectFactory;
 import org.apache.wink.common.internal.lifecycle.ScopeLifecycleManager;
@@ -307,6 +308,7 @@ public class DeploymentConfiguration implements WinkConfiguration {
         if (ofFactoryRegistry == null) {
             ofFactoryRegistry = new LifecycleManagersRegistry();
             ofFactoryRegistry.addFactoryFactory(new ScopeLifecycleManager<Object>());
+            ofFactoryRegistry.addFactoryFactory(new JSR250LifecycleManager<Object>());
         }
         ApplicationValidator applicationValidator = new ApplicationValidator();
         providersRegistry = new ProvidersRegistry(ofFactoryRegistry, applicationValidator);
