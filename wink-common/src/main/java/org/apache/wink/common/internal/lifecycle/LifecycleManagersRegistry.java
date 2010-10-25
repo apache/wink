@@ -19,7 +19,9 @@
  *******************************************************************************/
 package org.apache.wink.common.internal.lifecycle;
 
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Registry of LifecycleManagers
@@ -81,5 +83,9 @@ public class LifecycleManagersRegistry {
         }
 
         return defaultFactoryFactory.createObjectFactory(cls);
+    }
+    
+    public List<LifecycleManager<?>> getLifecycleManagers() {
+        return Collections.unmodifiableList(this.store);
     }
 }

@@ -70,7 +70,7 @@ public class MethodMetadata extends AbstractMetadata {
     public List<Injectable> getFormalParameters() {
         return formalParameters;
     }
-    
+
     @Override
     public Set<MediaType> getConsumes() {
         Set<MediaType> set = super.getConsumes();

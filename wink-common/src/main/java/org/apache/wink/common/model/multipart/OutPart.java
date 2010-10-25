@@ -98,7 +98,7 @@ public class OutPart {
                     .valueOf(getContentType()));
             if (writer == null) {
                 logger
-                    .warn(Messages.getMessage("couldNotFindWriter", getBody().getClass(), //$NON-NLS-1$
+                    .error(Messages.getMessage("couldNotFindWriter", getBody().getClass(), //$NON-NLS-1$
                            getContentType()));
                 throw new WebApplicationException(500);
             }

@@ -66,10 +66,13 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
 
     public static boolean isStaticResource(Class<?> cls) {
         if (Modifier.isInterface(cls.getModifiers()) || Modifier.isAbstract(cls.getModifiers())) {
+            logger.trace("isStaticResource() exit returning false because interface or abstract");
+
             return false;
         }
 
         if (cls.getAnnotation(Path.class) != null) {
+            logger.trace("isStaticResource() exit returning true");
             return true;
         }
 
@@ -80,8 +83,11 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             Class<?> superclass = declaringClass.getSuperclass();
             if (superclass.getAnnotation(Path.class) != null) {
                 if (logger.isWarnEnabled()) {
-                    logger.warn(Messages.getMessage("rootResourceShouldBeAnnotatedDirectly", cls)); //$NON-NLS-1$
+                    logger.warn(Messages
+                        .getMessage("rootResourceShouldBeAnnotatedDirectly", cls, superclass)); //$NON-NLS-1$
                 }
+                logger.trace("isStaticResource() exit returning true because {} has @Path",
+                             superclass);
                 return true;
             }
 
@@ -91,13 +97,17 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                 if (interfaceClass.getAnnotation(Path.class) != null) {
                     if (logger.isWarnEnabled()) {
                         logger.warn(Messages.getMessage("rootResourceShouldBeAnnotatedDirectly", //$NON-NLS-1$
-                                                        cls));
+                                                        cls,
+                                                        interfaceClass));
                     }
+                    logger.trace("isStaticResource() exit returning true because {} has @Path",
+                                 interfaceClass);
                     return true;
                 }
             }
             declaringClass = declaringClass.getSuperclass();
         }
+        logger.trace("isStaticResource() exit returning false");
         return false;
     }
 
@@ -106,12 +116,15 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
     }
 
     public static ClassMetadata collectMetadata(Class<?> clazz) {
+        logger.trace("collectMetadata({}) entry", clazz);
         ResourceMetadataCollector collector = new ResourceMetadataCollector(clazz);
         collector.parseClass();
         collector.parseFields();
         collector.parseConstructors();
         collector.parseMethods();
-        return collector.getMetadata();
+        ClassMetadata md = collector.getMetadata();
+        logger.trace("collectMetadata() exit returning {}", md);
+        return md;
     }
 
     @Override
@@ -135,7 +148,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
     }
 
     private boolean parseClass(Class<?> cls) {
-
+        logger.trace("parseClass({})", cls);
         boolean workspacePresent = parseWorkspace(cls);
         boolean pathPresent = parsePath(cls);
         boolean consumesPresent = parseClassConsumes(cls);
@@ -171,6 +184,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
         Path path = cls.getAnnotation(Path.class);
         if (path != null) {
             getMetadata().addPath(path.value());
+            logger.trace("parseClass() returning true for class direct");
             return true;
         }
 
@@ -182,6 +196,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             path = superclass.getAnnotation(Path.class);
             if (path != null) {
                 getMetadata().addPath(path.value());
+                logger.trace("parseClass() returning true for superclass {}", superclass);
                 return true;
             }
 
@@ -191,31 +206,37 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                 path = interfaceClass.getAnnotation(Path.class);
                 if (path != null) {
                     getMetadata().addPath(path.value());
+                    logger.trace("parseClass() returning true for interface {}", interfaceClass);
                     return true;
                 }
             }
             declaringClass = declaringClass.getSuperclass();
         }
-
+        logger.trace("parseClass() returning false");
         return false;
     }
 
     private void parseMethods() {
+        logger.trace("entry");
         F1: for (Method method : getMetadata().getResourceClass().getMethods()) {
             Class<?> declaringClass = method.getDeclaringClass();
             if (declaringClass == Object.class) {
                 continue F1;
             }
             MethodMetadata methodMetadata = createMethodMetadata(method);
+            logger.trace("Found methodMetadata {} for method {}", methodMetadata, method);
+
             if (methodMetadata != null) {
                 String path = methodMetadata.getPath();
                 String httpMethod = methodMetadata.getHttpMethod();
                 if (path != null) {
                     // sub-resource
                     if (httpMethod != null) {
+                        logger.trace("Was subresource method");
                         // sub-resource method
                         getMetadata().getSubResourceMethods().add(methodMetadata);
                     } else {
+                        logger.trace("Was subresource locator");
                         // sub-resource locator
                         // verify that the method does not take an entity
                         // parameter
@@ -244,15 +265,17 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                         getMetadata().getSubResourceLocators().add(methodMetadata);
                     }
                 } else {
+                    logger.trace("Was resource method");
                     // resource method
                     getMetadata().getResourceMethods().add(methodMetadata);
                 }
             }
         }
+        logger.trace("exit");
     }
 
     private MethodMetadata createMethodMetadata(Method method) {
-
+        logger.trace("createMethodMetadata({})", method);
         int modifiers = method.getModifiers();
         // only public, non-static methods
         if (Modifier.isStatic(modifiers) || !Modifier.isPublic(modifiers)) {
@@ -306,7 +329,8 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
         // but keep the method params as the super may have declared a generic
         // type param
         if (!hasAnnotation) {
-
+            logger
+                .trace("Method did not directly have annotation so going up the class hierarchy chain");
             Class<?> declaringClass = method.getDeclaringClass();
 
             // try a superclass
@@ -316,6 +340,9 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                 // stop with if the method found
                 if (createdMetadata != null) {
                     mergeFormalParameterMetadata(createdMetadata, method);
+                    logger.trace("createMethodMetadata() exit returning {} from superclass {}",
+                                 createdMetadata,
+                                 superclass);
                     return createdMetadata;
                 }
             }
@@ -327,11 +354,15 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                 // stop with the first method found
                 if (createdMetadata != null) {
                     mergeFormalParameterMetadata(createdMetadata, method);
+                    logger.trace("createMethodMetadata() exit returning {} from interface {}",
+                                 createdMetadata,
+                                 interfaceClass);
                     return createdMetadata;
                 }
             }
 
             // annotations are not inherited. ignore this method.
+            logger.trace("createdMethodMetadata() returning null");
             return null;
         }
 
@@ -342,6 +373,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
             if (metadata.isEncoded() || defaultValue != null) {
                 // property methods may have @Encoded or @DefaultValue but
                 // are not HTTP methods/paths
+                logger.trace("createdMethodMetadata() returning null");
                 return null;
             }
             if (logger.isWarnEnabled()) {
@@ -349,21 +381,26 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                                                 method.getName(),
                                                 method.getDeclaringClass().getCanonicalName()));
             }
+            logger.trace("createdMethodMetadata() returning null");
             return null;
         }
 
         parseMethodParameters(method, metadata);
 
+        logger.trace("createMethodMetadata() exit returning {}", metadata);
         return metadata;
     }
 
+    @SuppressWarnings("unchecked")
     private MethodMetadata createMethodMetadata(Class<?> declaringClass, Method method) {
+        logger.trace("createMethodMetadata({}, {}) entry", declaringClass, method);
         try {
             Method declaredMethod =
                 declaringClass.getDeclaredMethod(method.getName(), method.getParameterTypes());
             return createMethodMetadata(declaredMethod);
         } catch (SecurityException e) {
             // can't get to overriding method
+            logger.trace("createMethodMetadata() exit returning null because of SecurityException");
             return null;
         } catch (NoSuchMethodException e) {
             // see if declaringClass's declaredMethod uses generic parameters
@@ -387,14 +424,16 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                             if (!clazz.isAssignableFrom(method.getParameterTypes()[i])) {
                                 matchFound = false;
                             }
-                            if (matchFound) {
-                                return createMethodMetadata(candidateMethod);
-                            }
+                        }
+                        if (matchFound) {
+                            return createMethodMetadata(candidateMethod);
                         }
                     }
                 }
             }
             // no overriding method exists
+            logger
+                .trace("createMethodMetadata() exit returning null because of NoSuchMethodException");
             return null;
         }
     }
@@ -470,6 +509,7 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
     }
 
     private void parseMethodParameters(Method method, MethodMetadata methodMetadata) {
+        logger.trace("parseMethodParameters({}, {}), entry", method, methodMetadata);
         Annotation[][] parameterAnnotations = method.getParameterAnnotations();
         Type[] paramTypes = getParamTypesFilterByXmlElementAnnotation(method);
         boolean entityParamExists = false;
@@ -492,15 +532,17 @@ public class ResourceMetadataCollector extends AbstractMetadataCollector {
                 entityParamExists = true;
             }
             methodMetadata.getFormalParameters().add(fp);
+            logger.trace("Adding formal parameter {}", fp);
         }
+        logger.trace("parseMethodParameters(), exit");
     }
 
     private Type[] getParamTypesFilterByXmlElementAnnotation(Method method) {
         int index = 0;
         Type[] paramTypes = method.getGenericParameterTypes();
         Annotation[][] paramAnnotations = method.getParameterAnnotations();
-        for(Annotation[] annos: paramAnnotations) {
-            for(Annotation anno: annos) {
+        for (Annotation[] annos : paramAnnotations) {
+            for (Annotation anno : annos) {
                 if (anno.annotationType().equals(XmlElement.class)) {
                     XmlElement xmlElement = (XmlElement)anno;
                     Type type = xmlElement.type();

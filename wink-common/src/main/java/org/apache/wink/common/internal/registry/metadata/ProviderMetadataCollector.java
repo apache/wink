@@ -43,6 +43,7 @@ public class ProviderMetadataCollector extends AbstractMetadataCollector {
     }
 
     public static boolean isProvider(Class<?> cls) {
+        logger.trace("isProvider({}) entry", cls);
         /*
          * look for the Provider annotation on super classes (even though
          * @Provider does not have @java.lang.annotation.Inherited) in order to
@@ -50,6 +51,7 @@ public class ProviderMetadataCollector extends AbstractMetadataCollector {
          */
         // return cls.getAnnotation(Provider.class) != null;
         if (cls == Object.class) {
+            logger.trace("isProvider() exit returning false");
             return false;
         }
 
@@ -57,6 +59,7 @@ public class ProviderMetadataCollector extends AbstractMetadataCollector {
             if (logger.isWarnEnabled()) {
                 logger.warn(Messages.getMessage("providerIsInterfaceOrAbstract", cls)); //$NON-NLS-1$
             }
+            logger.trace("isProvider() exit returning false");
             return false;
         }
 
@@ -71,8 +74,9 @@ public class ProviderMetadataCollector extends AbstractMetadataCollector {
             Class<?> superclass = declaringClass.getSuperclass();
             if (superclass != null && superclass.getAnnotation(Provider.class) != null) {
                 if (logger.isWarnEnabled()) {
-                    logger.warn(Messages.getMessage("providerShouldBeAnnotatedDirectly", cls)); //$NON-NLS-1$
+                    logger.warn(Messages.getMessage("providerShouldBeAnnotatedDirectly", cls, superclass)); //$NON-NLS-1$
                 }
+                logger.trace("isProvider({}) exit returning true", superclass);
                 return true;
             }
 
@@ -81,22 +85,27 @@ public class ProviderMetadataCollector extends AbstractMetadataCollector {
             for (Class<?> interfaceClass : interfaces) {
                 if (interfaceClass.getAnnotation(Provider.class) != null) {
                     if (logger.isWarnEnabled()) {
-                        logger.warn(Messages.getMessage("providerShouldBeAnnotatedDirectly", cls)); //$NON-NLS-1$
+                        logger.warn(Messages.getMessage("providerShouldBeAnnotatedDirectly", cls, interfaceClass)); //$NON-NLS-1$
                     }
+                    logger.trace("isProvider({}) exit returning true", interfaceClass);
                     return true;
                 }
             }
             declaringClass = declaringClass.getSuperclass();
         }
-
+        logger.trace("isProvider() exit returning false");
         return false;
     }
 
     public static ClassMetadata collectMetadata(Class<?> clazz) {
+        logger.trace("collectMetadata({})", clazz);
         ProviderMetadataCollector collector = new ProviderMetadataCollector(clazz);
         collector.parseConstructors();
         collector.parseFields();
-        return collector.getMetadata();
+        
+        ClassMetadata md = collector.getMetadata();
+        logger.trace("collectMetadata() exit returning {}", md);
+        return md;
     }
 
     @Override

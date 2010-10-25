@@ -38,8 +38,12 @@ import org.apache.wink.common.internal.registry.Injectable;
 import org.apache.wink.common.internal.registry.InjectableFactory;
 import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
 import org.apache.wink.common.internal.registry.metadata.ConstructorMetadata;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CreationUtils {
+    
+    private static final Logger logger = LoggerFactory.getLogger(CreationUtils.class);
 
     private CreationUtils() {
     }
@@ -79,12 +83,15 @@ public class CreationUtils {
                                     ClassMetadata metadata,
                                     RuntimeContext runtimeContext) throws IOException,
         PrivilegedActionException {
+        logger.trace("entry {} {} {}", new Object[]{object, metadata, runtimeContext});
 
         List<Injectable> injectableFields = metadata.getInjectableFields();
+        logger.trace("injectableFields are {}", injectableFields);
         for (Injectable injectableData : injectableFields) {
 
             Object value = injectableData.getValue(runtimeContext);
             Member member = injectableData.getMember();
+            logger.trace("Processing value {} and member {}", value, member);
             if (member instanceof Field) {
                 injectField(object, value, (Field)member);
             } else if (member instanceof Method) {
@@ -94,10 +101,12 @@ public class CreationUtils {
                 throw new WebApplicationException();
             }
         }
+        logger.trace("exit");
     }
 
     static void invokeMethod(final Object object, final Object value, final Method method)
         throws PrivilegedActionException {
+        logger.trace("entry {} {} {}", new Object[]{object, value, method});
         AccessController.doPrivileged(new PrivilegedExceptionAction<Object>() {
 
             public Object run() throws Exception {
@@ -109,7 +118,7 @@ public class CreationUtils {
                 return null;
             }
         });
-
+        logger.trace("exit");
     }
 
     static void injectField(final Object object, final Object value, final Field field)

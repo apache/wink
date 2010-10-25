@@ -84,7 +84,7 @@ public class FileProvider implements MessageBodyWriter<File>, MessageBodyReader<
                 public Object run() throws IOException {
                     if (!t.canRead() || t.isDirectory()) {
                         if(logger.isWarnEnabled()) {
-                            logger.warn(Messages.getMessage("cannotUseFileAsResponse", //$NON-NLS-1$
+                            logger.error(Messages.getMessage("cannotUseFileAsResponse", //$NON-NLS-1$
                                                             t.getAbsoluteFile()));
                         }
                         throw new WebApplicationException();
@@ -130,7 +130,7 @@ public class FileProvider implements MessageBodyWriter<File>, MessageBodyReader<
             if (!dir.exists() || !dir.isDirectory()) {
                 dir = null;
                 if (logger.isWarnEnabled()) {
-                    logger.warn(Messages.getMessage("uploadDirDoesNotExist", uploadDir)); //$NON-NLS-1$
+                    logger.error(Messages.getMessage("uploadDirDoesNotExist", uploadDir)); //$NON-NLS-1$
                 }
                 throw new WebApplicationException();
 

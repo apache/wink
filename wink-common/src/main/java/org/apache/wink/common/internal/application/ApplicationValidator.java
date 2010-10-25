@@ -91,7 +91,7 @@ public class ApplicationValidator {
 
     /**
      * Validates that class has only one of the following: Path, Provider,
-     * DispatchedPath, DynamicResource
+     * DynamicResource
      * 
      * @param cls
      * @return
@@ -112,9 +112,10 @@ public class ApplicationValidator {
         if (!valid) {
             if (logger.isWarnEnabled()) {
                 logger.warn(Messages.getMessage("classNotValid", //$NON-NLS-1$
-                                                cls.getName(), Path.class.getName(),
-                                                    DynamicResource.class.getName(),
-                                                    Provider.class.getName()));
+                                                cls.getName(),
+                                                Path.class.getName(),
+                                                DynamicResource.class.getName(),
+                                                Provider.class.getName()));
             }
         }
 

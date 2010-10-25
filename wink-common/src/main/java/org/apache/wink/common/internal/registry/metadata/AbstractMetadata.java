@@ -29,7 +29,12 @@ import java.util.Set;
 
 import javax.ws.rs.core.MediaType;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public abstract class AbstractMetadata {
+
+    private static final Logger logger            = LoggerFactory.getLogger(AbstractMetadata.class);
 
     private List<String>   paths;
     private Set<MediaType> consumes;
@@ -46,26 +51,38 @@ public abstract class AbstractMetadata {
     }
 
     public String getPath() {
+        logger.trace("getPath() entry");
         if (paths.size() == 0) {
+            logger.trace("getPath() exit returning null");
             return null;
         }
-        return paths.get(0);
+        String p = paths.get(0);
+        logger.trace("getPath() exit returning {}", p);
+        return p;
     }
 
     public void addPath(String path) {
+        logger.trace("addPath({}) entry", path);
         paths.add(path);
+        logger.trace("addPath() exit");
     }
 
     public void addPaths(Collection<String> paths) {
+        logger.trace("addPath({}) entry", paths);
         this.paths.addAll(paths);
+        logger.trace("addPath() exit", paths);
     }
 
     public void addConsumes(MediaType mt) {
+        logger.trace("addConsumes({}) entry", mt);
         consumes.add(mt);
+        logger.trace("addConsumes() exit");
     }
 
     public void addProduces(MediaType mt) {
+        logger.trace("addProduces({}) entry", mt);
         produces.add(mt);
+        logger.trace("addProduces() exit");
     }
 
     public List<String> getPaths() {
@@ -89,7 +106,9 @@ public abstract class AbstractMetadata {
     }
 
     public void setEncoded(boolean encoded) {
+        logger.trace("setEncoded({}) entry", encoded);
         this.encoded = encoded;
+        logger.trace("setEncoded({}) exit", encoded);
     }
 
     public boolean isEncoded() {
@@ -101,6 +120,8 @@ public abstract class AbstractMetadata {
     }
 
     public void setDefaultValue(String defaultValue) {
+        logger.trace("setDefaultValue({}) entry", defaultValue);
         this.defaultValue = defaultValue;
+        logger.trace("setDefaultValue() exit");        
     }
 }

@@ -146,8 +146,8 @@ public class ApplicationFileLoader {
                         logger.trace("ClassNotFoundException while loading class", e); //$NON-NLS-1$
                     }
                 } catch (NoClassDefFoundError e) {
-                    if (logger.isTraceEnabled()) {
-                        logger.trace(Messages
+                    if (logger.isErrorEnabled()) {
+                        logger.error(Messages
                             .getMessage("classInstantiationExceptionWithMsgFormat", line), e); //$NON-NLS-1$
                     }
                 }

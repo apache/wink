@@ -57,11 +57,13 @@ public class JAXBArrayJSONProvider extends AbstractJAXBCollectionProvider implem
 
     protected volatile MessageBodyReader<Object> readerProvider = null;
     protected volatile MessageBodyWriter<Object> writerProvider = null;
-    
-    private static final Logger logger = LoggerFactory.getLogger(JAXBArrayJSONProvider.class);
+
+    private static final Logger                  logger         =
+                                                                    LoggerFactory
+                                                                        .getLogger(JAXBArrayJSONProvider.class);
 
     @Context
-    Providers                           injectedProviders;
+    Providers                                    injectedProviders;
 
     public boolean isReadable(Class<?> type,
                               Type genericType,
@@ -96,7 +98,10 @@ public class JAXBArrayJSONProvider extends AbstractJAXBCollectionProvider implem
                                                        theType,
                                                        annotations,
                                                        mediaType);
-            logger.trace("readerProvider was {} of type {}", System.identityHashCode(readerProvider), readerProvider.getClass().getName()); //$NON-NLS-1$
+            if (logger.isTraceEnabled()) {
+                logger
+                    .trace("readerProvider was {} of type {}", System.identityHashCode(readerProvider), readerProvider.getClass().getName()); //$NON-NLS-1$
+            }
         }
         Queue<String> queue = new LinkedList<String>();
         List<Object> collection = new ArrayList<Object>();
@@ -167,7 +172,10 @@ public class JAXBArrayJSONProvider extends AbstractJAXBCollectionProvider implem
                                                        theType,
                                                        annotations,
                                                        mediaType);
-            logger.trace("writerProvider was {} of type {}", System.identityHashCode(writerProvider), writerProvider.getClass().getName()); //$NON-NLS-1$
+            if (logger.isTraceEnabled()) {
+                logger
+                    .trace("writerProvider was {} of type {}", System.identityHashCode(writerProvider), writerProvider.getClass().getName()); //$NON-NLS-1$
+            }
         }
         entityStream.write("[".getBytes()); //$NON-NLS-1$
         int i = 0;

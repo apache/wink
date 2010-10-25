@@ -25,8 +25,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wink.common.internal.registry.Injectable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConstructorMetadata {
+    
+    private static Logger logger = LoggerFactory.getLogger(ConstructorMetadata.class);
 
     private Constructor<?>         constructor;
     private final List<Injectable> formalParameters;
@@ -42,7 +46,9 @@ public class ConstructorMetadata {
     }
 
     public void setConstructor(Constructor<?> constructor) {
+        logger.trace("setConstructor({}) entry", constructor);
         this.constructor = constructor;
+        logger.trace("setConstructor() exit");
     }
 
     public List<Injectable> getFormalParameters() {
@@ -50,7 +56,9 @@ public class ConstructorMetadata {
     }
 
     public void setEncoded(boolean encoded) {
+        logger.trace("setEncoded({}) entry", encoded);
         this.encoded = encoded;
+        logger.trace("setEncoded() exit");
     }
 
     public boolean isEncoded() {

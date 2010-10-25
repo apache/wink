@@ -351,7 +351,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                 return uri;
             } catch (URISyntaxException e) {
                 throw new IllegalArgumentException(Messages
-                    .getMessage("isInvalid", "schemeSpecificPart"), e); //$NON-NLS-1$ //$NON-NLS-2$
+                    .getMessage("isInvalid", "schemeSpecificPart", schemeSpecificPart), e); //$NON-NLS-1$ //$NON-NLS-2$
             }
         }
 
@@ -610,7 +610,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         isFirstCall = false;
         Path pathAnnotation = ((Class<?>)resource).getAnnotation(Path.class);
         if (pathAnnotation == null) {
-            throw new IllegalArgumentException(Messages.getMessage("resourceNotAnnotated", "Path")); //$NON-NLS-1$ //$NON-NLS-2$
+            throw new IllegalArgumentException(Messages.getMessage("resourceNotAnnotated", "@javax.ws.rs.Path", resource)); //$NON-NLS-1$ //$NON-NLS-2$
         }
         String path = pathAnnotation.value();
         logger.trace("path annotation value is {}", path); //$NON-NLS-1$
@@ -627,7 +627,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         }
         Path pathAnnotation = method.getAnnotation(Path.class);
         if (pathAnnotation == null) {
-            throw new IllegalArgumentException(Messages.getMessage("methodNotAnnotated", "Path")); //$NON-NLS-1$ //$NON-NLS-2$
+            throw new IllegalArgumentException(Messages.getMessage("methodNotAnnotated", "@javax.ws.rs.Path", method)); //$NON-NLS-1$ //$NON-NLS-2$
         }
         String path = pathAnnotation.value();
         logger.trace("path method annotation is {}", path); //$NON-NLS-1$
@@ -655,14 +655,14 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                 if (pathAnnotation != null) {
                     if (foundMethod != null) {
                         throw new IllegalArgumentException(Messages
-                            .getMessage("moreThanOneMethodAnnotated", "Path")); //$NON-NLS-1$ //$NON-NLS-2$
+                            .getMessage("moreThanOneMethodAnnotated", "@javax.ws.rs.Path", method, resource)); //$NON-NLS-1$ //$NON-NLS-2$
                     }
                     foundMethod = m;
                 }
             }
         }
         if (foundMethod == null) {
-            throw new IllegalArgumentException(Messages.getMessage("noMethodAnnotated", "Path")); //$NON-NLS-1$ //$NON-NLS-2$
+            throw new IllegalArgumentException(Messages.getMessage("noMethodAnnotated", "@javax.ws.rs.Path", method, resource)); //$NON-NLS-1$ //$NON-NLS-2$
         }
         path(foundMethod);
         logger.trace("path() exit"); //$NON-NLS-1$
@@ -675,7 +675,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
             logger.trace("port({}) entry", port); //$NON-NLS-1$
         }
         if (port < -1) {
-            throw new IllegalArgumentException(Messages.getMessage("invalidPort")); //$NON-NLS-1$
+            throw new IllegalArgumentException(Messages.getMessage("invalidPort", String.valueOf(port))); //$NON-NLS-1$
         }
         this.port = port;
         logger.trace("port() exit"); //$NON-NLS-1$
@@ -868,7 +868,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
             uri = new URI(scheme, ssp, fragment);
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException(Messages
-                .getMessage("isInvalid", "schemeSpecificPart"), e); //$NON-NLS-1$ //$NON-NLS-2$
+                .getMessage("isInvalid", "schemeSpecificPart", schemeSpecificPart), e); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         resetSchemeSpecificPart();

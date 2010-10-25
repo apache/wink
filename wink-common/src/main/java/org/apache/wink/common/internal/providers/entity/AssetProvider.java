@@ -115,13 +115,13 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
         } catch (IllegalArgumentException e) {
             if (logger.isErrorEnabled()) {
                 logger.error(Messages
-                    .getMessage("assetMethodInvokeError", method.getMethod().getName())); //$NON-NLS-1$
+                    .getMessage("assetMethodInvokeError", method.getMethod().getName()), e); //$NON-NLS-1$
             }
             throw new WebApplicationException(e);
         } catch (IllegalAccessException e) {
             if (logger.isErrorEnabled()) {
                 logger.error(Messages
-                    .getMessage("assetMethodInvokeError", method.getMethod().getName())); //$NON-NLS-1$
+                    .getMessage("assetMethodInvokeError", method.getMethod().getName()), e); //$NON-NLS-1$
             }
             throw new WebApplicationException(e);
         } catch (InvocationTargetException e) {
@@ -131,7 +131,7 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
             }
             if (logger.isErrorEnabled()) {
                 logger.error(Messages
-                    .getMessage("assetMethodInvokeError", method.getMethod().getName())); //$NON-NLS-1$
+                    .getMessage("assetMethodInvokeError", method.getMethod().getName()), e); //$NON-NLS-1$
             }
             throw new WebApplicationException(targetException);
         }
@@ -179,19 +179,19 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
             }
             if (logger.isErrorEnabled()) {
                 logger.error(Messages
-                    .getMessage("assetMethodInvokeError", method.getMethod().getName())); //$NON-NLS-1$
+                    .getMessage("assetMethodInvokeError", method.getMethod().getName()), e); //$NON-NLS-1$
             }
             throw new WebApplicationException(e);
         } catch (InstantiationException e) {
             if (logger.isErrorEnabled()) {
-                logger.error(Messages.getMessage("assetMustHavePublicConstructor", type.getName())); //$NON-NLS-1$
+                logger.error(Messages.getMessage("assetMustHavePublicConstructor", type.getName()), e); //$NON-NLS-1$
             }
             throw new WebApplicationException(e);
 
         } catch (Exception e) {
             if (logger.isErrorEnabled()) {
                 logger.error(Messages
-                    .getMessage("assetMethodInvokeError", method.getMethod().getName())); //$NON-NLS-1$
+                    .getMessage("assetMethodInvokeError", method.getMethod().getName()), e); //$NON-NLS-1$
             }
             throw new WebApplicationException(e);
         }
@@ -240,19 +240,19 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
         // verify that the asset has a default public constructor
         try {
             if (assetType.getConstructor() == null) {
-                if (logger.isInfoEnabled()) {
-                    logger.info(Messages.getMessage("assetCannotInstantiate", assetType.getName())); //$NON-NLS-1$
+                if (logger.isWarnEnabled()) {
+                    logger.warn(Messages.getMessage("assetCannotInstantiate", assetType.getName())); //$NON-NLS-1$
                 }
                 return false;
             }
         } catch (SecurityException e) {
-            if (logger.isInfoEnabled()) {
-                logger.info(Messages.getMessage("assetCannotInstantiate", assetType.getName())); //$NON-NLS-1$
+            if (logger.isWarnEnabled()) {
+                logger.warn(Messages.getMessage("assetCannotInstantiate", assetType.getName()), e); //$NON-NLS-1$
             }
             return false;
         } catch (NoSuchMethodException e) {
-            if (logger.isInfoEnabled()) {
-                logger.info(Messages.getMessage("assetCannotInstantiate", assetType.getName())); //$NON-NLS-1$
+            if (logger.isWarnEnabled()) {
+                logger.warn(Messages.getMessage("assetCannotInstantiate", assetType.getName()), e); //$NON-NLS-1$
             }
             return false;
         }

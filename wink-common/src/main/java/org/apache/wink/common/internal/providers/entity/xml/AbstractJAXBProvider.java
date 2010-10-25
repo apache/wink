@@ -64,6 +64,7 @@ import org.apache.wink.common.internal.utils.SoftConcurrentMap;
 import org.apache.wink.common.model.JAXBUnmarshalOptions;
 import org.apache.wink.common.model.XmlFormattingOptions;
 import org.apache.wink.common.utils.ProviderUtils;
+import org.apache.wink.common.utils.ProviderUtils.PROVIDER_EXCEPTION_ORIGINATOR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,16 +107,18 @@ public abstract class AbstractJAXBProvider {
     // of which is unique per class object being (un)marshalled. In Axis2, the
     // JAXBContext instances cover the entire application space, thus
     // it was safe to cache them in a static field.
-    private Pool<JAXBContext, Marshaller>                         mpool                     =
-                                                                                                new Pool<JAXBContext, Marshaller>();
-    private Pool<JAXBContext, Unmarshaller>                       upool                     =
-                                                                                                new Pool<JAXBContext, Unmarshaller>();
-                                                                                                
+    private Pool<JAXBContext, Marshaller>                            mpool                          =
+                                                                                                        new Pool<JAXBContext, Marshaller>();
+    private Pool<JAXBContext, Unmarshaller>                          upool                          =
+                                                                                                        new Pool<JAXBContext, Unmarshaller>();
 
-    // For performance, it might seem advantageous to use a static XMLInputFactory instance.  However, this was shown to
-    // be problematic on the Sun StAX parser (which is a fork of Apache Xerces) under load stress test.  So we use ThreadLocal.
-    private static ThreadLocal<XMLInputFactory> xmlInputFactory = new ThreadLocal<XMLInputFactory>();
-    
+    // For performance, it might seem advantageous to use a static
+    // XMLInputFactory instance. However, this was shown to
+    // be problematic on the Sun StAX parser (which is a fork of Apache Xerces)
+    // under load stress test. So we use ThreadLocal.
+    private static ThreadLocal<XMLInputFactory>                      xmlInputFactory                =
+                                                                                                        new ThreadLocal<XMLInputFactory>();
+
     /**
      * This class is the key to the JAXBContext cache. It must be based on the
      * ContextResolver instance who created the JAXBContext and the type passed
@@ -124,8 +127,10 @@ public abstract class AbstractJAXBProvider {
      * creates contexts between noon and 5:00pm. So, uhhh, don't do that.
      */
     private static class JAXBContextResolverKey {
-        private static final Logger logger = LoggerFactory.getLogger(JAXBContextResolverKey.class);
-        
+        private static final Logger            logger   =
+                                                            LoggerFactory
+                                                                .getLogger(JAXBContextResolverKey.class);
+
         protected ContextResolver<JAXBContext> _resolver;
         protected Type                         _type;
         private int                            hashCode = -1;
@@ -151,7 +156,8 @@ public abstract class AbstractJAXBProvider {
                 ((obj._resolver == null) && (_resolver == null)) || ((obj._resolver != null) && (_resolver != null));
             logger.trace("null check result is {}", result); //$NON-NLS-1$
             // we can use hashCode() to compare _resolver
-            boolean finalResult = result && (obj.hashCode() == hashCode()) && (obj._type.equals(_type));
+            boolean finalResult =
+                result && (obj.hashCode() == hashCode()) && (obj._type.equals(_type));
             logger.trace("final result is {}", finalResult); //$NON-NLS-1$
             return finalResult;
         }
@@ -209,11 +215,11 @@ public abstract class AbstractJAXBProvider {
     // JAXBContext cache can be turned off through system property
     static private final String                                          propVal          =
                                                                                               System
-                                                                                                  .getProperty("org.apache.wink.jaxbcontextcache"); //$NON-NLS-1$
+                                                                                                  .getProperty("org.apache.wink.jaxbcontextcache");        //$NON-NLS-1$
     // non-final, protected only to make it unittestable
     static protected boolean                                             contextCacheOn   =
                                                                                               !((propVal != null) && (propVal
-                                                                                                  .equalsIgnoreCase("off"))); //$NON-NLS-1$
+                                                                                                  .equalsIgnoreCase("off")));                              //$NON-NLS-1$
 
 /**
      * Get the unmarshaller. You must call {@link #releaseJAXBUnmarshaller(JAXBContext, Unmarshaller) to put it back
@@ -252,14 +258,14 @@ public abstract class AbstractJAXBProvider {
 
         return unm;
     }
-    
+
     /**
      * skips START_DOCUMENT, COMMENTs, PIs, and checks for DTD
+     * 
      * @param reader
      * @throws XMLStreamException
      */
-    private static void checkForDTD(XMLStreamReader reader)
-            throws XMLStreamException {
+    private static void checkForDTD(XMLStreamReader reader) throws XMLStreamException {
         boolean supportDTD = false;
 
         int event = reader.getEventType();
@@ -268,7 +274,11 @@ public abstract class AbstractJAXBProvider {
             // already been partially processed
             throw new XMLStreamException(Messages.getMessage("badXMLReaderInitialStart")); //$NON-NLS-1$
         }
-        while (event != XMLStreamReader.START_ELEMENT) {  // all StAX parsers require a START_ELEMENT.  See AbstractJAXBProviderTest class
+        while (event != XMLStreamReader.START_ELEMENT) { // all StAX parsers
+                                                         // require a
+                                                         // START_ELEMENT. See
+                                                         // AbstractJAXBProviderTest
+                                                         // class
             event = reader.next();
             if (event == XMLStreamReader.DTD) {
 
@@ -278,18 +288,21 @@ public abstract class AbstractJAXBProvider {
                     Properties props = winkConfig.getProperties();
                     if (props != null) {
                         // use valueOf method to require the word "true"
-                        supportDTD = Boolean.valueOf(props.getProperty("wink.supportDTDEntityExpansion")); //$NON-NLS-1$
+                        supportDTD =
+                            Boolean.valueOf(props.getProperty("wink.supportDTDEntityExpansion")); //$NON-NLS-1$
                     }
                 }
                 if (!supportDTD) {
-                    throw new EntityReferenceXMLStreamException(Messages.getMessage("entityRefsNotSupported")); //$NON-NLS-1$
+                    throw new EntityReferenceXMLStreamException(Messages
+                        .getMessage("entityRefsNotSupported")); //$NON-NLS-1$
                 } else {
-                    logger.trace("DTD entity reference expansion is enabled.  This may present a security risk."); //$NON-NLS-1$
+                    logger
+                        .trace("DTD entity reference expansion is enabled.  This may present a security risk."); //$NON-NLS-1$
                 }
             }
         }
     }
-    
+
     private static XMLInputFactory getXMLInputFactory() {
         XMLInputFactory factory = xmlInputFactory.get();
         if (factory == null) {
@@ -298,7 +311,7 @@ public abstract class AbstractJAXBProvider {
         }
         return factory;
     }
-    
+
     /**
      * A consistent place to get a properly configured XMLStreamReader.
      * 
@@ -306,15 +319,18 @@ public abstract class AbstractJAXBProvider {
      * @return
      * @throws XMLStreamException
      */
-    protected static XMLStreamReader getXMLStreamReader(InputStream entityStream) throws XMLStreamException  {
-        // NOTE: createFilteredReader may appear to be more convenient, but it comes at the cost of
-        // performance.  This solution (to use checkForDTD) appears to be the best solution to preserve
+    protected static XMLStreamReader getXMLStreamReader(InputStream entityStream)
+        throws XMLStreamException {
+        // NOTE: createFilteredReader may appear to be more convenient, but it
+        // comes at the cost of
+        // performance. This solution (to use checkForDTD) appears to be the
+        // best solution to preserve
         // performance, but still achieve what we need to do.
         XMLStreamReader reader = getXMLInputFactory().createXMLStreamReader(entityStream);
         checkForDTD(reader);
         return reader;
     }
-    
+
     /**
      * A consistent place to get a properly configured XMLStreamReader.
      * 
@@ -322,15 +338,18 @@ public abstract class AbstractJAXBProvider {
      * @return
      * @throws XMLStreamException
      */
-    protected static XMLStreamReader getXMLStreamReader(InputStreamReader entityStreamReader) throws XMLStreamException  {
-        // NOTE: createFilteredReader may appear to be more convenient, but it comes at the cost of
-        // performance.  This solution (to use checkForDTD) appears to be the best solution to preserve
+    protected static XMLStreamReader getXMLStreamReader(InputStreamReader entityStreamReader)
+        throws XMLStreamException {
+        // NOTE: createFilteredReader may appear to be more convenient, but it
+        // comes at the cost of
+        // performance. This solution (to use checkForDTD) appears to be the
+        // best solution to preserve
         // performance, but still achieve what we need to do.
         XMLStreamReader reader = getXMLInputFactory().createXMLStreamReader(entityStreamReader);
         checkForDTD(reader);
         return reader;
     }
-    
+
     protected static void closeXMLStreamReader(XMLStreamReader xmlStreamReader) {
         if (xmlStreamReader != null) {
             try {
@@ -481,7 +500,7 @@ public abstract class AbstractJAXBProvider {
         }
         return type;
     }
-    
+
 
     public Class<?> getConcreteTypeFromTypeMap(Class<?> type, Annotation[] annotations) {
         Class<?> concreteType = jaxbTypeMapCache.get(type);
@@ -491,21 +510,21 @@ public abstract class AbstractJAXBProvider {
         }
         return concreteType;
     }
-    
+
     @SuppressWarnings("unchecked")
     protected Object marshalWithXmlAdapter(Object obj, Type type, Annotation[] annotations) {
         if ((type == null) || (annotations == null)) {
             return obj;
         }
-        XmlJavaTypeAdapter xmlJavaTypeAdapter = getXmlJavaTypeAdapter(type,
-                annotations);
+        XmlJavaTypeAdapter xmlJavaTypeAdapter = getXmlJavaTypeAdapter(type, annotations);
         if (xmlJavaTypeAdapter != null) {
             try {
                 XmlAdapter xmlAdapter = xmlJavaTypeAdapter.value().newInstance();
                 return xmlAdapter.marshal(obj);
             } catch (Exception e) {
                 if (logger.isDebugEnabled()) {
-                    logger.debug("Could not marshal {} using {} due to exception:", new Object[]{obj, xmlJavaTypeAdapter.value().getName(), e});
+                    logger.debug("Could not marshal {} using {} due to exception:", new Object[] {
+                        obj, xmlJavaTypeAdapter.value().getName(), e});
                 }
             }
         }
@@ -545,28 +564,27 @@ public abstract class AbstractJAXBProvider {
         }
         return xmlJavaTypeAdapter;
     }
-    
-    
+
     @SuppressWarnings("unchecked")
     protected Object unmarshalWithXmlAdapter(Object obj, Type type, Annotation[] annotations) {
         if ((type == null) || (annotations == null)) {
             return obj;
         }
-        XmlJavaTypeAdapter xmlJavaTypeAdapter = getXmlJavaTypeAdapter(type,
-                annotations);
+        XmlJavaTypeAdapter xmlJavaTypeAdapter = getXmlJavaTypeAdapter(type, annotations);
         if (xmlJavaTypeAdapter != null) {
             try {
                 XmlAdapter xmlAdapter = xmlJavaTypeAdapter.value().newInstance();
                 return xmlAdapter.unmarshal(obj);
             } catch (Exception e) {
                 if (logger.isDebugEnabled()) {
-                    logger.debug("Could not unmarshal {} using {} due to exception:", new Object[]{obj, xmlJavaTypeAdapter.value().getName(), e});
+                    logger.debug("Could not unmarshal {} using {} due to exception:", new Object[] {
+                        obj, xmlJavaTypeAdapter.value().getName(), e});
                 }
             }
         }
         return obj;
     }
-    
+
     public static boolean isJAXBObject(Class<?> type) {
         return isXMLRootElement(type) || isXMLType(type);
     }
@@ -637,7 +655,15 @@ public abstract class AbstractJAXBProvider {
         }
 
         if (contextResolver != null) {
-            context = contextResolver.getContext(type);
+            try {
+                context = contextResolver.getContext(type);
+            } catch (RuntimeException e) {
+                ProviderUtils.logUserProviderException(e,
+                                                       contextResolver,
+                                                       PROVIDER_EXCEPTION_ORIGINATOR.getContext,
+                                                       new Object[] {type},
+                                                       RuntimeContextTLS.getRuntimeContext());
+            }
         }
 
         if (context == null) {
@@ -657,7 +683,8 @@ public abstract class AbstractJAXBProvider {
         return context;
     }
 
-    private JAXBContext getDefaultContext(final Class<?> type, final Type genericType) throws JAXBException {
+    private JAXBContext getDefaultContext(final Class<?> type, final Type genericType)
+        throws JAXBException {
         logger.trace("getDefaultContext({}, {}) entry", type, genericType); //$NON-NLS-1$
         try {
             return AccessController.doPrivileged(new PrivilegedExceptionAction<JAXBContext>() {
@@ -693,9 +720,9 @@ public abstract class AbstractJAXBProvider {
                     }
                     return context;
                 }
-                
+
             });
-        } catch(PrivilegedActionException e) {
+        } catch (PrivilegedActionException e) {
             throw (JAXBException)e.getException();
         }
     }

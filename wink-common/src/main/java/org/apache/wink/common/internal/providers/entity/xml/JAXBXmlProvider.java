@@ -180,7 +180,9 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
         try {
             if (isJAXBObject(concreteType)) {
                 JAXBContext context = getContext(concreteType, genericType, mediaType);
-                logger.trace("using context {}@{} to get marshaller", context.getClass().getName(), System.identityHashCode(context)); //$NON-NLS-1$
+                if(logger.isTraceEnabled()) {
+                    logger.trace("using context {}@{} to get marshaller", context.getClass().getName(), System.identityHashCode(context)); //$NON-NLS-1$
+                }
                 Marshaller marshaller = getJAXBMarshaller(concreteType, context, mediaType);
                 Object entityToMarshal = getEntityToMarshal(t, concreteType);
 

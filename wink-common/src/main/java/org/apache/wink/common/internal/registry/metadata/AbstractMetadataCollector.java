@@ -43,8 +43,8 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractMetadataCollector {
     
-    private static final Logger logger = LoggerFactory.getLogger(AbstractMetadataCollector.class);
-    
+    private static final Logger logger = LoggerFactory.getLogger(AbstractMetadataCollector.class); 
+
     private final ClassMetadata metadata;
 
     public AbstractMetadataCollector(Class<?> clazz) {
@@ -59,10 +59,13 @@ public abstract class AbstractMetadataCollector {
      * constructor only, when you override parseField() and set it to be final.
      */
     protected final void parseFields() {
+        logger.trace("parseFields() entry");
         Class<?> resourceClass = metadata.getResourceClass();
+        logger.trace("Class is {}", resourceClass);
 
         List<Injectable> injectableFields = metadata.getInjectableFields();
-        
+        logger.trace("Injectable fields: {}", injectableFields);
+
         // add fields
         while (resourceClass != Object.class && resourceClass != null) {
             for (Field field : resourceClass.getDeclaredFields()) {
@@ -103,6 +106,7 @@ public abstract class AbstractMetadataCollector {
                 }
             }
         }
+        logger.trace("parseFields() exit");
     }
 
     protected abstract Injectable parseAccessibleObject(AccessibleObject field, Type fieldType);
@@ -118,13 +122,16 @@ public abstract class AbstractMetadataCollector {
      * isConstructorParameterValid() and set it to be final.
      */
     protected final void parseConstructors() {
+        logger.trace("parseConstructors() entry");
         ConstructorMetadata constructorMetadata = new ConstructorMetadata();
         List<Injectable> formalParameters = new ArrayList<Injectable>();
         Class<?> resourceClass = metadata.getResourceClass();
 
         L1: for (Constructor<?> constructor : resourceClass.getDeclaredConstructors()) {
+            logger.trace("Constructor is {}", constructor);
             int modifiers = constructor.getModifiers();
             if (!Modifier.isPublic(modifiers)) {
+                logger.trace("Constructor is skipped because not public");
                 continue;
             }
 
@@ -174,14 +181,19 @@ public abstract class AbstractMetadataCollector {
             }
         }
 
+        logger.trace("Set constructor to {}", constructorMetadata);
         metadata.setConstructor(constructorMetadata);
+        logger.trace("parseConstructors() exit");
     }
 
     protected void parseEncoded(Class<?> cls) {
+        logger.trace("parseEncoded({}) entry", cls);
         Encoded encoded = cls.getAnnotation(Encoded.class);
         if (encoded != null) {
             metadata.setEncoded(true);
+            logger.trace("parseEncoded() setEncoded to true");
         }
+        logger.trace("parseEncoded() exit");
     }
 
     public ClassMetadata getMetadata() {
