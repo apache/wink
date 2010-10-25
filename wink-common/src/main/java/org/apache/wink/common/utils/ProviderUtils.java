@@ -34,6 +34,7 @@ import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.UnsupportedCharsetException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.core.HttpHeaders;
@@ -43,8 +44,11 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Providers;
 
+import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.internal.MultivaluedMapImpl;
+import org.apache.wink.common.internal.application.ApplicationExceptionAttribute;
 import org.apache.wink.common.internal.http.AcceptCharset;
+import org.apache.wink.common.internal.log.LogUtils;
 import org.apache.wink.common.internal.utils.SoftConcurrentMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,6 +64,15 @@ public class ProviderUtils {
                                                                             new SoftConcurrentMap<String, Boolean>();
     private static SoftConcurrentMap<String, String>  preferredCharsets =
                                                                             new SoftConcurrentMap<String, String>();
+    
+    public static enum PROVIDER_EXCEPTION_ORIGINATOR {
+        isReadable,
+        readFrom,
+        getSize,
+        isWriteable,
+        writeTo,
+        getContext
+    }
 
     public static String getCharsetOrNull(MediaType m) {
         String name = (m == null) ? null : m.getParameters().get("charset"); //$NON-NLS-1$
@@ -280,5 +293,48 @@ public class ProviderUtils {
             return null;
         }
         return reader.readFrom(type, genericType, new Annotation[0], mediaType, httpHeaders, is);
+    }
+    
+    public static void logUserProviderException(RuntimeException e,
+            Object obj, // MessageBodyReader or MessageBodyWriter
+            PROVIDER_EXCEPTION_ORIGINATOR originator,
+            Object[] methodParams,
+            RuntimeContext context) {
+        
+        try {
+        
+            if (context.getAttribute(ApplicationExceptionAttribute.class) != null) {
+                // exception from application code has already been recorded to the RuntimeContext, don't record it again.
+                return;
+            }
+
+            List<Object> dataToFormattedString = new ArrayList<Object>();
+            dataToFormattedString.add(e.getClass().getName());
+            dataToFormattedString.add(e.getMessage());
+            dataToFormattedString.add(obj.getClass().getName());
+            dataToFormattedString.add(originator);
+            for (int i = 0; i < methodParams.length; i++) {
+                dataToFormattedString.add(methodParams[i]);
+            }
+            // send exception through stackToString because it may have been intentionally thrown
+            // from provider method; we don't want to scare the log readers, so it's recorded as DEBUG
+            dataToFormattedString.add(LogUtils.stackToDebugString(e));
+
+            String debugMsgFormat = "%s with message \"%s\" was encountered during invocation of method %s.%s( ";
+            for (int i = 0; i < methodParams.length; i++) {
+                debugMsgFormat += "%s";
+                if (i < methodParams.length) {
+                    debugMsgFormat += ", ";
+                }
+            }
+            String newLine = System.getProperty("line.separator"); //$NON-NLS-1$
+            debugMsgFormat += " )" + newLine + "%s";
+
+            String debugMsg = String.format(debugMsgFormat, dataToFormattedString.toArray(new Object[]{}));
+            context.setAttribute(ApplicationExceptionAttribute.class, new ApplicationExceptionAttribute(debugMsg));
+        } catch (Throwable t) {
+            // just to be extra super duper cautious.  It'll still be logged, just not via the format above.
+            logger.trace("Could not format log output for exception originating in provider.", t);
+        }
     }
 }

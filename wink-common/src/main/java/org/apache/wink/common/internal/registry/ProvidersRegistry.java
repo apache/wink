@@ -26,6 +26,7 @@ import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -49,10 +50,12 @@ import org.apache.wink.common.internal.application.ApplicationValidator;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.common.internal.lifecycle.ObjectFactory;
+import org.apache.wink.common.internal.log.Providers;
 import org.apache.wink.common.internal.utils.AnnotationUtils;
 import org.apache.wink.common.internal.utils.GenericsUtils;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.internal.utils.SoftConcurrentMap;
+import org.apache.wink.common.utils.ProviderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,28 +68,28 @@ import org.slf4j.LoggerFactory;
  */
 public class ProvidersRegistry {
 
-    private static final Logger                                 logger             =
-                                                                                       LoggerFactory
-                                                                                           .getLogger(ProvidersRegistry.class);
+    private static final Logger                                         logger             =
+                                                                                               LoggerFactory
+                                                                                                   .getLogger(ProvidersRegistry.class);
 
-    private final ProducesMediaTypeMap<ContextResolver<?>>      contextResolvers   =
-                                                                                       new ProducesMediaTypeMap<ContextResolver<?>>(
-                                                                                                                                    ContextResolver.class);
+    private final ProducesMediaTypeMap<ContextResolver<?>>              contextResolvers   =
+                                                                                               new ProducesMediaTypeMap<ContextResolver<?>>(
+                                                                                                                                            ContextResolver.class);
     /*
      * need exception mappers to be volatile for publication purposes
      */
-    private volatile TreeSet<ObjectFactory<ExceptionMapper<?>>> exceptionMappers   =
-                                                                                       new TreeSet<ObjectFactory<ExceptionMapper<?>>>(
-                                                                                                                                      Collections
-                                                                                                                                          .reverseOrder());
-    private final ConsumesMediaTypeMap<MessageBodyReader<?>>    messageBodyReaders =
-                                                                                       new ConsumesMediaTypeMap<MessageBodyReader<?>>(
-                                                                                                                                      MessageBodyReader.class);
-    private final ProducesMediaTypeMap<MessageBodyWriter<?>>    messageBodyWriters =
-                                                                                       new ProducesMediaTypeMap<MessageBodyWriter<?>>(
-                                                                                                                                      MessageBodyWriter.class);
-    private final ApplicationValidator                          applicationValidator;
-    private final LifecycleManagersRegistry                     factoryFactoryRegistry;
+    private volatile TreeSet<PriorityObjectFactory<ExceptionMapper<?>>> exceptionMappers   =
+                                                                                               new TreeSet<PriorityObjectFactory<ExceptionMapper<?>>>(
+                                                                                                                                                      Collections
+                                                                                                                                                          .reverseOrder());
+    private final ConsumesMediaTypeMap<MessageBodyReader<?>>            messageBodyReaders =
+                                                                                               new ConsumesMediaTypeMap<MessageBodyReader<?>>(
+                                                                                                                                              MessageBodyReader.class);
+    private final ProducesMediaTypeMap<MessageBodyWriter<?>>            messageBodyWriters =
+                                                                                               new ProducesMediaTypeMap<MessageBodyWriter<?>>(
+                                                                                                                                              MessageBodyWriter.class);
+    private final ApplicationValidator                                  applicationValidator;
+    private final LifecycleManagersRegistry                             factoryFactoryRegistry;
 
     public ProvidersRegistry(LifecycleManagersRegistry factoryRegistry,
                              ApplicationValidator applicationValidator) {
@@ -139,10 +142,10 @@ public class ProvidersRegistry {
         }
         if (ExceptionMapper.class.isAssignableFrom(cls)) {
             logger.trace("Adding type {} to ExceptionMappers list", cls); //$NON-NLS-1$
-            TreeSet<ObjectFactory<ExceptionMapper<?>>> exceptionMappersCopy =
-                new TreeSet<ObjectFactory<ExceptionMapper<?>>>(Collections.reverseOrder());
+            TreeSet<PriorityObjectFactory<ExceptionMapper<?>>> exceptionMappersCopy =
+                new TreeSet<PriorityObjectFactory<ExceptionMapper<?>>>(Collections.reverseOrder());
             exceptionMappersCopy.addAll(exceptionMappers);
-            exceptionMappersCopy.add((ObjectFactory<ExceptionMapper<?>>)objectFactory);
+            exceptionMappersCopy.add((PriorityObjectFactory<ExceptionMapper<?>>)objectFactory);
             exceptionMappers = exceptionMappersCopy;
             retValue = true;
         }
@@ -171,6 +174,32 @@ public class ProvidersRegistry {
 
     public boolean addProvider(Object provider) {
         return addProvider(provider, WinkApplication.DEFAULT_PRIORITY);
+    }
+
+    public List<ProviderRecord<?>> getMessageBodyWriterRecords() {
+        return new ArrayList<ProviderRecord<?>>(messageBodyWriters.getProviderRecords());
+    }
+
+    public List<ProviderRecord<?>> getMessageBodyReaderRecords() {
+        return new ArrayList<ProviderRecord<?>>(messageBodyReaders.getProviderRecords());
+    }
+
+    public List<ProviderRecord<?>> getExceptionMapperRecords() {
+        ArrayList<ProviderRecord<?>> recordList = new ArrayList<ProviderRecord<?>>();
+
+        for (PriorityObjectFactory<ExceptionMapper<?>> factory : exceptionMappers) {
+            ProviderRecord<?> record =
+                new ProviderRecord<ExceptionMapper<?>>(factory.getInstanceClass(), null,
+                                                       ExceptionMapper.class,
+                                                       factory.isSystemProvider);
+            recordList.add(record);
+        }
+
+        return recordList;
+    }
+
+    public List<ProviderRecord<?>> getContextResolverRecords() {
+        return new ArrayList<ProviderRecord<?>>(contextResolvers.getProviderRecords());
     }
 
     /**
@@ -378,24 +407,20 @@ public class ProvidersRegistry {
             messageBodyReaders.getProvidersByMediaType(mediaType, type);
 
         logger.trace("Found possible MessageBodyReader ObjectFactories {}", factories); //$NON-NLS-1$
-        for (ObjectFactory<MessageBodyReader<?>> factory : factories) {
+        Providers providersLogger = new Providers();
+        MessageBodyReader<T> ret = null;
+        for (MediaTypeMap<MessageBodyReader<?>>.OFHolder<MessageBodyReader<?>> factory : factories) {
             MessageBodyReader<?> reader = factory.getInstance(runtimeContext);
-            if (logger.isTraceEnabled()) {
-                List<Annotation> anns = (annotations == null) ? null : Arrays.asList(annotations);
-                logger.trace("Calling {}.isReadable( {}, {}, {}, {} )", new Object[] {reader, type, //$NON-NLS-1$
-                    genericType, anns, mediaType});
-            }
-            if (reader.isReadable(type, genericType, annotations, mediaType)) {
-                if (logger.isTraceEnabled()) {
-                    List<Annotation> anns =
-                        (annotations == null) ? null : Arrays.asList(annotations);
-                    logger.trace("{}.isReadable( {}, {}, {}, {} ) returned true", new Object[] { //$NON-NLS-1$
-                                 reader, type, genericType, anns, mediaType});
-                }
-                return (MessageBodyReader<T>)reader;
+            if (isReadable(reader, type, genericType, annotations, mediaType, runtimeContext, factory.isSystemProvider)) {
+                ret = (MessageBodyReader<T>)reader;
+                providersLogger.addMessageBodyReader(reader, true);
+                break;
+            } else {
+                providersLogger.addMessageBodyReader(reader, false);
             }
         }
-        return null;
+        providersLogger.log();
+        return ret;
     }
 
     @SuppressWarnings("unchecked")
@@ -419,31 +444,32 @@ public class ProvidersRegistry {
         List<MediaTypeMap<MessageBodyWriter<?>>.OFHolder<MessageBodyWriter<?>>> writersFactories =
             messageBodyWriters.getProvidersByMediaType(mediaType, type);
         logger.trace("Found possible MessageBodyWriter ObjectFactories {}", writersFactories); //$NON-NLS-1$
-        for (ObjectFactory<MessageBodyWriter<?>> factory : writersFactories) {
+        Providers providersLogger = new Providers();
+        MessageBodyWriter<T> ret = null;
+        for (MediaTypeMap<MessageBodyWriter<?>>.OFHolder<MessageBodyWriter<?>> factory : writersFactories) {
             MessageBodyWriter<?> writer = factory.getInstance(runtimeContext);
-            if (logger.isTraceEnabled()) {
-                List<Annotation> anns = (annotations == null) ? null : Arrays.asList(annotations);
-                logger
-                    .trace("Calling {}.isWriteable( {}, {}, {}, {} )", new Object[] {writer, type, //$NON-NLS-1$
-                        genericType, anns, mediaType});
-            }
-            if (writer.isWriteable(type, genericType, annotations, mediaType)) {
+            if (isWriteable(writer, type, genericType, annotations, mediaType, runtimeContext, factory.isSystemProvider)) {
                 if (logger.isTraceEnabled()) {
                     List<Annotation> anns =
                         (annotations == null) ? null : Arrays.asList(annotations);
                     logger.trace("{}.isWriteable( {}, {}, {}, {} ) returned true", new Object[] { //$NON-NLS-1$
                                  writer, type, genericType, anns, mediaType});
                 }
-                return (MessageBodyWriter<T>)writer;
+                ret = (MessageBodyWriter<T>)writer;
+                providersLogger.addMessageBodyWriter(writer, true);
+                break;
+            } else {
+                providersLogger.addMessageBodyWriter(writer, false);
             }
         }
-        if (logger.isTraceEnabled()) {
+        if (ret == null && logger.isTraceEnabled()) {
             List<Annotation> anns = (annotations == null) ? null : Arrays.asList(annotations);
             logger
                 .trace("No MessageBodyWriter returned true for isWriteable( {}, {}, {}, {} )", new Object[] { //$NON-NLS-1$
                        type, genericType, anns, mediaType});
         }
-        return null;
+        providersLogger.log();
+        return ret;
     }
 
     public Set<MediaType> getMessageBodyReaderMediaTypesLimitByIsReadable(Class<?> type,
@@ -456,7 +482,7 @@ public class ProvidersRegistry {
         logger.trace("Found all MessageBodyReader ObjectFactories limited by class type {}", //$NON-NLS-1$
                      readerFactories);
         Annotation[] ann = new Annotation[0];
-        for (ObjectFactory<MessageBodyReader<?>> factory : readerFactories) {
+        for (MediaTypeMap<MessageBodyReader<?>>.OFHolder<MessageBodyReader<?>> factory : readerFactories) {
             MessageBodyReader<?> reader = factory.getInstance(runtimeContext);
             Consumes consumes = factory.getInstanceClass().getAnnotation(Consumes.class);
             String[] values = null;
@@ -467,12 +493,7 @@ public class ProvidersRegistry {
             }
             for (String v : values) {
                 MediaType mt = MediaType.valueOf(v);
-                if (logger.isTraceEnabled()) {
-                    List<Annotation> anns = (ann == null) ? null : Arrays.asList(ann);
-                    logger.trace("Calling {}.isReadable( {}, {}, {}, {} )", new Object[] {reader, //$NON-NLS-1$
-                        type, type, anns, mt});
-                }
-                if (reader.isReadable(type, type, ann, mt)) {
+                if (isReadable(reader, type, type, ann, mt, runtimeContext, factory.isSystemProvider)) {
                     logger.trace("Adding {} to media type set", mt); //$NON-NLS-1$
                     mediaTypes.add(mt);
                 }
@@ -487,7 +508,6 @@ public class ProvidersRegistry {
 
     public MediaType getMessageBodyWriterMediaTypeLimitByIsWritable(Class<?> type,
                                                                     RuntimeContext runtimeContext) {
-        List<MediaType> mediaTypes = new ArrayList<MediaType>();
         logger.trace("Searching MessageBodyWriters media types limited by class type {}", type); //$NON-NLS-1$
 
         List<MediaTypeMap<MessageBodyWriter<?>>.OFHolder<MessageBodyWriter<?>>> writerFactories =
@@ -495,7 +515,7 @@ public class ProvidersRegistry {
         logger.trace("Found all MessageBodyWriter ObjectFactories limited by class type {}", //$NON-NLS-1$
                      writerFactories);
         Annotation[] ann = new Annotation[0];
-        for (ObjectFactory<MessageBodyWriter<?>> factory : writerFactories) {
+        for (MediaTypeMap<MessageBodyWriter<?>>.OFHolder<MessageBodyWriter<?>> factory : writerFactories) {
             MessageBodyWriter<?> writer = factory.getInstance(runtimeContext);
             Produces produces = factory.getInstanceClass().getAnnotation(Produces.class);
             String[] values = null;
@@ -506,18 +526,66 @@ public class ProvidersRegistry {
             }
             for (String v : values) {
                 MediaType mt = MediaType.valueOf(v);
-                if (logger.isTraceEnabled()) {
-                    List<Annotation> anns = (ann == null) ? null : Arrays.asList(ann);
-                    logger.trace("Calling {}.isWritable( {}, {}, {}, {} )", new Object[] {writer, //$NON-NLS-1$
-                        type, type, anns, mt});
-                }
-                if (writer.isWriteable(type, type, ann, mt)) {
+                if (isWriteable(writer, type, type, ann, mt, runtimeContext, factory.isSystemProvider)) {
                     logger.trace("Returning media type {}", mt); //$NON-NLS-1$
                     return mt;
                 }
             }
         }
         return null;
+    }
+
+    /**
+     * @param factory
+     * @param type
+     * @param ann
+     * @param reader
+     * @param mt
+     * @param runtimeContext
+     * @return
+     */
+    private boolean isReadable(
+            MessageBodyReader<?> reader,
+            Class<?> type, Type genericType, Annotation[] ann,
+            MediaType mt, RuntimeContext runtimeContext, boolean isSystemProvider) {
+        if (logger.isTraceEnabled()) {
+            List<Annotation> anns = (ann == null) ? null : Arrays.asList(ann);
+            logger.trace("Calling {}.isReadable( {}, {}, {}, {} )", new Object[] {reader, //$NON-NLS-1$
+                type, genericType, anns, mt});
+        }
+        try {
+            return reader.isReadable(type, genericType, ann, mt);
+        } catch (RuntimeException ex) {
+            ProviderUtils.logUserProviderException(ex, reader, ProviderUtils.PROVIDER_EXCEPTION_ORIGINATOR.isReadable, new Object[]{type, genericType, ann, mt}, runtimeContext);
+            throw ex;
+        }
+    }
+
+
+    /**
+     * @param factory
+     * @param type
+     * @param genericType
+     * @param ann
+     * @param mt
+     * @param runtimeContext
+     * @return
+     */
+    private boolean isWriteable(
+            MessageBodyWriter<?> writer,
+            Class<?> type, Type genericType, Annotation[] ann, 
+            MediaType mt, RuntimeContext runtimeContext, boolean isSystemProvider) {
+        if (logger.isTraceEnabled()) {
+            List<Annotation> anns = (ann == null) ? null : Arrays.asList(ann);
+            logger.trace("Calling {}.isWritable( {}, {}, {}, {} )", new Object[] {writer, //$NON-NLS-1$
+                type, genericType, anns, mt});
+        }
+        try {
+            return writer.isWriteable(type, genericType, ann, mt);
+        } catch (RuntimeException ex) {
+            ProviderUtils.logUserProviderException(ex, writer, ProviderUtils.PROVIDER_EXCEPTION_ORIGINATOR.isWriteable, new Object[]{type, genericType, ann, mt}, runtimeContext);
+            throw ex;
+        }
     }
 
     public Set<MediaType> getMessageBodyWriterMediaTypes(Class<?> type) {
@@ -646,6 +714,23 @@ public class ProvidersRegistry {
             return list;
         }
 
+        public Collection<ProviderRecord<T>> getProviderRecords() {
+            List<ProviderRecord<T>> compatible = new ArrayList<ProviderRecord<T>>();
+
+            Entry<MediaType, HashSet<PriorityObjectFactory<T>>>[] registryEntrySet = entrySet;
+            for (Entry<MediaType, HashSet<PriorityObjectFactory<T>>> entry : registryEntrySet) {
+                TreeSet<PriorityObjectFactory<T>> entries =
+                    new TreeSet<PriorityObjectFactory<T>>(Collections.reverseOrder());
+                entries.addAll(entry.getValue());
+
+                for (PriorityObjectFactory<T> of : entries) {
+                    compatible.add(new ProviderRecord<T>(of.getInstanceClass(), entry.getKey(),
+                                                         rawType, of.isSystemProvider));
+                }
+            }
+            return compatible;
+        }
+
         private List<OFHolder<T>> internalGetProvidersByMediaType(MediaType mediaType, Class<?> cls) {
             Set<OFHolder<T>> compatible = new TreeSet<OFHolder<T>>(Collections.reverseOrder());
             for (Entry<MediaType, HashSet<PriorityObjectFactory<T>>> entry : entrySet) {
@@ -707,8 +792,8 @@ public class ProvidersRegistry {
             }
             copyOfMap.put(key, set);
             if (!set.add(objectFactory)) {
-                if (logger.isWarnEnabled()) {
-                    logger.warn(Messages.getMessage("mediaTypeSetAlreadyContains", objectFactory)); //$NON-NLS-1$
+                if (logger.isTraceEnabled()) {
+                    logger.trace(Messages.getMessage("mediaTypeSetAlreadyContains", objectFactory)); //$NON-NLS-1$
                 }
             } else {
 
@@ -747,11 +832,12 @@ public class ProvidersRegistry {
         public String toString() {
             return toString("  ", false, true); //$NON-NLS-1$
         }
-        
+
         /**
-         * 
          * @param userOnly only print user-defined entities
-         * @param trace if calling toString as part of debugging, use trace=false, if as part of trace or any other reason, use trace=true
+         * @param trace if calling toString as part of debugging, use
+         *            trace=false, if as part of trace or any other reason, use
+         *            trace=true
          * @return
          */
         public String toString(boolean userOnly, boolean trace) {
@@ -759,10 +845,11 @@ public class ProvidersRegistry {
         }
 
         /**
-         * 
          * @param indent how far to indent output
          * @param userOnly only log user-defined entities
-         * @param trace if calling toString as part of debugging, use trace=false, if as part of trace or any other reason, use trace=true (debug prints slightly less verbose)
+         * @param trace if calling toString as part of debugging, use
+         *            trace=false, if as part of trace or any other reason, use
+         *            trace=true (debug prints slightly less verbose)
          * @return
          */
         protected String toString(String indent, boolean userOnly, boolean trace) {
@@ -787,12 +874,16 @@ public class ProvidersRegistry {
                     // Separate each ObjectFactory entry in the Set
                     // into its own line
                     for (ObjectFactory<T> of : data.get(k)) {
-                        // assuming everything in the org.apache.wink.* package space with "internal" in package name is system, not user
+                        // assuming everything in the org.apache.wink.* package
+                        // space with "internal" in package name is system, not
+                        // user
                         String instanceClassName = of.getInstanceClass().getName();
-                        if ((userOnly && !(instanceClassName.startsWith("org.apache.wink.common.internal.") || instanceClassName.startsWith("org.apache.wink.server.internal."))) || !userOnly) { //$NON-NLS-1$ $NON-NLS-2$
+                        if ((userOnly && !(instanceClassName
+                            .startsWith("org.apache.wink.common.internal.") || instanceClassName.startsWith("org.apache.wink.server.internal."))) || !userOnly) { //$NON-NLS-1$ $NON-NLS-2$
                             userItemFound = true;
                             sb_map.append(indent);
-                            if (trace) { // trace, print full ObjectFactory.toString()
+                            if (trace) { // trace, print full
+                                // ObjectFactory.toString()
                                 sb_map.append(of);
                             } else { // debug, print slightly less information
                                 sb_map.append(of.getInstanceClass());
@@ -811,6 +902,7 @@ public class ProvidersRegistry {
             return sb.toString();
         }
 
+        @SuppressWarnings("hiding")
         class OFHolder<T> implements ObjectFactory<T>, Comparable<OFHolder<T>> {
 
             private final PriorityObjectFactory<T> of;
@@ -963,24 +1055,64 @@ public class ProvidersRegistry {
 
         @Override
         public String toString() {
-            return String.format("Priority: %f, ObjectFactory: %s", priority, of.toString().replace("class ", "")); //$NON-NLS-1$
+            return String
+                .format("Priority: %f, ObjectFactory: %s", priority, of.toString().replace("class ", "")); //$NON-NLS-1$
         }
     }
-    
+
+    public static class ProviderRecord<T> {
+
+        private final MediaType mediaType;
+        private final Class<?>  genericType;
+        private final boolean   isSystemProvider;
+        private final Class<T>  providerClass;
+
+        public ProviderRecord(Class<T> providerClass,
+                              MediaType mediaType,
+                              Class<?> rawType,
+                              boolean isSystemProvider) {
+            super();
+            this.mediaType = mediaType;
+            this.isSystemProvider = isSystemProvider;
+            this.providerClass = providerClass;
+            Type t = GenericsUtils.getGenericInterfaceParamType(providerClass, rawType);
+            if (t == null) {
+                this.genericType = Object.class;
+            } else {
+                this.genericType = GenericsUtils.getClassType(t);
+            }
+        }
+
+        public MediaType getMediaType() {
+            return mediaType;
+        }
+
+        public Class<?> getGenericType() {
+            return genericType;
+        }
+
+        public boolean isSystemProvider() {
+            return isSystemProvider;
+        }
+
+        public Class<T> getProviderClass() {
+            return providerClass;
+        }
+    }
+
     /**
-     * 
      * @param userOnly true = log user providers only, false = log all providers
      */
     public String getLogFormattedProvidersList(boolean userOnly) {
         StringBuffer sb = new StringBuffer();
-        sb.append(this.contextResolvers.toString(userOnly, false));
         sb.append(this.messageBodyReaders.toString(userOnly, false));
         sb.append(this.messageBodyWriters.toString(userOnly, false));
+        sb.append(this.contextResolvers.toString(userOnly, false));
         if (userOnly) {
             return Messages.getMessage("followingProvidersUserDefined", sb.toString());
         } else {
             return Messages.getMessage("followingProviders", sb.toString());
         }
     }
-
+    
 }

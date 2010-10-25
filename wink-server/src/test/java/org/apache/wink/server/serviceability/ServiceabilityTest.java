@@ -157,11 +157,11 @@ public class ServiceabilityTest extends MockServletInvocationTest {
         assertEquals("Registered resources: \n" +
                 "  Path: myapp; ClassMetadata: Class: org.apache.wink.server.serviceability.ServiceabilityTest$MyApp$MyAppResource", records.get(1).getMessage());
         assertEquals("The following user-defined JAX-RS providers are registered: \n" +
-                "RawType: interface javax.ws.rs.ext.ContextResolver\n" +
-                "Data Map: {empty}\n" +
                 "RawType: interface javax.ws.rs.ext.MessageBodyReader\n" +
                 "Data Map: {empty}\n" +
                 "RawType: interface javax.ws.rs.ext.MessageBodyWriter\n" +
+                "Data Map: {empty}\n" +
+                "RawType: interface javax.ws.rs.ext.ContextResolver\n" +
                 "Data Map: {empty}", records.get(2).getMessage());
     }
     
@@ -177,7 +177,7 @@ public class ServiceabilityTest extends MockServletInvocationTest {
         WinkLogHandler.turnLoggingCaptureOff();
         ArrayList<LogRecord> records = WinkLogHandler.getRecords();
         
-        assertEquals(1, records.size());
+        assertEquals(2, records.size());
         assertEquals("Processing GET request to http://localhost:80/root, source content type is null, acceptable media types include text/plain", records.get(0).getMessage());
     }
     
@@ -193,7 +193,7 @@ public class ServiceabilityTest extends MockServletInvocationTest {
         WinkLogHandler.turnLoggingCaptureOff();
         ArrayList<LogRecord> records = WinkLogHandler.getRecords();
         
-        assertEquals(1, records.size());
+        assertEquals(2, records.size());
         assertEquals("Processing GET request to http://localhost:80/root, source content type is null, acceptable media types include text/html", records.get(0).getMessage());
     }
     
@@ -210,7 +210,7 @@ public class ServiceabilityTest extends MockServletInvocationTest {
         WinkLogHandler.turnLoggingCaptureOff();
         ArrayList<LogRecord> records = WinkLogHandler.getRecords();
         
-        assertEquals(1, records.size());
+        assertEquals(2, records.size());
         assertEquals("Processing GET request to http://localhost:80/root?param1=value1, source content type is null, acceptable media types include text/plain", records.get(0).getMessage());
     }
     
@@ -226,7 +226,7 @@ public class ServiceabilityTest extends MockServletInvocationTest {
         WinkLogHandler.turnLoggingCaptureOff();
         ArrayList<LogRecord> records = WinkLogHandler.getRecords();
         
-        assertEquals(1, records.size());
+        assertEquals(2, records.size());
         assertEquals("Processing GET request to http://localhost:80/root/2, source content type is null, acceptable media types include text/plain", records.get(0).getMessage());
     }
     
@@ -265,13 +265,13 @@ public class ServiceabilityTest extends MockServletInvocationTest {
                 "  Path: root; ClassMetadata: Class: org.apache.wink.server.serviceability.ServiceabilityTest$MyResource\n" +
                 "  Path: ; ClassMetadata: Class: org.apache.wink.server.internal.resources.HtmlServiceDocumentResource", records.get(2).getMessage());
         assertEquals("The following user-defined JAX-RS providers are registered: \n" +
-                "RawType: interface javax.ws.rs.ext.ContextResolver\nData Map: \n" +
+                "RawType: interface javax.ws.rs.ext.MessageBodyReader\nData Map: {empty}" +
+                "\nRawType: interface javax.ws.rs.ext.MessageBodyWriter\nData Map: {empty}" +
+                "\nRawType: interface javax.ws.rs.ext.ContextResolver\nData Map: \n" +
                 "MediaType key = */*\n" +
                 "ObjectFactory Set value = {\n" +
                 "  class org.apache.wink.server.serviceability.ServiceabilityTest$MyContextResolver1\n" +
-                "}\n" +
-                "\nRawType: interface javax.ws.rs.ext.MessageBodyReader\nData Map: {empty}" +
-                "\nRawType: interface javax.ws.rs.ext.MessageBodyWriter\nData Map: {empty}", records.get(3).getMessage());
+                "}\n", records.get(3).getMessage());
     }
 
 }
