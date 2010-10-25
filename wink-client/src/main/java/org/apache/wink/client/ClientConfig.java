@@ -465,7 +465,9 @@ public class ClientConfig implements Cloneable, WinkConfiguration {
                 String supportDTD = System.getProperty(WINK_SUPPORT_DTD_EXPANSION, String.valueOf(WINK_CLIENT_SUPPORT_DTD_EXPANSION_DEFAULT));
                 boolean toSet = Boolean.valueOf(supportDTD);  // require "true" or "false", not "yes" or "no" or other variants (see parseBoolean vs. valueOf javadoc)
                 properties.put(WINK_SUPPORT_DTD_EXPANSION, String.valueOf(toSet));
-                logger.trace("Wink client readTimeout default value is {}.", String.valueOf(toSet)); //$NON-NLS-1$
+                if(logger.isTraceEnabled()) {
+                    logger.trace("Wink client readTimeout default value is {}.", String.valueOf(toSet)); //$NON-NLS-1$
+                }
             } catch (Exception e) {
                 logger.trace("Error processing {} system property: {}", WINK_SUPPORT_DTD_EXPANSION, e); //$NON-NLS-1$
             }
