@@ -73,13 +73,13 @@ public class WinkGuiceModule extends AbstractModule {
             } catch (IOException e) {
                 if (logger.isErrorEnabled()) {
                     logger.error(Messages.getMessage("injectionFailureSingleton", instance
-                        .getClass().getName()));
+                        .getClass().getName()), e);
                 }
                 throw new ObjectCreationException(e);
             } catch (PrivilegedActionException e) {
                 if (logger.isErrorEnabled()) {
                     logger.error(Messages.getMessage("injectionFailureSingleton", instance
-                        .getClass().getName()));
+                        .getClass().getName()), e);
                 }
                 throw new ObjectCreationException(e);
             }

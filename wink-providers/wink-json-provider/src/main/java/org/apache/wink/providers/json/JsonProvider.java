@@ -87,7 +87,7 @@ public class JsonProvider implements MessageBodyWriter<JSONObject>, MessageBodyR
         try {
             jsonString = t.toString(2);
         } catch (JSONException e) {
-            logger.error(Messages.getMessage("jsonFailWriteJSONObject")); //$NON-NLS-1$
+            logger.error(Messages.getMessage("jsonFailWriteJSONObject"), e); //$NON-NLS-1$
             throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
         }
 
@@ -131,7 +131,7 @@ public class JsonProvider implements MessageBodyWriter<JSONObject>, MessageBodyR
             return new JSONObject(new JSONTokener(ProviderUtils.createReader(entityStream,
                                                                              mediaType)));
         } catch (JSONException e) {
-            logger.error(Messages.getMessage("jsonFailReadJSONObject")); //$NON-NLS-1$
+            logger.error(Messages.getMessage("jsonFailReadJSONObject"), e); //$NON-NLS-1$
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         }
     }

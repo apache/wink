@@ -89,7 +89,7 @@ public class JsonArrayProvider implements MessageBodyWriter<JSONArray>,
         try {
             jsonString = t.toString(2);
         } catch (JSONException e) {
-            logger.error(Messages.getMessage("jsonFailWriteJSONArray")); //$NON-NLS-1$
+            logger.error(Messages.getMessage("jsonFailWriteJSONArray"), e); //$NON-NLS-1$
             throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
         }
 
@@ -131,7 +131,7 @@ public class JsonArrayProvider implements MessageBodyWriter<JSONArray>,
             return new JSONArray(new JSONTokener(ProviderUtils
                 .createReader(entityStream, mediaType)));
         } catch (JSONException e) {
-            logger.error(Messages.getMessage("jsonFailReadJSONArray")); //$NON-NLS-1$
+            logger.error(Messages.getMessage("jsonFailReadJSONArray"), e); //$NON-NLS-1$
             throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
         }
     }
