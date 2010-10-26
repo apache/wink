@@ -57,7 +57,9 @@ public abstract class AbstractHandlersChain<T extends Handler> implements Handle
             // get the next handler from the chain to handle
             T handler = iterator.next();
             // invoke the handler
-            logger.trace("Invoking handler: {}", handler.getClass().getName()); //$NON-NLS-1$
+            if(logger.isTraceEnabled()) {
+                logger.trace("Invoking handler: {}", handler.getClass().getName()); //$NON-NLS-1$
+            }
             handle(handler, context);
         } finally {
             // set the iterator back one handler on the chain so the same

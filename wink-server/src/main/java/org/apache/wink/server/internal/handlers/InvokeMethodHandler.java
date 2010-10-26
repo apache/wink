@@ -27,7 +27,7 @@ import org.apache.wink.common.internal.application.ApplicationExceptionAttribute
 import org.apache.wink.common.internal.log.LogUtils;
 import org.apache.wink.server.handlers.AbstractHandler;
 import org.apache.wink.server.handlers.MessageContext;
-//import org.apache.wink.server.internal.log.ResourceInvocation.ResourceInvocationData;
+import org.apache.wink.server.internal.log.ResourceInvocation.ResourceInvocationData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,11 +55,11 @@ public class InvokeMethodHandler extends AbstractHandler {
                                Integer.toHexString(System.identityHashCode(instance)),
                                Arrays.toString(parameters)});
             }
-//            ResourceInvocationData resInvocationData =
-//                context.getAttribute(ResourceInvocationData.class);
-//            if (resInvocationData != null) {
-//                resInvocationData.addInvocation(context);
-//            }
+            ResourceInvocationData resInvocationData =
+                context.getAttribute(ResourceInvocationData.class);
+            if (resInvocationData != null) {
+                resInvocationData.addInvocation(context);
+            }
             Object result = javaMethod.invoke(instance, parameters);
             context.setResponseEntity(result);
         } catch (InvocationTargetException ite) {

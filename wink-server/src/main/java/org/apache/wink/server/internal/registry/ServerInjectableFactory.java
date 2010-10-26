@@ -56,6 +56,8 @@ import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.common.internal.uri.UriEncoder;
 import org.apache.wink.common.internal.utils.MediaTypeUtils;
 import org.apache.wink.common.internal.utils.StringUtils;
+import org.apache.wink.common.utils.ProviderUtils;
+import org.apache.wink.common.utils.ProviderUtils.PROVIDER_EXCEPTION_ORIGINATOR;
 import org.apache.wink.server.internal.handlers.SearchResult;
 
 public class ServerInjectableFactory extends InjectableFactory {
@@ -187,13 +189,19 @@ public class ServerInjectableFactory extends InjectableFactory {
                                                    mediaType);
 
                 if (mbr != null) {
-                    Object read =
-                        mbr.readFrom(paramType,
+                    Object read;
+                    try {
+                        read = mbr.readFrom(paramType,
                                      getGenericType(),
                                      getAnnotations(),
                                      mediaType,
                                      runtimeContext.getHttpHeaders().getRequestHeaders(),
                                      runtimeContext.getInputStream());
+                    } catch (RuntimeException e) {
+                        ProviderUtils.logUserProviderException(e, mbr, PROVIDER_EXCEPTION_ORIGINATOR.readFrom, new Object[]{paramType, getGenericType(), getAnnotations(), mediaType, runtimeContext.getHttpHeaders().getRequestHeaders(),
+                                runtimeContext.getInputStream()}, runtimeContext);
+                        throw e;
+                    }
                     return read;
                 }
             }

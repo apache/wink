@@ -19,8 +19,8 @@
 
 package org.apache.wink.server.serviceability;
 
-import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.LogRecord;
 
@@ -44,16 +44,16 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 /**
- * 
- * When running this test in Eclipse or another IDE, make sure project wink-component-test-support is first in the classpath
- * so that SLF4J picks up the SLF4J bridge provided from it.  Otherwise, you'll get no log output to assert against.
- *
+ * When running this test in Eclipse or another IDE, make sure project
+ * wink-component-test-support is first in the classpath so that SLF4J picks up
+ * the SLF4J bridge provided from it. Otherwise, you'll get no log output to
+ * assert against.
  */
 public class ServiceabilityTest extends MockServletInvocationTest {
 
     @Override
     protected Class<?>[] getClasses() {
-        return new Class<?>[]{MyResource.class, MyContextResolver.class, MyContextResolver1.class};
+        return new Class<?>[] {MyResource.class, MyContextResolver.class, MyContextResolver1.class};
     }
 
     @Path("/root")
@@ -70,7 +70,7 @@ public class ServiceabilityTest extends MockServletInvocationTest {
         public String getHTML() {
             return "some html";
         }
-        
+
         @GET
         @Path("2")
         @Produces(MediaType.TEXT_PLAIN)
@@ -79,21 +79,21 @@ public class ServiceabilityTest extends MockServletInvocationTest {
         }
 
     }
-    
+
     // intentionally forgetting @Provider annotation as part of test
-    public static class MyContextResolver implements ContextResolver {
-        public Object getContext(Class type) {
+    public static class MyContextResolver implements ContextResolver<Object> {
+        public Object getContext(Class<?> type) {
             return null;
         }
     }
-    
+
     @Provider
-    public static class MyContextResolver1 implements ContextResolver {
-        public Object getContext(Class type) {
+    public static class MyContextResolver1 implements ContextResolver<Object> {
+        public Object getContext(Class<?> type) {
             return null;
         }
     }
-    
+
     public static class MyApp extends Application {
 
         @Override
@@ -102,7 +102,7 @@ public class ServiceabilityTest extends MockServletInvocationTest {
             classes.add(MyAppResource.class);
             return classes;
         }
-        
+
         @Path("/myapp")
         public static class MyAppResource {
             @GET
@@ -112,9 +112,9 @@ public class ServiceabilityTest extends MockServletInvocationTest {
                 return "some private text";
             }
         }
-        
+
     }
-    
+
     public static class MockAppValidator extends ApplicationValidator {
 
         @Override
@@ -126,9 +126,8 @@ public class ServiceabilityTest extends MockServletInvocationTest {
         public boolean isValidResource(Class<?> cls) {
             return true;
         }
-        
+
     }
-    
 
     @Override
     protected void setUp() throws Exception {
@@ -141,137 +140,147 @@ public class ServiceabilityTest extends MockServletInvocationTest {
         WinkLogHandler.clearRecords();
         super.tearDown();
     }
-    
+
     public void testGoodAppStartupInfoLogOutput() throws Exception {
         WinkLogHandler.turnLoggingCaptureOn(WinkLogHandler.LEVEL.INFO);
         MockAppValidator mockAppValidator = new MockAppValidator();
-        ResourceRegistry mockResourceRegistry = new ResourceRegistry(new LifecycleManagersRegistry(), mockAppValidator);
-        ProvidersRegistry mockProvidersRegistry = new ProvidersRegistry(new LifecycleManagersRegistry(), mockAppValidator);
-        ApplicationProcessor appProcessor = new ApplicationProcessor(new MyApp(), mockResourceRegistry, mockProvidersRegistry, false);
+        ResourceRegistry mockResourceRegistry =
+            new ResourceRegistry(new LifecycleManagersRegistry(), mockAppValidator);
+        ProvidersRegistry mockProvidersRegistry =
+            new ProvidersRegistry(new LifecycleManagersRegistry(), mockAppValidator);
+        ApplicationProcessor appProcessor =
+            new ApplicationProcessor(new MyApp(), mockResourceRegistry, mockProvidersRegistry, false);
         appProcessor.process();
         WinkLogHandler.turnLoggingCaptureOff();
-        ArrayList<LogRecord> records = WinkLogHandler.getRecords();
-        
-        assertEquals(3, records.size());
-        assertEquals("The following application has been processed: org.apache.wink.server.serviceability.ServiceabilityTest$MyApp", records.get(0).getMessage());
-        assertEquals("Registered resources: \n" +
-                "  Path: myapp; ClassMetadata: Class: org.apache.wink.server.serviceability.ServiceabilityTest$MyApp$MyAppResource", records.get(1).getMessage());
-        assertEquals("The following user-defined JAX-RS providers are registered: \n" +
-                "RawType: interface javax.ws.rs.ext.MessageBodyReader\n" +
-                "Data Map: {empty}\n" +
-                "RawType: interface javax.ws.rs.ext.MessageBodyWriter\n" +
-                "Data Map: {empty}\n" +
-                "RawType: interface javax.ws.rs.ext.ContextResolver\n" +
-                "Data Map: {empty}", records.get(2).getMessage());
+        List<LogRecord> records = WinkLogHandler.getRecords();
+
+        assertEquals(1, records.size());
+        assertEquals("The following JAX-RS application has been processed: org.apache.wink.server.serviceability.ServiceabilityTest$MyApp",
+                     records.get(0).getMessage());
     }
-    
+
     public void testGoodURLLogOutput1() throws Exception {
         WinkLogHandler.turnLoggingCaptureOn(WinkLogHandler.LEVEL.DEBUG);
-        
+
         MockHttpServletRequest mockRequest =
             MockRequestConstructor.constructMockRequest("GET", "/root", MediaType.TEXT_PLAIN);
         MockHttpServletResponse mockResponse = invoke(mockRequest);
         assertEquals(200, mockResponse.getStatus());
         assertEquals("some text", mockResponse.getContentAsString());
-        
+
         WinkLogHandler.turnLoggingCaptureOff();
-        ArrayList<LogRecord> records = WinkLogHandler.getRecords();
-        
-        assertEquals(2, records.size());
-        assertEquals("Processing GET request to http://localhost:80/root, source content type is null, acceptable media types include text/plain", records.get(0).getMessage());
+        List<LogRecord> records = WinkLogHandler.getRecords();
+
+        assertEquals(9, records.size());
+        assertEquals("Processing GET request to http://localhost:80/root, source content type is null, acceptable media types include text/plain",
+                     records.get(0).getMessage());
     }
-    
+
     public void testGoodURLLogOutput2() throws Exception {
         WinkLogHandler.turnLoggingCaptureOn(WinkLogHandler.LEVEL.DEBUG);
-        
+
         MockHttpServletRequest mockRequest =
             MockRequestConstructor.constructMockRequest("GET", "/root", MediaType.TEXT_HTML);
         MockHttpServletResponse mockResponse = invoke(mockRequest);
         assertEquals(200, mockResponse.getStatus());
         assertEquals("some html", mockResponse.getContentAsString());
-        
+
         WinkLogHandler.turnLoggingCaptureOff();
-        ArrayList<LogRecord> records = WinkLogHandler.getRecords();
-        
-        assertEquals(2, records.size());
-        assertEquals("Processing GET request to http://localhost:80/root, source content type is null, acceptable media types include text/html", records.get(0).getMessage());
+        List<LogRecord> records = WinkLogHandler.getRecords();
+
+        assertEquals(9, records.size());
+        assertEquals("Processing GET request to http://localhost:80/root, source content type is null, acceptable media types include text/html",
+                     records.get(0).getMessage());
     }
-    
+
     public void testGoodURLLogOutput3() throws Exception {
         WinkLogHandler.turnLoggingCaptureOn(WinkLogHandler.LEVEL.DEBUG);
-        
+
         MockHttpServletRequest mockRequest =
             MockRequestConstructor.constructMockRequest("GET", "/root", MediaType.TEXT_PLAIN);
         mockRequest.setQueryString("param1=value1");
         MockHttpServletResponse mockResponse = invoke(mockRequest);
         assertEquals(200, mockResponse.getStatus());
         assertEquals("some text", mockResponse.getContentAsString());
-        
+
         WinkLogHandler.turnLoggingCaptureOff();
-        ArrayList<LogRecord> records = WinkLogHandler.getRecords();
-        
-        assertEquals(2, records.size());
-        assertEquals("Processing GET request to http://localhost:80/root?param1=value1, source content type is null, acceptable media types include text/plain", records.get(0).getMessage());
+        List<LogRecord> records = WinkLogHandler.getRecords();
+
+        assertEquals(9, records.size());
+        assertEquals("Processing GET request to http://localhost:80/root?param1=value1, source content type is null, acceptable media types include text/plain",
+                     records.get(0).getMessage());
     }
-    
+
     public void testGoodURLLogOutput4() throws Exception {
         WinkLogHandler.turnLoggingCaptureOn(WinkLogHandler.LEVEL.DEBUG);
-        
+
         MockHttpServletRequest mockRequest =
             MockRequestConstructor.constructMockRequest("GET", "/root/2", MediaType.TEXT_PLAIN);
         MockHttpServletResponse mockResponse = invoke(mockRequest);
         assertEquals(200, mockResponse.getStatus());
         assertEquals("some text 2", mockResponse.getContentAsString());
-        
+
         WinkLogHandler.turnLoggingCaptureOff();
-        ArrayList<LogRecord> records = WinkLogHandler.getRecords();
-        
-        assertEquals(2, records.size());
-        assertEquals("Processing GET request to http://localhost:80/root/2, source content type is null, acceptable media types include text/plain", records.get(0).getMessage());
+        List<LogRecord> records = WinkLogHandler.getRecords();
+
+        assertEquals(9, records.size());
+        assertEquals("Processing GET request to http://localhost:80/root/2, source content type is null, acceptable media types include text/plain",
+                     records.get(0).getMessage());
     }
-    
+
     public void testBadURLLogOutput1() throws Exception {
         WinkLogHandler.turnLoggingCaptureOn(WinkLogHandler.LEVEL.INFO);
-        
+
         MockHttpServletRequest mockRequest =
             MockRequestConstructor.constructMockRequest("GET", "/root/BAD", MediaType.TEXT_PLAIN);
         MockHttpServletResponse mockResponse = invoke(mockRequest);
         assertEquals(404, mockResponse.getStatus());
-        
+
         WinkLogHandler.turnLoggingCaptureOff();
-        ArrayList<LogRecord> records = WinkLogHandler.getRecords();
-        
+        List<LogRecord> records = WinkLogHandler.getRecords();
+
         assertEquals(1, records.size());
-        assertEquals("The following error occurred during the invocation of the handlers chain: WebApplicationException (404 - Not Found) while processing GET request sent to http://localhost:80/root/BAD", records.get(0).getMessage());
-        assertNull(records.get(0).getThrown());  // when NOT in debug mode, exception should NOT show up in the debug trace
+        assertEquals("The following error occurred during the invocation of the handlers chain: WebApplicationException (404 - Not Found) with message 'null' while processing GET request sent to http://localhost:80/root/BAD",
+                     records.get(0).getMessage());
+        assertNull(records.get(0).getThrown()); // when NOT in debug mode,
+                                                // exception should NOT show up
+                                                // in the debug trace
     }
-    
+
     public void testBadURLLogOutput2() throws Exception {
         WinkLogHandler.turnLoggingCaptureOn(WinkLogHandler.LEVEL.DEBUG);
-        
+
         MockHttpServletRequest mockRequest =
             MockRequestConstructor.constructMockRequest("GET", "/root/BAD", MediaType.TEXT_PLAIN);
         MockHttpServletResponse mockResponse = invoke(mockRequest);
         assertEquals(404, mockResponse.getStatus());
-        
+
         WinkLogHandler.turnLoggingCaptureOff();
-        ArrayList<LogRecord> records = WinkLogHandler.getRecords();
-        
-        assertEquals(4, records.size());
-        assertEquals("Processing GET request to http://localhost:80/root/BAD, source content type is null, acceptable media types include text/plain", records.get(0).getMessage());
-        assertEquals("The following error occurred during the invocation of the handlers chain: WebApplicationException (404 - Not Found) while processing GET request sent to http://localhost:80/root/BAD", records.get(1).getMessage());
-        assertNotNull(records.get(1).getThrown());  // when in debug mode, exception should show up in the debug trace
-        assertEquals("Registered resources: \n" +
-                "  Path: root; ClassMetadata: Class: org.apache.wink.server.serviceability.ServiceabilityTest$MyResource\n" +
-                "  Path: ; ClassMetadata: Class: org.apache.wink.server.internal.resources.HtmlServiceDocumentResource", records.get(2).getMessage());
-        assertEquals("The following user-defined JAX-RS providers are registered: \n" +
-                "RawType: interface javax.ws.rs.ext.MessageBodyReader\nData Map: {empty}" +
-                "\nRawType: interface javax.ws.rs.ext.MessageBodyWriter\nData Map: {empty}" +
-                "\nRawType: interface javax.ws.rs.ext.ContextResolver\nData Map: \n" +
-                "MediaType key = */*\n" +
-                "ObjectFactory Set value = {\n" +
-                "  class org.apache.wink.server.serviceability.ServiceabilityTest$MyContextResolver1\n" +
-                "}\n", records.get(3).getMessage());
+        List<LogRecord> records = WinkLogHandler.getRecords();
+
+        assertEquals(11, records.size());
+        assertEquals("Processing GET request to http://localhost:80/root/BAD, source content type is null, acceptable media types include text/plain",
+                     records.get(0).getMessage());
+        assertEquals("The following error occurred during the invocation of the handlers chain: WebApplicationException (404 - Not Found) with message 'null' while processing GET request sent to http://localhost:80/root/BAD",
+                     records.get(5).getMessage());
+        assertNotNull(records.get(5).getThrown()); // when in debug mode,
+                                                   // exception should show up
+                                                   // in the debug trace
+        // assertEquals("Registered resources: \n" +
+        // "  Path: root; ClassMetadata: Class: org.apache.wink.server.serviceability.ServiceabilityTest$MyResource",
+        // records.get(2).getMessage());
+        // assertEquals("The following user-defined JAX-RS providers are registered: \n"
+        // +
+        // "RawType: interface javax.ws.rs.ext.ContextResolver\nData Map: \n" +
+        // "MediaType key = */*\n" +
+        // "ObjectFactory Set value = {\n" +
+        // "  class org.apache.wink.server.serviceability.ServiceabilityTest$MyContextResolver1\n"
+        // +
+        // "}\n" +
+        // "\nRawType: interface javax.ws.rs.ext.MessageBodyReader\nData Map: {empty}"
+        // +
+        // "\nRawType: interface javax.ws.rs.ext.MessageBodyWriter\nData Map: {empty}",
+        // records.get(3).getMessage());
     }
 
 }

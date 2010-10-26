@@ -37,6 +37,8 @@ import org.apache.wink.common.internal.utils.ClassUtils;
 import org.apache.wink.server.internal.DeploymentConfiguration;
 import org.apache.wink.server.internal.RequestProcessor;
 import org.apache.wink.server.internal.application.ServletWinkApplication;
+import org.apache.wink.server.internal.log.Providers;
+import org.apache.wink.server.internal.log.Resources;
 import org.apache.wink.server.internal.utils.ServletFileLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,12 +70,12 @@ public class RestServlet extends AbstractRestServlet {
     private static final Logger logger                  =
                                                             LoggerFactory
                                                                 .getLogger(RestServlet.class);
-    
-    public static final String APPLICATION_INIT_PARAM  = "javax.ws.rs.Application";          //$NON-NLS-1$
-    public static final String PROPERTIES_DEFAULT_FILE = "META-INF/wink-default.properties"; //$NON-NLS-1$
-    public static final String PROPERTIES_INIT_PARAM   = "propertiesLocation";               //$NON-NLS-1$
-    public static final String APP_LOCATION_PARAM      = "applicationConfigLocation";        //$NON-NLS-1$
-    public static final String DEPLOYMENT_CONF_PARAM    = "deploymentConfiguration";          //$NON-NLS-1$
+
+    public static final String  APPLICATION_INIT_PARAM  = "javax.ws.rs.Application";          //$NON-NLS-1$
+    public static final String  PROPERTIES_DEFAULT_FILE = "META-INF/wink-default.properties"; //$NON-NLS-1$
+    public static final String  PROPERTIES_INIT_PARAM   = "propertiesLocation";               //$NON-NLS-1$
+    public static final String  APP_LOCATION_PARAM      = "applicationConfigLocation";        //$NON-NLS-1$
+    public static final String  DEPLOYMENT_CONF_PARAM   = "deploymentConfiguration";          //$NON-NLS-1$
 
     @Override
     public void init() throws ServletException {
@@ -126,12 +128,45 @@ public class RestServlet extends AbstractRestServlet {
         if (app == null) {
             app = getApplication(deploymentConfiguration);
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug("RestServlet:  setting application to " + app.toString());
+        if (logger.isTraceEnabled()) {
+            logger.trace("Setting application to " + app.toString());
         }
         deploymentConfiguration.addApplication(app, false);
+
+        if (!LoggerFactory.getLogger(Resources.class).isTraceEnabled()) {
+            /*
+             * if just debug or higher is enabled, then log only user
+             * applications
+             */
+            new Resources(deploymentConfiguration.getResourceRegistry()).log();
+        }
+
+        if (!LoggerFactory.getLogger(Providers.class).isTraceEnabled()) {
+            /*
+             * if just debug or higher is enabled, then log only user
+             * applications
+             */
+            new Providers(deploymentConfiguration.getProvidersRegistry()).log();
+        }
+
         RequestProcessor requestProcessor = new RequestProcessor(deploymentConfiguration);
         logger.trace("Creating request processor {} for servlet {}", requestProcessor, this); //$NON-NLS-1$
+
+        if (LoggerFactory.getLogger(Resources.class).isTraceEnabled()) {
+            /*
+             * if full trace is enabled, then log everything
+             */
+
+            new Resources(deploymentConfiguration.getResourceRegistry()).log();
+        }
+
+        if (LoggerFactory.getLogger(Providers.class).isTraceEnabled()) {
+            /*
+             * if full trace is enabled, then log everything
+             */
+            new Providers(deploymentConfiguration.getProvidersRegistry()).log();
+        }
+
         return requestProcessor;
     }
 
@@ -146,11 +181,10 @@ public class RestServlet extends AbstractRestServlet {
     }
 
     /**
-     * order of loading and property precedence:
-     * 
-     * wink-default.properties
-     * file referred to by propertiesLocation init param (may override and add to above set props)
-     * JVM system properties (only sets values for key/value pairs where the value is null or empty)
+     * order of loading and property precedence: wink-default.properties file
+     * referred to by propertiesLocation init param (may override and add to
+     * above set props) JVM system properties (only sets values for key/value
+     * pairs where the value is null or empty)
      */
     protected Properties getProperties() throws IOException {
         Properties defaultProperties = loadProperties(PROPERTIES_DEFAULT_FILE, null);
@@ -209,7 +243,7 @@ public class RestServlet extends AbstractRestServlet {
             // use ClassUtils.loadClass instead of Class.forName so we have
             // classloader visibility into the Web module in J2EE environments
             appClass = (Class<? extends Application>)ClassUtils.loadClass(initParameter);
-            
+
             // let the lifecycle manager create the instance and process fields
             // for injection
             ObjectFactory of = configuration.getOfFactoryRegistry().getObjectFactory(appClass);
@@ -240,11 +274,11 @@ public class RestServlet extends AbstractRestServlet {
          */
         return null;
     }
- 
+
     /**
      * loadProperties will try to load the properties from the resource,
-     * overriding existing properties in defaultProperties, and adding
-     * new ones, and return the result
+     * overriding existing properties in defaultProperties, and adding new ones,
+     * and return the result
      * 
      * @param resourceName
      * @param defaultProperties
@@ -269,7 +303,8 @@ public class RestServlet extends AbstractRestServlet {
                 }
             } catch (IOException e) {
                 if (logger.isWarnEnabled()) {
-                    logger.warn(Messages.getMessage("exceptionClosingFile") + ": " + resourceName, e); //$NON-NLS-1$ //$NON-NLS-2$
+                    logger
+                        .warn(Messages.getMessage("exceptionClosingFile") + ": " + resourceName, e); //$NON-NLS-1$ //$NON-NLS-2$
                 }
             }
         }

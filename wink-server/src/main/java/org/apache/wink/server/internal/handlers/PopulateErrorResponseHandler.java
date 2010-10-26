@@ -42,7 +42,7 @@ public class PopulateErrorResponseHandler extends AbstractHandler {
         Object result = context.getResponseEntity();
         if (result instanceof WebApplicationException) {
             handleWebApplicationException(context, (WebApplicationException)result);
-        } else {
+        } else if(result instanceof Throwable) {
             Throwable exception = (Throwable)result;
             ExceptionMapper<Throwable> provider =
                 (ExceptionMapper<Throwable>)findProvider(context, exception);
@@ -59,7 +59,7 @@ public class PopulateErrorResponseHandler extends AbstractHandler {
         try {
             return provider.toResponse(exception);
         } catch (Throwable e) {
-            logger.error(Messages.getMessage("exceptionOccurredDuringExceptionMapper"), e); //$NON-NLS-1$
+            logger.error(Messages.getMessage("exceptionOccurredDuringExceptionMapper", provider.getClass().getName()), e); //$NON-NLS-1$
             return RUNTIME_DELEGATE.createResponseBuilder().status(500).build();
         }
     }

@@ -36,7 +36,14 @@
         <module>core</module>
         <module>client</module>
         <module>ext</module>
-  </modules>
+    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <scope>test</scope>
+        </dependency>        
+    </dependencies>
     <!-- The definition for the repositories was added to enable building the examples from the distribution zip (the parent will be located through this definition) -->
 	<!--
     <repositories>

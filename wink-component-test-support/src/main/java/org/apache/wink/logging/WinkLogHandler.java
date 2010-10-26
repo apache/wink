@@ -21,28 +21,33 @@
 package org.apache.wink.logging;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 public class WinkLogHandler extends Handler {
-    
+
     public enum LEVEL {
         INFO, DEBUG, TRACE
     }
 
-    static private ArrayList<LogRecord> logRecords = new ArrayList<LogRecord>();
-    static boolean storeLogsOn = false;
-    static LEVEL level;
-    
+    static private List<LogRecord> logRecords  = new ArrayList<LogRecord>();
+    static boolean                 storeLogsOn = false;
+    static LEVEL                   level;
+
     @Override
     public void close() throws SecurityException {
+        /* do nothing */
     }
 
     @Override
     public void flush() {
+        /* do nothing */
     }
-    
+
     public static Level getLogLevel() {
         if (level != null) {
             if (level.equals(LEVEL.INFO)) {
@@ -68,42 +73,74 @@ public class WinkLogHandler extends Handler {
             }
         }
     }
-    
+
+    private static WinkLogHandler handler;
+
     /**
      * turns logging capture on
      */
     public static void turnLoggingCaptureOn(LEVEL _level) {
+        Logger logger = Logger.getLogger("org.apache.wink");
+
+        if (handler == null) {
+            handler = new WinkLogHandler();
+            handler.setLevel(Level.FINEST);
+        }
+        Handler[] handlers = logger.getHandlers();
+
+        clearRecords();
+        if (handlers == null || !Arrays.asList(handlers).contains(handler)) {
+            logger.addHandler(handler);
+        }
+        
+        switch(_level) {
+            case INFO:
+                logger.setLevel(Level.INFO);
+                break;
+            case DEBUG:
+                logger.setLevel(Level.FINE);
+                break;
+            case TRACE:
+                logger.setLevel(Level.FINEST);
+                break;
+        }
+
         level = _level;
         storeLogsOn = true;
     }
-    
+
     /**
      * turns logging capture off
      */
     public static void turnLoggingCaptureOff() {
+        Logger logger = Logger.getLogger("org.apache.wink");
+        logger.removeHandler(handler);
+        logger.setLevel(Level.OFF);
         storeLogsOn = false;
         level = null;
     }
-    
+
     /**
-     * get all captured LogRecords.  It is recommended that you inspect the returned list,
-     * perform the desired asserts, then call clearRecords to clean up the list prior to the
-     * next test that may wish to also capture logging.
+     * get all captured LogRecords. It is recommended that you inspect the
+     * returned list, perform the desired asserts, then call clearRecords to
+     * clean up the list prior to the next test that may wish to also capture
+     * logging.
      * 
      * @return ArrayList of LogRecords captured
      */
-    public static ArrayList<LogRecord> getRecords() {
+    public static List<LogRecord> getRecords() {
         return logRecords;
     }
-    
+
     /**
-     * Get only the records associated with the logger for a particular name.  Typically, this will
-     * be the class name of the production class under test.
+     * Get only the records associated with the logger for a particular name.
+     * Typically, this will be the class name of the production class under
+     * test.
      * 
      * @param logName
      * @return filtered ArrayList of LogRecords captured
      */
-    public static ArrayList<LogRecord> getRecordsFilteredBy(String logName) {
+    public static List<LogRecord> getRecordsFilteredBy(String logName) {
         ArrayList<LogRecord> filtered = new ArrayList<LogRecord>();
         for (int i = 0; i < logRecords.size(); i++) {
             if (logRecords.get(i).getLoggerName().equals(logName)) {
@@ -112,10 +149,11 @@ public class WinkLogHandler extends Handler {
         }
         return filtered;
     }
-    
+
     /**
-     * Clear all logRecords from the captured list.  It is recommended that test methods do this
-     * to clean up prior to the next test that may wish to also capture logging.
+     * Clear all logRecords from the captured list. It is recommended that test
+     * methods do this to clean up prior to the next test that may wish to also
+     * capture logging.
      */
     public static void clearRecords() {
         logRecords.clear();

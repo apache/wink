@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -760,9 +761,9 @@ public class ProvidersRegistry {
         }
 
         public Set<MediaType> getProvidersMediaTypes(Class<?> type) {
-            Set<MediaType> mediaTypes = new HashSet<MediaType>();
+            Set<MediaType> mediaTypes = new LinkedHashSet<MediaType>();
 
-            l1: for (Entry<MediaType, HashSet<PriorityObjectFactory<T>>> entry : data.entrySet()) {
+            l1: for (Entry<MediaType, HashSet<PriorityObjectFactory<T>>> entry : entrySet) {
                 MediaType mediaType = entry.getKey();
                 Set<PriorityObjectFactory<T>> set = entry.getValue();
                 for (PriorityObjectFactory<T> t : set) {

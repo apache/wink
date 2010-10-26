@@ -63,7 +63,9 @@ public class FindRootResourceHandler implements RequestHandler {
             registry.getMatchingRootResources(strippedPath, isContinuedSearchPolicy);
         logger.trace("Found resource instances: {}", matchedResources); //$NON-NLS-1$
         if (matchedResources.size() == 0) {
-            logger.trace("No resource found matching {}", context.getUriInfo().getPath(false)); //$NON-NLS-1$
+            if(logger.isTraceEnabled()) {
+                logger.trace("No resource found matching {}", context.getUriInfo().getPath(false)); //$NON-NLS-1$
+            }
             SearchResult result =
                 new SearchResult(new WebApplicationException(Response.Status.NOT_FOUND));
             context.setAttribute(SearchResult.class, result);

@@ -69,6 +69,9 @@ import org.apache.wink.server.internal.handlers.PopulateErrorResponseHandler;
 import org.apache.wink.server.internal.handlers.PopulateResponseMediaTypeHandler;
 import org.apache.wink.server.internal.handlers.PopulateResponseStatusHandler;
 import org.apache.wink.server.internal.handlers.SearchResultHandler;
+import org.apache.wink.server.internal.log.Requests;
+import org.apache.wink.server.internal.log.ResourceInvocation;
+import org.apache.wink.server.internal.log.Responses;
 import org.apache.wink.server.internal.registry.ResourceRegistry;
 import org.apache.wink.server.internal.registry.ServerInjectableFactory;
 import org.slf4j.Logger;
@@ -160,6 +163,44 @@ public class DeploymentConfiguration implements WinkConfiguration {
         initAlternateShortcutMap();
         initMediaTypeMapper();
         initHandlers();
+
+        // this next code is to dump the config to trace after initialization
+        if (logger.isDebugEnabled()) {
+            try {
+                logger.debug("Configuration Settings:");
+                logger.trace("Request Handlers Chain : {}", requestHandlersChain);
+                logger.trace("Response Handlers Chain: {}", responseHandlersChain);
+                logger.trace("Error Handlers Chain: {}", errorHandlersChain);
+                logger.debug("Request User Handlers: {}", String
+                    .format("%1$s", requestUserHandlers));
+                logger.debug("Response User Handlers: {}", String.format("%1$s",
+                                                                         responseUserHandlers));
+                logger.debug("Error User Handlers: {}", String.format("%1$s", errorUserHandlers));
+                logger.trace("LifecycleManagerRegistry: {}", this.ofFactoryRegistry
+                    .getLifecycleManagers());
+                logger.debug("MediaTypeMapper: {}", this.mediaTypeMapper); // TODO
+                // add
+                // toString
+                // method
+                // for
+                // MediaTypeMapper
+                logger.debug("AlternateShortcutMap: {}", this.alternateShortcutMap);
+                logger.debug("Properties: {}", this.properties);
+                logger.trace("ServletConfig: {}", this.servletConfig);
+                logger.trace("ServletContext: {}", this.servletContext);
+                logger.trace("FilterConfig: {}", this.filterConfig);
+                logger.trace("Applications: {}", this.applications);
+                List<String> httpMethodOverrideHeadersList = new ArrayList<String>();
+                if (this.httpMethodOverrideHeaders != null) {
+                    for (int i = 0; i < this.httpMethodOverrideHeaders.length; ++i)
+                        httpMethodOverrideHeadersList.add(this.httpMethodOverrideHeaders[i]);
+                }
+                logger.debug("HttpMethodOverrideHeaders: {}", httpMethodOverrideHeadersList);
+            } catch (Exception e) {
+                // make sure we don't fail in case anything wrong happens here
+                logger.debug("An Exception occurred when logging the configuration {}", e);
+            }
+        }
     }
 
     public RequestHandlersChain getRequestHandlersChain() {
@@ -465,8 +506,11 @@ public class DeploymentConfiguration implements WinkConfiguration {
      * 
      * @see initRequestUserHandlers
      */
+    @SuppressWarnings("unchecked")
     protected RequestHandlersChain initRequestHandlersChain() {
         RequestHandlersChain handlersChain = new RequestHandlersChain();
+        handlersChain.addHandler(createHandler(Requests.class));
+        handlersChain.addHandler(createHandler(ResourceInvocation.class));
         handlersChain.addHandler(createHandler(SearchResultHandler.class));
         handlersChain.addHandler(createHandler(OptionsMethodHandler.class));
         handlersChain.addHandler(createHandler(HeadMethodHandler.class));
@@ -529,6 +573,7 @@ public class DeploymentConfiguration implements WinkConfiguration {
      */
     protected ResponseHandlersChain initResponseHandlersChain() {
         ResponseHandlersChain handlersChain = new ResponseHandlersChain();
+        handlersChain.addHandler(createHandler(Responses.class));
         handlersChain.addHandler(createHandler(PopulateResponseStatusHandler.class));
         handlersChain.addHandler(createHandler(PopulateResponseMediaTypeHandler.class));
         if (responseUserHandlers != null) {
@@ -550,6 +595,11 @@ public class DeploymentConfiguration implements WinkConfiguration {
      */
     protected ResponseHandlersChain initErrorHandlersChain() {
         ResponseHandlersChain handlersChain = new ResponseHandlersChain();
+
+        Responses responsesHandler = createHandler(Responses.class);
+        responsesHandler.setIsErrorFlow(true);
+        handlersChain.addHandler(responsesHandler);
+
         handlersChain.addHandler(createHandler(PopulateErrorResponseHandler.class));
         handlersChain.addHandler(createHandler(PopulateResponseStatusHandler.class));
         PopulateResponseMediaTypeHandler populateMediaTypeHandler =
@@ -567,7 +617,7 @@ public class DeploymentConfiguration implements WinkConfiguration {
         return handlersChain;
     }
 
-    private <T extends Handler> T createHandler(Class<T> cls) {
+    protected <T extends Handler> T createHandler(Class<T> cls) {
         try {
             T handler = cls.newInstance();
             logger.trace("Calling {}.init(Properties)", cls); //$NON-NLS-1$

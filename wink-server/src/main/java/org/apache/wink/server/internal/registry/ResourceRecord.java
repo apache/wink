@@ -141,6 +141,10 @@ public class ResourceRecord extends TemplatedRecord {
         return getMatchingSubResources(uri, false, true);
     }
 
+    public List<SubResourceRecord> getSubResourceRecords() {
+        return subResources;
+    }
+
     public List<SubResourceInstance> getMatchingSubResources(String uri,
                                                              boolean method,
                                                              boolean locator) {

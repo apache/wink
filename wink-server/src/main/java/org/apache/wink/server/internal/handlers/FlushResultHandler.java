@@ -46,6 +46,8 @@ import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 import org.apache.wink.common.internal.MultivaluedMapImpl;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
+import org.apache.wink.common.utils.ProviderUtils;
+import org.apache.wink.common.utils.ProviderUtils.PROVIDER_EXCEPTION_ORIGINATOR;
 import org.apache.wink.server.handlers.AbstractHandler;
 import org.apache.wink.server.handlers.MessageContext;
 import org.apache.wink.server.internal.contexts.RequestImpl;
@@ -147,22 +149,36 @@ public class FlushResultHandler extends AbstractHandler {
 
         // use the provider to write the entity
         if (messageBodyWriter != null) {
-            logger.trace("Serialization using provider {}", messageBodyWriter.getClass().getName()); //$NON-NLS-1$
+            if (logger.isTraceEnabled()) {
+                logger
+                    .trace("Serialization using provider {}", messageBodyWriter.getClass().getName()); //$NON-NLS-1$
+            }
 
             final MultivaluedMap<String, Object> headers = httpHeaders;
 
-            long size =
-                messageBodyWriter.getSize(entity,
-                                          rawType,
-                                          genericType,
-                                          declaredAnnotations,
-                                          responseMediaType);
+            long size;
+            try {
+                size =
+                    messageBodyWriter.getSize(entity,
+                                              rawType,
+                                              genericType,
+                                              declaredAnnotations,
+                                              responseMediaType);
+            } catch (RuntimeException e) {
+                ProviderUtils.logUserProviderException(e,
+                                                       messageBodyWriter,
+                                                       PROVIDER_EXCEPTION_ORIGINATOR.getSize,
+                                                       new Object[] {entity, rawType, genericType,
+                                                           declaredAnnotations, responseMediaType},
+                                                       context);
+                throw e;
+            }
             if (logger.isTraceEnabled()) {
                 logger.trace("{}@{}.getSize({}, {}, {}, {}, {}) returned {}", new Object[] { //$NON-NLS-1$
                              messageBodyWriter.getClass().getName(),
                                  Integer.toHexString(System.identityHashCode(messageBodyWriter)),
-                                 entity, rawType, genericType, declaredAnnotations,
-                                 responseMediaType, size});
+                                 Integer.toHexString(System.identityHashCode(entity)), rawType,
+                                 genericType, declaredAnnotations, responseMediaType, size});
             }
             if (size >= 0) {
                 headers.putSingle(HttpHeaders.CONTENT_LENGTH, String.valueOf(size));
@@ -175,16 +191,29 @@ public class FlushResultHandler extends AbstractHandler {
                     .trace("{}@{}.writeTo({}, {}, {}, {}, {}, {}, {}) being called", new Object[] { //$NON-NLS-1$
                            messageBodyWriter.getClass().getName(),
                                Integer.toHexString(System.identityHashCode(messageBodyWriter)),
-                               entity, rawType, genericType, declaredAnnotations,
-                               responseMediaType, httpHeaders, outputStream});
+                               Integer.toHexString(System.identityHashCode(entity)), rawType,
+                               genericType, declaredAnnotations, responseMediaType, httpHeaders,
+                               outputStream});
             }
-            messageBodyWriter.writeTo(entity,
-                                      rawType,
-                                      genericType,
-                                      declaredAnnotations,
-                                      responseMediaType,
-                                      httpHeaders,
-                                      outputStream);
+            try {
+                messageBodyWriter.writeTo(entity,
+                                          rawType,
+                                          genericType,
+                                          declaredAnnotations,
+                                          responseMediaType,
+                                          httpHeaders,
+                                          outputStream);
+            } catch (RuntimeException e) {
+                ProviderUtils
+                    .logUserProviderException(e,
+                                              messageBodyWriter,
+                                              ProviderUtils.PROVIDER_EXCEPTION_ORIGINATOR.writeTo,
+                                              new Object[] {entity, rawType, genericType,
+                                                  declaredAnnotations, responseMediaType,
+                                                  httpHeaders, outputStream},
+                                              context);
+                throw e;
+            }
             logger.trace("Flushing headers if not written"); //$NON-NLS-1$
             outputStream.flushHeaders();
             return;
@@ -213,16 +242,19 @@ public class FlushResultHandler extends AbstractHandler {
             throw new WebApplicationException(500);
         }
 
-        logger.trace("Serialization using data content handler {}", dataContentHandler.getClass() //$NON-NLS-1$
-            .getName());
+        if (logger.isTraceEnabled()) {
+            logger
+                .trace("Serialization using data content handler {}", dataContentHandler.getClass() //$NON-NLS-1$
+                    .getName());
+        }
 
         FlushHeadersOutputStream outputStream =
             new FlushHeadersOutputStream(httpResponse, httpHeaders, responseMediaType);
         if (logger.isTraceEnabled()) {
             logger.trace("{}@{}.writeTo({}, {}, {}) being called", new Object[] { //$NON-NLS-1$
                          dataContentHandler.getClass().getName(),
-                         Integer.toHexString(System.identityHashCode(dataContentHandler)), entity,
-                             responseMediaType.toString(), outputStream});
+                             Integer.toHexString(System.identityHashCode(dataContentHandler)),
+                             entity, responseMediaType.toString(), outputStream});
         }
         dataContentHandler
             .writeTo(entity,
