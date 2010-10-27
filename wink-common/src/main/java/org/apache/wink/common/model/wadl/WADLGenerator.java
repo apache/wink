@@ -45,11 +45,17 @@ import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollect
 import org.apache.wink.common.internal.uritemplate.JaxRsUriTemplateProcessor;
 import org.apache.wink.common.internal.uritemplate.UriTemplateProcessor;
 
+/**
+ * @Path("/sfdsf"); public class MyResource {
+ * @Context javax.ws.rs.core.Application app;
+ * @OPTIONS public org.apache.wink.common.model.wadl.Application getWADL() {
+ *          return new WADLGenerator().generate(app.getClasses()); } }
+ */
 public class WADLGenerator {
 
     private static final String XML_SCHEMA_NS = "http://www.w3.org/2001/XMLSchema";
 
-    public Application generate(Set<Class<?>> classes) {
+    public Application generate(String baseURI, Set<Class<?>> classes) {
         /*
          * the idea is that classes comes from the Application subclass
          */
@@ -59,6 +65,7 @@ public class WADLGenerator {
         }
 
         Resources resources = new Resources();
+        resources.setBase(baseURI);
 
         Set<ClassMetadata> metadataSet = buildClassMetdata(classes);
         resources.getResource().addAll(buildResources(metadataSet));
@@ -107,6 +114,7 @@ public class WADLGenerator {
         List<Param> resourceParams = r.getParam();
 
         List<MethodMetadata> methodMetadata = metadata.getResourceMethods();
+
         if (methodMetadata != null && !methodMetadata.isEmpty()) {
             for (MethodMetadata methodMeta : methodMetadata) {
                 Method m = buildMethod(metadata, methodMeta);
@@ -116,6 +124,8 @@ public class WADLGenerator {
                 List<Injectable> params = methodMeta.getFormalParameters();
                 if (params != null && params.size() > 0) {
                     for (Injectable p : params) {
+                        Param param = null;
+                        boolean isUnique = true;
                         switch (p.getParamType()) {
                             case QUERY:
                                 /* do nothing */
@@ -133,10 +143,30 @@ public class WADLGenerator {
                                 /* should show up in the representation instead */
                                 break;
                             case PATH:
-                                resourceParams.add(buildParam(p));
+                                param = buildParam(p);
+                                for (Param rParam : resourceParams) {
+                                    if (param.getName() != null && param.getName().equals(rParam
+                                        .getName())
+                                        && rParam.getStyle().equals(param.getStyle())) {
+                                        isUnique = false;
+                                    }
+                                }
+                                if (isUnique) {
+                                    resourceParams.add(param);
+                                }
                                 break;
                             case MATRIX:
-                                resourceParams.add(buildParam(p));
+                                param = buildParam(p);
+                                for (Param rParam : resourceParams) {
+                                    if (param.getName() != null && param.getName().equals(rParam
+                                        .getName())
+                                        && rParam.getStyle().equals(param.getStyle())) {
+                                        isUnique = false;
+                                    }
+                                }
+                                if (isUnique) {
+                                    resourceParams.add(param);
+                                }
                                 break;
                             case CONTEXT:
                                 /* do nothing */
@@ -153,6 +183,9 @@ public class WADLGenerator {
         List<Injectable> fields = metadata.getInjectableFields();
         if (fields != null) {
             for (Injectable p : metadata.getInjectableFields()) {
+                Param param = null;
+                boolean isUnique = true;
+
                 switch (p.getParamType()) {
                     case QUERY:
                         resourceParams.add(buildParam(p));
@@ -170,10 +203,28 @@ public class WADLGenerator {
                         /* should show up in the representation instead */
                         break;
                     case PATH:
-                        resourceParams.add(buildParam(p));
+                        param = buildParam(p);
+                        for (Param rParam : resourceParams) {
+                            if (param.getName() != null && param.getName().equals(rParam.getName())
+                                && rParam.getStyle().equals(param.getStyle())) {
+                                isUnique = false;
+                            }
+                        }
+                        if (isUnique) {
+                            resourceParams.add(param);
+                        }
                         break;
                     case MATRIX:
-                        resourceParams.add(buildParam(p));
+                        param = buildParam(p);
+                        for (Param rParam : resourceParams) {
+                            if (param.getName() != null && param.getName().equals(rParam.getName())
+                                && rParam.getStyle().equals(param.getStyle())) {
+                                isUnique = false;
+                            }
+                        }
+                        if (isUnique) {
+                            resourceParams.add(param);
+                        }
                         break;
                     case CONTEXT:
                         /* do nothing */
@@ -193,11 +244,14 @@ public class WADLGenerator {
                 subRes.getMethodOrResource().add(m);
                 subRes.setPath(methodMeta.getPath());
                 methodOrSubresource.add(subRes);
-
+                List<Param> subResParams = subRes.getParam();
                 /* also scan for all the path and matrix parameters */
                 List<Injectable> params = methodMeta.getFormalParameters();
                 if (params != null && params.size() > 0) {
                     for (Injectable p : params) {
+                        Param param = null;
+                        boolean isUnique = true;
+
                         switch (p.getParamType()) {
                             case QUERY:
                                 /* do nothing */
@@ -215,10 +269,30 @@ public class WADLGenerator {
                                 /* should show up in the representation instead */
                                 break;
                             case PATH:
-                                subRes.getParam().add(buildParam(p));
+                                param = buildParam(p);
+                                for (Param rParam : subResParams) {
+                                    if (param.getName() != null && param.getName().equals(rParam
+                                        .getName())
+                                        && rParam.getStyle().equals(param.getStyle())) {
+                                        isUnique = false;
+                                    }
+                                }
+                                if (isUnique) {
+                                    subRes.getParam().add(param);
+                                }
                                 break;
                             case MATRIX:
-                                subRes.getParam().add(buildParam(p));
+                                param = buildParam(p);
+                                for (Param rParam : subResParams) {
+                                    if (param.getName() != null && param.getName().equals(rParam
+                                        .getName())
+                                        && rParam.getStyle().equals(param.getStyle())) {
+                                        isUnique = false;
+                                    }
+                                }
+                                if (isUnique) {
+                                    subRes.getParam().add(param);
+                                }
                                 break;
                             case CONTEXT:
                                 /* do nothing */
@@ -241,14 +315,38 @@ public class WADLGenerator {
 
                 /* also scan for all the path and matrix parameters */
                 List<Injectable> params = methodMeta.getFormalParameters();
+                List<Param> subResParams = subRes.getParam();
                 if (params != null && params.size() > 0) {
                     for (Injectable p : params) {
+                        Param param = null;
+                        boolean isUnique = true;
+
                         switch (p.getParamType()) {
                             case QUERY:
-                                /* do nothing */
+                                param = buildParam(p);
+                                for (Param rParam : subResParams) {
+                                    if (param.getName() != null && param.getName().equals(rParam
+                                        .getName())
+                                        && rParam.getStyle().equals(param.getStyle())) {
+                                        isUnique = false;
+                                    }
+                                }
+                                if (isUnique) {
+                                    subRes.getParam().add(param);
+                                }
                                 break;
                             case HEADER:
-                                /* do nothing */
+                                param = buildParam(p);
+                                for (Param rParam : subResParams) {
+                                    if (param.getName() != null && param.getName().equals(rParam
+                                        .getName())
+                                        && rParam.getStyle().equals(param.getStyle())) {
+                                        isUnique = false;
+                                    }
+                                }
+                                if (isUnique) {
+                                    subRes.getParam().add(param);
+                                }
                                 break;
                             case ENTITY:
                                 /* do nothing */
@@ -260,10 +358,30 @@ public class WADLGenerator {
                                 /* should show up in the representation instead */
                                 break;
                             case PATH:
-                                subRes.getParam().add(buildParam(p));
+                                param = buildParam(p);
+                                for (Param rParam : subResParams) {
+                                    if (param.getName() != null && param.getName().equals(rParam
+                                        .getName())
+                                        && rParam.getStyle().equals(param.getStyle())) {
+                                        isUnique = false;
+                                    }
+                                }
+                                if (isUnique) {
+                                    subRes.getParam().add(param);
+                                }
                                 break;
                             case MATRIX:
-                                subRes.getParam().add(buildParam(p));
+                                param = buildParam(p);
+                                for (Param rParam : subResParams) {
+                                    if (param.getName() != null && param.getName().equals(rParam
+                                        .getName())
+                                        && rParam.getStyle().equals(param.getStyle())) {
+                                        isUnique = false;
+                                    }
+                                }
+                                if (isUnique) {
+                                    subRes.getParam().add(param);
+                                }
                                 break;
                             case CONTEXT:
                                 /* do nothing */
@@ -299,20 +417,46 @@ public class WADLGenerator {
             if (r == null) {
                 r = new Request();
             }
+            boolean hasValidParams = false;
             List<Param> requestParams = r.getParam();
             for (Injectable p : params) {
+                Param param = null;
+                boolean isUnique = true;
                 switch (p.getParamType()) {
                     case QUERY:
-                        requestParams.add(buildParam(p));
+                        hasValidParams = true;
+                        param = buildParam(p);
+                        for (Param rParam : requestParams) {
+                            if (param.getName() != null && param.getName().equals(rParam.getName())
+                                && rParam.getStyle().equals(param.getStyle())) {
+                                isUnique = false;
+                            }
+                        }
+                        if (isUnique) {
+                            requestParams.add(buildParam(p));
+                        }
+
                         break;
                     case HEADER:
-                        requestParams.add(buildParam(p));
+                        hasValidParams = true;
+                        param = buildParam(p);
+                        for (Param rParam : requestParams) {
+                            if (param.getName() != null && param.getName().equals(rParam.getName())
+                                && rParam.getStyle().equals(param.getStyle())) {
+                                isUnique = false;
+                            }
+                        }
+                        if (isUnique) {
+                            requestParams.add(buildParam(p));
+                        }
                         break;
                     case ENTITY:
+                        hasValidParams = true;
                         /* need to build the representation */
                         Set<Representation> representations =
                             buildIncomingRepresentation(classMetadata, metadata, p);
-                        r.getRepresentation().addAll(representations);
+                        if (representations != null)
+                            r.getRepresentation().addAll(representations);
                         break;
                     case COOKIE:
                         /* not supported in WADL */
@@ -330,6 +474,9 @@ public class WADLGenerator {
                         /* do nothing */
                         break;
                 }
+            }
+            if (!hasValidParams) {
+                r = null;
             }
         }
 
@@ -574,7 +721,7 @@ public class WADLGenerator {
     /*
      * Customized isResource method so it accepts interfaces.
      */
-    private static boolean isResource(Class<?> cls) {
+    protected boolean isResource(Class<?> cls) {
         if (ResourceMetadataCollector.isDynamicResource(cls)) {
             return true;
         }
