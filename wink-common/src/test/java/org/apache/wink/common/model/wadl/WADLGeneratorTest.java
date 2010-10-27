@@ -65,7 +65,7 @@ public class WADLGeneratorTest {
     @Test
     public void testGenerateEmptyApp() throws Exception {
         WADLGenerator generator = new WADLGenerator();
-        Application app = generator.generate(null);
+        Application app = generator.generate(null, null);
         Assert.assertNotNull(app);
 
         Assert.assertEquals(0, app.getAny().size());
@@ -379,7 +379,7 @@ public class WADLGeneratorTest {
         classes.add(Resource1.class);
         classes.add(Resource2.class);
         classes.add(MyInterface.class);
-        Application app = generator.generate(classes);
+        Application app = generator.generate("", classes);
         Assert.assertNotNull(app);
         marshalIt(app);
     }
