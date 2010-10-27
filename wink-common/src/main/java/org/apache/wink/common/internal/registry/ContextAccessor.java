@@ -99,6 +99,12 @@ public class ContextAccessor {
                                               // use runtimeContext from TLS
                                               RuntimeContext runtimeContext =
                                                   RuntimeContextTLS.getRuntimeContext();
+                                              if (runtimeContext == null) {
+                                                  if("toString".equals(method.getName()) && (args == null || args.length == 0)) {
+                                                      return "Proxy for " + contextClass.getName();
+                                                  }
+                                                  throw new IllegalStateException();
+                                              }
                                               // get the real context from the
                                               // RuntimeContext
                                               Object context =
