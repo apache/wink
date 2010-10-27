@@ -88,5 +88,11 @@
             <version>3.2.1</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.wink</groupId>
+            <artifactId>wink-json4j-provider</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

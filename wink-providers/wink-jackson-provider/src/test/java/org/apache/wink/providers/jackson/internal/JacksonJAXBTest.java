@@ -22,6 +22,7 @@ package org.apache.wink.providers.jackson.internal;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.GregorianCalendar;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -29,6 +30,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.xml.bind.JAXBElement;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.wink.common.model.atom.AtomEntry;
 import org.apache.wink.common.model.synd.SyndEntry;
@@ -64,6 +68,7 @@ public class JacksonJAXBTest extends MockServletInvocationTest {
             Person p = new Person();
             p.setName("My Name");
             p.setDesc("My desc");
+            p.setAge(100);
             return p;
         }
 
@@ -138,7 +143,7 @@ public class JacksonJAXBTest extends MockServletInvocationTest {
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
 
-        assertTrue(JSONUtils.equals(new JSONObject("{\"desc\":\"My desc\",\"name\":\"My Name\"}"),
+        assertTrue(JSONUtils.equals(new JSONObject("{\"desc\":\"My desc\",\"name\":\"My Name\",\"age\":100}"),
                                     new JSONObject(response.getContentAsString())));
     }
 
@@ -151,10 +156,10 @@ public class JacksonJAXBTest extends MockServletInvocationTest {
         MockHttpServletRequest request =
             MockRequestConstructor.constructMockRequest("POST", "/test/person", "application/json");
         request.setContentType("application/json");
-        request.setContent("{\"desc\":\"My desc\",\"name\":\"My Name\"}".getBytes());
+        request.setContent("{\"desc\":\"My desc\",\"name\":\"My Name\",\"age\":100}".getBytes());
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
-        assertTrue(JSONUtils.equals(new JSONObject("{\"desc\":\"My desc\",\"name\":\"My Name\"}"),
+        assertTrue(JSONUtils.equals(new JSONObject("{\"desc\":\"My desc\",\"name\":\"My Name\",\"age\":100}"),
                                     new JSONObject(response.getContentAsString())));
     }
 
@@ -165,6 +170,9 @@ public class JacksonJAXBTest extends MockServletInvocationTest {
                                                         "application/json");
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
+        System.out.println(JSONUtils.objectForString(ENTRY_JSON));
+        System.out.println(JSONUtils
+            .objectForString(response.getContentAsString()));
         assertTrue(JSONUtils.equals(JSONUtils.objectForString(ENTRY_JSON), JSONUtils
             .objectForString(response.getContentAsString())));
     }
@@ -238,8 +246,10 @@ public class JacksonJAXBTest extends MockServletInvocationTest {
     private static final String ENTRY_JSON_POST;
 
     static {
+
         ENTRY_JSON = ENTRY_STR_JSON;
         ENTRY_JSON_POST = ENTRY_STR_JSON_POST;
+
     }
 
 }

@@ -27,6 +27,8 @@ public class Person {
     private String name;
 
     private String desc;
+    
+    private int age;
 
     public String getName() {
         return name;
@@ -42,6 +44,14 @@ public class Person {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
 }

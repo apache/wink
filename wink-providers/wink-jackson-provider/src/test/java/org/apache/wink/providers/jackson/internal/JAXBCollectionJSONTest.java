@@ -166,11 +166,13 @@ public class JAXBCollectionJSONTest extends MockServletInvocationTest {
             Person p = new Person();
             p.setName("My Name");
             p.setDesc("My desc");
+            p.setAge(20);
             people.add(p);
             p = new Person();
             p.setName("My Name 2");
             p.setDesc("My desc 2");
             people.add(p);
+            p.setAge(22);
             return people;
         }
 
@@ -254,7 +256,7 @@ public class JAXBCollectionJSONTest extends MockServletInvocationTest {
 
         assertTrue(JSONUtils
             .equals(new JSONArray(
-                                  "[{\"desc\":\"My desc\",\"name\":\"My Name\"},{\"desc\":\"My desc 2\",\"name\":\"My Name 2\"}]"),
+                                  "[{\"desc\":\"My desc\",\"name\":\"My Name\",\"age\":20},{\"desc\":\"My desc 2\",\"name\":\"My Name 2\",\"age\":22}]"),
                     new JSONArray(response.getContentAsString())));
 
         request =
@@ -266,7 +268,7 @@ public class JAXBCollectionJSONTest extends MockServletInvocationTest {
 
         assertTrue(JSONUtils
             .equals(new JSONArray(
-                                  "[{\"desc\":\"My desc\",\"name\":\"My Name\"},{\"desc\":\"My desc 2\",\"name\":\"My Name 2\"}]"),
+                                  "[{\"desc\":\"My desc\",\"name\":\"My Name\",\"age\":20},{\"desc\":\"My desc 2\",\"name\":\"My Name 2\",\"age\":22}]"),
                     new JSONArray(response.getContentAsString())));
 
         request =
@@ -278,7 +280,7 @@ public class JAXBCollectionJSONTest extends MockServletInvocationTest {
 
         assertTrue(JSONUtils
             .equals(new JSONArray(
-                                  "[{\"name\":\"person\",\"declaredType\":\"org.apache.wink.providers.jackson.internal.jaxb.Person\",\"scope\":\"javax.xml.bind.JAXBElement$GlobalScope\",\"value\":{\"name\":\"My Name\",\"desc\":\"My desc\"},\"nil\":false, \"typeSubstituted\":false,\"globalScope\":true},{\"name\":\"person\",\"declaredType\":\"org.apache.wink.providers.jackson.internal.jaxb.Person\",\"scope\":\"javax.xml.bind.JAXBElement$GlobalScope\",\"value\":{\"name\":\"My Name 2\",\"desc\":\"My desc 2\"},\"nil\":false, \"typeSubstituted\":false,\"globalScope\":true}]"),
+                                  "[{\"name\":\"person\",\"declaredType\":\"org.apache.wink.providers.jackson.internal.jaxb.Person\",\"scope\":\"javax.xml.bind.JAXBElement$GlobalScope\",\"value\":{\"name\":\"My Name\",\"desc\":\"My desc\",\"age\":20},\"nil\":false, \"typeSubstituted\":false,\"globalScope\":true},{\"name\":\"person\",\"declaredType\":\"org.apache.wink.providers.jackson.internal.jaxb.Person\",\"scope\":\"javax.xml.bind.JAXBElement$GlobalScope\",\"value\":{\"name\":\"My Name 2\",\"desc\":\"My desc 2\",\"age\":22},\"nil\":false, \"typeSubstituted\":false,\"globalScope\":true}]"),
                     new JSONArray(response.getContentAsString())));
     }
 
@@ -289,13 +291,13 @@ public class JAXBCollectionJSONTest extends MockServletInvocationTest {
                                                         "application/json");
         request.setContentType("application/json");
         request
-            .setContent("[{\"desc\":\"My desc 1\",\"name\":\"My Name 1\"},{\"desc\":\"My desc 2\",\"name\":\"My Name 2\"}]"
+            .setContent("[{\"desc\":\"My desc 1\",\"name\":\"My Name 1\",\"age\":20},{\"desc\":\"My desc 2\",\"name\":\"My Name 2\",\"age\":22}]"
                 .getBytes());
         MockHttpServletResponse response = invoke(request);
         assertEquals(200, response.getStatus());
         assertTrue(JSONUtils
             .equals(new JSONArray(
-                                  "[{\"desc\":\"My desc 1\",\"name\":\"My Name 1\"},{\"desc\":\"My desc 2\",\"name\":\"My Name 2\"}]"),
+                                  "[{\"desc\":\"My desc 1\",\"name\":\"My Name 1\",\"age\":20},{\"desc\":\"My desc 2\",\"name\":\"My Name 2\",\"age\":22}]"),
                     new JSONArray(response.getContentAsString())));
 
         request =
@@ -304,13 +306,13 @@ public class JAXBCollectionJSONTest extends MockServletInvocationTest {
                                                         "application/json");
         request.setContentType("application/json");
         request
-            .setContent("[{\"desc\":\"My desc 1\",\"name\":\"My Name 1\"},{\"desc\":\"My desc 2\",\"name\":\"My Name 2\"}]"
+            .setContent("[{\"desc\":\"My desc 1\",\"name\":\"My Name 1\",\"age\":20},{\"desc\":\"My desc 2\",\"name\":\"My Name 2\",\"age\":22}]"
                 .getBytes());
         response = invoke(request);
         assertEquals(200, response.getStatus());
         assertTrue(JSONUtils
             .equals(new JSONArray(
-                                  "[{\"desc\":\"My desc 1\",\"name\":\"My Name 1\"},{\"desc\":\"My desc 2\",\"name\":\"My Name 2\"}]"),
+                                  "[{\"desc\":\"My desc 1\",\"name\":\"My Name 1\",\"age\":20},{\"desc\":\"My desc 2\",\"name\":\"My Name 2\",\"age\":22}]"),
                     new JSONArray(response.getContentAsString())));
 
     }
