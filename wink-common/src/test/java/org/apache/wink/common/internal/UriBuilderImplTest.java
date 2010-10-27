@@ -22,6 +22,7 @@ package org.apache.wink.common.internal;
 
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -431,7 +432,7 @@ public class UriBuilderImplTest extends TestCase {
     public void testQueryIllegal() {
         UriBuilder uriBuilder = UriBuilder.fromPath("");
         try {
-            uriBuilder.queryParam("a", null);
+            uriBuilder.queryParam("a", (Object)null);
             fail();
         } catch (IllegalArgumentException e) {
             // expected
@@ -578,5 +579,17 @@ public class UriBuilderImplTest extends TestCase {
         builder = UriBuilder.fromPath("http://localhost:8080/myResource");
         builder.path("{entity_id: [0-9]+}");
         assertEquals("http://localhost:8080/myResource/3", builder.build("3").toString());
+    }
+
+
+    public void testWithQueryEncoded() throws Exception {
+        URL url = new URL("http://localhost:8080/myResource?q={abcd}");
+        // URI.toURL() will escape characters if we use one of the multi-param constructors
+        URI constructedURI = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(),url.getPath(), url.getQuery(), null);
+        assertEquals("http://localhost:8080/myResource?q=%7Babcd%7D", constructedURI.toString());
+        
+        UriBuilder builder = UriBuilder.fromUri("http://localhost:8080/myResource");
+        builder.queryParam("q", "%7Babcd%7D");
+        assertEquals("http://localhost:8080/myResource?q=%7Babcd%7D", builder.build().toString());
     }
 }
