@@ -26,6 +26,7 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -501,13 +502,8 @@ public class ServerInjectableFactory extends InjectableFactory {
             decodeValues(values);
 
             try {
-                // does not make sense to support List as a PathParam method
-                // parameter, so, we get the last value:
-                if (values.size() > 0) {
-                    return getConvertor().convert(values.get(values.size() - 1));
-                } else {
-                    return getConvertor().convert(values);
-                }
+                Collections.reverse(values);
+                return getConvertor().convert(values);
             } catch (ConversionException e) {
                 throw new WebApplicationException(e.getCause(), Response.Status.NOT_FOUND);
             }

@@ -95,12 +95,25 @@ public class InjectableDataTest extends MockServletInvocationTest {
             assertEquals(1, p.size());
             assertEquals("a b+c", p.get(0));
         }
+        
+        @GET
+        @Path("multiValueList/{m}/{m}/{m}/{m}/{m}")
+        @Produces
+        public void getMultiValueList(@PathParam("m") List<String> m) {
+            assertEquals(5, m.size());
+            assertEquals("a", m.get(4));
+            assertEquals("b", m.get(3));
+            assertEquals("c", m.get(2));
+            assertEquals("d", m.get(1));
+            assertEquals("e", m.get(0));
+        }
 
         @GET
         @Path("simpleListMulti/{p:.*/.*}")
         @Produces
         public void getSimpleListMulti(@PathParam("p") List<String> p) {
-            assertEquals(1, p.size());
+            assertEquals(2, p.size());
+            assertEquals("a b+c", p.get(1));
             assertEquals("a/b", p.get(0));
         }
 
@@ -965,7 +978,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
             MockHttpServletResponse mockResponse = invoke(mockRequest);
             assertEquals(204, mockResponse.getStatus());
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
             fail("method invocation failed");
         }
     }
@@ -977,6 +990,7 @@ public class InjectableDataTest extends MockServletInvocationTest {
         assertInvocation("pathParam/a%20b+c/encoded");
         assertInvocation("pathParam/a%20b+c/default");
         assertInvocation("pathParam/a%20b+c/simpleList");
+        assertInvocation("pathParam/a%20b+c/multiValueList/a/b/c/d/e");
         assertInvocation("pathParam/a%20b+c/simpleListMulti/a;m=1/b");
         assertInvocation("pathParam/a%20b+c/encodedList");
         assertInvocation("pathParam/a%20b+c/defaultList");
