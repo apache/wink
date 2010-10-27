@@ -419,7 +419,7 @@ public class AdminServlet extends AbstractRestServlet {
             Marshaller marshaller = JAXBUtils.createMarshaller(resourceCtx);
             marshaller.marshal(jaxbObject, writer);
         } catch (JAXBException e) {
-            throw new ServletException(Messages.getMessage("adminServletFailMarshalObject",
+            throw new ServletException(Messages.getMessage("adminServletFailMarshalObject", //$NON-NLS-1$
                                                            jaxbObject.getClass().getName()), e);
 
         }
@@ -436,7 +436,11 @@ public class AdminServlet extends AbstractRestServlet {
      * @throws IOException
      */
     private void buildAdminHome(HttpServletResponse response) throws IOException {
-        PrintWriter writer = response.getWriter();
+        // Set the status code before writing content to the stream
+        // per the servlet specification.
+        response.setStatus(HttpStatus.BAD_REQUEST.getCode());
+        
+	PrintWriter writer = response.getWriter();
         writer
             .write("<html>\r\n" + "<head>\r\n" //$NON-NLS-1$ //$NON-NLS-2$
                 + "<title>Admin Console</title>\r\n" //$NON-NLS-1$
@@ -462,7 +466,6 @@ public class AdminServlet extends AbstractRestServlet {
                 + "</form>\r\n" //$NON-NLS-1$
                 + "</body>\r\n" //$NON-NLS-1$
                 + "</html>"); //$NON-NLS-1$
-        response.setStatus(HttpStatus.BAD_REQUEST.getCode());
         writer.close();
         return;
     }
