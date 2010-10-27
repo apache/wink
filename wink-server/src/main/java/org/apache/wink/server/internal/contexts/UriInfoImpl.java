@@ -271,7 +271,14 @@ public class UriInfoImpl implements UriInfo {
         MultivaluedMap<String, String> map = queryParameters;
         if (decode) {
             if (decodedQueryParameters == null) {
-                decodedQueryParameters = UriEncoder.decodeMultivaluedMapValues(queryParameters);
+                if (queryParameters.size() == 0) {
+                    /*
+                     * shortcut here if the query parameters don't exist
+                     */
+                    decodedQueryParameters = queryParameters;
+                } else {
+                    decodedQueryParameters = UriEncoder.decodeMultivaluedMapValues(queryParameters);
+                }
             }
             map = decodedQueryParameters;
         }

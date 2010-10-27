@@ -89,7 +89,9 @@ public class ServerMessageContext extends AbstractRuntimeContext implements Mess
         setAttribute(DeploymentConfiguration.class, configuration);  // legacy
         setAttribute(ResourceRegistry.class, configuration.getResourceRegistry());
         setAttribute(ProvidersRegistry.class, configuration.getProvidersRegistry());
-        setAttribute(MediaTypeCharsetAdjuster.class, ServerMediaTypeCharsetAdjuster.getInstance());
+        if (configuration.isDefaultResponseCharset() || configuration.isUseAcceptCharset()) {
+            setAttribute(MediaTypeCharsetAdjuster.class, ServerMediaTypeCharsetAdjuster.getInstance());
+        }
 
         initContexts();
         List<Application> apps = configuration.getApplications();

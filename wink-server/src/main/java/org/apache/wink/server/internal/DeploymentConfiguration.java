@@ -138,6 +138,10 @@ public class DeploymentConfiguration implements WinkConfiguration {
 
     private Set<ObjectFactory<?>>     appObjectFactories;
 
+    private boolean                   isUseAcceptCharset                  = false;
+
+    private boolean                   isDefaultResponseCharset            = false;
+
     /**
      * Makes sure that the object was properly initialized. Should be invoked
      * AFTER all the setters were invoked.
@@ -274,6 +278,10 @@ public class DeploymentConfiguration implements WinkConfiguration {
 
     public void setProperties(Properties properties) {
         this.properties = properties;
+        String val = properties.getProperty(USE_ACCEPT_CHARSET);
+        isUseAcceptCharset = Boolean.valueOf(val).booleanValue();
+        val = properties.getProperty(DEFAULT_RESPONSE_CHARSET);
+        isDefaultResponseCharset = Boolean.valueOf(val).booleanValue();
     }
 
     public ServletConfig getServletConfig() {
@@ -399,11 +407,10 @@ public class DeploymentConfiguration implements WinkConfiguration {
     @SuppressWarnings("unchecked")
     protected void initMediaTypeMapper() {
         if (mediaTypeMapper == null) {
-            mediaTypeMapper = new MediaTypeMapper();
-
             String mediaTypeMapperFactoryClassName =
                 properties.getProperty(MEDIATYPE_MAPPER_FACTORY_CLASS_PROP);
             if (mediaTypeMapperFactoryClassName != null) {
+                mediaTypeMapper = new MediaTypeMapper();
                 try {
                     logger.trace("MediaTypeMappingFactory Class is: {}", //$NON-NLS-1$
                                  mediaTypeMapperFactoryClassName);
@@ -652,12 +659,12 @@ public class DeploymentConfiguration implements WinkConfiguration {
      * @return boolean
      */
     public boolean isDefaultResponseCharset() {
-        String val = properties.getProperty(DEFAULT_RESPONSE_CHARSET);
-        return Boolean.valueOf(val).booleanValue();
+        return isDefaultResponseCharset;
     }
 
     public void setDefaultResponseCharset(boolean val) {
         properties.setProperty(DEFAULT_RESPONSE_CHARSET, Boolean.toString(val));
+        isDefaultResponseCharset = val;
     }
 
     /**
@@ -670,12 +677,12 @@ public class DeploymentConfiguration implements WinkConfiguration {
      * @return
      */
     public boolean isUseAcceptCharset() {
-        String val = properties.getProperty(USE_ACCEPT_CHARSET);
-        return Boolean.valueOf(val).booleanValue();
+        return isUseAcceptCharset;
     }
 
     public void setUseAcceptCharset(boolean val) {
         properties.setProperty(USE_ACCEPT_CHARSET, Boolean.toString(val));
+        isUseAcceptCharset = val;
     }
 
     public void addApplicationObjectFactory(ObjectFactory<?> of) {

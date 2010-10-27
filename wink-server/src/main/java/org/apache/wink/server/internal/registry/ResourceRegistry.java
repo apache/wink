@@ -560,8 +560,8 @@ public class ResourceRegistry {
         if (receivedMediaTypes.size() == 0) {
             return false;
         }
-        List<MediaType> deniableMediaTypes = new ArrayList<MediaType>();
-        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        List<MediaType> deniableMediaTypes = new LinkedList<MediaType>();
+        List<MediaType> acceptableMediaTypes = new LinkedList<MediaType>();
 
         for (MediaType received : receivedMediaTypes) {
             String q = received.getParameters().get("q"); //$NON-NLS-1$
