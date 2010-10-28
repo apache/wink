@@ -634,8 +634,8 @@ JavaBeans Activation Framework (http://java.sun.com/javase/technologies/desktop/
 
 
 --------------------------------------------------------------------------------
-Sun JAXB Reference Implementation Runtime com.sun.xml.bind:jaxb-impl:jar:2.1.4
-JAXB Reference Implementation project (https://jaxb.dev.java.net/) javax.xml.bind:jaxb-api:jar:2.1
+Sun JAXB Reference Implementation Runtime com.sun.xml.bind:jaxb-impl:jar:2.2.1.1
+JAXB Reference Implementation project (https://jaxb.dev.java.net/) javax.xml.bind:jaxb-api:jar:2.2
 Streaming API for XML javax.xml.stream:stax-api:jar:1.0-2:compile
 
 
