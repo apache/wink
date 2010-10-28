@@ -101,6 +101,15 @@
         </dependencySet>
         <dependencySet>
             <includes>
+                <include>org.apache.wink:wink-jackson-provider</include>
+            </includes>
+            <useProjectArtifact>false</useProjectArtifact>
+            <outputDirectory>ext/wink-jackson-provider</outputDirectory>
+            <useStrictFiltering>true</useStrictFiltering>
+            <directoryMode>0755</directoryMode>
+        </dependencySet>
+        <dependencySet>
+            <includes>
                 <include>org.apache.wink:wink-jettison-provider</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
@@ -114,6 +123,24 @@
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
             <outputDirectory>ext/wink-jettison-provider/lib</outputDirectory>
+            <useStrictFiltering>true</useStrictFiltering>
+            <directoryMode>0755</directoryMode>
+        </dependencySet>
+        <dependencySet>
+            <includes>
+                <include>org.apache.wink:wink-json4j</include>
+            </includes>
+            <useProjectArtifact>false</useProjectArtifact>
+            <outputDirectory>ext/wink-json4j/lib</outputDirectory>
+            <useStrictFiltering>true</useStrictFiltering>
+            <directoryMode>0755</directoryMode>
+        </dependencySet>
+        <dependencySet>
+            <includes>
+                <include>org.apache.wink:wink-json4j-provider</include>
+            </includes>
+            <useProjectArtifact>false</useProjectArtifact>
+            <outputDirectory>ext/wink-json4j-provider</outputDirectory>
             <useStrictFiltering>true</useStrictFiltering>
             <directoryMode>0755</directoryMode>
         </dependencySet>

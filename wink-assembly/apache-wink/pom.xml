@@ -75,7 +75,19 @@
                 </dependency>
                 <dependency>
                     <groupId>org.apache.wink</groupId>
+                    <artifactId>wink-jackson-provider</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.wink</groupId>
                     <artifactId>wink-jettison-provider</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.wink</groupId>
+                    <artifactId>wink-json4j</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.wink</groupId>
+                    <artifactId>wink-json4j-provider</artifactId>
                 </dependency>
                 <dependency>
                     <groupId>org.apache.wink</groupId>
