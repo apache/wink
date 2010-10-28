@@ -247,7 +247,7 @@ Copyright (c) 2002 JSON.org
     SOFTWARE.
 
 --------------------------------------------------------------------------------
-JSR 311 API (https://jsr311.dev.java.net/) javax.ws.rs:jsr311-api:jar:1.1
+JSR 311 API (https://jsr311.dev.java.net/) javax.ws.rs:jsr311-api:jar:1.1.1
 JavaBeans Activation Framework (http://java.sun.com/javase/technologies/desktop/javabeans/jaf/) javax.activation:activation:1.1
 
 
@@ -1392,9 +1392,9 @@ Streaming API for XML javax.xml.stream:stax-api:jar:1.0-2:compile
 
 
 --------------------------------------------------------------------------------
-SLF4J (http://www.slf4j.org/) org.slf4j:slf4j-api:jar:1.5.11
-SLF4J (http://www.slf4j.org/) org.slf4j:slf4j-simple:jar:1.5.11
-SLF4J (http://www.slf4j.org/) org.slf4j:jcl-over-slf4j:jar:1.5.11
+SLF4J (http://www.slf4j.org/) org.slf4j:slf4j-api:jar:1.6.1
+SLF4J (http://www.slf4j.org/) org.slf4j:slf4j-simple:jar:1.6.1
+SLF4J (http://www.slf4j.org/) org.slf4j:jcl-over-slf4j:jar:1.6.1
 
      Copyright (c) 2004-2008 QOS.ch
      All rights reserved.
