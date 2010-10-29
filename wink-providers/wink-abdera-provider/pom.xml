@@ -75,6 +75,7 @@
         <dependency>
             <groupId>org.apache.wink</groupId>
             <artifactId>wink-component-test-support</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.wink</groupId>
@@ -89,6 +90,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>

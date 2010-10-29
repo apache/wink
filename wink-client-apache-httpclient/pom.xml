@@ -37,13 +37,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.0.1</version>
             <exclusions>
                 <exclusion>
                     <groupId>commons-logging</groupId>
@@ -66,16 +61,14 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>woodstox</groupId>
+            <groupId>org.codehaus.woodstox</groupId>
             <artifactId>wstx-asl</artifactId>
-            <version>3.2.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-             <groupId>org.jmock</groupId>
-             <artifactId>jmock-junit3</artifactId>
-             <version>2.5.1</version>
-             <scope>test</scope>
+            <groupId>org.jmock</groupId>
+            <artifactId>jmock-junit3</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
