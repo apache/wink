@@ -21,12 +21,15 @@ package org.apache.wink.itest.securitycontext;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 
 import org.apache.wink.itest.securitycontext.xml.SecurityContextInfo;
 
 @Path("/context/securitycontext/field")
+@Produces(MediaType.APPLICATION_XML)
 public class SecurityContextFieldResource {
 
     @Context
