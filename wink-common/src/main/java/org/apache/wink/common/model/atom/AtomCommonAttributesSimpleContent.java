@@ -75,7 +75,7 @@ public class AtomCommonAttributesSimpleContent {
     @XmlAttribute(namespace = "http://www.w3.org/XML/1998/namespace")
     protected String           lang;
     @XmlAnyAttribute
-    private Map<QName, String> otherAttributes = new HashMap<QName, String>();
+    private Map<QName, String> otherAttributes;
 
     public AtomCommonAttributesSimpleContent() {
     }
@@ -153,6 +153,9 @@ public class AtomCommonAttributesSimpleContent {
      * @return always non-null
      */
     public Map<QName, String> getOtherAttributes() {
+        if (otherAttributes == null) {
+            otherAttributes = new HashMap<QName, String>();
+        }
         return otherAttributes;
     }
 

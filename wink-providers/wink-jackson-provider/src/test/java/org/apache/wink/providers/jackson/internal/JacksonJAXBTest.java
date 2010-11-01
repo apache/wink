@@ -220,18 +220,18 @@ public class JacksonJAXBTest extends MockServletInvocationTest {
                                                             + "</entry>\n";
 
     private static final String ENTRY_STR_JSON_POST =
-                                                        "{" + "\"id\":\"top ten validators\",\"updated\":@TIME_JSON@,\"title\":{\"lang\":\"en\",\"otherAttributes\":{},\"any\":[\"top ten validators\"],\"type\":\"text\"}"
+                                                        "{" + "\"id\":\"top ten validators\",\"updated\":@TIME_JSON@,\"title\":{\"lang\":\"en\",\"any\":[\"top ten validators\"],\"type\":\"text\"}"
                                                             + "}";
 
     private static final String ENTRY_STR_JSON      =
-                                                        "{\"base\":\"http://b216:8080/reporting/reports\"," + "\"otherAttributes\":{},"
+                                                        "{\"base\":\"http://b216:8080/reporting/reports\"," + ""
                                                             + "\"id\":\"toptenvalidators\","
                                                             + "\"updated\":1251743402000,"
-                                                            + "\"title\":{\"lang\":\"en\",\"otherAttributes\":{},\"type\":\"text\"},"
+                                                            + "\"title\":{\"lang\":\"en\",\"type\":\"text\"},"
                                                             + "\"published\":1251743402000,"
-                                                            + "\"link\":[{\"otherAttributes\":{},\"rel\":\"alternate\",\"type\":\"application/json\",\"href\":\"http://b216:8080/reporting/reports/toptenvalidators?alt=application/json\"}],"
+                                                            + "\"link\":[{\"rel\":\"alternate\",\"type\":\"application/json\",\"href\":\"http://b216:8080/reporting/reports/toptenvalidators?alt=application/json\"}],"
                                                             + "\"author\":[{\"name\":\"admin\"}],"
-                                                            + "\"category\":[{\"otherAttributes\":{},\"term\":\"urn:com:systinet:reporting:kind:definition\",\"scheme\":\"urn:com:systinet:reporting:kind\",\"label\":\"report definition\"}]"
+                                                            + "\"category\":[{\"term\":\"urn:com:systinet:reporting:kind:definition\",\"scheme\":\"urn:com:systinet:reporting:kind\",\"label\":\"report definition\"}]"
                                                             + "}";
 
     private static final String ENTRY_STR_JSON_GET  =

@@ -72,24 +72,24 @@ public class JAXBCollectionJSONTest extends MockServletInvocationTest {
                                                             + "</entry>";
 
     private static final String ENTRY_STR_JSON_1    =
-                                                        "{\"base\":\"http://b216:8080/reporting/reports\"," + "\"otherAttributes\":{},"
+                                                        "{\"base\":\"http://b216:8080/reporting/reports\"," + ""
                                                             + "\"id\":\"toptenvalidators\","
                                                             + "\"updated\":1251743402000,"
-                                                            + "\"title\":{\"lang\":\"en\",\"otherAttributes\":{},\"type\":\"text\"},"
+                                                            + "\"title\":{\"lang\":\"en\",\"type\":\"text\"},"
                                                             + "\"published\":1251743402000,"
-                                                            + "\"link\":[{\"otherAttributes\":{},\"rel\":\"alternate\",\"type\":\"application/json\",\"href\":\"http://b216:8080/reporting/reports/toptenvalidators?alt=application/json\"}],"
+                                                            + "\"link\":[{\"rel\":\"alternate\",\"type\":\"application/json\",\"href\":\"http://b216:8080/reporting/reports/toptenvalidators?alt=application/json\"}],"
                                                             + "\"author\":[{\"name\":\"admin 1\"}],"
-                                                            + "\"category\":[{\"otherAttributes\":{},\"term\":\"urn:com:systinet:reporting:kind:definition\",\"scheme\":\"urn:com:systinet:reporting:kind\",\"label\":\"report definition\"}]"
+                                                            + "\"category\":[{\"term\":\"urn:com:systinet:reporting:kind:definition\",\"scheme\":\"urn:com:systinet:reporting:kind\",\"label\":\"report definition\"}]"
                                                             + "}";
     private static final String ENTRY_STR_JSON_2    =
-                                                        "{\"base\":\"http://b216:8080/reporting/reports\"," + "\"otherAttributes\":{},"
+                                                        "{\"base\":\"http://b216:8080/reporting/reports\"," + ""
                                                             + "\"id\":\"toptenvalidators\","
                                                             + "\"updated\":1251743402000,"
-                                                            + "\"title\":{\"lang\":\"en\",\"otherAttributes\":{},\"type\":\"text\"},"
+                                                            + "\"title\":{\"lang\":\"en\",\"type\":\"text\"},"
                                                             + "\"published\":1251743402000,"
-                                                            + "\"link\":[{\"otherAttributes\":{},\"rel\":\"alternate\",\"type\":\"application/json\",\"href\":\"http://b216:8080/reporting/reports/toptenvalidators?alt=application/json\"}],"
+                                                            + "\"link\":[{\"rel\":\"alternate\",\"type\":\"application/json\",\"href\":\"http://b216:8080/reporting/reports/toptenvalidators?alt=application/json\"}],"
                                                             + "\"author\":[{\"name\":\"admin 2\"}],"
-                                                            + "\"category\":[{\"otherAttributes\":{},\"term\":\"urn:com:systinet:reporting:kind:definition\",\"scheme\":\"urn:com:systinet:reporting:kind\",\"label\":\"report definition\"}]"
+                                                            + "\"category\":[{\"term\":\"urn:com:systinet:reporting:kind:definition\",\"scheme\":\"urn:com:systinet:reporting:kind\",\"label\":\"report definition\"}]"
                                                             + "}";
 
     private static final String ENTRY_STR_JSON_GET  =
