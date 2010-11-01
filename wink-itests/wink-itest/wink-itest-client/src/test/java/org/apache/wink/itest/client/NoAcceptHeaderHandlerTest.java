@@ -145,7 +145,7 @@ public class NoAcceptHeaderHandlerTest extends TestCase {
         } catch (RuntimeException e) {
             assertEquals(e.getMessage(),
                          String
-                             .format("No javax.ws.rs.ext.MessageBodyReader found for type class %s and media type %s.  Verify that all entity providers are correctly registered.",
+                             .format("A javax.ws.rs.ext.MessageBodyReader implementation was not found for class %s type and %s media type.  Verify that all entity providers are correctly registered.  Add a custom javax.ws.rs.ext.MessageBodyReader provider to handle the type and media type if a JAX-RS entity provider does not currently exist.",
                                      Echo.class.getName(),
                                      MediaType.TEXT_PLAIN));
         }
@@ -166,7 +166,7 @@ public class NoAcceptHeaderHandlerTest extends TestCase {
             e.printStackTrace();
             assertEquals(e.getMessage(),
                          String
-                             .format("No javax.ws.rs.ext.MessageBodyReader found for type class %s and media type %s.  Verify that all entity providers are correctly registered.",
+                             .format("A javax.ws.rs.ext.MessageBodyReader implementation was not found for class %s type and %s media type.  Verify that all entity providers are correctly registered.  Add a custom javax.ws.rs.ext.MessageBodyReader provider to handle the type and media type if a JAX-RS entity provider does not currently exist.",
                                      JSONObject.class.getName(),
                                      MediaType.TEXT_PLAIN));
         }
