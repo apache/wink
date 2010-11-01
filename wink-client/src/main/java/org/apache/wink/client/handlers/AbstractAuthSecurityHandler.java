@@ -35,6 +35,8 @@ public class AbstractAuthSecurityHandler {
     
     protected volatile String  handlerUsername = null;
     protected volatile String  handlerPassword = null;
+    
+    protected volatile String handlerEncodedCredentials = null;
 
     public AbstractAuthSecurityHandler() {
         super();
@@ -53,6 +55,7 @@ public class AbstractAuthSecurityHandler {
     public void setUserName(String aUserName) {
         logger.trace("Setting the username to {}", aUserName); //$NON-NLS-1$
         this.handlerUsername = aUserName;
+        this.handlerEncodedCredentials = null;
     }
 
     /**
@@ -63,6 +66,7 @@ public class AbstractAuthSecurityHandler {
     public void setPassword(String aPassword) {
         logger.trace("Setting the password"); //$NON-NLS-1$
         this.handlerPassword = aPassword;
+        this.handlerEncodedCredentials = null;
     }
     
     protected static String getEncodedString(String userid, String password) {

@@ -80,9 +80,12 @@ public class ProxyAuthSecurityHandler extends AbstractAuthSecurityHandler implem
                 logger.trace("userid and password set so setting Proxy-Authorization header"); //$NON-NLS-1$
                 // we have a user credential
                 request.getHeaders().putSingle("Proxy-Connection", "Keep-Alive"); //$NON-NLS-1$ $NON-NLS-2$
+                if (handlerEncodedCredentials == null) {
+                    handlerEncodedCredentials = getEncodedString(handlerUsername, handlerPassword);
+                }
                 request
                     .getHeaders()
-                    .putSingle("Proxy-Authorization", getEncodedString(handlerUsername, handlerPassword)); //$NON-NLS-1$
+                    .putSingle("Proxy-Authorization", handlerEncodedCredentials); //$NON-NLS-1$
                 logger.trace("Issuing request again with Proxy-Authorization header"); //$NON-NLS-1$
                 response = context.doChain(request);
                 if (response.getStatusCode() == PROXY_AUTH_REQ_CODE) {

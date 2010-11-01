@@ -74,8 +74,11 @@ public class BasicAuthSecurityHandler extends AbstractAuthSecurityHandler implem
             if (!(handlerUsername == null || handlerUsername.equals("") || handlerPassword == null || handlerPassword.equals(""))) { //$NON-NLS-1$ //$NON-NLS-2$
                 logger.trace("userid and password set so setting Authorization header"); //$NON-NLS-1$
                 // we have a user credential
+                if (handlerEncodedCredentials == null) {
+                    handlerEncodedCredentials = getEncodedString(handlerUsername, handlerPassword);
+                }
                 request.getHeaders()
-                    .putSingle("Authorization", getEncodedString(handlerUsername, handlerPassword)); //$NON-NLS-1$
+                    .putSingle("Authorization", handlerEncodedCredentials); //$NON-NLS-1$
                 logger.trace("Issuing request again with Authorization header"); //$NON-NLS-1$
                 response = context.doChain(request);
                 if (response.getStatusCode() == UNAUTHORIZED) {
