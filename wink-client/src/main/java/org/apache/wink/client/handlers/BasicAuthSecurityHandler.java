@@ -45,14 +45,21 @@ import org.slf4j.LoggerFactory;
  */
 public class BasicAuthSecurityHandler extends AbstractAuthSecurityHandler implements ClientHandler {
 
-    private static Logger   logger          =
-        LoggerFactory
-        .getLogger(BasicAuthSecurityHandler.class);
+    private static Logger    logger       = LoggerFactory.getLogger(BasicAuthSecurityHandler.class);
 
     private static final int UNAUTHORIZED = HttpStatus.UNAUTHORIZED.getCode();
-    
+
+    public BasicAuthSecurityHandler() {
+        /* do nothing */
+    }
+
+    public BasicAuthSecurityHandler(final String username, final String password) {
+        super(username, password);
+    }
+
     /**
-     * Performs basic HTTP authentication and proxy authentication, if necessary.
+     * Performs basic HTTP authentication and proxy authentication, if
+     * necessary.
      * 
      * @param client request object
      * @param handler context object
@@ -63,18 +70,19 @@ public class BasicAuthSecurityHandler extends AbstractAuthSecurityHandler implem
         logger.trace("Entering BasicAuthSecurityHandler.doChain()"); //$NON-NLS-1$
         ClientResponse response = context.doChain(request);
         if (response.getStatusCode() == UNAUTHORIZED) {
-            
+
             if (!(handlerUsername == null || handlerUsername.equals("") || handlerPassword == null || handlerPassword.equals(""))) { //$NON-NLS-1$ //$NON-NLS-2$
                 logger.trace("userid and password set so setting Authorization header"); //$NON-NLS-1$
                 // we have a user credential
-                request.getHeaders().putSingle("Authorization", getEncodedString(handlerUsername, handlerPassword)); //$NON-NLS-1$
+                request.getHeaders()
+                    .putSingle("Authorization", getEncodedString(handlerUsername, handlerPassword)); //$NON-NLS-1$
                 logger.trace("Issuing request again with Authorization header"); //$NON-NLS-1$
                 response = context.doChain(request);
                 if (response.getStatusCode() == UNAUTHORIZED) {
                     logger
-                    .trace("After sending request with Authorization header, still got " + UNAUTHORIZED + " response"); //$NON-NLS-1$
+                        .trace("After sending request with Authorization header, still got " + UNAUTHORIZED + " response"); //$NON-NLS-1$
                     throw new ClientAuthenticationException(Messages
-                            .getMessage("serviceFailedToAuthenticateUser", handlerUsername)); //$NON-NLS-1$
+                        .getMessage("serviceFailedToAuthenticateUser", handlerUsername)); //$NON-NLS-1$
                 } else {
                     logger.trace("Got a non-" + UNAUTHORIZED + " response, so returning response"); //$NON-NLS-1$
                     return response;
@@ -83,14 +91,14 @@ public class BasicAuthSecurityHandler extends AbstractAuthSecurityHandler implem
                 logger.trace("user and/or password were not set so throwing exception"); //$NON-NLS-1$
                 // no user credential available
                 throw new ClientAuthenticationException(Messages
-                        .getMessage("missingClientAuthenticationCredentialForUser", handlerUsername)); //$NON-NLS-1$
+                    .getMessage("missingClientAuthenticationCredentialForUser", handlerUsername)); //$NON-NLS-1$
             }
         } else {
-            logger.trace("Status code was not " + UNAUTHORIZED + " so no need to re-issue request."); //$NON-NLS-1$
+            logger
+                .trace("Status code was not " + UNAUTHORIZED + " so no need to re-issue request."); //$NON-NLS-1$
             return response;
         }
 
     }
 
 }
-

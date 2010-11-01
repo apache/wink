@@ -40,6 +40,11 @@ public class AbstractAuthSecurityHandler {
         super();
     }
     
+    public AbstractAuthSecurityHandler(final String username, final String password) {
+        setUserName(username);
+        setPassword(password);
+    }
+    
     /**
      * Sets the username to use.
      * 
