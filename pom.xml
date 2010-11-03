@@ -42,6 +42,7 @@
         <module>wink-server</module>
         <module>wink-client</module>
         <module>wink-client-apache-httpclient</module>
+        <module>wink-client-asynchttpclient</module>
         <module>wink-spring-support</module>
         <module>wink-webdav</module>
 	    <module>wink-json4j</module>
@@ -486,6 +487,11 @@
             <dependency>
                 <groupId>org.apache.wink</groupId>
                 <artifactId>wink-client-apache-httpclient</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.wink</groupId>
+                <artifactId>wink-client-asynchttpclient</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
