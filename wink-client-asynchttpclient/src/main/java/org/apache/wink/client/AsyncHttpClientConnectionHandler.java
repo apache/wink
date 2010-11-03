@@ -18,7 +18,7 @@
  *
  *******************************************************************************/
 
-package org.sonatype.wink.client;
+package org.apache.wink.client;
 
 import com.ning.http.client.AsyncCompletionHandlerBase;
 import com.ning.http.client.AsyncHttpClient;

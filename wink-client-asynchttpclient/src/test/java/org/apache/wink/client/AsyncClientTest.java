@@ -20,7 +20,7 @@
 
 package org.apache.wink.client;
 
-import org.sonatype.wink.client.AsyncHttpClientConfiguration;
+import org.apache.wink.client.AsyncHttpClientConfiguration;
 
 import javax.ws.rs.core.Application;
 import java.util.HashSet;

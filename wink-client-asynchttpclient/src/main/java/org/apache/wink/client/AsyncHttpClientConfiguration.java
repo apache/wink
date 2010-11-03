@@ -18,7 +18,7 @@
  *
  *******************************************************************************/
 
-package org.sonatype.wink.client;
+package org.apache.wink.client;
 
 import com.ning.http.client.AsyncHttpClient;
 import org.apache.wink.client.ClientConfig;
