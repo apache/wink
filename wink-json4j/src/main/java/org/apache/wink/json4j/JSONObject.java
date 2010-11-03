@@ -1365,7 +1365,7 @@ public class JSONObject extends HashMap  implements JSONArtifact {
      * @return true if the key is not in the map or if the value referenced by the key is null.
      */
     public boolean isNull(String key) {
-        if (this.opt(key) == null) {
+        if ( (this.opt(key) == null) || (NULL == this.opt(key)) ) {
             return true;
         }
         return false;

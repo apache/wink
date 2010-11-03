@@ -23,6 +23,8 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import java.io.*;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.HashMap;
 import java.util.Date;
@@ -126,22 +128,29 @@ public class JSONObjectTest extends TestCase {
      */
     public void test_newFromMap() {
         JSONObject jObject = null;
+        JSONArray jArr = null;
         Exception ex = null;
         HashMap map = new HashMap();
         map.put("string", "This is a string");
         map.put("null", null);
         map.put("integer", new Integer(1));
         map.put("bool", new Boolean(true));
+        map.put("strArr", new String[]{"first", "second", "third"});
 
         // Load a JSON object from a map with JSONable values.
         try {
             jObject = new JSONObject(map);
+            jArr = (JSONArray)jObject.get("strArr");
         } catch (Exception ex1) {
             ex = ex1;
             ex.printStackTrace();
         }
         assertTrue(jObject != null);
-        assertTrue(jObject.length() == 4);
+        assertTrue(jObject.length() == 5);
+        assertTrue("first".equals((String)jArr.get(0)));
+        assertTrue("second".equals((String)jArr.get(1)));
+        assertTrue("third".equals((String)jArr.get(2)));
+
         assertTrue(ex == null);
     }
 
@@ -1500,6 +1509,22 @@ public class JSONObjectTest extends TestCase {
         }
         assertTrue(ex1 != null);
     }
+
+  
+    public void testIsNull() {
+        Map jsonMap = new LinkedHashMap(1);
+        jsonMap.put("key1", null);
+        jsonMap.put("key2", JSONObject.NULL);
+        jsonMap.put("key3", "NOT NULL");
+        
+        
+        JSONObject json = new JSONObject(jsonMap);
+        
+        assertTrue(json.isNull("key1"));
+        assertTrue(json.isNull("key2"));
+        assertFalse(json.isNull("key3"));
+    }
+    
 
 
     /*****************************************************************/

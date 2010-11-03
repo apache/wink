@@ -67,7 +67,10 @@ public class BeanSerializer {
                 ja = new JSONObject((Map)obj);
             } else if (Collection.class.isAssignableFrom(clazz)) {
                 ja = new JSONArray((Collection)obj);
-            } else {
+            } else if (clazz.isArray()) {
+                ja = new JSONArray((Object[])obj);
+            } 
+            else {
                 //TODO:  Bean introspection time.
                 ja = introspectBean(obj,includeSuperclass, new ArrayList());
             }
