@@ -49,27 +49,30 @@ public class AcceptHeaderHandler implements ClientHandler {
                 request.getAttributes().get(ClientRequestImpl.RESPONSE_ENTITY_CLASS_TYPE);
             if (responseEntityClassType != null) {
                 Class<?> classType = (Class<?>)responseEntityClassType;
-                logger.trace("Response entity class is: {}", classType); //$NON-NLS-1$
-                Set<MediaType> mediaTypes =
-                    request.getAttribute(ProvidersRegistry.class)
-                        .getMessageBodyReaderMediaTypesLimitByIsReadable(classType,
-                                                                         RuntimeContextTLS
-                                                                             .getRuntimeContext());
-                logger.trace("Found media types: {}", mediaTypes); //$NON-NLS-1$
-                StringBuffer acceptHeader = new StringBuffer();
-                boolean isFirst = true;
-                for (MediaType mt : mediaTypes) {
-                    if (!isFirst) {
-                        acceptHeader.append(","); //$NON-NLS-1$
+                if (!classType.isAssignableFrom(ClientResponse.class)) {
+                    logger.trace("Response entity class is: {}", classType); //$NON-NLS-1$
+                    Set<MediaType> mediaTypes =
+                        request
+                            .getAttribute(ProvidersRegistry.class)
+                            .getMessageBodyReaderMediaTypesLimitByIsReadable(classType,
+                                                                             RuntimeContextTLS
+                                                                                 .getRuntimeContext());
+                    logger.trace("Found media types: {}", mediaTypes); //$NON-NLS-1$
+                    StringBuffer acceptHeader = new StringBuffer();
+                    boolean isFirst = true;
+                    for (MediaType mt : mediaTypes) {
+                        if (!isFirst) {
+                            acceptHeader.append(","); //$NON-NLS-1$
+                        }
+                        acceptHeader.append(mt.toString());
+                        isFirst = false;
                     }
-                    acceptHeader.append(mt.toString());
-                    isFirst = false;
-                }
-                if (acceptHeader.length() > 0) {
-                    String acceptValue = acceptHeader.toString();
-                    requestHeaders.add(HttpHeaders.ACCEPT, acceptValue);
-                    logger.info(Messages.getMessage("clientAcceptHeaderHandlerSetAccept", //$NON-NLS-1$
-                                acceptValue));
+                    if (acceptHeader.length() > 0) {
+                        String acceptValue = acceptHeader.toString();
+                        requestHeaders.add(HttpHeaders.ACCEPT, acceptValue);
+                        logger.info(Messages.getMessage("clientAcceptHeaderHandlerSetAccept", //$NON-NLS-1$
+                                                        acceptValue));
+                    }
                 }
             }
         }
