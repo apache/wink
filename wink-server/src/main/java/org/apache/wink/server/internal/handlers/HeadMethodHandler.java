@@ -66,6 +66,8 @@ public class HeadMethodHandler implements RequestHandler, ResponseHandler {
             HttpServletResponse originalResponse = context.getAttribute(HttpServletResponse.class);
             NoBodyResponse noBodyResponse = new NoBodyResponse(originalResponse);
             context.setAttribute(HttpServletResponse.class, noBodyResponse);
+            context.setAttribute(HttpServletResponseWrapper.class, noBodyResponse);
+            context.setAttribute(NoBodyResponse.class, noBodyResponse);
             context.getAttributes().put(ORIGINAL_RESPONSE_ATT_NAME, originalResponse);
             chain.doChain(context);
         }
@@ -77,7 +79,8 @@ public class HeadMethodHandler implements RequestHandler, ResponseHandler {
         if (originalResponse != null) {
             HttpServletResponse response = context.getAttribute(HttpServletResponse.class);
             response.flushBuffer();
-            response.setContentLength(((NoBodyResponse)response).getContentLengthValue());
+            NoBodyResponse noBodyResponse = context.getAttribute(NoBodyResponse.class);
+            response.setContentLength(noBodyResponse.getContentLengthValue());
             // set the original response on the context
             context.setAttribute(HttpServletResponse.class, originalResponse);
         }
