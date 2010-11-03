@@ -61,8 +61,9 @@ public abstract class ClientTestSupport
     }
 
     @Override
-    public void tearDown() {
+    public void tearDown() throws Exception {
         RuntimeContextTLS.setRuntimeContext(null);
+        super.tearDown();
     }
 
     public static class TestGenerics<T> {
