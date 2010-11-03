@@ -153,8 +153,6 @@
                             <!--
                                 !org.apache.wink.server.internal.*,
                             -->
-                            'META-INF',
-                            'META-INF.server',
                             org.apache.wink.server.*
                         </Export-Package>
                     </instructions>
