@@ -101,6 +101,16 @@ public class WADLGenerator {
     /* package */Resource buildResource(ClassMetadata metadata) {
         Resource r = new Resource();
 
+        if (metadata != null) {
+            Class<?> resClass = metadata.getResourceClass();
+            if (resClass != null) {
+                WADLDoc d = resClass.getAnnotation(WADLDoc.class);
+                if (d != null) {
+                    r.getDoc().add(getDocument(d));
+                }
+            }
+        }
+
         /* set the path */
         String path = metadata.getPath();
         UriTemplateProcessor processor = JaxRsUriTemplateProcessor.newNormalizedInstance(path);
@@ -311,6 +321,17 @@ public class WADLGenerator {
             for (MethodMetadata methodMeta : methodMetadata) {
                 Resource subRes = new Resource();
                 subRes.setPath(methodMeta.getPath());
+
+                if (methodMeta != null) {
+                    java.lang.reflect.Method reflMethod = methodMeta.getReflectionMethod();
+                    if (reflMethod != null) {
+                        WADLDoc d = reflMethod.getAnnotation(WADLDoc.class);
+                        if (d != null) {
+                            subRes.getDoc().add(getDocument(d));
+                        }
+                    }
+                }
+
                 methodOrSubresource.add(subRes);
 
                 /* also scan for all the path and matrix parameters */
@@ -398,6 +419,15 @@ public class WADLGenerator {
     /* package */Method buildMethod(ClassMetadata classMetadata, MethodMetadata metadata) {
         Method m = new Method();
         m.setName(metadata.getHttpMethod());
+
+        java.lang.reflect.Method reflMethod = metadata.getReflectionMethod();
+        if (reflMethod != null) {
+            WADLDoc d = reflMethod.getAnnotation(WADLDoc.class);
+            if (d != null) {
+                m.getDoc().add(getDocument(d));
+            }
+        }
+
         Request r = buildRequest(classMetadata, metadata);
         if (r != null) {
             m.setRequest(r);
@@ -412,6 +442,7 @@ public class WADLGenerator {
 
     /* package */Request buildRequest(ClassMetadata classMetadata, MethodMetadata metadata) {
         Request r = null;
+
         List<Injectable> params = metadata.getFormalParameters();
         if (params != null && params.size() > 0) {
             if (r == null) {
@@ -452,6 +483,17 @@ public class WADLGenerator {
                         break;
                     case ENTITY:
                         hasValidParams = true;
+
+                        Annotation[] anns = p.getAnnotations();
+                        if (anns != null && anns.length > 0) {
+                            for (Annotation a : anns) {
+                                if (WADLDoc.class.equals(a.annotationType())) {
+                                    WADLDoc d = (WADLDoc)a;
+                                    r.getDoc().add(getDocument(d));
+                                }
+                            }
+                        }
+
                         /* need to build the representation */
                         Set<Representation> representations =
                             buildIncomingRepresentation(classMetadata, metadata, p);
@@ -578,6 +620,11 @@ public class WADLGenerator {
             if (DefaultValue.class.equals(a.annotationType())) {
                 DefaultValue paramAnn = (DefaultValue)a;
                 p.setDefault(paramAnn.value());
+            }
+
+            if (WADLDoc.class.equals(a.annotationType())) {
+                WADLDoc d = (WADLDoc)a;
+                p.getDoc().add(getDocument(d));
             }
         }
 
@@ -716,6 +763,12 @@ public class WADLGenerator {
         }
 
         return reps;
+    }
+
+    /* package */Doc getDocument(WADLDoc desc) {
+        Doc d = new Doc();
+        d.setTitle(desc.value());
+        return d;
     }
 
     /*

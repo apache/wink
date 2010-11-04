@@ -22,6 +22,7 @@ package org.apache.wink.common.model.wadl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -77,15 +78,19 @@ public class WADLGeneratorTest {
 
     @Path("resource1/{pp}")
     @Consumes(value = {MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
+    @WADLDoc("this is resource1")
     static class Resource1 {
 
         @GET
-        public String hello(String abcd,
-                            @QueryParam("q2") String q,
+        @WADLDoc("this is the hello method")
+        public String hello(@WADLDoc("request doc") String abcd,
+                            @WADLDoc("q2 parameter doc") @QueryParam("q2") String q,
                             @QueryParam("q3") int q2,
-                            @HeaderParam("h1234") String h1, @PathParam("pp") String somePath) {
+                            @HeaderParam("h1234") String h1,
+                            @PathParam("pp") String somePath) {
             return null;
         }
+
     }
 
     @Path("resource2")
@@ -195,15 +200,18 @@ public class WADLGeneratorTest {
 
         mockContext.checking(new Expectations() {
             {
+                oneOf(metadata).getResourceClass();
+                will(returnValue(null));
+
                 oneOf(metadata).getPath();
                 will(returnValue("myPath"));
 
                 oneOf(metadata).getResourceMethods();
                 will(returnValue(null));
-                
+
                 oneOf(metadata).getInjectableFields();
                 will(returnValue(null));
-                
+
                 oneOf(metadata).getSubResourceMethods();
                 will(returnValue(null));
 
@@ -240,6 +248,9 @@ public class WADLGeneratorTest {
 
         mockContext.checking(new Expectations() {
             {
+                oneOf(metadata).getResourceClass();
+                will(returnValue(BasicResourceWithVoidReturn.class));
+
                 oneOf(metadata).getPath();
                 will(returnValue("myResourcePath"));
 
@@ -255,12 +266,12 @@ public class WADLGeneratorTest {
                 oneOf(methodMeta).getProduces();
                 will(returnValue(Collections.emptySet()));
 
-                oneOf(methodMeta).getReflectionMethod();
+                exactly(2).of(methodMeta).getReflectionMethod();
                 will(returnValue(method));
-                
+
                 oneOf(methodMeta).getFormalParameters();
                 will(returnValue(null));
-                
+
                 oneOf(metadata).getInjectableFields();
                 will(returnValue(null));
 
@@ -323,7 +334,7 @@ public class WADLGeneratorTest {
                 oneOf(metadata).getProduces();
                 will(returnValue(Collections.emptySet()));
 
-                oneOf(metadata).getReflectionMethod();
+                exactly(2).of(metadata).getReflectionMethod();
                 will(returnValue(method));
             }
         });
@@ -382,5 +393,35 @@ public class WADLGeneratorTest {
         Application app = generator.generate("", classes);
         Assert.assertNotNull(app);
         marshalIt(app);
+    }
+
+    @Test
+    public void testWADLDocResource1() throws Exception {
+        WADLGenerator generator = new WADLGenerator();
+        Set<Class<?>> classes = new HashSet<Class<?>>();
+        classes.add(Resource1.class);
+        Application app = generator.generate("", classes);
+        Resource res = app.getResources().get(0).getResource().get(0);
+        assertEquals(1, res.getDoc().size());
+        assertEquals("this is resource1", res.getDoc().get(0).getTitle());
+        Method m = (Method)res.getMethodOrResource().get(0);
+        assertEquals(1, m.getDoc().size());
+        assertEquals("this is the hello method", m.getDoc().get(0).getTitle());
+
+        assertEquals(1, m.getRequest().getDoc().size());
+        assertEquals("request doc", m.getRequest().getDoc().get(0).getTitle());
+
+        boolean isFound = false;
+        List<Param> params = m.getRequest().getParam();
+        for (Param p : params) {
+            if (p.getName().equals("q2")) {
+                isFound = true;
+                assertEquals(1, p.getDoc().size());
+                assertEquals("q2 parameter doc", p.getDoc().get(0).getTitle());
+            } else {
+                assertEquals(0, p.getDoc().size());
+            }
+        }
+        assertTrue(isFound);
     }
 }
