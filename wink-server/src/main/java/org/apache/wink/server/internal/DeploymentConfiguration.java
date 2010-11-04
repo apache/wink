@@ -519,7 +519,21 @@ public class DeploymentConfiguration implements WinkConfiguration {
         handlersChain.addHandler(createHandler(Requests.class));
         handlersChain.addHandler(createHandler(ResourceInvocation.class));
         handlersChain.addHandler(createHandler(SearchResultHandler.class));
-        handlersChain.addHandler(createHandler(OptionsMethodHandler.class));
+        String optionsHandler =
+            properties.getProperty("org.apache.wink.server.options.handler",
+                                   OptionsMethodHandler.class.getName());
+        if ("none".equals(optionsHandler)) {
+            optionsHandler = OptionsMethodHandler.class.getName();
+        }
+        logger.trace("org.apache.wink.server.options.handler value is {}", optionsHandler);
+        try {
+            handlersChain.addHandler(createHandler((Class<? extends RequestHandler>)Class
+                .forName(optionsHandler)));
+        } catch (Exception e) {
+            logger.trace("Could not load handlers class so adding default");
+            handlersChain.addHandler(createHandler(OptionsMethodHandler.class));
+        }
+
         handlersChain.addHandler(createHandler(HeadMethodHandler.class));
         handlersChain.addHandler(createHandler(FindRootResourceHandler.class));
         handlersChain.addHandler(createHandler(FindResourceMethodHandler.class));
