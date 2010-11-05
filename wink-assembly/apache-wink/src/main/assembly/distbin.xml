@@ -101,15 +101,6 @@
         </dependencySet>
         <dependencySet>
             <includes>
-                <include>org.apache.wink:wink-client-asynchttpclient</include>
-            </includes>
-            <useProjectArtifact>false</useProjectArtifact>
-            <outputDirectory>ext/wink-client-asynchttpclient/lib</outputDirectory>
-            <useStrictFiltering>true</useStrictFiltering>
-            <directoryMode>0755</directoryMode>
-        </dependencySet>
-        <dependencySet>
-            <includes>
                 <include>org.apache.wink:wink-jackson-provider</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
