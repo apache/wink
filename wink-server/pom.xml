@@ -28,7 +28,7 @@
     <parent>
         <groupId>org.apache.wink</groupId>
         <artifactId>wink</artifactId>
-        <version>1.1.2-incubating-SNAPSHOT</version>
+        <version>1.1.2-incubating</version>
     </parent>
     <dependencies>
         <!-- wink-component-test-support must be first due to SLF4J bridge it provides, so that mvn eclipse:eclipse produces useable .classpath -->
