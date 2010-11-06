@@ -53,9 +53,9 @@
         <module>wink-assembly</module>
     </modules>
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/wink/trunk</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/wink/trunk</developerConnection>
-        <url>http://svn.apache.org/viewvc/incubator/wink/trunk</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/wink/branches/wink-1.1.2-incubating</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/wink/branches/wink-1.1.2-incubating</developerConnection>
+        <url>http://svn.apache.org/viewvc/incubator/wink/branches/wink-1.1.2-incubating</url>
     </scm>
     <build>
         <plugins>

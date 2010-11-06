@@ -35,9 +35,9 @@ From: 'The Apache Software Foundation' (http://jakarta.apache.org)
     License: The Apache Software License, Version 2.0  (/LICENSE.txt)
 
 From: 'The Apache Software Foundation' (http://www.apache.org/)
-  - Apache Wink Common (http://www.apache.org/wink/wink-common) org.apache.wink:wink-common:jar:1.1-incubating-SNAPSHOT
+  - Apache Wink Common (http://www.apache.org/wink/wink-common) org.apache.wink:wink-common:jar:1.1.2-incubating
     License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
-  - Apache Wink Server (http://www.apache.org/wink/wink-server) org.apache.wink:wink-server:jar:1.1-incubating-SNAPSHOT
+  - Apache Wink Server (http://www.apache.org/wink/wink-server) org.apache.wink:wink-server:jar:1.1.2-incubating
     License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
   - HttpClient (http://hc.apache.org/httpcomponents-client) org.apache.httpcomponents:httpclient:jar:4.0.1
     License: Apache License  (../LICENSE.txt)
