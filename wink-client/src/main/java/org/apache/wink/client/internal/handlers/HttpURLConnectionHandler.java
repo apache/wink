@@ -59,29 +59,31 @@ public class HttpURLConnectionHandler extends AbstractConnectionHandler {
         }
     }
 
-    private boolean getBypassHostnameVerification(ClientRequest request, HttpURLConnection connection) {
+    private boolean getBypassHostnameVerification(ClientRequest request,
+                                                  HttpURLConnection connection) {
         return ((ClientConfig)request.getAttribute(WinkConfiguration.class))
             .getBypassHostnameVerification() && (connection instanceof HttpsURLConnection);
     }
-    
+
     private HostnameVerifier setupHostnameVerificationBypass(HttpsURLConnection connection) {
         HttpsURLConnection https = ((HttpsURLConnection)connection);
         HostnameVerifier hv = https.getHostnameVerifier();
         https.setHostnameVerifier(new HostnameVerifier() {
             public boolean verify(String urlHostName, SSLSession session) {
-                logger.trace("Bypassing hostname verification: URL host is " + urlHostName //$NON-NLS-1$
-                    + ", SSLSession host is " //$NON-NLS-1$
-                    + session.getPeerHost());
+                logger
+                    .trace("Bypassing hostname verification: URL host is {}, SSLSession host is {}", urlHostName, //$NON-NLS-1$
+                           session.getPeerHost());
                 return true;
             }
         });
         return hv;
     }
-    
-    private void teardownHostnameVerificationBypass(HttpsURLConnection connection, HostnameVerifier hv) {
+
+    private void teardownHostnameVerificationBypass(HttpsURLConnection connection,
+                                                    HostnameVerifier hv) {
         connection.setHostnameVerifier(hv);
     }
-    
+
     private HttpURLConnection processRequest(ClientRequest request, HandlerContext context)
         throws IOException {
         HttpURLConnection connection = openConnection(request);
@@ -96,7 +98,7 @@ public class HttpURLConnectionHandler extends AbstractConnectionHandler {
             connection.connect();
         } finally {
             if (getBypassHostnameVerification(request, connection)) {
-                teardownHostnameVerificationBypass((HttpsURLConnection) connection, hv);
+                teardownHostnameVerificationBypass((HttpsURLConnection)connection, hv);
             }
         }
         if (request.getEntity() != null) {
@@ -182,7 +184,7 @@ public class HttpURLConnectionHandler extends AbstractConnectionHandler {
             processResponseHeaders(response, connection);
         } finally {
             if (getBypassHostnameVerification(request, connection)) {
-                teardownHostnameVerificationBypass((HttpsURLConnection) connection, hv);
+                teardownHostnameVerificationBypass((HttpsURLConnection)connection, hv);
             }
         }
         return response;
