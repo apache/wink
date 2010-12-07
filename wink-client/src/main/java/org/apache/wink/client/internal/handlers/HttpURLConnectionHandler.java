@@ -59,6 +59,29 @@ public class HttpURLConnectionHandler extends AbstractConnectionHandler {
         }
     }
 
+    private boolean getBypassHostnameVerification(ClientRequest request, HttpURLConnection connection) {
+        return ((ClientConfig)request.getAttribute(WinkConfiguration.class))
+            .getBypassHostnameVerification() && (connection instanceof HttpsURLConnection);
+    }
+    
+    private HostnameVerifier setupHostnameVerificationBypass(HttpsURLConnection connection) {
+        HttpsURLConnection https = ((HttpsURLConnection)connection);
+        HostnameVerifier hv = https.getHostnameVerifier();
+        https.setHostnameVerifier(new HostnameVerifier() {
+            public boolean verify(String urlHostName, SSLSession session) {
+                logger.trace("Bypassing hostname verification: URL host is " + urlHostName //$NON-NLS-1$
+                    + ", SSLSession host is " //$NON-NLS-1$
+                    + session.getPeerHost());
+                return true;
+            }
+        });
+        return hv;
+    }
+    
+    private void teardownHostnameVerificationBypass(HttpsURLConnection connection, HostnameVerifier hv) {
+        connection.setHostnameVerifier(hv);
+    }
+    
     private HttpURLConnection processRequest(ClientRequest request, HandlerContext context)
         throws IOException {
         HttpURLConnection connection = openConnection(request);
@@ -66,26 +89,15 @@ public class HttpURLConnectionHandler extends AbstractConnectionHandler {
         OutputStream os = ncos;
         processRequestHeaders(request, connection);
         HostnameVerifier hv = null;
-        boolean bypassHostnameVerification =
-            ((ClientConfig)request.getAttribute(WinkConfiguration.class))
-                .getBypassHostnameVerification() && (connection instanceof HttpsURLConnection);
-        if (bypassHostnameVerification) {
-            HttpsURLConnection https = ((HttpsURLConnection)connection);
-            hv = https.getHostnameVerifier();
-            https.setHostnameVerifier(new HostnameVerifier() {
-                public boolean verify(String urlHostName, SSLSession session) {
-                    logger.trace("Bypassing hostname verification: URL host is " + urlHostName //$NON-NLS-1$
-                        + ", SSLSession host is " //$NON-NLS-1$
-                        + session.getPeerHost());
-                    return true;
-                }
-            });
+        if (getBypassHostnameVerification(request, connection)) {
+            hv = setupHostnameVerificationBypass((HttpsURLConnection)connection);
         }
         try {
             connection.connect();
         } finally {
-            if (bypassHostnameVerification)
-                ((HttpsURLConnection)connection).setHostnameVerifier(hv);
+            if (getBypassHostnameVerification(request, connection)) {
+                teardownHostnameVerificationBypass((HttpsURLConnection) connection, hv);
+            }
         }
         if (request.getEntity() != null) {
             ncos.setOutputStream(connection.getOutputStream());
@@ -158,11 +170,21 @@ public class HttpURLConnectionHandler extends AbstractConnectionHandler {
 
     private ClientResponse createResponse(ClientRequest request, HttpURLConnection connection)
         throws IOException {
+        HostnameVerifier hv = null;
+        if (getBypassHostnameVerification(request, connection)) {
+            hv = setupHostnameVerificationBypass((HttpsURLConnection)connection);
+        }
         ClientResponse response = new ClientResponseImpl();
-        response.setStatusCode(connection.getResponseCode());
-        response.setMessage(connection.getResponseMessage());
-        response.getAttributes().putAll(request.getAttributes());
-        processResponseHeaders(response, connection);
+        try {
+            response.setStatusCode(connection.getResponseCode());
+            response.setMessage(connection.getResponseMessage());
+            response.getAttributes().putAll(request.getAttributes());
+            processResponseHeaders(response, connection);
+        } finally {
+            if (getBypassHostnameVerification(request, connection)) {
+                teardownHostnameVerificationBypass((HttpsURLConnection) connection, hv);
+            }
+        }
         return response;
     }
 
