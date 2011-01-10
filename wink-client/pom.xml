@@ -107,7 +107,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Import-Package>org.apache.commons.codec.*;resolution:=optional,org.apache.wink.common.internal.providers.entity.xml,org.apache.wink.common.internal.providers.entity.atom,org.apache.wink.common.internal.providers.entity.csv,org.apache.wink.common.internal.providers.multipart,org.apache.wink.common.internal.providers.entity.json,org.apache.wink.common.internal.providers.entity.app,*</Import-Package>
+                        <Import-Package>${slf4j.osgi.import.instruction},org.apache.commons.codec.*;resolution:=optional,org.apache.wink.common.internal.providers.entity.xml,org.apache.wink.common.internal.providers.entity.atom,org.apache.wink.common.internal.providers.entity.csv,org.apache.wink.common.internal.providers.multipart,org.apache.wink.common.internal.providers.entity.json,org.apache.wink.common.internal.providers.entity.app,*</Import-Package>
                         <Export-Package>
                             <!--
                                 !org.apache.wink.client.internal.*,

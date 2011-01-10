@@ -35,6 +35,8 @@
         <javadoc.exclude.patterns>*.internal:org.apache.wink.example.*:org.apache.wink.example:org.apache.wink.itest.*:org.apache.wink.itest:org.apache.wink.jaxrs.test.*:org.apache.wink.jaxrs.test:org.slf4j.impl.*:org.apache.wink.test.*:org.apache.wink.logging.*</javadoc.exclude.patterns>
         <maven.compile.source>1.5</maven.compile.source>
         <maven.compile.target>1.5</maven.compile.target>
+        <!--WINK-330 Change slf4j api import to a range to make it more user friendly.-->
+        <slf4j.osgi.import.instruction>org.slf4j.*;version="[1.5,1.7)"</slf4j.osgi.import.instruction>
     </properties>
     <modules>
         <module>wink-component-test-support</module>

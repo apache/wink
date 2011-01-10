@@ -136,6 +136,9 @@
                             -->
                             org.apache.wink.common.*
                         </Export-Package>
+                        <Import-Package>
+                            ${slf4j.osgi.import.instruction},*
+                        </Import-Package>
                     </instructions>
                 </configuration>
             </plugin>
