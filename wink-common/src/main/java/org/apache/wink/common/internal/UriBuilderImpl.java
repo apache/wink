@@ -550,6 +550,7 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
         }
 
         if (isFirstCall) {
+            isFirstCall = false;
             if (path.indexOf(":") != -1) { //$NON-NLS-1$
                 // we need to parse this as scheme:scheme-specific-part#fragment
                 // for
@@ -572,7 +573,6 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
                     }
                 }
             }
-            isFirstCall = false;
         }
 
         // strip off the authority prefix if present
@@ -753,10 +753,10 @@ public class UriBuilderImpl extends UriBuilder implements Cloneable {
     public UriBuilder replacePath(String path) {
         logger.trace("replacePath({}) entry", path); //$NON-NLS-1$
         if (isFirstCall) {
+            isFirstCall = false;
             if (path == null) {
                 throw new IllegalArgumentException(Messages.getMessage("variableIsNull", "path")); //$NON-NLS-1$ //$NON-NLS-2$
             }
-            isFirstCall = false;
         }
         if (path == null) {
             logger.trace("path is null. resetting"); //$NON-NLS-1$

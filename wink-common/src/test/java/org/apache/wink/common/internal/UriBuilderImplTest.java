@@ -356,9 +356,12 @@ public class UriBuilderImplTest extends TestCase {
         uriBuilder = UriBuilder.fromUri(new URI("foo://localhost:8080/com/ibm?name=myname#first"));
         uriBuilder = uriBuilder.uri(new URI("//localhost:8080/com/ibm?name=myname#last"));
         assertEquals("foo://localhost:8080/com/ibm?name=myname#last", uriBuilder.build().toString());
-        
-        uriBuilder = UriBuilder.fromUri(new URI("http://myserver/dm/atom/library/%5B@Pgistest/@RMain.nsf%5D/feed"));
-        assertEquals("http://myserver/dm/atom/library/%5B@Pgistest/@RMain.nsf%5D/feed", uriBuilder.build().toString());
+
+        uriBuilder =
+            UriBuilder
+                .fromUri(new URI("http://myserver/dm/atom/library/%5B@Pgistest/@RMain.nsf%5D/feed"));
+        assertEquals("http://myserver/dm/atom/library/%5B@Pgistest/@RMain.nsf%5D/feed", uriBuilder
+            .build().toString());
     }
 
     public void testClone() {
@@ -570,26 +573,37 @@ public class UriBuilderImplTest extends TestCase {
         assertEquals("http://localhost?something", UriBuilder.fromUri("http://localhost?something")
             .build().toString());
     }
-    
 
     public void testWithPathTemplate() {
         UriBuilder builder = UriBuilder.fromPath("/myResource/{entity_id: [0-9]+}");
         assertEquals("/myResource/3", builder.build("3").toString());
-        
+
         builder = UriBuilder.fromPath("http://localhost:8080/myResource");
         builder.path("{entity_id: [0-9]+}");
         assertEquals("http://localhost:8080/myResource/3", builder.build("3").toString());
     }
 
-
     public void testWithQueryEncoded() throws Exception {
         URL url = new URL("http://localhost:8080/myResource?q={abcd}");
-        // URI.toURL() will escape characters if we use one of the multi-param constructors
-        URI constructedURI = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(),url.getPath(), url.getQuery(), null);
+        // URI.toURL() will escape characters if we use one of the multi-param
+        // constructors
+        URI constructedURI =
+            new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url
+                .getPath(), url.getQuery(), null);
         assertEquals("http://localhost:8080/myResource?q=%7Babcd%7D", constructedURI.toString());
-        
+
         UriBuilder builder = UriBuilder.fromUri("http://localhost:8080/myResource");
         builder.queryParam("q", "%7Babcd%7D");
         assertEquals("http://localhost:8080/myResource?q=%7Babcd%7D", builder.build().toString());
+    }
+
+    public void testNoOverflow() throws Exception {
+        UriBuilder builder = UriBuilder.fromPath("a:/a:/b#c");
+        assertEquals("a:/a:/b#c", builder.build().toString());
+
+        builder = UriBuilder.fromPath("http://localhost/");
+        builder.path("a:/a:/b");
+        builder.fragment("c");
+        assertEquals("http://localhost/a:/a:/b#c", builder.build().toString());
     }
 }
