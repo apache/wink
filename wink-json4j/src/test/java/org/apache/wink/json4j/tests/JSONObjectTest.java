@@ -1333,6 +1333,29 @@ public class JSONObjectTest extends TestCase {
             assertTrue(false);
         }
     }
+    
+    /**
+     * Test JSONObject creation does not throw exception if key is missing and 
+     * does not add missing value.
+     */
+    public void test_MissingKeyIsIgnored() {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("key1", "key1");
+            obj.put("key2", "key2");
+            obj.put("key3", "key3");
+            String[] keys = {"key1", "key3"};
+            JSONObject testObj = new JSONObject(obj, keys);
+            assertTrue(testObj.size() == 2);
+            assertTrue(testObj.opt("key2") == null);
+            assertTrue(testObj.opt("key3").equals("key3"));
+            assertTrue(testObj.opt("key1").equals("key1"));
+        }
+        catch (JSONException jex) {
+            jex.printStackTrace();
+            assertTrue(false);
+        }
+    }
 
     /***********************************************************/
     /* The following tests checks UTF-8 encoded DBCS characters*/

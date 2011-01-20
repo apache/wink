@@ -99,7 +99,8 @@ public class JSONObject extends HashMap  implements JSONArtifact {
     }
 
     /**
-     * Create a new instance of this class taking selected values from the underlying one.
+     * Create a new instance of this class taking selected values from the underlying one.  If a key is not
+     * found, then it will be copied into the new JSONObject.
      * @param obj The JSONObject to extract values from.
      * @param keys The keys to take from the JSONObject and apply to this instance.
      * @throws JSONException Thrown if a key is duplicated in the string[] keys
@@ -112,7 +113,10 @@ public class JSONObject extends HashMap  implements JSONArtifact {
                     throw new JSONException("Duplicate key: " + keys[i]);
                 }
                 try {
-                    this.put(keys[i], obj.get(keys[i]));
+                	Object item = obj.opt(keys[i]);
+                    if (item != null) {
+                        this.put(keys[i], item);
+                    }
                 } catch (Exception ex) {
                     JSONException jex = new JSONException("Error occurred during JSONObject creation");
                     jex.initCause(ex);
