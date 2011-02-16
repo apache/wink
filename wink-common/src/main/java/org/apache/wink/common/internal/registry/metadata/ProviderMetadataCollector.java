@@ -120,7 +120,7 @@ public class ProviderMetadataCollector extends AbstractMetadataCollector {
         Context context = field.getAnnotation(Context.class);
         if (context != null) {
             return InjectableFactory.getInstance().createContextParam(GenericsUtils
-                                                                          .getClassType(fieldType),
+                                                                          .getClassType(fieldType, ((Member) field).getDeclaringClass()),
                                                                       field.getAnnotations(),
                                                                       (Member)field);
         }

@@ -65,7 +65,7 @@ public class EntityType<T> {
 					.getMessage("entityTypeMustBeParameterized")); //$NON-NLS-1$
 		}
 		this.type = ((ParameterizedType) superclass).getActualTypeArguments()[0];
-		this.cls = (Class<T>) GenericsUtils.getClassType(type);
+		this.cls = (Class<T>) GenericsUtils.getClassType(type, this.getClass());
 	}
 
 	public Type getType() {

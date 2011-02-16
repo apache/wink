@@ -49,8 +49,8 @@ import org.apache.wink.common.annotations.Scope;
 import org.apache.wink.common.annotations.Scope.ScopeType;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.registry.Injectable;
-import org.apache.wink.common.internal.registry.InjectableFactory;
 import org.apache.wink.common.internal.registry.Injectable.ParamType;
+import org.apache.wink.common.internal.registry.InjectableFactory;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
 import org.apache.wink.common.internal.utils.AnnotationUtils;
 import org.apache.wink.common.internal.utils.GenericsUtils;
@@ -419,7 +419,7 @@ public class AssetProvider implements MessageBodyReader<Object>, MessageBodyWrit
         public ProducesMethod(Method method, MediaType mediaType) {
             super(method, mediaType);
             this.type = method.getGenericReturnType();
-            this.typeClass = GenericsUtils.getClassType(type);
+            this.typeClass = GenericsUtils.getClassType(type, method.getDeclaringClass());
         }
     }
 

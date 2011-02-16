@@ -19,14 +19,12 @@
  *******************************************************************************/
 package org.apache.wink.common.internal.utils;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.lang.reflect.WildcardType;
 
 import org.apache.wink.common.internal.i18n.Messages;
+import org.apache.wink.common.internal.type.TypeFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,7 +83,7 @@ public class GenericsUtils {
             }
         } else {
             if (type instanceof GenericArrayType == false) {
-                Class<?> classType = getClassType(type);
+                Class<?> classType = getClassType(type, null);
                 if (classType == Object.class || classType.isAssignableFrom(cls)) {
                     return true;
                 }
@@ -143,9 +141,17 @@ public class GenericsUtils {
      * <code>List.class</code> is returned.
      * 
      * @param type the type to return the class type for
+     * @param context The class that owns the member
      * @return the class type of type
      */
-    public static Class<?> getClassType(Type type) {
+    public static Class<?> getClassType(Type type, Class<?> context) {
+        if (type == null) {
+            return null;
+        }
+        Class<?> cls =
+            context == null ? TypeFactory.type(type).getRawClass() : TypeFactory.type(type, context).getRawClass();
+        
+        /*
         if (type instanceof Class<?>) {
             return (Class<?>)type;
         }
@@ -157,16 +163,21 @@ public class GenericsUtils {
 
         if (type instanceof GenericArrayType) {
             GenericArrayType genericArray = (GenericArrayType)type;
-            Class<?> classType = getClassType(genericArray.getGenericComponentType());
+            Class<?> classType = getClassType(genericArray.getGenericComponentType(), context);
             return Array.newInstance(classType, 0).getClass();
         }
 
         if (type instanceof TypeVariable<?>) {
-            return getClassType(((TypeVariable<?>)type).getBounds()[0]);
+            return getClassType(((TypeVariable<?>)type).getBounds()[0], context);
         }
 
         if (type instanceof WildcardType) {
-            return getClassType(((WildcardType)type).getUpperBounds()[0]);
+            return getClassType(((WildcardType)type).getUpperBounds()[0], context);
+        }
+        */
+        
+        if (cls != null) {
+            return cls;
         }
 
         logger.error(Messages.getMessage("methodCannotHandleType", String.valueOf(type))); //$NON-NLS-1$

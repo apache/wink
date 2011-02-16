@@ -80,18 +80,30 @@ public class GenericsUtilsTest extends TestCase {
     }
 
     public void testGetClassType() throws Exception {
-        Class<?> clazz = GenericsUtils.getClassType(String.class);
+        Class<?> clazz = GenericsUtils.getClassType(String.class, null);
         assertTrue(clazz.equals(String.class));
-        clazz = GenericsUtils.getClassType(String[].class);
+        clazz = GenericsUtils.getClassType(String[].class, null);
         assertTrue(clazz.equals(String[].class));
-        clazz = GenericsUtils.getClassType(A.class.getField("stringList").getGenericType());
+        clazz = GenericsUtils.getClassType(A.class.getField("stringList").getGenericType(), null);
         assertTrue(clazz.equals(List.class));
-        clazz = GenericsUtils.getClassType(A.class.getField("map").getGenericType());
+        clazz = GenericsUtils.getClassType(A.class.getField("map").getGenericType(), null);
         assertTrue(clazz.equals(Map.class));
-        clazz = GenericsUtils.getClassType(A.class.getField("byteArrayList").getGenericType());
+        clazz = GenericsUtils.getClassType(A.class.getField("byteArrayList").getGenericType(), null);
         assertTrue(clazz.equals(List.class));
-        clazz = GenericsUtils.getClassType(A.class.getField("stringListArray").getGenericType());
+        clazz = GenericsUtils.getClassType(A.class.getField("stringListArray").getGenericType(), null);
         assertTrue(clazz.equals(List[].class));
+        
+        clazz = GenericsUtils.getClassType(G1.class.getMethod("g", Object.class).getGenericReturnType(), null);
+        assertTrue(clazz.equals(Object.class));
+        
+        clazz = GenericsUtils.getClassType(G1.class.getMethod("g", Object.class).getGenericReturnType(), G.class);
+        assertTrue(clazz.equals(Object.class));
+        
+        clazz = GenericsUtils.getClassType(G1.class.getMethod("g", Object.class).getGenericReturnType(), G1.class);
+        assertTrue(clazz.equals(String.class));
+        
+        clazz = GenericsUtils.getClassType(G1.class.getMethod("g", Object.class).getGenericParameterTypes()[0], G1.class);
+        assertTrue(clazz.equals(Integer.class));
     }
 
     public void testGetGenericType() throws Exception {
@@ -102,4 +114,13 @@ public class GenericsUtilsTest extends TestCase {
         clazz = GenericsUtils.getGenericParamType(A.class.getField("map").getGenericType());
         assertTrue(clazz.equals(Integer.class));
     }
+    
+    public static interface G<T, D> {
+        T g(D d);
+    }
+    
+    public static interface G1 extends G<String, Integer> {
+        
+    }
+
 }

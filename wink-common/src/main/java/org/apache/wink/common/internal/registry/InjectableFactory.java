@@ -38,7 +38,7 @@ import javax.ws.rs.core.Context;
 
 import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.internal.i18n.Messages;
-import org.apache.wink.common.internal.utils.GenericsUtils;
+import org.apache.wink.common.internal.type.TypeFactory;
 
 public class InjectableFactory {
 
@@ -75,7 +75,8 @@ public class InjectableFactory {
                              Member member,
                              boolean encoded,
                              String defaultValue) {
-        Class<?> classType = GenericsUtils.getClassType(genericType);
+        Class<?> classType = TypeFactory.type(genericType, member.getDeclaringClass()).getRawClass();
+        // Class<?> classType = GenericsUtils.getClassType(genericType);
 
         MatrixParam matrix = null;
         PathParam path = null;

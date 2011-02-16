@@ -33,9 +33,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Map.Entry;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -349,7 +349,7 @@ public class ProvidersRegistry {
             Type genericType =
                 GenericsUtils.getGenericInterfaceParamType(exceptionMapper.getClass(),
                                                            ExceptionMapper.class);
-            Class<?> classType = GenericsUtils.getClassType(genericType);
+            Class<?> classType = GenericsUtils.getClassType(genericType, null);
             if (classType.isAssignableFrom(type)) {
                 matchingMappers.add(exceptionMapper);
             }
@@ -368,8 +368,8 @@ public class ProvidersRegistry {
             Type second =
                 GenericsUtils.getGenericInterfaceParamType(matchingMappers.get(1).getClass(),
                                                            ExceptionMapper.class);
-            Class<?> firstClass = GenericsUtils.getClassType(first);
-            Class<?> secondClass = GenericsUtils.getClassType(second);
+            Class<?> firstClass = GenericsUtils.getClassType(first, null);
+            Class<?> secondClass = GenericsUtils.getClassType(second, null);
             if (firstClass == secondClass) {
                 // the first one has higher priority, so remove the second
                 // one for the same classes!
@@ -920,7 +920,7 @@ public class ProvidersRegistry {
                 this.isSystemProvider = isSystemProvider;
                 genericType =
                     GenericsUtils.getClassType(GenericsUtils.getGenericInterfaceParamType(of
-                        .getInstanceClass(), rawType));
+                        .getInstanceClass(), rawType), rawType);
             }
 
             @Override
@@ -1080,7 +1080,7 @@ public class ProvidersRegistry {
             if (t == null) {
                 this.genericType = Object.class;
             } else {
-                this.genericType = GenericsUtils.getClassType(t);
+                this.genericType = GenericsUtils.getClassType(t, providerClass);
             }
         }
 
