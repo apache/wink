@@ -37,6 +37,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.xml.namespace.QName;
 
+import org.apache.wink.common.DynamicResource;
 import org.apache.wink.common.internal.registry.Injectable;
 import org.apache.wink.common.internal.registry.Injectable.ParamType;
 import org.apache.wink.common.internal.registry.metadata.ClassMetadata;
@@ -113,6 +114,19 @@ public class WADLGenerator {
 
         /* set the path */
         String path = metadata.getPath();
+
+        if (path == null) {
+            Class<?> resClass = metadata.getResourceClass();
+            if (DynamicResource.class.isAssignableFrom(resClass)) {
+                try {
+                    DynamicResource dynRes = (DynamicResource)resClass.newInstance();
+                    path = dynRes.getPath();
+                } catch (Exception e) {
+                    // Drop through and look for @Path annotation.
+                }
+            }
+        }
+
         UriTemplateProcessor processor = JaxRsUriTemplateProcessor.newNormalizedInstance(path);
         String pathStr = processor.getTemplate();
         for (String var : processor.getVariableNames()) {
