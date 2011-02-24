@@ -35,6 +35,7 @@
 		<module>wink-jackson-provider</module>
 		<module>wink-json4j-provider</module>
 		<module>wink-protobuf-provider</module>
+                <module>wink-thrift-provider</module>
 	</modules>
 	<dependencies>
         <dependency>
