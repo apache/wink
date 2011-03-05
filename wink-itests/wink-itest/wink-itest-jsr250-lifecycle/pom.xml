@@ -23,11 +23,11 @@
     <parent>
         <artifactId>wink-itest</artifactId>
         <groupId>org.apache.wink</groupId>
-        <version>1.1.2-incubating-SNAPSHOT</version>
+        <version>1.1.3-incubating-SNAPSHOT</version>
     </parent>
     <groupId>org.apache.wink</groupId>
     <artifactId>wink-itest-jsr250-lifecycle</artifactId>
-    <version>1.1.2-incubating-SNAPSHOT</version>
+    <version>1.1.3-incubating-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Apache Wink JSR-250 Lifecycle Tests</name>
 </project>
