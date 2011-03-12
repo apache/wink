@@ -19,14 +19,14 @@
 
 package org.apache.wink.json4j;
 
+import java.io.BufferedReader;
+import java.io.CharArrayReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
-import java.io.PushbackReader;
-import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.PushbackReader;
+import java.io.Reader;
 import java.io.StringReader;
-import java.io.CharArrayReader;
 
 /**
  * Helper class that does generic parsing of a JSON stream and returns the appropriate 

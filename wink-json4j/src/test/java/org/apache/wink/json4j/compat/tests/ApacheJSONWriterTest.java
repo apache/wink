@@ -19,14 +19,14 @@
 
 package org.apache.wink.json4j.compat.tests;
 
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import java.io.*;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.HashMap;
+import java.io.StringWriter;
 
-import org.apache.wink.json4j.compat.*;
+import junit.framework.TestCase;
+
+import org.apache.wink.json4j.compat.JSONArray;
+import org.apache.wink.json4j.compat.JSONFactory;
+import org.apache.wink.json4j.compat.JSONObject;
+import org.apache.wink.json4j.compat.JSONWriter;
 
 /**
  * Tests for the basic Java JSONWriter

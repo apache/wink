@@ -23,7 +23,6 @@ package org.apache.wink.json4j.tests;
  * Basic junit imports.
  */
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 

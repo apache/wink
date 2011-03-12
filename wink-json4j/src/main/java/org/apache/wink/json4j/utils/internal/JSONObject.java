@@ -19,16 +19,14 @@
 
 package org.apache.wink.json4j.utils.internal;
 
-import java.util.logging.*;
-import java.util.StringTokenizer;
-import java.util.Hashtable;
-import java.util.Enumeration;
-import java.util.Vector;
-import java.util.Properties;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Properties;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**

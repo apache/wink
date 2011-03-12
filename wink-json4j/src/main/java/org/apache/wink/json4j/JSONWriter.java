@@ -19,11 +19,11 @@
 
 package org.apache.wink.json4j;
 
-import java.io.Writer;
 import java.io.BufferedWriter;
-import java.io.StringWriter;
 import java.io.CharArrayWriter;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.Stack;
 
 import org.apache.wink.json4j.internal.BeanSerializer;

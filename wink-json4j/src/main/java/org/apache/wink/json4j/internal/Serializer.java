@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.wink.json4j.JSONArray;
-import org.apache.wink.json4j.JSONException;
 import org.apache.wink.json4j.JSONObject;
 import org.apache.wink.json4j.JSONString;
 import org.apache.wink.json4j.OrderedJSONObject;

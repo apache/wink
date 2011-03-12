@@ -19,8 +19,8 @@
 
 package org.apache.wink.json4j;
 
-import java.io.StringWriter;
 import java.io.IOException;
+import java.io.StringWriter;
 
 
 /**

@@ -20,9 +20,9 @@
 package org.apache.wink.json4j.compat.impl;
 
 import java.io.Reader;
+import java.io.Writer;
 import java.util.Collection;
 import java.util.Map;
-import java.io.Writer;
 
 import org.apache.wink.json4j.compat.JSONArray;
 import org.apache.wink.json4j.compat.JSONException;

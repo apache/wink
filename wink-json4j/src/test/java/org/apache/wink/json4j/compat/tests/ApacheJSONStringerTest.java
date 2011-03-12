@@ -20,13 +20,11 @@
 package org.apache.wink.json4j.compat.tests;
 
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import java.io.*;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.HashMap;
 
-import org.apache.wink.json4j.compat.*;
+import org.apache.wink.json4j.compat.JSONArray;
+import org.apache.wink.json4j.compat.JSONFactory;
+import org.apache.wink.json4j.compat.JSONObject;
+import org.apache.wink.json4j.compat.JSONStringer;
 
 /**
  * Tests for the basic Java JSONStringer

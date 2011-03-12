@@ -19,16 +19,13 @@
 
 package org.apache.wink.json4j.tests;
 
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import java.io.*;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.HashMap;
 import java.util.Date;
 
-import org.apache.wink.json4j.*;
-import org.apache.wink.json4j.internal.*;
+import junit.framework.TestCase;
+
+import org.apache.wink.json4j.JSONArtifact;
+import org.apache.wink.json4j.JSONObject;
+import org.apache.wink.json4j.internal.BeanSerializer;
 
 /**
  * Tests for the basic Java Bean serializer

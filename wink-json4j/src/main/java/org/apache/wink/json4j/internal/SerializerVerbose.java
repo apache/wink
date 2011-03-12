@@ -21,9 +21,9 @@ package org.apache.wink.json4j.internal;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Map;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Internaql class for handling the serialization of JSON objects in a verbose

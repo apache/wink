@@ -19,24 +19,22 @@
 
 package org.apache.wink.json4j;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.Reader;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Writer;
 import java.io.BufferedWriter;
 import java.io.CharArrayWriter;
-import java.io.OutputStreamWriter;
-import java.io.StringWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Collection;
 
 import org.apache.wink.json4j.internal.BeanSerializer;
 import org.apache.wink.json4j.internal.Parser;

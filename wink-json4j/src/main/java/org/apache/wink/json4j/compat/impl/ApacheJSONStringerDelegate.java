@@ -19,10 +19,10 @@
 
 package org.apache.wink.json4j.compat.impl;
 
-import org.apache.wink.json4j.compat.JSONStringer;
-
-import java.io.StringWriter;
 import java.io.IOException;
+import java.io.StringWriter;
+
+import org.apache.wink.json4j.compat.JSONStringer;
 
 /**
  *

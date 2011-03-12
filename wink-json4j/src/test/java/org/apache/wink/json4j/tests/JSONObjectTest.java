@@ -19,18 +19,20 @@
 
 package org.apache.wink.json4j.tests;
 
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import java.io.*;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.HashMap;
-import java.util.Date;
 
-import org.apache.wink.json4j.*;
-import org.apache.wink.json4j.utils.*;
+import junit.framework.TestCase;
+
+import org.apache.wink.json4j.JSONArray;
+import org.apache.wink.json4j.JSONException;
+import org.apache.wink.json4j.JSONObject;
 
 /**
  * Tests for the basic Java JSONObject model

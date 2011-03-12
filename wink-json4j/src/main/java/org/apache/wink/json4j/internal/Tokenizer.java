@@ -19,12 +19,12 @@
 
 package org.apache.wink.json4j.internal;
 
-import java.io.IOException;
-import java.io.Reader;
 import java.io.BufferedReader;
-import java.io.StringReader;
 import java.io.CharArrayReader;
+import java.io.IOException;
 import java.io.PushbackReader;
+import java.io.Reader;
+import java.io.StringReader;
 
 /**
  * Tokenizes a stream into JSON tokens.

@@ -19,14 +19,15 @@
 
 package org.apache.wink.json4j.compat.tests;
 
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import java.io.*;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.HashMap;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
-import org.apache.wink.json4j.compat.*;
+import junit.framework.TestCase;
+
+import org.apache.wink.json4j.compat.JSONArray;
+import org.apache.wink.json4j.compat.JSONException;
+import org.apache.wink.json4j.compat.JSONFactory;
+import org.apache.wink.json4j.compat.JSONObject;
 
 /**
  * Tests for the basic Java JSONArray model
