@@ -125,7 +125,7 @@ public class BeanSerializer {
                         String attr = mName.substring(3, mName.length());
                         attr = Character.toLowerCase(attr.charAt(0)) + attr.substring(1, attr.length());
                         try {
-                            Object val = m.invoke(obj, null);
+                            Object val = m.invoke(obj);
                             if (val == null) {
                                 ja.put(attr, (Object)null);
                             } else {
@@ -550,7 +550,7 @@ public class BeanSerializer {
                                         }
                                     } else {
                                         try {
-                                            m = clazz.getMethod(setter, null);
+                                            m = clazz.getMethod(setter); // FIXME: [rfeng] This doesn't make much sense
                                         } catch (NoSuchMethodException nmex){
                                             // Ignore, no setter.
                                         }

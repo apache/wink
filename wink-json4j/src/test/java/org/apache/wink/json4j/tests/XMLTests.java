@@ -381,7 +381,7 @@ public class XMLTests extends TestCase {
             fos.flush();
             fos.close();
 
-            is = fileOut.toURL().openStream();// this.getClass().getClassLoader().getResourceAsStream("json_output/utf8-lowerchar.json");
+            is = fileOut.toURI().toURL().openStream();// this.getClass().getClassLoader().getResourceAsStream("json_output/utf8-lowerchar.json");
             JSONObject jObject = new JSONObject(is);
             is.close();
             String str = (String)jObject.get("hi");
@@ -414,7 +414,7 @@ public class XMLTests extends TestCase {
             fos.flush();
             fos.close();
 
-            is = fileOut.toURL().openStream(); //this.getClass().getClassLoader().getResourceAsStream("utf8-array.json");
+            is = fileOut.toURI().toURL().openStream(); //this.getClass().getClassLoader().getResourceAsStream("utf8-array.json");
             JSONObject jObject = new JSONObject(is);
             is.close();
             String expected="\u592a\u548c\u6bbf";
