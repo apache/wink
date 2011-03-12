@@ -39,6 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.MultivaluedMap;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -46,12 +47,14 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Extends {@link AbstractConnectionHandler} and uses {@link AsyncHttpClient} to perform HTTP request execution.
  */
 public class AsyncHttpClientConnectionHandler
     extends AbstractConnectionHandler
+    implements Closeable
 {
     private static final Logger logger = LoggerFactory.getLogger(AsyncHttpClientConnectionHandler.class);
 
@@ -59,6 +62,10 @@ public class AsyncHttpClientConnectionHandler
 
     public AsyncHttpClientConnectionHandler(final AsyncHttpClient asyncHttpClient) {
         this.asyncHttpClient = asyncHttpClient;
+    }
+
+    public void close() throws IOException {
+        asyncHttpClient.close();
     }
 
     public ClientResponse handle(final ClientRequest request, final HandlerContext context) throws Exception {
@@ -73,18 +80,20 @@ public class AsyncHttpClientConnectionHandler
 
         Request request = setupHttpRequest(cr, ncos, os);
         Response response;
+        final AtomicReference<Throwable> failureHolder = new AtomicReference<Throwable>();
 
         try {
             response = asyncHttpClient.executeRequest(request, new AsyncCompletionHandlerBase()
             {
                 @Override
                 public Response onCompleted(final Response response) throws Exception {
-                    logger.debug("Response received: {}", response);
+                    logger.trace("Response received: {}", response);
                     return super.onCompleted(response);
                 }
 
                 public void onThrowable(Throwable t) {
-                    logger.error(AsyncCompletionHandlerBase.class.getName(), t);
+                    logger.trace("Request failed", t);
+                    failureHolder.set(t);
                 }
             }).get();
         }
@@ -93,6 +102,18 @@ public class AsyncHttpClientConnectionHandler
         }
         catch (ExecutionException e) {
             throw (IOException)new IOException().initCause(e);
+        }
+
+        // If a failure occurred, then decode and re-throw
+        Throwable failure = failureHolder.get();
+        if (failure != null) {
+            if (failure instanceof RuntimeException) {
+                throw (RuntimeException)failure;
+            }
+            if (failure instanceof IOException) {
+                throw (IOException)failure;
+            }
+            throw (IOException)new IOException().initCause(failure);
         }
 
         return response;
@@ -148,11 +169,30 @@ public class AsyncHttpClientConnectionHandler
         return new AsyncHttpClient(c.build());
     }
 
+    /**
+     * An empty input stream to simulate an empty message body.
+     */
+    private static class EmptyInputStream
+        extends InputStream
+    {
+        @Override
+        public int read() throws IOException {
+            return -1;
+        }
+    }
+
     private ClientResponse processResponse(final ClientRequest request, final HandlerContext context, final Response response)
         throws IllegalStateException, IOException
     {
         ClientResponse cr = createResponse(request, response);
-        InputStream is = adaptInputStream(response.getResponseBodyAsStream(), cr, context.getInputStreamAdapters());
+        InputStream is;
+        if (response.hasResponseBody()) {
+            is = response.getResponseBodyAsStream();
+        }
+        else {
+            is = new EmptyInputStream();
+        }
+        is = adaptInputStream(is, cr, context.getInputStreamAdapters());
         cr.setEntity(is);
         return cr;
     }
@@ -162,17 +202,7 @@ public class AsyncHttpClientConnectionHandler
         cr.setStatusCode(response.getStatusCode());
         cr.setMessage(response.getStatusText());
         cr.getAttributes().putAll(request.getAttributes());
-
-        // FIXME: Should we use a constant here to avoid creating this dummy runnable every time?
-        cr.setContentConsumer(new Runnable()
-        {
-            public void run() {
-                // empty
-            }
-        });
-
         processResponseHeaders(cr, response);
-
         return cr;
     }
 
