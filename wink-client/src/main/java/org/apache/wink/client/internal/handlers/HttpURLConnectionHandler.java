@@ -54,7 +54,6 @@ public class HttpURLConnectionHandler extends AbstractConnectionHandler {
             HttpURLConnection connection = processRequest(request, context);
             return processResponse(request, context, connection);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
