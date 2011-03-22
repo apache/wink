@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 /**
  * 
@@ -62,5 +63,22 @@ public class MockHttpServletRequestWrapperTestCase {
 
         Assert.assertEquals(3, req.getParameterMap().size());
     }
-}
 
+    @Test
+    public void testQuery() throws Exception {
+        MockHttpServletRequest req =
+            MockRequestConstructor.constructMockRequest("GET", "/test", "application/json", (String)null, null);
+        req.setQueryString("x=1&y=2&z=%20");
+        String x = req.getParameter("x");
+        String y = req.getParameter("y");
+        String z = req.getParameter("z");
+        String a = req.getParameter("a");
+
+        Assert.assertEquals("1", x);
+        Assert.assertEquals("2", y);
+        Assert.assertEquals(" ", z);
+        Assert.assertNull(a);
+
+        Assert.assertEquals(3, req.getParameterMap().size());
+    }
+}

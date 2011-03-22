@@ -48,10 +48,12 @@ public class MockHttpServletRequestWrapper extends MockHttpServletRequest {
 
     @Override
     public void setContentType(String contentType) {
-        if (getCharacterEncoding() != null && !contentType.contains("charset=")) {
-            contentType += ";charset=" + getCharacterEncoding();
+        if (contentType != null) {
+            if (getCharacterEncoding() != null && !contentType.contains("charset=")) {
+                contentType += ";charset=" + getCharacterEncoding();
+            }
+            addHeader("Content-Type", contentType);
         }
-        addHeader("Content-Type", contentType);
         super.setContentType(contentType);
     }
 
@@ -145,12 +147,19 @@ public class MockHttpServletRequestWrapper extends MockHttpServletRequest {
         if ("POST".equals(getMethod()) && contentType != null
             && contentType.startsWith(MediaType.APPLICATION_FORM_URLENCODED)) {
             String form = readContent();
-            Map<String, String> params = decodeForm(form);
-            for (Map.Entry<String, String> e : params.entrySet()) {
-                addParameter(e.getKey(), e.getValue());
-            }
+            addParameters(form);
+        }
+        if ("GET".equals(getMethod()) && getQueryString() != null) {
+            addParameters(getQueryString());
         }
         done = true;
+    }
+
+    protected void addParameters(String form) {
+        Map<String, String> params = decodeForm(form);
+        for (Map.Entry<String, String> e : params.entrySet()) {
+            addParameter(e.getKey(), e.getValue());
+        }
     }
 
     @Override
