@@ -764,6 +764,9 @@
                     <value>CI</value>
                 </property>
             </activation>
+            <modules>
+                <module>wink-assembly</module>
+            </modules>			
             <build>
                 <plugins>
                     <plugin>

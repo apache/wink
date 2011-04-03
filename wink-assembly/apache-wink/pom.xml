@@ -120,7 +120,6 @@
             </dependencies>
             <build>
                 <plugins>
-
                     <plugin>
                         <inherited>false</inherited>
                         <groupId>org.apache.maven.plugins</groupId>
