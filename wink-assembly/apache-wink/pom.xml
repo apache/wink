@@ -120,11 +120,13 @@
             </dependencies>
             <build>
                 <plugins>
+
                     <plugin>
                         <inherited>false</inherited>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-assembly-plugin</artifactId>
                         <executions>
+                            <!-- Make the binary distribution -->						
                             <execution>
                                 <id>make-bin-assembly</id>
                                 <phase>package</phase>
@@ -133,13 +135,27 @@
                                 </goals>
                                 <configuration>
                                     <finalName>apache-wink-${project.version}</finalName>
-                                    <appendAssemblyId>true</appendAssemblyId>
+                                    <appendAssemblyId>false</appendAssemblyId> <!-- For binary distro, don't need the assembly 'id' -->
                                     <descriptors>
                                         <descriptor>src/main/assembly/distbin.xml</descriptor>
-                                        <descriptor>src/main/assembly/distsrc.xml</descriptor>
                                     </descriptors>
                                 </configuration>
                             </execution>
+                            <!-- Make the source distribution -->
+                            <execution>
+                                <id>make-src-assembly</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                                <configuration>
+                                    <finalName>apache-wink-${project.version}</finalName>
+                                    <appendAssemblyId>true</appendAssemblyId>
+                                    <descriptors>
+                                        <descriptor>src/main/assembly/distsrc.xml</descriptor>
+                                    </descriptors>
+                                </configuration>
+                            </execution>							
                         </executions>
                     </plugin>
                 </plugins>
