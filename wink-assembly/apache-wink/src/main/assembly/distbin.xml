@@ -18,7 +18,7 @@
     under the License.
 -->
 <assembly>
-    <id></id>
+    <id>bin</id>
     <formats>
         <format>zip</format>
         <format>tar.gz</format>
@@ -55,7 +55,8 @@
                 <include>javax.ws.rs:jsr311-api</include>
                 <include>org.slf4j:slf4j-api</include>
                 <include>org.slf4j:slf4j-simple</include>
-                <include>stax:stax-api:*:1.0.2</include>
+				<!--include>stax:stax-api:*:1.0.2</include-->
+                <include>javax.xml.stream:stax-api</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
             <useTransitiveFiltering>true</useTransitiveFiltering>
@@ -229,7 +230,6 @@
                 <exclude>**/options</exclude>
                 <exclude>**/packages</exclude>
             </excludes>
-            <useStrictFiltering>true</useStrictFiltering>
         </fileSet>
         <fileSet>
             <directory>../../src/doc/DeveloperGuide</directory>
@@ -237,7 +237,6 @@
             <includes>
                 <include>Apache_Wink_User_Guide.pdf</include>
             </includes>
-            <useStrictFiltering>true</useStrictFiltering>
         </fileSet>
         <fileSet>
             <directory>binarydist</directory>
@@ -246,7 +245,6 @@
                 <include>NOTICE</include>
                 <include>LICENSE</include>
             </includes>
-            <useStrictFiltering>true</useStrictFiltering>
         </fileSet>
         <fileSet>
             <directory>../../</directory>
@@ -255,12 +253,10 @@
                 <include>DISCLAIMER</include>
                 <include>release_notes.txt</include>
             </includes>
-            <useStrictFiltering>true</useStrictFiltering>
         </fileSet>
-         <fileSet>
+        <fileSet>
             <directory>../../wink-examples</directory>
             <outputDirectory>examples</outputDirectory>
-            <useStrictFiltering>true</useStrictFiltering>
             <includes>
                 <include>**/build.properties</include>
             </includes>
@@ -273,7 +269,6 @@
         <fileSet>
             <directory>../../wink-examples</directory>
             <outputDirectory>examples</outputDirectory>
-            <useStrictFiltering>true</useStrictFiltering>
             <includes>
                 <include>**/readme.txt</include>
                 <include>**/src/**</include>
