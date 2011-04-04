@@ -62,7 +62,7 @@ public class AcceptHeaderTest extends TestCase {
         assertEquals("1. q-value", 0.1, vmtList.get(0).getQ());
         assertEquals("1. mime", MediaType.valueOf("*/*;q=0.1"), vmtList.get(0).getMediaType());
         assertEquals("2. q-value", 1.0, vmtList.get(1).getQ());
-        assertEquals("2. mime", MediaTypeUtils.IMAGE_PNG, vmtList.get(1).getMediaType());
+        assertEquals("2. mime", MediaTypeUtils.IMAGE_PNG_TYPE, vmtList.get(1).getMediaType());
         assertEquals("3. q-value", 0.512, vmtList.get(2).getQ());
         assertEquals("3. mime", MediaType.valueOf("image/gif;q=0.512"), vmtList.get(2)
             .getMediaType());

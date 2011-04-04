@@ -78,7 +78,7 @@ public class CsvSerializerProvider implements MessageBodyWriter<CsvSerializer> {
 
         // set content disposition. This will enable browsers to open excel
         ContentDispositionHeader contentDispositionHeader =
-            ContentDispositionHeader.createContentDispositionHeader(MediaTypeUtils.CSV);
+            ContentDispositionHeader.createContentDispositionHeader(MediaTypeUtils.CSV_TYPE);
         contentDispositionHeader.setFileName("representation"); //$NON-NLS-1$
         httpHeaders
             .putSingle(CONTENT_DISPOSITION_HEADER, header.toString(contentDispositionHeader));

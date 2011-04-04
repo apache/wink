@@ -44,13 +44,13 @@ public class OpenSearchUtils {
         }
         OpenSearchImage image = new OpenSearchImage();
         MediaType mediaType = MediaType.valueOf(mediaTypeString);
-        if (MediaTypeUtils.equalsIgnoreParameters(MediaTypeUtils.IMAGE_X_ICON, mediaType) || MediaTypeUtils
-            .equalsIgnoreParameters(MediaTypeUtils.IMAGE_VND, mediaType)) {
+        if (MediaTypeUtils.equalsIgnoreParameters(MediaTypeUtils.IMAGE_X_ICON_TYPE, mediaType) || MediaTypeUtils
+            .equalsIgnoreParameters(MediaTypeUtils.IMAGE_VND_TYPE, mediaType)) {
             image.setHeight(ICON_SIZE);
             image.setWidth(ICON_SIZE);
             image.setType(mediaTypeString);
             image.setValue(url);
-        } else if (MediaTypeUtils.equalsIgnoreParameters(MediaTypeUtils.IMAGE_PNG, mediaType) || MediaTypeUtils
+        } else if (MediaTypeUtils.equalsIgnoreParameters(MediaTypeUtils.IMAGE_PNG_TYPE, mediaType) || MediaTypeUtils
             .equalsIgnoreParameters(MediaTypeUtils.IMAGE_JPEG_TYPE, mediaType)) {
             image.setHeight(IMG_SIZE);
             image.setWidth(IMG_SIZE);
@@ -59,7 +59,7 @@ public class OpenSearchUtils {
         } else {
             image.setHeight(IMG_SIZE);
             image.setWidth(IMG_SIZE);
-            image.setType(MediaTypeUtils.IMAGE_PNG.toString());
+            image.setType(MediaTypeUtils.IMAGE_PNG_TYPE.toString());
             image.setValue(url);
         }
         return image;

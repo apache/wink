@@ -110,7 +110,7 @@ public class CsvProvidersTest extends TestCase {
                                             csvSerializer.getClass(),
                                             null,
                                             null,
-                                            MediaTypeUtils.CSV,
+                                            MediaTypeUtils.CSV_TYPE,
                                             httpHeaders,
                                             os);
 
@@ -189,7 +189,7 @@ public class CsvProvidersTest extends TestCase {
                 .readFrom(InnerCsvDeserializer.class,
                           null,
                           null,
-                          MediaTypeUtils.CSV,
+                          MediaTypeUtils.CSV_TYPE,
                           new MultivaluedMapImpl<String, String>(),
                           new ByteArrayInputStream(source.getBytes()));
 
@@ -266,7 +266,7 @@ public class CsvProvidersTest extends TestCase {
                                            syndFeed.getClass(),
                                            null,
                                            null,
-                                           MediaTypeUtils.CSV,
+                                           MediaTypeUtils.CSV_TYPE,
                                            httpHeaders,
                                            os);
 
