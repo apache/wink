@@ -54,11 +54,11 @@
                 </property>
             </activation>
             <modules>
-                <module>wink-assembly-aggregatejar</module>
 <!--
+                <module>wink-assembly-aggregatejar</module>
                 <module>wink-assembly-aggregatejar-osgi</module>
--->
                 <module>apache-wink</module>
+-->
             </modules>
         </profile>
     </profiles>
