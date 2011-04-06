@@ -220,6 +220,24 @@
             <useStrictFiltering>true</useStrictFiltering>
             <directoryMode>0755</directoryMode>
         </dependencySet>
+        <dependencySet>
+            <includes>
+                <include>org.apache.wink:wink-protobuf-provider</include>
+            </includes>
+            <useProjectArtifact>false</useProjectArtifact>
+            <outputDirectory>ext/wink-protobuf-provider</outputDirectory>
+            <useStrictFiltering>true</useStrictFiltering>
+            <directoryMode>0755</directoryMode>
+        </dependencySet>
+        <dependencySet>
+            <includes>
+                <include>com.google.protobuf:protobuf-java</include>
+            </includes>
+            <useProjectArtifact>false</useProjectArtifact>
+            <outputDirectory>ext/wink-protobuf-provider/lib</outputDirectory>
+            <useStrictFiltering>true</useStrictFiltering>
+            <directoryMode>0755</directoryMode>
+        </dependencySet>		
        </dependencySets>
      <fileSets>
         <fileSet>
