@@ -31,3 +31,11 @@ You can obtain a copy of the License at:
     https://glassfish.dev.java.net/public/CDDL+GPL.html
 The source code is available at:
     https://sjsxp.dev.java.net/
+
+-------------------------------------------------------------------------------
+This product includes software, Protocol Buffers - Google's data interchange format 
+Copyright 2008 Google Inc.
+You can obtain a copy of the License at:
+    http://www.opensource.org/licenses/bsd-license.php
+The source code is available at:
+    http://code.google.com/p/protobuf/source
