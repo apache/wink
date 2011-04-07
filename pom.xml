@@ -538,6 +538,11 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.wink</groupId>
+                <artifactId>wink-thrift-provider</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.wink</groupId>
                 <artifactId>wink-jcdi-server</artifactId>
                 <version>${project.version}</version>
             </dependency>

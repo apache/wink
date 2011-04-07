@@ -238,7 +238,26 @@
             <useStrictFiltering>true</useStrictFiltering>
             <directoryMode>0755</directoryMode>
         </dependencySet>		
+        <dependencySet>
+            <includes>
+                <include>org.apache.wink:wink-thrift-provider</include>
+            </includes>
+            <useProjectArtifact>false</useProjectArtifact>
+            <outputDirectory>ext/wink-thrift-provider</outputDirectory>
+            <useStrictFiltering>true</useStrictFiltering>
+            <directoryMode>0755</directoryMode>
+        </dependencySet>
+        <dependencySet>
+            <includes>
+                <include>org.apache.hadoop:libthrift</include>
+            </includes>
+            <useProjectArtifact>false</useProjectArtifact>
+            <outputDirectory>ext/wink-thrift-provider/lib</outputDirectory>
+            <useStrictFiltering>true</useStrictFiltering>
+            <directoryMode>0755</directoryMode>
+        </dependencySet>		
        </dependencySets>
+
      <fileSets>
         <fileSet>
             <directory>../../target/site/apidocs</directory>
