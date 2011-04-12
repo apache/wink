@@ -47,15 +47,12 @@ public class WebDAVModelHelper {
     private static final DocumentBuilderFactory documentBuilderFactory;
     private static final Document               document;
     private static final String                 XML_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"; //$NON-NLS-1$
-    private static final SimpleDateFormat       dateFormat;
 
     static {
         try {
             context = JAXBContext.newInstance(Propertyupdate.class.getPackage().getName());
             documentBuilderFactory = DocumentBuilderFactory.newInstance();
             document = documentBuilderFactory.newDocumentBuilder().newDocument();
-            dateFormat = new SimpleDateFormat(XML_DATE_FORMAT);
-            dateFormat.setLenient(false);
         } catch (Exception e) {
             throw new RestException(Messages.getMessage("webDAVFailSetupPropertyHelper"), e); //$NON-NLS-1$
         }
@@ -103,7 +100,7 @@ public class WebDAVModelHelper {
             if (!(elementClass.equals(object.getClass()))) {
                 throw new RestException(Messages
                     .getMessage("webDAVIncompatibleTypeInRequest", elementName, object.getClass() //$NON-NLS-1$
-                    .getName(), elementClass.getName()));
+                        .getName(), elementClass.getName()));
             }
             return (T)object;
         } catch (JAXBException e) {
@@ -199,10 +196,14 @@ public class WebDAVModelHelper {
     }
 
     public static String convertDateToXMLDate(Date date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(XML_DATE_FORMAT);
+        dateFormat.setLenient(false);
         return dateFormat.format(date);
     }
 
     public static Date convertXMLDateToDate(String date) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(XML_DATE_FORMAT);
+        dateFormat.setLenient(false);
         return dateFormat.parse(date);
     }
 
