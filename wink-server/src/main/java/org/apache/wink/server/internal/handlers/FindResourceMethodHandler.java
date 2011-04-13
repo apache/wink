@@ -159,7 +159,6 @@ public class FindResourceMethodHandler implements RequestHandler {
         SearchResult result = context.getAttribute(SearchResult.class);
         ResourceInstance resource = result.getResource();
         SubResourceRecord subResourceRecord = subResourceInstance.getRecord();
-        UriTemplateMatcher matcher = subResourceInstance.getMatcher();
         String pattern = subResourceRecord.getTemplateProcessor().getPatternString();
         // dispatch to one of the sub-resource methods.
         SubResourceInstance method = null;
@@ -173,6 +172,7 @@ public class FindResourceMethodHandler implements RequestHandler {
             return;
         }
 
+        UriTemplateMatcher matcher = method.getMatcher();
         saveFoundMethod(result, matcher, method, context);
 
         // continue the chain to invoke the method
