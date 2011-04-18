@@ -185,6 +185,7 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
                 }
                 marshaller.marshal(entityToMarshal, entityStream);
                 releaseJAXBMarshaller(context, marshaller);
+                marshaller = null;
             }
 
             writeEndTag(qname, entityStream);
