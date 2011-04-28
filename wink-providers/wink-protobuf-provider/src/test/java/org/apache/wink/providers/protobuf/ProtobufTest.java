@@ -1,5 +1,3 @@
-package org.apache.wink.providers.protobuf;
-
 /*******************************************************************************
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,6 +17,8 @@ package org.apache.wink.providers.protobuf;
  *  under the License.
  *  
  *******************************************************************************/
+
+package org.apache.wink.providers.protobuf;
 
 import java.io.IOException;
 
