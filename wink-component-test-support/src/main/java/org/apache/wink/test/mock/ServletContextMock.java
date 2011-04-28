@@ -30,7 +30,7 @@ import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
-@SuppressWarnings( {"unchecked", "deprecation"})
+@SuppressWarnings( {"deprecation", "rawtypes"})
 public class ServletContextMock implements ServletContext {
 
     private final ServletContext servletContext;
@@ -133,6 +133,10 @@ public class ServletContextMock implements ServletContext {
 
     public void setAttribute(String arg0, Object arg1) {
         servletContext.setAttribute(arg0, arg1);
+    }
+    
+    public String getContextPath() {
+        return servletContext.getContextPath();
     }
 
 }

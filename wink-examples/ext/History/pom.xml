@@ -70,7 +70,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-j2ee_1.4_spec</artifactId>
+            <artifactId>geronimo-servlet_2.5_spec</artifactId>
         </dependency>
         <dependency>
             <groupId>woodstox</groupId>

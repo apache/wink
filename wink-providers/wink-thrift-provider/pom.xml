@@ -35,11 +35,10 @@
             <artifactId>wink-common</artifactId>
         </dependency>
 
-        <!-- [rfeng] The official thift jar is not in maven repo, see https://issues.apache.org/jira/browse/THRIFT-363 -->
         <dependency>
-            <groupId>org.apache.hadoop</groupId>
+            <groupId>org.apache.thrift</groupId>
             <artifactId>libthrift</artifactId>
-            <version>0.5.0.0</version>
+            <version>0.6.1</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -60,7 +59,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring</artifactId>
+            <artifactId>spring-context</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -70,7 +69,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-j2ee_1.4_spec</artifactId>
+            <artifactId>geronimo-servlet_2.5_spec</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
