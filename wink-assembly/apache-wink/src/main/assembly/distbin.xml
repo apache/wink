@@ -184,7 +184,7 @@
         <dependencySet>
             <includes>
                 <include>org.slf4j:jcl-over-slf4j</include>
-                <include>org.springframework:spring</include>
+                <include>org.springframework:spring*</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
             <outputDirectory>ext/wink-spring-support/lib</outputDirectory>
@@ -249,7 +249,7 @@
         </dependencySet>
         <dependencySet>
             <includes>
-                <include>org.apache.hadoop:libthrift</include>
+                <include>org.apache.thrift:libthrift</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
             <outputDirectory>ext/wink-thrift-provider/lib</outputDirectory>
