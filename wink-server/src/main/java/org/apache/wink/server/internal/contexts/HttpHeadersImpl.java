@@ -37,6 +37,7 @@ import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.wink.common.RestConstants;
 import org.apache.wink.common.internal.CaseInsensitiveMultivaluedMap;
@@ -152,8 +153,8 @@ public class HttpHeadersImpl implements HttpHeaders {
             logger.trace("getAcceptHeader() returns {}", acceptHeader); //$NON-NLS-1$
             return acceptHeader;
         } catch (IllegalArgumentException e) {
-            logger.trace("Illegal Accept request header: {}", e); //$NON-NLS-1$
-            throw new WebApplicationException(e, 400);
+            logger.error(Messages.getMessage("illegalAcceptHeader", acceptValue), e);
+            throw new WebApplicationException(e, Status.BAD_REQUEST);
         }
     }
 

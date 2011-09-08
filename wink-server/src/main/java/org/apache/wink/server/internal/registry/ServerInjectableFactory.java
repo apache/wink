@@ -48,6 +48,7 @@ import javax.ws.rs.ext.Providers;
 
 import org.apache.wink.common.RuntimeContext;
 import org.apache.wink.common.internal.PathSegmentImpl;
+import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.registry.BoundInjectable;
 import org.apache.wink.common.internal.registry.ContextAccessor;
 import org.apache.wink.common.internal.registry.Injectable;
@@ -60,8 +61,12 @@ import org.apache.wink.common.internal.utils.StringUtils;
 import org.apache.wink.common.utils.ProviderUtils;
 import org.apache.wink.common.utils.ProviderUtils.PROVIDER_EXCEPTION_ORIGINATOR;
 import org.apache.wink.server.internal.handlers.SearchResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ServerInjectableFactory extends InjectableFactory {
+    
+    private final static Logger logger = LoggerFactory.getLogger(ServerInjectableFactory.class);
 
     @Override
     public Injectable createContextParam(Class<?> classType, Annotation[] annotations, Member member) {
@@ -403,6 +408,7 @@ public class ServerInjectableFactory extends InjectableFactory {
                 // http://jcp.org/aboutJava/communityprocess/maintenance/jsr311/311ChangeLog.html:
                 // "400 status code should be returned if an exception is
                 // raised during @FormParam-annotated parameter construction"
+                logger.error(Messages.getMessage("conversionError", this, values), e);
                 throw new WebApplicationException(e.getCause(), Response.Status.BAD_REQUEST);
             }
         }
@@ -543,6 +549,7 @@ public class ServerInjectableFactory extends InjectableFactory {
             try {
                 return getConvertor().convert(values);
             } catch (ConversionException e) {
+                logger.error(Messages.getMessage("conversionError", this, values), e);
                 throw new WebApplicationException(e.getCause(), Response.Status.BAD_REQUEST);
             }
         }
@@ -598,6 +605,7 @@ public class ServerInjectableFactory extends InjectableFactory {
             try {
                 return getConvertor().convert(value);
             } catch (ConversionException e) {
+                logger.error(Messages.getMessage("conversionError", this, value), e);
                 throw new WebApplicationException(e.getCause(), Response.Status.BAD_REQUEST);
             }
         }

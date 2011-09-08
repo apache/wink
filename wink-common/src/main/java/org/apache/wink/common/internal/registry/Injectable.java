@@ -25,6 +25,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Member;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -137,5 +138,15 @@ public abstract class Injectable {
      * @return
      */
     public abstract Object getValue(RuntimeContext runtimeContext) throws IOException;
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Injectable [paramType=").append(paramType).append(", type=").append(type)
+            .append(", genericType=").append(genericType).append(", member=").append(member).append(", annotations=")
+            .append(Arrays.toString(annotations)).append("]");
+        return builder.toString();
+    }
+
 
 }
