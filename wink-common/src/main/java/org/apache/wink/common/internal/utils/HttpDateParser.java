@@ -48,6 +48,13 @@ public final class HttpDateParser {
      * @throws IllegalArgumentException if parsing fails
      */
     public static Date parseHttpDate(String date) {
+        
+        // http://www.squid-cache.org/mail-archive/squid-users/200307/0122.html
+        // Some IE browsers send If-Modified-Since header with a length extension such as: Thu, 01 Sep 2011 00:48:38 GMT; length=347987
+        int index = date.indexOf(';');
+        if (index != -1) {
+            date = date.substring(0, index).trim();
+        }
 
         int indexOfComma = date.indexOf(',');
         try {

@@ -25,6 +25,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -39,6 +40,7 @@ import javax.ws.rs.core.PathSegment;
 
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.utils.GenericsUtils;
+import org.apache.wink.common.internal.utils.HttpDateParser;
 import org.apache.wink.common.internal.utils.UriHelper;
 
 /**
@@ -256,6 +258,10 @@ public abstract class ValueConvertor {
         public Object convert(String value) {
             if (value == null) {
                 return null;
+            }
+            if (constructor.getDeclaringClass() == Date.class) {
+                // The constructor of Date doesn't handle the HTTP date formats
+                return HttpDateParser.parseHttpDate(value);
             }
             try {
                 return constructor.newInstance(value);

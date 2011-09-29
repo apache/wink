@@ -44,13 +44,13 @@ public class DateHeaderDelegateTest {
      * The date example for format pattern for RFC 1036 - <EEEE, dd-MMM-yy
      * HH:mm:ss zzz>
      */
-    private static final String RFC1036_DATE                = "Sunday, 06-Nov-94 08:49:37 GMT";
+    private static final String RFC1036_DATE                = "Sunday, 06-Nov-94 08:49:37 GMT; length=347987";
 
     /**
      * The date example for format pattern for ANSI C asctime() - <EEE MMM d
      * HH:mm:ss yyyy>
      */
-    private static final String ANSI_C_ASCTIME_DATE         = "Sun Nov 6 08:49:37 1994";
+    private static final String ANSI_C_ASCTIME_DATE         = "Sun Nov 6 08:49:37 1994; length=347987";
 
     @Test
     public void testParseHeaderDelegate() throws ParseException {
