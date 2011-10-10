@@ -156,7 +156,7 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
                                                                             config.getProxyPort()));
         }
 
-        HttpClient httpclient = new DefaultHttpClient(params);
+        this.httpclient = new DefaultHttpClient(params);
 
         if (config.getBypassHostnameVerification()) {
             SSLContext sslcontext = SSLContext.getInstance("TLS");
