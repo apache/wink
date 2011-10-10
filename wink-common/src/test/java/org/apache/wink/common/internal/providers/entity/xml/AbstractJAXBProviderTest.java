@@ -125,7 +125,7 @@ public class AbstractJAXBProviderTest extends MockObjectTestCase {
         final String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>";
         ByteArrayInputStream bais = new ByteArrayInputStream(xml.getBytes());
         try {
-            AbstractJAXBProvider.getXMLStreamReader(bais);
+            new TestAbstractJAXBProvider().getXMLStreamReader(bais);
             fail("should have got an exception");
         } catch (XMLStreamException e) {
             // any other exception type will cause test failure
@@ -143,7 +143,7 @@ public class AbstractJAXBProviderTest extends MockObjectTestCase {
         final String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><!-- comment -->";
         ByteArrayInputStream bais = new ByteArrayInputStream(xml.getBytes());
         try {
-            AbstractJAXBProvider.getXMLStreamReader(bais);
+            new TestAbstractJAXBProvider().getXMLStreamReader(bais);
             fail("should have got an exception");
         } catch (XMLStreamException e) {
             // any other exception type will cause test failure
@@ -161,7 +161,7 @@ public class AbstractJAXBProviderTest extends MockObjectTestCase {
         final String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>  <!-- comment -->";
         ByteArrayInputStream bais = new ByteArrayInputStream(xml.getBytes());
         try {
-            AbstractJAXBProvider.getXMLStreamReader(bais);
+            new TestAbstractJAXBProvider().getXMLStreamReader(bais);
             fail("should have got an exception");
         } catch (XMLStreamException e) {
             // any other exception type will cause test failure
@@ -179,7 +179,7 @@ public class AbstractJAXBProviderTest extends MockObjectTestCase {
         final String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>  <!-- comment -->   ";
         ByteArrayInputStream bais = new ByteArrayInputStream(xml.getBytes());
         try {
-            AbstractJAXBProvider.getXMLStreamReader(bais);
+            new TestAbstractJAXBProvider().getXMLStreamReader(bais);
             fail("should have got an exception");
         } catch (XMLStreamException e) {
             // any other exception type will cause test failure
@@ -199,7 +199,7 @@ public class AbstractJAXBProviderTest extends MockObjectTestCase {
         "<message>&file;</message>";
         ByteArrayInputStream bais = new ByteArrayInputStream(xml.getBytes());
         try {
-            AbstractJAXBProvider.getXMLStreamReader(bais);
+            new TestAbstractJAXBProvider().getXMLStreamReader(bais);
             fail("should have got an exception");
         } catch (XMLStreamException e) {
             // any other exception type will cause test failure
@@ -219,7 +219,7 @@ public class AbstractJAXBProviderTest extends MockObjectTestCase {
         "<!DOCTYPE data [<!ENTITY file SYSTEM \"file:"+ TEST_CLASSES_PATH +"/etc/ProvidersJAXBTest.txt\">]>" +
         "<message><arg0>&file;</arg0></message>";
         ByteArrayInputStream bais = new ByteArrayInputStream(xml.getBytes());
-        XMLStreamReader reader = AbstractJAXBProvider.getXMLStreamReader(bais);
+        XMLStreamReader reader = new TestAbstractJAXBProvider().getXMLStreamReader(bais);
         assertEquals("reader event should be start element", XMLStreamReader.START_ELEMENT, reader.getEventType());
         
         JAXBContext context = JAXBContext.newInstance(Message.class);
@@ -229,4 +229,6 @@ public class AbstractJAXBProviderTest extends MockObjectTestCase {
         assertEquals("message object should contain text from ProvidersJAXBTest.txt file", "99999999", message.getArg0().trim());
     }
     
+    private static class TestAbstractJAXBProvider extends AbstractJAXBProvider {
+    }
 }

@@ -71,7 +71,7 @@ import org.slf4j.LoggerFactory;
 
 public abstract class AbstractJAXBProvider {
 
-    private static final Logger                                      logger                         =
+    protected static final Logger                                    logger                         =
                                                                                                         LoggerFactory
                                                                                                             .getLogger(AbstractJAXBProvider.class);
     private static final SoftConcurrentMap<Class<?>, JAXBContext>    jaxbDefaultContexts            =
@@ -232,9 +232,8 @@ public abstract class AbstractJAXBProvider {
      * @return Unmarshaller an unmarshaller for the context
      * @throws JAXBException
      */
-    protected final Unmarshaller getJAXBUnmarshaller(Class<?> type,
-                                                     JAXBContext context,
-                                                     MediaType mediaType) throws JAXBException {
+    protected Unmarshaller getJAXBUnmarshaller(Class<?> type, JAXBContext context, MediaType mediaType)
+        throws JAXBException {
         Unmarshaller unm = upool.get(context);
         if (unm == null) {
             if (logger.isTraceEnabled()) {
@@ -321,7 +320,7 @@ public abstract class AbstractJAXBProvider {
      * @return
      * @throws XMLStreamException
      */
-    protected static XMLStreamReader getXMLStreamReader(InputStream entityStream)
+    protected XMLStreamReader getXMLStreamReader(InputStream entityStream)
         throws XMLStreamException {
         // NOTE: createFilteredReader may appear to be more convenient, but it
         // comes at the cost of
@@ -340,7 +339,7 @@ public abstract class AbstractJAXBProvider {
      * @return
      * @throws XMLStreamException
      */
-    protected static XMLStreamReader getXMLStreamReader(InputStreamReader entityStreamReader)
+    protected XMLStreamReader getXMLStreamReader(InputStreamReader entityStreamReader)
         throws XMLStreamException {
         // NOTE: createFilteredReader may appear to be more convenient, but it
         // comes at the cost of
