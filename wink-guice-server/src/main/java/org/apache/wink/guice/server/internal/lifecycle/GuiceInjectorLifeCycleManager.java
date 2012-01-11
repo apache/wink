@@ -219,6 +219,8 @@ public class GuiceInjectorLifeCycleManager<T> implements LifecycleManager<T> {
             classMetadata = ProviderMetadataCollector.collectMetadata(cls);
         } else if (ResourceMetadataCollector.isResource(cls)) {
             classMetadata = ResourceMetadataCollector.collectMetadata(cls);
+        } else if (ApplicationMetadataCollector.isApplication(cls)) {
+            classMetadata = ApplicationMetadataCollector.collectMetadata(cls);
         }
 
         return classMetadata;
