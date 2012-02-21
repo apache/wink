@@ -36,7 +36,7 @@ import javax.ws.rs.ext.Providers;
 public abstract class OutMultiPart {
 
     private String             boundary = "simple boundary"; //$NON-NLS-1$
-    public final static String SEP      = "\n"; //$NON-NLS-1$
+    public final static String SEP      = "\r\n"; //$NON-NLS-1$
 
     /**
      * set the boundary to be used to separate between the different parts
@@ -69,13 +69,15 @@ public abstract class OutMultiPart {
      * @throws IOException
      */
     public void write(OutputStream os, Providers providers) throws IOException {
+
         Iterator<? extends OutPart> it = getIterator();
         while (it.hasNext()) {
             OutPart p = it.next();
-            os.write((SEP + "--" + boundary + SEP).getBytes()); //$NON-NLS-1$
+            os.write(("--" + getBoundary() + SEP).getBytes()); //$NON-NLS-1$
             p.writePart(os, providers);
+            os.write(SEP.getBytes());
         }
-        os.write((SEP + "--" + boundary + "--" + SEP).getBytes()); //$NON-NLS-1$ //$NON-NLS-2$
+        os.write(("--" + getBoundary() + "--" + SEP).getBytes()); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
 }

@@ -119,9 +119,8 @@ public class OutPart {
         for (String name : getHeaders().keySet()) {
             List<String> values = getHeaders().get(name);
             for (String value : values) {
-                String header =
-                    new StringBuilder().append(name).append(": ").append(value) //$NON-NLS-1$
-                        .append(OutMultiPart.SEP).toString();
+                String header = new StringBuilder().append(name).append(": ").append(value) //$NON-NLS-1$
+                    .append(OutMultiPart.SEP).toString();
                 os.write(header.getBytes());
             }
         }
