@@ -25,7 +25,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.ServletException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -113,10 +112,9 @@ public class JacksonDeserializationConfiguration2Test extends MockServletInvocat
                                                         MediaType.APPLICATION_JSON);
         request.setContentType(MediaType.APPLICATION_JSON);
         request.setContent("{\"children\":[\"Joe\",\"Sally\",\"Steve\"]}".getBytes());
-        try{
-            invoke(request);
-            fail("ServletException not thrown for missing setter method of children.");
-        } catch(ServletException e) {}
+        // No jackson 1.9.x support the List without setter
+        MockHttpServletResponse response = invoke(request);
+        assertEquals(200, response.getStatus());
     }
     
     public void testPOSTPersonWithAgeWeight() throws Exception {
