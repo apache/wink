@@ -90,7 +90,7 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
                             elementList.add(unmarshaller.unmarshal(xsr, theType));
                         } else if (theType.isAnnotationPresent(XmlRootElement.class)) {
                             Object o = unmarshaller.unmarshal(xsr);
-                            o = unmarshalWithXmlAdapter(o, getParameterizedTypeClassForRead(type, genericType, false), annotations);
+                            o = unmarshalWithXmlAdapter(o, type, getParameterizedTypeClassForRead(type, genericType, false), annotations);
                             if (o instanceof JAXBElement) {
                                 o = ((JAXBElement)o).getValue();
                             }
@@ -163,7 +163,7 @@ public abstract class AbstractJAXBCollectionProvider extends AbstractJAXBProvide
             Marshaller marshaller = null;
             JAXBContext context = null;
             for (Object o : elementArray) {
-                o = marshalWithXmlAdapter(o, getParameterizedTypeClassForWrite(type, genericType, false), annotations);
+                o = marshalWithXmlAdapter(o, type, getParameterizedTypeClassForWrite(type, genericType, false), annotations);
                 if(marshaller == null) {
                     Class<?> oType =
                         isJAXBElement ? ((JAXBElement<?>)o).getDeclaredType() : o.getClass();

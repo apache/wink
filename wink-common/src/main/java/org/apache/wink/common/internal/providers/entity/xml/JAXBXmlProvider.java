@@ -147,7 +147,7 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
             closeXMLStreamReader(xmlStreamReader);
             throw e;
         }
-        return unmarshalWithXmlAdapter(unmarshaledResource, type, annotations);
+        return unmarshalWithXmlAdapter(unmarshaledResource, type, type, annotations);
     }
 
     public long getSize(Object t,
@@ -173,7 +173,7 @@ public class JAXBXmlProvider extends AbstractJAXBProvider implements MessageBody
                         MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException, WebApplicationException {
 
-        t = marshalWithXmlAdapter(t, genericType, annotations);
+        t = marshalWithXmlAdapter(t, type, genericType, annotations);
         Class<?> concreteType = getConcreteTypeFromTypeMap(type, annotations);
         mediaType = MediaTypeUtils.setDefaultCharsetOnMediaTypeHeader(httpHeaders, mediaType);
 

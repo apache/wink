@@ -82,6 +82,12 @@
             <groupId>org.codehaus.woodstox</groupId>
             <artifactId>wstx-asl</artifactId>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>stax</groupId>
+                    <artifactId>stax-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         
         <dependency>

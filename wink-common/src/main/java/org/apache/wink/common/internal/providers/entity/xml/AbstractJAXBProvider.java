@@ -490,7 +490,7 @@ public abstract class AbstractJAXBProvider {
     }
 
     private Class<?> getConcreteTypeFromAdapter(Class<?> type, Annotation[] annotations) {
-        XmlJavaTypeAdapter adapter = getXmlJavaTypeAdapter(type, annotations);
+        XmlJavaTypeAdapter adapter = getXmlJavaTypeAdapter(type, type, annotations);
         if (adapter != null) {
             Class<?> adapterClass = adapter.value();
             try {
@@ -509,9 +509,9 @@ public abstract class AbstractJAXBProvider {
         if (ret == null) {
             XmlElement xmlElement = getXmlElementAnno(type, annotations);
             if (xmlElement != null) {
-                Type xmlElementType = xmlElement.type();
+                Class<?> xmlElementType = xmlElement.type();
                 if (xmlElementType != null) {
-                    ret = (Class<?>)xmlElementType;
+                    ret = xmlElementType;
                 }
             }
             if (ret == null)
@@ -535,11 +535,11 @@ public abstract class AbstractJAXBProvider {
     }
 
     @SuppressWarnings("unchecked")
-    protected Object marshalWithXmlAdapter(Object obj, Type type, Annotation[] annotations) {
+    protected Object marshalWithXmlAdapter(Object obj, Class<?> cls, Type type, Annotation[] annotations) {
         if ((type == null) || (annotations == null)) {
             return obj;
         }
-        XmlJavaTypeAdapter xmlJavaTypeAdapter = getXmlJavaTypeAdapter(type, annotations);
+        XmlJavaTypeAdapter xmlJavaTypeAdapter = getXmlJavaTypeAdapter(cls, type, annotations);
         if (xmlJavaTypeAdapter != null) {
             try {
                 XmlAdapter xmlAdapter = xmlJavaTypeAdapter.value().newInstance();
@@ -559,21 +559,21 @@ public abstract class AbstractJAXBProvider {
      * @param annotations
      * @return
      */
-    private XmlJavaTypeAdapter getXmlJavaTypeAdapter(Type type, Annotation[] annotations) {
+    private XmlJavaTypeAdapter getXmlJavaTypeAdapter(Class<?> cls, Type type, Annotation[] annotations) {
         Boolean present = xmlJavaTypeAdapterPresentCache.get(type);
         if (Boolean.FALSE.equals(present)) {
             return null;
         }
         XmlJavaTypeAdapter xmlJavaTypeAdapter = xmlJavaTypeAdapterCache.get(type);
         if(xmlJavaTypeAdapter == null) {
-            xmlJavaTypeAdapter = findXmlJavaTypeAdapter(type, annotations);
+            xmlJavaTypeAdapter = findXmlJavaTypeAdapter(cls, type, annotations);
             xmlJavaTypeAdapterCache.put(type, xmlJavaTypeAdapter);
             xmlJavaTypeAdapterPresentCache.put(type, xmlJavaTypeAdapter != null);
         }
         return xmlJavaTypeAdapter;
     }
 
-    private XmlJavaTypeAdapter findXmlJavaTypeAdapter(Type type, Annotation[] annotations) {
+    private XmlJavaTypeAdapter findXmlJavaTypeAdapter(Class<?> cls, Type type, Annotation[] annotations) {
         XmlJavaTypeAdapter xmlJavaTypeAdapter = null;
         for (int i = 0; (annotations != null) && i < annotations.length; i++) {
             if (annotations[i].annotationType() == XmlJavaTypeAdapter.class) {
@@ -581,9 +581,9 @@ public abstract class AbstractJAXBProvider {
                 break;
             }
         }
-        if ((xmlJavaTypeAdapter == null) && (type != null)) {
+        if ((xmlJavaTypeAdapter == null) && (cls != null)) {
             // check the type itself
-            xmlJavaTypeAdapter = ((Class<?>)type).getAnnotation(XmlJavaTypeAdapter.class);
+            xmlJavaTypeAdapter = cls.getAnnotation(XmlJavaTypeAdapter.class);
         }
         return xmlJavaTypeAdapter;
     }
@@ -605,11 +605,11 @@ public abstract class AbstractJAXBProvider {
     }
 
     @SuppressWarnings("unchecked")
-    protected Object unmarshalWithXmlAdapter(Object obj, Type type, Annotation[] annotations) {
+    protected Object unmarshalWithXmlAdapter(Object obj, Class<?> cls, Type type, Annotation[] annotations) {
         if ((type == null) || (annotations == null)) {
             return obj;
         }
-        XmlJavaTypeAdapter xmlJavaTypeAdapter = getXmlJavaTypeAdapter(type, annotations);
+        XmlJavaTypeAdapter xmlJavaTypeAdapter = getXmlJavaTypeAdapter(cls, type, annotations);
         if (xmlJavaTypeAdapter != null) {
             try {
                 XmlAdapter xmlAdapter = xmlJavaTypeAdapter.value().newInstance();
