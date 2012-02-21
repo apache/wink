@@ -210,7 +210,7 @@ public class XMLTests extends TestCase {
     public void testSimpleXMLDocument_AsStreamToStreamCompact() {
         Exception ex = null;
         InputStream is = this.getClass().getClassLoader().getResourceAsStream("simple.xml");
-        File fileOut = new File("json_output/simple_json_compact.json");
+        File fileOut = new File("target/json_output/simple_json_compact.json");
 
         try {
             File parent = fileOut.getParentFile();
@@ -233,7 +233,7 @@ public class XMLTests extends TestCase {
     public void testSimpleXMLDocument_AsStreamToStreamVerbose() {
         Exception ex = null;
         InputStream is = this.getClass().getClassLoader().getResourceAsStream("simple.xml");
-        File fileOut = new File("json_output/simple_json_verbose.json");
+        File fileOut = new File("target/json_output/simple_json_verbose.json");
 
         try {
             File parent = fileOut.getParentFile();
@@ -256,7 +256,7 @@ public class XMLTests extends TestCase {
     public void testComplexXMLDocument_AsStreamToStreamCompact() {
         Exception ex = null;
         InputStream is = this.getClass().getClassLoader().getResourceAsStream("complex.xml");
-        File fileOut = new File("json_output/complex_json_compact.json");
+        File fileOut = new File("target/json_output/complex_json_compact.json");
 
         try {
             File parent = fileOut.getParentFile();
@@ -279,7 +279,7 @@ public class XMLTests extends TestCase {
     public void testComplexXMLDocument_AsStreamToStreamVerbose() {
         Exception ex = null;
         InputStream is = this.getClass().getClassLoader().getResourceAsStream("complex.xml");
-        File fileOut = new File("json_output/complex_json_verbose.json");
+        File fileOut = new File("target/json_output/complex_json_verbose.json");
 
         try {
             File parent = fileOut.getParentFile();
@@ -319,7 +319,7 @@ public class XMLTests extends TestCase {
     public void testAtomFeedConversion1() {
         Exception ex = null;
         InputStream is = this.getClass().getClassLoader().getResourceAsStream("atom-xml-entry1");
-        File oFile   = new File("json_output/atomentry-xml-json1.json");
+        File oFile   = new File("target/json_output/atomentry-xml-json1.json");
 
         try {
             File parent = oFile.getParentFile();
@@ -344,7 +344,7 @@ public class XMLTests extends TestCase {
     public void testAtomFeedConversion2() {
         Exception ex = null;
         InputStream is = this.getClass().getClassLoader().getResourceAsStream("atom-xml-feed1");
-        File oFile   = new File("json_output/atomfeed-xml-json2.json");
+        File oFile   = new File("target/json_output/atomfeed-xml-json2.json");
 
         try {
             File parent = oFile.getParentFile();
@@ -369,7 +369,7 @@ public class XMLTests extends TestCase {
     public void testLowCharacterUTF8String() {
         Exception ex = null;
         InputStream is = this.getClass().getClassLoader().getResourceAsStream("utf8-lowerchar.xml");
-        File fileOut = new File("json_output/utf8-lowerchar.json");
+        File fileOut = new File("target/json_output/utf8-lowerchar.json");
 
         try {
             File parent = fileOut.getParentFile();
@@ -381,7 +381,7 @@ public class XMLTests extends TestCase {
             fos.flush();
             fos.close();
 
-            is = fileOut.toURI().toURL().openStream();// this.getClass().getClassLoader().getResourceAsStream("json_output/utf8-lowerchar.json");
+            is = fileOut.toURI().toURL().openStream();// this.getClass().getClassLoader().getResourceAsStream("target/json_output/utf8-lowerchar.json");
             JSONObject jObject = new JSONObject(is);
             is.close();
             String str = (String)jObject.get("hi");
@@ -402,7 +402,7 @@ public class XMLTests extends TestCase {
     public void testArrayUTF8String() {
         Exception ex = null;
         InputStream is = this.getClass().getClassLoader().getResourceAsStream("utf8-array.xml");
-        File fileOut = new File("json_output/utf8-array.json");
+        File fileOut = new File("target/json_output/utf8-array.json");
 
         try {
             File parent = fileOut.getParentFile();
