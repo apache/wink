@@ -46,12 +46,16 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.conn.ssl.X509HostnameVerifier;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.SchemeRegistryFactory;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreConnectionPNames;
-import org.apache.wink.client.ClientConfig;
+import org.apache.http.util.EntityUtils;
+import org.apache.wink.client.ApacheHttpClientConfig;
 import org.apache.wink.client.ClientRequest;
 import org.apache.wink.client.ClientResponse;
 import org.apache.wink.client.handlers.HandlerContext;
@@ -99,7 +103,12 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
 
         HttpRequestBase entityRequest = setupHttpRequest(request, client, entityWriter);
 
-        return client.execute(entityRequest);
+        try {
+            return client.execute(entityRequest);
+        } catch (Exception ex) {
+            entityRequest.abort();
+            throw new RuntimeException(ex);
+        }
     }
 
     private HttpRequestBase setupHttpRequest(ClientRequest request,
@@ -133,13 +142,13 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
         return httpRequest;
     }
 
-    private HttpClient openConnection(ClientRequest request) throws NoSuchAlgorithmException, KeyManagementException {
+    private synchronized HttpClient openConnection(ClientRequest request) throws NoSuchAlgorithmException, KeyManagementException {
         if (this.httpclient != null) {
             return this.httpclient;
         }
 
         // cast is safe because we're on the client
-        ClientConfig config = (ClientConfig)request.getAttribute(WinkConfiguration.class);
+        ApacheHttpClientConfig config = (ApacheHttpClientConfig)request.getAttribute(WinkConfiguration.class);
         BasicHttpParams params = new BasicHttpParams();
         params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, Integer.valueOf(config
             .getConnectTimeout()));
@@ -156,14 +165,23 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
                                                                             config.getProxyPort()));
         }
 
-        this.httpclient = new DefaultHttpClient(params);
+        if (config.getMaxPooledConnections() > 0) {
+            SchemeRegistry schemeRegistry = SchemeRegistryFactory.createDefault();
+            ThreadSafeClientConnManager httpConnectionManager = new ThreadSafeClientConnManager(schemeRegistry);
+
+            httpConnectionManager.setMaxTotal(config.getMaxPooledConnections());
+            httpConnectionManager.setDefaultMaxPerRoute(config.getMaxPooledConnections());
+
+            this.httpclient = new DefaultHttpClient(httpConnectionManager, params);
+        } else {
+            this.httpclient = new DefaultHttpClient(params);
+        }
 
         if (config.getBypassHostnameVerification()) {
             SSLContext sslcontext = SSLContext.getInstance("TLS");
             sslcontext.init(null, null, null);
 
-            SSLSocketFactory sf = new SSLSocketFactory(sslcontext);
-            sf.setHostnameVerifier(new X509HostnameVerifier() {
+            SSLSocketFactory sf = new SSLSocketFactory(sslcontext, new X509HostnameVerifier() {
 
                 public boolean verify(String hostname, SSLSession session) {
                     return true;
@@ -179,10 +197,10 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
                 public void verify(String host, SSLSocket ssl) throws IOException {
                 }
             });
-            httpclient.getConnectionManager().getSchemeRegistry().register(new Scheme("https", sf,
-                                                                                      443));
+            httpclient.getConnectionManager().getSchemeRegistry().register(new Scheme("https", 443, sf));
         }
-        return httpclient;
+
+        return this.httpclient;
     }
 
     /**
@@ -225,7 +243,7 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
               HttpEntity entity = httpResponse.getEntity();
               if (entity != null) {
                   try {
-                    entity.consumeContent();
+                    EntityUtils.consume(entity);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -324,6 +342,7 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
             this.ncos = ncos;
         }
 
+        @Deprecated
         public void consumeContent() throws IOException {
         }
 

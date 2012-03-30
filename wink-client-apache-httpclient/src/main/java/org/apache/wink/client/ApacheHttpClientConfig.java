@@ -46,6 +46,7 @@ import org.apache.wink.client.internal.handlers.ApacheHttpClientConnectionHandle
 public class ApacheHttpClientConfig extends ClientConfig {
 
     private HttpClient client;
+    private int maxPooledConnections;
 
     public ApacheHttpClientConfig() {
         client = null;
@@ -60,4 +61,11 @@ public class ApacheHttpClientConfig extends ClientConfig {
         return new ApacheHttpClientConnectionHandler(client);
     }
 
+    public void setMaxPooledConnections(int maxPooledConnections) {
+        this.maxPooledConnections = maxPooledConnections;
+    }
+
+    public int getMaxPooledConnections() {
+        return maxPooledConnections;
+    }
 }
