@@ -23,7 +23,7 @@ package org.apache.wink.client.httpclient;
 import org.apache.http.client.HttpClient;
 import org.apache.wink.client.ClientConfig;
 import org.apache.wink.client.handlers.ConnectionHandler;
-import org.apache.wink.client.internal.handlers.ApacheHttpClientConnectionHandler;
+import org.apache.wink.client.internal.handlers.httpclient.ApacheHttpClientConnectionHandler;
 
 /**
  * Configuration object that wraps Apache HttpClient as underling Http client.

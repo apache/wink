@@ -18,7 +18,7 @@
  *  
  *******************************************************************************/
 
-package org.apache.wink.client.internal.handlers;
+package org.apache.wink.client.internal.handlers.httpclient;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,10 +55,12 @@ import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.util.EntityUtils;
-import org.apache.wink.client.ApacheHttpClientConfig;
 import org.apache.wink.client.ClientRequest;
 import org.apache.wink.client.ClientResponse;
 import org.apache.wink.client.handlers.HandlerContext;
+import org.apache.wink.client.httpclient.ApacheHttpClientConfig;
+import org.apache.wink.client.internal.handlers.AbstractConnectionHandler;
+import org.apache.wink.client.internal.handlers.ClientResponseImpl;
 import org.apache.wink.common.internal.WinkConfiguration;
 
 /**
