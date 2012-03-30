@@ -18,9 +18,10 @@
  *  
  *******************************************************************************/
 
-package org.apache.wink.client;
+package org.apache.wink.client.httpclient;
 
 import org.apache.http.client.HttpClient;
+import org.apache.wink.client.ClientConfig;
 import org.apache.wink.client.handlers.ConnectionHandler;
 import org.apache.wink.client.internal.handlers.ApacheHttpClientConnectionHandler;
 
@@ -42,18 +43,30 @@ import org.apache.wink.client.internal.handlers.ApacheHttpClientConnectionHandle
  * </pre>
  * 
  * </p>
- * Move to org.apache.wink.client.httpclient to avoid OSGi split package issues
- * @deprecated
- * 
  */
-@Deprecated
-public class ApacheHttpClientConfig extends org.apache.wink.client.httpclient.ApacheHttpClientConfig {
+public class ApacheHttpClientConfig extends ClientConfig {
+
+    protected HttpClient client;
+    protected int maxPooledConnections;
 
     public ApacheHttpClientConfig() {
-        super();
+        client = null;
     }
 
     public ApacheHttpClientConfig(HttpClient client) {
-        super(client);
+        this.client = client;
+    }
+
+    @Override
+    protected ConnectionHandler getConnectionHandler() {
+        return new ApacheHttpClientConnectionHandler(client);
+    }
+
+    public void setMaxPooledConnections(int maxPooledConnections) {
+        this.maxPooledConnections = maxPooledConnections;
+    }
+
+    public int getMaxPooledConnections() {
+        return maxPooledConnections;
     }
 }
