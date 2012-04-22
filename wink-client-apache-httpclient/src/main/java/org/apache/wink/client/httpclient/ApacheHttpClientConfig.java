@@ -48,7 +48,7 @@ public class ApacheHttpClientConfig extends ClientConfig {
 
     protected HttpClient client;
     protected int maxPooledConnections;
-    protected boolean chunked;
+    protected boolean chunked = true;
 
     public ApacheHttpClientConfig() {
         client = null;
