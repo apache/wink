@@ -62,7 +62,8 @@ public class JaxRsFilter implements Filter {
 	private boolean accepts(HttpServletRequest request) {
 		DeploymentConfiguration deploymentConfiguration = winkProvider.getRequestProcessor().getConfiguration();
 		ResourceRegistry resourceRegistry = deploymentConfiguration.getResourceRegistry();
-		log.info("Checking acceptance of {}.", request.getRequestURI());
+		//FIXME: fix this to comply with externalization requirements
+		//log.info("Checking acceptance of {}.", request.getRequestURI());
 		return resourceRegistry.getMatchingRootResources(request.getRequestURI()).size() > 0;
 	}
 
