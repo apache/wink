@@ -22,6 +22,7 @@ package org.apache.wink.guice.server.internal;
 import org.apache.wink.common.internal.lifecycle.LifecycleManagersRegistry;
 import org.apache.wink.guice.server.internal.lifecycle.GuiceInjectorLifeCycleManager;
 import org.apache.wink.guice.server.internal.lifecycle.WinkGuiceModule;
+import org.apache.wink.server.handlers.Handler;
 import org.apache.wink.server.internal.DeploymentConfiguration;
 
 import com.google.inject.Guice;
@@ -34,11 +35,21 @@ public class GuiceDeploymentConfiguration extends DeploymentConfiguration {
     public GuiceDeploymentConfiguration() {
         LifecycleManagersRegistry lifecycleManagersRegistry = new LifecycleManagersRegistry();
         setOfFactoryRegistry(lifecycleManagersRegistry);
-        Injector injector = Guice.createInjector(createModules());
+        injector = Guice.createInjector(createModules());
         lifecycleManagersRegistry.addFactoryFactory(new GuiceInjectorLifeCycleManager(injector));
     }
 
     public Module[] createModules() {
         return new Module[] {new WinkGuiceModule()};
     }
+    
+	private final Injector injector;
+	@Override
+	protected <T extends Handler> T createHandler(Class<T> cls) {
+		try {
+			return injector.getInstance(cls);
+		} catch (Throwable th) {
+			return super.createHandler(cls);
+		}
+	}
 }
