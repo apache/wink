@@ -53,6 +53,7 @@
         <module>wink-guice-server</module>
         <module>wink-examples</module>
         <module>wink-assembly</module>
+        <module>wink-osgi</module>
     </modules>
     <scm>
         <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/wink/trunk</connection>

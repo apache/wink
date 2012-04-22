@@ -30,6 +30,7 @@ This document describes the examples available in Wink distribution
 		- Spring
 		- Scope
 		- WebDAV
+		- OSGi (maven build only)
 
 For more details regarding each example, please refer to the readme.txt file located
 in each example directory.

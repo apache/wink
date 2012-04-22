@@ -38,5 +38,6 @@
 		<module>Scope</module>
 		<module>Spring</module>		
 		<module>WebDAV</module>
+		<module>OSGi</module>
   </modules>
 </project>
