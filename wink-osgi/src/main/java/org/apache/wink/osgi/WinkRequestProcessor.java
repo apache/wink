@@ -152,6 +152,7 @@ public class WinkRequestProcessor {
 	private void init() {
 		ThreadRootResourceDeploymentConfiguration configuration = new ThreadRootResourceDeploymentConfiguration();
 		configuration.init();
+		configuration.getProperties().setProperty("wink.rootResource", "none");
 		requestProcessor = new RequestProcessor(configuration);
 		for (Object component : components) {
 			registerComponent(component);
