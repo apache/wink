@@ -107,8 +107,8 @@ public class ContextAccessor {
                                               }
                                               // get the real context from the
                                               // RuntimeContext
-                                              Object context =
-                                                  runtimeContext.getAttribute(contextClass);
+                                              // We need to call getContext() instead of getContextFromAccessor() as some context will be created from the context resolvers
+                                              Object context = getContext(contextClass, runtimeContext);
                                               // invoke the method on the real
                                               // context
                                               return method.invoke(context, args);
