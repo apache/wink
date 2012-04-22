@@ -163,7 +163,8 @@ public class WinkRequestProcessor {
 		Application application = new InnerApplication(component);
 		requestProcessor.getConfiguration().addApplication(application, false);
 		components.add(component);
-		log.info("registered component {}", component);
+		//FIXME: fix this to comply with externalization requirements
+		//log.info("registered component {}", component);
 	}
 
 	
