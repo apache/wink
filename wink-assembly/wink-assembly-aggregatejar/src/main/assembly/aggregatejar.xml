@@ -115,7 +115,20 @@
                 </excludes>
             </unpackOptions>
         </dependencySet>
-     </dependencySets>
+        <dependencySet>
+            <includes>
+                <include>org.apache.wink:wink-client-asynchttpclient</include>
+            </includes>
+            <unpack>true</unpack>
+            <unpackOptions>
+                <excludes>
+                    <exclude>**/NOTICE</exclude>
+                    <exclude>**/DEPENDENCIES</exclude>
+                    <exclude>**/DISCLAIMER</exclude>
+                </excludes>
+            </unpackOptions>
+        </dependencySet>
+    </dependencySets>
     <fileSets>
         <fileSet>
             <includes>
