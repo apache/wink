@@ -48,6 +48,7 @@ public class ApacheHttpClientConfig extends ClientConfig {
 
     protected HttpClient client;
     protected int maxPooledConnections;
+    protected boolean chunked;
 
     public ApacheHttpClientConfig() {
         client = null;
@@ -68,5 +69,13 @@ public class ApacheHttpClientConfig extends ClientConfig {
 
     public int getMaxPooledConnections() {
         return maxPooledConnections;
+    }
+
+    public boolean isChunked() {
+        return chunked;
+    }
+
+    public void setChunked(boolean chunked) {
+        this.chunked = chunked;
     }
 }

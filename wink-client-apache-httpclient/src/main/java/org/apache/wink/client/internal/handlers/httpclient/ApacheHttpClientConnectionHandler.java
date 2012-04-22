@@ -20,6 +20,7 @@
 
 package org.apache.wink.client.internal.handlers.httpclient;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -33,6 +34,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.http.Header;
@@ -99,8 +101,10 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
         EntityWriter entityWriter = null;
         if (request.getEntity() != null) {
             os = adaptOutputStream(ncos, request, context.getOutputStreamAdapters());
+            // cast is safe because we're on the client
+            ApacheHttpClientConfig config = (ApacheHttpClientConfig)request.getAttribute(WinkConfiguration.class);
             // prepare the entity that will write our entity
-            entityWriter = new EntityWriter(this, request, os, ncos);
+            entityWriter = new EntityWriter(this, request, os, ncos, config.isChunked());
         }
 
         HttpRequestBase entityRequest = setupHttpRequest(request, client, entityWriter);
@@ -330,18 +334,34 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
     private static class EntityWriter implements HttpEntity {
 
         private ApacheHttpClientConnectionHandler apacheHttpClientHandler;
-        private ClientRequest                     request;
-        private OutputStream                      adaptedOutputStream;
-        private NonCloseableOutputStream          ncos;
+        private ClientRequest request;
+        private OutputStream adaptedOutputStream;
+        private NonCloseableOutputStream ncos;
+        private boolean chunked;
+        private long length = -1l;
+        private byte[] content;
 
         public EntityWriter(ApacheHttpClientConnectionHandler apacheHttpClientHandler,
                             ClientRequest request,
                             OutputStream adaptedOutputStream,
-                            NonCloseableOutputStream ncos) {
+                            NonCloseableOutputStream ncos,
+                            boolean chunked) {
             this.apacheHttpClientHandler = apacheHttpClientHandler;
             this.request = request;
             this.adaptedOutputStream = adaptedOutputStream;
             this.ncos = ncos;
+            this.chunked = chunked;
+
+            if (!chunked) {
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                try {
+                    apacheHttpClientHandler.writeEntity(request, bos);
+                    content = bos.toByteArray();
+                    length = content.length;
+                } catch (IOException e) {
+                    throw new WebApplicationException(e);
+                }
+            }
         }
 
         @Deprecated
@@ -357,7 +377,7 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
         }
 
         public long getContentLength() {
-            return -1;
+            return length;
         }
 
         public Header getContentType() {
@@ -365,7 +385,7 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
         }
 
         public boolean isChunked() {
-            return true;
+            return chunked;
         }
 
         public boolean isRepeatable() {
@@ -373,13 +393,17 @@ public class ApacheHttpClientConnectionHandler extends AbstractConnectionHandler
         }
 
         public boolean isStreaming() {
-            return true;
+            return content == null;
         }
 
         public void writeTo(OutputStream os) throws IOException {
-            ncos.setOutputStream(os);
-            apacheHttpClientHandler.writeEntity(request, adaptedOutputStream);
+            if (!chunked && length > 0 && content != null) {
+                os.write(content);
+                os.flush();
+            } else {
+                ncos.setOutputStream(os);
+                apacheHttpClientHandler.writeEntity(request, adaptedOutputStream);
+            }
         }
-
     }
 }
