@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.wink</groupId>
         <artifactId>wink</artifactId>
-        <version>1.2.0-incubating-SNAPSHOT</version>
+        <version>1.2.0-incubating</version>
     </parent>
     <dependencies>
         <dependency>

@@ -27,7 +27,7 @@
     <parent>
         <groupId>org.apache.wink</groupId>
         <artifactId>wink-assembly</artifactId>
-        <version>1.2.0-incubating-SNAPSHOT</version>
+        <version>1.2.0-incubating</version>
     </parent>
     <properties>
         <SDK_JAR_NAME>wink-${project.version}.jar</SDK_JAR_NAME>
