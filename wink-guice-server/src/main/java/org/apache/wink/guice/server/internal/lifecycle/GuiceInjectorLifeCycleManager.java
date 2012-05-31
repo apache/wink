@@ -134,6 +134,9 @@ public class GuiceInjectorLifeCycleManager<T> implements LifecycleManager<T> {
                         instance = (T)injector.getInstance(clazz);
                         return instance;
                     } catch (ProvisionException e) {
+                    	if (e.getCause() == null) {
+                    		throw e;
+                    	}
                         throw (Exception)e.getCause();
                     }
                 }
@@ -186,6 +189,9 @@ public class GuiceInjectorLifeCycleManager<T> implements LifecycleManager<T> {
                     try {
                         return (T)injector.getInstance(clazz);
                     } catch (ProvisionException e) {
+                    	if (e.getCause() == null) {
+                    		throw e;
+                    	}
                         throw (Exception)e.getCause();
                     }
                 }
