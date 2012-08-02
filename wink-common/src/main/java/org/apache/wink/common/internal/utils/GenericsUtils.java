@@ -80,6 +80,10 @@ public class GenericsUtils {
                 GenericArrayType genericArray = (GenericArrayType)type;
                 Class<?> componentType = cls.getComponentType();
                 return isAssignableFrom(genericArray.getGenericComponentType(), componentType);
+            } else if ((type instanceof Class<?>) && ((Class<?>)type).isArray()) {
+                Class<?> componentType1 = ((Class<?>)type).getComponentType();
+                Class<?> componentType2 = cls.getComponentType();
+                return isAssignableFrom(componentType1, componentType2);
             }
         } else {
             if (type instanceof GenericArrayType == false) {
