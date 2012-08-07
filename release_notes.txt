@@ -1,4 +1,4 @@
-Apache Wink 1.2 Release Notes
+Apache Wink 1.2.1 Release Notes
 
 
 1. Overview

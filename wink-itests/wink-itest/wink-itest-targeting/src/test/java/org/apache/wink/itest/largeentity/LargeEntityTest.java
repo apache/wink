@@ -154,10 +154,10 @@ public class LargeEntityTest extends TestCase {
         try {
             System.out
                 .println(new File(
-                                  ServerEnvironmentInfo.getWorkDir() + "/wink-itest-targeting-1.3.0-incubating-SNAPSHOT.war")
+                                  ServerEnvironmentInfo.getWorkDir() + "/wink-itest-targeting-1.2.1-incubating.war")
                     .getAbsoluteFile().getAbsolutePath());
             postMethod.setRequestEntity(new FileRequestEntity(new File(ServerEnvironmentInfo
-                .getWorkDir() + "/wink-itest-targeting-1.3.0-incubating-SNAPSHOT.war"),
+                .getWorkDir() + "/wink-itest-targeting-1.2.1-incubating.war"),
                                                               "application/jar"));
             client.executeMethod(postMethod);
             assertEquals(290, postMethod.getStatusCode());
@@ -179,10 +179,10 @@ public class LargeEntityTest extends TestCase {
         try {
             System.out
                 .println(new File(
-                                  ServerEnvironmentInfo.getWorkDir() + "/wink-itest-targeting-1.3.0-incubating-SNAPSHOT.war")
+                                  ServerEnvironmentInfo.getWorkDir() + "/wink-itest-targeting-1.2.1-incubating.war")
                     .getAbsoluteFile().getAbsolutePath());
             postMethod.setRequestEntity(new FileRequestEntity(new File(ServerEnvironmentInfo
-                .getWorkDir() + "/wink-itest-targeting-1.3.0-incubating-SNAPSHOT.war"),
+                .getWorkDir() + "/wink-itest-targeting-1.2.1-incubating.war"),
                                                               "application/jar"));
             client.executeMethod(postMethod);
             assertEquals(290, postMethod.getStatusCode());
