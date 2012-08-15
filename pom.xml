@@ -78,9 +78,11 @@
                     </includes>
                     <excludes>
                         <exclude>**/LICENSE</exclude>
+                        <exclude>**/LICENSE.vm</exclude>
                         <exclude>**/DISCLAIMER</exclude>
                         <exclude>**/DEPENDENCIES</exclude>
                         <exclude>**/NOTICE</exclude>
+                        <exclude>**/NOTICE.vm</exclude>
                         <exclude>**/.*</exclude>
                         <exclude>**/.*/**</exclude>
                         <exclude>**/*.txt</exclude>
