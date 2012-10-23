@@ -35,6 +35,7 @@
 		<module>wink-jackson-provider</module>
 		<module>wink-json4j-provider</module>
 		<module>wink-protobuf-provider</module>
+                <module>wink-thrift-provider</module>
 	</modules>
         <!-- [rfeng] Only include the thrift provider as the thrift.jar is compiled using JDK 6 level -->
         <profiles>
