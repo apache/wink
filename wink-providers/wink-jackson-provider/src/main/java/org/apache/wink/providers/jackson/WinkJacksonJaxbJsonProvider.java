@@ -28,8 +28,10 @@ import javax.ws.rs.ext.Provider;
 
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.codehaus.jackson.map.AnnotationIntrospector;
+import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.DeserializationConfig.Feature;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import org.codehaus.jackson.map.introspect.JacksonAnnotationIntrospector;
 import org.codehaus.jackson.xc.JaxbAnnotationIntrospector;
@@ -45,15 +47,22 @@ public class WinkJacksonJaxbJsonProvider extends JacksonJaxbJsonProvider impleme
 
     private static ObjectMapper createObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
-        mapper.getSerializationConfig().setSerializationInclusion(Inclusion.NON_NULL);
-        mapper.getDeserializationConfig().set(Feature.FAIL_ON_UNKNOWN_PROPERTIES, Boolean.FALSE);
-//        mapper.getSerializationConfig().setDateFormat(StdDateFormat.getBlueprintISO8601Format());
-//        mapper.getDeserializationConfig().setDateFormat(StdDateFormat.getBlueprintISO8601Format());
+
         AnnotationIntrospector pair =
             new AnnotationIntrospector.Pair(new JaxbAnnotationIntrospector(),
                                             new JacksonAnnotationIntrospector());
-        mapper.getDeserializationConfig().setAnnotationIntrospector(pair);
-        mapper.getSerializationConfig().setAnnotationIntrospector(pair);
+
+        SerializationConfig serializationConfig = 
+            mapper.getSerializationConfig().withSerializationInclusion(Inclusion.NON_NULL).withAnnotationIntrospector(pair);
+           //.withDateFormat(StdDateFormat.getBlueprintISO8601Format());
+
+
+        DeserializationConfig deserializationConfig = 
+            mapper.getDeserializationConfig().without(Feature.FAIL_ON_UNKNOWN_PROPERTIES).withAnnotationIntrospector(pair);
+            //.withDateFormat(StdDateFormat.getBlueprintISO8601Format());
+
+        mapper.setSerializationConfig(serializationConfig);
+        mapper.setDeserializationConfig(deserializationConfig);
         return mapper;
     }
 
