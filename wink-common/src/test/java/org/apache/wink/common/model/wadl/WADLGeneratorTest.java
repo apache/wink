@@ -78,11 +78,11 @@ public class WADLGeneratorTest {
 
     @Path("resource1/{pp}")
     @Consumes(value = {MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
-    @WADLDoc("this is resource1")
+    @WADLDoc(value = "this is resource1 title", content = "this is resource1 content")
     static class Resource1 {
 
         @GET
-        @WADLDoc("this is the hello method")
+        @WADLDoc("this is the hello method with only default title value and no content")
         public String hello(@WADLDoc("request doc") String abcd,
                             @WADLDoc("q2 parameter doc") @QueryParam("q2") String q,
                             @QueryParam("q3") int q2,
@@ -403,10 +403,14 @@ public class WADLGeneratorTest {
         Application app = generator.generate("", classes);
         Resource res = app.getResources().get(0).getResource().get(0);
         assertEquals(1, res.getDoc().size());
-        assertEquals("this is resource1", res.getDoc().get(0).getTitle());
+        assertEquals("this is resource1 title", res.getDoc().get(0).getTitle());
+        assertEquals(res.getDoc().get(0).getContent().size(), 1);
+        assertEquals("this is resource1 content", res.getDoc().get(0).getContent().get(0));
         Method m = (Method)res.getMethodOrResource().get(0);
         assertEquals(1, m.getDoc().size());
-        assertEquals("this is the hello method", m.getDoc().get(0).getTitle());
+        assertEquals("this is the hello method with only default title value and no content", m.getDoc().get(0)
+                .getTitle());
+        assertEquals(0, m.getDoc().get(0).getContent().size());
 
         assertEquals(1, m.getRequest().getDoc().size());
         assertEquals("request doc", m.getRequest().getDoc().get(0).getTitle());

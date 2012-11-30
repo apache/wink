@@ -782,6 +782,9 @@ public class WADLGenerator {
     /* package */Doc getDocument(WADLDoc desc) {
         Doc d = new Doc();
         d.setTitle(desc.value());
+        if (!"".equals(desc.content())) {
+            d.getContent().add(desc.content());
+        }
         return d;
     }
 

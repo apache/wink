@@ -28,4 +28,6 @@ import java.lang.annotation.Target;
 public @interface WADLDoc {
 
     String value();
+
+    String content() default "";
 }
