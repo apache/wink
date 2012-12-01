@@ -198,11 +198,12 @@ public class ResourceImpl implements Resource {
 
     @SuppressWarnings("unchecked")
     public <T> T invoke(String method, EntityType<T> responseEntity, Object requestEntity) {
-        ClientResponse response =
-            invoke(method, responseEntity.getRawClass(), responseEntity.getType(), requestEntity);
         if (responseEntity == null) {
+            invoke(method, null, null, requestEntity);
             return null;
         }
+        ClientResponse response =
+            invoke(method, responseEntity.getRawClass(), responseEntity.getType(), requestEntity);
         if (ClientResponse.class.equals(responseEntity.getRawClass())) {
             return (T)response;
         }
