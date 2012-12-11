@@ -114,9 +114,14 @@ public class WinkRequestProcessor {
 	 *            The new JAX-RS component (root resource or provider) to bind.
 	 */
 	public void bindComponent(Object component) {
-		components.add(component);
 		if (requestProcessor != null) {
+			ensureNotOutdated();
 			registerComponent(component);
+		}
+		//has to be called after ensureUpdate as endureUpdate might cause reinitialization
+		//based on components
+		synchronized (this) {
+			components.add(component);
 		}
 	}
 	
@@ -124,7 +129,7 @@ public class WinkRequestProcessor {
 	 * @param component
 	 *            The new JAX-RS component (root resource or provider) to bind.
 	 */
-	public void unbindComponent(Object component) {
+	public synchronized void unbindComponent(Object component) {
 		components.remove(component);
 		//since it seems not possible to remove from RequestProcessor
 		//we need to create a new one, we defer this to prevent
@@ -142,9 +147,11 @@ public class WinkRequestProcessor {
 	
 	private void ensureNotOutdated() {
 		if (requestProcessorOutdated) {
-			requestProcessorOutdated = false;
 			synchronized(this) {
-				init();
+				if (requestProcessorOutdated) {
+					init();
+					requestProcessorOutdated = false;
+				}
 			}
 		}
 	}
@@ -160,10 +167,8 @@ public class WinkRequestProcessor {
 	}
 
 	private void registerComponent(Object component) {
-		ensureNotOutdated();
 		Application application = new InnerApplication(component);
 		requestProcessor.getConfiguration().addApplication(application, false);
-		components.add(component);
 		//FIXME: fix this to comply with externalization requirements
 		//log.info("registered component {}", component);
 	}
