@@ -112,7 +112,7 @@ public class WinkThriftProvider implements MessageBodyReader<TBase>, MessageBody
             try {
                 t.write(protocol);
             } catch (TException e) {
-                throw new IOException(e);
+                throw new IOException(e.getMessage());
             }
         }
     }
