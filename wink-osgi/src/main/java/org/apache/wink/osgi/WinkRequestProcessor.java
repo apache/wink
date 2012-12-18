@@ -49,6 +49,10 @@ import org.slf4j.LoggerFactory;
  * with the property <code>javax.ws.rs</code> set to true and registers them with the 
  * Wink RequestProcessor. Root resources and providers that are not exposed as such a service
  * can be registered by invoking the bindComponent method.
+ * 
+ * Alternatively Jax-RS resources can be registered by their class. This supports
+ * having root-resources with a per request life cycle. The method to use is
+ * <code>bindComponentClass</code>.
  *
  */
 @Component
@@ -60,6 +64,7 @@ public class WinkRequestProcessor {
 	private final static Logger log = LoggerFactory.getLogger(WinkRequestProcessor.class);
 	private RequestProcessor requestProcessor;
 	private Set<Object> components = new HashSet<Object>();	
+    private Set<Class> componentClasses = new HashSet<Class>();	
 	private boolean requestProcessorOutdated = false;
 	
 	/**
@@ -79,7 +84,7 @@ public class WinkRequestProcessor {
      * Dispatches the request and fills the response (even with an error
      * message using the spcified root resource instance. Note that any
      * @Path annotation on the root resource class as well as methods with
-     * auch an annotation are ignored.
+     * such an annotation are ignored.
      * 
      * @param request AS or mock request
      * @param response AS or mock response
@@ -136,6 +141,27 @@ public class WinkRequestProcessor {
 		//creation of many new RequestProcessors when unregistering many resources
 		requestProcessorOutdated = true;
 	}
+    
+    /**
+	 * @param componentClass
+	 *            The new JAX-RS component class (root resource or provider) to bind.
+	 */
+    public void bindComponentClass(Class componentClass) {
+        ensureNotOutdated();
+        registerComponentClass(componentClass);
+        synchronized (this) {
+			componentClasses.add(componentClass);
+		}
+    }
+    
+    /**
+	 * @param componentClass
+	 *            The new JAX-RS component class (root resource or provider) to bind.
+	 */
+    public synchronized void unbindComponentClass(Class componentClass) {
+        componentClasses.remove(componentClass);
+        requestProcessorOutdated = true;
+    }
 	
 	/**
 	 * Used in JaxRsFilter to check if the path can be handled by wink
@@ -164,6 +190,9 @@ public class WinkRequestProcessor {
 		for (Object component : components) {
 			registerComponent(component);
 		}
+        for (Class componentClass : componentClasses) {
+			registerComponentClass(componentClass);
+		}
 	}
 
 	private void registerComponent(Object component) {
@@ -171,6 +200,11 @@ public class WinkRequestProcessor {
 		requestProcessor.getConfiguration().addApplication(application, false);
 		//FIXME: fix this to comply with externalization requirements
 		//log.info("registered component {}", component);
+	}
+    
+    private void registerComponentClass(Class componentClass) {
+		Application application = new InnerApplication(componentClass);
+		requestProcessor.getConfiguration().addApplication(application, false);
 	}
 
 	
