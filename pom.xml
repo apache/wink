@@ -56,9 +56,9 @@
         <module>wink-osgi</module>
     </modules>
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/wink/trunk</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/wink/trunk</developerConnection>
-        <url>http://svn.apache.org/viewvc/incubator/wink/trunk</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/wink/trunk</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/wink/trunk</developerConnection>
+        <url>http://svn.apache.org/viewvc/wink/trunk</url>
     </scm>
     <build>
         <plugins>
@@ -212,7 +212,6 @@
                         <configuration>
                             <resourceBundles>
                                 <resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
-                                <resourceBundle>org.apache:apache-incubator-disclaimer-resource-bundle:1.1</resourceBundle>
                             </resourceBundles>
                         </configuration>
                     </execution>
@@ -392,7 +391,7 @@
                     <artifactId>maven-release-plugin</artifactId>
                     <version>2.1</version>					
                     <configuration>
-                        <tagBase>https://svn.apache.org/repos/asf/incubator/wink/tags</tagBase>
+                        <tagBase>https://svn.apache.org/repos/asf/wink/tags</tagBase>
                         <preparationGoals>clean install</preparationGoals>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                     </configuration>
