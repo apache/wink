@@ -735,7 +735,7 @@ public class ProvidersRegistry {
         private List<OFHolder<T>> internalGetProvidersByMediaType(MediaType mediaType, Class<?> cls) {
             Set<OFHolder<T>> compatible = new TreeSet<OFHolder<T>>(Collections.reverseOrder());
             for (Entry<MediaType, HashSet<PriorityObjectFactory<T>>> entry : entrySet) {
-                if (entry.getKey().isCompatible(mediaType)) {
+                if (areMediaTypesCompatible(entry.getKey(), mediaType)) {
                     // media type is compatible, check generic type of the
                     // subset
                     for (PriorityObjectFactory<T> of : entry.getValue()) {
@@ -758,6 +758,52 @@ public class ProvidersRegistry {
             @SuppressWarnings("unchecked")
             OFHolder<T>[] tmp = compatible.toArray(new OFHolder[compatible.size()]);
             return Arrays.asList(tmp);
+        }
+
+        /**
+         * Allow providers to be registered with a structured syntax suffix (e.g. '+xml'
+         * or '+json') to narrow (or broaden) the applicability of a provider.
+         * <p>
+         * The structured syntax suffix (SSS) is defined in RFC6838, section 4.2.8 and
+         * RFC6839, section 3.<br/>
+         * For providers, the SSS is used <em>in addition to</em> to the mimetype's main
+         * type. For example, a mediatype of "application/vnd.custom+json" should be
+         * considered compatible with a provider registered as either
+         * "application/vnd.custom+json" or "application/json", but not with "text/json"
+         * or "application/vnd.custom+xml".
+         * </p>
+         * @param providerMediaType the media type of the provider to check for
+         *        compatibility, cannot be <code>null</code>;
+         * @param candidateMediaType the media type of check against, cannot be
+         *        <code>null</code>.
+         * @return <code>true</code> if the given media types are compatible,
+         *         <code>false</code> otherwise.
+         * @see http://tools.ietf.org/html/rfc6838#section-4.2.8
+         * @see http://tools.ietf.org/html/rfc6839#section-3
+         */
+        private boolean areMediaTypesCompatible(MediaType providerMediaType, MediaType candidateMediaType) {
+          if (providerMediaType.isCompatible(candidateMediaType)) {
+            // Easy case: directly compatible media types...
+            return true;
+          }
+
+          // Are main types equal? If not, we're done really quickly...
+          if (!providerMediaType.getType().equals(candidateMediaType.getType())) {
+            return false;
+          }
+
+          // If the provider has a SSS in its subtype, it means that it is *specifically*
+          // registered for that particular subtype + SSS, so do not strip it from the
+          // subtype...
+          String subtype1 = providerMediaType.getSubtype();
+          String subtype2 = candidateMediaType.getSubtype();
+          int idx = subtype2.indexOf('+');
+          if (idx >= 0) {
+            // subtype contains a structured syntax suffix...
+            subtype2 = subtype2.substring(idx + 1);
+          }
+
+          return subtype1.equals(subtype2);
         }
 
         public Set<MediaType> getProvidersMediaTypes(Class<?> type) {

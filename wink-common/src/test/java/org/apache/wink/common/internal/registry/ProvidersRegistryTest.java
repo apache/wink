@@ -21,16 +21,20 @@ package org.apache.wink.common.internal.registry;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Set;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyReader;
+import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
 import junit.framework.TestCase;
@@ -110,6 +114,86 @@ public class ProvidersRegistryTest extends TestCase {
         // make there is only one provider in the list to conform to JAX-RS 4.1 first sentence
         assertEquals(1, readers.size());
     }
+
+    /**
+     * Tests that a structured syntax suffix is handled correctly for determining a writer.
+     *
+     * @throws Exception
+     */
+    public void testProvidesStructuredSyntaxSuffixHandledOk() throws Exception {
+      ProvidersRegistry providersRegistry =
+          new ProvidersRegistry(new LifecycleManagersRegistry(), new ApplicationValidator());
+      providersRegistry.addProvider(GenericProvider.class);
+      providersRegistry.addProvider(SpecificProvider.class);
+
+      MediaType mediaType;
+      MessageBodyWriter<String> writer;
+
+      mediaType = MediaType.valueOf("application/json"); // use generic provider
+
+      writer = providersRegistry.getMessageBodyWriter(String.class, null, null, mediaType, null);
+      assertTrue(writer instanceof GenericProvider);
+
+      mediaType = MediaType.valueOf("application/vnd.other+json"); // use generic provider
+
+      writer = providersRegistry.getMessageBodyWriter(String.class, null, null, mediaType, null);
+      assertTrue(writer instanceof GenericProvider);
+
+      mediaType = MediaType.valueOf("application/subschema+json"); // use specific provider
+
+      writer = providersRegistry.getMessageBodyWriter(String.class, null, null, mediaType, null);
+      assertTrue(writer instanceof SpecificProvider);
+
+      mediaType = MediaType.valueOf("application/subschema"); // cannot use specific provider, nor generic
+
+      writer = providersRegistry.getMessageBodyWriter(String.class, null, null, mediaType, null);
+      assertNull(writer);
+
+      mediaType = MediaType.valueOf("text/json"); // cannot use specific provider, nor generic
+
+      writer = providersRegistry.getMessageBodyWriter(String.class, null, null, mediaType, null);
+      assertNull(writer);
+    }
+
+    /**
+     * Tests that a structured syntax suffix is handled correctly for determining a reader.
+     *
+     * @throws Exception
+     */
+    public void testConsumesStructuredSyntaxSuffixHandledOk() throws Exception {
+      ProvidersRegistry providersRegistry =
+          new ProvidersRegistry(new LifecycleManagersRegistry(), new ApplicationValidator());
+      providersRegistry.addProvider(GenericProvider.class);
+      providersRegistry.addProvider(SpecificProvider.class);
+
+      MediaType mediaType;
+      MessageBodyReader<String> reader;
+
+      mediaType = MediaType.valueOf("application/json"); // use generic provider
+
+      reader = providersRegistry.getMessageBodyReader(String.class, null, null, mediaType, null);
+      assertTrue(reader instanceof GenericProvider);
+
+      mediaType = MediaType.valueOf("application/vnd.other+json"); // use generic provider
+
+      reader = providersRegistry.getMessageBodyReader(String.class, null, null, mediaType, null);
+      assertTrue(reader instanceof GenericProvider);
+
+      mediaType = MediaType.valueOf("application/subschema+json"); // use specific provider
+
+      reader = providersRegistry.getMessageBodyReader(String.class, null, null, mediaType, null);
+      assertTrue(reader instanceof SpecificProvider);
+
+      mediaType = MediaType.valueOf("application/subschema"); // cannot use specific provider, nor generic
+
+      reader = providersRegistry.getMessageBodyReader(String.class, null, null, mediaType, null);
+      assertNull(reader);
+
+      mediaType = MediaType.valueOf("text/json"); // cannot use specific provider, nor generic
+
+      reader = providersRegistry.getMessageBodyReader(String.class, null, null, mediaType, null);
+      assertNull(reader);
+    }
     
     // TODO:  perhaps future tests should be added to actually exercise the providersCache code, but it would be an involved,
     // multi-threaded test that dynamically adds providers at just the right time to ensure no problems with
@@ -140,4 +224,69 @@ public class ProvidersRegistryTest extends TestCase {
         }
     }
     
+    @Provider
+    @Produces({"application/subschema+json"})
+    @Consumes({"application/subschema+json"})
+    public static class SpecificProvider implements MessageBodyReader<String>, MessageBodyWriter<String> {
+      public boolean isWriteable( Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType )
+      {
+        return String.class.isAssignableFrom(type);
+      }
+
+      public long getSize( String t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType )
+      {
+        return -1L;
+      }
+
+      public void writeTo( String t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
+          MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream ) throws IOException,
+          WebApplicationException
+      {
+      }
+
+      public boolean isReadable( Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType )
+      {
+        return String.class.isAssignableFrom(type);
+      }
+
+      public String readFrom( Class<String> type, Type genericType, Annotation[] annotations, MediaType mediaType,
+          MultivaluedMap<String, String> httpHeaders, InputStream entityStream ) throws IOException,
+          WebApplicationException
+      {
+        return null;
+      }
+    }
+
+    @Provider
+    @Produces({"application/json"})
+    @Consumes({"application/json"})
+    public static class GenericProvider implements MessageBodyReader<String>, MessageBodyWriter<String> {
+      public boolean isWriteable( Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType )
+      {
+        return String.class.isAssignableFrom(type);
+      }
+
+      public long getSize( String t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType )
+      {
+        return -1L;
+      }
+
+      public void writeTo( String t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
+          MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream ) throws IOException,
+          WebApplicationException
+      {
+      }
+
+      public boolean isReadable( Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType )
+      {
+        return String.class.isAssignableFrom(type);
+      }
+
+      public String readFrom( Class<String> type, Type genericType, Annotation[] annotations, MediaType mediaType,
+          MultivaluedMap<String, String> httpHeaders, InputStream entityStream ) throws IOException,
+          WebApplicationException
+      {
+        return null;
+      }
+    }
 }
