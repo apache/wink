@@ -100,7 +100,7 @@ public class WinkRequestProcessor {
 	}
 
 	protected void activate(ComponentContext context) {
-		// hint from http://www.amdatu.org/confluence/display/Amdatu/OSGiification
+		// hint from https://amdatu.atlassian.net/wiki/display/AMDATU/OSGiification
 		// dummy RuntimeDelegate
 		RuntimeDelegate.setInstance(new DummyRuntimeDelegate());
 		RuntimeDelegate.setInstance(new RuntimeDelegateImpl());	
