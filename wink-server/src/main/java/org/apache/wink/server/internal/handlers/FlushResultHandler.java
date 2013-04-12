@@ -56,9 +56,7 @@ import org.slf4j.LoggerFactory;
 
 public class FlushResultHandler extends AbstractHandler {
 
-    private static final Logger          logger          =
-                                                             LoggerFactory
-                                                                 .getLogger(FlushResultHandler.class);
+    private static final Logger          logger          = LoggerFactory.getLogger(FlushResultHandler.class);
     private static final RuntimeDelegate runtimeDelegate = RuntimeDelegate.getInstance();
 
     @SuppressWarnings("unchecked")
@@ -150,8 +148,7 @@ public class FlushResultHandler extends AbstractHandler {
         // use the provider to write the entity
         if (messageBodyWriter != null) {
             if (logger.isTraceEnabled()) {
-                logger
-                    .trace("Serialization using provider {}", messageBodyWriter.getClass().getName()); //$NON-NLS-1$
+                logger.trace("Serialization using provider {}", messageBodyWriter.getClass().getName()); //$NON-NLS-1$
             }
 
             final MultivaluedMap<String, Object> headers = httpHeaders;
@@ -187,8 +184,7 @@ public class FlushResultHandler extends AbstractHandler {
             FlushHeadersOutputStream outputStream =
                 new FlushHeadersOutputStream(httpResponse, headers, responseMediaType);
             if (logger.isTraceEnabled()) {
-                logger
-                    .trace("{}@{}.writeTo({}, {}, {}, {}, {}, {}, {}) being called", new Object[] { //$NON-NLS-1$
+                logger.trace("{}@{}.writeTo({}, {}, {}, {}, {}, {}, {}) being called", new Object[] { //$NON-NLS-1$
                            messageBodyWriter.getClass().getName(),
                                Integer.toHexString(System.identityHashCode(messageBodyWriter)),
                                Integer.toHexString(System.identityHashCode(entity)), rawType,
@@ -204,8 +200,7 @@ public class FlushResultHandler extends AbstractHandler {
                                           httpHeaders,
                                           outputStream);
             } catch (RuntimeException e) {
-                ProviderUtils
-                    .logUserProviderException(e,
+                ProviderUtils.logUserProviderException(e,
                                               messageBodyWriter,
                                               ProviderUtils.PROVIDER_EXCEPTION_ORIGINATOR.writeTo,
                                               new Object[] {entity, rawType, genericType,
@@ -219,8 +214,7 @@ public class FlushResultHandler extends AbstractHandler {
             return;
 
         } else {
-            logger
-                .trace("Could not find a writer for {} and {}. Try to find JAF DataSourceProvider", //$NON-NLS-1$
+            logger.trace("Could not find a writer for {} and {}. Try to find JAF DataSourceProvider", //$NON-NLS-1$
                        entity.getClass().getName(),
                        responseMediaType);
         }
@@ -230,8 +224,7 @@ public class FlushResultHandler extends AbstractHandler {
 
         // try to find a data handler using JavaBeans Activation Framework, if
         // found use DataSourceProvider
-        dataContentHandler =
-            CommandMap
+        dataContentHandler = CommandMap
                 .getDefaultCommandMap()
                 .createDataContentHandler(responseMediaType.getType() + "/" + responseMediaType.getSubtype()); //$NON-NLS-1$
         if (dataContentHandler == null) {
@@ -248,8 +241,7 @@ public class FlushResultHandler extends AbstractHandler {
                     .getName());
         }
 
-        FlushHeadersOutputStream outputStream =
-            new FlushHeadersOutputStream(httpResponse, httpHeaders, responseMediaType);
+        FlushHeadersOutputStream outputStream = new FlushHeadersOutputStream(httpResponse, httpHeaders, responseMediaType);
         if (logger.isTraceEnabled()) {
             logger.trace("{}@{}.writeTo({}, {}, {}) being called", new Object[] { //$NON-NLS-1$
                          dataContentHandler.getClass().getName(),
