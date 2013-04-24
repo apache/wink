@@ -43,6 +43,7 @@ import javax.ws.rs.ext.Providers;
 import javax.ws.rs.ext.RuntimeDelegate;
 import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 
+import org.apache.wink.common.http.HttpStatus;
 import org.apache.wink.common.internal.MultivaluedMapImpl;
 import org.apache.wink.common.internal.i18n.Messages;
 import org.apache.wink.common.internal.runtime.RuntimeContextTLS;
@@ -232,7 +233,11 @@ public class FlushResultHandler extends AbstractHandler {
                 logger.error(Messages.getMessage("noWriterOrDataSourceProvider", entity.getClass() //$NON-NLS-1$
                     .getName(), responseMediaType));
             }
-            throw new WebApplicationException(500);
+            // WINK-379 - From the spec :
+            // If no methods support one of the acceptable response entity body media types
+            // an implementation MUST generate a WebApplicationException with a not acceptable
+            // response (HTTP 406 status) and no entity
+            throw new WebApplicationException(HttpStatus.NOT_ACCEPTABLE.getCode());
         }
 
         if (logger.isTraceEnabled()) {

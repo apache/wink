@@ -182,13 +182,13 @@ public class ActivationDataContentHandlerTest extends MockServletInvocationTest 
         }
     }
 
-    public void test500ForMissingWriterAndHandler() throws Exception {
+    public void test406ForMissingWriterAndHandler() throws Exception {
         System.out.println(TestResource.class.getName());
         MockHttpServletRequest mockRequest =
             MockRequestConstructor.constructMockRequest("GET",
                                                         "/root/nowriterorhandler",
                                                         "not/valid");
         MockHttpServletResponse response = invoke(mockRequest);
-        assertEquals(500, response.getStatus());
+        assertEquals(406, response.getStatus());
     }
 }
