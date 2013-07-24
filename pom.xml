@@ -37,6 +37,11 @@
         <maven.compile.target>1.5</maven.compile.target>
         <!--WINK-330 Change slf4j api import to a range to make it more user friendly.-->
         <slf4j.osgi.import.instruction>org.slf4j.*;version="[1.5,1.7)"</slf4j.osgi.import.instruction>
+
+        <!-- for in-container tests -->
+        <tomee.version>1.5.2</tomee.version>
+        <arquillian.version>1.0.2.Final</arquillian.version>
+        <maven.surefire.plugin.version>2.11</maven.surefire.plugin.version>
     </properties>
     <modules>
         <module>wink-component-test-support</module>
@@ -113,6 +118,8 @@
                         <exclude>wink-json4j/src/test/resources/utf8_helloworld_ko.json</exclude>
                         <exclude>wink-json4j/src/test/resources/utf8_lowerchar.json</exclude>
                         <exclude>wink-json4j/src/test/resources/utf8_ordered.json</exclude>
+                        
+                        <exclude>wink-jcdi-server/src/main/resources/META-INF/services/javax.enterprise.inject.spi.Extension</exclude>
 
                         <exclude>wink-common/src/main/resources/META-INF/core/wink-providers</exclude>
                         <exclude>wink-server/src/main/resources/META-INF/server/wink-providers</exclude>
@@ -608,7 +615,7 @@
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version>4.8.1</version>
+                <version>4.10</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -746,6 +753,26 @@
                 <groupId>com.google.inject</groupId>
                 <artifactId>guice</artifactId>
                 <version>2.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>${arquillian.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.shrinkwrap</groupId>
+                <artifactId>shrinkwrap-api</artifactId>
+                <version>1.0.1</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.openejb</groupId>
+                <artifactId>arquillian-tomee-remote</artifactId>
+                <version>${tomee.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
