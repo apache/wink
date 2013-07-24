@@ -26,10 +26,6 @@ From: 'Spring Framework' (http://www.springframework.org/)
   - Spring Framework (http://www.springframework.org) org.springframework:spring:jar:2.5
     License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-From: 'Sun Microsystems, Inc' (http://www.sun.com/)
-  - jsr311-api (https://jsr311.dev.java.net) javax.ws.rs:jsr311-api:jar:1.1
-    License: CDDL License  (http://www.opensource.org/licenses/cddl1.php)
-
 From: 'The Apache Software Foundation' (http://jakarta.apache.org)
   - Lang (http://jakarta.apache.org/commons/lang/) commons-lang:commons-lang:jar:2.3
     License: The Apache Software License, Version 2.0  (/LICENSE.txt)

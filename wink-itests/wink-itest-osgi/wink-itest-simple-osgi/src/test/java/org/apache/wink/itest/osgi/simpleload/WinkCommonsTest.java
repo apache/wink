@@ -40,7 +40,7 @@ public class WinkCommonsTest {
 	public static Option[] configuration() {
 		return options(provision(mavenBundle().groupId("org.apache.wink")
 				.artifactId("wink-common").versionAsInProject(), mavenBundle()
-				.groupId("javax.ws.rs").artifactId("jsr311-api")
+				.groupId("org.apache.geronimo.specs").artifactId("geronimo-jaxrs_1.1_spec")
 				.versionAsInProject(), mavenBundle().groupId("org.slf4j")
 				.artifactId("slf4j-api").versionAsInProject(), mavenBundle()
 				.groupId("org.slf4j").artifactId("slf4j-jdk14")

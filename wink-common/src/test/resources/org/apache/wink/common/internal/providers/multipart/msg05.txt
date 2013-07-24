@@ -330,8 +330,8 @@ Content-Id: <1071294019496.1066069460327.IBM.WEBSERVICES@ibm-7pr28r4m35k>
 
             <!-- 3rd party dependencies -->
             <dependency>
-                <groupId>javax.ws.rs</groupId>
-                <artifactId>jsr311-api</artifactId>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-jaxrs_1.1_spec</artifactId>
                 <version>1.0</version>
             </dependency>
             <dependency>

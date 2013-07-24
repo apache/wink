@@ -63,7 +63,7 @@
                         </Private-Package>
                         <Embed-Transitive>true</Embed-Transitive>
                         <Embed-Dependency>
-                            wink-server, wink-common, activation, jsr311-api, 
+                            wink-server, wink-common, activation, geronimo-jaxrs_1.1_spec,
                             jaxb-api, geronimo-annotation_1.1_spec, stax-api
                         </Embed-Dependency>
                     </instructions>

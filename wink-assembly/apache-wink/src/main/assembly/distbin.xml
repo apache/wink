@@ -52,7 +52,7 @@
                 <include>commons-lang:commons-lang</include>
                 <include>com.sun.xml.bind:jaxb-impl</include>
                 <include>javax.xml.bind:jaxb-api</include>
-                <include>javax.ws.rs:jsr311-api</include>
+                <include>org.apache.geronimo.specs:geronimo-jaxrs_1.1_spec</include>
                 <include>org.slf4j:slf4j-api</include>
                 <include>org.slf4j:slf4j-simple</include>
 				<!--include>stax:stax-api:*:1.0.2</include-->
