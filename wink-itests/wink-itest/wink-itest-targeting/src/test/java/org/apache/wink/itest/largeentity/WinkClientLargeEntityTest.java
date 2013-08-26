@@ -91,7 +91,7 @@ public class WinkClientLargeEntityTest extends TestCase {
                 .resource(getBaseURI() + "/large/zip")
                 .contentType("application/jar")
                 .post(new File(
-                               ServerEnvironmentInfo.getWorkDir() + "/wink-itest-targeting-1.4.0-SNAPSHOT.war"));
+                               ServerEnvironmentInfo.getWorkDir() + "/wink-itest-targeting-1.4.war"));
         assertEquals(290, response.getStatusCode());
         assertEquals("META-INF/DEPENDENCIES", response.getEntity(String.class));
     }
