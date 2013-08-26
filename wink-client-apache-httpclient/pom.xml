@@ -71,4 +71,42 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>bundle-manifest</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>manifest</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Import-Package>${slf4j.osgi.import.instruction},org.apache.commons.codec.*;resolution:=optional,org.apache.wink.common.internal.providers.entity.xml,org.apache.wink.common.internal.providers.entity.atom,org.apache.wink.common.internal.providers.entity.csv,org.apache.wink.common.internal.providers.multipart,org.apache.wink.common.internal.providers.entity.json,org.apache.wink.common.internal.providers.entity.app,*</Import-Package>
+                        <Export-Package>
+                            <!--
+                                !org.apache.wink.client.internal.*,
+                            -->
+                            org.apache.wink.client.*
+                        </Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>    
 </project>
