@@ -19,6 +19,10 @@
 package org.apache.wink.jcdi.server.test;
 
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+
 import org.apache.wink.client.ClientConfig;
 import org.apache.wink.client.Resource;
 import org.apache.wink.client.RestClient;
@@ -38,14 +42,12 @@ import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-
 @RunWith(Arquillian.class)
+@Ignore
 public class WinkCdiTest {
     private final static String TEST_NAME = "restTests";
     private final static String TEST_SERVLET_PATH = "wink-test";
