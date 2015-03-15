@@ -22,11 +22,14 @@ package org.apache.wink.common.internal.providers.multipart;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.wink.common.internal.CaseInsensitiveMultivaluedMap;
 import org.apache.wink.common.internal.i18n.Messages;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*
  * TODO: Add the option to get the preamble
@@ -36,6 +39,9 @@ import org.apache.wink.common.internal.i18n.Messages;
 
 public class MultiPartParser {
     public final static String             SEP                 = "\n";           //$NON-NLS-1$
+
+    private static final Logger            logger              = LoggerFactory.getLogger(MultiPartParser.class);
+    private final static String            UTF8                = "UTF-8";           //$NON-NLS-1$
 
     private InputStream                    is;
     private byte[]                         boundaryBA;
@@ -64,7 +70,11 @@ public class MultiPartParser {
 
     public MultiPartParser(InputStream is, String boundary) {
         this.is = is;
-        boundaryBA = ("--" + boundary).getBytes(); //$NON-NLS-1$
+        try {
+            boundaryBA = ("--" + boundary).getBytes(UTF8); //$NON-NLS-1$
+        } catch(UnsupportedEncodingException e) {
+            logger.debug("Error parsing multi part: " + e.getMessage(), e);
+        }
         // make sure to allocate a buffer that is at least double then the
         // boundary length
         int buffLength = Math.max(8192, boundaryBA.length * 2);
@@ -297,7 +307,7 @@ public class MultiPartParser {
             return null;
         }
 
-        String hdr = new String(buff, buffIdx, lineIdx);
+        String hdr = new String(buff, buffIdx, lineIdx, UTF8);
         buffIdx += lineIdx + breakeSize;
         return hdr;
     }
