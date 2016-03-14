@@ -132,18 +132,12 @@ public class PopulateResponseMediaTypeHandler extends AbstractHandler {
                         logger.trace("Comparing {} to {}", acceptableMediaType, mediaType); //$NON-NLS-1$
                     }
                     if (mediaType.isCompatible(acceptableMediaType)) {
-                        MediaType candidateMediaType = null;
-                        if (MediaTypeUtils.compareTo(mediaType, acceptableMediaType) > 0) {
-                            candidateMediaType = mediaType;
-                        } else {
-                            candidateMediaType = acceptableMediaType;
-                        }
                         if (debug) {
-                            logger.trace("MediaType compatible so using candidate type {}", candidateMediaType); //$NON-NLS-1$
+                            logger.trace("MediaType compatible so using candidate type {}", mediaType); //$NON-NLS-1$
                         }
                         String q = acceptableMediaType.getParameters().get("q"); //$NON-NLS-1$
                         CandidateMediaType candidate =
-                            new CandidateMediaType(candidateMediaType, q);
+                            new CandidateMediaType(mediaType, q);
                         if (Double.compare(candidate.q, 0.0) != 0) {
                             if (debug) {
                                 logger.trace("Candidate {} has q value {} so adding to possible candidates", candidate.getMediaType(), q); //$NON-NLS-1$
